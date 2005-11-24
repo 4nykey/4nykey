@@ -14,18 +14,19 @@ S=${WORKDIR}/${PN}
 LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE=""
+IUSE="doc"
 
 RDEPEND="media-libs/libsndfile"
 DEPEND="${RDEPEND}
+	doc? ( app-text/asciidoc )
 	sys-devel/autoconf"
 
 src_unpack() {
 	cvs_src_unpack
 	cd ${S}
-	mkdir -p build
-	sed -i s:twolame_frontend:frontend: src/frontend/Makefile.am
-	WANT_AUTOMAKE=1.6 autoreconf -fi
+	epatch ${FILESDIR}/config.diff
+	use doc || sed -i 's: doc::' Makefile.am
+	WANT_AUTOMAKE=1.7 ./autogen.sh || die
 }
 
 src_install() {

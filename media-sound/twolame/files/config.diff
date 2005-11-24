@@ -1,0 +1,27 @@
+Index: autogen.sh
+===================================================================
+RCS file: /cvsroot/twolame/twolame/autogen.sh,v
+retrieving revision 1.4
+diff -u -r1.4 autogen.sh
+--- autogen.sh	6 Nov 2005 00:45:16 -0000	1.4
++++ autogen.sh	24 Nov 2005 22:00:31 -0000
+@@ -85,4 +85,3 @@
+ run_cmd autoconf
+ 
+ 
+-$srcdir/configure --enable-debug && echo
+Index: configure.in
+===================================================================
+RCS file: /cvsroot/twolame/twolame/configure.in,v
+retrieving revision 1.11
+diff -u -r1.11 configure.in
+--- configure.in	13 Nov 2005 14:38:08 -0000	1.11
++++ configure.in	24 Nov 2005 22:00:32 -0000
+@@ -7,7 +7,6 @@
+ 
+ AC_INIT([twolame], [0.3.4], [twolame-discuss@lists.sourceforge.net])
+ 
+-AC_CONFIG_SRCDIR( libtwolame/twolame.h )
+ AC_CONFIG_AUX_DIR( build )
+ AC_CANONICAL_SYSTEM
+ 
