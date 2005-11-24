@@ -13,12 +13,13 @@ KEYWORDS="~x86"
 S="${WORKDIR}/sources"
 
 IUSE="debug curl a52 aac vorbis flac alsa oss gtk vqf musepack mad cdparanoia
-	mod dts shorten jack speex wavpack"
+	mod dts shorten jack speex wavpack readline"
 DEPEND="curl ( >=net-misc/curl-7.10* )"
 RDEPEND="${DEPEND}"
 PDEPEND="media-plugins/lamip-in-playlist
 	media-plugins/lamip-in-wav
 	gtk? ( media-plugins/lamip-ui-default )
+	readline? ( media-plugins/lamip-ui-shell )
 	alsa? ( media-plugins/lamip-out-alsa )
 	jack? ( media-plugins/lamip-out-jack )
 	oss? (media-plugins/lamip-out-oss )
