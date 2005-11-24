@@ -1,0 +1,59 @@
+diff -uprN gnusound-0.7.orig/doc/Makefile.in gnusound-0.7/doc/Makefile.in
+--- gnusound-0.7.orig/doc/Makefile.in	2005-04-27 18:26:31.000000000 +0200
++++ gnusound-0.7/doc/Makefile.in	2005-04-27 18:27:05.000000000 +0200
+@@ -50,15 +50,15 @@ uninstall:
+	rm -rf $(datadir)
+ 
+ install:
+-	mkdir -p $(omfdir)
++	mkdir -p $(DESTDIR)$(omfdir)
+	for lang in $(LANGUAGES); do \
+-		mkdir -p $(datadir)/$$lang; \
++		mkdir -p $(DESTDIR)/$(datadir)/$$lang; \
+		install -m 644 -o $(owner_user) -g $(owner_group) \
+			$$lang/*.xml $$lang/*.html $$lang/topic.dat \
+-			$(datadir)/$$lang; \
++			$(DESTDIR)/$(datadir)/$$lang; \
+		 install -m 644 -o $(owner_user) -g $(owner_group) \
+			 $$lang/$(name).omf \
+-                        $(omfdir)/$(name)-$$lang.omf; \
++                        $(DESTDIR)$(omfdir)/$(name)-$$lang.omf; \
+	done
+ 
+ .PHONY: dist clean veryclean distclean install uninstall
+diff -uprN gnusound-0.7.orig/Makefile.in gnusound-0.7/Makefile.in
+--- gnusound-0.7.orig/Makefile.in	2005-04-27 18:26:31.000000000 +0200
++++ gnusound-0.7/Makefile.in	2005-04-27 18:27:38.000000000 +0200
+@@ -160,12 +160,12 @@ src/$(name): $(objects) .ldflags
+ install: all 
+ 	$(MAKE) -C doc install owner_user=$(owner_user) owner_group=$(owner_group)
+ 	$(MAKE) -C modules install owner_user=$(owner_user) owner_group=$(owner_group)
+-	mkdir -p $(bindir)
+-	mkdir -p $(guidir)
+-	mkdir -p $(desktopdir)
+-	install -m 755 -o $(owner_user) -g $(owner_group) src/$(name) $(bindir)
+-	install -m 644 -o $(owner_user) -g $(owner_group) $(gui_files) $(guidir)
+-	install -m 644 -o $(owner_user) -g $(owner_group) $(desktop_files) $(desktopdir)
++	mkdir -p $(DESTDIR)$(bindir)
++	mkdir -p $(DESTDIR)$(guidir)
++	mkdir -p $(DESTDIR)$(desktopdir)
++	install -m 755 -o $(owner_user) -g $(owner_group) src/$(name) $(DESTDIR)$(bindir)
++	install -m 644 -o $(owner_user) -g $(owner_group) $(gui_files) $(DESTDIR)$(guidir)
++	install -m 644 -o $(owner_user) -g $(owner_group) $(desktop_files) $(DESTDIR)$(desktopdir)
+ 
+ uninstall:
+ 	$(MAKE) -C modules uninstall
+diff -uprN gnusound-0.7.orig/modules/Makefile.in gnusound-0.7/modules/Makefile.in
+--- gnusound-0.7.orig/modules/Makefile.in	2005-04-27 18:26:31.000000000 +0200
++++ gnusound-0.7/modules/Makefile.in	2005-04-27 18:33:15.000000000 +0200
+@@ -60,8 +60,8 @@ $(gnusounddir)/.cflags:
+ 	$(CC) `cat $(gnusounddir)/.cflags` -I$(gnusounddir)/src -I$(gnusounddir)/src/$(gtk) -fPIC -shared  $< -o $@  `cat .$(basename $@).cflags`
+ 
+ install:
+-	mkdir -p $(moduledir)
+-	install -m 644 -o $(owner_user) -g $(owner_group) $(module_files) $(moduledir)
++	mkdir -p $(DESTDIR)$(moduledir)
++	install -m 644 -o $(owner_user) -g $(owner_group) $(module_files) $(DESTDIR)$(moduledir)
+ 
+ uninstall:
+ 	(cd $(moduledir) && rm -f $(module_files))

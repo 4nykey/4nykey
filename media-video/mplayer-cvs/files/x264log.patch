@@ -1,0 +1,15 @@
+Index: libmpcodecs/ve_x264.c
+===================================================================
+RCS file: /cvsroot/mplayer/main/libmpcodecs/ve_x264.c,v
+retrieving revision 1.8
+diff -u -r1.8 ve_x264.c
+--- libmpcodecs/ve_x264.c	17 Oct 2004 17:59:38 -0000	1.8
++++ libmpcodecs/ve_x264.c	24 Oct 2004 03:34:34 -0000
+@@ -27,6 +27,7 @@
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <stdarg.h>
+ #include <string.h>
+ #include <errno.h>
+ 

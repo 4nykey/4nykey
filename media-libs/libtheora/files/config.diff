@@ -1,0 +1,35 @@
+Index: autogen.sh
+===================================================================
+--- autogen.sh	(revision 9060)
++++ autogen.sh	(working copy)
+@@ -113,4 +113,3 @@
+ autoconf || exit 1
+ 
+ cd $olddir
+-$srcdir/configure --enable-maintainer-mode "$@" && echo
+Index: configure.ac
+===================================================================
+--- configure.ac	(revision 9443)
++++ configure.ac	(working copy)
+@@ -67,7 +67,7 @@
+         case $host in 
+         *)
+                 DEBUG="-g -W -D__NO_MATH_INLINES"
+-                CFLAGS="-Wall -O3 -fforce-addr -fomit-frame-pointer -finline-functions -funroll-loops"
++                CFLAGS="-Wall -fforce-addr -fomit-frame-pointer"
+                 PROFILE="-W -pg -g -O3 -fno-inline-functions";;
+         esac
+ fi
+Index: Makefile.am
+===================================================================
+--- Makefile.am	(revision 9443)
++++ Makefile.am	(working copy)
+@@ -2,7 +2,7 @@
+ 
+ AUTOMAKE_OPTIONS = foreign 1.6 dist-zip dist-bzip2
+ 
+-SUBDIRS = lib include doc examples debian tests
++SUBDIRS = lib include doc
+ 
+ EXTRA_DIST = COPYING autogen.sh win32 libtheora.spec libtheora.spec.in \
+ 	theora-uninstalled.pc.in

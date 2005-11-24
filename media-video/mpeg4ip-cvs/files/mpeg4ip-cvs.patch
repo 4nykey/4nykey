@@ -1,0 +1,109 @@
+Index: configure.in
+===================================================================
+RCS file: /cvsroot/mpeg4ip/mpeg4ip/configure.in,v
+retrieving revision 1.154
+diff -u -r1.154 configure.in
+--- configure.in	17 Dec 2004 19:32:40 -0000	1.154
++++ configure.in	22 Dec 2004 08:43:18 -0000
+@@ -367,8 +367,8 @@
+ if test x$disable_ffmpeg = xfalse; then
+   if test x$have_ffmpeg_arg = xtrue; then
+      AC_MSG_NOTICE([have enable ffmpeg $enable_ffmpeg])
+-     FFMPEG_INC=-I${enable_ffmpeg}/libavcodec
+-     FFMPEG_LIB="${enable_ffmpeg}/libavcodec/libavcodec.a -lz"
++     FFMPEG_INC=-I/usr/include/ffmpeg
++     FFMPEG_LIB="-lavcodec -lz"
+      saveCFLAGS="$CFLAGS"
+      CFLAGS="$CFLAGS $FFMPEG_INC"
+      AC_CHECK_TYPES([AVRational], , , [#include <avcodec.h>])
+Index: common/video/mpeg4-2000/idct/idct.hpp
+===================================================================
+RCS file: /cvsroot/mpeg4ip/mpeg4ip/common/video/mpeg4-2000/idct/idct.hpp,v
+retrieving revision 1.2
+diff -u -r1.2 idct.hpp
+--- common/video/mpeg4-2000/idct/idct.hpp	28 May 2004 17:15:09 -0000	1.2
++++ common/video/mpeg4-2000/idct/idct.hpp	22 Dec 2004 08:43:48 -0000
+@@ -24,6 +24,7 @@
+ 
+ 
+ #define IDCT_BLOCK_SIZE	8
++#define BLOCK_SIZE		8
+ class idct{
+ public:
+ 
+Index: lib/SDLAudio/configure.in
+===================================================================
+RCS file: /cvsroot/mpeg4ip/mpeg4ip/lib/SDLAudio/configure.in,v
+retrieving revision 1.3
+diff -u -r1.3 configure.in
+--- lib/SDLAudio/configure.in	3 Dec 2004 23:33:38 -0000	1.3
++++ lib/SDLAudio/configure.in	22 Dec 2004 08:47:21 -0000
+@@ -262,7 +262,7 @@
+             CFLAGS="$CFLAGS -DDMEDIA_SUPPORT"
+             AUDIO_SUBDIRS="$AUDIO_SUBDIRS dmedia"
+             AUDIO_DRIVERS="$AUDIO_DRIVERS dmedia/libaudio_dmedia.la"
+-            SYSTEM_LIBS="$SYSTEM_LIBS -laudio"
++            SYSTEM_LIBS="$SYSTEM_LIBS -L/usr/X11R6/lib -laudio"
+         fi
+     fi
+ }
+@@ -374,7 +374,7 @@
+         elif test -r /usr/freeware/include/nas/audiolib.h; then
+             have_nas=yes
+             CFLAGS="$CFLAGS -DNAS_SUPPORT"
+-            SYSTEM_LIBS="$SYSTEM_LIBS -lnas -lXt"
++            SYSTEM_LIBS="$SYSTEM_LIBS -L/usr/X11R6/lib -lnas -lXt"
+             AUDIO_SUBDIRS="$AUDIO_SUBDIRS nas"
+             AUDIO_DRIVERS="$AUDIO_DRIVERS nas/libaudio_nas.la"
+         fi
+Index: util/testfaac.sh
+===================================================================
+RCS file: /cvsroot/mpeg4ip/mpeg4ip/util/testfaac.sh,v
+retrieving revision 1.2
+diff -u -r1.2 testfaac.sh
+--- util/testfaac.sh	6 Oct 2003 23:49:35 -0000	1.2
++++ util/testfaac.sh	22 Dec 2004 08:55:10 -0000
+@@ -9,11 +9,8 @@
+ do
+   word=`echo $i | tr '[a-z]' '[A-Z]'`
+   if test $found_libfaac = 'no'; then
+-     if test $word = "LIBFAAC"; then
++     if test $word = "FAAC"; then
+         found_libfaac=yes
+-     fi
+-  else
+-     if test $word = "VERSION"; then
+         echo "yes"
+         exit 0
+      fi
+Index: player/lib/audio/faad/Makefile.am
+===================================================================
+RCS file: /cvsroot/mpeg4ip/mpeg4ip/player/lib/audio/faad/Makefile.am,v
+retrieving revision 1.11
+diff -u -r1.11 Makefile.am
+--- player/lib/audio/faad/Makefile.am	12 Feb 2004 18:13:38 -0000	1.11
++++ player/lib/audio/faad/Makefile.am	6 May 2005 22:33:35 -0000
+@@ -33,6 +33,6 @@
+ 	transfo.h\
+ 	util.h
+ INCLUDES = -I$(top_srcdir)/include
+-AM_CFLAGS = -O2 -Werror -Wall -fexceptions -fno-strict-aliasing
++AM_CFLAGS = -O2 -Wall -fexceptions -fno-strict-aliasing
+ 
+ EXTRA_DIST = COPYING libfaad60.dsp README
+Index: lib/SDLAudio/src/audio/SDL_audio.c
+===================================================================
+RCS file: /cvsroot/mpeg4ip/mpeg4ip/lib/SDLAudio/src/audio/SDL_audio.c,v
+retrieving revision 1.4
+diff -u -r1.4 SDL_audio.c
+--- lib/SDLAudio/src/audio/SDL_audio.c	17 Jan 2005 20:46:08 -0000	1.4
++++ lib/SDLAudio/src/audio/SDL_audio.c	6 May 2005 09:07:14 -0000
+@@ -115,7 +115,7 @@
+ #endif
+ 
+ /* The general mixing thread function */
+-static int SDL_RunAudio(void *audiop)
++extern int SDL_RunAudio(void *audiop)
+ {
+ 	SDL_AudioDevice *audio = (SDL_AudioDevice *)audiop;
+ 	Uint8 *stream;

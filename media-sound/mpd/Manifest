@@ -1,0 +1,5 @@
+MD5 b2eec5efca41d8995a5d5f1c26b41a07 files/config.diff 137
+MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-mpd-0.12.0 0
+MD5 e1942b96aae7fa8cbc9b738857b5988f files/mpd.rc6 870
+MD5 8617c0187dfb87fd477bd8b1abbda60c files/mpd.rc7 703
+MD5 830f620b3eca7fd6fa6c3d434b260d84 mpd-0.12.0.ebuild 3578

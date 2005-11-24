@@ -1,0 +1,11 @@
+--- svgalib-1.9.19/Makefile.orig	2004-09-23 21:02:54.009100784 -0400
++++ svgalib-1.9.19/Makefile	2004-09-23 21:03:01.353984192 -0400
+@@ -98,8 +98,6 @@
+ 		(cd $(sharedlibdir); \
+ 		 ln -sf $$foo `echo $$foo | sed 's/\.so\..*/.so/'` ); \
+ 	done
+-	@./fixldsoconf
+-	@ldconfig
+ 
+ installstaticlib: static
+ 	@echo Installing static libraries in $(libdir).

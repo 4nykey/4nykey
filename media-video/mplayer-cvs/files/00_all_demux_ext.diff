@@ -1,0 +1,25 @@
+Index: libmpdemux/extension.c
+===================================================================
+RCS file: /cvsroot/mplayer/main/libmpdemux/extension.c,v
+retrieving revision 1.12
+diff -u -r1.12 extension.c
+--- libmpdemux/extension.c	7 Apr 2005 18:59:15 -0000	1.12
++++ libmpdemux/extension.c	10 Aug 2005 12:35:09 -0000
+@@ -38,6 +39,9 @@
+         { "wav", DEMUXER_TYPE_AUDIO },
+         { "flac", DEMUXER_TYPE_AUDIO },
+         { "fla", DEMUXER_TYPE_AUDIO },
++        { "mpc", DEMUXER_TYPE_MPC },
++        { "mp+", DEMUXER_TYPE_MPC },
++        { "aac", DEMUXER_TYPE_AAC },
+         { "ogg", DEMUXER_TYPE_OGG },
+         { "ogm", DEMUXER_TYPE_OGG },
+ //        { "pls", DEMUXER_TYPE_PLAYLIST },
+@@ -57,6 +61,7 @@
+ 	{ "swf", DEMUXER_TYPE_LAVF },
+ 	{ "flv", DEMUXER_TYPE_LAVF },
+ 	{ "302", DEMUXER_TYPE_LAVF },
++        { "h264", DEMUXER_TYPE_H264_ES },
+         { "264", DEMUXER_TYPE_H264_ES },
+         { "26l", DEMUXER_TYPE_H264_ES },
+ 	{ "ac3", DEMUXER_TYPE_LAVF }

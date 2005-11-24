@@ -1,0 +1,16 @@
+Index: frontend/main.c
+===================================================================
+RCS file: /cvsroot/faac/faac/frontend/main.c,v
+retrieving revision 1.78
+diff -u -r1.78 main.c
+--- frontend/main.c	8 Dec 2004 11:07:17 -0000	1.78
++++ frontend/main.c	16 Mar 2005 23:47:16 -0000
+@@ -876,7 +876,7 @@
+ #ifdef MP4_CREATE_EXTENSIBLE_FORMAT
+     /* hack to compile against libmp4v2 >= 1.0RC3
+      * why is there no version identifier in mp4.h? */
+-        MP4hFile = MP4Create(aacFileName, MP4_DETAILS_ERROR, 0);
++        MP4hFile = MP4CreateEx(aacFileName, MP4_DETAILS_ERROR, 0, 1, 1, 0, 0, 0, 0);
+ #else
+     MP4hFile = MP4Create(aacFileName, MP4_DETAILS_ERROR, 0, 0);
+ #endif

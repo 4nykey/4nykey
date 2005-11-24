@@ -1,0 +1,6 @@
+MD5 db98448ddd0675e888635a1d6c4838a0 libdts-0.0.2-r1.ebuild 1406
+MD5 7dc0e12f1f729e83b3d58025c69aca96 libdts-0.0.2.ebuild 870
+MD5 9d1c5f06b01f4cc5b729407e44de4078 files/digest-libdts-0.0.2-r1 64
+MD5 62c3344b13d00b325c29b9d29bece0f2 files/svn.diff 2633
+MD5 12c04e9ab275d3c791221f2466fc1dd4 files/libdts-0.0.2-libtool.patch 2812
+MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-libdts-0.0.2 0

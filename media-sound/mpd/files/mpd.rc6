@@ -1,0 +1,36 @@
+#!/sbin/runscript
+# Copyright 1999-2004 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: /var/cvsroot/gentoo-x86/media-sound/mpd/files/mpd.rc6,v 1.11 2004/07/23 00:17:09 ferringb Exp $
+
+depend() {
+	need localmount
+} 
+
+checkconfig() {
+	if [ -f /etc/conf.d/mpd ]; then
+		eerror "Please remove the /etc/conf.d/mpd file as it is no longer used."
+		eerror "You may configure your mpd settings in /etc/mpd.conf"
+	fi
+
+	if ! [ -f /etc/mpd.conf ]; then
+		eerror "Configuration file /etc/mpd.conf does not exist."
+		return 1
+	fi
+
+	return 0
+}
+
+start() {
+	checkconfig || return 1
+
+	ebegin "Starting Music Player Daemon" 
+	start-stop-daemon --start --quiet --exec /usr/bin/mpd -- --no-create-db /etc/mpd.conf
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping Music Player Daemon"
+	start-stop-daemon --stop --quiet --exec /usr/bin/mpd 
+	eend $? 
+}

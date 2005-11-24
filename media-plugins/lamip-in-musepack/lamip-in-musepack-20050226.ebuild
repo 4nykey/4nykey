@@ -1,0 +1,33 @@
+# Copyright 1999-2005 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+inherit autotools
+
+DESCRIPTION="Musepack input plugin for LAMIP"
+HOMEPAGE="http://lamip.sourceforge.net"
+LICENSE="GPL-2"
+SLOT="0"
+KEYWORDS="~x86"
+S="${WORKDIR}/inputmpc"
+
+SRC_URI="http://fondriest.frederic.free.fr/realisations/lamip/files/src/testing/contrib/lamip-inputMPC_${PV}.tar.bz2"
+
+IUSE=""
+
+DEPEND="media-sound/lamip
+	media-libs/libmpcdec"
+RDEPEND="${DEPEND}"
+
+src_unpack() {
+	unpack ${A}
+	cd ${S}
+	sed -i 's:\<musepack\>:mpcdec:' configure.ac
+	sed -i 's:musepack/musepack:mpcdec/mpcdec:' src/libmpc.c
+	eautoreconf || die "autotools failed"
+}
+
+src_install() {
+	make DESTDIR=${D} libdir=/usr/$(get_libdir)/lamip install || die "install failed"
+	dodoc AUTHORS ChangeLog NEWS README
+}

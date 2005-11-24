@@ -1,0 +1,9 @@
+Index: autogen.sh
+===================================================================
+--- autogen.sh	(revision 9576)
++++ autogen.sh	(working copy)
+@@ -77,4 +77,3 @@
+ autoconf || exit 1
+ 
+ cd $olddir
+-$srcdir/configure --enable-maintainer-mode "$@" && echo

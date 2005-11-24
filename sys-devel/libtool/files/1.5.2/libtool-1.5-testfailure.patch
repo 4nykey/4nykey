@@ -1,0 +1,176 @@
+--- libtool-1.5/pdemo/longer_file_name_hell0.c.testfailure	2003-04-24 19:19:09.000000000 -0400
++++ libtool-1.5/pdemo/longer_file_name_hell0.c	2003-04-24 19:19:04.000000000 -0400
+@@ -0,0 +1,32 @@
++/* hello.c -- trivial test function for libfoo
++   Copyright (C) 1996-1999 Free Software Foundation, Inc.
++   This file is part of GNU Libtool.
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++
++You should have received a copy of the GNU General Public License
++along with this program; if not, write to the Free Software
++Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
++USA. */
++
++/* Written by Gordon Matzigkeit <gord@gnu.ai.mit.edu> */
++#define _LIBFOO_COMPILATION
++#include "foo.h"
++#undef _LIBFOO_COMPILATION
++
++#include <stdio.h>
++
++int
++hello ()
++{
++  printf ("** This is not GNU Hello.  There is no built-in mail reader. **\n");
++  return HELLO_RET;
++}
+--- libtool-1.5/pdemo/longer_file_name_foo0.c.testfailure	2003-04-24 19:19:51.000000000 -0400
++++ libtool-1.5/pdemo/longer_file_name_foo0.c	2003-04-24 19:19:43.000000000 -0400
+@@ -0,0 +1,39 @@
++/* foo.c -- trivial test function for libfoo
++   Copyright (C) 1996-1999 Free Software Foundation, Inc.
++   Gordon Matzigkeit <gord@gnu.ai.mit.edu>, 1996
++   This file is part of GNU Libtool.
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++
++You should have received a copy of the GNU General Public License
++along with this program; if not, write to the Free Software
++Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
++USA. */
++
++#define _LIBFOO_COMPILATION_
++#include "foo.h"
++#undef _LIBFOO_COMPILATION_
++
++#include <stdio.h>
++
++#ifdef HAVE_MATH_H
++#include <math.h>
++#endif
++
++/* Give a global variable definition. */
++int nothing = FOO_RET;
++
++int
++foo ()
++{
++  printf ("cos (0.0) = %g\n", (double) cos ((double) 0.0));
++  return FOO_RET;
++}
+--- libtool-1.5/pdemo/Makefile.am.testfailure	2003-04-24 19:20:08.000000000 -0400
++++ libtool-1.5/pdemo/Makefile.am	2003-04-24 19:20:17.000000000 -0400
+@@ -122,7 +122,7 @@
+ # This is one of the essential tests for deplibs_check_method=pass_all.
+ # If this one passes with pass_all, it is likely that pass_all works
+ EXTRA_LIBRARIES = libhell0.a
+-libhell0_a_SOURCES = longer_file_name_hello.c longer_file_name_foo.c
++libhell0_a_SOURCES = longer_file_name_hell0.c longer_file_name_foo0.c
+ EXTRA_LTLIBRARIES = libhell1.la libhell2.la
+ libhell1_la_SOURCES = longer_file_name_hell1.c
+ libhell1_la_LIBADD = -L. -lhell0
+--- /dev/null	2002-04-11 10:25:15.000000000 -0400
++++ libtool-1.5/demo/hell0.c	2003-04-24 19:11:46.000000000 -0400
+@@ -0,0 +1,32 @@
++/* hello.c -- trivial test function for libfoo
++   Copyright (C) 1996-1999 Free Software Foundation, Inc.
++   This file is part of GNU Libtool.
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++
++You should have received a copy of the GNU General Public License
++along with this program; if not, write to the Free Software
++Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
++USA. */
++
++/* Written by Gordon Matzigkeit <gord@gnu.ai.mit.edu> */
++#define _LIBFOO_COMPILATION
++#include "foo.h"
++#undef _LIBFOO_COMPILATION
++
++#include <stdio.h>
++
++int
++hello ()
++{
++  printf ("** This is not GNU Hello.  There is no built-in mail reader. **\n");
++  return HELLO_RET;
++}
+--- /dev/null	2002-04-11 10:25:15.000000000 -0400
++++ libtool-1.5/demo/foo0.c	2003-04-24 19:11:46.000000000 -0400
+@@ -0,0 +1,39 @@
++/* foo.c -- trivial test function for libfoo
++   Copyright (C) 1996-1999 Free Software Foundation, Inc.
++   Gordon Matzigkeit <gord@gnu.ai.mit.edu>, 1996
++   This file is part of GNU Libtool.
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++
++You should have received a copy of the GNU General Public License
++along with this program; if not, write to the Free Software
++Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
++USA. */
++
++#define _LIBFOO_COMPILATION_
++#include "foo.h"
++#undef _LIBFOO_COMPILATION_
++
++#include <stdio.h>
++
++#ifdef HAVE_MATH_H
++#include <math.h>
++#endif
++
++/* Give a global variable definition. */
++int nothing = FOO_RET;
++
++int
++foo ()
++{
++  printf ("cos (0.0) = %g\n", (double) cos ((double) 0.0));
++  return FOO_RET;
++}
+--- libtool-1.5/demo/Makefile.am.testfailure	2002-11-19 04:42:39.000000000 -0500
++++ libtool-1.5/demo/Makefile.am	2003-04-24 19:11:46.000000000 -0400
+@@ -122,7 +122,7 @@
+ # This is one of the essential tests for deplibs_check_method=pass_all.
+ # If this one passes with pass_all, it is likely that pass_all works
+ EXTRA_LIBRARIES = libhell0.a
+-libhell0_a_SOURCES = hello.c foo.c
++libhell0_a_SOURCES = hell0.c foo0.c
+ EXTRA_LTLIBRARIES = libhell1.la libhell2.la
+ libhell1_la_SOURCES = hell1.c
+ libhell1_la_LIBADD = -L. -lhell0

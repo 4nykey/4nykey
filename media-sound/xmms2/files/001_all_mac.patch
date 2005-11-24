@@ -1,0 +1,517 @@
+diff --git a/src/plugins/mac/Plugin b/src/plugins/mac/Plugin
+new file mode 100644
+--- /dev/null
++++ b/src/plugins/mac/Plugin
+@@ -0,0 +1,6 @@
++target="mac"
++source=["source_adapter.cpp", "mac.cpp"]
++
++def config(env):
++	env.checklib("mac", "DecompressFile")
++
+diff --git a/src/plugins/mac/mac.cpp b/src/plugins/mac/mac.cpp
+new file mode 100644
+--- /dev/null
++++ b/src/plugins/mac/mac.cpp
+@@ -0,0 +1,369 @@
++#include <mac/All.h>
++#include <mac/MACLib.h>
++#include <mac/APETag.h>
++#include <mac/APEInfo.h>
++#include <mac/CharacterHelper.h>
++
++#ifdef __cplusplus
++extern "C"{
++#endif
++
++#include "source_adapter.h"
++
++#include "xmms/xmms_defs.h"
++#include "xmms/xmms_log.h"
++#include "xmms/xmms_decoderplugin.h"
++
++#include <stdlib.h>
++#include <stdio.h>
++
++/*
++ * Type Definitions
++ */
++typedef struct 
++{
++    guint start_time;
++
++    IAPEDecompress *p_decompress;
++
++    guint block_align;
++    guint sample_rate;
++    guint bits_per_sample;
++    guint channels;
++} xmms_mac_data_t;
++
++/*
++ * Function prototypes
++ */
++
++static gboolean xmms_mac_new (xmms_decoder_t *decoder);
++static gboolean xmms_mac_init (xmms_decoder_t *decoder, gint mode);
++static void xmms_mac_destroy (xmms_decoder_t *decoder);
++static void xmms_mac_get_media_info (xmms_decoder_t *decoder);
++static gboolean xmms_mac_decode_block (xmms_decoder_t *decoder);
++static gboolean xmms_mac_seek (xmms_decoder_t *decoder, guint samples);
++
++/*
++ * Plugin header
++ */
++
++xmms_plugin_t *
++xmms_plugin_get (void)
++{
++	xmms_plugin_t *plugin;
++
++	plugin = xmms_plugin_new (XMMS_PLUGIN_TYPE_DECODER, 
++				  XMMS_DECODER_PLUGIN_API_VERSION,
++				  "mac",
++				  "Monkey's Audio decoder " XMMS_VERSION,
++				  "Monkey's Audio Codec");
++
++	xmms_plugin_info_add (plugin, "URL", "http://www.monkeysaudio.com/");
++	xmms_plugin_info_add (plugin, "URL", "http://supermmx.org/linux/mac/");
++	xmms_plugin_info_add (plugin, "Author", "SuperMMX");
++	xmms_plugin_info_add (plugin, "License", "GPL");
++
++	xmms_plugin_method_add (plugin, XMMS_PLUGIN_METHOD_NEW, xmms_mac_new);
++	xmms_plugin_method_add (plugin, XMMS_PLUGIN_METHOD_DECODE_BLOCK, xmms_mac_decode_block);
++	xmms_plugin_method_add (plugin, XMMS_PLUGIN_METHOD_DESTROY, xmms_mac_destroy);
++	xmms_plugin_method_add (plugin, XMMS_PLUGIN_METHOD_GET_MEDIAINFO, xmms_mac_get_media_info);
++	xmms_plugin_method_add (plugin, XMMS_PLUGIN_METHOD_INIT, xmms_mac_init);
++	xmms_plugin_method_add (plugin, XMMS_PLUGIN_METHOD_SEEK, xmms_mac_seek);
++
++/*
++	xmms_plugin_properties_add (plugin, XMMS_PLUGIN_PROPERTY_FAST_FWD);
++	xmms_plugin_properties_add (plugin, XMMS_PLUGIN_PROPERTY_REWIND);
++*/
++
++	xmms_plugin_magic_add (plugin, "Monkey's Audio Magic", "audio/x-ape",
++	                       "0 string MAC ", NULL);
++	return plugin;
++}
++
++static gboolean xmms_mac_new (xmms_decoder_t *decoder)
++{
++    xmms_mac_data_t *data;
++
++    XMMS_DBG("xmms_mac_new");
++    g_return_val_if_fail (decoder, FALSE);
++
++    data = g_new0 (xmms_mac_data_t, 1);
++
++    xmms_decoder_private_data_set (decoder, data);
++	
++    return TRUE;
++}
++
++static gboolean xmms_mac_init (xmms_decoder_t *decoder, gint mode)
++{
++    xmms_transport_t *transport = NULL;
++    xmms_mac_data_t *data = NULL;
++    xmms_medialib_entry_t entry;
++    gint start_block = -1, end_block = -1;
++    gint err = 0;
++    CAPEInfo *ape_info = NULL;
++
++    XMMS_DBG("xmms_mac_init");
++
++    transport = xmms_decoder_transport_get (decoder);
++    data = (xmms_mac_data_t *)xmms_decoder_private_data_get(decoder);
++
++    CSourceAdapter *source_adapter = new CSourceAdapter(transport);
++    ape_info = new CAPEInfo(&err, source_adapter);
++
++    entry = xmms_decoder_medialib_entry_get (decoder);
++
++    /* Since we have to use a source adapter, so 
++     * using this function to create the decompressor is the only way.
++     */
++    data->p_decompress = CreateIAPEDecompressEx2(ape_info, start_block, end_block, &err);
++
++    if (mode & XMMS_DECODER_INIT_DECODING) {
++	data->block_align = data->p_decompress->GetInfo(APE_INFO_BLOCK_ALIGN);
++	data->sample_rate = data->p_decompress->GetInfo(APE_INFO_SAMPLE_RATE);
++	data->bits_per_sample = data->p_decompress->GetInfo(APE_INFO_BITS_PER_SAMPLE);
++	data->channels = data->p_decompress->GetInfo(APE_INFO_CHANNELS);
++
++	xmms_decoder_format_add (decoder, XMMS_SAMPLE_FORMAT_S16, data->channels, data->sample_rate);
++	if (xmms_decoder_format_finish (decoder) == NULL) {
++	    return FALSE;
++	}
++    }
++    return TRUE;
++}
++
++static void xmms_mac_destroy (xmms_decoder_t *decoder)
++{
++	xmms_mac_data_t *data;
++
++	XMMS_DBG("xmms_mac_destroy");
++	g_return_if_fail (decoder);
++
++	data = (xmms_mac_data_t *)xmms_decoder_private_data_get (decoder);
++	g_return_if_fail (data);
++
++	if (data->p_decompress) {
++	    delete data->p_decompress;
++	}
++	
++	g_free (data);
++}
++
++static void xmms_mac_get_media_info (xmms_decoder_t *decoder)
++{
++    xmms_medialib_entry_t entry;
++    xmms_mac_data_t *data;
++    xmms_error_t error;
++    xmms_medialib_session_t *session;
++
++    XMMS_DBG("xmms_mac_get_media_info");
++
++    g_return_if_fail (decoder);
++    
++    data = (xmms_mac_data_t *)xmms_decoder_private_data_get (decoder);
++    entry = xmms_decoder_medialib_entry_get (decoder);
++
++    memset(&error, 0, sizeof(xmms_error_t));
++
++    /* Meta information */
++
++    CAPETag *p_ape_tag = (CAPETag *)(data->p_decompress->GetInfo(APE_INFO_TAG));
++
++    BOOL bHasID3Tag = p_ape_tag->GetHasID3Tag();
++    BOOL bHasAPETag = p_ape_tag->GetHasAPETag();
++
++    session = xmms_medialib_begin();
++
++    if (bHasID3Tag || bHasAPETag) {
++	CAPETagField * pTagField;
++	int index = 0;
++	while ((pTagField = p_ape_tag->GetTagField(index)) != NULL)
++	{
++	    index ++;
++
++	    const wchar_t *field_name;
++	    char field_value[255];
++
++	    gchar *name;
++
++	    field_name = pTagField->GetFieldName();
++	    name = (gchar *)GetUTF8FromUTF16(field_name);
++
++	    memset(field_value, 0, 255);
++	    int size = 255;
++	    p_ape_tag->GetFieldString(field_name, (char *)field_value, &size, TRUE);
++
++	    xmms_medialib_entry_property_set_str(session, entry, name, field_value);
++
++	    g_free(name);
++	}
++    }
++
++#define _(S) (S)
++
++    gchar *name, *value;
++
++    if (xmms_medialib_entry_property_get_int(session, entry, XMMS_MEDIALIB_ENTRY_PROPERTY_DURATION) <= 0) {
++	/* if in CUE, the duration has been caculated */
++	gint duration = data->p_decompress->GetInfo(APE_DECOMPRESS_LENGTH_MS);
++	xmms_medialib_entry_property_set_int(session, entry, XMMS_MEDIALIB_ENTRY_PROPERTY_DURATION, duration);
++    }
++
++
++    /* Technical Information */
++
++    /* APE Version */
++    name = _("Version");
++    value = g_strdup_printf("%.2f", (float)data->p_decompress->GetInfo(APE_INFO_FILE_VERSION) / float(1000));
++    xmms_medialib_entry_property_set_str(session, entry, name, value);
++    g_free(value);
++
++    /* Compression Level */
++    name = _("Compression Level");
++    switch (data->p_decompress->GetInfo(APE_INFO_COMPRESSION_LEVEL)) {
++    case COMPRESSION_LEVEL_FAST:
++	value = _("Fast");
++	break;
++    case COMPRESSION_LEVEL_NORMAL:
++	value = _("Normal");
++	break;
++    case COMPRESSION_LEVEL_HIGH:
++	value = _("High");
++	break;
++    case COMPRESSION_LEVEL_EXTRA_HIGH:
++	value = _("Extra High");
++	break;
++    case COMPRESSION_LEVEL_INSANE:
++	value = _("Insane");
++	break;
++    }
++    xmms_medialib_entry_property_set_str(session, entry, name, value);
++
++    /* Format Flags */
++    name = _("Flags");
++    xmms_medialib_entry_property_set_int(session, entry, name, data->p_decompress->GetInfo(APE_INFO_FORMAT_FLAGS));
++
++    /* Sample Rate */
++    name = _("Sample Rate");
++    xmms_medialib_entry_property_set_int(session, entry, name, data->p_decompress->GetInfo(APE_INFO_SAMPLE_RATE));
++
++    /* Bits Per Sample */
++    name = _("Bits Per Sample");
++    xmms_medialib_entry_property_set_int(session, entry, name, data->p_decompress->GetInfo(APE_INFO_BITS_PER_SAMPLE));
++
++    /* Channels */
++    name = _("Channels");
++    xmms_medialib_entry_property_set_int(session, entry, name, data->p_decompress->GetInfo(APE_INFO_CHANNELS));
++
++    /* Actrual File if the file is APL */
++/*
++    char *ext = strrchr(mac_info.current_filename, '.');
++    if(ext)
++    {
++	if (!strcasecmp(ext, ".apl"))
++	{
++	    name = _("Actrual File");
++	    CIO *pIO = (CIO *)data->p_decompress->GetInfo(APE_INFO_IO_SOURCE);
++	    if (pIO)
++	    {
++		wchar_t nameBuf[255];
++		memset(nameBuf, 0, 255 * sizeof(wchar_t));
++		pIO->GetName(nameBuf);
++		gchar *actrual_name = (gchar *)GetUTF8FromUTF16(nameBuf);
++		gchar *basename = g_strdup(g_basename(name));
++		value = basename;
++		gtk_list_store_append(list_store, &iter);
++		gtk_list_store_set(list_store, &iter,
++				   COL_NAME, name,
++				   COL_VALUE, value,
++				   -1);
++		g_free(actrual_name);
++		g_free(basename);
++	    }
++	}
++    }
++*/
++  
++    /* Total File Size */
++    name = _("File Size");
++    value = g_strdup_printf("%d bytes", data->p_decompress->GetInfo(APE_INFO_APE_TOTAL_BYTES));
++    xmms_medialib_entry_property_set_str(session, entry, name, value);
++    g_free(value);
++
++    /* Length (Time) */
++    name = _("Length");
++    unsigned int length = data->p_decompress->GetInfo(APE_INFO_LENGTH_MS);
++    int min, sec, ms;
++    ms = length % 1000;
++    sec = length / 1000;
++    min = sec / 60;
++    sec = sec % 60;
++    value = g_strdup_printf("%d:%d.%d ", min, sec, ms);
++    xmms_medialib_entry_property_set_str(session, entry, name, value);
++    g_free(value);
++
++    /* Average Bitrate */
++    name = _("Bitrate");
++    xmms_medialib_entry_property_set_int(session, entry, name, data->p_decompress->GetInfo(APE_INFO_AVERAGE_BITRATE));
++
++    xmms_medialib_end(session);
++    xmms_medialib_entry_send_update (entry);
++}
++
++#define SAMPLES_PER_READ 1024
++
++static gboolean xmms_mac_decode_block (xmms_decoder_t *decoder)
++{
++    xmms_mac_data_t *data;
++    char out_data[8192];
++
++    int blocks_to_read = 0, actrual_read = 0;
++    int nRetVal = 0;
++    int bytes = 0, actrual_bytes= 0;
++    gboolean result = TRUE;
++
++    data = (xmms_mac_data_t *)xmms_decoder_private_data_get (decoder);
++    
++    blocks_to_read = SAMPLES_PER_READ;
++    bytes = blocks_to_read * data->block_align;
++
++    actrual_read = blocks_to_read;
++    actrual_bytes = bytes;
++
++    nRetVal = data->p_decompress->GetData(out_data, blocks_to_read, &actrual_read);
++
++    if (actrual_read <= 0)
++    {
++	result = FALSE;
++    }
++    else
++    {
++	if (actrual_read < blocks_to_read)
++	{
++	    actrual_bytes = actrual_read * data->block_align;
++	}
++	bytes = blocks_to_read * (data->bits_per_sample / 8) * data->channels;
++	xmms_decoder_write (decoder, (gchar *)out_data, actrual_bytes);
++    }
++    
++    return result;
++}
++
++static gboolean xmms_mac_seek (xmms_decoder_t *decoder, guint samples)
++{
++	xmms_mac_data_t *data;
++	
++	XMMS_DBG("xmms_mac_seek to %d", samples);
++
++	g_return_val_if_fail (decoder, FALSE);
++
++	data = (xmms_mac_data_t *)xmms_decoder_private_data_get (decoder);
++
++	int ret = data->p_decompress->Seek(samples);
++    
++	return (ret == ERROR_SUCCESS) ? TRUE : FALSE;
++}
++
++#ifdef __cplusplus
++}
++#endif
+diff --git a/src/plugins/mac/source_adapter.cpp b/src/plugins/mac/source_adapter.cpp
+new file mode 100644
+--- /dev/null
++++ b/src/plugins/mac/source_adapter.cpp
+@@ -0,0 +1,64 @@
++#include "source_adapter.h"
++
++CSourceAdapter::CSourceAdapter(xmms_transport_t *transport)
++{
++    this->transport = transport;
++}
++
++int CSourceAdapter::Read(void * pBuffer, unsigned int nBytesToRead, unsigned int * pBytesRead)
++{
++    int ret = 0;
++    xmms_error_t error;
++
++    memset(&error, 0, sizeof(xmms_error_t));
++
++//    XMMS_DBG("Read nBytesToRead = %d", nBytesToRead);
++    memset(&error, 0, sizeof(xmms_error_t));
++    ret = xmms_transport_read(transport,
++			      (gchar *)pBuffer,
++			      nBytesToRead,
++			      &error);
++//    XMMS_DBG("BytesRead = %d, error code = %d, message = %s", ret, error.code, error.message);
++    *pBytesRead = ret;
++    
++    return ERROR_SUCCESS;
++}
++
++int CSourceAdapter::Seek(int nDistance, unsigned int nMoveMode)
++{
++    gint whence;
++    gint pos;
++
++//    XMMS_DBG("Seek nDistance = %d, nMoveMode = %d", nDistance, nMoveMode);
++    switch (nMoveMode)
++    {
++    case FILE_BEGIN:
++	whence = XMMS_TRANSPORT_SEEK_SET;
++	break;
++    case FILE_CURRENT:
++	whence = XMMS_TRANSPORT_SEEK_CUR;
++	break;
++    case FILE_END:
++	whence = XMMS_TRANSPORT_SEEK_END;
++	break;
++    }
++
++    pos = xmms_transport_seek(transport, nDistance, whence);
++//    XMMS_DBG("Current position = %d", pos);
++
++    return ERROR_SUCCESS;
++}
++
++int CSourceAdapter::GetPosition()
++{
++    guint pos = xmms_transport_tell(transport);
++
++    return pos; 
++}
++
++int CSourceAdapter::GetSize()
++{
++    guint size = xmms_transport_size(transport);
++
++    return size;
++}
+diff --git a/src/plugins/mac/source_adapter.h b/src/plugins/mac/source_adapter.h
+new file mode 100644
+--- /dev/null
++++ b/src/plugins/mac/source_adapter.h
+@@ -0,0 +1,58 @@
++#ifndef XMMS_MAC_SOURCE_ADAPTER_H
++#define XMMS_MAC_SOURCE_ADAPTER_H
++
++#include <mac/All.h>
++#include <mac/MACLib.h>
++#include <mac/IO.h>
++
++#ifdef __cplusplus
++extern "C"{
++#endif
++
++#include <glib.h>
++
++#include "xmms/xmms_defs.h"
++#include "xmms/xmms_plugin.h"
++#include "xmms/xmms_transport.h"
++#include "xmms/xmms_log.h"
++#include "xmms/xmms_decoder.h"
++
++#ifdef __cplusplus
++}
++#endif
++
++class CSourceAdapter : public CIO
++{
++public:
++    CSourceAdapter(xmms_transport_t *transport);
++    ~CSourceAdapter() {};
++
++    // open / close
++    int Open(const wchar_t * pName) { return ERROR_SUCCESS; }
++    int Close() { return ERROR_SUCCESS; }
++    
++    // read / write
++    int Read(void * pBuffer, unsigned int nBytesToRead, unsigned int * pBytesRead);
++    int Write(const void * pBuffer, unsigned int nBytesToWrite, unsigned int * pBytesWritten) { return ERROR_SUCCESS; };
++    
++    // seek
++    int Seek(int nDistance, unsigned int nMoveMode);
++    
++    // other functions
++    int SetEOF() { return ERROR_SUCCESS; };
++
++    // creation / destruction
++    int Create(const wchar_t * pName) { return ERROR_SUCCESS; }
++    int Delete() { return ERROR_SUCCESS; }
++
++    // attributes
++    int GetPosition();
++    int GetSize();
++    int GetName(wchar_t * pBuffer) { return 0; }
++    int GetHandle() { return 0; }
++
++private:
++    xmms_transport_t *transport;
++};
++
++#endif

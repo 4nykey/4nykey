@@ -1,0 +1,23 @@
+--- contrib/init.d.gentoo.orig	2005-04-08 08:55:21.000000000 +0300
++++ contrib/init.d.gentoo	2005-08-30 14:04:22.476989750 +0300
+@@ -6,8 +6,9 @@
+ }
+ 
+ checkconfig() {
+-	if [ ! -f /etc/mpdscribble/mpdscribble.conf ]; then
+-	eerror "mpdscribble configuration file /etc/mpdscribble/mpdscribble.conf doesn't exist"
++	CONFFILE=/etc/mpdscribble/mpdscribble.conf
++	if [ ! -f ${CONFFILE} ]; then
++	eerror "mpdscribble configuration file ${CONFFILE} doesn't exist"
+ 	eerror "run \"ebuild /var/db/pkg/net-misc/mpdscribble-<your-version>/mpdscribble-<your-version>.ebuild config\""
+ 	eerror "to create a new config file."
+ 		return 1
+@@ -18,7 +19,7 @@
+ 	checkconfig || return 1
+ 	
+ 	ebegin "Starting Music Player Daemon Audioscrobbler Client: mpdscribble"
+-	start-stop-daemon --start -p /var/run/mpdscribble.pid -b -m --exec /usr/bin/mpdscribble
++	start-stop-daemon --start -p /var/run/mpdscribble.pid -b -m --exec /usr/bin/mpdscribble -- --conf ${CONFFILE}
+ 	eend $?
+ }
+ 

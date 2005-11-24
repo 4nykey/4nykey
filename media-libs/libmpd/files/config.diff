@@ -1,0 +1,10 @@
+Index: autogen.sh
+===================================================================
+--- autogen.sh	(revision 3405)
++++ autogen.sh	(working copy)
+@@ -1,4 +1,5 @@
+ aclocal
++libtoolize -f
+ autoheader
+ automake -a -c
+ autoconf

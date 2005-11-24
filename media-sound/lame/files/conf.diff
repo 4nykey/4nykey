@@ -1,0 +1,25 @@
+--- config.h.in.orig	2005-03-01 17:58:42.693525640 +0200
++++ config.h.in	2005-03-01 17:59:24.471174472 +0200
+@@ -55,12 +55,14 @@
+ #undef HAVE_IEEE754_FLOAT32_T
+ #ifndef HAVE_IEEE754_FLOAT32_T
+ 	typedef float ieee754_float32_t;
++#define HAVE_IEEE754_FLOAT32_T
+ #endif
+ 
+ /* add ieee754_float64_t type */
+ #undef HAVE_IEEE754_FLOAT64_T
+ #ifndef HAVE_IEEE754_FLOAT64_T
+ 	typedef double ieee754_float64_t;
++#define HAVE_IEEE754_FLOAT64_T
+ #endif
+ 
+ /* system has 80 bit floats */
+@@ -70,6 +72,7 @@
+ #undef HAVE_IEEE854_FLOAT80_T
+ #ifndef HAVE_IEEE854_FLOAT80_T
+ 	typedef long double ieee854_float80_t;
++#define HAVE_IEEE854_FLOAT80_T
+ #endif
+ 
+ /* add int16_t type */

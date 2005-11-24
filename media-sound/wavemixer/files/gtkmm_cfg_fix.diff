@@ -1,0 +1,11 @@
+--- configure.ac.orig	2005-11-07 12:08:59.000000000 +0200
++++ configure.ac	2005-11-07 12:08:59.000000000 +0200
+@@ -104,7 +104,7 @@
+     AC_DEFINE(HAVE_GTKMM, 1, [have Gtkmm])
+     W_GTKMM_CFLAGS=[`$PKG_CONFIG gtkmm-2.4 --cflags`]
+     W_GTKMM_LIBS=[`$PKG_CONFIG gtkmm-2.4 --libs`]
+-    gtkmm_version=[`$PKG_CONFIG gtkmm-2.4 --modversion`]
++    gtkmm_version=[`$PKG_CONFIG gtkmm-2.4 --modversion | cut -d. -f-2`]
+ 
+     if test VERSION_TO_NUMBER(echo $gtkmm_version) -lt VERSION_TO_NUMBER(echo $GTKMM_MIN_VERSION); then
+         W_GTKMM=no

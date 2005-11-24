@@ -1,0 +1,5 @@
+MD5 2278b5cadc9d55c21a1d01234ccb8912 gpac-cvs-0.4.1.ebuild 3103
+MD5 52357c55c58731a981b4af9f22bfffc6 files/amr-deconly.diff 1308
+MD5 464473185984a60927580dd3f2c308c8 files/makefiles.diff 5672
+MD5 dff9acd36dbc6627b2ea0d60343c2114 files/oss.diff 464
+MD5 6ce95e0b0e6ee0f31aab963da172f16c files/digest-gpac-cvs-0.4.1 116

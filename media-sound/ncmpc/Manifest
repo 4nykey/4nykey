@@ -1,0 +1,4 @@
+MD5 ce6f423318479e26c151bc6daf6b0647 files/config.diff 223
+MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-ncmpc-0.11.2 0
+MD5 0516f00101614c645603d5051873daf5 files/ncmpc-0.11.1-bitrate.patch 2099
+MD5 6fc836fdc42d5e5834ab7160972a3fc6 ncmpc-0.11.2.ebuild 964

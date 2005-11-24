@@ -1,0 +1,14 @@
+--- libtool-1.4.3/ltmain.in.pass-thread-flags	2003-07-08 14:24:03.000000000 +0200
++++ libtool-1.4.3/ltmain.in	2003-07-08 14:52:09.000000000 +0200
+@@ -1225,6 +1225,11 @@ compiler."
+ 	continue
+ 	;;
+ 
++      -Kthread | -mthreads | -mt | -pthread | -pthreads | -threads | -qthreaded | -kthread )
++        compiler_flags="$compiler_flags $arg"
++        continue
++        ;;
++
+       # Some other compiler flag.
+       -* | +*)
+ 	# Unknown arguments in both finalize_command and compile_command need

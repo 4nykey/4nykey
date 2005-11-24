@@ -1,0 +1,59 @@
+diff -Naur ncmpc-0.11.1/src/conf.c ncmpc-0.11.1-bitrate/src/conf.c
+--- ncmpc-0.11.1/src/conf.c	2005-01-23 17:37:42.000000000 +0000
++++ ncmpc-0.11.1-bitrate/src/conf.c	2005-10-03 00:08:15.000000000 +0000
+@@ -60,6 +60,7 @@
+ #define CONF_HIDE_CURSOR             "hide-cursor"
+ #define CONF_SEEK_TIME               "seek-time"
+ #define CONF_SCREEN_LIST             "screen-list"
++#define CONF_VISIBLE_BITRATE         "visible-bitrate"
+ 
+ typedef enum {
+   KEY_PARSER_UNKNOWN,
+@@ -422,6 +423,11 @@
+ 		{
+ 		  options->wide_cursor = str2bool(value);
+ 		}
++	      /* visible bitrate */
++	      else if( !strcasecmp(CONF_VISIBLE_BITRATE, name) )
++		{
++		  options->visible_bitrate = str2bool(value);
++		}
+ 	      /* color definition */
+ 	      else if( !strcasecmp(CONF_COLOR_DEFINITION, name) )
+ 		{
+diff -Naur ncmpc-0.11.1/src/options.h ncmpc-0.11.1-bitrate/src/options.h
+--- ncmpc-0.11.1/src/options.h	2005-01-23 17:37:41.000000000 +0000
++++ ncmpc-0.11.1-bitrate/src/options.h	2005-10-03 00:08:15.000000000 +0000
+@@ -26,6 +26,7 @@
+   gboolean visible_bell;       
+   gboolean enable_xterm_title; 
+   gboolean enable_mouse;
++  gboolean visible_bitrate;
+ 
+ } options_t;
+ 
+diff -Naur ncmpc-0.11.1/src/screen.c ncmpc-0.11.1-bitrate/src/screen.c
+--- ncmpc-0.11.1/src/screen.c	2005-01-23 17:37:42.000000000 +0000
++++ ncmpc-0.11.1-bitrate/src/screen.c	2005-10-03 00:17:02.000000000 +0000
+@@ -292,10 +292,17 @@
+ 	{
+ 	  if( c->song && seek_id == c->song->id )
+ 	    elapsedTime = seek_target_time;
+-	  g_snprintf(screen->buf, screen->buf_size, 
+-		   " [%i:%02i/%i:%02i]",
+-		   elapsedTime/60, elapsedTime%60,
+-		   status->totalTime/60,   status->totalTime%60 );
++	  if ( options.visible_bitrate )
++	    g_snprintf(screen->buf, screen->buf_size, 
++		     " [%d kbps] [%i:%02i/%i:%02i]",
++		     status->bitRate,
++		     elapsedTime/60, elapsedTime%60,
++		     status->totalTime/60,   status->totalTime%60 );
++	  else
++	    g_snprintf(screen->buf, screen->buf_size, 
++		     " [%i:%02i/%i:%02i]",
++		     elapsedTime/60, elapsedTime%60,
++		     status->totalTime/60,   status->totalTime%60 );
+ 	}
+       else
+ 	{

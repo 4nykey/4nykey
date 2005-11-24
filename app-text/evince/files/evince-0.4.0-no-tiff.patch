@@ -1,0 +1,27 @@
+diff --exclude-from=/home/dang/.diffrc -u -ruN evince-0.4.0.orig/configure.ac evince-0.4.0/configure.ac
+--- evince-0.4.0.orig/configure.ac	2005-08-26 00:04:22.000000000 -0400
++++ evince-0.4.0/configure.ac	2005-10-17 10:53:11.000000000 -0400
+@@ -80,12 +80,12 @@
+ fi
+ 
+ SHELL_CFLAGS="$SHELL_CORE_CFLAGS $DBUS_CFLAGS"
+-SHELL_LIBS="$SHELL_CORE_LIBS $DBUS_LIBS -ltiff -lz"
++SHELL_LIBS="$SHELL_CORE_LIBS $DBUS_LIBS -lz"
+ AC_SUBST(SHELL_CFLAGS)
+ AC_SUBST(SHELL_LIBS)
+ 
+ FRONTEND_CFLAGS="$FRONTEND_CORE_CFLAGS"
+-FRONTEND_LIBS="$FRONTEND_CORE_LIBS -ltiff -lz"
++FRONTEND_LIBS="$FRONTEND_CORE_LIBS -lz"
+ AC_SUBST(FRONTEND_CFLAGS)
+ AC_SUBST(FRONTEND_LIBS)
+ 
+@@ -170,6 +170,8 @@
+     fi
+     if test "x$enable_tiff" = "xyes"; then
+ 	    AC_DEFINE([ENABLE_TIFF], [1], [Enable multipage tiff support.])
++	    FRONTEND_LIBS="$FRONTEND_LIBS -ltiff"
++	    SHELL_LIBS="$SHELL_LIBS -ltiff"
+     else
+ 	    AC_MSG_WARN("Tiff support is disabled since tiff library version 3.6 or newer not found")
+     fi 

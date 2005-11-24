@@ -1,0 +1,52 @@
+? faad2-2.1-mp4ff.patch
+Index: common/mp4ff/Makefile.am
+===================================================================
+RCS file: /cvsroot/faac/faad2/common/mp4ff/Makefile.am,v
+retrieving revision 1.8
+diff -u -r1.8 Makefile.am
+--- common/mp4ff/Makefile.am	22 Aug 2004 17:48:35 -0000	1.8
++++ common/mp4ff/Makefile.am	27 Jul 2005 14:27:07 -0000
+@@ -1,8 +1,8 @@
+-noinst_LIBRARIES = libmp4ff.a
++lib_LTLIBRARIES = libmp4ff.la
+ 
+-libmp4ff_a_CFLAGS = -DUSE_TAGGING=1
++libmp4ff_la_CFLAGS = -DUSE_TAGGING=1
+ 
+-libmp4ff_a_SOURCES = mp4ff.c mp4atom.c mp4meta.c mp4sample.c mp4util.c \
++libmp4ff_la_SOURCES = mp4ff.c mp4atom.c mp4meta.c mp4sample.c mp4util.c \
+    mp4tagupdate.c mp4ff.h mp4ffint.h mp4ff_int_types.h \
+    drms.h drms.c drmstables.h
+ 
+Index: frontend/Makefile.am
+===================================================================
+RCS file: /cvsroot/faac/faad2/frontend/Makefile.am,v
+retrieving revision 1.13
+diff -u -r1.13 Makefile.am
+--- frontend/Makefile.am	22 Aug 2004 17:48:36 -0000	1.13
++++ frontend/Makefile.am	27 Jul 2005 14:27:22 -0000
+@@ -4,7 +4,7 @@
+    -I$(top_srcdir)/common/mp4ff
+ 
+ faad_LDADD = $(top_builddir)/libfaad/libfaad.la \
+-	$(top_builddir)/common/mp4ff/libmp4ff.a
++	$(top_builddir)/common/mp4ff/libmp4ff.la
+ 
+ faad_SOURCES = main.c \
+ 	audio.c audio.h \
+Index: plugins/xmms/src/Makefile.am
+===================================================================
+RCS file: /cvsroot/faac/faad2/plugins/xmms/src/Makefile.am,v
+retrieving revision 1.9
+diff -u -r1.9 Makefile.am
+--- plugins/xmms/src/Makefile.am	22 Aug 2004 17:48:37 -0000	1.9
++++ plugins/xmms/src/Makefile.am	27 Jul 2005 14:27:29 -0000
+@@ -5,7 +5,7 @@
+        -I$(top_srcdir)/include -I$(top_srcdir)/common/mp4ff
+ 
+ libmp4_la_LIBADD = $(top_builddir)/libfaad/libfaad.la \
+-       $(top_builddir)/common/mp4ff/libmp4ff.a
++       $(top_builddir)/common/mp4ff/libmp4ff.la
+ 
+ libmp4_la_LDFLAGS = -module -avoid-version `$(XMMS_CONFIG) --libs` -lpthread
+ 

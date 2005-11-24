@@ -1,0 +1,27 @@
+Index: modules/amr_float_dec/Makefile
+===================================================================
+RCS file: /cvsroot/gpac/gpac/modules/amr_float_dec/Makefile,v
+retrieving revision 1.1.1.1
+diff -u -r1.1.1.1 Makefile
+--- modules/amr_float_dec/Makefile	13 Jul 2005 14:35:46 -0000	1.1.1.1
++++ modules/amr_float_dec/Makefile	14 Jul 2005 15:35:38 -0000
+@@ -17,16 +17,15 @@
+ #AMR NB obj
+ CFLAGS+=-DGPAC_HAS_AMR_FT
+ ifeq ($(CONFIG_AMR_NB_FT), yes)
+-OBJS+=./amr_nb_ft/interf_dec.o ./amr_nb_ft/interf_enc.o ./amr_nb_ft/sp_dec.o ./amr_nb_ft/sp_enc.o
++OBJS+=./amr_nb_ft/interf_dec.o ./amr_nb_ft/sp_dec.o
+ endif
+ 
+ 
+ #AMR WB obj
+ CFLAGS+=-DGPAC_HAS_AMR_FT_WB
+ ifeq ($(CONFIG_AMR_WB_FT), yes)
+-OBJS+=./amr_wb_ft/dec_acelp.o ./amr_wb_ft/dec_dtx.o ./amr_wb_ft/dec_gain.o ./amr_wb_ft/dec_if.o ./amr_wb_ft/dec_lpc.o ./amr_wb_ft/dec_main.o \
+-	./amr_wb_ft/dec_rom.o ./amr_wb_ft/dec_util.o ./amr_wb_ft/enc_acelp.o ./amr_wb_ft/enc_dtx.o ./amr_wb_ft/enc_gain.o ./amr_wb_ft/enc_if.o \
+-	./amr_wb_ft/enc_lpc.o ./amr_wb_ft/enc_main.o ./amr_wb_ft/enc_rom.o ./amr_wb_ft/enc_util.o ./amr_wb_ft/if_rom.o 
++OBJS+=./amr_wb_ft/dec_acelp.o ./amr_wb_ft/dec_dtx.o ./amr_wb_ft/dec_gain.o ./amr_wb_ft/dec_if.o ./amr_wb_ft/dec_lpc.o ./amr_wb_ft/dec_main.o \
++	./amr_wb_ft/dec_rom.o ./amr_wb_ft/dec_util.o ./amr_wb_ft/if_rom.o 
+ endif
+ 
+ 

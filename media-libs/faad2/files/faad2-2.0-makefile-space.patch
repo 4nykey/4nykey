@@ -1,0 +1,11 @@
+--- Makefile.am.orig	2004-03-13 14:05:37.008118272 +0100
++++ Makefile.am	2004-03-13 14:05:42.753244880 +0100
+@@ -1,8 +1,3 @@
+ SUBDIRS = libfaad common frontend plugins
+ 
+ EXTRA_DIST = faad2.spec
+-
+-rpm:    Makefile
+-       make dist
+-       $(RPMBUILD) -ta $(PACKAGE)-$(VERSION).tar.gz
+-       rm $(PACKAGE)-$(VERSION).tar.gz

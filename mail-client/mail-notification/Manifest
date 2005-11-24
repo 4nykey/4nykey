@@ -1,0 +1,5 @@
+MD5 929a84657f6cb36ab2e1c3ebf855935d mail-notification-2.0.ebuild 1758
+MD5 ec05e995d548a5051d6ac1a2886ea609 ChangeLog 235
+MD5 9b632ffa3d886c3829752ea656adf8f1 files/mail-notification-2.0-buildfix.diff 281
+MD5 7e2243b625802214a46bce8d633b94dc files/mail-notification-2.0-gmail-properties-fix.diff 508
+MD5 08760188e6900a0b64683d8f277f53eb files/digest-mail-notification-2.0 73

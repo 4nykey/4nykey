@@ -1,0 +1,41 @@
+Index: Makefile
+===================================================================
+RCS file: /cvsroot/mp3gain/mp3gain/Makefile,v
+retrieving revision 1.4
+diff -u -r1.4 Makefile
+--- Makefile	30 Mar 2004 18:55:26 -0000	1.4
++++ Makefile	11 Aug 2005 08:07:37 -0000
+@@ -6,7 +6,7 @@
+ 
+ CC=     gcc
+ 
+-CFLAGS= -Wall -O3 -DHAVE_MEMCPY
++CFLAGS+= -Wall -DHAVE_MEMCPY
+ 
+ ifneq ($(OSTYPE),beos)
+ INSTALL_PATH= /usr/local/bin
+Index: mp3gain.c
+===================================================================
+RCS file: /cvsroot/mp3gain/mp3gain/mp3gain.c,v
+retrieving revision 1.18
+diff -u -r1.18 mp3gain.c
+--- mp3gain.c	4 Apr 2005 18:06:04 -0000	1.18
++++ mp3gain.c	11 Aug 2005 08:07:42 -0000
+@@ -570,7 +570,7 @@
+     }      
+ }
+ 
+-unsigned long reportPercentWritten(unsigned long percent, unsigned long bytes)
++unsigned long reportPercentWritten(int percent, uint bytes)
+ {
+     int ok = 1;
+ 
+@@ -591,7 +591,7 @@
+ }
+ 
+ int numFiles, totFiles;
+-unsigned long reportPercentAnalyzed(unsigned long percent, unsigned long bytes)
++unsigned long reportPercentAnalyzed(int percent, uint bytes)
+ {
+ 	char fileDivFiles[21];
+     fileDivFiles[0]='\0';

@@ -1,0 +1,6 @@
+MD5 8121635a6e2d2be1c4b2067bc9d659f9 files/digest-svgalib-helper-1.9.23 66
+MD5 c136e25a99e0681344511eef09d410e6 files/svgalib-1.9.19-dont-touch-ld.conf.patch 350
+MD5 91fa4baff3dfb211bcb57a068ed7495f files/svgalib-1.9.19-pic.patch 422
+MD5 08f20bf4736bd6a4fa83eafcca8f8776 files/svgalib-1.9.21-linux2.6.patch 1799
+MD5 690144017f69486a911d88c0932a7d45 files/svgalib-1.9.23-gentoo.patch 2994
+MD5 8f160016fcb964fb1d69eb4c8adfc34a svgalib-helper-1.9.23.ebuild 1780

@@ -1,0 +1,58 @@
+--- emelfm2-0.0.9/src/e2_main.c.orig	2004-10-07 01:16:15.378509936 -0400
++++ emelfm2-0.0.9/src/e2_main.c	2004-10-07 01:13:45.373314192 -0400
+@@ -272,47 +272,6 @@
+ 	}
+ }
+ 
+-static void check_locale ()
+-{
+-	printd (DEBUG, "check_locale ()");
+-	gchar *locale = gtk_set_locale ();
+-	printd (NOTICE, "current locale is '%s'", locale);
+-	const gchar *broken =  g_getenv ("G_BROKEN_FILENAMES");
+-	if (broken != NULL && g_str_equal (locale, "C"))
+-	{
+-		printf (_("Your current locale is '%s'.\n"), locale);
+-		printf
+-		(
+-			_("You have set the environment variable G_BROKEN_FILENAMES. GTK+ is\n"
+-			"supposed to convert filenames from the system locale to UTF8 encoding.\n"
+-			"However, you have not set a system locale. Thus, please adjust your locale.\n")
+-		);
+-		if (!e2_cl_options.ignore_problems)
+-		{
+-			printf
+-			(
+-				_("(Note: There is the command line option -i/--ignore-problems, but use it\n"
+-				"at your own risk!)\n")
+-			);
+-			exit (1);
+-		} else
+-			printf
+-			(
+-				_("emelFM2 will ignore locale problems when reading filenames because\n"
+-				"--ignore-problems/-i has been set. This might result in segfaults and all\n"
+-				"kind of problems. You should really set a system locale with the\n"
+-				"LANG environment variable\n.")
+-			);
+-
+-	}
+-#ifdef ENABLE_NLS
+-	printd (DEBUG, "setting locale dir to '%s'", LOCALE_DIR);
+-	bindtextdomain (BINNAME, LOCALE_DIR);
+-	textdomain (BINNAME);
+-#endif
+-
+-}
+-
+ //blind log handler to stop gtk warnings
+ static void blind_log_handler () { }
+ 
+@@ -342,7 +301,6 @@
+ 	gtk_init (&argc, &argv);
+ 	
+ 	e2_cl_option_process (argc, argv);
+-	check_locale ();
+ 
+ 	if (e2_cl_options.surpress_gtk_output)
+ 		g_log_set_handler ("Gtk", G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL

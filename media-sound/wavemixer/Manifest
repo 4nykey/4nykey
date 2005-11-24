@@ -1,0 +1,5 @@
+MD5 8ec4a5b57442997a3b4a8196cbab175e files/digest-wavemixer-0.3 66
+MD5 c256e45118cef3cf24c2d08ca17b1724 files/digest-wavemixer-0.4 66
+MD5 d2a424a0d1080af5cef6c7eaa9f34a54 files/gtkmm_cfg_fix.diff 539
+MD5 85a48e0193033440720adde19df11733 wavemixer-0.3.ebuild 770
+MD5 a320cb3412b8991d0f686ad19e6a80ff wavemixer-0.4.ebuild 951

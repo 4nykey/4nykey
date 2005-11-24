@@ -1,0 +1,4 @@
+MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-mpeg4ip-cvs-1.4 0
+MD5 3755ef1c49bccdaf2201200943ea5f3f files/mpeg4ip-cvs.patch 4077
+MD5 9b509721b5804b4622fd6c67ba40c48c files/no_isompeg4.diff 789
+MD5 ca9c82df9f82aa974ca1cd32752d7148 mpeg4ip-cvs-1.4.ebuild 2405

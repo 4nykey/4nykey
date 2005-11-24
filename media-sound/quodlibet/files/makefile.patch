@@ -1,0 +1,19 @@
+Index: Makefile
+===================================================================
+--- Makefile	(revision 1155)
++++ Makefile	(working copy)
+@@ -1,10 +1,12 @@
+ MODULES = config.py const.py library.py match.py parser.py player.py plugins.py qltk.py util.py widgets.py formats/*.py
+ SUBDIRS = trayicon mmkeys po
+ EXTENSIONS = trayicon.so mmkeys.so
+-PREFIX ?= /usr/local
++PREFIX ?= /usr
+ TO = lib/quodlibet
+ 
+-all:
++all: check extensions po-data
++
++check:
+ 	@/bin/echo -n "Checking for Python... "
+ 	@which python || ( echo "Not found." && /bin/false )
+ 	@./check.py

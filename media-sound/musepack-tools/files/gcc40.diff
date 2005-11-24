@@ -1,0 +1,14 @@
+Index: mppdec.h
+===================================================================
+--- mppdec.h	(revision 34)
++++ mppdec.h	(working copy)
+@@ -1087,7 +1087,9 @@
+ void Cdecl memcpy_dn_SIMD             ( void* dst, const void* src, size_t words128byte );
+ 
+ void       Init_Dither                ( Int bits, int shapingtype, Double dither );
++#ifndef MPP_ENCODER
+ void       OverdriveReport            ( void );
++#endif
+ SyntheseFilter16_t
+            Get_Synthese_Filter        ( void );
+ 

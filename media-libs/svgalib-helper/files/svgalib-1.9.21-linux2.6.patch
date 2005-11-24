@@ -1,0 +1,60 @@
+ - touch up the Makefile to let the ebuild handle the module details
+ - fix support with io remap stuff in newer kernels
+
+--- svgalib/kernel/svgalib_helper/Makefile.alt
++++ svgalib/kernel/svgalib_helper/Makefile.alt
+@@ -37,7 +37,7 @@
+ CFLAGS += -DSVGALIB_HELPER_MAJOR=$(SVGALIB_HELPER_MAJOR)
+ 
+ ifeq (1,$(findstring 1,$(MODVER)))
+-	CFLAGS += -DMODVERSIONS -include $(INCLUDEDIR)/linux/modversions.h
++	CFLAGS += -DMODVERSIONS -DCONFIG_MODVERSIONS=1
+ endif
+ 
+ TARGET = svgalib_helper
+@@ -50,7 +50,8 @@
+ 	endif
+ endif
+ 
+-all: .depend $(OBJS)
++modules: $(OBJS)
++all: .depend modules
+ 
+ $(TARGET).o: $(SRC:.c=.o)
+ 	$(LD) -r $^ -o $@
+@@ -61,8 +62,8 @@
+ install: device modules_install
+ 
+ modules_install: $(OBJS)
+-	mkdir -p /lib/modules/$(VER)/kernel/misc 
+-	install -m 0644 -c $(OBJS) /lib/modules/$(VER)/kernel/misc
++	mkdir -p $(TOPDIR)/lib/modules/$(VER)/kernel/misc
++	install -m 0644 -c $(OBJS) $(TOPDIR)/lib/modules/$(VER)/kernel/misc
+ 
+ device:
+ 	rm -f /dev/svgalib_helper* /dev/svga_helper* /dev/svga /dev/svga?
+--- svgalib/kernel/svgalib_helper/kernel26compat.h
++++ svgalib/kernel/svgalib_helper/kernel26compat.h
+@@ -10,7 +10,7 @@
+ # define PCI_GET_CLASS pci_find_class
+ # define PCI_GET_DEVICE pci_find_device
+ 
+-# if defined (PG_chainlock)
++# if LINUX_VERSION_CODE >= KERNEL_VERSION(2,5,3)
+ #  define my_io_remap_page_range(vma, start, ofs, len, prot) \
+ 		io_remap_page_range(vma,start,ofs,len,prot)
+ # else
+@@ -50,8 +50,13 @@
+ # define DEVFS_MK_SYMLINK(a,b)
+ #endif
+ 
++#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,14)
+ # define my_io_remap_page_range(vma, start, ofs, len, prot) \
+ 		io_remap_page_range(vma,start,ofs,len,prot)
++#else
++# define my_io_remap_page_range(vma, start, ofs, len, prot) \
++		io_remap_pfn_range(vma,start,ofs>>PAGE_SHIFT,len,prot)
++#endif
+ 
+ # define pci_present() 1
+ 

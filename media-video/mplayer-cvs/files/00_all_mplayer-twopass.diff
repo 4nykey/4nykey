@@ -1,0 +1,40 @@
+Index: libmpcodecs/vd.c
+===================================================================
+RCS file: /cvsroot/mplayer/main/libmpcodecs/vd.c,v
+retrieving revision 1.79
+diff -u -r1.79 vd.c
+--- libmpcodecs/vd.c	1 Oct 2004 20:08:21 -0000	1.79
++++ libmpcodecs/vd.c	29 Nov 2004 17:24:36 -0000
+@@ -149,6 +149,17 @@
+     vf_instance_t* vf=sh->vfilter,*sc=NULL;
+     int palette=0;
+ 
++    // if this method was called previously with same args, just ignore
++    if(sh->cur_w) {
++        if(sh->cur_w == w && sh->cur_h == h &&
++           sh->cur_outfmt == preferred_outfmt) {
++	    return 0;
++        }
++    }
++    sh->cur_w = w;
++    sh->cur_h = h;
++    sh->cur_outfmt = preferred_outfmt;
++
+     if(!sh->disp_w || !sh->disp_h)
+         mp_msg(MSGT_DECVIDEO,MSGL_WARN, MSGTR_CodecDidNotSet);
+     /* XXX: HACK, if sh->disp_* aren't set,
+Index: libmpdemux/stheader.h
+===================================================================
+RCS file: /cvsroot/mplayer/main/libmpdemux/stheader.h,v
+retrieving revision 1.40
+diff -u -r1.40 stheader.h
+--- libmpdemux/stheader.h	28 Apr 2004 10:18:33 -0000	1.40
++++ libmpdemux/stheader.h	29 Nov 2004 17:24:36 -0000
+@@ -79,6 +79,7 @@
+   void* ImageDesc; // for quicktime codecs
+   // codec-specific:
+   void* context;   // codec-specific stuff (usually HANDLE or struct pointer)
++  int cur_w, cur_h, cur_outfmt; 
+ } sh_video_t;
+ 
+ // demuxer.c:
