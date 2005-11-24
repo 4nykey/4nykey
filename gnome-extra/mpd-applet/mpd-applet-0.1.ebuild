@@ -8,7 +8,8 @@ DESCRIPTION="MPD applet for GNOME panel"
 HOMEPAGE="http://www.musicpd.org"
 SRC_URI=""
 ESVN_REPO_URI="https://svn.musicpd.org/${PN}/trunk"
-ESVN_BOOTSTRAP="NOCONFIGURE=yup ./autogen.sh"
+ESVN_PATCHES="*.diff"
+#ESVN_BOOTSTRAP="NOCONFIGURE=yup ./autogen.sh"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -26,3 +27,10 @@ DEPEND="${RDEPEND}
 	dev-util/intltool"
 
 DOCS="AUTHORS NEWS README TODO"
+
+src_unpack () {
+	subversion_src_unpack
+	cd ${S}
+	./setup-gettext > /dev/null || die
+	WANT_AUTOMAKE=1.7 autoreconf -fi || die
+}
