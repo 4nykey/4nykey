@@ -14,18 +14,17 @@ S=${WORKDIR}/${PN}
 LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="doc"
+IUSE=""
 
 RDEPEND="media-libs/libsndfile"
 DEPEND="${RDEPEND}
-	doc? ( app-text/asciidoc )
 	sys-devel/autoconf"
 
 src_unpack() {
 	cvs_src_unpack
 	cd ${S}
 	epatch ${FILESDIR}/config.diff
-	use doc || sed -i 's: doc::' Makefile.am
+	sed -i 's: doc::' Makefile.am
 	WANT_AUTOMAKE=1.7 ./autogen.sh || die
 }
 
