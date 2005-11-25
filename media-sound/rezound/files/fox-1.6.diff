@@ -1,0 +1,70 @@
+--- configure.ac.orig	2005-09-04 03:01:37.000000000 +0300
++++ configure.ac	2005-09-04 03:01:37.000000000 +0300
+@@ -615,6 +615,8 @@
+ 
+ # This is a check for a class in a C++ library. To pinpoint the specific version we need we could change what class is linked.
+ # it sets $1_CXXFLAGS and $1_LIBS to either something useful or nothing
++ajv_CXX_CHECK_LIB(FOX-1.6,FXApp,fox-1.6/fx.h,[http://fox-toolkit.org],[],false)
++if test -z "$FOX_1_6_LIBS"; then
+ ajv_CXX_CHECK_LIB(FOX-1.5,FXApp,fox-1.5/fx.h,[http://fox-toolkit.org],[],false)
+ if test -z "$FOX_1_5_LIBS"; then
+ 	ajv_CXX_CHECK_LIB(FOX-1.4,FXApp,fox-1.4/fx.h,[http://fox-toolkit.org],[],false)
+@@ -633,6 +635,7 @@
+ 		fi
+ 	fi
+ fi
++fi
+ 
+ AC_SUBST(FOX_1_1_CXXFLAGS)
+ AC_SUBST(FOX_1_1_LIBS)
+@@ -644,6 +647,8 @@
+ AC_SUBST(FOX_1_4_LIBS)
+ AC_SUBST(FOX_1_5_CXXFLAGS)
+ AC_SUBST(FOX_1_5_LIBS)
++AC_SUBST(FOX_1_6_CXXFLAGS)
++AC_SUBST(FOX_1_6_LIBS)
+ AC_SUBST(FOX_CXXFLAGS)
+ AC_SUBST(FOX_LIBS)
+ 
+--- src/frontend_fox/fox_compat.h.orig	2005-08-22 02:49:53.000000000 +0300
++++ src/frontend_fox/fox_compat.h	2005-11-25 20:29:16.663320520 +0200
+@@ -21,6 +21,9 @@
+ #elif defined(HAVE_LIBFOX_1_5)
+ 	#include <fox-1.5/fx.h>
+ 	#include <fox-1.5/fxkeys.h>
++#elif defined(HAVE_LIBFOX_1_6)
++	#include <fox-1.6/fx.h>
++	#include <fox-1.6/fxkeys.h>
+ #else
+ 	#error no HAVE_LIBFOX defined
+ #endif
+@@ -102,6 +105,10 @@
+ 	#define FONTSLANT_REGULAR FXFont::Straight
+ #endif
+ 
++#if REZ_FOX_VERSION>=10511
++	#define fxparseAccel parseAccel
++	#define fxunparseAccel unparseAccel
++#endif
+ 
+ 
+ #endif
+--- src/frontend_fox/Makefile.am.orig	2005-05-01 00:58:16.000000000 +0300
++++ src/frontend_fox/Makefile.am	2005-11-25 21:18:59.274894640 +0200
+@@ -115,14 +115,14 @@
+ 	$(top_builddir)/src/misc/CNestedDataFile/libmiscCN.la \
+ 	$(top_builddir)/src/PoolFile/libPoolFile.la
+ 
+-rezound_LDADD=$(_rezound_LDADD) @FOX_1_5_LIBS@  @FOX_1_4_LIBS@ @FOX_1_3_LIBS@ @FOX_1_2_LIBS@ @FOX_1_1_LIBS@ @FOX_LIBS@
++rezound_LDADD=$(_rezound_LDADD) @FOX_1_6_LIBS@ @FOX_1_5_LIBS@  @FOX_1_4_LIBS@ @FOX_1_3_LIBS@ @FOX_1_2_LIBS@ @FOX_1_1_LIBS@ @FOX_LIBS@
+ 
+ ## if I don't do this, automake leaves out @abc@ vars when creating the rezound_DEPENDENCES value
+ ## so changes to the LADSPA lib (that may or may not be built) don't cause a re-link
+ rezound_DEPENDENCIES=$(_rezound_LDADD)
+ 
+ 
+-AM_CXXFLAGS=@FOX_1_5_CXXFLAGS@ @FOX_1_4_CXXFLAGS@ @FOX_1_3_CXXFLAGS@ @FOX_1_2_CXXFLAGS@ @FOX_1_1_CXXFLAGS@ @FOX_CXXFLAGS@
++AM_CXXFLAGS=@FOX_1_6_CXXFLAGS@ @FOX_1_5_CXXFLAGS@ @FOX_1_4_CXXFLAGS@ @FOX_1_3_CXXFLAGS@ @FOX_1_2_CXXFLAGS@ @FOX_1_1_CXXFLAGS@ @FOX_CXXFLAGS@
+ 
+ noinst_HEADERS=\
+ 	fox_compat.h \
