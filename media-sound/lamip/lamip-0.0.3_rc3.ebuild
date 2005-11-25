@@ -13,11 +13,12 @@ KEYWORDS="~x86"
 S="${WORKDIR}/sources"
 
 IUSE="debug curl a52 aac vorbis flac alsa oss gtk vqf musepack mad cdparanoia
-	mod dts shorten jack speex wavpack readline"
-DEPEND="curl ( >=net-misc/curl-7.10* )"
+	mod dts shorten jack speex wavpack readline libsamplerate"
+DEPEND="curl? ( >=net-misc/curl-7.10* )"
 RDEPEND="${DEPEND}"
 PDEPEND="media-plugins/lamip-in-playlist
 	media-plugins/lamip-in-wav
+	media-plugins/lamip-dsp-replaygain
 	gtk? ( media-plugins/lamip-ui-default )
 	readline? ( media-plugins/lamip-ui-shell )
 	alsa? ( media-plugins/lamip-out-alsa )
@@ -35,6 +36,7 @@ PDEPEND="media-plugins/lamip-in-playlist
 	dts? ( media-plugins/lamip-in-dts )
 	shorten? ( media-plugins/lamip-in-shn )
 	speex? ( media-plugins/lamip-in-speex )
+	libsamplerate? ( media-plugins/lamip-dsp-samplerate )
 	wavpack? ( media-plugins/lamip-in-wavpack )"
 
 src_unpack() {
