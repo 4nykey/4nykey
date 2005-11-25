@@ -27,7 +27,6 @@ DEPEND="${RDEPEND}
 src_unpack() {
 	unpack ${A}
 	sed -i 's:1\.0\.8:1.0.6:g' ${S}/configure
-	sed -i 's:AboutDialog:Bless.Gui.Dialogs.AboutDialog:' ${S}/src/gui/MainWindow.cs
 }
 
 src_compile() {
