@@ -13,8 +13,15 @@ KEYWORDS="~x86"
 LICENSE="GPL-2"
 IUSE=""
 
-RDEPEND=">=x11-libs/gtk+-2.4"
-DEPEND="${RDEPEND}"
+RDEPEND=">=x11-libs/gtk+-2.4
+	>=gnome-base/libgnomeui-2.0
+	>=gnome-base/gnome-vfs-2.6
+	>=gnome-base/gconf-2.0
+	>=gnome-base/libgtop-2.10
+	>=gnome-base/libglade-2.5.1
+	>=gnome-base/libgnomecanvas-2.10.2"
+DEPEND="${RDEPEND}
+	dev-util/intltool"
 
 DOCS="AUTHORS ChangeLog NEWS README"
 
