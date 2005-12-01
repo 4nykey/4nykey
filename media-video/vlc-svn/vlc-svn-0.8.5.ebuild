@@ -205,6 +205,7 @@ src_compile () {
 		$(use_enable mod) \
 		$(use_enable speex) \
 		$(use_enable libvc1) \
+		$(use_enable dirac) \
 		$(use_enable musepack mpc) \
 		$(use_enable gnome gnomevfs) \
 		$(use_enable nsplugin mozilla) \
