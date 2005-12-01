@@ -175,13 +175,13 @@ diff -druN main/libavcodec/avcodec.h main_nu/libavcodec/avcodec.h
  extern AVCodec h263_decoder;
  extern AVCodec h261_decoder;
 @@ -2070,6 +2073,7 @@
+ extern AVCodec indeo2_decoder;
+ extern AVCodec vorbis_decoder;
  extern AVCodec fraps_decoder;
++extern AVCodec dirac_decoder;
  extern AVCodec libgsm_encoder;
  extern AVCodec libgsm_decoder;
-+extern AVCodec dirac_decoder;
- 
- /* pcm codecs */
- #define PCM_CODEC(id, name) \
+ extern AVCodec bmp_decoder;
 @@ -2361,6 +2365,7 @@
  extern AVCodecParser ac3_parser;
  extern AVCodecParser dvdsub_parser;
