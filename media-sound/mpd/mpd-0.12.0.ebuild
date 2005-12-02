@@ -44,7 +44,6 @@ src_unpack() {
 src_compile() {
 	econf `use_enable aac` \
 		`use_enable !mad mpd-mad` \
-		`use_enable !mad mpd-id3tag` \
 		`use_enable vorbis ogg` \
 		`use_enable vorbis oggtest` \
 		`use_enable vorbis vorbistest` \
@@ -55,8 +54,11 @@ src_compile() {
 		`use_enable flac` \
 		`use_enable musepack mpc` \
 		`use_enable mikmod libmikmodtest` \
-		`use_enable mikmod mod` ${myconf} ||
-		die "could not configure"
+		`use_enable mikmod mod` \
+		--enable-mpd-id3tag \
+		${myconf} || die "could not configure"
+		# use included id3tag, so mpd_mp3_replaygain.diff won't break
+		#`use_enable !mad mpd-id3tag` \
 
 	emake || die "emake failed"
 }
