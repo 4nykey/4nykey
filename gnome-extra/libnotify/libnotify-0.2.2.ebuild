@@ -5,8 +5,8 @@
 inherit eutils
 
 DESCRIPTION="A library for user notifications"
-HOMEPAGE="http://www.galago.info/"
-SRC_URI="http://www.galago.info/files/releases/source/${PN}/${P}.tar.gz"
+HOMEPAGE="http://www.galago-project.org/"
+SRC_URI="http://www.galago-project.org/files/releases/source/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
