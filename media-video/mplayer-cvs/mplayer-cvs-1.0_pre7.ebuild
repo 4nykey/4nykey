@@ -207,6 +207,9 @@ src_unpack() {
 
 	EPATCH_SUFFIX="diff" epatch "${FILESDIR}"
 	use dirac && epatch ${FILESDIR}/mplayer-dirac-cvs.diff
+
+	has_version '>=media-sound/twolame-0.3.4' && \
+		sed -i 's:twolame_set_VBR_q:twolame_set_VBR_level:' libmpcodecs/ae_twolame.c
 }
 
 linguas_warn() {

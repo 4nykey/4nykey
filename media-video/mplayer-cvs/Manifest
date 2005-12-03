@@ -6,4 +6,4 @@ MD5 a7775479bde78a5ee6ae46675232d1d3 files/digest-mplayer-cvs-1.0_pre7 475
 MD5 3141ec5e99f82e769a626ee25b70ddab files/mplayer-dirac-cvs.diff 31278
 MD5 38c7908ce49f7f6a272993ba5bc9dd09 files/mplayer-mythtv.patch 13755
 MD5 c2d65649f15837c5a326557ded4e47c5 files/mplayer.desktop 119
-MD5 d0f933f4f937d4c869b64a9dbc960c1c mplayer-cvs-1.0_pre7.ebuild 19393
+MD5 ada959a2ee047ecaa2cb87be6472d7e8 mplayer-cvs-1.0_pre7.ebuild 19521
