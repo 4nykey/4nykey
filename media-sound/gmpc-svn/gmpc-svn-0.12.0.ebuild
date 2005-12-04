@@ -23,7 +23,7 @@ RDEPEND=">=x11-libs/gtk+-2.4
 		gnome-extra/libnotify )
 	dev-libs/libxml2
 	dev-perl/XML-Parser
-	>=media-libs/libmpd-0.01"
+	>=media-libs/libmpd-0.9.15"
 DEPEND="${RDEPEND}"
 
 src_compile() {
