@@ -1,4 +1,4 @@
 MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-wavpack-4.2_beta3 0
-MD5 65748d2253bf1a6d986999c6f180a6bf files/digest-wavpack-4.3 64
+MD5 43f12f6173991545d7d209242ba5940e files/digest-wavpack-4.31 65
 MD5 625f2c46b3e04822583fc5dfe0818ef4 wavpack-4.2_beta3.ebuild 643
-MD5 135f23c4750a5c0da366fc37ac75bf26 wavpack-4.3.ebuild 373
+MD5 135f23c4750a5c0da366fc37ac75bf26 wavpack-4.31.ebuild 373
