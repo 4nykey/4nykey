@@ -397,16 +397,14 @@ diff -u -r1.290 mencoder.c
  static char* spudec_ifo=NULL;
  
  static char** audio_codec_list=NULL;  // override audio codec
-@@ -124,16 +121,16 @@
- //void skip_audio_frame(sh_audio_t *sh_audio){}
+@@ -124,15 +121,15 @@
  //void resync_audio_stream(sh_audio_t *sh_audio){}
  
--int verbose=0; // must be global!
+ extern int verbose; // must be global!
 -int identify=0;
 -int quiet=0;
 -double video_time_usage=0;
 -double vout_time_usage=0;
-+extern int verbose; // must be global!
 +extern int identify;
 +extern int quiet;
 +extern double video_time_usage;
