@@ -1,13 +1,13 @@
 Index: configure
 ===================================================================
---- configure	(revision 308)
+--- configure	(revision 387)
 +++ configure	(working copy)
-@@ -177,7 +177,7 @@
-             ;;
-         --enable-mp4-output)
-             CFLAGS="$CFLAGS -DMP4_OUTPUT"
--            LDFLAGS="$LDFLAGS -lgpac_static"
-+            LDFLAGS="$LDFLAGS -lgpac"
-             if [ $SYS = CYGWIN -o $SYS = MINGW ]; then
-                 LDFLAGS="$LDFLAGS -lwinmm"
-             fi
+@@ -268,7 +268,7 @@
+     esac
+ fi
+ 
+-MP4_LDFLAGS="-lgpac_static"
++MP4_LDFLAGS="-lgpac"
+ if [ $SYS = CYGWIN -o $SYS = MINGW ]; then
+     MP4_LDFLAGS="$MP4_LDFLAGS -lwinmm"
+ fi

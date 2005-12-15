@@ -67,6 +67,8 @@ src_unpack() {
 	# make configure to pick theora, if presented
 	use theora && sed -i 's:ltheora 2:ltheora -logg 2:' configure
 
+	sed -i '/#include/s/\\/\//g' modules/svg_loader/svg_parser.c
+
 	use sdl || sed -i 's:^has_sdl=yes:has_sdl=no:' configure
 	use nsplugin || sed -i 's:osmozilla::' applications/Makefile
 	use X || sed -i 's:PLUGDIRS+=x11_out:PLUGDIRS+=:' modules/Makefile
