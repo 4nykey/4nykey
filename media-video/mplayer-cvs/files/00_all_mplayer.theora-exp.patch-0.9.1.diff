@@ -86,7 +86,7 @@ diff -u -r1.1005 configure
    for _ld_theora in "`pkg-config --silence-errors --libs --cflags theora`" "-ltheora"; do
      cc_check $_ld_theora && _theora=yes && break
    done
-@@ -5509,15 +5509,29 @@
+@@ -5509,9 +5509,23 @@
      done
    fi
  fi
@@ -108,8 +108,10 @@ diff -u -r1.1005 configure
 +  _inc_theora=`pkg-config --cflags theora`
 +  _theora_version=`pkg-config --modversion theora`
 +  _theora_version="(Version $_theora_version)"
- else
-   _def_theora='#undef HAVE_OGGTHEORA'
+   # when --enable-theora is forced, we'd better provide a probably sane
+   # $_ld_theora than nothing
+   test -z "$_ld_theora" && _ld_theora="-ltheora -logg"
+@@ -5522,7 +5522,7 @@
    _nocodecmodules="libtheora $_nocodecmodules"
    _ld_theora=""
  fi
