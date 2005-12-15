@@ -13,10 +13,9 @@ ESVN_REPO_URI="svn://beep-media-player.org/${PN}/trunk"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="xine dbus mad ogg vorbis a52 flac theora perl python irssi xchat"
+IUSE="xine dbus mad ogg vorbis a52 flac theora perl python irssi xchat gtk"
 
-RDEPEND=">=x11-libs/gtk+-2.8.0
-	>=x11-libs/cairo-1.0.0
+RDEPEND="gtk? ( >=x11-libs/gtk+-2.8.0 )
 	>=media-libs/taglib-1.4
 	>=gnome-base/libglade-2.5.1
 	>=dev-libs/libxml2-2.6.1
@@ -51,6 +50,7 @@ DOCS="AUTHORS ChangeLog NEWS README"
 # gstreamer is default backend
 G2CONF="${G2CONF} \
 	$(use_enable dbus) \
+	$(use_enable gtk gui) \
 	$(use_enable xine) \
 	$(use_enable !xine gst)"
 use dbus && G2CONF="${G2CONF} $(use_enable perl) $(use_enable python)"
