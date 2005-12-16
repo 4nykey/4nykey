@@ -46,6 +46,10 @@ DEPEND="imlib? ( media-libs/imlib2 )
 src_unpack() {
 	cvs_src_unpack
 
+	ECVS_SERVER="cvs.sourceforge.net:/cvsroot/dirac" \
+	ECVS_MODULE="compress/extras/patches" \
+	cvs_src_unpack
+
 	cd ${WORKDIR}
 	if use amr; then
 		unpack ${A}
@@ -80,7 +84,7 @@ src_unpack() {
 		do sed -i /LDCONFIG/d $dir/Makefile
 	done
 
-	epatch ${FILESDIR}/ffmpeg-dirac-patch.txt
+	epatch ${WORKDIR}/compress/extras/patches/FFMpeg-20051205-dirac-0.5.x.patch
 }
 
 teh_conf() {

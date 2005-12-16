@@ -16,7 +16,7 @@ start() {
 
 stop() {
 	ebegin "Stopping xmms2"
-	start-stop-daemon --start -q -c ${XMMS2_USER} --exec /usr/bin/xmms2 -- quit
+	start-stop-daemon --start -q -c ${XMMS2_USER} --exec /usr/bin/xmms2 quit
 	eend $?
 }
 

@@ -1,7 +1,26 @@
-diff -druN main/configure main_nu/configure
---- main/configure	2005-10-26 22:32:11.000000000 +0300
-+++ main_nu/configure	2005-10-28 21:00:53.524652000 +0300
-@@ -262,6 +262,7 @@
+Index: Makefile
+===================================================================
+RCS file: /cvsroot/mplayer/main/Makefile,v
+retrieving revision 1.333
+diff -u -r1.333 Makefile
+--- Makefile	16 Nov 2005 10:38:23 -0000	1.333
++++ Makefile	16 Dec 2005 11:17:41 -0000
+@@ -106,6 +106,7 @@
+              $(JPEG_LIB) \
+              $(ALSA_LIB) \
+              $(XMMS_LIB) \
++             $(DIRAC_LIB) \
+              $(X264_LIB) \
+              $(MUSEPACK_LIB) \
+              $(SPEEX_LIB) \
+Index: configure
+===================================================================
+RCS file: /cvsroot/mplayer/main/configure,v
+retrieving revision 1.1111
+diff -u -r1.1111 configure
+--- configure	14 Dec 2005 21:52:40 -0000	1.1111
++++ configure	16 Dec 2005 11:17:55 -0000
+@@ -264,6 +264,7 @@
    --disable-amr_nb       disable amr narrowband, floating point [autodetect]
    --disable-amr_nb-fixed disable amr narrowband, fixed point [autodetect]
    --disable-amr_wb       disable amr wideband, floating point [autodetect]
@@ -9,7 +28,7 @@ diff -druN main/configure main_nu/configure
    --disable-codec=CODEC  disable specified codec
    --enable-codec=CODEC   dnable specified codec
    
-@@ -1575,6 +1576,7 @@
+@@ -1571,6 +1572,7 @@
  _ftp=yes
  _musepack=auto
  _vstream=auto
@@ -27,7 +46,7 @@ diff -druN main/configure main_nu/configure
    --charset=*)
      _charset=`echo $ac_option | cut -d '=' -f 2`
      ;;
-@@ -6923,6 +6928,53 @@
+@@ -7009,6 +7014,53 @@
  fi
  echores "$_lircc"
  
@@ -81,7 +100,7 @@ diff -druN main/configure main_nu/configure
  #############################################################################
  echo "Creating config.mak"
  cat > config.mak << EOF
-@@ -7108,6 +7160,9 @@
+@@ -7200,6 +7252,9 @@
  AMR_NB=$_amr_nb
  AMR_NB_FIXED=$_amr_nb_fixed
  AMR_WB=$_amr_wb
@@ -91,7 +110,7 @@ diff -druN main/configure main_nu/configure
  `echo $_libavcodecs | tr '[a-z] ' '[A-Z]\n' | sed 's/^/CONFIG_/;s/$/=yes/'`
  CONFIG_GPL=yes
  
-@@ -7673,6 +7728,9 @@
+@@ -7772,6 +7827,9 @@
  /* enable Matroska support */
  $_def_matroska
  
@@ -101,9 +120,13 @@ diff -druN main/configure main_nu/configure
  /* enable FAAD (AAC) support */
  $_def_faad
  $_def_faad_internal
-diff -druN main/etc/codecs.conf main_nu/etc/codecs.conf
---- main/etc/codecs.conf	2005-10-26 22:32:14.000000000 +0300
-+++ main_nu/etc/codecs.conf	2005-10-28 21:00:53.572644704 +0300
+Index: etc/codecs.conf
+===================================================================
+RCS file: /cvsroot/mplayer/main/etc/codecs.conf,v
+retrieving revision 1.442
+diff -u -r1.442 codecs.conf
+--- etc/codecs.conf	9 Dec 2005 16:52:44 -0000	1.442
++++ etc/codecs.conf	16 Dec 2005 11:18:02 -0000
 @@ -244,6 +244,16 @@
    dll libtheora
    out YV12
@@ -121,52 +144,77 @@ diff -druN main/etc/codecs.conf main_nu/etc/codecs.conf
  ; prefer native codecs over win32?
  ; the win32 codecs probably are (better) optimized and support direct
  ; rendering, so this may be not the best idea...
-diff -druN main/libavcodec/allcodecs.c main_nu/libavcodec/allcodecs.c
---- main/libavcodec/allcodecs.c	2005-10-26 18:04:53.000000000 +0300
-+++ main_nu/libavcodec/allcodecs.c	2005-10-28 21:00:53.577643944 +0300
-@@ -189,6 +189,9 @@
- #ifdef CONFIG_LIBGSM
-     register_avcodec(&libgsm_encoder);
- #endif //CONFIG_LIBGSM
-+#ifdef CONFIG_DIRAC_ENCODER
-+    register_avcodec(&dirac_encoder);
-+#endif //CONFIG_DIRAC_ENCODER
- #ifdef CONFIG_RAWVIDEO_ENCODER
-     register_avcodec(&rawvideo_encoder);
- #endif //CONFIG_RAWVIDEO_ENCODER
-@@ -488,6 +491,9 @@
- #ifdef CONFIG_LIBGSM
-     register_avcodec(&libgsm_decoder);
- #endif //CONFIG_LIBGSM
-+#ifdef CONFIG_DIRAC_DECODER
-+    register_avcodec(&dirac_decoder);
-+#endif //CONFIG_DIRAC_DECODER
- #ifdef CONFIG_QDM2_DECODER
-     register_avcodec(&qdm2_decoder);
- #endif //CONFIG_QDM2_DECODER
-@@ -596,5 +602,9 @@
- #ifdef CONFIG_DVBSUB_DECODER
-     av_register_codec_parser(&dvbsub_parser);
+? libavcodec/dirac.c
+? libavformat/drc.c
+Index: libavcodec/Makefile
+===================================================================
+RCS file: /cvsroot/ffmpeg/ffmpeg/libavcodec/Makefile,v
+retrieving revision 1.215
+diff -u -r1.215 Makefile
+--- libavcodec/Makefile	10 Dec 2005 17:14:23 -0000	1.215
++++ libavcodec/Makefile	16 Dec 2005 11:18:10 -0000
+@@ -7,7 +7,7 @@
+ VPATH=$(SRC_PATH)/libavcodec
+ 
+ # NOTE: -I.. is needed to include config.h
+-CFLAGS=$(OPTFLAGS) -DHAVE_AV_CONFIG_H -I.. -I$(SRC_PATH)/libavutil -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE $(AMR_CFLAGS)
++CFLAGS=$(OPTFLAGS) -DHAVE_AV_CONFIG_H -I.. -I$(SRC_PATH)/libavutil -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE $(AMR_CFLAGS) $(EXTRAINCS)
+ 
+ OBJS= bitstream.o utils.o mem.o allcodecs.o \
+       mpegvideo.o jrevdct.o jfdctfst.o jfdctint.o\
+@@ -304,6 +304,12 @@
+ endif
+ endif
+ 
++ifeq ($(CONFIG_DIRAC),yes)
++OBJS += dirac.o
++EXTRALIBS += $(DIRAC_LIB)
++CFLAGS += $(DIRAC_INC)
++endif
++
+ ifeq ($(CONFIG_LIBGSM),yes)
+ OBJS += libgsm.o
+ endif
+Index: libavcodec/allcodecs.c
+===================================================================
+RCS file: /cvsroot/ffmpeg/ffmpeg/libavcodec/allcodecs.c,v
+retrieving revision 1.117
+diff -u -r1.117 allcodecs.c
+--- libavcodec/allcodecs.c	9 Dec 2005 16:08:18 -0000	1.117
++++ libavcodec/allcodecs.c	16 Dec 2005 11:18:10 -0000
+@@ -525,6 +525,14 @@
+     register_avcodec(&bmp_decoder);
  #endif
+ 
++/* dirac codec */
 +#ifdef CONFIG_DIRAC
-+    av_register_codec_parser(&dirac_parser);
++    register_avcodec(&dirac_decoder);
++#ifdef CONFIG_ENCODERS
++    register_avcodec(&dirac_encoder);
++#endif
 +#endif
 +
- }
- 
-diff -druN main/libavcodec/avcodec.h main_nu/libavcodec/avcodec.h
---- main/libavcodec/avcodec.h	2005-10-26 18:04:54.000000000 +0300
-+++ main_nu/libavcodec/avcodec.h	2005-10-28 21:00:53.591641816 +0300
-@@ -193,6 +193,8 @@
+     /* pcm codecs */
+ #if defined (CONFIG_ENCODERS) && defined (CONFIG_DECODERS)
+     #define PCM_CODEC(id, name) \
+Index: libavcodec/avcodec.h
+===================================================================
+RCS file: /cvsroot/ffmpeg/ffmpeg/libavcodec/avcodec.h,v
+retrieving revision 1.430
+diff -u -r1.430 avcodec.h
+--- libavcodec/avcodec.h	9 Dec 2005 16:08:18 -0000	1.430
++++ libavcodec/avcodec.h	16 Dec 2005 11:18:15 -0000
+@@ -195,6 +195,9 @@
      CODEC_ID_DVD_SUBTITLE= 0x17000, 
      CODEC_ID_DVB_SUBTITLE, 
      
 +    CODEC_ID_DIRAC = 0x18000, 
++
 +    
      CODEC_ID_MPEG2TS= 0x20000, /* _FAKE_ codec to indicate a raw MPEG2 transport
                           stream (only used by libavformat) */
  };
-@@ -1967,6 +1969,7 @@
+@@ -1970,6 +1973,7 @@
  extern AVCodec sonic_ls_encoder;
  extern AVCodec svq1_encoder;
  extern AVCodec x264_encoder;
@@ -174,26 +222,79 @@ diff -druN main/libavcodec/avcodec.h main_nu/libavcodec/avcodec.h
  
  extern AVCodec h263_decoder;
  extern AVCodec h261_decoder;
-@@ -2070,6 +2073,7 @@
- extern AVCodec indeo2_decoder;
- extern AVCodec vorbis_decoder;
- extern AVCodec fraps_decoder;
-+extern AVCodec dirac_decoder;
+@@ -2075,6 +2079,7 @@
  extern AVCodec libgsm_encoder;
  extern AVCodec libgsm_decoder;
  extern AVCodec bmp_decoder;
-@@ -2361,6 +2365,7 @@
- extern AVCodecParser ac3_parser;
- extern AVCodecParser dvdsub_parser;
- extern AVCodecParser dvbsub_parser;
-+extern AVCodecParser dirac_parser;
++extern AVCodec dirac_decoder;
  
- /* memory */
- void *av_malloc(unsigned int size);
-diff -druN main/libavcodec/dirac.c main_nu/libavcodec/dirac.c
---- main/libavcodec/dirac.c	1970-01-01 03:00:00.000000000 +0300
-+++ main_nu/libavcodec/dirac.c	2005-10-28 21:00:53.631635736 +0300
-@@ -0,0 +1,713 @@
+ /* pcm codecs */
+ #define PCM_CODEC(id, name) \
+Index: libavformat/Makefile
+===================================================================
+RCS file: /cvsroot/ffmpeg/ffmpeg/libavformat/Makefile,v
+retrieving revision 1.103
+diff -u -r1.103 Makefile
+--- libavformat/Makefile	10 Dec 2005 17:14:23 -0000	1.103
++++ libavformat/Makefile	16 Dec 2005 11:18:16 -0000
+@@ -6,7 +6,7 @@
+ 
+ VPATH=$(SRC_PATH)/libavformat
+ 
+-CFLAGS=$(OPTFLAGS) -I.. -I$(SRC_PATH) -I$(SRC_PATH)/libavutil -I$(SRC_PATH)/libavcodec -DHAVE_AV_CONFIG_H -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE
++CFLAGS=$(OPTFLAGS) -I.. -I$(SRC_PATH) -I$(SRC_PATH)/libavutil -I$(SRC_PATH)/libavcodec $(EXTRAINCS) -DHAVE_AV_CONFIG_H -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE
+ 
+ OBJS= utils.o cutils.o os_support.o allformats.o
+ PPOBJS=
+@@ -36,6 +36,12 @@
+ OBJS+= avio.o aviobuf.o file.o 
+ OBJS+= framehook.o 
+ 
++ifeq ($(CONFIG_DIRAC),yes)
++    OBJS+= drc.o
++	EXTRALIBS+=$(DIRAC_LIB)
++	CFLAGS+=$(DIRAC_INC)
++endif
++
+ ifeq ($(CONFIG_VIDEO4LINUX),yes)
+ OBJS+= grab.o
+ endif
+Index: libavformat/allformats.c
+===================================================================
+RCS file: /cvsroot/ffmpeg/ffmpeg/libavformat/allformats.c,v
+retrieving revision 1.50
+diff -u -r1.50 allformats.c
+--- libavformat/allformats.c	23 Sep 2005 00:25:41 -0000	1.50
++++ libavformat/allformats.c	16 Dec 2005 11:18:16 -0000
+@@ -111,6 +111,10 @@
+     nsvdec_init();
+     daud_init();
+ 
++#ifdef CONFIG_DIRAC
++    drc_init();
++#endif
++
+ #ifdef CONFIG_MUXERS
+     /* image formats */
+ #if 0
+Index: libavformat/avienc.c
+===================================================================
+RCS file: /cvsroot/ffmpeg/ffmpeg/libavformat/avienc.c,v
+retrieving revision 1.115
+diff -u -r1.115 avienc.c
+--- libavformat/avienc.c	30 Nov 2005 10:50:13 -0000	1.115
++++ libavformat/avienc.c	16 Dec 2005 11:18:18 -0000
+@@ -193,6 +193,7 @@
+     { CODEC_ID_FRAPS, MKTAG('F', 'P', 'S', '1') },
+     { CODEC_ID_THEORA, MKTAG('t', 'h', 'e', 'o') },
+     { CODEC_ID_TRUEMOTION2, MKTAG('T', 'M', '2', '0') },
++    { CODEC_ID_DIRAC, MKTAG('d', 'r', 'a', 'c') },
+     { CODEC_ID_RAWVIDEO, 0 },
+     { 0, 0 },
+ };
+--- /dev/null	2005-12-09 12:34:30.989462208 +0200
++++ libavcodec/dirac.c	2005-12-16 13:10:14.789099688 +0200
+@@ -0,0 +1,509 @@
 +/**
 + * @file dirac.c
 + * Dirac codec support via dirac_encoder.
@@ -216,7 +317,7 @@ diff -druN main/libavcodec/dirac.c main_nu/libavcodec/dirac.c
 + * License along with this library; if not, write to the Free Software
 + * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 + */
-+ 
++
 +
 +#include "avcodec.h"
 +
@@ -228,9 +329,8 @@ diff -druN main/libavcodec/dirac.c main_nu/libavcodec/dirac.c
 +#include <libdirac_decoder/dirac_parser.h>
 +
 +/** ffmpeg qscale to Dirac quality conversion table */
-+static const float quality_factor_conv[] = {10.0, 9.8, 9.6, 9.4, 9.2, 9.0, 8.8, 
-+          8.6, 8.4, 8.2, 8.0, 7.8, 7.6, 7.3, 7.0, 6.7, 6.4, 6.0, 5.6, 5.2, 4.8, 
-+          4.4, 4.0, 3.6, 3.2, 2.8, 2.4, 2.0, 1.6, 1.2, 1.0 };
++static const float quality_factor_conv[] = {10.0, 9.8, 9.6, 9.4, 9.2, 9.0, 8.8, 8.6, 8.4, 8.2, 8.0, 7.8, 7.6, 7.3, 7.0, 6.7, 6.4, 6.0, 5.6, 5.2, 4.8, 
++			     		      4.4, 4.0, 3.6, 3.2, 2.8, 2.4, 2.0, 1.6, 1.2, 1.0 };
 +
 +/** contains a single frame returned from Dirac*/
 +typedef struct FfmpegDiracOutputFrame
@@ -249,13 +349,13 @@ diff -druN main/libavcodec/dirac.c main_nu/libavcodec/dirac.c
 +    
 + } FfmpegDiracOutputFrame;
 +  
-+typedef struct FfmpegDiracParams
-+{
++typedef struct FfmpegDiracParams {
++     
 +    /* context params */
 +    dirac_encoder_context_t enc_ctx;
 +
 +    /* frame being encoded */
-+    AVFrame picture;
++	AVFrame picture;
 +
 +      /* decoder */
 +    dirac_decoder_t*  p_decoder;
@@ -278,135 +378,136 @@ diff -druN main/libavcodec/dirac.c main_nu/libavcodec/dirac.c
 +} FfmpegDiracParams;
 +
 +
-+typedef struct FfmpegDiracParseContext
-+{
-+
-+    /** stream buffer variables */
-+    unsigned char* p_dirac_videobuffer;
-+    int dirac_videobuf_code_len;
-+    unsigned char dirac_videobuf_code[5];
-+    int dirac_videobuf_len;
-+    int in_frame;
-+    int dirac_overread_size;
-+
-+} FfmpegDiracParseContext ;
-+
-+
 +/**
 +* Works out Dirac-compatible pre-set option from file size
 +*/
-+static dirac_encoder_presets_t GetDiracPreset(AVCodecContext *avccontext)
++dirac_encoder_presets_t GetDiracPreset(AVCodecContext *avccontext)
 +{
 +
-+    if(avccontext->width==720 && avccontext->height==576)
-+        return SD576;
-+   
-+    if(avccontext->height==1280 && avccontext->height==720)
-+        return HD720;
-+        
-+    if(avccontext->height==1920 && avccontext->width==1080)
-+        return HD1080;
-+
-+    if(avccontext->height==352 && avccontext->width==288)
-+        return CIF;
-+
-+    return CIF;
++	if(avccontext->width==720 && avccontext->height==576)
++		return SD576;
++		
++	if(avccontext->height==1280 && avccontext->height==720)
++	 	return HD720;
++		
++	if(avccontext->height==1920 && avccontext->width==1080)
++		return HD1080;
++		
++	if(avccontext->height==352 && avccontext->width==288)
++		return CIF;
++		
++	return CIF;
 +}
 +
 +/**
 +* Works out Dirac-compatible chroma format 
 +*/
-+static int GetDiracChromaFormat(AVCodecContext *avccontext)
-+{
-+   FfmpegDiracParams* p_dirac_params = avccontext->priv_data;
++ dirac_chroma_t GetDiracChromaFormat(AVCodecContext *avccontext)
++ {
 + 
-+    switch(avccontext->pix_fmt)
-+    {
-+        case PIX_FMT_YUV420P:
-+            p_dirac_params->enc_ctx.seq_params.chroma =  format420;
-+            break;
-+
-+        case PIX_FMT_YUV422P:
-+            p_dirac_params->enc_ctx.seq_params.chroma =  format422;
-+            break;
++ 	switch(avccontext->pix_fmt)
++	{
++	case PIX_FMT_YUV420P:
++		return format420;
++			
++	case PIX_FMT_YUV422P:
++		return format422; 
 +    
-+        case PIX_FMT_YUV444P:
-+            p_dirac_params->enc_ctx.seq_params.chroma =  format444;
-+            break;
++    	case PIX_FMT_YUV444P:
++		return format444;
 +    
-+        case PIX_FMT_YUV411P:
-+            p_dirac_params->enc_ctx.seq_params.chroma =  format411;
-+            break;
++    	case PIX_FMT_YUV411P:
++                return format411;
 +                
-+        case PIX_FMT_GRAY8:
-+            p_dirac_params->enc_ctx.seq_params.chroma =  Yonly;
-+            break;
-+                
-+        default:
-+            av_log (avccontext, AV_LOG_ERROR, "this codec supports only Planar YUV formats (yuv420p, yuv422p, yuv444p, yuv411p and gray\n");
-+            return -1;
-+
-+    }
-+    return 0;
-+}
++	default:
++		av_log (avccontext, AV_LOG_ERROR, "this codec supports only YUV420P\n");
++		return format420;
++	
++	}
++	
++	return format420;
++ 
++ }
 + 
 + /**
 + * returns Ffmppeg chroma format 
 + */
-+static int GetFfmpegChromaFormat(dirac_chroma_t dirac_chroma)
-+{
-+    switch(dirac_chroma)
-+    {
-+        case format420:
-+            return PIX_FMT_YUV420P;
-+        case format422:
-+            return PIX_FMT_YUV422P;
-+        case format444:
-+            return PIX_FMT_YUV444P;
-+        case format411:
-+            return PIX_FMT_YUV411P;
-+        case Yonly:
-+            return PIX_FMT_GRAY8;
++ int GetFfmpegChromaFormat(dirac_chroma_t dirac_chroma)
++ {
++     switch(dirac_chroma)
++     {
++         case format420:
++             return PIX_FMT_YUV420P;
++         case format422:
++             return PIX_FMT_YUV422P;
++         case format444:
++             return PIX_FMT_YUV444P;
++         case format411:
++             return PIX_FMT_YUV411P;
++       
++         default:
++             return PIX_FMT_YUV420P;
++      }
 +      
-+        default:
-+            break;
-+     }
-+      
-+     return PIX_FMT_YUV420P;
-+}
++      return PIX_FMT_YUV420P;
++ }
 +  
-+
-+static int dirac_encode_init(AVCodecContext *avccontext)
++ 
++ /**
++ * Calculates total size of frame
++ */
++int GetFrameBufferSize (const dirac_encoder_context_t* p_enc_ctx)
 +{
++
++    int xl = p_enc_ctx->seq_params.width;
++    int yl = p_enc_ctx->seq_params.height;
++
++    int size;
++
++    switch (p_enc_ctx->seq_params.chroma)
++    {
++    case format411:
++    case format420:
++        size = (xl*yl*3)/2;
++        break;
++    case format422:
++        size = (xl*yl)*2;
++        break;
++    case format444:
++        size = (xl*yl)*3;
++        break;
++    case Yonly:
++    default:
++        size = xl * yl;
++        break;
++    }
++    return size;
++}
++
++static int dirac_encode_init(AVCodecContext *avccontext) {
 +  
 +   FfmpegDiracParams* p_dirac_params = avccontext->priv_data;
 +   int no_local=0;  
++   int i;
 +   int verbose=avccontext->debug;
 +   
-+   if(avccontext->strict_std_compliance > FF_COMPLIANCE_EXPERIMENTAL){
-+        av_log(avccontext, AV_LOG_ERROR, "this codec is under development, files encoded with it may not be decodable with future versions!!!\n"
-+               "use vstrict=-2 / -strict -2 to use it anyway\n");
-+        return -1;
-+    }
-+   
-+   /* get dirac preset*/
++   /** get dirac preset*/
 +   dirac_encoder_presets_t preset = GetDiracPreset(avccontext);
 +
-+    /* set data to zero */
++    /** set data to zero */
 +    memset (p_dirac_params, 0, sizeof(FfmpegDiracParams));
 +     
 + 
-+     /* initialise the encoder context */
++     /** initialise the encoder context */
 +    dirac_encoder_context_init (&(p_dirac_params->enc_ctx), preset);
 +   
-+    if (GetDiracChromaFormat(avccontext) == -1)
-+        return -1;
++    p_dirac_params->enc_ctx.seq_params.chroma=GetDiracChromaFormat(avccontext);
 +    p_dirac_params->enc_ctx.seq_params.frame_rate.numerator=avccontext->time_base.den;
 +    p_dirac_params->enc_ctx.seq_params.frame_rate.denominator=avccontext->time_base.num;
 +    p_dirac_params->enc_ctx.seq_params.width=avccontext->width;
 +    p_dirac_params->enc_ctx.seq_params.height=avccontext->height;
 +   
-+    avccontext->frame_size = avpicture_get_size(avccontext->pix_fmt, avccontext->width, avccontext->height);
++    avccontext->frame_size = GetFrameBufferSize(&(p_dirac_params->enc_ctx));
 +    avccontext->coded_frame= &p_dirac_params->picture;
 +     
 +    if (no_local)
@@ -434,7 +535,7 @@ diff -druN main/libavcodec/dirac.c main_nu/libavcodec/dirac.c
 +    }
 +    
 +   
-+    /* allocate enough memory for the incoming data */
++    /** allocate enough memory for the incoming data */
 +    p_dirac_params->p_in_frame_buf = (unsigned char*) av_malloc(avccontext->frame_size);
 +    
 +    return 0 ;
@@ -442,10 +543,11 @@ diff -druN main/libavcodec/dirac.c main_nu/libavcodec/dirac.c
 +
 +
 +static int dirac_encode_frame(AVCodecContext *avccontext,
-+                              unsigned char *frame,
-+                              int buf_size, void *data)
++			      unsigned char *frame,
++			      int buf_size, void *data)
 +{
 +    int enc_size=0;
++    int frames_written = 0;
 +    dirac_encoder_state_t state;
 +    FfmpegDiracParams* p_dirac_params = avccontext->priv_data;
 +    AVFrame* p_frame_src;
@@ -455,118 +557,119 @@ diff -druN main/libavcodec/dirac.c main_nu/libavcodec/dirac.c
 +
 +    if(data==0)
 +    {
-+        /* look for any delayed frames at EOF*/
-+        p_next_output_frame=p_dirac_params->p_next_output_frame;
-+        if(p_next_output_frame==NULL)
-+        {
-+            /* get terminate data*/
-+            p_dirac_params->p_encoder->enc_buf.buffer=frame;
-+            p_dirac_params->p_encoder->enc_buf.size = buf_size;
-+            if (dirac_encoder_end_sequence( p_dirac_params->p_encoder ) > 0)
-+                return p_dirac_params->p_encoder->enc_buf.size;
-+
-+            return 0;
-+        }
-+     
-+        memcpy(frame, p_next_output_frame->p_data, p_next_output_frame->size);
-+        enc_size=p_next_output_frame->size;
-+
-+        /*remove frame*/
-+        p_dirac_params->p_next_output_frame=p_next_output_frame->p_next_frame;
-+        av_free(p_next_output_frame->p_data);
-+        av_free(p_next_output_frame);
-+        
-+        return enc_size;
++    	/** look for any delayed frames at EOF*/
++    	p_next_output_frame=p_dirac_params->p_next_output_frame;
++	if(p_next_output_frame==NULL)
++	{
++		/* get terminate data*/
++		p_dirac_params->p_encoder->enc_buf.buffer=frame;
++		p_dirac_params->p_encoder->enc_buf.size = buf_size;
++		if (dirac_encoder_end_sequence( p_dirac_params->p_encoder ) > 0)
++        		return p_dirac_params->p_encoder->enc_buf.size;
++			
++		return 0;
++	}
++	 
++	
++	memcpy(frame, p_next_output_frame->p_data, p_next_output_frame->size);
++	enc_size=p_next_output_frame->size;
++	
++	/*remove frame*/
++	p_dirac_params->p_next_output_frame=p_next_output_frame->p_next_frame;
++	av_free(p_next_output_frame->p_data);
++	av_free(p_next_output_frame);
++	
++	return enc_size;
 +    }
-+    
++    	
 +    p_dirac_params->picture = *(AVFrame*)data;
-+    p_frame_src=(AVFrame*)data;
++	p_frame_src=(AVFrame*)data;
 +    
 +    /** allocate frame data to dirac input buffer */
-+    /*
-+    * input line size may differe from what the codec supports. Especially
-+    * when transcoding from one format to another. So use avpicture_layout
-+    * to copy the frame.
-+    */
-+    avpicture_layout ((AVPicture *)data, avccontext->pix_fmt, avccontext->width, avccontext->height,p_dirac_params->p_in_frame_buf, avccontext->frame_size);
++	/*
++	* input line size may differe from what the codec supports. Especially
++	* when transcoding from one format to another. So use avpicture_layout
++	* to copy the frame.
++	*/
++	avpicture_layout ((AVPicture *)data, avccontext->pix_fmt, avccontext->width, avccontext->height,p_dirac_params->p_in_frame_buf, avccontext->frame_size);
 +
-+    /* load next frame*/
++    /** load next frame*/
 +    if (dirac_encoder_load( p_dirac_params->p_encoder, p_dirac_params->p_in_frame_buf, avccontext->frame_size ) < 0)
 +    {
-+        av_log(avccontext, AV_LOG_ERROR, "Unrecoverable Encoder Error. Quitting...\n");
-+        return -1;
-+    }
++                av_log(avccontext, AV_LOG_ERROR, "Unrecoverable Encoder Error. Quitting...\n");
++                return -1;
++     }
 +     
-+
++	
 +     do {
-+            p_dirac_params->p_encoder->enc_buf.buffer = frame;
-+            p_dirac_params->p_encoder->enc_buf.size = buf_size;
-+            /* process frame */
-+            state = dirac_encoder_output ( p_dirac_params->p_encoder );
++     		p_dirac_params->p_encoder->enc_buf.buffer = frame;
++     		p_dirac_params->p_encoder->enc_buf.size = buf_size;
++		/** process frame */
++     		state = dirac_encoder_output ( p_dirac_params->p_encoder );
 +     
-+            switch (state)
-+            {
-+                case ENC_STATE_AVAIL:
-+                    assert (p_dirac_params->p_encoder->enc_buf.size > 0);
-+                    /* create output frame*/
-+                    p_frame_output=(struct FfmpegDiracOutputFrame*)av_malloc(sizeof(FfmpegDiracOutputFrame));
-+                    memset(p_frame_output, 0, sizeof(FfmpegDiracOutputFrame));
-+                
-+                    /* set output data */
-+                    p_frame_output->p_data=(unsigned char*)av_malloc(p_dirac_params->p_encoder->enc_buf.size);
-+                    memcpy(p_frame_output->p_data,p_dirac_params->p_encoder->enc_buf.buffer,p_dirac_params->p_encoder->enc_buf.size);
-+                    p_frame_output->size=p_dirac_params->p_encoder->enc_buf.size;
-+                    p_frame_output->type=p_dirac_params->p_encoder->enc_fparams.ftype;
-+                    if(p_dirac_params->p_next_output_frame==NULL)
-+                    {
-+                        p_dirac_params->p_next_output_frame=p_frame_output;
-+                        p_dirac_params->p_last_output_frame=p_frame_output;
-+                    }
-+                    else
-+                    {
-+                        p_dirac_params->p_last_output_frame->p_next_frame=p_frame_output;
-+                        p_dirac_params->p_last_output_frame=p_frame_output;
-+                    }
-+                    break;
++     		switch (state)
++    		{
++            	case ENC_STATE_AVAIL:
++                	assert (p_dirac_params->p_encoder->enc_buf.size > 0);
++			/** create output frame*/
++			p_frame_output=(struct FfmpegDiracOutputFrame*)av_malloc(sizeof(FfmpegDiracOutputFrame));
++			memset(p_frame_output, 0, sizeof(FfmpegDiracOutputFrame));
++			
++			/** set output data */
++			p_frame_output->p_data=(unsigned char*)av_malloc(p_dirac_params->p_encoder->enc_buf.size);
++			memcpy(p_frame_output->p_data,p_dirac_params->p_encoder->enc_buf.buffer,p_dirac_params->p_encoder->enc_buf.size);
++			p_frame_output->size=p_dirac_params->p_encoder->enc_buf.size;
++			p_frame_output->type=p_dirac_params->p_encoder->enc_fparams.ftype;
++			if(p_dirac_params->p_next_output_frame==NULL)
++			{
++				p_dirac_params->p_next_output_frame=p_frame_output;
++				p_dirac_params->p_last_output_frame=p_frame_output;
++			}
++			else
++			{
++				p_dirac_params->p_last_output_frame->p_next_frame=p_frame_output;
++				p_dirac_params->p_last_output_frame=p_frame_output;
++			}
++				
++			break;
++		
++            	case ENC_STATE_BUFFER:
++                	break;
 +
-+                case ENC_STATE_BUFFER:
-+                    break;
++            	case ENC_STATE_INVALID:
++                	av_log(avccontext, AV_LOG_ERROR, "Unrecoverable Encoder Error. Quitting...\n");
++                	return -1;
++            	default:
++                	av_log(avccontext, AV_LOG_ERROR, "Unknown Encoder state\n");
++                	return -1;
++		}
++      	}
++	while(state==ENC_STATE_AVAIL);
 +
-+                case ENC_STATE_INVALID:
-+                    av_log(avccontext, AV_LOG_ERROR, "Unrecoverable Encoder Error. Quitting...\n");
-+                    return -1;
-+                
-+                default:
-+                    av_log(avccontext, AV_LOG_ERROR, "Unknown Encoder state\n");
-+                    return -1;
-+            }
-+        }
-+        while(state==ENC_STATE_AVAIL);
-+
-+    /* copy 'next' frame in queue */
-+    p_next_output_frame=p_dirac_params->p_next_output_frame;
-+    if(p_next_output_frame==NULL)
-+        return 0;
-+
-+    memcpy(frame, p_next_output_frame->p_data, p_next_output_frame->size);
-+    avccontext->coded_frame->key_frame= p_next_output_frame->type == I_frame;    
-+    avccontext->coded_frame->pts= 0;    
-+    enc_size=p_next_output_frame->size;
-+
-+    /*remove frame*/
-+    p_dirac_params->p_next_output_frame=p_next_output_frame->p_next_frame;
-+    av_free(p_next_output_frame->p_data);
-+    av_free(p_next_output_frame);
-+
-+    return enc_size;
++	/* copy 'next' frame in queue */
++	p_next_output_frame=p_dirac_params->p_next_output_frame;
++	if(p_next_output_frame==NULL)
++		return 0;
++		
++	memcpy(frame, p_next_output_frame->p_data, p_next_output_frame->size);
++    avccontext->coded_frame->key_frame= p_next_output_frame->type == I_frame;	
++    avccontext->coded_frame->pts= 0;	
++	enc_size=p_next_output_frame->size;
++	
++	/*remove frame*/
++	p_dirac_params->p_next_output_frame=p_next_output_frame->p_next_frame;
++	av_free(p_next_output_frame->p_data);
++	av_free(p_next_output_frame);
++	
++	return enc_size;
 +}
 +
 +
-+static int dirac_encode_close(AVCodecContext *avccontext)
-+{
++static int dirac_encode_close(AVCodecContext *avccontext) {
++
 +   
 +    FfmpegDiracParams* p_dirac_params = avccontext->priv_data;
-+        
++   	 
 +     // close the encoder
 +    dirac_encoder_close(p_dirac_params->p_encoder );     
 +
@@ -587,10 +690,9 @@ diff -druN main/libavcodec/dirac.c main_nu/libavcodec/dirac.c
 +   .capabilities= CODEC_CAP_DELAY,
 +} ;
 +
-+/**-------------------------DECODER------------------------------------------*/
++/**-----------------------------------------------------DECODER-----------------------------------------------------------------------------------------*/
 +
-+static int dirac_decode_init(AVCodecContext *avccontext)
-+{
++static int dirac_decode_init(AVCodecContext *avccontext) {
 +
 +    FfmpegDiracParams *p_dirac_params = (FfmpegDiracParams*)avccontext->priv_data ;
 +    p_dirac_params->p_decoder =  dirac_decoder_init(avccontext->debug);
@@ -609,15 +711,16 @@ diff -druN main/libavcodec/dirac.c main_nu/libavcodec/dirac.c
 +    FfmpegDiracParams *p_dirac_params=(FfmpegDiracParams*)avccontext->priv_data;
 +    AVPicture *picture = (AVPicture*)data;
 +    AVPicture pic;
-+    int pict_size;
++    int drop_frame, framedrop, pict_size;
 +    unsigned char *buffer[3];
 +
 +    if(buf_size>0) 
-+        /* set data to decode into buffer */
++        /** set data to decode into buffer */
 +        dirac_buffer (p_dirac_params->p_decoder, buf, buf+buf_size);
++        
 +    while (1)
 +    {
-+         /* parse data and process result */
++         /** parse data and process result */
 +         DecoderState state = dirac_parse (p_dirac_params->p_decoder);
 +         switch (state)
 +         {
@@ -626,25 +729,24 @@ diff -druN main/libavcodec/dirac.c main_nu/libavcodec/dirac.c
 +
 +            case STATE_SEQUENCE:
 +                
-+                /* tell ffmpeg about sequence details*/
++                /** tell ffmpeg about sequence details*/
 +                avccontext->height=p_dirac_params->p_decoder->seq_params.height;
 +                avccontext->width=p_dirac_params->p_decoder->seq_params.width;
 +                avccontext->pix_fmt=GetFfmpegChromaFormat(p_dirac_params->p_decoder->seq_params.chroma);
 +                avccontext->time_base.den =p_dirac_params->p_decoder->seq_params.frame_rate.numerator;
 +                avccontext->time_base.num =p_dirac_params->p_decoder->seq_params.frame_rate.denominator;
 +                
-+                /* calc output dimensions */
++                /** calc output dimensions */
 +                avpicture_fill(&pic, NULL, avccontext->pix_fmt, avccontext->width, avccontext->height); 
 +                pict_size = avpicture_get_size(avccontext->pix_fmt, avccontext->width, avccontext->height);
 +                
-+                /* allocate output buffer */
-+                if(p_dirac_params->p_out_frame_buf==0)
-+                    p_dirac_params->p_out_frame_buf = (unsigned char *)av_malloc (pict_size);
++                   /** allocate output buffer */
++                p_dirac_params->p_out_frame_buf = (unsigned char *)av_malloc (pict_size);
 +                buffer[0]=p_dirac_params->p_out_frame_buf;
 +                buffer[1]=p_dirac_params->p_out_frame_buf+(pic.linesize[0]*avccontext->height);
 +                buffer[2]=buffer[1]+(pic.linesize[1]*p_dirac_params->p_decoder->seq_params.chroma_height);
 +                
-+                /* tell dirac about output destination */
++                /** tell dirac about output destination */
 +                dirac_set_buf(p_dirac_params->p_decoder, buffer, NULL);
 +                break;
 +                        
@@ -652,9 +754,9 @@ diff -druN main/libavcodec/dirac.c main_nu/libavcodec/dirac.c
 +                break;
 +
 +            case STATE_PICTURE_AVAIL:
-+                /* fill pic with current buffer data from dirac*/
++                /** fill pic with current buffer data from dirac*/
 +                avpicture_fill(picture, p_dirac_params->p_out_frame_buf, avccontext->pix_fmt, avccontext->width, avccontext->height);
-+                *data_size=avpicture_get_size(avccontext->pix_fmt, avccontext->width, avccontext->height);
++                *data_size=1;
 +                return buf_size;
 +
 +            case STATE_PICTURE_START:
@@ -668,13 +770,16 @@ diff -druN main/libavcodec/dirac.c main_nu/libavcodec/dirac.c
 +        }
 +    }
 +        
++        
 +    return buf_size;
++
++
 +}
 +
 +
-+static int dirac_decode_close(AVCodecContext *avccontext)
-+{
-+    FfmpegDiracParams *p_dirac_params=(FfmpegDiracParams*)avccontext->priv_data;    
++static int dirac_decode_close(AVCodecContext *avccontext) {
++   
++    FfmpegDiracParams *p_dirac_params=(FfmpegDiracParams*)avccontext->priv_data;	
 +                
 +    dirac_decoder_close (p_dirac_params->p_decoder);
 +
@@ -697,79 +802,153 @@ diff -druN main/libavcodec/dirac.c main_nu/libavcodec/dirac.c
 +} ;
 +
 +
-+static int dirac_sync_video_packet (const uint8_t **buf,
-+                                    FfmpegDiracParseContext *p_dirac_params,
-+                                    int *start)
-+{
-+    unsigned char* p_dirac_videobuf_code = p_dirac_params->dirac_videobuf_code;
-+    p_dirac_params->dirac_videobuf_len=0;
 +
-+    while(p_dirac_params->dirac_videobuf_code_len<5)
++
+--- /dev/null	2005-12-09 12:34:30.989462208 +0200
++++ libavformat/drc.c	2005-12-16 13:10:14.805097256 +0200
+@@ -0,0 +1,300 @@
++/**
++ * @file drc.c
++ * Dirac streaming support
++ * @author Andrew Kennedy <dirac@rd.bbc.co.uk>
++ * www.sourceforge.net/projects/dirac
++ *
++ * This file is part of libavformat.
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++ */
++
++#include <stdio.h>
++
++#include "avformat.h"
++
++#undef NDEBUG
++#include <assert.h>
++
++
++typedef struct FfmpegDrcParams {
++ 
++    /** in initialization mode? */
++    int initializing;
++ 
++    /** sequence data */
++    char *p_seq_buf;
++ 
++    /** size of sequence buffer */
++    int seq_size;
++
++} FfmpegDrcParams ;
++
++
++
++static int drc_write_header(AVFormatContext *avfcontext) 
++{
++      
++    return 0 ;
++}
++
++static int drc_write_packet(AVFormatContext *avfcontext, AVPacket *pkt)
++{
++
++  put_buffer(&avfcontext->pb, pkt->data, pkt->size);
++  put_flush_packet(&avfcontext->pb);
++  
++                         
++    return 0;
++}
++
++
++static int drc_write_trailer(AVFormatContext *avfcontext) {
++  
++   
++				 
++				 
++   return 0 ;
++}
++
++
++static AVOutputFormat drc_oformat = {
++    "drc",
++    "Dirac",
++    "",
++    "drc",
++    sizeof(FfmpegDrcParams),
++    0,
++    CODEC_ID_DIRAC,
++    drc_write_header,
++    drc_write_packet,
++    drc_write_trailer,
++} ;
++
++
++/**------------------------------------------------------------input---------------------------------------------------------------------*/
++
++static int drc_read_header(AVFormatContext *avfcontext, AVFormatParameters *ap)
++{
++    AVStream *st;
++    FfmpegDrcParams *p_drc_params = (FfmpegDrcParams*)avfcontext->priv_data;
++   
++    memset(p_drc_params, sizeof(FfmpegDrcParams), 0);
++    
++    /** create new stream */
++    st = av_new_stream(avfcontext, 0);
++    st->codec->codec_type = CODEC_TYPE_VIDEO;
++    st->codec->codec_id = CODEC_ID_DIRAC;
++    st->start_time = 0;
++    
++    p_drc_params->initializing=1;
++
++    return 0 ;
++}
++
++
++#define DIRAC_VIDEOBUFFER_SIZE 0x100000
++static unsigned char* dirac_videobuffer = 0;
++static int dirac_videobuf_len =0;
++static unsigned char dirac_videobuf_code[5];
++static int dirac_videobuf_code_len = 0;
++
++int dirac_sync_video_packet (ByteIOContext *p_byte_context)
++{
++    int skipped = 0;
++    dirac_videobuf_len = 0;
++    while(dirac_videobuf_code_len<5)
 +    {
-+        p_dirac_videobuf_code[p_dirac_params->dirac_videobuf_code_len++]=*(*buf);
-+        (*buf)++;
++        dirac_videobuf_code[dirac_videobuf_code_len++]=url_fgetc(p_byte_context);
 +    }
 +    while (1)
 +    {
-+        int c;
-+        if(p_dirac_videobuf_code[0]==0x42 && p_dirac_videobuf_code[1]==0x42 && p_dirac_videobuf_code[2]==0x43 && p_dirac_videobuf_code[3]==0x44)
-+            break;
-+                
-+        ++(*start);
-+        p_dirac_videobuf_code[0]=p_dirac_videobuf_code[1];
-+        p_dirac_videobuf_code[1]=p_dirac_videobuf_code[2];
-+        p_dirac_videobuf_code[2]=p_dirac_videobuf_code[3];
-+        p_dirac_videobuf_code[3]=p_dirac_videobuf_code[4];
-+        c = *(*buf);
-+        (*buf)++;
-+        if (c < 0 )
-+            return 0;
-+        p_dirac_videobuf_code[4]=c;
++                int c;
++                if(dirac_videobuf_code[0]==0x42 && dirac_videobuf_code[1]==0x42 && dirac_videobuf_code[2]==0x43 && dirac_videobuf_code[3]==0x44)
++                {
++                    break;
++                }
++                ++skipped;
++                dirac_videobuffer[0] = dirac_videobuf_code[0]=dirac_videobuf_code[1];
++                dirac_videobuffer[1] = dirac_videobuf_code[1]=dirac_videobuf_code[2];
++                dirac_videobuffer[2] = dirac_videobuf_code[2]=dirac_videobuf_code[3];
++                dirac_videobuffer[3] = dirac_videobuf_code[3]=dirac_videobuf_code[4];
++                c = url_fgetc(p_byte_context);
++                if (c < 0 )
++                    return 0;
++                dirac_videobuffer[4] = dirac_videobuf_code[4]=c;
++                dirac_videobuf_len = 5;
 +    }
 +    
-+    return p_dirac_videobuf_code[4];
-+}
-+
-+static int dirac_find_frame_end(FfmpegDiracParseContext *p_dirac_params, 
-+                                const uint8_t *buf, 
-+                                uint8_t *p_buf_end, int cur_idx)
-+{
-+    int end_idx=cur_idx;
-+
-+     /* find end of frame */
-+    int shift = 0xffffffff;
-+    p_dirac_params->dirac_videobuf_code_len = 0;
-+    while (p_dirac_params->in_frame)
-+    {
-+        if(buf==p_buf_end)
-+            return -1;
-+
-+        int byte;
-+        byte = *buf;
-+        if (byte < 0)
-+            return -1;
-+
-+        if (shift == 0x42424344)
-+        {
-+            if (byte != 0xFF)
-+            {
-+                p_dirac_params->in_frame = 0;
-+                p_dirac_params->dirac_videobuf_code_len = 5;
-+                p_dirac_params->dirac_videobuf_code[0] = 0x42;
-+                p_dirac_params->dirac_videobuf_code[1] = 0x42;
-+                p_dirac_params->dirac_videobuf_code[2] = 0x43;
-+                p_dirac_params->dirac_videobuf_code[3] = 0x44;
-+                p_dirac_params->dirac_videobuf_code[4] = byte;
-+                return end_idx;
-+            }
-+        }
-+        shift = (shift << 8 ) | byte;
-+        buf++;
-+        end_idx++;
-+    }
-+    
-+    return -1;
-+
++ 
++    return dirac_videobuf_code[4];
 +}
 +
 +/** RAP Frame start = 0xD7
@@ -778,240 +957,153 @@ diff -druN main/libavcodec/dirac.c main_nu/libavcodec/dirac.c
 + L2 Frame start = 0xD7*/
 +#define FRAME_START(c) ((c) == 0xD4 || (c) == 0xD5 || (c) == 0xD6 || (c) == 0xD7)
 +
-+static int dirac_find_frame_start(FfmpegDiracParseContext *p_dirac_params, const uint8_t **buf, int buf_size)
-+{
++static int drc_read_packet(AVFormatContext *avfcontext, AVPacket *pkt) {
++
++    int in_frame = 0;
++    int offset=0;
++    unsigned char* start;
 +    unsigned int shift = 0xffffffff;
 +    int msg_type = 0xFF;
-+    int start=0;
++    dirac_videobuf_len=0;
++    FfmpegDrcParams *p_drc_params = (FfmpegDrcParams*)avfcontext->priv_data ;
++    
++    if (!dirac_videobuffer)
++    {
++        dirac_videobuffer = (unsigned char *)av_malloc(DIRAC_VIDEOBUFFER_SIZE);
++        if(!dirac_videobuffer)
++        {
++            return 0;
++        }
++    }
 +
-+     /* find start of data */
++    start = dirac_videobuffer;
++    
++    /** if we have any valid sequence data, then need to send to decoder */
++    if(p_drc_params->initializing==0 && p_drc_params->seq_size > 0)
++    {     
++        memcpy(start, p_drc_params->p_seq_buf, p_drc_params->seq_size);
++        dirac_videobuf_len+=p_drc_params->seq_size;
++        av_free(p_drc_params->p_seq_buf);
++        p_drc_params->seq_size=0;
++    }
++    
++    /** find start of data */
 +    while (msg_type != 0 && msg_type == 0xFF)
-+        msg_type = dirac_sync_video_packet(buf, p_dirac_params, &start);
++        msg_type = dirac_sync_video_packet(&avfcontext->pb);
 +
 +    if (msg_type == 0)
 +        return -1;
 +
-+        
 +    /* find start of frame */
-+    while (!p_dirac_params->in_frame)
++    while (!in_frame)
 +    {
 +        int byte;
 +        if (FRAME_START(msg_type))
 +        {
-+            p_dirac_params->in_frame = 1;
-+            return start;
++            in_frame = 1;
++            break;
 +        }
 +
-+        byte = *(*buf);
-+        (*buf)++;
-+        
++        byte = url_fgetc(&avfcontext->pb);
 +        if (byte < 0)
 +        {
-+            p_dirac_params->dirac_videobuf_code_len = 0;
-+            return -1;
-+        }
++            dirac_videobuf_code_len = 0;
++            if (dirac_videobuf_len)
++                return dirac_videobuf_len;
++            else
++                return -1;
++         }
 +
++           dirac_videobuffer[dirac_videobuf_len++] = byte;
++           if (shift == 0x42424344)
++           {
++                if (FRAME_START(byte))
++                    {
++                        in_frame = 1;
++                        break;
++                    }
++            }
++        shift = (shift << 8 ) | byte;
++      }
++
++    /* find end of frame */
++    shift = 0xffffffff;
++    dirac_videobuf_code_len = 0;
++    while (in_frame)
++    {
++        int byte;
++        byte = url_fgetc(&avfcontext->pb);
++        if (byte < 0)
++            return dirac_videobuf_len;
++
++        dirac_videobuffer[dirac_videobuf_len++] = byte;
 +        if (shift == 0x42424344)
 +        {
-+            if (FRAME_START(byte))
++            if (byte != 0xFF)
 +            {
-+                p_dirac_params->in_frame = 1;
-+                return start;
++                in_frame = 0;
++                dirac_videobuf_code_len = 5;
++                dirac_videobuf_code[0] = 0x42;
++                dirac_videobuf_code[1] = 0x42;
++                dirac_videobuf_code[2] = 0x43;
++                dirac_videobuf_code[3] = 0x44;
++                dirac_videobuf_code[4] = byte;
++                break;
 +            }
 +        }
 +        shift = (shift << 8 ) | byte;
-+        start++;
 +    }
-+    
-+    return -1;
-+
-+}
-+
-+
-+static int parse_dirac(AVCodecParserContext *s,
-+                      AVCodecContext *avctx,
-+                      uint8_t **poutbuf, int *poutbuf_size, 
-+                      const uint8_t *buf, int buf_size)
-+{
-+
-+    int frame_start=0;
-+    int frame_end;
-+    uint8_t *p_cur=buf;
-+ 
-+    if(buf_size==0)
-+        return 0;
-+    
-+    FfmpegDiracParseContext *p_dirac_params = (FfmpegDiracParseContext*)s->priv_data ;
-+    
-+    if(!p_dirac_params->in_frame)
-+    {
-+        frame_start=dirac_find_frame_start(p_dirac_params, &p_cur, buf_size);
-+        if(frame_start==-1)
-+        {
-+            *poutbuf = NULL;
-+            *poutbuf_size = 0;
-+             return buf_size;
-+        }
-+    }
-+    
-+    frame_end = dirac_find_frame_end(p_dirac_params, p_cur, buf+buf_size, p_cur-buf);
-+
-+    /* no frame end - store data */
-+    if(frame_end < 0)
-+    {
-+        memcpy(p_dirac_params->p_dirac_videobuffer+p_dirac_params->dirac_videobuf_len,
-+               buf+frame_start, buf_size-frame_start);
-+        p_dirac_params->dirac_videobuf_len+=buf_size-frame_start;
-+               
-+        *poutbuf = NULL;
-+        *poutbuf_size = 0;
-+         return buf_size;
-+    }
-+
-+    /* have frame end */
-+    memcpy(p_dirac_params->p_dirac_videobuffer+p_dirac_params->dirac_videobuf_len,
-+           buf+frame_start, frame_end-frame_start+1);   
-+           p_dirac_params->dirac_videobuf_len+=frame_end-frame_start+1;
-+           
-+    /* construct new frame */
-+    *poutbuf=av_malloc(p_dirac_params->dirac_videobuf_len);
-+    memcpy(*poutbuf, p_dirac_params->p_dirac_videobuffer, p_dirac_params->dirac_videobuf_len);
-+    *poutbuf_size = p_dirac_params->dirac_videobuf_len;
-+    
-+    
-+    return frame_end+1;
-+}   
 +   
-+    
-+    
-+static int dirac_parse_close(AVCodecParserContext *s)
-+{
-+    FfmpegDiracParseContext *pc = s->priv_data;
-+    av_freep(&pc->p_dirac_videobuffer);
-+    return 0;
-+}
-+
-+static int dirac_parse_open(AVCodecParserContext *s)
-+{
-+    FfmpegDiracParseContext *pc = s->priv_data;
-+    pc->p_dirac_videobuffer = (unsigned char *)av_malloc(0x100000);
-+    return 0;
++    if (av_new_packet(pkt, dirac_videobuf_len))
++        return AVERROR_IO;
 +        
-+}
++    pkt->stream_index = 0;
 +
-+
-+AVCodecParser dirac_parser = {
-+    { CODEC_ID_DIRAC },
-+    sizeof(FfmpegDiracParseContext),
-+    dirac_parse_open,
-+    parse_dirac,
-+    dirac_parse_close
-+};
-diff -druN main/libavcodec/Makefile main_nu/libavcodec/Makefile
---- main/libavcodec/Makefile	2005-10-26 18:04:53.000000000 +0300
-+++ main_nu/libavcodec/Makefile	2005-10-28 21:00:53.596641056 +0300
-@@ -285,6 +285,12 @@
- OBJS += libgsm.o
- endif
- 
-+ifeq ($(CONFIG_DIRAC),yes)
-+OBJS += dirac.o
-+EXTRALIBS += $(DIRAC_LIB)
-+CFLAGS += $(DIRAC_INC)
-+endif
-+
- ifeq ($(TARGET_GPROF),yes)
- CFLAGS+=-p
- LDFLAGS+=-p
-diff -druN main/libavformat/avienc.c main_nu/libavformat/avienc.c
---- main/libavformat/avienc.c	2005-10-13 13:23:50.000000000 +0300
-+++ main_nu/libavformat/avienc.c	2005-10-28 21:00:53.601640296 +0300
-@@ -188,6 +188,7 @@
-     { CODEC_ID_INDEO2, MKTAG('R', 'T', '2', '1') },
-     { CODEC_ID_FRAPS, MKTAG('F', 'P', 'S', '1') },
-     { CODEC_ID_THEORA, MKTAG('t', 'h', 'e', 'o') },
-+    { CODEC_ID_DIRAC, MKTAG('d', 'r', 'a', 'c') },
-     { CODEC_ID_TRUEMOTION2, MKTAG('T', 'M', '2', '0') },
-     { CODEC_ID_RAWVIDEO, 0 },
-     { 0, 0 },
-diff -druN main/libavformat/raw.c main_nu/libavformat/raw.c
---- main/libavformat/raw.c	2005-10-02 04:52:41.000000000 +0300
-+++ main_nu/libavformat/raw.c	2005-10-28 21:00:53.621637256 +0300
-@@ -187,6 +187,23 @@
-     return 0;
- }
- 
-+/* drc read */
-+static int dirac_read_header(AVFormatContext *s,
-+                             AVFormatParameters *ap)
-+{
-+    AVStream *st;
-+
-+    st = av_new_stream(s, 0);
-+    if (!st)
-+        return AVERROR_NOMEM;
-+
-+    st->codec->codec_type = CODEC_TYPE_VIDEO;
-+    st->codec->codec_id = CODEC_ID_DIRAC;
-+    st->need_parsing = 1;
-+    /* the parameters will be extracted from the compressed bitstream */
-+    return 0;
-+}
-+
- static int shorten_read_header(AVFormatContext *s,
-                                AVFormatParameters *ap)
- {
-@@ -329,6 +346,32 @@
-     .extensions = "ac3",
- };
- 
-+AVInputFormat dirac_iformat = {
-+    "dirac",
-+    "raw dirac",
-+    0,
-+    NULL,
-+    dirac_read_header,
-+    raw_read_partial_packet,
-+    raw_read_close,
-+    .extensions = "drc",
-+};
-+
-+#ifdef CONFIG_MUXERS
-+AVOutputFormat dirac_oformat = {
-+    "dirac",
-+    "raw dirac",
-+    "dirac", 
-+    "drc",
-+    0,
-+    CODEC_ID_DIRAC,
-+    0,
-+    raw_write_header,
-+    raw_write_packet,
-+    raw_write_trailer,
-+};
-+#endif //CONFIG_MUXERS
-+
- #ifdef CONFIG_MUXERS
- AVOutputFormat ac3_oformat = {
-     "ac3",
-@@ -693,6 +736,9 @@
-     av_register_input_format(&ac3_iformat);
-     av_register_output_format(&ac3_oformat);
- 
-+    av_register_input_format(&dirac_iformat);
-+    av_register_output_format(&dirac_oformat);
 +    
-     av_register_input_format(&dts_iformat);
- 
-     av_register_input_format(&h261_iformat);
-diff -druN main/Makefile main_nu/Makefile
---- main/Makefile	2005-08-30 19:51:59.000000000 +0300
-+++ main_nu/Makefile	2005-10-28 21:00:53.562646224 +0300
-@@ -104,6 +104,7 @@
-              $(JPEG_LIB) \
-              $(ALSA_LIB) \
-              $(XMMS_LIB) \
-+             $(DIRAC_LIB) \
-              $(X264_LIB) \
-              $(MUSEPACK_LIB) \
-              $(SPEEX_LIB) \
++   
++    /** reset input buffer to beggining if we are still initialzing*/
++    if(p_drc_params->initializing)
++    {
++        p_drc_params->p_seq_buf=(unsigned char *)av_malloc(dirac_videobuf_len);
++        memcpy(p_drc_params->p_seq_buf,start, pkt->size);
++        p_drc_params->seq_size=dirac_videobuf_len;
++        p_drc_params->initializing=0;
++    }
++    
++    memcpy(pkt->data, start, dirac_videobuf_len);
++    
++    return dirac_videobuf_len;
++}
++    
++    
++static int drc_read_close(AVFormatContext *avfcontext) {
++
++    av_free(dirac_videobuffer);
++    dirac_videobuffer=0;   
++
++    return 0;
++ }
++
++ 
++static AVInputFormat drc_iformat = {
++    "drc",
++    "Dirac",
++    sizeof(FfmpegDrcParams),
++    NULL,
++    drc_read_header,
++    drc_read_packet,
++    drc_read_close,
++    .extensions = "drc",
++} ;
++
++
++int drc_init(void) {
++
++#ifdef CONFIG_ENCODERS
++    av_register_output_format(&drc_oformat) ;
++#endif
++    av_register_input_format(&drc_iformat);
++
++    return 0 ;
++}
++
