@@ -7,7 +7,7 @@ inherit subversion toolchain-funcs flag-o-matic
 DESCRIPTION="x264 is a free library for encoding H264/AVC video streams"
 HOMEPAGE="http://www.videolan.org/x264.html"
 ESVN_REPO_URI="svn://svn.videolan.org/${PN}/trunk"
-ESVN_PATCHES="gpac_shared.diff"
+ESVN_PATCHES="*.diff"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -42,13 +42,12 @@ src_test() {
 }
 
 src_install() {
-	newlib.a libx264.a libx264_static.a
-	dobin x264 xyuv avc2avi
-	insinto /usr/$(get_libdir)
-	newins ${FILESDIR}/ld_script libx264.so
-	newins ${FILESDIR}/ld_script libx264.a
-	dosed "s:@DEP_LIBS@:${DEP_LIBS}:" /usr/$(get_libdir)/libx264.{so,a}
+	dobin x264 avc2avi
+	use sdl && dobin xyuv
+	dolib.a libx264.a
+	insinto /usr/$(get_libdir)/pkgconfig
+	doins x264.pc
 	insinto /usr/include
 	doins x264.h
-	dodoc AUTHORS COPYING doc/dct.txt TODO tools/*.{pl,sh}
+	dodoc AUTHORS TODO doc/*.txt tools/*.{pl,sh}
 }

@@ -1,3 +1,0 @@
-/* GNU ld script */
-
-INPUT ( -lx264_static@DEP_LIBS@ )

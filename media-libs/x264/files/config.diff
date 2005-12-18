@@ -1,0 +1,35 @@
+Index: configure
+===================================================================
+--- configure	(revision 387)
++++ configure	(working copy)
+@@ -236,6 +236,7 @@
+             ;;
+         --enable-visualize)
+             LDFLAGS="$LDFLAGS -L/usr/X11R6/lib -lX11"
++            PKGLIBS="$PKGLIBS -L/usr/X11R6/lib -lX11"
+             CFLAGS="$CFLAGS -DVISUALIZE=1"
+             vis="yes"
+             ;;
+@@ -264,11 +265,12 @@
+         MINGW|CYGWIN|BEOS)
+             ;;
+         *) LDFLAGS="$LDFLAGS -lpthread"
++            PKGLIBS="$PKGLIBS -lpthread"
+             ;;
+     esac
+ fi
+ 
+-MP4_LDFLAGS="-lgpac_static"
++MP4_LDFLAGS="-lgpac"
+ if [ $SYS = CYGWIN -o $SYS = MINGW ]; then
+     MP4_LDFLAGS="$MP4_LDFLAGS -lwinmm"
+ fi
+@@ -344,7 +346,7 @@
+ Name: x264
+ Description: H.264 (MPEG4 AVC) encoder library
+ Version: $(grep POINTVER < config.h | sed -e 's/.* "//; s/".*//')
+-Libs: -L$libdir -lx264
++Libs: -L$libdir -lx264 $PKGLIBS
+ Cflags: -I$includedir
+ EOF
+ 
