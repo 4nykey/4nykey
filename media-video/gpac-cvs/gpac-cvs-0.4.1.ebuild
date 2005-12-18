@@ -18,7 +18,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
 IUSE="aac amr debug ffmpeg gtk2 jpeg mad mozilla nsplugin vorbis oss png sdl theora
-truetype wxwindows xml2 xvid unicode X"
+truetype wxwindows xml2 xvid unicode X ssl"
 S="${WORKDIR}/${PN/-cvs}"
 
 RDEPEND="jpeg? ( media-libs/jpeg )
@@ -34,6 +34,7 @@ RDEPEND="jpeg? ( media-libs/jpeg )
 	sdl? ( media-libs/libsdl )
 	wxwindows? ( >=x11-libs/wxGTK-2.5.2 )
 	xml2? ( >=dev-libs/libxml2-2.6.0 )
+	ssl? ( dev-libs/openssl )
 	X? ( virtual/x11 )
 	xvid? ( >=media-libs/xvid-1.0.1 )"
 
@@ -83,21 +84,24 @@ src_unpack() {
 }
 
 src_compile() {
+	local myconf
+	use mozilla || myconf="${myconf} --use-js=no"
+	use truetype || myconf="${myconf} --use-ft=no"
+	use jpeg || myconf="${myconf} --use-jpeg=no"
+	use png || myconf="${myconf} --use-png=no"
+	use aac || myconf="${myconf} --use-faad=no"
+	use mad || myconf="${myconf} --use-mad=no"
+	use xvid || myconf="${myconf} --use-xvid=no"
+	use ffmpeg || myconf="${myconf} --use-ffmpeg=no"
+
 	econf \
 		--mozdir=${D}usr/$(get_libdir)/${PLUGINS_DIR} \
 		$(use_enable amr) \
+		$(use_enable ssl) \
 		$(use_enable debug) \
-		$(use_enable aac faad) \
-		$(use_enable ffmpeg) \
-		$(use_enable jpeg) \
-		$(use_enable mad) \
-		$(use_enable mozilla js) \
 		$(use_enable oss oss-audio) \
-		$(use_enable png) \
-		$(use_enable truetype ft) \
 		$(use_enable xml2 svg) \
-		$(use_enable xvid) ||
-		die "configure died"
+		${myconf} || die "configure died"
 
 	sed -i "s:=/usr:=${D}usr:" config.mak
 
