@@ -2,27 +2,26 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit subversion toolchain-funcs flag-o-matic
+inherit subversion toolchain-funcs
 
 DESCRIPTION="x264 is a free library for encoding H264/AVC video streams"
 HOMEPAGE="http://www.videolan.org/x264.html"
 ESVN_REPO_URI="svn://svn.videolan.org/${PN}/trunk"
-ESVN_PATCHES="*.diff"
+#ESVN_PATCHES="*.diff"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
 IUSE="X mp4 sdl threads test"
 
-RDEPEND="mp4? ( media-video/gpac-cvs )
-	X? ( virtual/x11 )
+RDEPEND="mp4? || ( media-video/gpac-cvs media-video/gpac )
+	X? ( x11-libs/libX11 )
 	sdl? ( media-libs/libsdl )"
 DEPEND="${RDEPEND}
 	dev-lang/nasm"
 
 src_compile() {
-	use X && DEP_LIBS=" -lX11"
-	use threads && DEP_LIBS="${DEP_LIBS} -lpthread"
+	sed -i 's:gpac_static:gpac:; s:/local::' configure
 
 	./configure\
 		`use_enable X visualize` \
@@ -33,7 +32,10 @@ src_compile() {
 
 	make || die
 	`tc-getCC` $CFLAGS $LDFLAGS -o avc2avi tools/avc2avi.c
-	use sdl && `tc-getCC` $CFLAGS $LDFLAGS -o xyuv tools/xyuv.c -lSDL
+	use sdl && `tc-getCC` $CFLAGS $LDFLAGS -o xyuv tools/xyuv.c `sdl-config --libs`
+
+	use threads && sed -i 's:\(^Libs.*\) :\1 -lpthread :' x264.pc
+	use X && echo "Requires: x11" >> x264.pc
 }
 
 src_test() {
