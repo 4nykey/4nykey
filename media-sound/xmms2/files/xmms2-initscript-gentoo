@@ -2,21 +2,19 @@
 # Copyright 1999-2005 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-opts="${opts}"
-
 depend() {
 	need net
 }
 
 start() {
 	ebegin "Starting xmms2"
-	start-stop-daemon --start -q -b -c ${XMMS2_USER} --exec /usr/bin/xmms2d -- -q
+	start-stop-daemon --start -q -c ${XMMS2_USER} --exec /usr/bin/xmms2-launcher >& /dev/null
 	eend
 }
 
 stop() {
 	ebegin "Stopping xmms2"
-	start-stop-daemon --start -q -c ${XMMS2_USER} --exec /usr/bin/xmms2 quit
+	start-stop-daemon --start -q -c ${XMMS2_USER} --exec /usr/bin/xmms2 -- quit
 	eend $?
 }
 
