@@ -1,2 +1,3 @@
-MD5 11214cc023c1004a54326c6bffad6db0 ffmpeg-cvs-0.4.9-r1.ebuild 5074
+MD5 4d5f8739e1fdf887a5e6eb1b059e0818 ffmpeg-cvs-0.4.9-r1.ebuild 4941
+MD5 925679fc863648c3f58ee893378a3c03 files/FFMpeg-20051205-dirac-0.5.x.patch 30726
 MD5 1b13e426946ece6adac5ff815c5f1710 files/digest-ffmpeg-cvs-0.4.9-r1 116

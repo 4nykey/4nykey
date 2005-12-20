@@ -1,3 +1,4 @@
 MD5 23eece5dad7a35bef48aaf34c403840c files/digest-vlc-svn-0.8.5 64
 MD5 fe11639c90446adddc3a141f390724e6 files/vlc-libvc1.diff 10187
-MD5 fbae1c09a22e16089e0195f4275cbf5b vlc-svn-0.8.5.ebuild 7392
+MD5 4c06cd188f3d8e2e75a4a22381fbdfbf files/x264_pkgconfig.diff 680
+MD5 5205d174253b139e45a10d061cbd0164 vlc-svn-0.8.5.ebuild 7383

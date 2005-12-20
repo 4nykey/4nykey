@@ -125,7 +125,7 @@ src_unpack() {
 		"s:/truetype/freefont/FreeSerifBold.ttf:/ttf-bitstream-vera/VeraBd.ttf:" \
 		modules/misc/freetype.c
 
-	epatch ${FILESDIR}/vlc-libvc1.diff
+	epatch ${FILESDIR}/*.diff
 	sed -i '/set -./d; s:="-1.9":="-1.7":' bootstrap
 	# if --disable-hal, any other modules, that use pkg-config for detection,
 	# (cdio, vcdinfo, gnome-vfs...) get all disabled somehow
