@@ -1,3 +1,3 @@
-MD5 7c79a31aaeea8a37e50c12fa4fd6b9c5 quodlibet-0.13.0.ebuild 904
-MD5 d7609ae18071f4110369e100a17aedcf files/makefile.patch 564
-MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-quodlibet-0.13.0 0
+MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-quodlibet-0.16.0 0
+MD5 b567e3e6a6515513550fa516ad45d319 files/makefile.patch 500
+MD5 21dac8be786a531a735c53e92e753eae quodlibet-0.16.0.ebuild 1100

@@ -1,14 +1,15 @@
 Index: Makefile
 ===================================================================
---- Makefile	(revision 1155)
+--- Makefile	(revision 2575)
 +++ Makefile	(working copy)
-@@ -1,10 +1,12 @@
- MODULES = config.py const.py library.py match.py parser.py player.py plugins.py qltk.py util.py widgets.py formats/*.py
+@@ -3,11 +3,13 @@
+ PROGRAMS = exfalso quodlibet
  SUBDIRS = trayicon mmkeys po
- EXTENSIONS = trayicon.so mmkeys.so
+ EXTENSIONS = _trayicon.so _mmkeys.so
 -PREFIX ?= /usr/local
 +PREFIX ?= /usr
- TO = lib/quodlibet
+ TO = share/quodlibet
+ TODEP = lib/quodlibet
  
 -all:
 +all: check extensions po-data

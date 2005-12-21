@@ -12,17 +12,20 @@ LICENSE="GPL-2"
 
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="mad vorbis flac musepack gnome"
+IUSE="mad vorbis flac musepack gnome wavpack modplug network"
 
 DEPEND=">=virtual/python-2.3
 	>=dev-python/pygtk-2.6
 	>=dev-python/gst-python-0.8.2
 	gnome? ( dev-python/gnome-python-extras )
-	musepack? ( dev-python/pymusepack )
+	network? ( media-plugins/gst-plugins-gnomevfs )
 	flac? ( dev-python/pyflac )
 	vorbis? ( dev-python/pyvorbis )
 	mad? ( dev-python/pymad
-		dev-python/pyid3lib )"
+		dev-python/pyid3lib )
+	musepack? ( media-libs/libmpcdec dev-python/ctypes )
+	wavpack? ( media-sound/wavpack dev-python/ctypes )
+	modplug? ( media-libs/libmodplug dev-python/ctypes )"
 
 src_install() {
 	make DESTDIR=${D} install || die
