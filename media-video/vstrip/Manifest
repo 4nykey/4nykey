@@ -1,0 +1,4 @@
+MD5 1f3d4d7b3589e5de8e4bb357eb9a0f63 files/digest-vstrip-0.8f 59
+MD5 5e8b0123e4210ad51352ae95aca5832e files/vstrip-0.8f-gentoo.patch 2027
+MD5 c110ac283e28c67a52aea184d72981d8 files/vstrip_makefile.diff 266
+MD5 ae6901de686268073b9e4a0cebb6dc19 vstrip-0.8f.ebuild 872

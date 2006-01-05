@@ -1,0 +1,8 @@
+--- vstrip/Makefile.orig	2005-12-30 01:10:17.866737024 +0200
++++ vstrip/Makefile	2005-12-30 01:09:07.862379304 +0200
+@@ -1,4 +1,4 @@
+-CFLAGS := -W -Wall -O2 -D__UNIX__
++CFLAGS += -W -Wall -O2 -D__UNIX__ -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
+ CC	:= gcc
+ 
+ 
