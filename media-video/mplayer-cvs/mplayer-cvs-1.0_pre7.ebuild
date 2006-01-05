@@ -181,9 +181,6 @@ src_unpack() {
 	sed -e 's:CFLAGS="custom":CFLAGS=${CFLAGS}:' -i configure
 	fi
 
-	#adds mythtv support to mplayer
-	use mythtv && epatch ${FILESDIR}/mplayer-mythtv.patch
-
 	# Fix hppa compilation
 	[ "${ARCH}" = "hppa" ] && sed -i -e "s/-O4/-O1/" "${S}/configure"
 
