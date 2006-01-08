@@ -1,0 +1,12 @@
+--- Syntax	2004-08-20 22:52:37.145034864 +0200
++++ Syntax.new	2004-08-20 22:52:19.000000000 +0200
+@@ -116,6 +116,9 @@
+ file Don_t_match_me Mail\sfolder ^From\s
+ include mail.syntax
+ 
++file .\*\\.(ebuild|eclass)$ Gentoo\sEbuild
++include ebuild.syntax
++
+ file .\* unknown
+ include unknown.syntax
+ 

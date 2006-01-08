@@ -1,0 +1,25 @@
+--- lib/mc.ext.in.old	2003-01-30 17:48:33.000000000 +0200
++++ lib/mc.ext.in	2004-11-08 16:51:59.429212632 +0200
+@@ -143,6 +143,12 @@
+ shell/.info
+ 	Open=info -f %f
+ 
++# 7-Zip, Needs to be before manual page definitions
++regex/\.(7z|7Z)$
++	View=%view{ascii} 7za l %f 2>/dev/null
++	Open=%cd %p#u7z
++
++
+ # Manual page
+ # Exception - .so libraries are not manual pages
+ regex/\.(so|so\.[0-9\.]*)$
+--- vfs/extfs/extfs.ini.old	2002-12-09 16:16:33.000000000 +0200
++++ vfs/extfs/extfs.ini	2004-10-25 13:56:04.000000000 +0300
+@@ -7,6 +7,7 @@
+ ulha
+ urar
+ uha
++u7z
+ # For arj usage you need a special patch to unarj (see unarj.diff)
+ uarj
+ 
