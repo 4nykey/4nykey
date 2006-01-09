@@ -531,8 +531,10 @@ src_compile() {
 	# We build the shared libpostproc.so here so that our
 	# mplayer binary is not linked to it, ensuring that we
 	# do not run into issues ... (bug #14479)
-	cd ${S}/libavcodec/libpostproc
-	make SHARED_PP="yes" || die "Failed to build libpostproc.so!"
+	if ! has_version '>=media-video/ffmpeg-cvs-0.4.9'; then # ffmpeg also builds it
+		make -C ${S}/libavcodec/libpostproc SHARED_PP="yes" \
+			SHFLAGS="-shared ${LDFLAGS}" || die "Failed to build libpostproc.so!"
+	fi
 }
 
 src_install() {
