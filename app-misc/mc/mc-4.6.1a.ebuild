@@ -2,16 +2,14 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-misc/mc/mc-4.6.0-r14.ebuild,v 1.6 2006/01/03 22:02:11 sekretarz Exp $
 
-inherit flag-o-matic eutils
+inherit cvs flag-o-matic
 
-U7Z_PV="4.16"
-U7Z="u7z-${U7Z_PV}beta.tar.bz2"
 DESCRIPTION="GNU Midnight Commander cli-based file manager"
 HOMEPAGE="http://www.ibiblio.org/mc/"
-SRC_URI="http://www.ibiblio.org/pub/Linux/utils/file/managers/${PN}/${P}.tar.gz
-	unicode? ( http://www.ottolander.nl/mc-patches/UTF-8/mc-4.6.1-utf8.patch )
-	7zip? ( http://sgh.nightmail.ru/files/u7z/${U7Z} )"
-#	mirror://gentoo/${P}-sambalib-3.0.10.patch.bz2
+#PORTAGE_ACTUAL_DISTDIR=/usr/portage/distfiles
+ECVS_SERVER="cvs.sv.gnu.org:/sources/mc"
+ECVS_MODULE="mc"
+S="${WORKDIR}/${ECVS_MODULE}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -25,7 +23,7 @@ RDEPEND=">=sys-fs/e2fsprogs-1.19
 	=dev-libs/glib-2*
 	pam? ( >=sys-libs/pam-0.72 )
 	gpm? ( >=sys-libs/gpm-1.19.3 )
-	slang? ( >=sys-libs/slang-1.4.9-r1 )
+	slang? ( >=sys-libs/slang-2.0.0 )
 	samba? ( >=net-fs/samba-3.0.0 )
 	X? ( || ( (
 			x11-libs/libX11
@@ -45,27 +43,21 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
 
 src_unpack() {
-	if ( use x86 || use amd64 || use ppc ) && use 7zip; then
-		unpack ${U7Z}
-	fi
-	unpack ${P}.tar.gz
+	cvs_src_unpack
 	cd ${S}
 
-	#epatch ${DISTDIR}/${P}-sambalib-3.0.10.patch.bz2
-
 	epatch ${FILESDIR}/${P}-find.patch
-	#epatch ${FILESDIR}/${P}-can-2004-0226-0231-0232.patch.bz2
-	#epatch ${FILESDIR}/${P}-can-2004-1004-1005-1092-1176.patch.bz2
-	if ( use x86 || use amd64 || use ppc ) && use 7zip; then
-		epatch ${FILESDIR}/${PN}-4.6.0-7zip.patch
-	fi
-	epatch ${FILESDIR}/${P}-largefile.patch
+	#epatch ${FILESDIR}/${PN}-4.6.1-largefile.patch
 	# Fix building with gcc4.
 	#epatch ${FILESDIR}/${P}-gcc4.patch
 
-	if use slang && use unicode; then
-		epatch ${DISTDIR}/${P}-utf8.patch
-	fi
+	# included is slang v2, which handles utf-8
+	# so external patched slang not required anymore
+	use unicode && epatch ${FILESDIR}/${P}-utf8*.patch
+
+	ebegin "Running autotools"
+	./autogen.sh >& /dev/null
+	eend $?
 }
 
 src_compile() {
@@ -74,12 +66,12 @@ src_compile() {
 
 	local myconf=""
 
-	if ! use slang && ! use ncurses ; then
-		myconf="${myconf} --with-screen=mcslang"
-	elif use ncurses && ! use slang ; then
+	if use slang; then
+		myconf="${myconf} --with-screen=slang"
+	elif use ncurses && ! use unicode; then
 		myconf="${myconf} --with-screen=ncurses"
 	else
-		use slang && myconf="${myconf} --with-screen=slang"
+		myconf="${myconf} --with-screen=mcslang"
 	fi
 
 	myconf="${myconf} `use_with gpm gpm-mouse`"
@@ -118,14 +110,6 @@ src_install() {
 	insinto /usr/share/mc
 	doins ${FILESDIR}/mc.gentoo
 	doins ${FILESDIR}/mc.ini
-
-	if ( use x86 || use amd64 || use ppc ) && use 7zip; then
-		cd ../${U7Z_PV}
-		exeinto /usr/share/mc/extfs
-		doexe u7z
-		dodoc readme.u7z
-		newdoc ChangeLog ChangeLog.u7z
-	fi
 
 	insinto /usr/share/mc/syntax
 	doins ${FILESDIR}/ebuild.syntax
