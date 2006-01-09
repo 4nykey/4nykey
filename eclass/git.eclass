@@ -37,7 +37,7 @@ DEPEND="dev-util/cogito"
 
 ## -- EGIT_STORE_DIR:  git sources store directory
 #
-EGIT_STORE_DIR="${DISTDIR}/git-src"
+EGIT_STORE_DIR="${PORTAGE_ACTUAL_DISTDIR-${DISTDIR}}/git-src"
 
 
 ## -- EGIT_FETCH_CMD:  git fetch command
