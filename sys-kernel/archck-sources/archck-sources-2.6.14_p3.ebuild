@@ -10,10 +10,8 @@ inherit kernel-2
 detect_version
 
 # A few hacks to set ck version via _p instead of -r
-#MY_PR=$([ -n "${PR//[r0]/}" ] && echo ${PR/r/.})
-MY_PR="${PR/r/.}"
-MY_PR="${MY_PR/.0/}"
-EXTRAVERSION=${PV/*_p/-archck}${MY_PR}
+MY_PV="$(replace_all_version_separators . ${PVR/r/})"
+EXTRAVERSION="-$(get_version_component_range 4- ${MY_PV/p/archck})"
 KV_FULL=${OKV}${EXTRAVERSION}
 detect_version
 
