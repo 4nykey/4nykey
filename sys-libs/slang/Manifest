@@ -1,0 +1,5 @@
+MD5 99084c3ea94e72bf3bc1bdd4da314922 files/digest-slang-2.0.5 65
+MD5 fffcf02e135735195e52db3b0dcda669 files/slang-2.0.5-autoconf.patch 4046
+MD5 4b8103943e024ef24ca72aa1f7145e06 files/slang-2.0.5-fsuid.patch 1648
+MD5 133fcb820bdd04fb2089afe8c8b6d9f7 files/slang-2.0.5.patch 955
+MD5 0756b9ecb8f5f6fbb57ffd48958f6375 slang-2.0.5.ebuild 1532

@@ -1,0 +1,66 @@
+--- autoconf/configure.ac.setfsuid	2002-09-13 15:30:56.000000000 +0200
++++ autoconf/configure.ac	2002-09-13 15:35:56.000000000 +0200
+@@ -94,8 +94,17 @@
+ nan.h \
+ fenv.h \
+ sys/mman.h \
++sys/fsuid.h \
+ )
+ 
++AC_CHECK_FUNCS(setfsuid setfsgid)
++
++if test "${ac_cv_func_setfsuid}" != "yes" || test "${ac_cv_func_setfsgid}" != "yes"; then
++    AC_MSG_ERROR([
++*** setfsguid and setfsgid cannot be found!!!
++    These are needed to support setuid/setgid applications ***])
++fi
++
+ AC_TYPE_MODE_T
+ AC_TYPE_PID_T
+ AC_TYPE_UID_T
+--- src.old/slinclud.h	2002-09-13 14:17:04.000000000 +0200
++++ src/slinclud.h	2002-09-13 15:39:38.000000000 +0200
+@@ -30,4 +30,8 @@
+ #include <wchar.h>
+ #include <limits.h>
+ 
++#ifdef HAVE_SYS_FSUID_H
++# include <sys/fsuid.h>
++#endif
++
+ #endif				       /* _SLANG_INCLUDE_H_ */
+--- src/sltermin.c
++++ src/sltermin.c
+@@ -105,7 +105,32 @@
+     * I will also look into the use of setreuid, seteuid and setregid, setegid.
+     * FIXME: Priority=medium
+     */
++   /* If your system lacks setfsuid/getfsuid either write
++      equivalent support or dont use slang to build setuid/setgid
++      apps like Mutt */
++
++   if(setfsuid(getuid())==-1)
++   {
++       perror("setfsuid");
++       return NULL;
++   }
++   if(setfsgid(getgid())==-1)
++   {
++       perror("setfsgid");
++       return NULL;
++   }    
+    fp = fopen (file, "rb");
++   if(setfsuid(geteuid())==-1)
++   {
++       perror("setfsuid");
++       return NULL;
++   }
++   if(setfsgid(getegid())==-1)
++   {
++       perror("setfsgid");
++       return NULL;
++   }
++
+    if (fp == NULL) return NULL;
+ 
+    if ((12 == fread ((char *) buf, 1, 12, fp) && (MAGIC == make_integer (buf))))
