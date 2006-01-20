@@ -10,13 +10,18 @@ SRC_URI="http://tea.linux.kiev.ua/${P}.tar.bz2"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE=""
+IUSE="gnome"
 
 RDEPEND=">=x11-libs/gtk+-2.4
-	app-text/aspell"
+	app-text/aspell
+	gnome? ( x11-libs/gtksourceview
+		gnome-base/gnome-vfs
+		gnome-base/gconf )"
 
 DEPEND="${RDEPEND}
 	>=dev-util/pkgconfig-0.12.0
 	>=dev-util/intltool-0.30"
 
 DOCS="AUTHORS ChangeLog MAINTAINERS NEWS TODO README"
+
+G2CONF="`use_enable gnome chai`"
