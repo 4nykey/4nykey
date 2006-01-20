@@ -1,0 +1,6 @@
+MD5 342ecc2fc9aa2b0328c7522269b66049 files/digest-poppler-0.5.0 65
+MD5 93baf580cd860acff7c064fe57408d32 files/poppler-0.4.3-pdf2xml.patch 840
+MD5 63413b6d02c3bc97a966821e7befd8eb files/poppler-0.4.4-bug117481.patch 696
+MD5 29dc1ccc279993123bd97abfe9d60287 files/poppler-0.4.4-cairo-lines.patch 760
+MD5 841c9a6eddaa0e8680646e633bb26dea files/poppler-0.5.0-cairo-ft.patch 463
+MD5 8969de5055733608363bd283aebf992b poppler-0.5.0.ebuild 1455

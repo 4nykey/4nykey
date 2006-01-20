@@ -22,7 +22,7 @@ RDEPEND="
 	dbus? ( >=sys-apps/dbus-0.33 )
 	tiff? ( >=media-libs/tiff-3.6 )
 	djvu? ( >=app-text/djvu-3.5.15 )
-	>=app-text/poppler-0.4.1
+	>=app-text/poppler-0.5.0
 	>=dev-libs/glib-2
 	>=gnome-base/gnome-vfs-2.0
 	>=gnome-base/libglade-2
@@ -51,6 +51,7 @@ ELTCONF="--portage"
 
 pkg_setup() {
 	G2CONF="--disable-scrollkeeper \
+		--enable-comics     \
 		$(use_enable dvi)   \
 		$(use_enable t1lib) \
 		$(use_enable dbus)  \
@@ -68,14 +69,6 @@ src_unpack(){
 	unpack "${A}"
 	cd "${S}"
 
-	epatch ${FILESDIR}/${P}-t1lib_is_t1.patch
 	# Fix .desktop file so menu item shows up
-	epatch ${FILESDIR}/${P}-display-menu.patch
-	# Make tiff really optional
-	epatch ${FILESDIR}/${P}-no-tiff.patch
-
-	export WANT_AUTOMAKE=1.7
-	automake || die "automake failed"
-	autoconf || die "autoconf failed"
-	libtoolize --copy --force || die "libtoolize failed"
+	epatch ${FILESDIR}/${PN}-0.4.0-display-menu.patch
 }
