@@ -680,14 +680,14 @@ diff -ruN --exclude=CVS ffmpeg-cvs/libavformat/allformats.c ffmpeg-cvs-dirac/lib
 diff -ruN --exclude=CVS ffmpeg-cvs/libavformat/avienc.c ffmpeg-cvs-dirac/libavformat/avienc.c
 --- ffmpeg-cvs/libavformat/avienc.c	2005-11-30 10:50:13.000000000 +0000
 +++ ffmpeg-cvs-dirac/libavformat/avienc.c	2005-12-01 11:52:33.000000000 +0000
-@@ -193,6 +193,7 @@
+@@ -190,6 +190,7 @@
+     { CODEC_ID_WNV1, MKTAG('W', 'N', 'V', '1') },
+     { CODEC_ID_AASC, MKTAG('A', 'A', 'S', 'C') },
+     { CODEC_ID_INDEO2, MKTAG('R', 'T', '2', '1') },
++    { CODEC_ID_DIRAC, MKTAG('d', 'r', 'a', 'c') },
      { CODEC_ID_FRAPS, MKTAG('F', 'P', 'S', '1') },
      { CODEC_ID_THEORA, MKTAG('t', 'h', 'e', 'o') },
      { CODEC_ID_TRUEMOTION2, MKTAG('T', 'M', '2', '0') },
-+    { CODEC_ID_DIRAC, MKTAG('d', 'r', 'a', 'c') },
-     { CODEC_ID_RAWVIDEO, 0 },
-     { 0, 0 },
- };
 diff -ruN --exclude=CVS ffmpeg-cvs/libavformat/drc.c ffmpeg-cvs-dirac/libavformat/drc.c
 --- ffmpeg-cvs/libavformat/drc.c	1970-01-01 01:00:00.000000000 +0100
 +++ ffmpeg-cvs-dirac/libavformat/drc.c	2005-09-02 12:49:18.000000000 +0100

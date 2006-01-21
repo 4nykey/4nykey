@@ -283,13 +283,13 @@ diff -u -r1.115 avienc.c
 --- libavformat/avienc.c	30 Nov 2005 10:50:13 -0000	1.115
 +++ libavformat/avienc.c	16 Dec 2005 11:18:18 -0000
 @@ -193,6 +193,7 @@
+     { CODEC_ID_WNV1, MKTAG('W', 'N', 'V', '1') },
+     { CODEC_ID_AASC, MKTAG('A', 'A', 'S', 'C') },
+     { CODEC_ID_INDEO2, MKTAG('R', 'T', '2', '1') },
++    { CODEC_ID_DIRAC, MKTAG('d', 'r', 'a', 'c') },
      { CODEC_ID_FRAPS, MKTAG('F', 'P', 'S', '1') },
      { CODEC_ID_THEORA, MKTAG('t', 'h', 'e', 'o') },
      { CODEC_ID_TRUEMOTION2, MKTAG('T', 'M', '2', '0') },
-+    { CODEC_ID_DIRAC, MKTAG('d', 'r', 'a', 'c') },
-     { CODEC_ID_RAWVIDEO, 0 },
-     { 0, 0 },
- };
 --- /dev/null	2005-12-09 12:34:30.989462208 +0200
 +++ libavcodec/dirac.c	2005-12-16 13:10:14.789099688 +0200
 @@ -0,0 +1,509 @@

@@ -100,7 +100,7 @@ src_compile() {
 	#use specified CFLAGS are only used in executables
 	filter-flags -fforce-addr -momit-leaf-frame-pointer
 
-	local myconf="--enable-gpl --enable-pp --enable-shared-pp --disable-opts"
+	local myconf="--enable-gpl --enable-pp --disable-opts"
 
 	teh_conf dis debug
 	teh_conf en encode mp3lame
