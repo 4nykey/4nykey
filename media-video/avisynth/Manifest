@@ -1,0 +1,5 @@
+MD5 4fd6765007c46237e9c929bd9c4c31b6 avisynth-3.0.ebuild 1736
+MD5 4705fbee52a0d59c726a7dbc79131e64 files/avisynth-boost.diff 2840
+MD5 54734256a60632817f4e198dfab19254 files/avisynth-makefile.diff 1352
+MD5 680fb37415b94f2eec6d6ad42b3c69c4 files/avisynth-stllib.diff 1082
+MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-avisynth-3.0 0
