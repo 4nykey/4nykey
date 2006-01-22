@@ -1,5 +1,5 @@
 MD5 b2eec5efca41d8995a5d5f1c26b41a07 files/config.diff 137
 MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-mpd-0.12.0-r1 0
 MD5 36e14440a7c1815b23099ef9947b6b7f files/mpd.rc6 732
-MD5 3f1f382deb80e5ea4305dc053dd7ac4a files/mpd_mp3_replaygain.diff 8340
-MD5 c8f51214574171bece9eed99fe288deb mpd-0.12.0-r1.ebuild 4950
+MD5 3f1f382deb80e5ea4305dc053dd7ac4a files/mpd_mp3_replaygain.diff_ 8340
+MD5 c3639dadfd587d189ceb5aea60809556 mpd-0.12.0-r1.ebuild 4862

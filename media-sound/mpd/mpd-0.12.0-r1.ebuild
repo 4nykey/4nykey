@@ -73,15 +73,14 @@ src_compile() {
 		$(use_enable icecast shout) \
 		$(use_enable ipv6) \
 		$(use_enable !mad mpd-mad) \
+		$(use_enable !mad mpd-id3tag) \
 		$(use_enable mikmod libmikmodtest) \
 		$(use_enable mikmod mod) \
 		$(use_enable musepack mpc) \
 		$(use_enable vorbis ogg) \
 		$(use_enable vorbis oggtest) \
-		$(use_enable vorbis vorbistest) \
-		--enable-mpd-id3tag || die "could not configure"
-		# use included id3tag, so mpd_mp3_replaygain.diff won't break
-		#$(use_enable !mad mpd-id3tag) \
+		$(use_enable vorbis vorbistest) ||
+	die "could not configure"
 
 	emake || die "emake failed"
 }
