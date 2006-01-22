@@ -1,3 +1,2 @@
-MD5 ccde04e28563c6247932c0d4e71fd1fd files/config.diff 223
-MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-gmpc-svn-0.12.0 0
-MD5 a72be480b9a3a628957a3929e0ff5cd7 gmpc-svn-0.12.0.ebuild 1071
+MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-gmpc-svn-0.12.1 0
+MD5 5e59cf5f2dc0073b947dfa571658b3c5 gmpc-svn-0.12.1.ebuild 883

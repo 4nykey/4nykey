@@ -1,9 +1,0 @@
-Index: autogen.sh
-===================================================================
---- autogen.sh	(revision 3380)
-+++ autogen.sh	(working copy)
-@@ -115,4 +116,3 @@
- autoconf
- 
- cd $olddir
--$srcdir/configure "$@" && echo
