@@ -7,17 +7,15 @@ inherit git
 DESCRIPTION="XMMS2 is a redesign of the XMMS music player"
 HOMEPAGE="http://xmms2.xmms.org/"
 SRC_URI=""
-#EGIT_PROJECT="xmms2-stable"
 EGIT_PROJECT="xmms2-devel"
 EGIT_REPO_URI="rsync://git.xmms.se/xmms2/${EGIT_PROJECT}.git/"
-EPATCH_OPTS="-p1 --no-backup-if-mismatch"
-EGIT_PATCHES="*.patch"
+#EPATCH_OPTS="-p1 --no-backup-if-mismatch"
+#EGIT_PATCHES="*.patch"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="vorbis flac sid python ruby alsa curl aac gnome jack mad oss samba mikmod
-	speex mac sdl musepack"
+IUSE="vorbis flac sid python ruby alsa curl aac gnome jack mad oss samba mikmod speex sdl musepack"
 
 RDEPEND=">=dev-libs/glib-2.2.0
 	mad? ( media-libs/libmad )
@@ -31,7 +29,6 @@ RDEPEND=">=dev-libs/glib-2.2.0
 	mikmod? ( media-libs/libmodplug )
 	speex? ( media-libs/speex )
 	sid? ( media-libs/libsidplay )
-	mac? ( media-sound/mac )
 	musepack? ( media-libs/libmpcdec )
 	sdl? ( media-libs/sdl-ttf )
 	python? ( dev-python/pyrex )
@@ -56,7 +53,6 @@ src_compile() {
 	pick_plug oss
 	pick_plug samba smb
 	pick_plug sid
-	pick_plug mac
 	pick_plug sdl sdl-vis
 	pick_plug speex
 	pick_plug vorbis vorbisfile

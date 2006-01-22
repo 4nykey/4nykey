@@ -12,15 +12,18 @@ EGIT_REPO_URI="rsync://git.xmms.se/xmms2/gxmms2.git/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE=""
+IUSE="gkrellm"
 
 DEPEND="${RDEPEND}"
 RDEPEND=">=x11-libs/gtk+-2.6
-	media-sound/xmms2"
+	media-sound/xmms2
+	gkrellm? ( =app-admin/gkrellm-2* )"
 
-src_compile() {
-	sed -i 's:/usr/local:/usr:g' ${S}/Makefile
-	emake || die
+src_unpack() {
+	git_src_unpack
+	cd ${S}
+	use gkrellm || sed -i 's,\(all:.*\)gkrellxmms2\(.*\),\1\2,' Makefile
+	sed -i 's:/usr/local:/usr:g' Makefile
 }
 
 src_install() {

@@ -1,6 +1,4 @@
-MD5 feaa5b878e8c42771dcb3e2173db9e3b files/001_all_mac.patch 14218
-MD5 51828b9acb0c161c20e70ad7d8162c4a files/002_all_cue.patch 16739
 MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-xmms2-0.2 0
 MD5 1e637fb08ad497313b1d63079ac49493 files/xmms2-initscript-gentoo 408
 MD5 dc080b26cf0df1791b168e28f4ebaa13 files/xmms2-initscript-gentoo.conf 170
-MD5 33a7194cd082a405b41a05b9aead0d91 xmms2-0.2.ebuild 2121
+MD5 9812561862e536d131de7336ae9b2a8f xmms2-0.2.ebuild 2048
