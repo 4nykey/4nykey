@@ -11,7 +11,8 @@ SLOT="0"
 KEYWORDS="~x86"
 
 IUSE=""
-DEPEND="x11-libs/vte"
+DEPEND="x11-libs/vte
+	dev-libs/confuse"
 
 src_install() {
 	einstall || die
