@@ -20,13 +20,15 @@ RDEPEND="dev-ruby/ruby-libglade2
 
 src_unpack() {
 	unpack ${A}
-	sed -i 's:\.ripr\.rb:ripr.rb:' ${S}/rubyripper.rb
+	sed -i \
+		"s:\./\(ripr\.rb\):\1:; s:\(rubyripper.glade\):/usr/share/${PN}/glade/\1:" \
+		${S}/rubyripper.rb
 }
 
 src_install() {
 	ruby_einstall
 	SITEDIR=$(${RUBY} -r rbconfig -e 'print Config::CONFIG["sitedir"]')
-	insinto ${SITEDIR}
+	insinto /usr/share/${PN}/glade
 	doins ${S}/rubyripper.glade
 	touch ${T}/blah
 	echo -e "#\x21/bin/sh\n${RUBY} ${SITEDIR}/${PN}.rb" > ${T}/blah
