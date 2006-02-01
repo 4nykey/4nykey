@@ -6,8 +6,8 @@ inherit eutils flag-o-matic linux-mod cvs
 
 #RESTRICT="nostrip"
 IUSE="3dfx 3dnow 3dnowext aac aalib alsa altivec amr arts avi bidi bl cpudetection
-custom-cflags debug dga dirac doc dts dvb cdparanoia directfb dvd dv dvdread edl
-encode esd fbcon gif ggi gtk i8x0 ipv6 jack joystick jpeg libcaca lirc live lzo
+custom-cflags debug dga dirac doc dts dvb cdparanoia directfb dv dvd dvdread dvdnav
+edl encode esd fbcon gif ggi gtk i8x0 ipv6 jack joystick jpeg libcaca lirc live lzo
 mad matroska matrox mmx mmxext musepack mythtv nas nls nvidia vorbis opengl oss
 png real rtc samba sdl speex sse sse2 svga tga theora truetype v4l v4l2 X x264
 xanim xinerama xmms xv xvid xvmc gtk2"
@@ -16,16 +16,16 @@ BLUV=1.4
 SVGV=1.9.17
 NBV=540
 WBV=520
+NAV=20060201
 
-# Handle PREversions as well
 S="${WORKDIR}/main"
-#SRC_URI="mirror://mplayer/releases/${MY_P}.tar.bz2
 SRC_URI="mirror://mplayer/releases/fonts/font-arial-iso-8859-1.tar.bz2
 	mirror://mplayer/releases/fonts/font-arial-iso-8859-2.tar.bz2
 	mirror://mplayer/releases/fonts/font-arial-cp1250.tar.bz2
 	svga? ( http://mplayerhq.hu/~alex/svgalib_helper-${SVGV}-mplayer.tar.bz2 )
 	amr? ( http://www.3gpp.org/ftp/Specs/latest/Rel-5/26_series/26204-${WBV}.zip
 		http://www.3gpp.org/ftp/Specs/latest/Rel-5/26_series/26104-${NBV}.zip )
+	dvdnav? ( http://www.freeweb.hu/dcxx/mplayer/${NAV}/mplayer-dvdnav-patch.tar.gz )
 	gtk? ( mirror://mplayer/Skin/Blue-${BLUV}.tar.bz2 )"
 
 # Only install Skin if GUI should be build (gtk as USE flag)
@@ -158,12 +158,27 @@ src_unpack() {
 	ECVS_MODULE="ffmpeg/libavcodec" cvs_src_unpack
 	ECVS_MODULE="ffmpeg/libavformat" cvs_src_unpack
 	ECVS_MODULE="ffmpeg/libavutil" cvs_src_unpack
+	use dvdnav && use dvdread && \
+		ECVS_SERVER="cvs.ogle.berlios.de:/cvsroot/ogle" \
+		ECVS_MODULE="libdvdread/dvdread" cvs_src_unpack
+
 	cd ${WORKDIR}
+
 	mv -f ffmpeg/libav{codec,format,util} main
+
 	if use amr; then
 		unpack 26104-${NBV}.zip 26204-${WBV}.zip
 		unzip -ajq 26204-${WBV}_ANSI-C_source_code.zip -d ${S}/libavcodec/amrwb_float
 		unzip -ajq 26104-${NBV}_ANSI_C_source_code.zip -d ${S}/libavcodec/amr_float
+	fi
+
+	if use dvdnav; then
+		unpack mplayer-dvdnav-patch.tar.gz
+		cp mplayer-dvdnav-patch/*.txt ${S}/DOCS/tech
+		#sed -i '/dvdread\/dvd_input.h/d' mplayer-dvdnav-patch/mplayer-add/libmp{demux,dvdnav}/*.h
+		cp -r mplayer-dvdnav-patch/mplayer-add/* ${S}
+		mkdir ${S}/dvdread
+		mv -f ${WORKDIR}/libdvdread/dvdread/dvd_input.h ${S}/dvdread
 	fi
 
 	unpack \
@@ -181,8 +196,8 @@ src_unpack() {
 	sed -e 's:CFLAGS="custom":CFLAGS=${CFLAGS}:' -i configure
 	fi
 
-	# Fix hppa compilation
-	[ "${ARCH}" = "hppa" ] && sed -i -e "s/-O4/-O1/" "${S}/configure"
+	# skip make depend
+	sed -i '/\$(MAKE) depend/d' Makefile
 
 	if use svga
 	then
@@ -195,15 +210,14 @@ src_unpack() {
 		mv ${WORKDIR}/svgalib_helper ${S}/libdha
 	fi
 
-	# Remove kernel-2.6 workaround as the problem it works around is
-	# fixed, and the workaround breaks sparc
-	use sparc && sed -i 's:#define __KERNEL__::' osdep/kerneltwosix.h
+	use dirac && epatch ${FILESDIR}/mplayer-dirac-cvs.diff
+	use dvdnav && EPATCH_OPTS="-d ${S} ${EPATCH_OPTS}" \
+		epatch ${WORKDIR}/mplayer-dvdnav-patch/*.patch
 
 	# cat a.avi b.avi | mencoder ...
 	#epatch ${FILESDIR}/demuxavifix.patch
 
 	EPATCH_SUFFIX="diff" epatch "${FILESDIR}"
-	use dirac && epatch ${FILESDIR}/mplayer-dirac-cvs.diff
 
 	has_version '>=media-sound/twolame-0.3.4' && \
 		sed -i 's:twolame_set_VBR_q:twolame_set_VBR_level:' libmpcodecs/ae_twolame.c
@@ -350,6 +364,10 @@ src_compile() {
 	myconf="${myconf} $(use_enable v4l tv-v4l)"
 	myconf="${myconf} $(use_enable v4l2 tv-v4l2)"
 	use jack || myconf="${myconf} --disable-jack"
+	myconf="${myconf} $(use_enable dvdnav)"
+	if has_version '>=media-video/ffmpeg-cvs-0.4.9'; then # ffmpeg also builds it
+		myconf="${myconf} --disable-libpostproc --disable-libpostproc_so"
+	fi
 
 	#########
 	# Codecs #
@@ -522,19 +540,11 @@ src_compile() {
 	MAKEOPTS="${MAKEOPTS} -j1"
 
 	einfo "Make"
-	make depend && emake || die "Failed to build MPlayer!"
+	emake || die "Failed to build MPlayer!"
 	if use doc; then
 		make -C ${S}/DOCS/xml html-chunked-en
 	fi
 	einfo "Make completed"
-
-	# We build the shared libpostproc.so here so that our
-	# mplayer binary is not linked to it, ensuring that we
-	# do not run into issues ... (bug #14479)
-	if ! has_version '>=media-video/ffmpeg-cvs-0.4.9'; then # ffmpeg also builds it
-		make -C ${S}/libavcodec/libpostproc SHARED_PP="yes" \
-			SHFLAGS="-shared ${LDFLAGS}" || die "Failed to build libpostproc.so!"
-	fi
 }
 
 src_install() {
@@ -550,20 +560,19 @@ src_install() {
 	einfo "Make install completed"
 
 	dodoc AUTHORS ChangeLog README
+	# loose CVS dirs
+	find "${S}/DOCS" -name CVS -type d | xargs rm -rf
 	# Install the documentation; DOCS is all mixed up not just html
 	if use doc ; then
-		find "${S}/DOCS" -name CVS -type d | xargs rm -rf
-		find "${S}/DOCS" -type d | xargs -- chmod 0755
-		find "${S}/DOCS" -type f | xargs -- chmod 0644
-		for dir in de it tech zh
-			do cp -r "${S}/DOCS/$dir" "${D}/usr/share/doc/${PF}/"
-		done
-		dohtml -r ${S}/DOCS/HTML/en/*
+		#for dir in de it tech zh
+		#	do cp -r "${S}/DOCS/$dir" "${D}/usr/share/doc/${PF}/"
+		#done
+		cp -r "${S}/DOCS/tech" "${D}/usr/share/doc/${PF}/"
+		dohtml -r "${S}/DOCS/HTML/en/*"
 	fi
 
 	# Copy misc tools to documentation path, as they're not installed directly
 	# and yes, we are nuking the +x bit.
-	find "${S}/TOOLS" -name CVS -type d | xargs rm -rf
 	find "${S}/TOOLS" -type d | xargs -- chmod 0755
 	find "${S}/TOOLS" -type f | xargs -- chmod 0644
 	cp -r "${S}/TOOLS" "${D}/usr/share/doc/${PF}/" || die
