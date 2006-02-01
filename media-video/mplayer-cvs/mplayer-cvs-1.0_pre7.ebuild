@@ -148,6 +148,11 @@ pkg_setup() {
 				REALLIBDIR="/opt/RealPlayer/codecs"
 	fi
 	CHARSET="`locale charmap`"
+	if use dvdread && use dvdnav; then
+		einfo "dvdnav patch will only build with mpdvdkit enabled,"
+		einfo "which can be achieved by USE=\"-dvdread\""
+		die "dvdnav patch requires mpdvdkit"
+	fi
 }
 
 src_unpack() {
@@ -158,9 +163,6 @@ src_unpack() {
 	ECVS_MODULE="ffmpeg/libavcodec" cvs_src_unpack
 	ECVS_MODULE="ffmpeg/libavformat" cvs_src_unpack
 	ECVS_MODULE="ffmpeg/libavutil" cvs_src_unpack
-	use dvdnav && use dvdread && \
-		ECVS_SERVER="cvs.ogle.berlios.de:/cvsroot/ogle" \
-		ECVS_MODULE="libdvdread/dvdread" cvs_src_unpack
 
 	cd ${WORKDIR}
 
@@ -175,10 +177,7 @@ src_unpack() {
 	if use dvdnav; then
 		unpack mplayer-dvdnav-patch.tar.gz
 		cp mplayer-dvdnav-patch/*.txt ${S}/DOCS/tech
-		#sed -i '/dvdread\/dvd_input.h/d' mplayer-dvdnav-patch/mplayer-add/libmp{demux,dvdnav}/*.h
 		cp -r mplayer-dvdnav-patch/mplayer-add/* ${S}
-		mkdir ${S}/dvdread
-		mv -f ${WORKDIR}/libdvdread/dvdread/dvd_input.h ${S}/dvdread
 	fi
 
 	unpack \
@@ -320,6 +319,7 @@ src_compile() {
 	myconf="${myconf} $(use_enable cdparanoia)"
 	if use dvd; then
 		myconf="${myconf} $(use_enable dvdread) $(use_enable !dvdread mpdvdkit)"
+		use dvdnav && myconf="${myconf} $(use_enable !dvdread dvdnav)"
 	else
 		myconf="${myconf} --disable-dvdread --disable-mpdvdkit"
 	fi
@@ -364,7 +364,6 @@ src_compile() {
 	myconf="${myconf} $(use_enable v4l tv-v4l)"
 	myconf="${myconf} $(use_enable v4l2 tv-v4l2)"
 	use jack || myconf="${myconf} --disable-jack"
-	myconf="${myconf} $(use_enable dvdnav)"
 	if has_version '>=media-video/ffmpeg-cvs-0.4.9'; then # ffmpeg also builds it
 		myconf="${myconf} --disable-libpostproc --disable-libpostproc_so"
 	fi
