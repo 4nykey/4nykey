@@ -364,9 +364,6 @@ src_compile() {
 	myconf="${myconf} $(use_enable v4l tv-v4l)"
 	myconf="${myconf} $(use_enable v4l2 tv-v4l2)"
 	use jack || myconf="${myconf} --disable-jack"
-	if has_version '>=media-video/ffmpeg-cvs-0.4.9'; then # ffmpeg also builds it
-		myconf="${myconf} --disable-libpostproc --disable-libpostproc_so"
-	fi
 
 	#########
 	# Codecs #

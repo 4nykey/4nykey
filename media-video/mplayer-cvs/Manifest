@@ -22,6 +22,6 @@ SHA256 38e7a3f00abfe17524d3aa040b5d9c82c8f0e82fc93acb3a1cbd690bbe020c14 files/mp
 MD5 c2d65649f15837c5a326557ded4e47c5 files/mplayer.desktop 119
 RMD160 f53ef0d67a0b9f03937e4c33b4c8e843d076e73f files/mplayer.desktop 119
 SHA256 5caf218b418db22816e278a019c895c14ecc46b8327fe6a438a039c56e44b7bc files/mplayer.desktop 119
-MD5 01327c425ce2f28e16ae663db2ce0462 mplayer-cvs-1.0_pre7.ebuild 19579
-RMD160 4b484ed4d038f9eecede77e7a83e18b5dfe229cf mplayer-cvs-1.0_pre7.ebuild 19579
-SHA256 5c2874008f3b9c7d6616428f4df4767f0bccf518810b5dc495c23897e3c717d8 mplayer-cvs-1.0_pre7.ebuild 19579
+MD5 d3d03a3ef11063ea501b35456e704c80 mplayer-cvs-1.0_pre7.ebuild 19428
+RMD160 5ca3376a1e7d5a6355b28eb4c1b7b22c0db74a38 mplayer-cvs-1.0_pre7.ebuild 19428
+SHA256 c079a6a9f62b030f2ad184025c43e468cb20b99552e5bb83e05e11736a5e2039 mplayer-cvs-1.0_pre7.ebuild 19428
