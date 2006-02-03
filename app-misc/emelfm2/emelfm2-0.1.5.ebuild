@@ -5,19 +5,20 @@
 inherit eutils
 
 DESCRIPTION="A file manager that implements the popular two-pane design based on gtk+-2"
-HOMEPAGE="http://emelfm2.org/"
-SRC_URI="http://emelfm2.org/rel/${P}.tar.gz"
+HOMEPAGE="http://emelfm2.net/"
+SRC_URI="http://emelfm2.net/rel/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~ppc ~amd64"
-IUSE="nls"
+IUSE="nls fam"
 
-DEPEND=">=x11-libs/gtk+-2.4"
+RDEPEND=">=x11-libs/gtk+-2.4
+	virtual/fam"
+DEPEND="${RDEPEND}"
 
 src_unpack() {
 	unpack ${A}
-	#epatch ${FILESDIR}/locale.patch
 }
 
 src_compile() {
