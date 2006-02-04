@@ -2,14 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/mpd-svn/mpd-svn-20051009-r1.ebuild,v 1.2 2005/10/17 14:42:41 ticho Exp $
 
-inherit subversion
+inherit subversion autotools
 
 DESCRIPTION="A development version of Music Player Daemon (mpd)"
 HOMEPAGE="http://www.musicpd.org"
 #SRC_URI="mirror://gentoo/${P}.tar.bz2"
 ESVN_REPO_URI="https://svn.musicpd.org/${PN}/trunk"
-ESVN_BOOTSTRAP="./autogen.sh"
-ESVN_PATCHES="*.diff"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -51,10 +49,11 @@ pkg_setup() {
 }
 
 src_unpack() {
-	subversion_svn_fetch
+	subversion_src_unpack
+	cd ${S}
 	has_version '>=media-libs/faad2-2.1' && \
-		sed -i 's:faacDec:NeAACDec:g; s:MP4FF_.*la:MP4FF_LIB="-lmp4ff:' ${S}/configure.ac
-	subversion_bootstrap
+		sed -i 's:faacDec:NeAACDec:g; s:MP4FF_.*la:MP4FF_LIB="-lmp4ff:' configure.ac
+	eautoreconf || die
 }
 
 src_compile() {
@@ -86,11 +85,6 @@ src_compile() {
 }
 
 src_install() {
-	dodir /var/run/mpd
-	fowners mpd:audio /var/run/mpd
-	fperms 750 /var/run/mpd
-	keepdir /var/run/mpd
-
 	emake install DESTDIR=${D} || die
 	rm -rf ${D}/usr/share/doc/mpd/
 	dodoc ChangeLog INSTALL README TODO UPGRADING
@@ -110,11 +104,12 @@ src_install() {
 	dosed 's:^\(port[ \t]*\).*$:\1"6600":' /etc/mpd.conf
 	dosed 's:^\(music_directory[ \t]*\).*$:\1"/var/lib/mpd/music":' /etc/mpd.conf
 	dosed 's:^\(playlist_directory[ \t]*\).*$:\1"/var/lib/mpd/playlists":' /etc/mpd.conf
-	dosed 's:^\(log_file[ \t]*\).*$:\1"/var/log/mpd.log":' /etc/mpd.conf
-	dosed 's:^\(error_file[ \t]*\).*$:\1"/var/log/mpd.error.log":' /etc/mpd.conf
+	dosed 's:^\(log_file[ \t]*\).*$:\1"/var/log/mpd/mpd.log":' /etc/mpd.conf
+	dosed 's:^\(error_file[ \t]*\).*$:\1"/var/log/mpd/errors.log":' /etc/mpd.conf
 	dosed 's:^\(pid_file[ \t]*\).*$:\1"/var/run/mpd/mpd.pid":' /etc/mpd.conf
 	dosed 's:^\(db_file[ \t]*\).*:\1"/var/lib/mpd/database":' /etc/mpd.conf
 	dosed 's:^\(#state_file[ \t]*\).*$:\1"/var/lib/mpd/state":' /etc/mpd.conf
+
 	diropts -m0755 -o mpd -g audio
 	dodir /var/lib/mpd/music
 	keepdir /var/lib/mpd/music
@@ -122,11 +117,8 @@ src_install() {
 	keepdir /var/lib/mpd/playlists
 	dodir /var/run/mpd
 	keepdir /var/run/mpd
-	insinto /var/log
-	touch ${T}/blah
-	insopts -m0640 -o mpd -g audio
-	newins ${T}/blah mpd.log
-	newins ${T}/blah mpd.error.log
+	dodir /var/log/mpd
+	keepdir /var/log/mpd
 
 	use alsa && \
 		dosed 's:need :need alsasound :' /etc/init.d/mpd
