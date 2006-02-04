@@ -1,0 +1,32 @@
+#!/sbin/runscript
+
+depend() {
+	need localmount
+	need net
+}
+
+checkconfig() {
+	CONFFILE=/etc/lastmp/lastmp.cfg
+	if [ ! -f ${CONFFILE} ]; then
+	eerror "lastmp configuration file ${CONFFILE} doesn't exist"
+	eerror "run \"ebuild /var/db/pkg/media-sound/@PF@/@PF@.ebuild config\""
+	eerror "to create a new config file."
+		return 1
+	fi
+}
+
+start () {
+	checkconfig || return 1
+	source ${CONFFILE}
+	
+	ebegin "Starting MPD last.fm client: lastfmsubmitd"
+	LASTFM_USER="$LASTFM_USER" LASTFM_PASSWORD="$LASTFM_PASSWORD" start-stop-daemon --start \
+		-p /var/run/lastfm/lastfmsubmitd.pid --exec /usr/bin/lastfmsubmitd
+	eend $?
+}
+
+stop () {
+	ebegin "Stopping MPD last.fm client: lastfmsubmitd"
+	start-stop-daemon --stop --quiet -p /var/run/lastfm/lastfmsubmitd.pid
+	eend $?
+}

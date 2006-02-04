@@ -1,0 +1,6 @@
+MD5 3e741120b5335759249b85fcb5fbda4e files/digest-py-libmpdclient-0.11.1 265
+RMD160 5522bc81d4c2877fb6025b665c732289ec047dfd files/digest-py-libmpdclient-0.11.1 265
+SHA256 4ed428147d25463b631096f6a5298cc9589f2ca121e5ea459e4af8ecdd1a2184 files/digest-py-libmpdclient-0.11.1 265
+MD5 7d4b93acf6ffe5b6bcdf1ea2feffd44d py-libmpdclient-0.11.1.ebuild 348
+RMD160 7154526d3c0bf8262b9e32c4c3f7676093e330c2 py-libmpdclient-0.11.1.ebuild 348
+SHA256 68ce583f2a86baae8b3fa53e9d987c686a08a106f40feeae053ffffe644f2b21 py-libmpdclient-0.11.1.ebuild 348

@@ -1,0 +1,17 @@
+#!/sbin/runscript
+
+depend() {
+	need lfmsubmitd
+}
+
+start () {
+	ebegin "Starting MPD last.fm client: lastmp"
+	start-stop-daemon --start -p /var/run/lastfm/lastmp.pid --exec /usr/bin/lastmp
+	eend $?
+}
+
+stop () {
+	ebegin "Stopping MPD last.fm client: lastmp"
+	start-stop-daemon --stop --quiet -p /var/run/lastfm/lastmp.pid || eerror "lastmp is not running"
+	eend $?
+}
