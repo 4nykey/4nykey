@@ -1,0 +1,13 @@
+Index: configure
+===================================================================
+--- configure	(revision 425)
++++ configure	(working copy)
+@@ -53,7 +53,7 @@
+ vis="no"
+ 
+ CC="gcc"
+-CFLAGS="-Wall -I. -O4 -ffast-math -D__X264__"
++CFLAGS="$CFLAGS -Wall -I. -ffast-math -D__X264__"
+ LDFLAGS=""
+ HAVE_GETOPT_LONG=1
+ 
