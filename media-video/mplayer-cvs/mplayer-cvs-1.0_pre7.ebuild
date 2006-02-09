@@ -16,7 +16,7 @@ BLUV=1.4
 SVGV=1.9.17
 NBV=540
 WBV=520
-NAV=20060201
+NAV=20060206
 
 S="${WORKDIR}/main"
 SRC_URI="mirror://mplayer/releases/fonts/font-arial-iso-8859-1.tar.bz2
@@ -136,7 +136,7 @@ ecpu_check() {
 			if ! has ${CPU_FLAGS[${flags} - 1]} ${USER_CPU}  && has ${CPU_FLAGS[${flags} -1]} ${USE}
 			then
 				ewarn "You have ${CPU_FLAGS[${flags} - 1]} support enabled but your processor doesn't"
-				ewarn "Seem to support it!  You might be cross compiling or do not have /proc filesystem"
+				ewarn "seem to support it!  You might be cross compiling or do not have /proc filesystem"
 				ewarn "enabled.  If either is the case, set CROSSCOMPILE to 1 to disable this warning."
 			fi
 		done
@@ -195,7 +195,8 @@ src_unpack() {
 	sed -e 's:CFLAGS="custom":CFLAGS=${CFLAGS}:' -i configure
 	fi
 
-	# skip make depend
+	# skip make distclean/depend
+	touch .developer
 	sed -i '/\$(MAKE) depend/d' Makefile
 
 	if use svga
