@@ -13,7 +13,7 @@
    fclose(info->input);
  
 -  if (tagcmp(wph.ckID,WAVPACK_MAGIC) || wph.version < 1 || wph.version > 3 || (wph.flags & RAW_FLAG)) {
-+  if (tagcmp(wph.ckID,WAVPACK_MAGIC) || wph.version < 1 || (wph.flags & RAW_FLAG)) {
++  if (tagcmp(wph.ckID,WAVPACK_MAGIC) || wph.version < 1) {
      return NOT_WV_FILE;
    }
  
