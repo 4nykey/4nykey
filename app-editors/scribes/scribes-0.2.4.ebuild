@@ -7,7 +7,7 @@ inherit gnome2 distutils
 DESCRIPTION="Text Editor for GNOME"
 HOMEPAGE="http://scribes.sourceforge.net/"
 RESTRICT="primaryuri"
-SRC_URI="http://openusability.org/download.php/72/${P}.tar.gz"
+SRC_URI="http://openusability.org/download.php/86/${P}.tar.gz"
 LICENSE="GPL-2"
 
 SLOT="0"
