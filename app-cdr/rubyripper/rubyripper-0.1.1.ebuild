@@ -6,7 +6,7 @@ inherit ruby
 
 DESCRIPTION="An audioripper with the ultimate goal of providing perfect rips"
 HOMEPAGE="http://rubyforge.org/projects/rubyripper/"
-SRC_URI="http://rubyforge.org/frs/download.php/8289/${P}.tar.bz2"
+SRC_URI="http://rubyforge.org/frs/download.php/8530/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
