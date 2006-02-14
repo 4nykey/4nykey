@@ -16,7 +16,7 @@ BLUV=1.4
 SVGV=1.9.17
 NBV=540
 WBV=520
-NAV=20060206
+NAV=20060210
 
 S="${WORKDIR}/main"
 SRC_URI="mirror://mplayer/releases/fonts/font-arial-iso-8859-1.tar.bz2

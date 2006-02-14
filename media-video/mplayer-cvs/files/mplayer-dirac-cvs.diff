@@ -212,22 +212,15 @@ diff -u -r1.430 avcodec.h
      CODEC_ID_FRAPS,
      CODEC_ID_TRUEMOTION2,
      CODEC_ID_BMP,
-@@ -1970,6 +1973,7 @@
- extern AVCodec sonic_ls_encoder;
- extern AVCodec svq1_encoder;
- extern AVCodec x264_encoder;
-+extern AVCodec dirac_encoder;
- 
- extern AVCodec h263_decoder;
- extern AVCodec h261_decoder;
-@@ -2075,6 +2079,7 @@
+@@ -2075,6 +2079,8 @@
+ extern AVCodec fraps_decoder;
  extern AVCodec libgsm_encoder;
  extern AVCodec libgsm_decoder;
- extern AVCodec bmp_decoder;
++extern AVCodec dirac_encoder;
 +extern AVCodec dirac_decoder;
- 
- /* pcm codecs */
- #define PCM_CODEC(id, name) \
+ extern AVCodec bmp_decoder;
+ extern AVCodec mmvideo_decoder;
+ extern AVCodec zmbv_decoder;
 Index: libavformat/Makefile
 ===================================================================
 RCS file: /cvsroot/ffmpeg/ffmpeg/libavformat/Makefile,v

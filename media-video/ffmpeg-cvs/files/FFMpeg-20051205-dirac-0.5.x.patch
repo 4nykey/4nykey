@@ -109,22 +109,15 @@ diff -ruN --exclude=CVS ffmpeg-cvs/libavcodec/avcodec.h ffmpeg-cvs-dirac/libavco
      CODEC_ID_FRAPS,
      CODEC_ID_TRUEMOTION2,
      CODEC_ID_BMP,
-@@ -1969,6 +1972,7 @@
- extern AVCodec sonic_ls_encoder;
- extern AVCodec svq1_encoder;
- extern AVCodec x264_encoder;
-+extern AVCodec dirac_encoder;
- 
- extern AVCodec h263_decoder;
- extern AVCodec h261_decoder;
-@@ -2073,6 +2077,7 @@
+@@ -2073,6 +2077,8 @@
+ extern AVCodec fraps_decoder;
  extern AVCodec libgsm_encoder;
  extern AVCodec libgsm_decoder;
- extern AVCodec bmp_decoder;
++extern AVCodec dirac_encoder;
 +extern AVCodec dirac_decoder;
- 
- /* pcm codecs */
- #define PCM_CODEC(id, name) \
+ extern AVCodec bmp_decoder;
+ extern AVCodec mmvideo_decoder;
+ extern AVCodec zmbv_decoder;
 diff -ruN --exclude=CVS ffmpeg-cvs/libavcodec/dirac.c ffmpeg-cvs-dirac/libavcodec/dirac.c
 --- ffmpeg-cvs/libavcodec/dirac.c	1970-01-01 01:00:00.000000000 +0100
 +++ ffmpeg-cvs-dirac/libavcodec/dirac.c	2005-09-02 12:49:18.000000000 +0100

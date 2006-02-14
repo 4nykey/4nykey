@@ -69,9 +69,7 @@ src_unpack() {
 		libavutil/common.h \
 		|| die "sed failed (__PIC__)"
 
-	# epatch ${FILESDIR}/${PN}-libdir-pic.patch
-	# epatch ${FILESDIR}/${PN}-a52.patch
-	# epatch ${FILESDIR}/${PN}-missing_links.patch
+	epatch ${FILESDIR}/${PN}_install-dir.diff
 	# To make sure the ffserver test will work 
 	sed -i -e "s:-e debug=off::" tests/server-regression.sh
 
