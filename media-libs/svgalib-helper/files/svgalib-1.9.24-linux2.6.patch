@@ -1,0 +1,123 @@
+ - get rid of warning when linux/device.h doesnt exist
+ - touch up the Makefile to let the ebuild handle the module details
+ - fix support with io remap stuff in newer kernels
+ - dont include headers that dont exist in 2.4.x kernels
+
+--- svgalib/kernel/svgalib_helper/Makefile
++++ svgalib/kernel/svgalib_helper/Makefile
+@@ -28,7 +28,7 @@
+ 
+ endif
+ 
+-CLASS_SIMPLE := $(shell grep class_simple_create $(KDIR)/include/linux/device.h)
++CLASS_SIMPLE := $(shell grep class_simple_create $(KDIR)/include/linux/device.h 2>/dev/null)
+ 
+ ifneq ($(CLASS_SIMPLE),)
+   CLASS_CFLAGS = -DCLASS_SIMPLE=1
+--- svgalib/kernel/svgalib_helper/Makefile.alt
++++ svgalib/kernel/svgalib_helper/Makefile.alt
+@@ -37,7 +37,7 @@
+ CFLAGS += -DSVGALIB_HELPER_MAJOR=$(SVGALIB_HELPER_MAJOR)
+ 
+ ifeq (1,$(findstring 1,$(MODVER)))
+-	CFLAGS += -DMODVERSIONS -include $(INCLUDEDIR)/linux/modversions.h
++	CFLAGS += -DMODVERSIONS -DCONFIG_MODVERSIONS=1
+ endif
+ 
+ TARGET = svgalib_helper
+@@ -50,7 +50,8 @@
+ 	endif
+ endif
+ 
+-all: .depend $(OBJS)
++modules: $(OBJS)
++all: .depend modules
+ 
+ $(TARGET).o: $(SRC:.c=.o)
+ 	$(LD) -r $^ -o $@
+@@ -61,8 +62,8 @@
+ install: device modules_install
+ 
+ modules_install: $(OBJS)
+-	mkdir -p /lib/modules/$(VER)/kernel/misc 
+-	install -m 0644 -c $(OBJS) /lib/modules/$(VER)/kernel/misc
++	mkdir -p $(TOPDIR)/lib/modules/$(VER)/kernel/misc
++	install -m 0644 -c $(OBJS) $(TOPDIR)/lib/modules/$(VER)/kernel/misc
+ 
+ device:
+ 	rm -f /dev/svgalib_helper* /dev/svga_helper* /dev/svga /dev/svga?
+--- svgalib/kernel/svgalib_helper/kernel26compat.h
++++ svgalib/kernel/svgalib_helper/kernel26compat.h
+@@ -10,7 +10,7 @@
+ # define PCI_GET_CLASS pci_find_class
+ # define PCI_GET_DEVICE pci_find_device
+ 
+-# if defined (PG_chainlock)
++# if LINUX_VERSION_CODE >= KERNEL_VERSION(2,5,3)
+ #  define my_io_remap_page_range(vma, start, ofs, len, prot) \
+ 		io_remap_page_range(vma,start,ofs,len,prot)
+ # else
+@@ -84,6 +84,21 @@
+ #  define SLH_SYSFS_REGISTER                                            \
+      svgalib_helper_class = class_create(THIS_MODULE, "svgalib_helper");
+ 
++
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,15)
++
++#  define SLH_SYSFS_ADD_CONTROL                                         \
++     class_device_create(svgalib_helper_class, NULL,                  	\
++                             MKDEV(SVGALIB_HELPER_MAJOR, 0),            \
++                             NULL, "svga");
++
++#  define SLH_SYSFS_ADD_DEVICE(_name, _minor)                           \
++     class_device_create(svgalib_helper_class, NULL,                  	\
++                             MKDEV(SVGALIB_HELPER_MAJOR, _minor),       \
++                             &sh_pci_devs[_minor]->dev->dev, _name);
++#else
++
++
+ #  define SLH_SYSFS_ADD_CONTROL                                         \
+      class_device_create(svgalib_helper_class,                      	\
+                              MKDEV(SVGALIB_HELPER_MAJOR, 0),            \
+@@ -93,6 +108,8 @@
+      class_device_create(svgalib_helper_class,                      	\
+                              MKDEV(SVGALIB_HELPER_MAJOR, _minor),       \
+                              &sh_pci_devs[_minor]->dev->dev, _name);
++#endif
++
+ 
+ #  define SLH_SYSFS_REMOVE_DEVICE(i)                                    \
+      class_destroy(svgalib_helper_class);
+@@ -148,6 +148,11 @@
+ #  define SLH_SYSFS_UNREGISTER
+ #endif
+ 
++/* gregkh was so kind as to remove a ton of PCI defines in linux-2.6.15 */
++#if !defined(PCI_VENDOR_ID_RENDITION)
++# define PCI_VENDOR_ID_RENDITION 0x1163
++#endif
++
+ #if (defined MINOR)
+ # define my_minor(x) MINOR(x)
+ #else
+--- svgalib/kernel/svgalib_helper/main.c
++++ svgalib/kernel/svgalib_helper/main.c
+@@ -19,13 +19,18 @@
+ #include <linux/pci.h>
+ #include <linux/devfs_fs_kernel.h>
+ #include <linux/mm.h>
++#include <linux/version.h>
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,5,0)
+ #include <linux/thread_info.h>
++#endif
+ #include <linux/smp.h>
+ #include <linux/smp_lock.h>
+ 
+ #include <linux/sched.h>
+ #include <linux/wait.h>
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,5,0)
+ #include <linux/syscalls.h>
++#endif
+ 
+ #define __KERNEL_SYSCALLS__
+ #include <linux/unistd.h>
