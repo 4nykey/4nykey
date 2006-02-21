@@ -1,29 +1,22 @@
-Index: configure.in
+Index: Makefile.in
 ===================================================================
---- configure.in	(revision 3709)
-+++ configure.in	(working copy)
-@@ -186,11 +186,9 @@
- AC_DEFINE_UNQUOTED(PACKAGE_SOURCE_DIR, "${packagesrcdir}")
- 
- AC_OUTPUT([ 
--m4/Makefile 
- intl/Makefile
- Makefile
- pixmaps/Makefile
--po/Makefile.in
- macros/Makefile
- src/Makefile
- ])
-Index: Makefile.am
-===================================================================
---- Makefile.am	(revision 3709)
-+++ Makefile.am	(working copy)
-@@ -3,7 +3,7 @@
- ## If you don't want it to overwrite it,
- ## 	Please disable it in the Anjuta project configuration
+--- Makefile.in	(revision 3896)
++++ Makefile.in	(working copy)
+@@ -156,7 +156,7 @@
+ USE_NLS = @USE_NLS@
+ VERSION = @VERSION@
  
 -SUBDIRS = intl po macros src pixmaps
 +SUBDIRS = macros src pixmaps
  
  mpd_appletdocdir = ${prefix}/doc/mpd-applet
- mpd_appletdoc_DATA = \
+ mpd_appletdoc_DATA =  	README 	COPYING 	AUTHORS 	ChangeLog 	INSTALL 	NEWS 	TODO 	ABOUT-NLS
+@@ -168,7 +168,7 @@
+ mpd_applet_glade_file_DATA = mpd-applet.glade
+ 
+ ACLOCAL_AMFLAGS = -I m4
+-ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
++ACLOCAL_M4 = 
+ mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+ CONFIG_HEADER = config.h
+ CONFIG_CLEAN_FILES = 
