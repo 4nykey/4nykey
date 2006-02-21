@@ -7,7 +7,6 @@ IUSE="gnome"
 
 DESCRIPTION="A Gnome client for the Music Player Daemon."
 HOMEPAGE="http://etomite.qballcow.nl/qgmpc-0.12.html"
-#SRC_URI="http://download.qballcow.nl/programs/${PN}/${P}.tar.gz"
 SRC_URI=""
 ESVN_REPO_URI="https://svn.musicpd.org/${PN}/trunk"
 
@@ -19,7 +18,7 @@ RDEPEND=">=x11-libs/gtk+-2.4
 	=gnome-base/libglade-2*
 	dev-libs/libxml2
 	dev-perl/XML-Parser
-	>=media-libs/libmpd-0.9.19"
+	>=media-libs/libmpd-0.12.0"
 DEPEND="${RDEPEND}"
 
 src_unpack() {
