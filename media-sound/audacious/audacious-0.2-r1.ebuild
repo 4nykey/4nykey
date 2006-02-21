@@ -8,7 +8,7 @@ inherit flag-o-matic subversion autotools
 
 DESCRIPTION="Audacious Player - Your music, your way, no exceptions."
 HOMEPAGE="http://audacious-media-player.org/"
-SRC_URI="mirror://gentoo/gentoo_ice-xmms-0.2.tar.bz2"
+#SRC_URI="mirror://gentoo/gentoo_ice-xmms-0.2.tar.bz2"
 ESVN_REPO_URI="http://svn.atheme.org/audacious/trunk"
 
 LICENSE="GPL-2"
@@ -50,8 +50,6 @@ DEPEND="${RDEPEND}
 
 src_unpack() {
 	subversion_src_unpack
-	cd ${WORKDIR}
-	unpack ${A}
 	cd ${S}
 	epatch ${FILESDIR}/*.diff
 	autopoint --force || die
@@ -75,7 +73,6 @@ src_compile() {
 		--includedir=/usr/include/audacious \
 		`use_enable mmx simd` \
 		`use_enable gnome gconf` \
-		`use_enable gnome gnome-vfs` \
 		`use_enable vorbis` \
 		`use_enable esd` \
 		`use_enable mp3` \
@@ -93,24 +90,22 @@ src_compile() {
 		`use_enable jack` \
 		`use_enable adplug` \
 		|| die
+#		`use_enable gnome gnome-vfs` \
 
 	make || die "make failed"
 }
 
 src_install() {
 	einstall || die
-	dodoc AUTHORS FAQ NEWS README
-
-	# Gentoo_ice skin installation; bug #109772
-	insinto /usr/share/audacious/Skins/gentoo_ice
-	doins ${WORKDIR}/gentoo_ice/*
-	docinto gentoo_ice
-	dodoc ${WORKDIR}/README
+	dodoc AUTHORS NEWS README
 
 	# XMMS skin symlinking; bug 70697
 	for SKIN in /usr/share/xmms/Skins/* ; do
 		dosym "$SKIN" /usr/share/audacious/Skins/
 	done
+
+	insinto /usr/share/applications
+	doins audacious/audacious.desktop
 }
 
 pkg_postinst() {

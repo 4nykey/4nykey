@@ -7,13 +7,13 @@ inherit subversion gnome2 autotools
 DESCRIPTION="Next generation Beep Media Player"
 HOMEPAGE="http://beep-media-player.org/index.php/BMPx_Homepage"
 SRC_URI= #"mirror://sourceforge/beepmp/${PN}.tar.bz2"
-ESVN_REPO_URI="svn://beep-media-player.org/${PN}/trunk"
+ESVN_REPO_URI="http://svn.beep-media-player.org/bmpx/trunk"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="xine dbus mad ogg vorbis a52 flac theora perl python irssi xchat gtk
-startup-notification gnome sysfs"
+IUSE="dbus mad ogg vorbis a52 flac theora perl python irssi xchat gtk
+startup-notification gnome sysfs hal"
 
 RDEPEND="gtk? ( >=x11-libs/gtk+-2.8.0
 		virtual/fam )
@@ -22,27 +22,27 @@ RDEPEND="gtk? ( >=x11-libs/gtk+-2.8.0
 	>=net-misc/neon-0.25.3
 	>=gnome-base/libglade-2.5.1
 	>=dev-libs/libxml2-2.6.1
+	>=media-libs/musicbrainz-2.1.1
 	gnome? ( >=gnome-base/gconf-2.6.4 )
 	dbus? ( >=sys-apps/dbus-0.3.5 )
+	hal? ( >=sys-apps/hal-0.5.6 )
 	net-misc/curl
 	startup-notification? ( >=x11-libs/startup-notification-0.8 )
 	perl? ( dev-lang/perl )
 	python? ( =dev-python/pygtk-2* )
 	irssi? ( net-irc/irssi )
 	xchat? ( || ( net-irc/xchat net-irc/xchat-gnome ) )
-	xine? ( >=media-libs/xine-lib-1.0.1 )
-	!xine? ( >=media-libs/gstreamer-0.10.0
-		>=media-libs/gst-plugins-base-0.10.0
-		>=media-plugins/gst-plugins-pango-0.10.0
-		mad? ( >=media-plugins/gst-plugins-mad-0.10.0 )
-		ogg? ( >=media-plugins/gst-plugins-ogg-0.10.0 )
-		vorbis? ( >=media-plugins/gst-plugins-ogg-0.10.0
-			>=media-plugins/gst-plugins-vorbis-0.10.0 )
-		a52? ( >=media-plugins/gst-plugins-a52dec-0.10.0 )
-		flac? ( >=media-plugins/gst-plugins-flac-0.10.0 )
-		theora? ( >=media-plugins/gst-plugins-ogg-0.10.0
-		        >=media-plugins/gst-plugins-theora-0.10.0 )
-		)"
+	>=media-libs/gstreamer-0.10.0
+	>=media-libs/gst-plugins-base-0.10.0
+	>=media-plugins/gst-plugins-pango-0.10.0
+	mad? ( >=media-plugins/gst-plugins-mad-0.10.0 )
+	ogg? ( >=media-plugins/gst-plugins-ogg-0.10.0 )
+	vorbis? ( >=media-plugins/gst-plugins-ogg-0.10.0
+		>=media-plugins/gst-plugins-vorbis-0.10.0 )
+	a52? ( >=media-plugins/gst-plugins-a52dec-0.10.0 )
+	flac? ( >=media-plugins/gst-plugins-flac-0.10.0 )
+	theora? ( >=media-plugins/gst-plugins-ogg-0.10.0
+	        >=media-plugins/gst-plugins-theora-0.10.0 )"
 
 DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.29
@@ -58,8 +58,7 @@ G2CONF="--enable-amazon \
 	$(use_enable startup-notification sn) \
 	$(use_enable gtk gui) \
 	$(use_enable gnome gconf) \
-	$(use_enable xine) \
-	$(use_enable !xine gst)"
+	$(use_enable hal)"
 use dbus && G2CONF="${G2CONF} $(use_enable perl) $(use_enable python)"
 use perl && G2CONF="${G2CONF} $(use_enable irssi)"
 use python || use perl && G2CONF="${G2CONF} $(use_enable xchat)"
