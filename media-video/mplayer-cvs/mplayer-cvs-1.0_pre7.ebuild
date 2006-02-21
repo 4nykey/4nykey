@@ -16,7 +16,7 @@ BLUV=1.4
 SVGV=1.9.17
 NBV=540
 WBV=520
-NAV=20060210
+NAV=20060220
 
 S="${WORKDIR}/main"
 SRC_URI="mirror://mplayer/releases/fonts/font-arial-iso-8859-1.tar.bz2
@@ -557,8 +557,9 @@ src_install() {
 	einfo "Make install completed"
 
 	dodoc AUTHORS ChangeLog README
-	# loose CVS dirs
-	find "${S}/DOCS" -name CVS -type d | xargs rm -rf
+	for i in DOCS TOOLS; do
+		find "${S}/$i" -name CVS -type d | xargs rm -rf
+	done
 	# Install the documentation; DOCS is all mixed up not just html
 	if use doc ; then
 		#for dir in de it tech zh

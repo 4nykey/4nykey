@@ -69,7 +69,6 @@ src_unpack() {
 		libavutil/common.h \
 		|| die "sed failed (__PIC__)"
 
-	epatch ${FILESDIR}/${PN}_install-dir.diff
 	# To make sure the ffserver test will work 
 	sed -i -e "s:-e debug=off::" tests/server-regression.sh
 
@@ -98,7 +97,7 @@ src_compile() {
 	#use specified CFLAGS are only used in executables
 	filter-flags -fforce-addr -momit-leaf-frame-pointer
 
-	local myconf="--enable-gpl --enable-pp --disable-opts"
+	local myconf="--enable-shared --enable-gpl --enable-pp --disable-opts"
 
 	teh_conf dis debug
 	teh_conf en encode mp3lame
@@ -124,11 +123,13 @@ src_compile() {
 	teh_conf en aac faad
 	teh_conf en aac faac
 
-	use static || myconf="${myconf} --enable-shared"
 	use encode || myconf="${myconf} --disable-encoders --disable-muxers"
 	use dirac || myconf="${myconf} --disable-codec=dirac"
 
-	./configure --prefix=/usr ${myconf} || die "Configure failed"
+	./configure \
+		$(use_enable static) \
+		--prefix=/usr \
+		${myconf} || die "Configure failed"
 	emake CC="$(tc-getCC)" || die "emake failed"
 }
 
@@ -140,27 +141,16 @@ src_install() {
 		mandir=${D}/usr/share/man \
 		infodir=${D}/usr/share/info \
 		bindir=${D}/usr/bin \
-		install $(use static && echo installlib) || die "Install Failed"
+		install || die "Install Failed"
 
-	dodoc Changelog README INSTALL
-	dodoc doc/*
-
-	cd libavcodec/libpostproc
-	make prefix=${D}/usr libdir=${D}/usr/$(get_libdir) \
-		SHARED_PP="yes" \
-		install || die "Failed to install libpostproc.so!"
-
-	# Some stuff like transcode can use this one.
-	dolib.a ${S}/libavcodec/libpostproc/libpostproc.a
-
-	preplib /usr
+	dodoc Changelog CREDITS README MAINTAINERS doc/*.txt
 }
 
 # Never die for now...
 src_test() {
 
-	for d in ${S_STATIC} ${S_SHARED}; do
-		cd ${d}
-		make test || ewarn "Some test failed"
+	cd ${S}/tests
+	for t in "codectest libavtest test-server" ; do
+		make ${t} || ewarn "Some tests in ${t} failed"
 	done
 }
