@@ -1,0 +1,89 @@
+Index: src/options.h
+===================================================================
+--- src/options.h	(revision 3896)
++++ src/options.h	(working copy)
+@@ -31,6 +31,7 @@
+   gboolean visible_bell;       
+   gboolean enable_xterm_title; 
+   gboolean enable_mouse;
++  gboolean visible_bitrate;
+ 
+ } options_t;
+ 
+Index: src/screen.c
+===================================================================
+--- src/screen.c	(revision 3896)
++++ src/screen.c	(working copy)
+@@ -347,21 +347,34 @@
+ 	/*checks the conf to see whether to display elapsed or remaining time */
+ 	if(!strcmp(options.timedisplay_type,"elapsed"))
+           {
++	  if ( options.visible_bitrate )
++             timestr= " [%d kbps] [%i:%02i/%i:%02i]";	    
++	  else
+              timestr= " [%i:%02i/%i:%02i]";	    
+              elapsedTime = c->status->elapsedTime;
+           }
+         else if(!strcmp(options.timedisplay_type,"remaining"))
+           {
++	  if ( options.visible_bitrate )
++             timestr= " [%d kbps] [-%i:%02i/%i:%02i]";	    
++	  else
+             timestr= " [-%i:%02i/%i:%02i]";	    
+             elapsedTime = (c->status->totalTime - c->status->elapsedTime);
+           }  
+ 	if( c->song && seek_id == c->song->id )
+ 	    elapsedTime = seek_target_time;
+ 	/*write out the time*/
++	if ( options.visible_bitrate )
+ 	  g_snprintf(screen->buf, screen->buf_size, 
+ 		   timestr,
++		   status->bitRate,
+ 		   elapsedTime/60, elapsedTime%60,
+ 		   status->totalTime/60,   status->totalTime%60 );
++	else
++	  g_snprintf(screen->buf, screen->buf_size, 
++		   timestr,
++		   elapsedTime/60, elapsedTime%60,
++		   status->totalTime/60,   status->totalTime%60 );
+ 	}
+       else
+ 	{
+Index: src/conf.c
+===================================================================
+--- src/conf.c	(revision 3896)
++++ src/conf.c	(working copy)
+@@ -64,6 +64,7 @@
+ #define CONF_HIDE_CURSOR             "hide-cursor"
+ #define CONF_SEEK_TIME               "seek-time"
+ #define CONF_SCREEN_LIST             "screen-list"
++#define CONF_VISIBLE_BITRATE         "visible-bitrate"
+ #define CONF_TIMEDISPLAY_TYPE        "timedisplay-type"
+ 
+ typedef enum {
+@@ -479,6 +480,11 @@
+ 		    D("deb");
+ 		    D(options->timedisplay_type);
+ 		}
++	      /* visible bitrate */
++	      else if( !strcasecmp(CONF_VISIBLE_BITRATE, name) )
++		{
++		  options->visible_bitrate = str2bool(value);
++		}
+ 	      /* color definition */
+ 	      else if( !strcasecmp(CONF_COLOR_DEFINITION, name) )
+ 		{
+Index: doc/ncmpc.1
+===================================================================
+--- doc/ncmpc.1	(revision 3896)
++++ doc/ncmpc.1	(working copy)
+@@ -147,6 +147,9 @@
+ .B colordef COLOR = R, G, B
+ Redefine any of the base colors. The RGB values must be an integer value between 0 and 1000. 
+ \fBNote\fR: Only some terminals allow redefinitions of colors! 
++.TP 
++.B visible\-bitrate = yes|no
++Display bitrate in status window
+ .SH "KEYS"
+ When ncmpc start it tries to read user key bindings from the ~/.ncmpc/keys file. If no user key bindings is found ncmpc tries to load global key bindings from $SYSCONFDIR/ncmpc/keys (the actual path is displayed on the help screen). 
+ 
