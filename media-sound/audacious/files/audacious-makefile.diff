@@ -15,7 +15,7 @@ Index: Makefile.in
 ===================================================================
 --- Makefile.in	(revision 685)
 +++ Makefile.in	(working copy)
-@@ -4,8 +4,3 @@
+@@ -4,11 +4,6 @@
  SUBDIRS = Plugins libaudacious audacious po icons skin intl
  
  install-posthook:
@@ -24,6 +24,9 @@ Index: Makefile.in
 -		ldconfig; \
 -		echo "[system library cache updated]"; \
 -	fi
+ 	@mkdir -p $(DESTDIR)/$(LIBDIR)/pkgconfig
+ 	@mkdir -p $(DESTDIR)/$(mandir)/man1
+ 	@mkdir -p $(DESTDIR)/$(datadir)/applications
 Index: mk/objective.mk
 ===================================================================
 --- mk/objective.mk	(revision 685)

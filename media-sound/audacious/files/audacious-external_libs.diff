@@ -11,7 +11,7 @@ Index: Plugins/Input/aac/src/Makefile.in
 ===================================================================
 --- Plugins/Input/aac/src/Makefile.in	(revision 685)
 +++ Plugins/Input/aac/src/Makefile.in	(working copy)
-@@ -8,13 +8,13 @@
+@@ -8,10 +8,10 @@
  # override objective make's LIBDIR
  LIBDIR = $(plugindir)/$(INPUT_PLUGIN_DIR)
  
@@ -24,9 +24,6 @@ Index: Plugins/Input/aac/src/Makefile.in
  
 -CFLAGS += $(GTK_CFLAGS) -I../../../../intl -I../../../.. -I../include -I../libmp4v2 -I../libfaad
 +CFLAGS += $(GTK_CFLAGS) -I../../../../intl -I../../../..
- 
- libaac.so: $(OBJECTS)
- 	$(CC) -fPIC -DPIC -shared -o $@ $(OBJECTS) $(LDFLAGS)
 Index: Plugins/Input/adplug/Makefile.in
 ===================================================================
 --- Plugins/Input/adplug/Makefile.in	(revision 685)

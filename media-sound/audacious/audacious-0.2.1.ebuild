@@ -96,7 +96,7 @@ src_compile() {
 }
 
 src_install() {
-	einstall || die
+	emake DESTDIR=${D} install || die
 	dodoc AUTHORS NEWS README
 
 	# XMMS skin symlinking; bug 70697
