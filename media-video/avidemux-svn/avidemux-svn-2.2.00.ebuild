@@ -86,6 +86,6 @@ src_compile() {
 }
 
 src_install() {
-	make DESTDIR=${D} install || die "make install failed"
+	dobin avidemux/avidemux2
 	dodoc AUTHORS ChangeLog History README TODO
 }

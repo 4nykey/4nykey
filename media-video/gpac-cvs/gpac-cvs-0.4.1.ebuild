@@ -50,11 +50,7 @@ src_unpack() {
 	chmod 755 configure
 
 	if use wxwindows; then
-		if has_version '>=x11-libs/wxGTK-2.6.0'; then
-			WX_GTK_VER="2.6"
-		else
-			WX_GTK_VER="2.5"
-		fi
+		WX_GTK_VER="2.6"
 		if use unicode; then
 			need-wxwidgets unicode
 		elif use gtk2; then
