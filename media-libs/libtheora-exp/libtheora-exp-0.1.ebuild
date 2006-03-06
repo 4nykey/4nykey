@@ -2,13 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit subversion
+inherit subversion autotools
 
 DESCRIPTION="The Theora Video Compression Codec (experimental version)"
 HOMEPAGE="http://www.theora.org/"
 ESVN_REPO_URI="http://svn.xiph.org/experimental/derf/theora-exp"
-ESVN_PATCHES="autog_skipconf.diff"
-ESVN_BOOTSTRAP="./autogen.sh"
 
 LICENSE="xiph"
 SLOT="0"
@@ -16,8 +14,13 @@ KEYWORDS="~x86"
 IUSE="static"
 
 DEPEND=">=media-libs/libogg-1.1.0
-	>=media-libs/libvorbis-1.0.1
-	>=sys-devel/automake-1.6"
+	>=media-libs/libvorbis-1.0.1"
+
+src_unpack() {
+	subversion_src_unpack
+	cd ${S}
+	eautoreconf || die
+}
 
 src_compile() {
 	econf \

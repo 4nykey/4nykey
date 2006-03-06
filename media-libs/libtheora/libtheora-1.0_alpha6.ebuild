@@ -2,13 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit subversion
+inherit subversion autotools
 
 DESCRIPTION="The Theora Video Compression Codec"
 HOMEPAGE="http://www.theora.org/"
-#SRC_URI="http://www.theora.org/files/${P/_}.tar.bz2"
-ESVN_PATCHES="*.diff"
-ESVN_BOOTSTRAP="./autogen.sh"
 
 LICENSE="xiph"
 SLOT="0"
@@ -17,12 +14,9 @@ IUSE="encode mmx static liboil"
 
 DEPEND=">=media-libs/libogg-1.1.0
 	>=media-libs/libvorbis-1.0.1
-	liboil? ( dev-libs/liboil )
-	>=sys-devel/automake-1.6"
+	liboil? ( dev-libs/liboil )"
 
-S=${WORKDIR}/${P/_}
-
-pkg_setup() {
+src_unpack() {
 	if use mmx; then
 		einfo "Using theora-mmx branch"
 		ESVN_REPO_URI="http://svn.xiph.org/branches/theora-mmx"
@@ -32,6 +26,9 @@ pkg_setup() {
 	else
 		ESVN_REPO_URI="http://svn.xiph.org/trunk/theora"
 	fi
+	subversion_src_unpack
+	cd ${S}
+	AT_M4DIR="${S}/m4" eautoreconf || die
 }
 
 src_compile() {
