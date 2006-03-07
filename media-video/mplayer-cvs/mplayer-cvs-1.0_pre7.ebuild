@@ -16,7 +16,7 @@ BLUV=1.4
 SVGV=1.9.17
 NBV=540
 WBV=520
-NAV=20060223
+NAV=20060306
 
 S="${WORKDIR}/main"
 SRC_URI="mirror://mplayer/releases/fonts/font-arial-iso-8859-1.tar.bz2
@@ -85,7 +85,7 @@ RDEPEND="xvid? ( >=media-libs/xvid-0.9.0 )
 	musepack? ( >=media-libs/libmpcdec-1.2.1 )
 	dirac? ( >=media-video/dirac-0.5.2 )
 	aac? ( media-libs/faad2 )
-	x264? ( >=media-libs/x264-39 )
+	x264? ( >=media-libs/x264-45 )
 	speex? ( >=media-libs/speex-1.1.0 )
 	sys-libs/ncurses"
 

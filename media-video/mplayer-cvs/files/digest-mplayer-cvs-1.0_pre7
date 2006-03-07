@@ -16,9 +16,9 @@ SHA256 9730f481764f367c9089d0166fb6ccf9148808ffbbfeca635cf0e6db75765d29 font-ari
 MD5 7b47904a925cf58ea546ca15f3df160c font-arial-iso-8859-2.tar.bz2 222208
 RMD160 562d4d92c4f5f3d537340fde3ad8d1495ac41acb font-arial-iso-8859-2.tar.bz2 222208
 SHA256 71debfc960007c2f6242dfc91e8b1c005b30a99e129aeb00ab8c03f4371b41c1 font-arial-iso-8859-2.tar.bz2 222208
-MD5 fe5d03587355133077251ccca6469d4b mplayer-dvdnav-patch.tar.gz 110450
-RMD160 b58606d49f295097914981b7e6373479263256c5 mplayer-dvdnav-patch.tar.gz 110450
-SHA256 73ae91d5af19160663a373714d3c4741cf965a2081cfc46cd3ff0917c4b802f6 mplayer-dvdnav-patch.tar.gz 110450
+MD5 d377cb99f6ac69a9a968ac5ed3b6c2d2 mplayer-dvdnav-patch.tar.gz 175644
+RMD160 df65a4c9c8fd6f45265bf0b981a888949cd07722 mplayer-dvdnav-patch.tar.gz 175644
+SHA256 118308288ae0c5171dddcae0b49d5e4d02e1646cf043ad65ff3cda763d341386 mplayer-dvdnav-patch.tar.gz 175644
 MD5 3f1b9eb2ba639bf42c61f7b9189f6524 svgalib_helper-1.9.17-mplayer.tar.bz2 7234
 RMD160 e0c4ae039478732404dd743e250e1061cc9cf0a4 svgalib_helper-1.9.17-mplayer.tar.bz2 7234
 SHA256 016edd27d74b5c66481ddb4563c961fbb579e3a95dd846cc857a639df09999e5 svgalib_helper-1.9.17-mplayer.tar.bz2 7234
