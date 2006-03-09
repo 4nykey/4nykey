@@ -4,9 +4,9 @@ SHA256 f5efc72d7f09f3564dc983f72ab91e5b049ac4d0deeed3b84c81086533bee85c files/00
 MD5 586842ed1bc20ca901919055eccf5e77 files/00_all_libdha-noldconfig.diff 713
 RMD160 986a5bfdacc470e05f5fe53e4d8092cd33e4c456 files/00_all_libdha-noldconfig.diff 713
 SHA256 eb29bc29ea2435f6e3a3178e88dbed2bc636d79c926a624d3c5a12c57f30fc8d files/00_all_libdha-noldconfig.diff 713
-MD5 edbdec34e774c63490a4b1240d4d16a8 files/00_all_mplayer.theora-exp.patch-0.9.1.diff 31143
-RMD160 8a031b0a6402d58605421090e9cedc002ce109ac files/00_all_mplayer.theora-exp.patch-0.9.1.diff 31143
-SHA256 40ed3268cba8746b76e5a56ea396e67eb621b7ec1647dec4a7c5d02db3887975 files/00_all_mplayer.theora-exp.patch-0.9.1.diff 31143
+MD5 7637a71bc59305550f48a8c505732f19 files/00_all_mplayer.theora-exp.patch-0.9.1.diff 31148
+RMD160 161b0d79a02469aa6aa90104e7e2ba914455c002 files/00_all_mplayer.theora-exp.patch-0.9.1.diff 31148
+SHA256 d1656ad9c3f58751eb07cdc1f935e8ee61c0fb0f50ad8612af174302c50943d6 files/00_all_mplayer.theora-exp.patch-0.9.1.diff 31148
 MD5 ce3fdef160147b9855451012e77a3d8c files/00_all_patch-MPlayer-main-single-binary.diff 15333
 RMD160 4c7c4ed8b70cffe92e3630c54e7102dc58a2fffb files/00_all_patch-MPlayer-main-single-binary.diff 15333
 SHA256 fcaf9f705cc75f6007063aa635186ca4a27b7b7d28f9bf18d9d90234290bbd2b files/00_all_patch-MPlayer-main-single-binary.diff 15333

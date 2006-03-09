@@ -748,7 +748,7 @@ diff -u -r1.75 demux_ogg.c
 @@ -352,7 +366,7 @@
      }
    } else if (os->speex) {
-     data = pack->packet;
+     // whole packet (default)
 -# ifdef HAVE_OGGTHEORA
 +#if defined(HAVE_OGGTHEORA)||defined(HAVE_OGGTHEORA_EXP)
    } else if (os->theora) {
