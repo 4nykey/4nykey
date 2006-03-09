@@ -36,7 +36,7 @@ MAKEOPTS="${MAKEOPTS} -j1"
 DOCS="AUTHORS COPYING ChangeLog INSTALL \
 	  NEWS README TODO"
 
-G2CONF="${G2CONF} --disable-cd"
+G2CONF="--disable-cd"
 
 src_unpack() {
 	cvs_src_unpack

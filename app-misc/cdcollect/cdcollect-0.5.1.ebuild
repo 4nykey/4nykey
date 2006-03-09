@@ -19,6 +19,6 @@ RDEPEND=">=dev-lang/mono-1.1.8
 	=dev-db/sqlite-2*"
 DEPEND="${RDEPEND}"
 
-G2CONF="${G2CONF} --enable-compile-warnings=no"
+G2CONF="--enable-compile-warnings=no"
 
 DOCS="ChangeLog NEWS README AUTHORS TODO COPYING"

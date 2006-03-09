@@ -59,9 +59,9 @@ G2CONF="--enable-amazon \
 	$(use_enable gtk gui) \
 	$(use_enable gnome gconf) \
 	$(use_enable hal)"
-use dbus && G2CONF="${G2CONF} $(use_enable perl) $(use_enable python)"
-use perl && G2CONF="${G2CONF} $(use_enable irssi)"
-use python || use perl && G2CONF="${G2CONF} $(use_enable xchat)"
+use dbus && G2CONF="$(use_enable perl) $(use_enable python)"
+use perl && G2CONF="$(use_enable irssi)"
+use python || use perl && G2CONF="$(use_enable xchat)"
 
 USE_DESTDIR="1"
 

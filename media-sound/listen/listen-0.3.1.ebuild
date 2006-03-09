@@ -21,6 +21,13 @@ RDEPEND=">=dev-python/pygtk-2.6.0
 
 MAKEOPTS="-j1"
 
+pkg_setup() {
+	if use dbus && ! built_with_use sys-apps/dbus python; then
+		eerror "Please rebuild dbus with USE=\"python\"."
+		die "Python D-bus support missing."
+	fi
+}
+
 src_install() {
 	make DESTDIR="${D}" PREFIX=/usr install || die
 	dodoc changelog copy

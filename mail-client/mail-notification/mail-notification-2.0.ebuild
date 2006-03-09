@@ -30,7 +30,7 @@ DEPEND=">=x11-libs/gtk+-2.6
 	gmail? ( >=net-libs/libsoup-2.2 )
 	eds? ( >=mail-client/evolution-2.2 )"
 
-G2CONF="${G2CONF} 	$(use_enable ssl) \
+G2CONF="	$(use_enable ssl) \
 			$(use_enable sasl) \
 			$(use_enable ipv6) \
 			$(use_enable imap) \

@@ -20,7 +20,7 @@ DEPEND="${RDEPEND}
 	app-text/scrollkeeper
 	>=dev-util/intltool-0.21"
 
-G2CONF="${G2CONF} --disable-schemas-install"
+G2CONF="--disable-schemas-install"
 DOCS="AUTHORS ChangeLog NEWS README"
 USE_DESTDIR="1"
 

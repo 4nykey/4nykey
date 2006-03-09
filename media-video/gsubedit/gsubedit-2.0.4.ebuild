@@ -16,7 +16,7 @@ LICENSE="GPL-2"
 KEYWORDS="-*"
 IUSE="nls"
 
-G2CONF="${G2CONF} `use_with nls`"
+G2CONF="`use_with nls`"
 DOCS="AUTHORS ChangeLog TODO"
 
 DEPEND=">=x11-libs/gtk+-2.4.0
