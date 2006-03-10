@@ -6,7 +6,6 @@ inherit eutils wxwidgets subversion
 
 DESCRIPTION="Tools to create, alter, and inspect Matroska files"
 HOMEPAGE="http://www.bunkus.org/videotools/mkvtoolnix"
-#SRC_URI="${HOMEPAGE}/sources/${P}.tar.bz2"
 ESVN_REPO_URI="http://svn.bunkus.org/mosu/trunk/prog/video/mkvtoolnix"
 ESVN_BOOTSTRAP="./autogen.sh"
 
@@ -15,7 +14,8 @@ SLOT="0"
 KEYWORDS="~x86"
 IUSE="gtk2 X oggvorbis unicode flac lzo"
 
-DEPEND=">=media-libs/libmatroska-0.7.5
+DEPEND="!media-video/mkvtoolnix
+	>=media-libs/libmatroska-0.7.5
 	vorbis? ( media-libs/libvorbis )
 	flac? ( >=media-libs/flac-1.1.1 )
 	X? ( >=x11-libs/wxGTK-2.4.2-r2 )

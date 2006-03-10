@@ -23,7 +23,8 @@ oss aalib ggi libcaca esd arts alsa wxwindows ncurses xosd lirc joystick hal str
 mp3 xv bidi gtk2 sdl png xml2 samba daap corba screen mod speex nsplugin x264
 dirac gnome libvc1 musepack"
 
-RDEPEND="hal? ( =sys-apps/hal-0.4* )
+RDEPEND="!media-video/vlc
+		hal? ( =sys-apps/hal-0.4* )
 		cdda? ( >=dev-libs/libcdio-0.71
 			>=media-libs/libcddb-0.9.5 )
 		live? ( >=media-plugins/live-2005.01.29 )

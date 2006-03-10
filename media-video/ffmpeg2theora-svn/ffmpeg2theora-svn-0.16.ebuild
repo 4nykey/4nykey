@@ -13,7 +13,8 @@ SLOT="0"
 KEYWORDS="x86 amd64 ppc sparc alpha hppa"
 IUSE=""
 
-DEPEND=">=media-libs/libtheora-1.0_alpha4
+DEPEND="!media-video/ffmpeg2theora
+	>=media-libs/libtheora-1.0_alpha4
 	|| ( >=media-video/ffmpeg-0.4.9_p20050226-r1
 		media-video/ffmpeg-cvs )
 	>=media-libs/libogg-1.1.0

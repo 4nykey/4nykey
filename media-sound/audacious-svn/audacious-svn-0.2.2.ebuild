@@ -16,7 +16,8 @@ SLOT="0"
 
 KEYWORDS="~x86"
 
-RDEPEND="app-arch/unzip
+RDEPEND="!media-sound/audacious
+	app-arch/unzip
 	>=x11-libs/gtk+-2.6
 	>=gnome-base/libglade-2.3.1
 	adplug? ( media-libs/adplug )
@@ -70,6 +71,7 @@ src_compile() {
 		--with-dev-dsp=/dev/sound/dsp \
 		--with-dev-mixer=/dev/sound/mixer \
 		--includedir=/usr/include/audacious \
+		`use_enable gnome gconf` \
 		`use_enable mmx simd` \
 		`use_enable vorbis` \
 		`use_enable esd` \
@@ -91,7 +93,6 @@ src_compile() {
 		`use_enable timidity` \
 		|| die
 #		`use_enable gnome gnome-vfs` \
-#		`use_enable gnome gconf` \
 
 	make || die "make failed"
 }

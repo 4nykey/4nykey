@@ -86,6 +86,6 @@ src_compile() {
 }
 
 src_install() {
-	dobin avidemux/avidemux2
+	newbin avidemux/avidemux2 avidemux2-svn
 	dodoc AUTHORS ChangeLog History README TODO
 }

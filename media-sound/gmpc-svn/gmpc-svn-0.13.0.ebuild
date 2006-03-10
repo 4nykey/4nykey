@@ -14,7 +14,8 @@ KEYWORDS="~x86"
 SLOT="0"
 LICENSE="GPL-2"
 
-RDEPEND=">=x11-libs/gtk+-2.4
+RDEPEND="!media-sound/gmpc
+	>=x11-libs/gtk+-2.4
 	=gnome-base/libglade-2*
 	dev-libs/libxml2
 	dev-perl/XML-Parser
