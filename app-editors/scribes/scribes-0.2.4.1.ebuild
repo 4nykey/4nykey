@@ -2,13 +2,16 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit gnome2 distutils
+inherit gnome2 distutils versionator
 
 DESCRIPTION="Text Editor for GNOME"
 HOMEPAGE="http://scribes.sourceforge.net/"
 RESTRICT="primaryuri"
 SRC_URI="http://openusability.org/download.php/86/${P}.tar.gz"
 LICENSE="GPL-2"
+
+MY_PV="$(get_version_component_range -3)"
+S="${WORKDIR}/${PN}-${MY_PV}"
 
 SLOT="0"
 KEYWORDS="~x86"
