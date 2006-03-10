@@ -6,7 +6,7 @@ inherit eutils flag-o-matic linux-mod cvs
 
 #RESTRICT="nostrip"
 IUSE="3dfx 3dnow 3dnowext aac aalib alsa altivec amr arts avi bidi bl cpudetection
-custom-cflags debug dga dirac doc dts dvb cdparanoia directfb dv dvd dvdread dvdnav
+custom-cflags debug dga dirac doc dts dvb cdparanoia directfb dv dvd dvdread
 edl encode esd fbcon gif ggi gtk i8x0 ipv6 jack joystick jpeg libcaca lirc live lzo
 mad matroska matrox mmx mmxext musepack mythtv nas nls nvidia vorbis opengl oss
 png real rtc samba sdl speex sse sse2 svga tga theora truetype v4l v4l2 X x264
@@ -25,7 +25,6 @@ SRC_URI="mirror://mplayer/releases/fonts/font-arial-iso-8859-1.tar.bz2
 	svga? ( http://mplayerhq.hu/~alex/svgalib_helper-${SVGV}-mplayer.tar.bz2 )
 	amr? ( http://www.3gpp.org/ftp/Specs/latest/Rel-5/26_series/26204-${WBV}.zip
 		http://www.3gpp.org/ftp/Specs/latest/Rel-5/26_series/26104-${NBV}.zip )
-	dvdnav? ( http://www.freeweb.hu/dcxx/mplayer/${NAV}/mplayer-dvdnav-patch.tar.gz )
 	gtk? ( mirror://mplayer/Skin/Blue-${BLUV}.tar.bz2 )"
 
 # Only install Skin if GUI should be build (gtk as USE flag)
@@ -148,11 +147,6 @@ pkg_setup() {
 				REALLIBDIR="/opt/RealPlayer/codecs"
 	fi
 	CHARSET="`locale charmap`"
-	if use dvdread && use dvdnav; then
-		einfo "dvdnav patch will only build with mpdvdkit enabled,"
-		einfo "which can be achieved by USE=\"-dvdread\""
-		die "dvdnav patch requires mpdvdkit"
-	fi
 }
 
 src_unpack() {
@@ -172,12 +166,6 @@ src_unpack() {
 		unpack 26104-${NBV}.zip 26204-${WBV}.zip
 		unzip -ajq 26204-${WBV}_ANSI-C_source_code.zip -d ${S}/libavcodec/amrwb_float
 		unzip -ajq 26104-${NBV}_ANSI_C_source_code.zip -d ${S}/libavcodec/amr_float
-	fi
-
-	if use dvdnav; then
-		unpack mplayer-dvdnav-patch.tar.gz
-		cp mplayer-dvdnav-patch/*.txt ${S}/DOCS/tech
-		cp -r mplayer-dvdnav-patch/mplayer-add/* ${S}
 	fi
 
 	unpack \
@@ -211,8 +199,6 @@ src_unpack() {
 	fi
 
 	use dirac && epatch ${FILESDIR}/mplayer-dirac-cvs.diff
-	use dvdnav && EPATCH_OPTS="-d ${S} ${EPATCH_OPTS}" \
-		epatch ${WORKDIR}/mplayer-dvdnav-patch/*.patch
 
 	# cat a.avi b.avi | mencoder ...
 	#epatch ${FILESDIR}/demuxavifix.patch
@@ -320,7 +306,6 @@ src_compile() {
 	myconf="${myconf} $(use_enable cdparanoia)"
 	if use dvd; then
 		myconf="${myconf} $(use_enable dvdread) $(use_enable !dvdread mpdvdkit)"
-		use dvdnav && myconf="${myconf} $(use_enable !dvdread dvdnav)"
 	else
 		myconf="${myconf} --disable-dvdread --disable-mpdvdkit"
 	fi
