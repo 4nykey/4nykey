@@ -1,9 +1,14 @@
 # Copyright 1999-2004 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
+inherit cvs autotools
+
 DESCRIPTION="Dirac is a general-purpose wavelet video codec"
 HOMEPAGE="http://www.bbc.co.uk/rd/projects/dirac/overview.shtml"
-SRC_URI="mirror://sourceforge/dirac/${P}.tar.gz"
+#SRC_URI="mirror://sourceforge/dirac/${P}.tar.gz"
+ECVS_SERVER="cvs.sourceforge.net:/cvsroot/dirac"
+ECVS_MODULE="compress"
+S="${WORKDIR}/${ECVS_MODULE}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -14,9 +19,15 @@ DEPEND="doc? ( app-doc/doxygen
 	app-text/dvipdfm
 	app-text/tetex )"
 
-src_compile() {
-	sed -i 's:\<util\> ::' Makefile.in
+src_unpack() {
+	cvs_src_unpack
+	cd ${S}
+	sed -i 's:g++\*):*g++*):g' configure.ac
+	sed -i 's:SUBDIRS = .*:SUBDIRS = :' util/Makefile.am
+	eautoreconf || die
+}
 
+src_compile() {
 	use doc || export ac_cv_prog_HAVE_DOXYGEN="no" ac_cv_prog_HAVE_LATEX="no"
 
 	econf \
