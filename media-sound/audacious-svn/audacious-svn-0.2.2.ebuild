@@ -2,13 +2,13 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/audacious/audacious-0.2-r1.ebuild,v 1.4 2006/02/19 18:30:16 hansmi Exp $
 
-IUSE="aac adplug alsa arts esd flac gnome jack libvisual lirc mmx modplug mp3 musepack nls oss sdl sid sndfile vorbis wma"
+IUSE="aac adplug alsa arts esd flac gnome jack libsamplerate libvisual lirc mmx
+modplug mp3 musepack musicbrainz nls oss sdl sid sndfile timidity vorbis wma"
 
 inherit flag-o-matic subversion autotools
 
 DESCRIPTION="Audacious Player - Your music, your way, no exceptions."
 HOMEPAGE="http://audacious-media-player.org/"
-#SRC_URI="mirror://gentoo/gentoo_ice-xmms-0.2.tar.bz2"
 ESVN_REPO_URI="http://svn.atheme.org/audacious/trunk"
 
 LICENSE="GPL-2"
@@ -22,14 +22,12 @@ RDEPEND="app-arch/unzip
 	adplug? ( media-libs/adplug )
 	alsa? ( >=media-libs/alsa-lib-1.0.9_rc2 )
 	esd? ( >=media-sound/esound-0.2.30 )
-	flac? ( >=media-libs/libvorbis-1.0
-		>=media-libs/flac-1.1.2 )
+	flac? ( >=media-libs/flac-1.1.2 )
 	gnome? ( >=gnome-base/gconf-2.6.0
 		>=gnome-base/gnome-vfs-2.6.0 )
-	jack? ( >=media-libs/bio2jack-0.4
-		media-libs/libsamplerate
-		media-sound/jack-audio-connection-kit )
-	arts? ( kde-base/arts )
+	libsamplerate? ( >=media-libs/libsamplerate-0.0.15 )
+	jack? ( media-sound/jack-audio-connection-kit )
+	arts? ( >=kde-base/arts-0.9.5 )
 	libvisual? ( =media-plugins/libvisual-plugins-0.2.0
 		     >=media-libs/libsdl-1.2.5 )
 	lirc? ( app-misc/lirc )
@@ -41,8 +39,8 @@ RDEPEND="app-arch/unzip
 	sndfile? ( media-libs/libsndfile )
 	aac? ( media-libs/faad2
 		|| ( media-libs/libmp4v2 media-video/mpeg4ip-cvs ) )
-	vorbis? ( >=media-libs/libvorbis-1.0
-		  >=media-libs/libogg-1.0 )"
+	musicbrainz? ( >=media-libs/musicbrainz-2.0.0 )
+	vorbis? ( >=media-libs/libvorbis-1.0 )"
 
 DEPEND="${RDEPEND}
 	sys-devel/gettext
@@ -53,9 +51,9 @@ src_unpack() {
 	subversion_src_unpack
 	cd ${S}
 	epatch ${FILESDIR}/*.diff
+	sed -i '/install-posthook/,/^$/d' Makefile.in
 	autopoint --force || die
 	AT_M4DIR="${S}/m4" eautoreconf || die
-	automake --add-missing --copy || die
 }
 
 src_compile() {
@@ -73,7 +71,6 @@ src_compile() {
 		--with-dev-mixer=/dev/sound/mixer \
 		--includedir=/usr/include/audacious \
 		`use_enable mmx simd` \
-		`use_enable gnome gconf` \
 		`use_enable vorbis` \
 		`use_enable esd` \
 		`use_enable mp3` \
@@ -91,8 +88,10 @@ src_compile() {
 		`use_enable jack` \
 		`use_enable arts` \
 		`use_enable adplug` \
+		`use_enable timidity` \
 		|| die
 #		`use_enable gnome gnome-vfs` \
+#		`use_enable gnome gconf` \
 
 	make || die "make failed"
 }
