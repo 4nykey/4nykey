@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/audacious/audacious-0.2-r1.ebuild,v 1.4 2006/02/19 18:30:16 hansmi Exp $
 
-IUSE="aac adplug alsa esd flac gnome jack libvisual lirc mmx modplug mp3 musepack nls oss sdl sid sndfile vorbis wma"
+IUSE="aac adplug alsa arts esd flac gnome jack libvisual lirc mmx modplug mp3 musepack nls oss sdl sid sndfile vorbis wma"
 
 inherit flag-o-matic subversion autotools
 
@@ -29,6 +29,7 @@ RDEPEND="app-arch/unzip
 	jack? ( >=media-libs/bio2jack-0.4
 		media-libs/libsamplerate
 		media-sound/jack-audio-connection-kit )
+	arts? ( kde-base/arts )
 	libvisual? ( =media-plugins/libvisual-plugins-0.2.0
 		     >=media-libs/libsdl-1.2.5 )
 	lirc? ( app-misc/lirc )
@@ -88,6 +89,7 @@ src_compile() {
 		`use_enable sid` \
 		`use_enable musepack` \
 		`use_enable jack` \
+		`use_enable arts` \
 		`use_enable adplug` \
 		|| die
 #		`use_enable gnome gnome-vfs` \
