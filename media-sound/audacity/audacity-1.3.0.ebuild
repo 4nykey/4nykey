@@ -107,6 +107,4 @@ src_install() {
 
 	insinto /usr/share/icons/hicolor/48x48/apps
 	newins images/AudacityLogo48x48.xpm audacity.xpm
-
-	make_desktop_entry audacity Audacity audacity
 }

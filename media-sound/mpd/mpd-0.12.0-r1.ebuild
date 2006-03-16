@@ -12,7 +12,8 @@ ESVN_REPO_URI="https://svn.musicpd.org/${PN}/trunk"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="aac alsa libao audiofile flac icecast ipv6 mad mikmod mp3 musepack vorbis oss unicode"
+IUSE="aac alsa libao audiofile flac icecast ipv6 mad mikmod mp3 musepack vorbis
+oss unicode ogg"
 
 DEPEND="dev-util/gperf
 	sys-libs/zlib
@@ -21,6 +22,7 @@ DEPEND="dev-util/gperf
 	ao? ( >=media-libs/libao-0.8.4 )
 	audiofile? ( media-libs/audiofile )
 	flac? ( >=media-libs/flac-1.1.0 )
+	ogg? ( media-libs/libogg )
 	icecast? ( media-libs/libshout )
 	mad? ( media-libs/libmad
 	       media-libs/libid3tag )
@@ -57,29 +59,24 @@ src_unpack() {
 }
 
 src_compile() {
+	local myconf
+	use ogg && myconf="${myconf} $(use_enable flac oggflac)"
 	econf \
 		$(use_enable alsa) \
-		$(use_enable alsa alsatest) \
 		$(use_enable oss) \
 		$(use_enable mp3) \
 		$(use_enable aac) \
 		$(use_enable libao ao) \
-		$(use_enable libao aotest) \
 		$(use_enable audiofile) \
-		$(use_enable audiofile audiofiletest) \
-		$(use_enable flac libFLACtest) \
 		$(use_enable flac) \
 		$(use_enable icecast shout) \
 		$(use_enable ipv6) \
 		$(use_enable !mad mpd-mad) \
 		$(use_enable !mad mpd-id3tag) \
-		$(use_enable mikmod libmikmodtest) \
 		$(use_enable mikmod mod) \
 		$(use_enable musepack mpc) \
-		$(use_enable vorbis ogg) \
-		$(use_enable vorbis oggtest) \
-		$(use_enable vorbis vorbistest) ||
-	die "could not configure"
+		$(use_enable vorbis oggvorbis) \
+		${myconf} || die "could not configure"
 
 	emake || die "emake failed"
 }
