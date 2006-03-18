@@ -55,6 +55,9 @@ pkg_config() {
 src_install() {
 	make DESTDIR="${D}" install || die "Install failed!"
 
+	exeinto /etc/init.d
+	doexe ${FILESDIR}/scmpc
+
 	insinto /etc
 	insopts -m0600
 	doins examples/scmpc.conf

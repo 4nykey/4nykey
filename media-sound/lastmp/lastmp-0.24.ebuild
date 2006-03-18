@@ -38,7 +38,6 @@ src_install() {
 	keepdir /var/cache/lastfm
 	exeinto /etc/init.d
 	doexe ${FILESDIR}/l{fmsubmitd,astmp}
-	dosed "s:@PF@:${PF}:g" /etc/init.d/lfmsubmitd
 }
 
 pkg_config() {

@@ -1,0 +1,30 @@
+#!/sbin/runscript
+
+depend() {
+	need localmount
+	need net
+}
+
+checkconfig() {
+	CFG=/etc/scmpc.conf
+	if [ "$(grep 'password = ""' ${CFG})" ]; then
+		eerror "You are trying to run scmpc system-wide, but"
+		eerror "no password stored in scmpc configuration file ${CFG},"
+		eerror "run \"ebuild /var/db/pkg/media-sound/scmpc-\${PV}/scmpc-\${PV}.ebuild config\""
+		return 1
+	fi
+}
+
+start () {
+	checkconfig || return 1
+
+	ebegin "Starting MPD last.fm client: scmpc"
+	start-stop-daemon --start -c scmpc:lastfm -p /var/run/scmpc/scmpc.pid --exec /usr/bin/scmpc -- -f /etc/scmpc.conf>& /dev/null
+	eend $?
+}
+
+stop () {
+	ebegin "Stopping MPD last.fm client: scmpc"
+	start-stop-daemon --stop --quiet -p /var/run/scmpc/scmpc.pid --exec /usr/bin/scmpc
+	eend $?
+}

@@ -9,7 +9,7 @@ checkconfig() {
 	CONFFILE=/etc/lastmp/lastmp.cfg
 	if [ ! -f ${CONFFILE} ]; then
 	eerror "lastmp configuration file ${CONFFILE} doesn't exist"
-	eerror "run \"ebuild /var/db/pkg/media-sound/@PF@/@PF@.ebuild config\""
+	eerror "run \"ebuild /var/db/pkg/media-sound/lastmp-\${PV}/lastmp-\${PV}.ebuild config\""
 	eerror "to create a new config file."
 		return 1
 	fi
