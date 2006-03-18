@@ -27,7 +27,6 @@ pkg_setup() {
 
 src_install() {
 	distutils_src_install
-	touch ${T}/blah
 	diropts -m0755 -o lastfm -g lastfm
 	dodir ${CFG_DIR}
 	keepdir ${CFG_DIR}
