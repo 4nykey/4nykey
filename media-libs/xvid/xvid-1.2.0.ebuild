@@ -23,12 +23,8 @@ S="${WORKDIR}/${ECVS_MODULE}/build/generic"
 src_unpack() {
 	cvs_src_unpack
 	cd ${S}
-	#epatch ${FILESDIR}/1.0.1-DESTDIR.patch
 
-	# Appliying 64bit patch unconditionally.
-	# Simple patch that works arch independent.
-	# Danny van Dyk <kugelfang@gentoo.org> 2004/06/22
-	#epatch ${FILESDIR}/${PN}-1.0.1-64bit-clean.patch
+	sed -i 's:\<max\>:fmax:' ../../src/plugins/plugin_lumimasking.c
 
 	einfo "Running bootstrap.sh"
 	sed -i 's:head -1:head -n1:' bootstrap.sh

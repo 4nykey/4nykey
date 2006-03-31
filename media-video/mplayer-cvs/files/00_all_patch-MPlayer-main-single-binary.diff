@@ -1,96 +1,29 @@
 Index: Makefile
 ===================================================================
 RCS file: /cvsroot/mplayer/main/Makefile,v
-retrieving revision 1.325
-diff -u -r1.325 Makefile
---- Makefile	27 Jun 2005 20:08:38 -0000	1.325
-+++ Makefile	29 Jun 2005 22:27:40 -0000
-@@ -19,47 +19,45 @@
- DO_MAKE = @ for i in $(SUBDIRS); do $(MAKE) -C $$i $@; done
- endif
- 
--SRCS_COMMON = asxparser.c \
--              codec-cfg.c \
--              cpudetect.c \
--              edl.c \
--              find_sub.c \
--              m_config.c \
--              m_option.c \
--              m_struct.c \
--              parser-cfg.c \
--              playtree.c \
--              playtreeparser.c \
--              spudec.c \
--              sub_cc.c \
--              subreader.c \
--              vobsub.c \
--
--SRCS_MENCODER = mencoder.c \
--                mp_msg-mencoder.c \
--                $(SRCS_COMMON) \
--                divx4_vbr.c \
--                libvo/aclib.c \
--                libvo/font_load.c \
--                libvo/font_load_ft.c \
--                libvo/osd.c \
--                libvo/sub.c \
--                parser-mecmd.c \
--                xvid_vbr.c \
--
--SRCS_MPLAYER = mplayer.c \
--               mp_msg.c \
--               $(SRCS_COMMON) \
--               mixer.c \
--               parser-mpcmd.c \
--               subopt-helper.c \
-+SRCS =  mplayer.c \
-+        mp_msg.c \
-+        asxparser.c \
-+        codec-cfg.c \
-+        cpudetect.c \
-+        edl.c \
-+        find_sub.c \
-+        m_config.c \
-+        m_option.c \
-+        m_struct.c \
-+        parser-cfg.c \
-+        playtree.c \
-+        playtreeparser.c \
-+        spudec.c \
-+        sub_cc.c \
-+        subreader.c \
-+        vobsub.c \
-+        mixer.c \
-+        parser-mpcmd.c \
-+        subopt-helper.c \
-+
-+ifeq ($(MENCODER),yes)
-+SRCS += mencoder.c \
-+        divx4_vbr.c \
-+        libvo/aclib.c \
-+        libvo/font_load.c \
-+        libvo/font_load_ft.c \
-+        libvo/osd.c \
-+        libvo/sub.c \
-+        parser-mecmd.c \
-+        xvid_vbr.c \
-+
-+endif
- 
- ifeq ($(UNRARLIB),yes)
--SRCS_COMMON += unrarlib.c
-+SRCS += unrarlib.c
+retrieving revision 1.355
+diff -u -r1.355 Makefile
+--- Makefile	26 Mar 2006 21:44:55 -0000	1.355
++++ Makefile	31 Mar 2006 16:44:40 -0000
+@@ -61,8 +61,13 @@
+ SRCS_COMMON += unrarlib.c
  endif
  
 -OBJS_MENCODER = $(SRCS_MENCODER:.c=.o)
 -OBJS_MPLAYER = $(SRCS_MPLAYER:.c=.o)
++SRCS = $(SRCS_COMMON) $(SRCS_MPLAYER)
++
++ifeq ($(MENCODER),yes)
++SRCS += $(SRCS_MENCODER)
++endif
++
 +OBJS = $(SRCS:.c=.o)
  
  VO_LIBS = $(AA_LIB) \
            $(X_LIB) \
-@@ -342,17 +340,19 @@
- libavcodec/libpostproc/libpostproc.so:
- 	$(MAKE) -C libavcodec/libpostproc
+@@ -352,17 +357,19 @@
+ libmenu/libmenu.a:
+ 	$(MAKE) -C libmenu
  
 -MPLAYER_DEP = $(OBJS_MPLAYER) $(COMMON_DEPS)
 +DEP = $(OBJS) $(COMMON_DEPS)
@@ -111,7 +44,7 @@ diff -u -r1.325 Makefile
  
  ifeq ($(VIDIX),yes)
  VIDIX_LIBS = vidix/libvidix.a
-@@ -361,59 +361,54 @@
+@@ -371,70 +378,65 @@
  endif
  
  ifeq ($(TARGET_WIN32),yes)
@@ -175,14 +108,25 @@ diff -u -r1.325 Makefile
  	-L/usr/local/lib/wine -lkernel32
  
 -mplayer.exe.so:	$(MPLAYER_DEP) mplayer.exe.spec.c
--	$(CC) $(CFLAGS) -Wall -shared  -Wl,-rpath,/usr/local/lib -Wl,-Bsymbolic  -o mplayer.exe.so $(OBJS_MPLAYER) mplayer.exe.spec.c libvo/libvo.a libao2/libao2.a $(MENU_LIBS) $(VIDIX_LIBS) $(GUI_LIBS) $(COMMON_LIBS) $(GTK_LIBS) $(VO_LIBS) $(AO_LIBS) $(EXTRA_LIB) $(LIRC_LIB) $(LIRCC_LIB) $(STATIC_LIB) $(ARCH_LIB) -lwine $(MATH_LIB) 
 +mplayer.exe.so:	$(MPLAYER) mplayer.exe.spec.c
-+	$(CC) $(CFLAGS) -Wall -shared  -Wl,-rpath,/usr/local/lib -Wl,-Bsymbolic  -o mplayer.exe.so $(OBJS) mplayer.exe.spec.c libvo/libvo.a libao2/libao2.a $(MENU_LIBS) $(VIDIX_LIBS) $(GUI_LIBS) $(COMMON_LIBS) $(GTK_LIBS) $(VO_LIBS) $(AO_LIBS) $(EXTRA_LIB) $(LIRC_LIB) $(LIRCC_LIB) $(STATIC_LIB) $(ARCH_LIB) -lwine $(MATH_LIB) 
+ 	$(CC) $(CFLAGS) -Wall -shared \
+ 	-Wl,-rpath,/usr/local/lib -Wl,-Bsymbolic \
+-	-o mplayer.exe.so $(OBJS_MPLAYER) mplayer.exe.spec.c \
++	-o mplayer.exe.so $(OBJS) mplayer.exe.spec.c \
+ 	libvo/libvo.a libao2/libao2.a $(MENU_LIBS) $(VIDIX_LIBS) \
+ 	$(GUI_LIBS) $(COMMON_LIBS) $(GTK_LIBS) $(VO_LIBS) \
+ 	$(AO_LIBS) $(EXTRA_LIB) $(LIRC_LIB) $(LIRCC_LIB) \
+ 	$(STATIC_LIB) $(ARCH_LIB) -lwine $(MATH_LIB) \
  
 -mplayer_wine.so:	$(MPLAYER_DEP)
--	$(CC) $(CFLAGS) -shared -Wl,-Bsymbolic -o mplayer_wine.so mplayer_wine.spec.c $(OBJS_MPLAYER) libvo/libvo.a libao2/libao2.a $(MENU_LIBS) $(VIDIX_LIBS) $(GUI_LIBS) $(COMMON_LIBS) $(GTK_LIBS) $(VO_LIBS) $(AO_LIBS) $(EXTRA_LIB) $(LIRC_LIB) $(LIRCC_LIB) $(STATIC_LIB) -lwine $(ARCH_LIB) $(MATH_LIB)
 +mplayer_wine.so:	$(MPLAYER)
-+	$(CC) $(CFLAGS) -shared -Wl,-Bsymbolic -o mplayer_wine.so mplayer_wine.spec.c $(OBJS) libvo/libvo.a libao2/libao2.a $(MENU_LIBS) $(VIDIX_LIBS) $(GUI_LIBS) $(COMMON_LIBS) $(GTK_LIBS) $(VO_LIBS) $(AO_LIBS) $(EXTRA_LIB) $(LIRC_LIB) $(LIRCC_LIB) $(STATIC_LIB) -lwine $(ARCH_LIB) $(MATH_LIB)
+ 	$(CC) $(CFLAGS) -shared -Wl,-Bsymbolic -o mplayer_wine.so \
+-          mplayer_wine.spec.c $(OBJS_MPLAYER) libvo/libvo.a \
++          mplayer_wine.spec.c $(OBJS) libvo/libvo.a \
+ 	  libao2/libao2.a $(MENU_LIBS) $(VIDIX_LIBS) $(GUI_LIBS) \
+ 	  $(COMMON_LIBS) $(GTK_LIBS) $(VO_LIBS) $(AO_LIBS) \
+ 	  $(EXTRA_LIB) $(LIRC_LIB) $(LIRCC_LIB) $(STATIC_LIB) \
+ 	  -lwine $(ARCH_LIB) $(MATH_LIB) \
  
  ifeq ($(MENCODER),yes)
 -LIBS_MENCODER = libmpcodecs/libmpencoders.a \
@@ -204,17 +148,15 @@ diff -u -r1.325 Makefile
  endif
  
  codecs.conf.h: $(PRG_CFG) etc/codecs.conf
-@@ -425,8 +421,7 @@
- # in a recursive "make distclean" and we must wait for this "make distclean" to
- # finish before we can start building new object files.
+@@ -453,6 +455,7 @@
  # help_mp.h is also required by a lot of files, so force generating it early.
--$(MPLAYER_DEP): version.h help_mp.h
--$(MENCODER_DEP): version.h help_mp.h
+ $(MPLAYER_DEP): version.h help_mp.h
+ $(MENCODER_DEP): version.h help_mp.h
 +$(DEP): version.h help_mp.h
  
- $(PRG_CFG): version.h codec-cfg.c codec-cfg.h
- 	$(HOST_CC) $(HOST_CFLAGS) -I. -g codec-cfg.c mp_msg.c -o $(PRG_CFG) -DCODECS2HTML $(EXTRA_LIB) $(EXTRA_INC) $(I18NLIBS)
-@@ -453,7 +448,7 @@
+ $(PRG_CFG): version.h codec-cfg.c codec-cfg.h help_mp.h
+ 	$(HOST_CC) $(HOST_CFLAGS) -I. codec-cfg.c -o $(PRG_CFG) \
+@@ -478,7 +481,7 @@
  		fi ; \
  	done
  ifeq ($(MENCODER),yes)
@@ -223,7 +165,7 @@ diff -u -r1.325 Makefile
  	for i in $(MAN_LANG); do \
  		if test "$$i" = en ; then \
  			ln -sf mplayer.1 $(MANDIR)/man1/mencoder.1 ; \
-@@ -523,7 +518,7 @@
+@@ -550,7 +553,7 @@
  
  depend: help_mp.h
  	./version.sh `$(CC) -dumpversion`
@@ -235,11 +177,11 @@ diff -u -r1.325 Makefile
 Index: cfg-common.h
 ===================================================================
 RCS file: /cvsroot/mplayer/main/cfg-common.h,v
-retrieving revision 1.145
-diff -u -r1.145 cfg-common.h
---- cfg-common.h	13 May 2005 14:45:28 -0000	1.145
-+++ cfg-common.h	29 Jun 2005 22:27:40 -0000
-@@ -346,6 +346,9 @@
+retrieving revision 1.159
+diff -u -r1.159 cfg-common.h
+--- cfg-common.h	26 Mar 2006 11:09:17 -0000	1.159
++++ cfg-common.h	31 Mar 2006 16:44:41 -0000
+@@ -358,6 +358,9 @@
  #endif
  
  #ifdef USE_TV
@@ -249,7 +191,7 @@ diff -u -r1.145 cfg-common.h
  m_option_t tvopts_conf[]={
  	{"on", "-tv on is deprecated, use tv:// instead.\n", CONF_TYPE_PRINT, 0, 0, 0, NULL},
  	{"immediatemode", &tv_param_immediate, CONF_TYPE_INT, CONF_RANGE, 0, 1, NULL},
-@@ -391,6 +394,7 @@
+@@ -403,6 +406,7 @@
  	{NULL, NULL, 0, 0, 0, 0, NULL}
  };
  #endif
@@ -257,7 +199,7 @@ diff -u -r1.145 cfg-common.h
  
  #ifdef HAS_DVBIN_SUPPORT
  #include "libmpdemux/dvbin.h"
-@@ -412,6 +416,9 @@
+@@ -424,6 +428,9 @@
  extern float sws_chr_sharpen;
  extern float sws_lum_sharpen;
  
@@ -267,15 +209,15 @@ diff -u -r1.145 cfg-common.h
  m_option_t scaler_filter_conf[]={
  	{"lgb", &sws_lum_gblur, CONF_TYPE_FLOAT, 0, 0, 100.0, NULL},
  	{"cgb", &sws_chr_gblur, CONF_TYPE_FLOAT, 0, 0, 100.0, NULL},
-@@ -421,6 +428,7 @@
- 	{"cs", &sws_chr_sharpen, CONF_TYPE_FLOAT, 0, 0, 100.0, NULL},
+@@ -433,6 +440,7 @@
+ 	{"cs", &sws_chr_sharpen, CONF_TYPE_FLOAT, 0, -100.0, 100.0, NULL},
  	{NULL, NULL, 0, 0, 0, 0, NULL}
  };
 +#endif
  
  /* VIVO demuxer options: */
  extern int vivo_param_version;
-@@ -433,6 +441,9 @@
+@@ -445,6 +453,9 @@
  extern int vivo_param_vformat;
  extern char *dvd_device, *cdrom_device;
  
@@ -285,7 +227,7 @@ diff -u -r1.145 cfg-common.h
  m_option_t vivoopts_conf[]={
  	{"version", &vivo_param_version, CONF_TYPE_INT, 0, 0, 0, NULL},
  	/* audio options */
-@@ -446,6 +457,7 @@
+@@ -458,6 +469,7 @@
  	{"vformat", &vivo_param_vformat, CONF_TYPE_INT, 0, 0, 0, NULL},
  	{NULL, NULL, 0, 0, 0, 0, NULL}
  };
@@ -293,7 +235,7 @@ diff -u -r1.145 cfg-common.h
  
  extern int    mf_w;
  extern int    mf_h;
-@@ -454,6 +466,9 @@
+@@ -466,6 +478,9 @@
  extern m_obj_settings_t* vf_settings;
  extern m_obj_list_t vf_obj_list;
  
@@ -303,7 +245,7 @@ diff -u -r1.145 cfg-common.h
  m_option_t mfopts_conf[]={
          {"on", "-mf on is deprecated, use mf:// instead.\n", CONF_TYPE_PRINT, 0, 0, 1, NULL},
          {"w", &mf_w, CONF_TYPE_INT, 0, 0, 0, NULL},
-@@ -466,17 +481,26 @@
+@@ -474,17 +489,26 @@
          {"type", &mf_type, CONF_TYPE_STRING, 0, 0, 0, NULL},
          {NULL, NULL, 0, 0, 0, 0, NULL}
  };
@@ -330,7 +272,7 @@ diff -u -r1.145 cfg-common.h
  m_option_t msgl_config[]={
  	{ "all", &mp_msg_level_all, CONF_TYPE_INT, CONF_RANGE, -1, 9, NULL},
  
-@@ -563,6 +587,7 @@
+@@ -573,6 +597,7 @@
          "   muxer      - muxer layer\n"
          "\n", CONF_TYPE_PRINT, CONF_NOCFG, 0, 0, NULL},
  };
@@ -341,10 +283,10 @@ diff -u -r1.145 cfg-common.h
 Index: cfg-mencoder.h
 ===================================================================
 RCS file: /cvsroot/mplayer/main/cfg-mencoder.h,v
-retrieving revision 1.100
-diff -u -r1.100 cfg-mencoder.h
---- cfg-mencoder.h	19 Jun 2005 09:12:42 -0000	1.100
-+++ cfg-mencoder.h	29 Jun 2005 22:27:40 -0000
+retrieving revision 1.107
+diff -u -r1.107 cfg-mencoder.h
+--- cfg-mencoder.h	19 Feb 2006 09:34:36 -0000	1.107
++++ cfg-mencoder.h	31 Mar 2006 16:44:43 -0000
 @@ -3,7 +3,9 @@
   * config for cfgparser
   */
@@ -358,11 +300,11 @@ diff -u -r1.100 cfg-mencoder.h
 Index: mencoder.c
 ===================================================================
 RCS file: /cvsroot/mplayer/main/mencoder.c,v
-retrieving revision 1.290
-diff -u -r1.290 mencoder.c
---- mencoder.c	27 Jun 2005 19:10:11 -0000	1.290
-+++ mencoder.c	29 Jun 2005 22:27:40 -0000
-@@ -72,7 +72,7 @@
+retrieving revision 1.346
+diff -u -r1.346 mencoder.c
+--- mencoder.c	24 Mar 2006 08:12:01 -0000	1.346
++++ mencoder.c	31 Mar 2006 16:44:46 -0000
+@@ -74,7 +74,7 @@
  
  #include "osdep/timer.h"
  
@@ -371,7 +313,7 @@ diff -u -r1.290 mencoder.c
  
  #ifdef USE_LIBAVCODEC
  #ifdef USE_LIBAVCODEC_SO
-@@ -83,30 +83,27 @@
+@@ -85,30 +85,27 @@
  #endif
  
  #include "libmpcodecs/ae.h"
@@ -412,7 +354,7 @@ diff -u -r1.290 mencoder.c
  static char* spudec_ifo=NULL;
  
  static char** audio_codec_list=NULL;  // override audio codec
-@@ -124,15 +121,15 @@
+@@ -130,15 +127,15 @@
  //void resync_audio_stream(sh_audio_t *sh_audio){}
  
  extern int verbose; // must be global!
@@ -431,10 +373,10 @@ diff -u -r1.290 mencoder.c
 -int benchmark=0;
 +extern int benchmark;
  
- #ifdef WIN32
- char * proc_priority=NULL;
-@@ -149,10 +146,10 @@
- static float audio_delay=0.0;
+ extern int mp_msg_levels[MSGT_MAX];
+ extern int mp_msg_level_all;
+@@ -159,10 +156,10 @@
+ static int ignore_start=0;
  static int audio_density=2;
  
 -float force_fps=0;
@@ -446,7 +388,7 @@ diff -u -r1.290 mencoder.c
  
  static int force_srate=0;
  static int audio_output_format=0;
-@@ -174,21 +171,21 @@
+@@ -185,21 +182,21 @@
  #include "libvo/sub.h"
  
  // sub:
@@ -477,7 +419,7 @@ diff -u -r1.290 mencoder.c
  #endif
  
  int auto_expand=1;
-@@ -266,7 +263,7 @@
+@@ -297,7 +294,7 @@
      exit(level);
  }
  
@@ -485,8 +427,8 @@ diff -u -r1.290 mencoder.c
 +void me_parse_cfgfiles( m_config_t* conf )
  {
    char *conffile;
-   if ((conffile = get_path("mencoder")) == NULL) {
-@@ -327,7 +324,7 @@
+   if ((conffile = get_path("mencoder.conf")) == NULL) {
+@@ -358,7 +355,7 @@
  
  extern void print_wave_header(WAVEFORMATEX *h);
  
@@ -495,15 +437,15 @@ diff -u -r1.290 mencoder.c
  
  stream_t* stream=NULL;
  demuxer_t* demuxer=NULL;
-@@ -372,6 +369,7 @@
+@@ -403,6 +400,7 @@
  
  audio_encoding_params_t aparams;
  audio_encoder_t *aencoder = NULL;
 + sub_auto = 0;
  
    mp_msg_init();
-   mp_msg_set_level(MSGL_STATUS);
-@@ -435,7 +433,7 @@
+   mp_msg(MSGT_CPLAYER,MSGL_INFO, "MEncoder " VERSION " (C) 2000-2006 MPlayer Team\n");
+@@ -461,7 +459,7 @@
  
   mconfig = m_config_new();
   m_config_register_options(mconfig,mencoder_opts);
@@ -515,20 +457,20 @@ diff -u -r1.290 mencoder.c
 Index: mplayer.c
 ===================================================================
 RCS file: /cvsroot/mplayer/main/mplayer.c,v
-retrieving revision 1.850
-diff -u -r1.850 mplayer.c
---- mplayer.c	24 Jun 2005 10:50:52 -0000	1.850
-+++ mplayer.c	29 Jun 2005 22:27:42 -0000
-@@ -1001,7 +1001,7 @@
+retrieving revision 1.923
+diff -u -r1.923 mplayer.c
+--- mplayer.c	24 Mar 2006 20:42:23 -0000	1.923
++++ mplayer.c	31 Mar 2006 16:44:56 -0000
+@@ -2154,7 +2154,7 @@
+     return 1;
  }
- #endif
  
 -int main(int argc,char* argv[]){
 +int mp_main(int argc,char* argv[]){
  
  
  char * mem_ptr;
-@@ -4299,3 +4299,14 @@
+@@ -4990,3 +4990,14 @@
  
  return 1;
  }
