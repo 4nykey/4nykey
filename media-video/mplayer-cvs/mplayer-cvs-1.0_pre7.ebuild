@@ -8,7 +8,7 @@ inherit eutils flag-o-matic linux-mod cvs
 IUSE="3dfx 3dnow 3dnowext aac aalib alsa altivec amr arts avi bidi bl cpudetection
 custom-cflags debug dga dirac doc dts dvb cdparanoia directfb dv dvd dvdread
 edl encode esd fbcon gif ggi gtk i8x0 ipv6 jack joystick jpeg libcaca lirc live lzo
-mad matroska matrox mmx mmxext musepack mythtv nas nls nvidia vorbis opengl oss
+mad matroska matrox mmx mmxext musepack mythtv nas nvidia vorbis opengl oss
 png real rtc samba sdl speex sse sse2 svga tga theora truetype v4l v4l2 X x264
 xanim xinerama xmms xv xvid xvmc gtk2"
 
@@ -67,7 +67,6 @@ RDEPEND="xvid? ( >=media-libs/xvid-0.9.0 )
 	lzo? ( dev-libs/lzo )
 	mad? ( media-libs/libmad )
 	nas? ( media-libs/nas )
-	nls? ( sys-devel/gettext )
 	opengl? ( virtual/opengl )
 	png? ( media-libs/libpng )
 	samba? ( >=net-fs/samba-2.2.8a )
@@ -466,7 +465,6 @@ src_compile() {
 	myconf="${myconf} $(use_enable mmx)"
 	myconf="${myconf} $(use_enable mmxext mmx2)"
 	myconf="${myconf} $(use_enable debug)"
-	myconf="${myconf} $(use_enable nls i18n)"
 
 	# mplayer now contains SIMD assembler code for amd64
 	# AMD64 Team decided to hardenable SIMD assembler for all users
