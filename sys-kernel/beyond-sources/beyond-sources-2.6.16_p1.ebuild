@@ -11,20 +11,20 @@ detect_version
 
 # A few hacks to set ck version via _p instead of -r
 MY_PV="$(replace_all_version_separators . ${PVR/r/})"
-EXTRAVERSION="-$(get_version_component_range 4- ${MY_PV/p/archck})"
+EXTRAVERSION="-$(get_version_component_range 4- ${MY_PV/p/beyond})"
 KV_FULL=${OKV}${EXTRAVERSION}
 detect_version
 
 IUSE=""
 
-ARCHCK_PATCH="patch-${KV_FULL}.bz2"
-UNIPATCH_LIST="${DISTDIR}/${ARCHCK_PATCH}"
+TEH_PATCH="patch-${KV_FULL}.bz2"
+UNIPATCH_LIST="${DISTDIR}/${TEH_PATCH}"
 
-DESCRIPTION="ArchCK is a derivation of the CK patchset"
-HOMEPAGE="http://iphitus.loudas.com/archck.php"
-SRC_URI="${KERNEL_URI} http://iphitus.loudas.com/arch/ck/${OKV}/${ARCHCK_PATCH}"
+DESCRIPTION="Beyond is a derivation of the CK patchset"
+HOMEPAGE="http://iphitus.loudas.com/beyond.php"
+SRC_URI="${KERNEL_URI} http://iphitus.loudas.com/beyond/${OKV}/${TEH_PATCH}"
 
-KEYWORDS="~x86 ~amd64 ~ppc64"
+KEYWORDS="~x86"
 
 pkg_postinst() {
 	postinst_sources
