@@ -1,9 +1,0 @@
-# ChangeLog for mail-client/evolution
-# Copyright 2000-2005 Gentoo Technologies, Inc.; Distributed under the GPL v2
-# $Header: $
-
-10 Aug 2005; Hendrik Brandt <heb@gnome-de.org> mail-notification-2.0.ebuild:
-
-        * initial ebuild
-
-	
