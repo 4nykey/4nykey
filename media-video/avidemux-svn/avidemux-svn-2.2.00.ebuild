@@ -45,6 +45,7 @@ filter-flags "-fno-default-inline"
 filter-flags "-funroll-loops"
 filter-flags "-funroll-all-loops"
 filter-flags "-fforce-addr"
+filter-ldflags "-Wl,--as-needed"
 
 src_unpack() {
 	subversion_src_unpack

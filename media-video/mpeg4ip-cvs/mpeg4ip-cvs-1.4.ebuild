@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /home/cvsroot/gentoo-x86/media-video/mpeg4ip/mpeg4ip-1.0.ebuild,v 1.5 2004/02/27 13:38:34 tester Exp $
 
-inherit eutils cvs
+inherit cvs autotools
 
 DESCRIPTION="MPEG 4 implementation library"
 
@@ -46,10 +46,9 @@ src_unpack() {
 	epatch ${FILESDIR}/${PN}.patch
 	epatch ${FILESDIR}/no_isompeg4.diff
 
-	sed -i '/set/d; /configure/d' cvs_bootstrap
 	sed -i 's:fexceptions :fexceptions -fpermissive :' \
 		server/mp4live/gui/Makefile.am
-	WANT_AUTOMAKE=1.6 ./cvs_bootstrap > /dev/null || die "bootstrap failed"
+	eautoreconf || die
 }
 
 src_compile() {
