@@ -17,6 +17,7 @@ SVGV=1.9.17
 NBV=540
 WBV=520
 NAV=20060306
+SKINDIR="/usr/share/mplayer/skins/"
 
 S="${WORKDIR}/main"
 SRC_URI="mirror://mplayer/releases/fonts/font-arial-iso-8859-1.tar.bz2
@@ -138,6 +139,14 @@ ecpu_check() {
 				ewarn "enabled.  If either is the case, set CROSSCOMPILE to 1 to disable this warning."
 			fi
 		done
+	fi
+}
+
+teh_conf() {
+	# avoid using --enable-xxx options,
+	# except {gui,debug} and those, disabled by default
+	if ! use $1; then
+		myconf="${myconf} --disable-$( [ -n "$2" ] && echo $2 || echo $1)"
 	fi
 }
 
@@ -301,29 +310,28 @@ src_compile() {
 	#Optional features#
 	###############
 	myconf="${myconf} $(use_enable cpudetection runtime-cpudetection)"
-	myconf="${myconf} $(use_enable bidi fribidi)"
-	myconf="${myconf} $(use_enable cdparanoia)"
+	teh_conf bidi fribidi
+	teh_conf cdparanoia
 	if use dvd; then
-		myconf="${myconf} $(use_enable dvdread) $(use_enable !dvdread mpdvdkit)"
+		teh_conf dvdread
 	else
 		myconf="${myconf} --disable-dvdread --disable-mpdvdkit"
 	fi
-	myconf="${myconf} $(use_enable edl)"
+	teh_conf edl
 
 	if use encode ; then
-		myconf="${myconf} --enable-mencoder $(use_enable dv libdv)"
+		teh_conf dv libdv
 	else
 		myconf="${myconf} --disable-mencoder --disable-libdv"
 	fi
-
-		myconf="${myconf} $(use_enable gtk gui)"
-		use gtk && use !gtk2 && myconf="${myconf} --enable-old-gtk"
 
 	if use !gtk && use !X && use !xv && use !xinerama; then
 		myconf="${myconf} --disable-gui --disable-x11 --disable-xv --disable-xmga --disable-xinerama --disable-vm --disable-xvmc"
 	else
 		#note we ain't touching --enable-vm.  That should be locked down in the future.
-		myconf="${myconf} --enable-x11 $(use_enable xinerama) $(use_enable xv) $(use_enable gtk gui)"
+		myconf="${myconf} $(use_enable gtk gui)"
+		teh_conf xinerama
+		teh_conf xv
 		use !gtk2 && myconf="${myconf} --enable-old-gtk"
 	fi
 
@@ -334,87 +342,81 @@ src_compile() {
 	use !dga && myconf="${myconf} --disable-dga"
 
 	# disable png *only* if gtk && png aren't on
-	if use png || use gtk; then
-		myconf="${myconf} --enable-png"
-	else
+	if ! use png || ! use gtk; then
 		myconf="${myconf} --disable-png"
 	fi
-	myconf="${myconf} $(use_enable ipv6 inet6)"
+	teh_conf ipv6 inet6
 	myconf="${myconf} $(use_enable joystick)"
-	myconf="${myconf} $(use_enable lirc)"
-	myconf="${myconf} $(use_enable live)"
-	myconf="${myconf} $(use_enable rtc)"
-	myconf="${myconf} $(use_enable samba smb)"
-	myconf="${myconf} $(use_enable truetype freetype)"
-	myconf="${myconf} $(use_enable v4l tv-v4l)"
-	myconf="${myconf} $(use_enable v4l2 tv-v4l2)"
+	teh_conf lirc
+	teh_conf live
+	teh_conf rtc
+	teh_conf samba smb
+	teh_conf truetype freetype
+	teh_conf v4l tv-v4l
+	teh_conf v4l2 tv-v4l2
 	use jack || myconf="${myconf} --disable-jack"
 
 	#########
 	# Codecs #
 	########
-	myconf="${myconf} $(use_enable gif)"
-	myconf="${myconf} $(use_enable jpeg)"
-	#myconf="${myconf} $(use_enable ladspa)"
-	myconf="${myconf} $(use_enable dts libdts)"
-	myconf="${myconf} $(use_enable lzo liblzo)"
-	myconf="${myconf} $(use_enable matroska internal-matroska)"
-	myconf="${myconf} $(use_enable aac external-faad) $(use_enable !aac internal-faad)"
-	if use !aac || use !encode; then myconf="${myconf} --disable-faac"; fi
-	myconf="${myconf} $(use_enable vorbis)"
-	myconf="${myconf} $(use_enable speex)"
-	myconf="${myconf} $(use_enable theora)"
-	myconf="${myconf} $(use_enable xmms)"
-	myconf="${myconf} $(use_enable xvid)"
-	myconf="${myconf} $(use_enable x264)"
-	use x86 && myconf="${myconf} $(use_enable real)"
-	use x86 && myconf="${myconf} $(use_enable avi win32)"
-	myconf="${myconf} $(use_enable amr amr_nb) $(use_enable amr amr_wb) --disable-amr_nb-fixed"
+	teh_conf gif
+	teh_conf jpeg
+	#teh_conf ladspa
+	teh_conf dts libdts
+	teh_conf lzo liblzo
+	teh_conf matroska internal-matroska
+	teh_conf aac external-faad
+	if use aac; then
+		myconf="${myconf} --disable-internal-faad"
+	else
+		use !encode && myconf="${myconf} --disable-faac"
+	fi
+	teh_conf vorbis
+	teh_conf speex
+	teh_conf theora
+	use xmms && myconf="${myconf} --enable-xmms"
+	teh_conf xvid
+	teh_conf x264
+	use x86 && teh_conf real
+	use x86 && teh_conf avi win32
+	teh_conf amr amr_nb
+	teh_conf amr amr_wb
+	myconf="${myconf} --disable-amr_nb-fixed"
 
-	myconf="${myconf} $(use_enable musepack)"
-	use dirac && myconf="${myconf} --enable-dirac"
+	teh_conf musepack
 
 	#############
 	# Video Output #
 	#############
-	myconf="${myconf} $(use_enable 3dfx)"
 	if use 3dfx; then
-		myconf="${myconf} --enable-tdfxvid"
+		myconf="${myconf} --enable-3dfx --enable-tdfxvid"
+		use fbcon && myconf="${myconf} --enable-tdfxfb"
 	else
 		myconf="${myconf} --disable-tdfxvid"
 	fi
-	if use fbcon && use 3dfx; then
-		myconf="${myconf} --enable-tdfxfb"
-	else
-		myconf="${myconf} --disable-tdfxfb"
-	fi
 
 	if use dvb ; then
-		myconf="${myconf} --enable-dvbhead --with-dvbincdir=/usr/src/linux/include"
+		myconf="${myconf} --with-dvbincdir=/usr/src/linux/include"
 	else
 		myconf="${myconf} --disable-dvbhead"
 	fi
 
-	myconf="${myconf} $(use_enable aalib aa)"
-	myconf="${myconf} $(use_enable directfb)"
-	myconf="${myconf} $(use_enable fbcon fbdev)"
-	myconf="${myconf} $(use_enable ggi)"
-	myconf="${myconf} $(use_enable libcaca caca)"
+	teh_conf aalib aa
+	teh_conf directfb
+	teh_conf fbcon fbdev
+	teh_conf ggi
+	teh_conf libcaca caca
 	if use matrox && use X; then
-		myconf="${myconf} $(use_enable matrox xmga)"
+		teh_conf matrox xmga
 	fi
-	myconf="${myconf} $(use_enable matrox mga)"
-	myconf="${myconf} $(use_enable opengl gl)"
-	myconf="${myconf} $(use_enable sdl)"
+	teh_conf matrox mga
+	teh_conf opengl gl
+	teh_conf sdl
 
-	if use svga
-	then
-		myconf="${myconf} --enable-svga"
-	else
-		myconf="${myconf} --disable-svga --disable-vidix"
-	fi
+	teh_conf svga
+	teh_conf svga vidix
 
-	myconf="${myconf} $(use_enable tga)"
+	teh_conf tga
 
 	( use xvmc && use nvidia ) \
 		&& myconf="${myconf} --enable-xvmc --with-xvmclib=XvMCNVIDIA"
@@ -448,22 +450,22 @@ src_compile() {
 	#############
 	# Audio Output #
 	#############
-	myconf="${myconf} $(use_enable alsa)"
-	myconf="${myconf} $(use_enable arts)"
-	myconf="${myconf} $(use_enable esd)"
-	myconf="${myconf} $(use_enable mad)"
-	myconf="${myconf} $(use_enable nas)"
-	myconf="${myconf} $(use_enable oss ossaudio)"
+	teh_conf alsa
+	teh_conf arts
+	teh_conf esd
+	teh_conf mad
+	teh_conf nas
+	teh_conf oss ossaudio
 
 	#################
 	# Advanced Options #
 	#################
-	myconf="${myconf} $(use_enable 3dnow)"
-	myconf="${myconf} $(use_enable 3dnowext 3dnowex)";
-	myconf="${myconf} $(use_enable sse)"
-	myconf="${myconf} $(use_enable sse2)"
-	myconf="${myconf} $(use_enable mmx)"
-	myconf="${myconf} $(use_enable mmxext mmx2)"
+	teh_conf 3dnow
+	teh_conf 3dnowext 3dnowex;
+	teh_conf sse
+	teh_conf sse2
+	teh_conf mmx
+	teh_conf mmxext mmx2
 	myconf="${myconf} $(use_enable debug)"
 
 	# mplayer now contains SIMD assembler code for amd64
@@ -477,7 +479,7 @@ src_compile() {
 	then
 		myconf="${myconf} --disable-altivec"
 	else
-		myconf="${myconf} $(use_enable altivec)"
+		teh_conf altivec
 		use altivec && append-flags -maltivec -mabi=altivec
 	fi
 
@@ -506,10 +508,8 @@ src_compile() {
 		--prefix=/usr \
 		--confdir=/usr/share/mplayer \
 		--datadir=/usr/share/mplayer \
-		--disable-runtime-cpudetection \
 		--enable-largefiles \
 		--enable-menu \
-		--enable-network --enable-ftp \
 		--with-reallibdir=${REALLIBDIR} \
 		--with-x11incdir=/usr/X11R6/include \
 		--charset=${CHARSET} \
@@ -560,17 +560,12 @@ src_install() {
 
 	# Install the default Skin and Gnome menu entry
 	if use gtk; then
-		dodir /usr/share/mplayer/Skin
-		cp -r ${WORKDIR}/Blue ${D}/usr/share/mplayer/Skin/default || die
+		if [ -d "${ROOT}${SKINDIR}default" ]; then dodir ${SKINDIR}; fi
+		cp -r ${WORKDIR}/Blue ${D}${SKINDIR}default || die
 
 		# Fix the symlink
 		rm -rf ${D}/usr/bin/gmplayer
 		dosym mplayer /usr/bin/gmplayer
-
-		insinto /usr/share/pixmaps
-		newins ${S}/Gui/mplayer/pixmaps/logo.xpm mplayer.xpm
-		insinto /usr/share/applications
-		doins ${FILESDIR}/mplayer.desktop
 	fi
 
 	dodir /usr/share/mplayer/fonts
@@ -603,9 +598,9 @@ src_install() {
 
 pkg_preinst() {
 
-	if [ -d "${ROOT}/usr/share/mplayer/Skin/default" ]
+	if [ -d "${ROOT}${SKINDIR}default" ]
 	then
-		rm -rf ${ROOT}/usr/share/mplayer/Skin/default
+		rm -rf ${ROOT}${SKINDIR}default
 	fi
 }
 

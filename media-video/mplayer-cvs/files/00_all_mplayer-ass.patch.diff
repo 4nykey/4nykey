@@ -1,0 +1,3245 @@
+Index: libmpcodecs/vf_ass.c
+===================================================================
+--- libmpcodecs/vf_ass.c	(.../branches/upstream)	(revision 0)
++++ libmpcodecs/vf_ass.c	(.../trunk)	(revision 219)
+@@ -0,0 +1,237 @@
++#include "config.h"
++
++#ifdef HAVE_FREETYPE
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <assert.h>
++
++#include "config.h"
++#include "mp_msg.h"
++#include "cpudetect.h"
++
++#include "img_format.h"
++#include "mp_image.h"
++#include "mp_msg.h"
++#include "vf.h"
++
++//#include "libvo/fastmemcpy.h"
++
++#include "libsub/ass_render.h"
++
++
++
++
++
++
++/* external */
++extern int verbose;
++
++/* private data */
++struct vf_priv_s {
++
++	struct ass_priv_s ass_priv;
++	int forced_tid;
++	int jabba;
++};
++
++static inline void *my_memcpy_pic(void * dst, void * src, int bytesPerLine, int height, int dstStride, int srcStride)
++{
++	int i;
++	void *retval=dst;
++
++	for(i=0; i<height; i++)
++	{
++		memcpy(dst, src, bytesPerLine);
++		src+= srcStride;
++		dst+= dstStride;
++	}
++
++	return retval;
++}
++/*
++static int config(struct vf_instance_s* vf,
++                  int width, int height, int d_width, int d_height,
++	          unsigned int flags, unsigned int outfmt)
++{
++	return vf_next_config(vf, width, height, d_width, d_height, flags, outfmt);
++}
++*/
++
++static mp_image_t* init_frame(struct vf_instance_s* vf, mp_image_t *mpi, ass_track_data_t* track)
++{
++	int               by;
++	int               dw;
++
++	mp_image_t* dmpi = vf_get_image(vf->next, mpi->imgfmt, MP_IMGTYPE_TEMP,
++			MP_IMGFLAG_ACCEPT_STRIDE | MP_IMGFLAG_PREFER_ALIGNED_STRIDE,
++			mpi->w, mpi->h);
++
++	/* bytes x pixel & bytes x line */
++	if (mpi->flags & MP_IMGFLAG_PLANAR) {
++		by = 1;
++		dw = mpi->w;
++	}
++	else {
++		by = (mpi->bpp + 7) / 8;
++		dw = mpi->w * by;
++	}
++
++	/* Copy image */
++	my_memcpy_pic( dmpi->planes[0],
++			mpi->planes[0],
++			dw,
++			mpi->h,
++			dmpi->stride[0],
++			mpi->stride[0]);
++
++	if (mpi->flags & MP_IMGFLAG_PLANAR) {
++		my_memcpy_pic( dmpi->planes[1],
++				mpi->planes[1],
++				mpi->w >> mpi->chroma_x_shift,
++				mpi->h >> mpi->chroma_y_shift,
++				dmpi->stride[1],
++				mpi->stride[1]);
++		my_memcpy_pic( dmpi->planes[2],
++				mpi->planes[2],
++				mpi->w >> mpi->chroma_x_shift,
++				mpi->h >> mpi->chroma_y_shift,
++				dmpi->stride[2],
++				mpi->stride[2]);
++	}
++	
++	ass_start_frame(&(vf->priv->ass_priv), dmpi, track);
++	
++	return dmpi;
++}
++
++static mp_image_t* render_frame(struct vf_instance_s* vf, mp_image_t *mpi)
++{
++	struct vf_priv_s* priv = vf->priv;
++	
++	int tid = priv->forced_tid;
++	if (tid < 0)
++		tid = ass_current_track;
++	if (tid < 0)
++		return mpi; // nothing to draw
++
++	ass_track_data_t* track = ass_tracks_info + tid;
++
++	mp_image_t* dmpi = 0;
++	int frame_initialized = 0;
++	int i;
++	for (i = track->n_events - 1; i >= 0; --i) { // this way overlapping subtitles almost always pop up in the right order
++		ass_event_t* event = track->events + i;
++		if ( (event->Start <= ass_current_timecode) && (ass_current_timecode <= (event->Start + event->Duration)) ) {
++			if (!frame_initialized) {
++				dmpi = init_frame(vf, mpi, track);
++				frame_initialized = 1;
++			}
++			ass_render_event(event);
++		}
++	}
++	
++	if (frame_initialized) {
++		ass_end_frame();
++		return dmpi;
++	} else
++		return mpi; // unchanged image
++}
++
++/* Filter handler */
++static int put_image(struct vf_instance_s* vf, mp_image_t *mpi, double pts)
++{
++	mp_image_t        *dmpi;
++
++	dmpi = render_frame(vf, mpi);
++
++	return vf_next_put_image(vf, dmpi, pts);
++}
++
++static void uninit(struct vf_instance_s* vf)
++{
++	/* free local data */
++	free(vf->priv);
++}
++#if 0
++/* rgb/bgr 15->32 supported & some Yxxx */
++static int query_format(struct vf_instance_s* vf, unsigned int fmt)
++{
++	switch (fmt) {
++		/* rgb 15 -> 32 bit */
++		case IMGFMT_RGB15:
++		case IMGFMT_RGB16:
++		case IMGFMT_RGB24:
++		case IMGFMT_RGB32:
++			/* bgr 15 -> 32 bit */
++		case IMGFMT_BGR15:
++		case IMGFMT_BGR16:
++		case IMGFMT_BGR24:
++		case IMGFMT_BGR32:
++			/* Various Yxxx Formats */
++		case IMGFMT_444P:
++		case IMGFMT_422P:
++		case IMGFMT_411P:
++		case IMGFMT_YUY2:
++		case IMGFMT_YV12:
++		case IMGFMT_I420:
++		case IMGFMT_YVU9:
++		case IMGFMT_IF09:
++		case IMGFMT_IYUV:
++			return vf_next_query_format(vf, fmt);
++	}
++	return 0;
++}
++#endif
++static int
++query_format(struct vf_instance_s* vf, unsigned int fmt){
++	if(fmt==IMGFMT_YV12) return vf_next_query_format(vf, fmt);
++	return 0;
++}
++
++extern int sub_visibility;
++
++/* Main entry funct for the filter */
++static int open(vf_instance_t *vf, char* args)
++{
++	struct vf_priv_s *p;
++	int rc;
++	vf->put_image    = put_image;
++	vf->query_format = query_format;
++	//    vf->config       = config;
++	vf->uninit       = uninit;
++	vf->default_reqs = VFCAP_ACCEPT_STRIDE;
++	/* Private data */
++	vf->priv = p = calloc(1, sizeof(struct vf_priv_s));
++	if (p == NULL) {
++		return(0);
++	}
++	
++	rc = ass_init(&(p->ass_priv));
++	if (!rc)
++		return 0;
++	
++	if (args) {
++		vf->priv->forced_tid = ass_read_file(args);
++	} else {
++		vf->priv->forced_tid = -1;
++	}
++
++	if (vf->priv->forced_tid >= 0)
++		sub_visibility = 0;
++	
++	return 1;
++}
++
++vf_info_t vf_info_ass = {
++	"Render ASS/SSA subtitles",
++	"ass",
++	"Evgeniy Stepanov",
++	"",
++	open,
++	NULL
++};
++
++#endif // HAVE_FREETYPE
++
+Index: libmpcodecs/Makefile
+===================================================================
+--- libmpcodecs/Makefile	(.../branches/upstream)	(revision 219)
++++ libmpcodecs/Makefile	(.../trunk)	(revision 219)
+@@ -173,6 +173,10 @@
+ VFILTER_SRCS += $(VFILTER_LAVC_SRCS)
+ endif
+ 
++ifeq ($(FREETYPE),yes)
++VFILTER_SRCS +=	vf_ass.c
++endif
++
+ ENCODER_SRCS=ae.c \
+              ae_pcm.c \
+              ve.c \
+@@ -275,6 +279,7 @@
+           $(X264_INC) \
+           $(XVID_INC) \
+           -D_GNU_SOURCE \
++          $(FREETYPE_INC)
+ 
+ .SUFFIXES: .c .o
+ 
+Index: libmpcodecs/vf.c
+===================================================================
+--- libmpcodecs/vf.c	(.../branches/upstream)	(revision 219)
++++ libmpcodecs/vf.c	(.../trunk)	(revision 219)
+@@ -100,6 +100,9 @@
+ extern vf_info_t vf_info_harddup;
+ extern vf_info_t vf_info_softskip;
+ extern vf_info_t vf_info_screenshot;
++#ifdef HAVE_FREETYPE
++extern vf_info_t vf_info_ass;
++#endif
+ 
+ // list of available filters:
+ static vf_info_t* filter_list[]={
+@@ -191,6 +194,9 @@
+ #ifdef HAVE_PNG
+     &vf_info_screenshot,
+ #endif
++#ifdef HAVE_FREETYPE
++    &vf_info_ass,
++#endif
+     NULL
+ };
+ 
+Index: Makefile
+===================================================================
+--- Makefile	(.../branches/upstream)	(revision 219)
++++ Makefile	(.../trunk)	(revision 219)
+@@ -111,6 +111,7 @@
+               $(DS_LIB) \
+               libaf/libaf.a \
+               libmpdemux/libmpdemux.a \
++              libsub/libsub.a \
+               input/libinput.a \
+               postproc/libswscale.a \
+               osdep/libosdep.a \
+@@ -158,7 +159,8 @@
+ CODEC_LIBS += $(FAAC_LIB)
+ endif
+ 
+-PARTS = libmpdemux \
++PARTS = libsub \
++        libmpdemux \
+         libmpcodecs \
+         libavutil \
+         libavcodec \
+@@ -218,6 +220,7 @@
+               $(AV_DEP) \
+               libmpdemux/libmpdemux.a \
+               libmpcodecs/libmpcodecs.a \
++              libsub/libsub.a \
+               libao2/libao2.a \
+               osdep/libosdep.a \
+               postproc/libswscale.a \
+@@ -280,6 +283,9 @@
+ libfame/libfame.a:
+ 	$(MAKE) -C libfame
+ 
++libsub/libsub.a:
++	$(MAKE) -C libsub
++
+ libmpdemux/libmpdemux.a:
+ 	$(MAKE) -C libmpdemux
+ 
+Index: libsub/ass_cache.h
+===================================================================
+--- libsub/ass_cache.h	(.../branches/upstream)	(revision 0)
++++ libsub/ass_cache.h	(.../trunk)	(revision 219)
+@@ -0,0 +1,47 @@
++#ifndef __ASS_CACHE_H__
++#define __ASS_CACHE_H__
++
++#include <ft2build.h>
++#include FT_FREETYPE_H
++#include FT_STROKER_H
++#include FT_GLYPH_H
++
++// font cache
++typedef struct face_desc_s {
++	char* family;
++	char bold;
++	char italic;
++} face_desc_t;
++
++int ass_new_face(FT_Library library, void* fontconfig_priv, face_desc_t* desc, /*out*/ FT_Face* face);
++
++
++// describes a glyph; glyphs with equivalents structs are considered identical
++typedef struct glyph_hash_key_s {
++	char bitmap; // bool : true = bitmap, false = outline
++	FT_Face face;
++	int size; // font size
++	int index; // glyph index in the face
++	unsigned outline; // 16.16 fixed point value
++	char bold; // bool, really
++	char italic; // the same
++
++	// the following affects bitmap glyphs only
++	unsigned scale_x, scale_y; // 16.16
++	int angle; // signed 16.16
++	
++//	FT_Vector advance;
++} glyph_hash_key_t;
++
++typedef struct glyph_hash_val_s {
++	FT_Glyph glyph; // the actual glyphs
++	FT_Glyph outline_glyph;
++	FT_BBox bbox_scaled; // bbox after scaling, but before rotation
++} glyph_hash_val_t;
++
++void cache_add_glyph(glyph_hash_key_t* key, glyph_hash_val_t* val);
++glyph_hash_val_t* cache_find_glyph(glyph_hash_key_t* key);
++
++
++#endif
++
+Index: libsub/ass_types.h
+===================================================================
+--- libsub/ass_types.h	(.../branches/upstream)	(revision 0)
++++ libsub/ass_types.h	(.../trunk)	(revision 219)
+@@ -0,0 +1,83 @@
++#ifndef __ASS_TYPES_H__
++#define __ASS_TYPES_H__
++
++#define VALIGN_SUB 0
++#define VALIGN_CENTER 8
++#define VALIGN_TOP 4
++#define HALIGN_LEFT 1
++#define HALIGN_CENTER 2
++#define HALIGN_RIGHT 3
++
++typedef struct ass_style_s {
++	char* Name;
++        char* FontName;
++        int FontSize;
++        unsigned PrimaryColour;
++        unsigned SecondaryColour;
++        unsigned OutlineColour;
++        unsigned BackColour;
++        int Bold;
++        int Italic;
++	int Underline;
++	int StrikeOut;
++	double ScaleX;
++	double ScaleY;
++	int Spacing;
++	int Angle;
++        int BorderStyle;
++        double Outline;
++        double Shadow;
++        int Alignment;
++        int MarginL;
++        int MarginR;
++        int MarginV;
++//        int AlphaLevel;
++        int Encoding;
++} ass_style_t;
++
++typedef struct ass_event_s {
++	unsigned long long Start;
++	unsigned long long Duration;
++
++	int ReadOrder;
++	int Layer;
++	int Style;
++	char* Name;
++	int MarginL;
++	int MarginR;
++	int MarginV;
++	char* Effect;
++	char* Text;
++} ass_event_t;
++
++
++typedef struct ass_track_data_s {
++	char my_track; // bool, is this an ASS/SSA track ?
++	
++	int n_styles; // amount used
++	int max_styles; // amount allocated
++	int n_events;
++	int max_events;
++	ass_style_t* styles;
++	ass_event_t* events;
++
++	char* style_format;
++	char* event_format;
++
++	enum {TRACK_TYPE_ASS, TRACK_TYPE_SSA} track_type;
++	int PlayResX;
++	int PlayResY;
++	double Timer;
++	int default_style;
++} ass_track_data_t;
++
++#define ASS_MAX_TRACKS 50
++#define ASS_MAX_STYLES 20
++#define ASS_MAX_EVENTS 1000
++
++extern ass_track_data_t ass_tracks_info[ASS_MAX_TRACKS];
++extern int ass_current_track;
++extern unsigned long long ass_current_timecode;
++
++#endif
++
+Index: libsub/ass_fontconfig.c
+===================================================================
+--- libsub/ass_fontconfig.c	(.../branches/upstream)	(revision 0)
++++ libsub/ass_fontconfig.c	(.../trunk)	(revision 219)
+@@ -0,0 +1,156 @@
++#include "config.h"
++
++#ifdef HAVE_FREETYPE
++
++#include <stdlib.h>
++#include <stdio.h>
++#include <assert.h>
++#include <string.h>
++
++#include "mp_msg.h"
++#include "ass_fontconfig.h"
++#include "ass.h"
++#include "ass_types.h"
++
++#ifdef HAVE_FONTCONFIG
++#include <fontconfig/fontconfig.h>
++#endif
++
++typedef struct fontconfig_priv_s {
++#ifdef HAVE_FONTCONFIG
++	FcConfig* config;
++#endif
++	char* path_default;
++	int index_default;
++} fontconfig_priv_t;
++
++extern int no_more_font_messages;
++
++#ifdef HAVE_FONTCONFIG
++static char* _select_font(fontconfig_priv_t* priv, const char* family, int* index)
++{
++	FcBool rc;
++	FcResult result;
++	FcPattern *pat, *rpat;
++	FcValue val;
++	
++	*index = 0;
++
++	char buf[2000];
++	snprintf(buf, 2000, "%s:outline=True:slant=0:weight=100", family);
++	pat = FcNameParse((const FcChar8*)buf);
++	if (!pat)
++		return 0;
++	
++	FcDefaultSubstitute(pat);
++	
++	rc = FcConfigSubstitute(priv->config, pat, FcMatchFont);
++	if (!rc)
++		return 0;
++	
++	rpat = FcFontMatch(priv->config, pat, &result);
++	if (!rpat)
++		return 0;
++	
++	result = FcPatternGet(rpat, FC_INDEX, 0, &val);
++	if ((result != FcResultMatch) || (val.type != FcTypeInteger))
++		return 0;
++	*index = val.u.i;
++
++	result = FcPatternGet(rpat, FC_FAMILY, 0, &val);
++	if ((result != FcResultMatch) || (val.type != FcTypeString))
++		return 0;
++
++	if (strcmp((const char*)val.u.s, family) != 0)
++		return 0;
++
++	result = FcPatternGet(rpat, FC_FILE, 0, &val);
++	if ((result != FcResultMatch) || (val.type != FcTypeString))
++		return 0;
++	
++	return strdup((const char*)val.u.s);
++}
++
++char* fontconfig_select(void* priv_, const char* family, int* index)
++{
++	fontconfig_priv_t* priv = (fontconfig_priv_t*)priv_;
++	char* res;
++
++	if (family && *family) {
++		res = _select_font(priv, family, index);
++	} else {
++		res = 0;
++	}
++
++	if (res) {
++		mp_msg(MSGT_GLOBAL, MSGL_V, "fontconfig_select: (%s) -> %s, %d\n", family, res, *index);
++		return res;
++	} else {
++		if (!no_more_font_messages)
++			mp_msg(MSGT_GLOBAL, MSGL_WARN, "fontconfig_select: using default font: (%s) -> %s, %d\n", family, priv->path_default, *index);
++		*index = priv->index_default;
++		return priv->path_default;
++	}
++}
++
++void* fontconfig_init(const char* dir, const char* family1, const char* family2, const char* path)
++{
++	int rc;
++	fontconfig_priv_t* priv = (fontconfig_priv_t*)malloc(sizeof(fontconfig_priv_t));
++	memset(priv, 0, sizeof(fontconfig_priv_t));
++	
++	rc = FcInit();
++	assert(rc);
++
++	priv->config = FcInitLoadConfigAndFonts();
++	if (!priv->config) {
++		mp_msg(MSGT_GLOBAL, MSGL_FATAL, "FcInitLoadConfigAndFonts failed\n");
++		return 0;
++	}
++
++	rc = FcConfigAppFontAddDir(priv->config, (const FcChar8*)dir);
++	if (!rc) {
++		mp_msg(MSGT_GLOBAL, MSGL_WARN, "FcConfigAppFontAddDir failed\n");
++	}
++
++	if (family1)
++		priv->path_default = _select_font(priv, family1, &priv->index_default);
++	
++	if ((!priv->path_default) && family2)
++		priv->path_default = _select_font(priv, family2, &priv->index_default);
++
++	if (!priv->path_default) {
++		priv->path_default = strdup(path);
++		priv->index_default = 0;
++	}
++
++	mp_msg(MSGT_GLOBAL, MSGL_V, "Fontconfig: default font selected: %s, %d\n", priv->path_default, priv->index_default);
++
++	return priv;
++}
++
++#else
++
++char* fontconfig_select(void* priv_, const char* family, int* index)
++{
++	fontconfig_priv_t* priv = (fontconfig_priv_t*)priv_;
++	*index = priv->index_default;
++	return priv->path_default;
++}
++
++void* fontconfig_init(const char* dir, const char* path)
++{
++	mp_msg(MSGT_GLOBAL, MSGL_WARN, "Fontconfig disabled, only default font will be used\n");
++	
++	fontconfig_priv_t* priv = (fontconfig_priv_t*)malloc(sizeof(fontconfig_priv_t));
++	memset(priv, 0, sizeof(fontconfig_priv_t));
++	
++	priv->path_default = strdup(path);
++	priv->index_default = 0;
++	return priv;
++}
++
++#endif
++
++#endif // HAVE_FREETYPE
++
+Index: libsub/ass_render.c
+===================================================================
+--- libsub/ass_render.c	(.../branches/upstream)	(revision 0)
++++ libsub/ass_render.c	(.../trunk)	(revision 219)
+@@ -0,0 +1,1328 @@
++#include "config.h"
++
++#ifdef HAVE_FREETYPE
++
++#include <pthread.h>
++#include <assert.h>
++#include <math.h>
++
++#include <time.h>
++#include <sys/time.h>
++
++#include "mp_msg.h"
++#include "ass_render.h"
++#include "ass_cache.h"
++#include "ass_utils.h"
++
++#define MAX_GLYPHS 1000
++
++char *get_path(char *);
++
++extern char *font_name;
++#ifdef HAVE_FONTCONFIG
++extern int font_fontconfig;
++#else
++static int font_fontconfig = 0;
++#endif
++
++#define PI 3.1415926535897932384626433832795029L
++
++#define _r(c)  ((c)>>24)
++#define _g(c)  (((c)>>16)&0xFF)
++#define _b(c)  (((c)>>8)&0xFF)
++#define _a(c)  ((c)&0xFF)
++#define rgba2y(c)  ( (( 263*_r(c)  + 516*_g(c) + 100*_b(c)) >> 10) + 16  )
++#define rgba2u(c)  ( ((-152*_r(c) - 298*_g(c) + 450*_b(c)) >> 10) + 128 )
++#define rgba2v(c)  ( (( 450*_r(c) - 376*_g(c) -  73*_b(c)) >> 10) + 128 )
++
++
++int no_more_font_messages = 0;  // don't print font warnings
++
++// glyph_info_t and text_info_t are used for text centering and word-wrapping operations
++typedef struct glyph_info_s {
++	unsigned symbol;
++	FT_Glyph glyph;
++	FT_Glyph outline_glyph;
++	FT_BBox bbox;
++	FT_Vector pos;
++	unsigned c1, c2, c3, c4; // colors
++//	double scale_x, scale_y;
++	char bitmap; // bool
++
++	glyph_hash_key_t hash_key;
++} glyph_info_t;
++
++typedef struct text_info_s {
++	glyph_info_t glyphs[MAX_GLYPHS];
++	int length;
++	int n_lines;
++} text_info_t;
++
++
++typedef struct global_settings_s {
++	double font_size_coeff;
++	int resolution_x, resolution_y;
++} global_settings_t;
++
++// event-global data
++typedef struct render_context_s {
++	ass_event_t* event;
++	ass_style_t* style;
++	
++	FT_Face face;
++	char* font_path;
++	int font_size;
++	
++	FT_Stroker stroker;
++	int alignment; // alignment overrides go here; if zero, style value will be used
++	double rotation;
++	enum {	EVENT_NORMAL, // "normal" top-, sub- or mid- title
++		EVENT_POSITIONED // happens after pos(,), margins are ignored
++		} evt_type;
++	int pos_x, pos_y; // position
++	int org_x, org_y; // origin
++	double scale_x, scale_y;
++	int hspacing; // distance between letters, in pixels
++	double border; // outline width
++	unsigned c1, c2, c3, c4; // colors(Primary, Secondary, so on) in RGBA
++	int clip_x0, clip_y0, clip_x1, clip_y1;
++	char detect_collisions;
++} render_context_t;
++
++// frame-global data
++typedef struct frame_context_s {
++	ass_priv_t* ass_priv;
++	mp_image_t *dmpi;
++	unsigned char* planes[3]; // long image copy
++	unsigned char* dirty_rows;
++	ass_track_data_t* track;
++	int add_bottom_margin; // additional margin, used to shift subtitles in case of collision
++	int add_top_margin;
++} frame_context_t;
++
++
++static text_info_t text_info;
++static render_context_t render_context;
++static global_settings_t global_settings;
++static frame_context_t frame_context;
++
++void copy_from_image(int first_row, int last_row);
++
++static void ass_lazy_header_init()
++{
++	static int done = 0;
++	if (done) return;
++	done = 1;
++
++	ass_track_data_t* track = frame_context.track;
++	if (!track->PlayResX && !track->PlayResY) {
++		mp_msg(MSGT_GLOBAL, MSGL_WARN, "Neither PlayResX nor PlayResY defined. Using screen dimensions.\n");
++		track->PlayResX = frame_context.dmpi->w;
++		track->PlayResY = frame_context.dmpi->h;
++	} else {
++		double aspect = ((double)frame_context.dmpi->w) / frame_context.dmpi->h;
++		if (!track->PlayResY) {
++			track->PlayResY = track->PlayResX / aspect;
++			mp_msg(MSGT_GLOBAL, MSGL_WARN, "PlayResY undefined, setting %d\n", track->PlayResY);
++		} else {
++			track->PlayResX = track->PlayResY * aspect;
++			mp_msg(MSGT_GLOBAL, MSGL_WARN, "PlayResX undefined, setting %d\n", track->PlayResX);
++		}
++	}
++
++	// planes[0] not used
++	if (!frame_context.planes[1])
++		frame_context.planes[1] = (unsigned char*)malloc(frame_context.dmpi->w * frame_context.dmpi->h);
++	if (!frame_context.planes[2])
++		frame_context.planes[2] = (unsigned char*)malloc(frame_context.dmpi->w * frame_context.dmpi->h);
++	if (!frame_context.dirty_rows)
++		frame_context.dirty_rows = (unsigned char*)malloc(frame_context.dmpi->h);
++}
++
++int ass_init(struct ass_priv_s *p)
++{
++	char* family = 0;
++	char* path = 0;
++	
++	if (font_fontconfig && font_name)
++		family = strdup(font_name);
++	else
++		family = strdup("Arial");
++	
++	if (!font_fontconfig && font_name)
++		path = strdup(font_name);
++	else
++		path = get_path("subfont.ttf");
++
++	char* fonts_path = get_path("fonts");
++	
++//	p->fontconfig_priv = fontconfig_init(fonts_path, "Arial", family, path);
++	p->fontconfig_priv = fontconfig_init(fonts_path, 0, family, path);
++
++	free(fonts_path);
++	if (path) free(path);
++	if (family) free(family);
++
++	if (!p->fontconfig_priv)
++		return 0;
++	
++	int error = FT_Init_FreeType( &(p->library) );
++	if ( error ) { 
++		mp_msg(MSGT_GLOBAL, MSGL_FATAL, "FT_Init_FreeType failed\n");
++		return 0;
++	}
++
++	return 1;
++}
++
++static unsigned char get_color(FT_Bitmap* bitmap, int x, int y) {
++//	if ((x < 0) || (y < 0) || (x >= bitmap->width) || (y >= bitmap->rows))
++//		return 0;
++	return *(bitmap->buffer + bitmap->pitch * y + x);
++}
++
++static int ass_draw_bitmap(mp_image_t* dmpi, FT_Bitmap* bitmap, int dst_x, int dst_y, unsigned color)
++{
++	unsigned char y = rgba2y(color);
++	unsigned char u = rgba2u(color);
++	unsigned char v = rgba2v(color);
++	unsigned char opacity = 255 - _a(color);
++
++	int by, dw;
++	
++	if (bitmap->pixel_mode != FT_PIXEL_MODE_GRAY) {
++		mp_msg(MSGT_GLOBAL, MSGL_WARN, "Unsupported pixel mode: %d\n", (int)(bitmap->pixel_mode));
++		return 1;
++	}
++	if (dmpi->flags & MP_IMGFLAG_PLANAR) {
++		by = 1;
++		dw = dmpi->w;
++	}
++	else {
++		by = (dmpi->bpp + 7) / 8;
++		dw = dmpi->w * by;
++	}
++	if (by != 1) {
++		mp_msg(MSGT_GLOBAL, MSGL_WARN, "Unsupported image type, by != 1, by = %d\n", by);
++		return 1;
++	}
++
++	int i, j;
++	
++	// clipping
++	int b_x0, b_y0, b_x1, b_y1; // visible part of the bitmap
++	int clip_x0, clip_y0, clip_x1, clip_y1;
++	int tmp;
++	clip_x0 = render_context.clip_x0;
++	clip_y0 = render_context.clip_y0;
++	clip_x1 = render_context.clip_x1;
++	clip_y1 = render_context.clip_y1;
++	b_x0 = 0;
++	b_y0 = 0;
++	b_x1 = bitmap->width;
++	b_y1 = bitmap->rows;
++	
++	tmp = dst_x - clip_x0;
++	if (tmp < 0) {
++		mp_msg(MSGT_GLOBAL, MSGL_V, "clip left\n");
++		b_x0 = - tmp;
++	}
++	tmp = dst_y - clip_y0;
++	if (tmp < 0) {
++		mp_msg(MSGT_GLOBAL, MSGL_V, "clip top\n");
++		b_y0 = - tmp;
++	}
++	tmp = clip_x1 - dst_x - bitmap->width;
++	if (tmp < 0) {
++		mp_msg(MSGT_GLOBAL, MSGL_V, "clip right\n");
++		b_x1 = bitmap->width + tmp;
++	}
++	tmp = clip_y1 - dst_y - bitmap->rows;
++	if (tmp < 0) {
++		mp_msg(MSGT_GLOBAL, MSGL_V, "clip bottom\n");
++		b_y1 = bitmap->rows + tmp;
++	}
++	
++	if ((b_y0 >= b_y1) || (b_x0 >= b_x1))
++		return 0;
++	
++	copy_from_image(dst_y + b_y0, dst_y + b_y1);
++
++	unsigned char* src = bitmap->buffer;
++	unsigned char* dst = dmpi->planes[0] + dst_x + (dst_y + b_y0) * dmpi->stride[0];
++	for(i = b_y0; i < b_y1; ++i)
++	{
++		for (j = b_x0; j < b_x1; ++j) {
++		//	unsigned k = *(src+j);
++			unsigned k = ((unsigned)get_color(bitmap, j, i)) * opacity / 255;
++			unsigned char orig_color = *(dst+j);
++			*(dst+j) = (k*y + (255-k)*orig_color) / 255;
++		}
++		src += bitmap->pitch;
++		dst += dmpi->stride[0];
++	}
++
++	for (i = b_y0; i < b_y1; ++i) {
++		for (j = b_x0; j < b_x1; ++j) {
++			int x = dst_x + j;
++			int y = dst_y + i;
++			unsigned k;
++			unsigned char orig_u, orig_v;
++			unsigned char new_u, new_v;
++
++			k = ((unsigned)get_color(bitmap, j, i)) * opacity / 255;
++
++			orig_u = *(frame_context.planes[1] + x + y * 2 * dmpi->chroma_width);
++			new_u = (k*u + (255-k)*orig_u) / 255;
++			*(frame_context.planes[1] + x + y * 2 * dmpi->chroma_width) = new_u;
++
++			orig_v = *(frame_context.planes[2] + x + y * 2 * dmpi->chroma_width);
++			new_v = (k*v + (255-k)*orig_v) / 255;
++			*(frame_context.planes[2] + x + y * 2 * dmpi->chroma_width) = new_v;
++		}
++	} 
++	return 0;
++}
++
++static void putpixel(mp_image_t* dmpi, int dst_x, int dst_y, int color)
++{
++	*(dmpi->planes[0] + dst_x + dst_y * dmpi->stride[0]) = rgba2y(color);
++}
++
++static void mark(mp_image_t* dmpi, int dst_x, int dst_y)
++{
++	int i;
++	for (i = -5; i < 6; ++i) {
++		putpixel(dmpi, dst_x + i, dst_y + i, 0xFFFFFFFF);
++		putpixel(dmpi, dst_x + i, dst_y - i, 0xFFFFFFFF);
++	}
++}
++
++static int render_text(text_info_t* text_info, int dst_x, int dst_y)
++{
++	int pen_x, pen_y;
++	int error, error2;
++	int i;
++	
++	FT_Glyph image;
++
++	for (i = 0; i < text_info->length; ++i) {
++		if (text_info->glyphs[i].bitmap != 1) {
++			if (text_info->glyphs[i].symbol == 0)
++				continue;
++			error = FT_Glyph_To_Bitmap( &(text_info->glyphs[i].outline_glyph), FT_RENDER_MODE_NORMAL, 0, 1);
++			error2 = FT_Glyph_To_Bitmap( &(text_info->glyphs[i].glyph), FT_RENDER_MODE_NORMAL, 0, 1);
++
++			if (error || error2) {
++				FT_Done_Glyph(text_info->glyphs[i].outline_glyph);
++				FT_Done_Glyph(text_info->glyphs[i].glyph);
++				mp_msg(MSGT_GLOBAL, MSGL_WARN, "FT_Glyph_To_Bitmap error %d %d, symbol %d, index %d\n", 
++						error, error2, text_info->glyphs[i].symbol, text_info->glyphs[i].hash_key.index);
++				text_info->glyphs[i].symbol = 0; // do not render
++				continue;
++			}
++			// cache
++			glyph_hash_val_t hash_val;
++			text_info->glyphs[i].hash_key.bitmap = 1; // other hash_key fields were set in get_glyph()
++			hash_val.bbox_scaled = text_info->glyphs[i].bbox;
++			hash_val.outline_glyph = text_info->glyphs[i].outline_glyph;
++			hash_val.glyph = text_info->glyphs[i].glyph;
++			cache_add_glyph(&(text_info->glyphs[i].hash_key), &hash_val);
++		}
++	}
++
++	for (i = 0; i < text_info->length; ++i) {
++		if (text_info->glyphs[i].symbol == 0)
++			continue;
++
++		pen_x = dst_x + text_info->glyphs[i].pos.x;
++		pen_y = dst_y + text_info->glyphs[i].pos.y;
++		
++		image = text_info->glyphs[i].outline_glyph;
++//		error = FT_Glyph_To_Bitmap( &image, FT_RENDER_MODE_NORMAL, 0, 1);
++//		if (!error) {
++			FT_BitmapGlyph bit = (FT_BitmapGlyph)image;
++
++			ass_draw_bitmap( frame_context.dmpi, &(bit->bitmap), pen_x + bit->left, pen_y - bit->top, text_info->glyphs[i].c3);
++
++//			FT_Done_Glyph( image );
++//		}
++	}
++	for (i = 0; i < text_info->length; ++i) {
++		if (text_info->glyphs[i].symbol == 0)
++			continue;
++
++		pen_x = dst_x + text_info->glyphs[i].pos.x;
++		pen_y = dst_y + text_info->glyphs[i].pos.y;
++		image = text_info->glyphs[i].glyph;
++//		error = FT_Glyph_To_Bitmap( &image, FT_RENDER_MODE_NORMAL, 0, 1);
++//		if (!error) {
++			FT_BitmapGlyph bit = (FT_BitmapGlyph)image;
++
++			ass_draw_bitmap(frame_context.dmpi, &(bit->bitmap), pen_x + bit->left, pen_y - bit->top, text_info->glyphs[i].c1);
++
++//			FT_Done_Glyph( image );
++//		}
++	}
++
++	return 0;
++}
++
++static int x2scr(int x) {
++	return x*frame_context.dmpi->w / frame_context.track->PlayResX;
++}
++static int y2scr(int y) {
++	return y*frame_context.dmpi->h / frame_context.track->PlayResY;
++}
++
++
++static void vmirror_bbox(FT_BBox* orig, FT_BBox* pbbox) {
++	pbbox->xMin = orig->xMin;
++	pbbox->xMax = orig->xMax;
++	pbbox->yMin = - orig->yMax;
++	pbbox->yMax = - orig->yMin;
++}
++
++static void compute_string_bbox( text_info_t* info, FT_BBox *abbox ) {
++	FT_BBox bbox;
++	int n;
++	
++	/* initialize string bbox to "empty" values */
++	bbox.xMin = bbox.yMin = 32000;
++	bbox.xMax = bbox.yMax = -32000;
++	
++	/* for each glyph image, compute its bounding box, */
++	/* translate it, and grow the string bbox */
++	for ( n = 0; n < info->length; n++ ) {
++		FT_BBox glyph_bbox;
++		vmirror_bbox( &(info->glyphs[n].bbox), &glyph_bbox );
++//		mp_msg(MSGT_GLOBAL, MSGL_V, "bbox: min = %d, max = %d\n", glyph_bbox.yMin, glyph_bbox.yMax);
++		glyph_bbox.xMin += info->glyphs[n].pos.x;
++		glyph_bbox.xMax += info->glyphs[n].pos.x;
++		glyph_bbox.yMin += info->glyphs[n].pos.y;
++		glyph_bbox.yMax += info->glyphs[n].pos.y;
++		if ( glyph_bbox.xMin < bbox.xMin ) bbox.xMin = glyph_bbox.xMin;
++		if ( glyph_bbox.yMin < bbox.yMin ) bbox.yMin = glyph_bbox.yMin;
++		if ( glyph_bbox.xMax > bbox.xMax ) bbox.xMax = glyph_bbox.xMax;
++		if ( glyph_bbox.yMax > bbox.yMax ) bbox.yMax = glyph_bbox.yMax;
++	}
++	
++	/* check that we really grew the string bbox */
++	if ( bbox.xMin > bbox.xMax ) {
++		bbox.xMin = 0;
++		bbox.yMin = 0;
++		bbox.xMax = 0;
++		bbox.yMax = 0;
++	}
++
++	/* return string bbox */
++	*abbox = bbox;
++}
++
++
++// check if starting part of (*p) matches sample
++// if true, shift p to the first symbol after the matching part
++static inline int mystrcmp(char** p, char* sample) {
++	int len = strlen(sample);
++	if (strncmp(*p, sample, len) == 0) {
++		(*p) += len;
++		return 1;
++	} else
++		return 0;
++}
++
++static inline unsigned ampcolor(char* p, char** q) {
++#define badcolor { mp_msg(MSGT_GLOBAL, MSGL_WARN, "bad color at %s:%d\n", __FILE__, __LINE__); *q = p; return 0; }
++	unsigned color = 0;
++	if (*p++ != '&') badcolor
++	if (*p++ != 'H') badcolor
++	
++	color = strtol(p, &p, 16);
++	{
++		unsigned char* tmp = (unsigned char*)(&color);
++		unsigned char b;
++		b = tmp[0]; tmp[0] = tmp[3]; tmp[3] = b;
++		b = tmp[1]; tmp[1] = tmp[2]; tmp[2] = b;
++	}
++	
++	if (*p++ != '&') badcolor
++	*q = p;
++	return color;
++#undef badcolor
++}
++
++static void change_font(char* family)
++{
++	int error;
++	ass_priv_t* priv = frame_context.ass_priv;
++	face_desc_t desc;
++	desc.family = strdup(family);
++	desc.bold = 0;
++	desc.italic = 0;
++	error = ass_new_face(priv->library, priv->fontconfig_priv, &desc, &(render_context.face));
++	if (error) {
++		render_context.face = 0;
++	}
++	
++	if (render_context.face)
++	{
++		double size = (double)render_context.font_size * global_settings.font_size_coeff;
++		size *= frame_context.dmpi->w;
++		size /= frame_context.track->PlayResX;
++
++		FT_Set_Char_Size(render_context.face, 0, render_context.font_size*global_settings.font_size_coeff*64,
++				global_settings.resolution_x, global_settings.resolution_y);
++	}
++}
++
++static void change_border(double border)
++{
++	if (!render_context.stroker) {
++		if (!no_more_font_messages)
++			mp_msg(MSGT_GLOBAL, MSGL_WARN, "No stroker!\n");
++	} else {
++		render_context.border = border;
++		FT_Stroker_Set( render_context.stroker,
++				(int)(64 * border),
++				FT_STROKER_LINECAP_ROUND,
++				FT_STROKER_LINEJOIN_ROUND,
++				0 );
++	}
++}
++
++// calculates c1*(1-a) + c2*a, but separately for each component
++static unsigned color_avg(unsigned c1, unsigned c2, double a)
++{
++	unsigned char* p1 = (unsigned char*)&c1;
++	unsigned char* p2 = (unsigned char*)&c2;
++	unsigned c3;
++	unsigned char* p3 = (unsigned char*)&c3;
++	int i;
++	for (i = 0; i < 4; ++i)
++		p3[i] = p1[i] * (1 - a) + p2[i] * a;
++	return c3;
++}
++
++static void change_alpha(unsigned* var, unsigned new_val, double pwr)
++{
++	(*var) = color_avg(*var, ((*var) & 0xFFFFFF00) | new_val, pwr);
++}
++
++static void change_color(unsigned* var, unsigned new_val, double pwr)
++{
++	(*var) = color_avg(*var, ((*var) & 0x000000FF) | new_val, pwr);
++}
++
++// pwr is a multiplier for most tag effects
++static char* parse_tag(char* p, double pwr) {
++#define skip_all(x) if (*p == (x)) ++p; else { \
++	while ((*p != (x)) && (*p != '}') && (*p != 0)) {++p;} }
++#define skip(x) if (*p == (x)) ++p; else { return p; }
++	
++	skip_all('\\');
++	if ((*p == '}') || (*p == 0))
++		return p;
++
++	if (mystrcmp(&p, "fsc")) {
++		char tp = *p++;
++		double val = strtod(p, &p);
++		val /= 100;
++		if (tp == 'x') {
++			render_context.scale_x = (val - 1.) * pwr + 1.;
++			mp_msg(MSGT_GLOBAL, MSGL_DBG2, "scale_x = %.2f\n", render_context.scale_x);
++		} else if (tp == 'y') {
++			render_context.scale_y = (val - 1.) * pwr + 1.;
++			mp_msg(MSGT_GLOBAL, MSGL_DBG2, "scale_y = %.2f\n", render_context.scale_y);
++		}
++	} else if (mystrcmp(&p, "fsp")) {
++		int val = strtol(p, &p, 10); // ignored
++		render_context.hspacing = val * pwr;
++	} else if (mystrcmp(&p, "fs")) {
++		int val = strtol(p, &p, 10);
++		mp_msg(MSGT_GLOBAL, MSGL_DBG2, "setting font size to %d\n", val);
++		render_context.font_size = val * pwr;
++		if (render_context.face) {
++			FT_Set_Char_Size(render_context.face, 0, render_context.font_size*global_settings.font_size_coeff*64,
++					global_settings.resolution_x, global_settings.resolution_y);
++		}
++	} else if (mystrcmp(&p, "bord")) {
++		double val = strtod(p, &p);
++		change_border(val);
++	} else if (mystrcmp(&p, "move")) {
++		skip('(');
++		int x1 = strtol(p, &p, 10);
++		skip(',');
++		int y1 = strtol(p, &p, 10);
++		skip(',');
++		int x2 = strtol(p, &p, 10);
++		skip(',');
++		int y2 = strtol(p, &p, 10);
++		skip(')'); // FIXME: 2 more optional args
++		mp_msg(MSGT_GLOBAL, MSGL_DBG2, "movement: (%d, %d) -> (%d, %d)\n", x1, y1, x2, y2);
++		unsigned long long t1 = render_context.event->Start;
++		unsigned long long delta_t = render_context.event->Duration;
++		unsigned long long t = ass_current_timecode; // FIXME: move to render_context
++		double k = ((double)(t - t1)) / delta_t;
++		int x = k * (x2 - x1) + x1;
++		int y = k * (y2 - y1) + y1;
++		render_context.pos_x = x;
++		render_context.pos_y = y;
++		render_context.detect_collisions = 0;
++		render_context.evt_type = EVENT_POSITIONED;
++	} else if (mystrcmp(&p, "frz")) { // FIXME: frx and fry !
++		int val = strtol(p, &p, 10);
++		mp_msg(MSGT_GLOBAL, MSGL_DBG2, "setting rotation to %.2f\n", val * pwr);
++		double angle = PI * val / 180;
++		render_context.rotation = angle * pwr;
++	} else if (mystrcmp(&p, "fn")) {
++		char* start = p;
++		skip_all('\\');
++		char* family = (char*)malloc(p - start + 1);
++		strncpy(family, start, p - start);
++		family[p - start] = '\0';
++		change_font(family);
++		free(family);
++	} else if (mystrcmp(&p, "alpha")) {
++		unsigned val = ampcolor(p, &p);
++		unsigned char a = val >> 24;
++		change_alpha(&render_context.c1, a, pwr);
++		change_alpha(&render_context.c2, a, pwr);
++		change_alpha(&render_context.c3, a, pwr);
++		change_alpha(&render_context.c4, a, pwr);
++		// FIXME: simplify
++	} else if (mystrcmp(&p, "an")) {
++		int val = strtol(p, &p, 10);
++		mp_msg(MSGT_GLOBAL, MSGL_V, "an %d\n", val);
++		int v = (val - 1) / 3; // 0, 1 or 2 for vertical alignment
++		if (v != 0) v = 3 - v;
++		val = ((val - 1) % 3) + 1; // horizontal alignment
++		val += v*4;
++		mp_msg(MSGT_GLOBAL, MSGL_V, "align %d\n", val);
++		render_context.alignment = val;
++	} else if (mystrcmp(&p, "a")) {
++		int val = strtol(p, &p, 10);
++		render_context.alignment = val;
++	} else if (mystrcmp(&p, "pos")) {
++		skip('(');
++		int v1 = strtol(p, &p, 10);
++		skip(',');
++		int v2 = strtol(p, &p, 10);
++		skip(')');
++		mp_msg(MSGT_GLOBAL, MSGL_V, "pos(%d, %d)\n", v1, v2);
++		render_context.evt_type = EVENT_POSITIONED;
++		render_context.detect_collisions = 0;
++		render_context.pos_x = v1;
++		render_context.pos_y = v2;
++	} else if (mystrcmp(&p, "org")) {
++		skip('(');
++		int v1 = strtol(p, &p, 10);
++		skip(',');
++		int v2 = strtol(p, &p, 10);
++		skip(')');
++		mp_msg(MSGT_GLOBAL, MSGL_V, "org(%d, %d)\n", v1, v2);
++		//				render_context.evt_type = EVENT_POSITIONED;
++		render_context.org_x = v1;
++		render_context.org_y = v2;
++	} else if (mystrcmp(&p, "t")) {
++		skip('(');
++		int v1 = strtol(p, &p, 10);
++		skip(',');
++		int v2 = strtol(p, &p, 10);
++		skip(',');
++		double v3;
++		if (*p == '\\') {
++			v3 = 1.;
++		} else {
++			v3 = strtod(p, &p);
++			skip(',');
++		}
++		render_context.detect_collisions = 0;
++		long long t1 = v1;
++		long long t2 = v2;
++		long long delta_t = v2 - v1;
++		long long t = ass_current_timecode - render_context.event->Start; // FIXME: move to render_context
++		double k;
++		if (t < t1)
++			k = 0.;
++		else if (t > t2)
++			k = 1.;
++		else k = ((double)(t - t1)) / delta_t;
++		while (*p == '\\')
++			p = parse_tag(p, k); // maybe k*pwr ? no, specs forbid nested \t's 
++		skip_all(')'); // FIXME: better skip(')'), but much more tags support required
++	} else if (mystrcmp(&p, "clip")) {
++		skip('(');
++		int x0 = strtol(p, &p, 10);
++		skip(',');
++		int y0 = strtol(p, &p, 10);
++		skip(',');
++		int x1 = strtol(p, &p, 10);
++		skip(',');
++		int y1 = strtol(p, &p, 10);
++		skip(')');
++		x0 = x2scr(x0);
++		x1 = x2scr(x1);
++		y0 = y2scr(y0);
++		y1 = y2scr(y1);
++		render_context.clip_x0 = render_context.clip_x0 * (1-pwr) + x0 * pwr;
++		render_context.clip_x1 = render_context.clip_x1 * (1-pwr) + x1 * pwr;
++		render_context.clip_y0 = render_context.clip_y0 * (1-pwr) + y0 * pwr;
++		render_context.clip_y1 = render_context.clip_y1 * (1-pwr) + y1 * pwr;
++	} else if (mystrcmp(&p, "c")) {
++		unsigned val = ampcolor(p, &p);
++		mp_msg(MSGT_GLOBAL, MSGL_DBG2, "color: %X\n", val);
++		change_color(&render_context.c1, val, pwr);
++	} else if ((*p >= '1') && (*p <= '4') && (++p) && (mystrcmp(&p, "c") || mystrcmp(&p, "a"))) {
++		char n = *(p-2);
++		char cmd = *(p-1);
++		assert((n >= '1') && (n <= '4'));
++		unsigned val = ampcolor(p, &p);
++		unsigned* pcolor;
++		switch (n) {
++			case '1': pcolor = &render_context.c1; break;
++			case '2': pcolor = &render_context.c2; break;
++			case '3': pcolor = &render_context.c3; break;
++			case '4': pcolor = &render_context.c4; break;
++			default : pcolor = 0; break; // impossible due to assert; avoid compilation warning
++		}
++		switch (cmd) {
++			case 'c': change_color(pcolor, val, pwr); break;
++			case 'a': change_alpha(pcolor, val >> 24, pwr); break;
++			default: mp_msg(MSGT_GLOBAL, MSGL_WARN, "Bad command: %c%c\n", n, cmd); break;
++		}
++		mp_msg(MSGT_GLOBAL, MSGL_DBG2, "single c/a at %f: %c%c = %X   \n", pwr, n, cmd, *pcolor);
++	} else if (mystrcmp(&p, "r")) {
++		render_context.c1 = render_context.style->PrimaryColour;
++		render_context.c2 = render_context.style->SecondaryColour;
++		render_context.c3 = render_context.style->OutlineColour;
++		render_context.c4 = render_context.style->BackColour;
++		// FIXME: incomplete. Must reset font/fontsize and more.
++	}
++
++	return p;
++
++#undef skip
++#undef skip_all
++}
++
++static char* get_next_char(char* p, unsigned int *code) {
++
++	if (*p != '{') { // '\0' goes here
++		int sz = utf8_to_ucs4(p, code);
++		if (*code == UCS4_INVALID)
++			*code = 0;
++		return p + sz;
++	} else { // parse style override tag
++		p++;
++		while (1) {
++			p = parse_tag(p, 1.);
++			if (*p == '}') { // end of tag
++				p++;
++				if (*p == '{') {
++					p++;
++					continue;
++				} else
++					break;
++			}
++			if (*p == 0)
++				break;
++		}
++		int sz = utf8_to_ucs4(p, code);
++		return p + sz;
++	}
++}
++
++static int init_render_context(ass_event_t* event)
++{
++	int error;
++
++// init global settings
++// FIXME: not here 
++	global_settings.font_size_coeff = .6;
++	global_settings.resolution_x = global_settings.resolution_y = 72;
++	
++// init render_context	
++	render_context.event = event;
++	render_context.style = frame_context.track->styles + event->Style;
++	
++	render_context.font_size = render_context.style->FontSize;
++	render_context.evt_type = EVENT_NORMAL;
++	render_context.alignment = 0;
++	render_context.rotation = 0.;
++	render_context.pos_x = 0;
++	render_context.pos_y = 0;
++	render_context.org_x = 0;
++	render_context.org_y = 0;
++	render_context.scale_x = 1.;
++	render_context.scale_y = 1.;
++	render_context.hspacing = 0;
++	render_context.c1 = render_context.style->PrimaryColour;
++	render_context.c2 = render_context.style->SecondaryColour;
++	render_context.c3 = render_context.style->OutlineColour;
++	render_context.c4 = render_context.style->BackColour;
++	render_context.clip_x0 = 0;
++	render_context.clip_y0 = 0;
++	render_context.clip_x1 = frame_context.dmpi->w;
++	render_context.clip_y1 = frame_context.dmpi->h;
++	render_context.detect_collisions = 1;
++	
++	change_font(render_context.style->FontName);
++
++	if (render_context.face) {
++		error = FT_Stroker_New( render_context.face->memory, &render_context.stroker );
++		if ( error ) {
++			mp_msg(MSGT_GLOBAL, MSGL_V, "failed to get stroker\n");
++			render_context.stroker = 0;
++		} else {
++			// FIXME: probably wrong when render_context.Border == 3
++			double border = (render_context.style->BorderStyle == 1) ? render_context.style->Outline : 1.;
++			change_border(border); // FIXME: use style value
++		}
++	}
++	
++	return 0;
++}
++
++static int free_render_context()
++{
++/*	if (render_context.face != 0) {
++		FT_Done_Face(render_context.face);
++		render_context.face = 0;
++	} */
++	if (render_context.stroker != 0) {
++		FT_Stroker_Done(render_context.stroker);
++		render_context.stroker = 0;
++	}
++	return 0;
++}
++
++// get normal and outline glyphs from cache (if possible) or font face
++int get_glyph(int index, int symbol, glyph_info_t* info)
++{
++	int error;
++	glyph_hash_val_t* val;
++	glyph_hash_key_t* key = &(info->hash_key);
++	
++	
++	key->face = render_context.face;
++	key->size = render_context.font_size;
++	key->index = index;
++	key->outline = (render_context.border * 0xFFFF); // convert to 16.16
++	key->bold = 0;
++	key->italic = 0;
++	key->scale_x = (render_context.scale_x * 0xFFFF);
++	key->scale_y = (render_context.scale_y * 0xFFFF);
++	key->angle = (render_context.rotation * 0xFFFF);
++
++	key->bitmap = 1; // looking for bitmap glyph
++
++	
++	val = cache_find_glyph(key);
++
++	if (val) {
++//		printf("hit!\n");
++		// bitmap glyph found, no need for FT_Glyph_Copy
++		info->glyph = val->glyph;
++		info->outline_glyph = val->outline_glyph;
++		info->bbox = val->bbox_scaled;
++		info->bitmap = 1; // bitmap glyph
++		return 0;
++	}
++
++	// not found, get a new outline glyph from face
++//	mp_msg(MSGT_GLOBAL, MSGL_INFO, "miss, index = %d, symbol = %c\n", index, symbol);
++	
++	error = FT_Load_Glyph( render_context.face, index, FT_LOAD_NO_BITMAP );
++	if ( error ) {
++		mp_msg(MSGT_GLOBAL, MSGL_WARN, "Error loading glyph\n");
++		return error;
++	}
++
++	error = FT_Get_Glyph( render_context.face->glyph, &(info->glyph));
++	if ( error ) {
++		mp_msg(MSGT_GLOBAL, MSGL_WARN, "Error getting glyph\n");
++		return error;
++	}
++
++	info->outline_glyph = info->glyph;
++	FT_Glyph_Stroke( &(info->outline_glyph), render_context.stroker, 0 ); // don't destroy original
++
++	info->bitmap = 0; // outline glyph
++
++	return 0;
++}
++
++int ass_render_event(ass_event_t* event)
++{
++	char* p;
++	FT_GlyphSlot slot;
++	FT_UInt glyph_index; 
++	FT_Bool use_kerning; 
++	FT_UInt previous; 
++	FT_UInt num_glyphs;
++	int pen_x, pen_y;
++	int error;
++	unsigned code;
++	FT_BBox bbox;
++	int i, j;
++
++	init_render_context(event);
++
++	// fill text_info, putting all text in one line
++
++	text_info.length = 0;
++	pen_x = 0;
++	pen_y = 0;
++	previous = 0;
++	num_glyphs = 0;
++
++	
++	p = event->Text;
++	if (!p) {
++		mp_msg(MSGT_GLOBAL, MSGL_WARN, "Empty event!\n");
++		return 0;
++	}
++
++//	printf("Event: %s  \n", p);
++	
++//	if (*p != '{') return 0;
++//	p = "{\\fs20}qwe qwe{\\fs40}qwe qwe{\\fs30}qwe qwe{\\fscx20}qwe qwe{\\fscx200}qwe qwe";
++
++	while (1) {
++
++		p = get_next_char(p, &code);
++		
++		// face could have been changed in get_next_char
++		if (!render_context.face) {
++			free_render_context();
++			return 0;
++		}
++
++		if (code == 0)
++			break;
++		
++
++		use_kerning = FT_HAS_KERNING(render_context.face);
++		slot = render_context.face->glyph;
++
++		if (text_info.length >= MAX_GLYPHS) {
++			mp_msg(MSGT_GLOBAL, MSGL_WARN, "\nMAX_GLYPHS reached: event %d, start = %llu, duration = %llu\n Text = %s\n", 
++					event - frame_context.track->events, event->Start, event->Duration, event->Text);
++			break;
++		}
++
++		if ( ((code == 'N')||(code == 'n')) && text_info.length && (text_info.glyphs[text_info.length - 1].symbol == '\\') ) {
++			// forced linebreak
++			text_info.glyphs[text_info.length - 1].symbol = 0;
++			continue;
++		}
++/*		
++		glyph_index = FT_Get_Char_Index( render_context.face, code);
++
++		error = FT_Load_Glyph( render_context.face, glyph_index, FT_LOAD_DEFAULT );
++		if ( error ) {
++			mp_msg(MSGT_GLOBAL, MSGL_V, "Error loading glyph: '%c'\n", (char)code);
++			continue;
++		}
++
++		error = FT_Get_Glyph( render_context.face->glyph, &text_info.glyphs[text_info.length].glyph);
++		if ( error ) {
++			mp_msg(MSGT_GLOBAL, MSGL_V, "Error getting glyph: '%c'\n", (char)code);
++			continue;
++		}
++
++		text_info.glyphs[text_info.length].outline_glyph = text_info.glyphs[text_info.length].glyph;
++		FT_Glyph_Stroke( &text_info.glyphs[text_info.length].outline_glyph, render_context.stroker, 0 );
++*/
++
++		glyph_index = FT_Get_Char_Index( render_context.face, code);
++
++		error = get_glyph(glyph_index, code, text_info.glyphs + text_info.length);
++
++		if (error) {
++			continue;
++		}
++		
++//		text_info.glyphs[text_info.length].glyph = text_info.glyphs[text_info.length].desc.glyph;
++//		text_info.glyphs[text_info.length].outline_glyph = text_info.glyphs[text_info.length].desc.outline_glyph;
++//		text_info.glyphs[text_info.length].bbox = text_info.glyphs[text_info.length].desc.bbox_scaled;
++
++/*		if (text_info.glyphs[text_info.length].glyph->format == FT_GLYPH_FORMAT_BITMAP) {
++			text_info.glyphs[text_info.length].bitmap = 1;
++		} else {
++			text_info.glyphs[text_info.length].bitmap = 0;
++		}
++*/		
++		if ( use_kerning && previous && glyph_index ) {
++			FT_Vector delta;
++			FT_Get_Kerning( render_context.face, previous, glyph_index, FT_KERNING_DEFAULT, &delta );
++			pen_x += delta.x >> 6;
++		}
++		
++		text_info.glyphs[text_info.length].pos.x = pen_x;
++		text_info.glyphs[text_info.length].pos.y = pen_y;
++		
++		// scale
++		if ((text_info.glyphs[text_info.length].bitmap != 1) && ((render_context.scale_x != 1.) || (render_context.scale_y != 1.))) {
++			FT_Matrix matrix;
++			matrix.xx = (FT_Fixed)( render_context.scale_x * 0x10000L );
++			matrix.xy = (FT_Fixed)( 0 * 0x10000L );
++			matrix.yx = (FT_Fixed)( 0 * 0x10000L );
++			matrix.yy = (FT_Fixed)( render_context.scale_y * 0x10000L );
++
++			FT_Glyph_Transform( text_info.glyphs[text_info.length].glyph, &matrix, 0 );
++			FT_Glyph_Transform( text_info.glyphs[text_info.length].outline_glyph, &matrix, 0 );
++		}
++		
++		pen_x += ceil(((double)(text_info.glyphs[text_info.length].glyph->advance.x)) / 0xFFFF + render_context.hspacing);
++		
++		// if it's an outline glyph, we still need to fill the bbox
++		if (text_info.glyphs[text_info.length].bitmap != 1) {
++			FT_Glyph_Get_CBox( text_info.glyphs[text_info.length].glyph, FT_GLYPH_BBOX_PIXELS, &(text_info.glyphs[text_info.length].bbox) );
++		}
++
++		
++		previous = glyph_index;
++		
++		text_info.glyphs[text_info.length].symbol = code;
++//		text_info.glyphs[text_info.length].scale_x = render_context.scale_x;
++//		text_info.glyphs[text_info.length].scale_y = render_context.scale_y;
++		text_info.glyphs[text_info.length].c1 = render_context.c1;
++		text_info.glyphs[text_info.length].c2 = render_context.c2;
++		text_info.glyphs[text_info.length].c3 = render_context.c3;
++		text_info.glyphs[text_info.length].c4 = render_context.c4;
++//		mp_msg(MSGT_GLOBAL, MSGL_V, "n = %d, c = %c, x = %d, y = %d\n", text_info.length, text_info.glyphs[text_info.length].symbol,
++//				text_info.glyphs[text_info.length].pos.x, text_info.glyphs[text_info.length].pos.y);
++		text_info.length++;
++	}
++	
++	// calculate max length of a line
++	ass_style_t* style = frame_context.track->styles + event->Style;
++	int MarginL, MarginR, MarginV;
++	(event->MarginL) ? (MarginL=event->MarginL) : (MarginL=style->MarginL); 
++	(event->MarginR) ? (MarginR=event->MarginR) : (MarginR=style->MarginR); 
++	(event->MarginV) ? (MarginV=event->MarginV) : (MarginV=style->MarginV);
++//	mp_msg(MSGT_GLOBAL, MSGL_V, "margins: %d %d %d, resolution: %d %d\n", MarginL, MarginR, MarginV, track->PlayResX, track->PlayResY);
++	int max_text_width;
++	if (render_context.evt_type == EVENT_NORMAL) {
++		max_text_width = x2scr(frame_context.track->PlayResX - MarginR) - x2scr(MarginL);
++		mp_msg(MSGT_GLOBAL, MSGL_V, "normal text width: %d\n", max_text_width);
++	} else if (render_context.evt_type == EVENT_POSITIONED) {
++		int text_left = x2scr(render_context.pos_x) - x2scr(MarginL);
++		int text_right = x2scr(frame_context.track->PlayResX - MarginR) - x2scr(render_context.pos_x);
++		max_text_width = (text_left < text_right) ? text_left : text_right;
++		max_text_width *= 2;
++		mp_msg(MSGT_GLOBAL, MSGL_V, "positioned text width: %d\n", max_text_width);
++	} else {
++		max_text_width = 100;
++		mp_msg(MSGT_GLOBAL, MSGL_V, "Unknown evt_type! setting text_width=%d\n", max_text_width);
++	}
++	
++	// rearrange text in several lines
++	int last_space = -1;
++	text_info.n_lines = 1;
++	for (i = 0; i < text_info.length; ++i) {
++		glyph_info_t* glyph_info = text_info.glyphs + i;
++//		FT_BBox* glyph_bbox;
++		int break_at = -1;
++
++		if (glyph_info->symbol == 0) {
++			break_at = i;
++			mp_msg(MSGT_GLOBAL, MSGL_V, "force line break at %d\n", break_at);
++		}
++		
++//		FT_Glyph_Get_CBox( glyph_info->glyph, FT_GLYPH_BBOX_PIXELS, &glyph_bbox );
++		if (glyph_info->bbox.xMax + glyph_info->pos.x >= max_text_width) {
++			break_at = last_space;
++			mp_msg(MSGT_GLOBAL, MSGL_V, "overfill at %d\n", i);
++			mp_msg(MSGT_GLOBAL, MSGL_V, "line break at %d\n", break_at);
++		}
++
++		if (break_at != -1) {
++			// need to use one more line
++			// shifting everything after last whitespace to the new line
++			// FIXME: check for long words
++			int pen_shift_x = - text_info.glyphs[break_at + 1].pos.x;
++			mp_msg(MSGT_GLOBAL, MSGL_V, "%d %d %d %f\n", render_context.face->height, render_context.face->units_per_EM,
++					render_context.font_size, global_settings.font_size_coeff);
++			int pen_shift_y = render_context.face->size->metrics.height >> 6;
++			mp_msg(MSGT_GLOBAL, MSGL_V, "shifting from %d to %d by (%d, %d)\n", break_at + 1, text_info.length - 1, pen_shift_x, pen_shift_y);
++			for (j = break_at + 1; j < text_info.length; j++) {
++				text_info.glyphs[j].pos.x += pen_shift_x;
++				text_info.glyphs[j].pos.y += pen_shift_y;
++			}
++			if ((break_at != -1) && (break_at != text_info.length)) {
++				text_info.glyphs[break_at].symbol = '\0'; // don't render this
++			}
++			text_info.n_lines ++;
++		}
++		
++		if (glyph_info->symbol == ' ')
++			last_space = i;
++	}
++
++	// align lines
++	int alignment = render_context.alignment;
++	if (!alignment)
++		alignment = render_context.style->Alignment;
++	int halign = alignment & 3;
++
++
++	// the following is a little incorrect when dealing with positioned events
++	// max_text_width for them should be calculated differently
++	// luckily, positioning code compensates for this by ignoring offset, and simply using bounding box
++	int last_break = -1;
++	for (i = 1; i < text_info.length + 1; ++i) { // (text_info.length + 1) is the end of the last line
++		if ((i == text_info.length) || (text_info.glyphs[i].symbol == '\0')) {
++
++			glyph_info_t* first_glyph = text_info.glyphs + last_break + 1;
++			glyph_info_t* last_glyph = text_info.glyphs + i - 1;
++
++			int width = last_glyph->pos.x + last_glyph->bbox.xMax - first_glyph->pos.x - first_glyph->bbox.xMin;
++			int shift = - first_glyph->bbox.xMin; // now text line starts exactly at 0 (left margin)
++			if (halign == HALIGN_LEFT) { // left aligned, no action
++			} else if (halign == HALIGN_RIGHT) { // right aligned
++				shift = max_text_width - width;
++			} else if (halign == HALIGN_CENTER) { // centered
++				shift = (max_text_width - width) / 2;
++			}
++			for (j = last_break + 1; j < i; ++j) {
++				text_info.glyphs[j].pos.x += shift;
++			}
++			last_break = i;
++		}
++	}
++	
++	// determing text bounding box
++	compute_string_bbox(&text_info, &bbox);
++	
++	// determine device coordinates for text
++
++	// FIXME: using current font descender, ascender and height here is wrong.
++	// correct way is using max(descender) over all the fonts used in a line
++	// the same for height and ascender
++	
++	int device_x, device_y;
++	int valign = alignment & 12;
++	if (render_context.evt_type == EVENT_NORMAL) {
++		device_x = x2scr(MarginL);
++		if (valign == VALIGN_TOP) { // toptitle
++			device_y = y2scr(MarginV) + (render_context.face->size->metrics.ascender >> 6);
++			if (render_context.detect_collisions) {
++				device_y += frame_context.add_top_margin;
++				frame_context.add_top_margin += text_info.n_lines * (render_context.face->size->metrics.height >> 6);
++			}
++		} else if (valign == VALIGN_CENTER) { // midtitle
++			int scr_y = y2scr(frame_context.track->PlayResY);
++			device_y = (scr_y - (bbox.yMax - bbox.yMin))/2;
++		} else { // subtitle
++			if (valign != VALIGN_SUB)
++				mp_msg(MSGT_GLOBAL, MSGL_V, "Invalid valign, supposing 0 (subtitle)\n");
++			int scr_y = y2scr(frame_context.track->PlayResY - MarginV);
++			device_y = scr_y;
++			assert(text_info.n_lines >= 1);
++			device_y += (render_context.face->size->metrics.descender >> 6); // descender is negative for 'normal' text
++			device_y -= (text_info.n_lines - 1) * (render_context.face->size->metrics.height >> 6);
++			if (render_context.detect_collisions) {
++				device_y -= frame_context.add_bottom_margin;
++				frame_context.add_bottom_margin += text_info.n_lines * (render_context.face->size->metrics.height >> 6);
++			}
++		}
++	} else if (render_context.evt_type == EVENT_POSITIONED) {
++		mp_msg(MSGT_GLOBAL, MSGL_DBG2, "positioned event at %d, %d\n", render_context.pos_x, render_context.pos_y);
++		int align_shift_x = 0;
++		int align_shift_y = 0;
++		switch(halign) {
++			case HALIGN_LEFT:
++				align_shift_x = - bbox.xMin;
++				break;
++			case HALIGN_CENTER:
++				align_shift_x = - (bbox.xMax + bbox.xMin) /2;
++				break;
++			case HALIGN_RIGHT:
++				align_shift_x = - bbox.xMax;
++				break;
++		}
++		switch(valign) {
++			case VALIGN_TOP:
++				align_shift_y = - bbox.yMin;
++				break;
++			case VALIGN_CENTER:
++				align_shift_y = - (bbox.yMax + bbox.yMin) /2;
++				break;
++			case VALIGN_SUB:
++				align_shift_y = - bbox.yMax;
++				break;
++		}
++		device_x = x2scr(render_context.pos_x) + align_shift_x;
++		device_y = y2scr(render_context.pos_y) + align_shift_y;
++//		mark(frame_context.dmpi, device_x, device_y);
++//		mark(frame_context.dmpi, x2scr(render_context.pos_x), y2scr(render_context.pos_y));
++	} else {
++		mp_msg(MSGT_GLOBAL, MSGL_V, "unknown evt_type\n");
++		device_x = 10;
++		device_y = 10;
++	}
++	
++//	mp_msg(MSGT_GLOBAL, MSGL_DBG2, "\ndevice: %d, %d\n", device_x, device_y);
++	
++	// rotate glyphs if needed
++	if (render_context.rotation != 0.) {
++		double angle = render_context.rotation;
++		
++		FT_Matrix matrix_rotate;
++		matrix_rotate.xx = (FT_Fixed)( cos( angle ) * 0x10000L );
++		matrix_rotate.xy = (FT_Fixed)( -sin( angle ) * 0x10000L );
++		matrix_rotate.yx = (FT_Fixed)( sin( angle ) * 0x10000L );
++		matrix_rotate.yy = (FT_Fixed)( cos( angle ) * 0x10000L );
++		
++		FT_Vector center;
++		if (((render_context.org_x != 0) || (render_context.org_y != 0)) && (render_context.evt_type == EVENT_POSITIONED)) {
++			center.x = render_context.org_x;
++			center.y = render_context.org_y;
++		} else {
++			center.x = text_info.glyphs[0].pos.x + device_x;
++			center.y = text_info.glyphs[0].pos.y + device_y;
++
++			FT_BBox str_bbox;
++			compute_string_bbox(&text_info, &str_bbox);
++			center.x += (str_bbox.xMax - str_bbox.xMin) / 2;
++			center.y += (str_bbox.yMax - str_bbox.yMin) / 2;
++		}
++//		mp_msg(MSGT_GLOBAL, MSGL_DBG2, "\ncenter: %d, %d\n", center.x, center.y);
++
++		for (i = 0; i < text_info.length; ++i) {
++			glyph_info_t* info = text_info.glyphs + i;
++
++			// calculating shift vector
++			// shift = (position - center)*M - (position - center)
++			FT_Vector start;
++			FT_Vector start_old;
++//			mp_msg(MSGT_GLOBAL, MSGL_DBG2, "start: (%d, %d) + (%d, %d) - (%d, %d) = (%d, %d)\n", info->pos.x, info->pos.y, device_x, device_y, center.x, center.y,
++//					info->pos.x + device_x - center.x, info->pos.y + device_y - center.y);
++			start.x = (info->pos.x + device_x - center.x) << 6;
++			start.y = - (info->pos.y + device_y - center.y) << 6;
++			start_old.x = start.x;
++			start_old.y = start.y;
++//			mp_msg(MSGT_GLOBAL, MSGL_DBG2, "start: %d, %d\n", start.x / 64, start.y / 64);
++
++			FT_Vector_Transform(&start, &matrix_rotate);
++			
++			start.x -= start_old.x;
++			start.y -= start_old.y;
++
++			info->pos.x += start.x >> 6;
++			info->pos.y -= start.y >> 6;
++
++//			mp_msg(MSGT_GLOBAL, MSGL_DBG2, "shift: %d, %d\n", start.x / 64, start.y / 64);
++
++//			FT_Glyph_Transform( info->glyph, &matrix_rotate, &start );
++//			FT_Glyph_Transform( info->outline_glyph, &matrix_rotate, &start );
++			if (info->bitmap != 1) {
++				FT_Glyph_Transform( info->glyph, &matrix_rotate, 0 );
++				FT_Glyph_Transform( info->outline_glyph, &matrix_rotate, 0 );
++			}
++		}
++	}
++
++	// render
++	render_text(&text_info, device_x, device_y);
++
++	free_render_context();
++	
++	return 0;
++}
++
++void copy_from_image(int first_row, int last_row)
++{
++	int pl;
++	int i, j, k;
++	unsigned char val;
++
++	first_row -= (first_row % 2);
++	last_row += (last_row % 2);
++	int chroma_rows = (last_row - first_row) / 2;
++
++	for (pl = 1; pl < 3; ++pl) {
++		int dst_stride = frame_context.dmpi->stride[pl] * 2;
++		int src_stride = frame_context.dmpi->stride[pl];
++		
++		unsigned char* src = frame_context.dmpi->planes[pl] + (first_row/2) * src_stride;
++		unsigned char* dst = frame_context.planes[pl] + first_row * dst_stride;
++		unsigned char* dst_next = dst + dst_stride;
++		for(i = 0; i < chroma_rows; ++i)
++		{
++			if ((frame_context.dirty_rows[first_row + i*2] == 0) ||
++				(frame_context.dirty_rows[first_row + i*2 + 1] == 0)) {
++				for (j = 0, k = 0; j < frame_context.dmpi->chroma_width; ++j, k+=2) {
++					val = *(src + j);
++					*(dst + k) = val;
++					*(dst + k + 1) = val;
++					*(dst_next + k) = val;
++					*(dst_next + k + 1) = val;
++				}
++			}
++			src += src_stride;
++			dst = dst_next + dst_stride;
++			dst_next = dst + dst_stride;
++		}
++	}
++	for (i = first_row; i < last_row; ++i)
++		frame_context.dirty_rows[i] = 1;
++}
++
++void copy_to_image()
++{
++	int pl;
++	int i, j, k;
++	for (pl = 1; pl < 3; ++pl) {
++		int dst_stride = frame_context.dmpi->stride[pl];
++		int src_stride = frame_context.dmpi->stride[pl] * 2;
++		
++		unsigned char* dst = frame_context.dmpi->planes[pl];
++		unsigned char* src = frame_context.planes[pl];
++		unsigned char* src_next = frame_context.planes[pl] + src_stride;
++		for(i = 0; i < frame_context.dmpi->chroma_height; ++i)
++		{
++			if ((frame_context.dirty_rows[i*2] == 1)) {
++				assert(frame_context.dirty_rows[i*2 + 1] == 1);
++				for (j = 0, k = 0; j < frame_context.dmpi->chroma_width; ++j, k+=2) {
++					unsigned val = 0;
++					val += *(src + k);
++					val += *(src + k + 1);
++					val += *(src_next + k);
++					val += *(src_next + k + 1);
++					*(dst + j) = val >> 2;
++				}
++			}
++			dst += dst_stride;
++			src = src_next + src_stride;
++			src_next = src + src_stride;
++		}
++	}
++}
++
++// initialize frame_context
++int ass_start_frame(struct ass_priv_s *priv, mp_image_t *dmpi, ass_track_data_t* track)
++{
++	frame_context.ass_priv = priv;
++	frame_context.dmpi = dmpi;
++	frame_context.track = track;
++	frame_context.add_bottom_margin = 0;
++	frame_context.add_top_margin = 0;
++
++	ass_lazy_header_init();
++
++	memset(frame_context.dirty_rows, 0, frame_context.dmpi->h); // reset dirty rows
++
++	return 0;
++}
++
++int ass_end_frame()
++{
++	copy_to_image();
++	return 0;
++}
++
++#endif // HAVE_FREETYPE
++
+Index: libsub/ass.c
+===================================================================
+--- libsub/ass.c	(.../branches/upstream)	(revision 0)
++++ libsub/ass.c	(.../trunk)	(revision 219)
+@@ -0,0 +1,590 @@
++#include "config.h"
++
++#ifndef HAVE_FREETYPE
++
++void ass_process_chunk(int tid, char *data, int size) {}
++void ass_process_line(int tid, char *data, int size, unsigned long long timecode, unsigned long long duration) {}
++void ass_process_font(const char* name, char* data, int data_size) {}
++int ass_read_file(char* fname) {return -1;}
++void ass_find_sub(unsigned long long timecode) {}
++void ass_change_track(int track_id) {}
++
++#else // HAVE_FREETYPE
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <assert.h>
++#include <pthread.h>
++#include <errno.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <unistd.h>
++
++#include "mp_msg.h"
++#include "ass.h"
++#include "ass_types.h"
++
++char *get_path(char *);
++
++ass_track_data_t ass_tracks_info[ASS_MAX_TRACKS];
++int ass_current_track = 0;
++unsigned long long ass_current_timecode = 0;
++
++static int track_init(int tid) {
++	memset(ass_tracks_info + tid, 0, sizeof(ass_track_data_t));
++	ass_tracks_info[tid].my_track = 1;
++	return 0;
++}
++
++static int alloc_style(int tid) {
++	ass_track_data_t* track = ass_tracks_info + tid;
++	int sid;
++	
++	assert(track->n_styles <= track->max_styles);
++
++	if (track->n_styles == track->max_styles) {
++		track->max_styles += ASS_MAX_STYLES;
++		track->styles = (ass_style_t*)realloc(track->styles, sizeof(ass_style_t)*track->max_styles);
++	}
++	
++	sid = track->n_styles++;
++	memset(track->styles + sid, 0, sizeof(ass_style_t));
++	return sid;
++}
++
++static int alloc_event(int tid) {
++	ass_track_data_t* track = ass_tracks_info + tid;
++	int eid;
++	
++	assert(track->n_events <= track->max_events);
++
++	if (track->n_events == track->max_events) {
++		track->max_events += ASS_MAX_EVENTS;
++		track->events = (ass_event_t*)realloc(track->events, sizeof(ass_event_t)*track->max_events);
++	}
++	
++	eid = track->n_events++;
++	memset(track->events + eid, 0, sizeof(ass_event_t));
++	return eid;
++}
++
++static void free_event(int tid, int eid) {
++	ass_track_data_t* track = ass_tracks_info + tid;
++	if (track->n_events > eid + 1) // not last event
++		memcpy(track->events + eid, track->events + eid + 1, sizeof(ass_event_t) * (track->n_events - eid - 1));
++	track->n_events--;
++}
++/*
++static void dump_styles(int tid) {
++	int i;
++	ass_track_data_t* track = ass_tracks_info + tid;
++	mp_msg(MSGT_GLOBAL, MSGL_INFO, "=== styles ===\n");
++	for (i=0; i<track->n_styles; ++i) {
++		ass_style_t* style = track->styles + i;
++		mp_msg(MSGT_GLOBAL, MSGL_INFO, "Style %d:\n\tName = %s\n\tFontName = %s\n\tFontSize = %d\n", i, style->Name, style->FontName,
++				style->FontSize);
++	}
++	mp_msg(MSGT_GLOBAL, MSGL_INFO, "=== end of styles ===\n");
++}
++
++static void dump_events(int tid) {
++	int i;
++	ass_track_data_t* track = ass_tracks_info + tid;
++	mp_msg(MSGT_GLOBAL, MSGL_INFO, "=== events ===\n");
++	for (i=0; i<track->n_events; ++i) {
++		ass_event_t* event = track->events + i;
++		mp_msg(MSGT_GLOBAL, MSGL_INFO, "Event %d:\n\tStart = %lld\n\tDuration = %lld\n\tStyle = %d\n\tText = %s\n", i, event->Start, event->Duration,
++				event->Style, event->Text);
++	}
++	mp_msg(MSGT_GLOBAL, MSGL_INFO, "=== end of events ===\n");
++}
++*/
++
++// ======================================================================================================
++
++static int lookup_style(int tid, char* name) {
++	ass_track_data_t* track = ass_tracks_info + tid;
++	int i;
++	for (i=0; i<track->n_styles; ++i) {
++		if (strcmp(track->styles[i].Name, name) == 0)
++			return i;
++	}
++	i = track->default_style;
++	mp_msg(MSGT_GLOBAL, MSGL_WARN, "[%d] Warning: no style named '%s' found, using '%s'\n", tid, name, track->styles[i].Name);
++	return i; // use the first style
++}
++
++static unsigned string2color(char* p) {
++#define badcolor { mp_msg(MSGT_GLOBAL, MSGL_WARN, "bad color at %s:%d\n", __FILE__, __LINE__); return 0; }
++        unsigned color = 0;
++	if (*p == '&') {
++		++p;
++        	if (*p++ != 'H') badcolor
++        	color = strtol(p, &p, 16);
++	} else {
++        	color = strtol(p, &p, 10);
++	}
++	unsigned char* tmp = (unsigned char*)(&color);
++	unsigned char b;
++	b = tmp[0]; tmp[0] = tmp[3]; tmp[3] = b;
++	b = tmp[1]; tmp[1] = tmp[2]; tmp[2] = b;
++        return color;
++#undef badcolor
++}
++
++static unsigned long long string2timecode(char* p) {
++	unsigned h, m, s, ms;
++	unsigned long long tm;
++	int res = sscanf(p, "%1d:%2d:%2d.%2d", &h, &m, &s, &ms);
++	if (res < 4) {
++		mp_msg(MSGT_GLOBAL, MSGL_WARN, "bad timestamp\n");
++		return 0;
++	}
++//	printf("time: %dh %dm %ds %dms\n", h, m, s, ms);
++	tm = ((h * 60 + m) * 60 + s) * 1000 + ms * 10;
++//	printf("timecode: %llu\n", tm);
++	return tm;
++}
++
++static int numpad2align(int val) {
++	int v = (val - 1) / 3; // 0, 1 or 2 for vertical alignment
++	if (v != 0) v = 3 - v;
++	int res = ((val - 1) % 3) + 1; // horizontal alignment
++	res += v*4;
++	return res;
++}
++
++#define NEXT(str,token) \
++	token = str; \
++	str += (step = next_token(str)); \
++	if (!step) break; \
++	while (*token == ' ') {token++;}
++
++#define ANYVAL(name,func) \
++	} else if (strcasecmp(tname, #name) == 0) { \
++		target->name = func(token); \
++		mp_msg(MSGT_GLOBAL, MSGL_DBG2, "%s = %s\n", #name, token);
++#define STRVAL(name) ANYVAL(name,strdup)
++#define COLORVAL(name) ANYVAL(name,string2color)
++#define INTVAL(name) ANYVAL(name,atoi)
++#define FPVAL(name) ANYVAL(name,atof)
++#define TIMEVAL(name) ANYVAL(name,string2timecode)
++#define STYLEVAL(name) \
++	} else if (strcasecmp(tname, #name) == 0) { \
++		target->name = lookup_style(tid, token); \
++		mp_msg(MSGT_GLOBAL, MSGL_DBG2, "%s = %s\n", #name, token);
++
++#define ALIAS(alias,name) \
++	if (strcasecmp(tname, #alias) == 0) {tname = #name;}
++
++static int next_token(char* str) {
++	int i;
++	char* p = str;
++	if (*p == '\0')
++		return 0;
++	for (i=0,p=str; (*p!='\0')&&(*p!=','); ++i,++p) {}
++	if (*p == '\0') {
++		return p - str;
++	} else {
++		*p = '\0';
++		return p - str + 1;
++	}
++}
++
++// n_ignored - number of format options ignored at the beginning
++static int process_event_tail(int tid, ass_event_t* event, char* str, int n_ignored)
++{
++	char* token;
++	char* tname;
++	int step;
++	char* p = str;
++	int i;
++	ass_event_t* target = event;
++
++	char* format = strdup(ass_tracks_info[tid].event_format);
++	char* q = format; // format scanning pointer
++
++	for (i = 0; i < n_ignored; ++i) {
++		NEXT(q, tname);
++	}
++
++	while (1) {
++		NEXT(q, tname);
++		if (strcasecmp(tname, "Text") == 0) {
++			event->Text = strdup(p);
++			char* last = event->Text + strlen(event->Text) - 1;
++			if (*last == '\r')
++				*last = 0;
++			mp_msg(MSGT_GLOBAL, MSGL_DBG2, "Text = %s\n", event->Text);
++			event->Duration -= event->Start;
++			free(format);
++			return 0; // "Text" is always the last
++		}
++		NEXT(p, token);
++//		printf("======  %s, %s\n", tname, token);
++		
++		ALIAS(End,Duration) // temporarily store end timecode in event->Duration
++		if (0) { // cool ;)
++			STYLEVAL(Style)
++			STRVAL(Name)
++			STRVAL(Effect)
++			INTVAL(MarginL)
++			INTVAL(MarginR)
++			INTVAL(MarginV)
++			TIMEVAL(Start)
++			TIMEVAL(Duration)
++		}
++	}
++	free(format);
++	return 1;
++}
++
++static int process_style(int tid, char *str)
++{
++
++	char* token;
++	char* tname;
++	int step;
++	char* p = str;
++	
++	assert(ass_tracks_info[tid].style_format);
++	
++	char* format = strdup(ass_tracks_info[tid].style_format);
++	char* q = format; // format scanning pointer
++	
++	mp_msg(MSGT_GLOBAL, MSGL_V, "[%d] Style: %s\n", tid, str);
++	
++	int sid = alloc_style(tid);
++
++	ass_track_data_t* track = ass_tracks_info + tid;
++	ass_style_t* style = ass_tracks_info[tid].styles + sid;
++	ass_style_t* target = style;
++	
++	while (1) {
++		NEXT(q, tname);
++		NEXT(p, token);
++		
++//		ALIAS(TertiaryColour,OutlineColour) // ignore TertiaryColour; it appears only in SSA, and is overridden by BackColour
++			
++		if (0) { // cool ;)
++			STRVAL(Name)
++				if ((strcmp(target->Name, "Default")==0) || (strcmp(target->Name, "*Default")==0))
++					track->default_style = sid;
++			STRVAL(FontName)
++			COLORVAL(PrimaryColour)
++			COLORVAL(SecondaryColour)
++			COLORVAL(OutlineColour) // TertiaryColor
++			COLORVAL(BackColour)
++				// SSA uses BackColour for both outline and shadow
++				// this will destroy SSA's TertiaryColour, but i'm not going to use it anyway
++				if (track->track_type == TRACK_TYPE_SSA)
++					target->OutlineColour = target->BackColour;
++			INTVAL(FontSize)
++			INTVAL(Bold)
++			INTVAL(Italic)
++			INTVAL(Underline)
++			INTVAL(StrikeOut)
++			INTVAL(Spacing)
++			INTVAL(Angle)
++			INTVAL(BorderStyle)
++			INTVAL(Alignment)
++				if (track->track_type == TRACK_TYPE_ASS)
++					target->Alignment = numpad2align(target->Alignment);
++			INTVAL(MarginL)
++			INTVAL(MarginR)
++			INTVAL(MarginV)
++			INTVAL(Encoding)
++			FPVAL(ScaleX)
++			FPVAL(ScaleY)
++			FPVAL(Outline)
++			FPVAL(Shadow)
++		}
++	}
++	free(format);
++	return 0;
++	
++}
++
++static int process_header_line(int tid, char *str)
++{
++	static int events_section_started = 0;
++	
++	ass_track_data_t* track = ass_tracks_info + tid;
++	mp_msg(MSGT_GLOBAL, MSGL_DBG2, "=== Header: %s\n", str);
++	if (strncmp(str, "PlayResX: ", 10)==0) {
++		track->PlayResX = atoi(str + 10);
++	} else if (strncmp(str,"PlayResY: ", 10)==0) {
++		track->PlayResY = atoi(str + 10);
++	} else if (strncmp(str,"Timer: ", 7)==0) {
++		track->Timer = atof(str + 7);
++	} else if (strstr(str,"Styles]")) {
++		events_section_started = 0;
++		if (strchr(str, '+'))
++			track->track_type = TRACK_TYPE_ASS;
++		else
++			track->track_type = TRACK_TYPE_SSA;
++	} else if (strncmp(str,"[Events]", 8)==0) {
++		events_section_started = 1;
++	} else if (strncmp(str,"Format: ", 8)==0) {
++		if (events_section_started) {
++			track->event_format = strdup(str + 8);
++			mp_msg(MSGT_GLOBAL, MSGL_DBG2, "Event format: %s\n", track->event_format);
++		} else {
++			track->style_format = strdup(str + 8);
++			mp_msg(MSGT_GLOBAL, MSGL_DBG2, "Style format: %s\n", track->style_format);
++		}
++	} else if (strncmp(str,"Style: ", 7)==0) {
++		process_style(tid, str + 7);
++	}
++	return 0;
++}
++
++// process Codec Private section of subtitle stream
++// it contains [Stream Info] and [V4+ Styles] sections
++void ass_process_chunk(int tid, char *data, int size)
++{
++	char* str = malloc(size + 1);
++	memcpy(str, data, size);
++	str[size] = '\0';
++//	printf("=====================\n[%d] chunk: \n%s\n", tid, str);
++
++	track_init(tid);
++	ass_track_data_t* track = ass_tracks_info + tid;
++
++	char* p = str;
++	while(1) {
++		char* q;
++		for (;((*p=='\r')||(*p=='\n'));++p) {}
++		for (q=p; ((*q!='\0')&&(*q!='\r')&&(*q!='\n')); ++q) {};
++		if (q==p)
++			break;
++		if (*q != '\0')
++			*(q++) = '\0';
++		process_header_line(tid, p);
++		if (*q == '\0')
++			break;
++		p = q;
++	}
++	free(str);
++
++	if (!track->event_format) {
++		// probably an mkv produced by ancient mkvtoolnix
++		// such files don't have [Events] and Format: headers
++		if (track->track_type == TRACK_TYPE_SSA)
++			track->event_format = "Format: Marked, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text";
++		else
++			track->event_format = "Format: Layer, Start, End, Style, Actor, MarginL, MarginR, MarginV, Effect, Text";
++	}
++}
++
++static int check_duplicate_event(int tid, int ReadOrder)
++{
++	int i;
++	ass_track_data_t* track = ass_tracks_info + tid;
++	for (i=0;  i<track->n_events - 1; ++i) // ignoring last event, it is the one we are comparing with
++		if (track->events[i].ReadOrder == ReadOrder)
++			return 1;
++	return 0;
++}
++
++// process a chunk of subtitle stream data
++// according to matroska/ass specification, it contains exactly 1 event
++void ass_process_line(int tid, char *data, int size, unsigned long long timecode, unsigned long long duration)
++{
++	if (!ass_tracks_info[tid].my_track) {
++		mp_msg(MSGT_GLOBAL, MSGL_WARN, "Uninitialized subtitle track\n");
++		return;
++	}
++	if (!ass_tracks_info[tid].event_format) {
++		mp_msg(MSGT_GLOBAL, MSGL_WARN, "Event format header missing\n");
++		return;
++	}
++	
++	char* str = malloc(size + 1);
++	memcpy(str, data, size);
++	str[size] = '\0';
++	mp_msg(MSGT_GLOBAL, MSGL_V, "\nline at timecode %lld, duration %lld: \n%s\n", timecode, duration, str);
++
++	int eid = alloc_event(tid);
++	ass_event_t* event = ass_tracks_info[tid].events + eid;
++
++	char* p = str;
++	char* token;
++	int step;
++	
++	do { 
++		NEXT(p, token);
++		event->ReadOrder = atoi(token);
++		if (check_duplicate_event(tid, event->ReadOrder))
++			break;
++
++		NEXT(p, token);
++		event->Layer = atoi(token);
++
++		process_event_tail(tid, event, p, 3);
++
++		event->Start = timecode;
++		event->Duration = duration;
++		
++		free(str);
++		return;
++//		dump_events(tid);
++	} while (0);
++	// some error
++	free_event(tid, eid);
++	free(str);
++}
++
++static void ass_process_external_line(int tid, char *str, int size)
++{
++	assert(ass_tracks_info[tid].my_track);
++
++	int eid = alloc_event(tid);
++	ass_event_t* event = ass_tracks_info[tid].events + eid;
++
++	if (strncmp("Dialogue: ", str, 10) != 0)
++		return;
++
++	str += 10;
++	process_event_tail(tid, event, str, 0);
++}
++
++int ass_read_file(char* fname)
++{
++	const int forced_tid = ASS_MAX_TRACKS - 1;
++	
++	FILE* fp = fopen(fname, "r");
++	if (!fp) {
++		mp_msg(MSGT_GLOBAL, MSGL_WARN, "ass_read_file(%s): fopen failed\n", fname);
++		return -1;
++	}
++	int res = fseek(fp, 0, SEEK_END);
++	if (res == -1) {
++		mp_msg(MSGT_GLOBAL, MSGL_WARN, "ass_read_file(%s): fseek failed\n", fname);
++		fclose(fp);
++		return -1;
++	}
++	long sz = ftell(fp);
++	rewind(fp);
++
++	if (sz > 10*1024*1024) {
++		mp_msg(MSGT_GLOBAL, MSGL_INFO, "ass_read_file(%s): Refusing to load subtitles larger than 10M\n", fname);
++		fclose(fp);
++		return -1;
++	}
++	
++	mp_msg(MSGT_GLOBAL, MSGL_V, "file size: %ld\n", sz);
++	
++	char* buf = (char*)malloc(sz + 1);
++	assert(buf);
++	long bytes_read = 0;
++	do {
++		res = fread(buf + bytes_read, 1, sz - bytes_read, fp);
++		if (res <= 0) {
++			mp_msg(MSGT_GLOBAL, MSGL_INFO, "Read failed, %d: %s\n", errno, strerror(errno));
++			fclose(fp);
++			free(buf);
++			return -1;
++		}
++		bytes_read += res;
++	} while (sz - bytes_read > 0);
++	
++	buf[sz] = 0;
++	
++	fclose(fp);
++
++	
++	// process header
++	int events_reached = 0;
++	char* p = buf;
++	while (p && (*p)) {
++		while (*p == '\n') {++p;}
++		if (strncmp(p, "[Events]", 8) == 0) {
++			events_reached = 1;
++		} else if ((strncmp(p, "Format:", 7) == 0) && (events_reached)) {
++			p = strchr(p, '\n');
++			if (p == 0) {
++				mp_msg(MSGT_GLOBAL, MSGL_WARN, "Incomplete subtitles\n");
++				return -1;
++			}
++			ass_process_chunk(forced_tid, buf, p - buf + 1);
++			++p;
++			break;
++		}
++		p = strchr(p, '\n');
++	}
++	// process events
++	while (p && (*p)) {
++		while (*p == '\n') {++p;}
++		char* next = strchr(p, '\n');
++		int len = 0;
++		if (next) {
++			len = next - p;
++			*next = 0;
++		} else {
++			len = strlen(p);
++		}
++		ass_process_external_line(forced_tid, p, len);
++		if (next) {
++			p = next + 1;
++			continue;
++		} else
++			break;
++	}
++
++//	dump_events(forced_tid);
++	return forced_tid;
++}
++
++void ass_process_font(const char* name, char* data, int data_size)
++{
++	char buf[1000];
++	FILE* fp = 0;
++	int rc;
++	struct stat st;
++	
++	char* fonts_dir = get_path("fonts");
++	rc = stat(fonts_dir, &st);
++	if (rc) {
++		int res;
++		res = mkdir(fonts_dir, 0700);
++		if (res) {
++			mp_msg(MSGT_GLOBAL, MSGL_WARN, "Failed to create: %s\n", fonts_dir);
++		}
++	} else if (!S_ISDIR(st.st_mode)) {
++		mp_msg(MSGT_GLOBAL, MSGL_WARN, "Not a directory: %s\n", fonts_dir);
++	}
++	
++	snprintf(buf, 1000, "%s/%s", fonts_dir, name);
++	free(fonts_dir);
++	rc = stat(buf, &st);
++	if (rc || (!S_ISREG(st.st_mode))) {
++		fp = fopen(buf, "w");
++	}
++	
++	if (!fp)
++		return;
++
++	fwrite(data, data_size, 1, fp);
++	fclose(fp);
++}
++
++
++// called from mplayer.c once each frame before applying video filters
++void ass_find_sub(unsigned long long timecode) {
++	ass_current_timecode = timecode;
++}
++
++extern int sub_visibility;
++
++void ass_change_track(int track_id) {
++	ass_current_track = track_id;
++	if ((track_id >= ASS_MAX_TRACKS) || !(ass_tracks_info[track_id].my_track))
++		sub_visibility = 1;
++	else
++		sub_visibility = 0;
++}
++
++#endif // HAVE_FREETYPE
++
+Index: libsub/ass_utils.c
+===================================================================
+--- libsub/ass_utils.c	(.../branches/upstream)	(revision 0)
++++ libsub/ass_utils.c	(.../trunk)	(revision 219)
+@@ -0,0 +1,67 @@
++#include "config.h"
++
++#ifdef HAVE_FREETYPE
++
++#include <stdint.h>
++#include <sys/time.h>
++#include <time.h>
++
++#include "mp_msg.h"
++#include "ass_utils.h"
++
++static const char utf8_lentab[] = {
++        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
++        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
++        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
++        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
++        0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
++        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
++        3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
++        4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 0, 0 };
++
++static int utf8_charlen( const char * p )
++{
++        if (!(*p & 0x80))
++                return 1;
++
++        return utf8_lentab[*(const unsigned char *)p ^ 0x80];
++}
++
++long utf8_to_ucs4(const char* p, uint32_t* pch)
++{
++        const unsigned char *c = (const unsigned char*)p;
++        uint32_t ch;
++        int len, i;
++        static unsigned char mask[] = {
++                0, 0x7f, 0x1f, 0x0f, 0x07, 0x03, 0x01 };
++
++	if (*p == 0) {
++		*pch = 0;
++		return 0;
++	}
++	
++        len = utf8_charlen(p);
++
++        if( len == 0 ) {
++                *pch = UCS4_INVALID;
++                return 0;
++        }
++
++        ch = c[0] & mask[len];
++
++        for(i=1; i < len; i++) {
++                if ((c[i] & 0xc0) != 0x80) {
++                        *pch = UCS4_INVALID;
++			return 0; // or 0 ??
++                }
++
++                ch <<= 6;
++                ch |= c[i] & 0x3f;
++        }
++
++        *pch = ch;
++        return len;
++}
++
++#endif // HAVE_FREETYPE
++
+Index: libsub/ass_fontconfig.h
+===================================================================
+--- libsub/ass_fontconfig.h	(.../branches/upstream)	(revision 0)
++++ libsub/ass_fontconfig.h	(.../trunk)	(revision 219)
+@@ -0,0 +1,9 @@
++#ifndef __ASS_FONTCONFIG_H__
++#define __ASS_FONTCONFIG_H__
++
++void* fontconfig_init(const char* dir, const char* family1, const char* family2, const char* path);
++
++char* fontconfig_select(void* priv, const char* family, int* index);
++
++#endif
++
+Index: libsub/ass_cache.c
+===================================================================
+--- libsub/ass_cache.c	(.../branches/upstream)	(revision 0)
++++ libsub/ass_cache.c	(.../trunk)	(revision 219)
+@@ -0,0 +1,164 @@
++#include "config.h"
++
++#ifdef HAVE_FREETYPE
++
++#include <ft2build.h>
++#include FT_FREETYPE_H
++
++#include <assert.h>
++
++#include "mp_msg.h"
++#include "ass_fontconfig.h"
++#include "ass_cache.h"
++
++
++typedef struct face_cache_item_s {
++	face_desc_t desc;
++	char* path;
++	int index;
++	FT_Face face;
++} face_cache_item_t;
++
++#define MAX_FACE_CACHE_SIZE 100
++
++static face_cache_item_t face_cache[MAX_FACE_CACHE_SIZE];
++static int face_cache_size = 0;
++
++extern int no_more_font_messages;
++
++static int font_compare(face_desc_t* a, face_desc_t* b) {
++	if (strcmp(a->family, b->family) != 0)
++		return 0;
++	if (a->bold != b->bold)
++		return 0;
++	if (a->italic != b->italic)
++		return 0;
++	return 1;
++}
++
++int ass_new_face(FT_Library library, void* fontconfig_priv, face_desc_t* desc, /*out*/ FT_Face* face)
++{
++	FT_Error error;
++	int i;
++	for (i=0; i<face_cache_size; ++i)
++		if (font_compare(desc, &(face_cache[i].desc))) {
++			*face = face_cache[i].face;
++			return 0;
++		}
++
++	if (face_cache_size == MAX_FACE_CACHE_SIZE) {
++		mp_msg(MSGT_GLOBAL, MSGL_FATAL, "Too many fonts\n");
++		return 1;
++	}
++
++	char* path;
++	int index;
++	path = fontconfig_select(fontconfig_priv, desc->family, &index);
++	
++	error = FT_New_Face(library, path, index, face);
++	if (error) {
++		if (!no_more_font_messages)
++			mp_msg(MSGT_GLOBAL, MSGL_WARN, "Error opening font: %s, %d\n", path, index);
++		no_more_font_messages = 1;
++		return 1;
++	}
++	
++	face_cache_item_t* item = face_cache + face_cache_size;
++	
++	item->path = strdup(path);
++	item->index = index;
++	item->face = *face;
++	memcpy(&(item->desc), desc, sizeof(face_desc_t));
++	face_cache_size++;
++	return 0;
++}
++
++#define GLYPH_HASH_SIZE (0xFFFF + 13)
++
++typedef struct glyph_hash_item_s {
++	glyph_hash_key_t key;
++	glyph_hash_val_t val;
++	struct glyph_hash_item_s* next;
++} glyph_hash_item_t;
++
++typedef glyph_hash_item_t* glyph_hash_item_p;
++
++static glyph_hash_item_p glyph_hash_root[GLYPH_HASH_SIZE]; // zero-filled at start
++
++static int glyph_hash_size = 0;
++
++
++
++static int glyph_compare(glyph_hash_key_t* a, glyph_hash_key_t* b) {
++/*	if (a->face != b->face)
++		return 0;
++	if (a->size != b->size)
++		return 0;
++	if (a->symbol != b->symbol)
++		return 0;
++	if (a->outline != b->outline)
++		return 0;
++	if (a->bold != b->bold)
++		return 0;
++	if (a->italic != b->italic)
++		return 0;*/
++	if (memcmp(a, b, sizeof(glyph_hash_key_t)) == 0)
++		return 1;
++	else
++		return 0;
++}
++
++static unsigned glyph_hash(glyph_hash_key_t* key) {
++	unsigned val = 0;
++	unsigned i;
++	for (i = 0; i < sizeof(key->face); ++i)
++		val += *(unsigned char *)(&(key->face) + i);
++	val <<= 21;
++	
++	if (key->bitmap)   val &= 0x80000000;
++	if (key->bold)     val &= 0x40000000;
++	if (key->italic)   val &= 0x20000000;
++	val += key->index;
++	val += key->size << 8;
++	val += key->outline << 3;
++	return val;
++}
++
++void cache_add_glyph(glyph_hash_key_t* key, glyph_hash_val_t* val)
++{
++	unsigned hash = glyph_hash(key);
++	glyph_hash_item_t** next = glyph_hash_root + (hash % GLYPH_HASH_SIZE);
++	while (*next) {
++		if (glyph_compare(key, &((*next)->key)))
++			return;
++		next = &((*next)->next);
++		assert(next);
++	}
++	(*next) = (glyph_hash_item_t*)malloc(sizeof(glyph_hash_item_t));
++//	(*next)->desc = glyph_key_copy(key, &((*next)->key));
++	memcpy(&((*next)->key), key, sizeof(glyph_hash_key_t));
++	memcpy(&((*next)->val), val, sizeof(glyph_hash_val_t));
++	(*next)->next = 0;
++
++	glyph_hash_size ++;
++/*	if (glyph_hash_size  && (glyph_hash_size % 25 == 0)) {
++		printf("\nGlyph cache: %d entries, %d bytes\n", glyph_hash_size, glyph_hash_size * sizeof(glyph_hash_item_t));
++	} */
++}
++
++// return 0 on error
++glyph_hash_val_t* cache_find_glyph(glyph_hash_key_t* key)
++{
++	unsigned hash = glyph_hash(key);
++	glyph_hash_item_t* item = glyph_hash_root[hash % GLYPH_HASH_SIZE];
++	while (item) {
++		if (glyph_compare(key, &(item->key))) {
++			return &(item->val);
++		}
++		item = item->next;
++	}
++	return 0;
++}
++
++#endif // HAVE_FREETYPE
++
+Index: libsub/ass_render.h
+===================================================================
+--- libsub/ass_render.h	(.../branches/upstream)	(revision 0)
++++ libsub/ass_render.h	(.../trunk)	(revision 219)
+@@ -0,0 +1,30 @@
++#ifndef __ASS_RENDER_H__
++#define __ASS_RENDER_H__
++
++#include <ft2build.h>
++#include FT_FREETYPE_H
++#include FT_STROKER_H
++#include FT_GLYPH_H
++
++#include "img_format.h"
++#include "mp_image.h"
++#include "mp_msg.h"
++
++#include "ass.h"
++#include "ass_types.h"
++#include "ass_fontconfig.h"
++
++typedef struct ass_priv_s {
++	FT_Library library;
++	FT_Face face;
++	void* fontconfig_priv;
++} ass_priv_t;
++
++int ass_init(struct ass_priv_s *p);
++
++int ass_start_frame(struct ass_priv_s *priv, mp_image_t *dmpi, ass_track_data_t* track);
++int ass_render_event(ass_event_t* event);
++int ass_end_frame();
++
++#endif
++
+Index: libsub/ass.h
+===================================================================
+--- libsub/ass.h	(.../branches/upstream)	(revision 0)
++++ libsub/ass.h	(.../trunk)	(revision 219)
+@@ -0,0 +1,23 @@
++#ifndef __ASS_H__
++#define __ASS_H__
++
++#include <stdint.h>
++
++// process CodecPrivate section of matroska
++void ass_process_chunk(int tid, char *data, int size);
++// process single Dialogue line
++void ass_process_line(int tid, char *data, int size, unsigned long long timecode, unsigned long long duration);
++// process embedded font from matroska
++void ass_process_font(const char* name, char* data, int data_size);
++
++// load subtitles from file; returns newly allocated track id
++int ass_read_file(char* fname);
++
++// set current time
++void ass_find_sub(unsigned long long timecode);
++
++// set current subtitle track
++void ass_change_track(int track_id);
++
++#endif
++
+Index: libsub/ass_utils.h
+===================================================================
+--- libsub/ass_utils.h	(.../branches/upstream)	(revision 0)
++++ libsub/ass_utils.h	(.../trunk)	(revision 219)
+@@ -0,0 +1,9 @@
++#ifndef __ASS_UTILS_H__
++#define __ASS_UTILS_H__
++
++#define UCS4_INVALID (0x80000000U)
++
++long utf8_to_ucs4(const char* p, unsigned int* pch);
++
++#endif
++
+Index: libsub/Makefile
+===================================================================
+--- libsub/Makefile	(.../branches/upstream)	(revision 0)
++++ libsub/Makefile	(.../trunk)	(revision 219)
+@@ -0,0 +1,53 @@
++
++include ../config.mak
++
++LIBNAME=libsub.a
++
++LIBS=$(LIBNAME)
++
++SRCS=ass.c
++
++ifeq ($(FREETYPE),yes)
++SRCS+=ass_cache.c ass_fontconfig.c ass_render.c ass_utils.c
++endif
++
++OBJS=$(SRCS:.c=.o)
++
++CFLAGS  = $(OPTFLAGS) \
++          -I. -I.. \
++          -I../libmpcodecs \
++          $(EXTRA_INC) \
++          -D_GNU_SOURCE \
++	  $(FREETYPE_INC)
++
++.SUFFIXES: .c .o
++
++# .PHONY: all clean
++
++.c.o:
++	$(CC) -c $(CFLAGS) -o $@ $<
++
++all:    $(LIBS)
++
++$(LIBNAME):     $(OBJS)
++	$(AR) r $(LIBNAME) $(OBJS)
++	$(RANLIB) $(LIBNAME)
++
++clean:
++	rm -f *.o *.a *~
++
++distclean: clean
++	rm -f .depend
++
++dep:    depend
++
++depend:
++	$(CC) -MM $(CFLAGS) $(SRCS) 1>.depend
++
++#
++# include dependency files if they exist
++#
++ifneq ($(wildcard .depend),)
++include .depend
++endif
++
+Index: configure
+===================================================================
+--- configure	(.../branches/upstream)	(revision 219)
++++ configure	(.../trunk)	(revision 219)
+@@ -7334,6 +7334,7 @@
+ DIRECTFB_LIB = $_ld_directfb
+ CDPARANOIA_INC = $_inc_cdparanoia
+ CDPARANOIA_LIB = $_ld_cdparanoia
++FREETYPE = $_freetype
+ FREETYPE_INC = $_inc_freetype
+ FREETYPE_LIB = $_ld_freetype
+ FONTCONFIG_INC = $_inc_fontconfig
+Index: mplayer.c
+===================================================================
+--- mplayer.c	(.../branches/upstream)	(revision 219)
++++ mplayer.c	(.../trunk)	(revision 219)
+@@ -85,6 +85,8 @@
+ 
+ #include "input/input.h"
+ 
++#include "libsub/ass.h"
++
+ int slave_mode=0;
+ int player_idle_mode=0;
+ extern int verbose;
+@@ -1817,6 +1819,8 @@
+         d_dvdsub->id = -2;
+     }
+ 
++    ass_change_track(-1);
++
+     if (source == SUB_SOURCE_VOBSUB) {
+         vobsub_id = global_sub_pos - global_sub_indices[SUB_SOURCE_VOBSUB];
+ #ifdef USE_SUB
+@@ -1841,6 +1845,8 @@
+ #ifdef HAVE_MATROSKA
+             if (demuxer->type == DEMUXER_TYPE_MATROSKA) {
+                 d_dvdsub->id = demux_mkv_change_subs(demuxer, dvdsub_id);
++                ass_change_track(d_dvdsub->id);
++
+                 if (d_dvdsub->id >= 0 &&
+                     ((mkv_sh_sub_t *)d_dvdsub->sh)->type == 'v') {
+                     mkv_sh_sub_t *mkv_sh_sub = (mkv_sh_sub_t *)d_dvdsub->sh;
+@@ -4831,6 +4837,10 @@
+       }
+       current_module=NULL;
+   }
++  // ass/ssa subs
++  if (sh_video && sh_video->pts>0){
++    ass_find_sub((sh_video->pts+sub_delay) * 1000);
++  }
+ #endif
+ 
+ #ifdef HAVE_X11
+Index: libmpdemux/demux_mkv.c
+===================================================================
+--- libmpdemux/demux_mkv.c	(.../branches/upstream)	(revision 219)
++++ libmpdemux/demux_mkv.c	(.../trunk)	(revision 219)
+@@ -22,6 +22,7 @@
+ 
+ #include "subreader.h"
+ #include "libvo/sub.h"
++#include "libsub/ass.h"
+ 
+ #ifdef USE_QTX_CODECS
+ #include "qtx/qtxsdk/components.h"
+@@ -143,6 +144,15 @@
+   uint64_t start, end;
+ } mkv_chapter_t;
+ 
++typedef struct mkv_attachment
++{
++  char* name;
++  char* mime;
++  uint64_t uid;
++  void* data;
++  unsigned int data_size;
++} mkv_attachment_t;
++
+ typedef struct mkv_demuxer
+ {
+   off_t segment_start;
+@@ -179,6 +189,9 @@
+   mkv_chapter_t *chapters;
+   int num_chapters;
+   int64_t stop_timecode;
++
++  mkv_attachment_t *attachments;
++  int num_attachments;
+ } mkv_demuxer_t;
+ 
+ 
+@@ -1069,6 +1082,8 @@
+                    || !strcmp (track->codec_id, MKV_S_ASS))
+             {
+               track->subtitle_type = MATROSKA_SUBTYPE_SSA;
++	      if (track->private_data)
++                ass_process_chunk(track->tnum, track->private_data, track->private_size);
+             }
+           else if (!strcmp (track->codec_id, MKV_S_TEXTASCII))
+             track->subtitle_type = MATROSKA_SUBTYPE_TEXT;
+@@ -1091,6 +1106,8 @@
+             track->private_size = num;
+             mp_msg (MSGT_DEMUX, MSGL_V, "[mkv] |  + CodecPrivate, length "
+                     "%u\n", track->private_size);
++	    if (track->subtitle_type == MATROSKA_SUBTYPE_SSA)
++              ass_process_chunk(track->tnum, track->private_data, track->private_size);
+             break;
+           }
+ 
+@@ -1419,6 +1436,116 @@
+ }
+ 
+ static int
++demux_mkv_read_attachments (demuxer_t *demuxer)
++{
++  mkv_demuxer_t *mkv_d = (mkv_demuxer_t *) demuxer->priv;
++  stream_t *s = demuxer->stream;
++  uint64_t length, l;
++  int il;
++
++  mp_msg(MSGT_DEMUX, MSGL_V, "[mkv] /---- [ parsing attachments ] ---------\n");
++  length = ebml_read_length (s, NULL);
++
++  while (length > 0)
++    {
++      switch (ebml_read_id (s, &il))
++        {
++          case MATROSKA_ID_ATTACHEDFILE:
++            {
++              uint64_t len;
++              int i;
++	      char* name = NULL;
++	      char* mime = NULL;
++	      uint64_t uid = 0;
++	      char* data = NULL;
++	      int data_size = 0;
++
++              len = ebml_read_length (s, &i);
++              l = len + i;
++
++	      mp_msg (MSGT_DEMUX, MSGL_V, "[mkv] | + an attachment...\n");
++
++              if (mkv_d->attachments == NULL)
++                mkv_d->attachments = malloc (32*sizeof(*mkv_d->attachments));
++              else if (!(mkv_d->num_attachments % 32))
++                mkv_d->attachments = realloc (mkv_d->attachments,
++                                           (mkv_d->num_attachments + 32)
++                                           * sizeof(*mkv_d->attachments));
++
++              while (len > 0)
++                {
++                  uint64_t l;
++                  int il;
++
++                  switch (ebml_read_id (s, &il))
++                    {
++	            case MATROSKA_ID_FILENAME:
++                      name = ebml_read_utf8 (s, &l);
++                      if (name == NULL)
++	                return 0;
++		      mp_msg (MSGT_DEMUX, MSGL_V, "[mkv] |  + FileName: %s\n",
++			name);
++		      break;
++
++		    case MATROSKA_ID_FILEMIMETYPE:
++                      mime = ebml_read_ascii (s, &l);
++                      if (mime == NULL)
++	                return 0;
++		      mp_msg (MSGT_DEMUX, MSGL_V, "[mkv] |  + FileMimeType: %s\n",
++			mime);
++                      break;
++
++		    case MATROSKA_ID_FILEUID:
++                      uid = ebml_read_uint (s, &l);
++                      break;
++
++		    case MATROSKA_ID_FILEDATA:
++	              {
++	                int x;
++	                uint64_t num = ebml_read_length (s, &x);
++			l = x + num;
++	                data = malloc (num);
++	                if (stream_read(s, data, num) != (int) num)
++	                  return 0;
++	                data_size = num;
++	                mp_msg (MSGT_DEMUX, MSGL_V, "[mkv] |  + FileData, length "
++	                        "%u\n", data_size);
++	                break;
++	              }
++
++                    default:
++                      ebml_read_skip (s, &l);
++                      break;
++                    }
++                  len -= l + il;
++                }
++
++              mkv_d->attachments[mkv_d->num_attachments].name = name;
++              mkv_d->attachments[mkv_d->num_attachments].mime = mime;
++              mkv_d->attachments[mkv_d->num_attachments].uid = uid;
++              mkv_d->attachments[mkv_d->num_attachments].data = data;
++              mkv_d->attachments[mkv_d->num_attachments].data_size = data_size;
++	      mkv_d->num_attachments ++;
++              mp_msg(MSGT_DEMUX, MSGL_V,
++                     "[mkv] Attachment: %s, %s, %u bytes\n",
++		     name, mime, data_size);
++	      if (mime && (strcmp(mime, "application/x-truetype-font") == 0))
++	        ass_process_font(name, data, data_size);
++              break;
++            }
++
++          default:
++            ebml_read_skip (s, &l);
++            break;
++        }
++      length -= l + il;
++    }
++
++  mp_msg(MSGT_DEMUX, MSGL_V, "[mkv] \\---- [ parsing attachments ] ---------\n");
++  return 0;
++}
++
++static int
+ demux_mkv_read_seekhead (demuxer_t *demuxer)
+ {
+   mkv_demuxer_t *mkv_d = (mkv_demuxer_t *) demuxer->priv;
+@@ -2265,6 +2392,8 @@
+         default:
+           cont = 1;
+         case MATROSKA_ID_ATTACHMENTS:
++          cont = demux_mkv_read_attachments (demuxer);
++          break;
+         case EBML_ID_VOID:
+           ebml_read_skip (s, NULL);
+           break;
+@@ -2565,6 +2694,9 @@
+       return;
+     }
+ 
++  if (track->subtitle_type == MATROSKA_SUBTYPE_SSA)
++    ass_process_line(track->tnum, block, size, timecode, block_duration);
++
+   ptr1 = block;
+   while (ptr1 - block <= size && (*ptr1 == '\n' || *ptr1 == '\r'))
+     ptr1++;
+Index: libmpdemux/ebml.h
+===================================================================
+--- libmpdemux/ebml.h	(.../branches/upstream)	(revision 219)
++++ libmpdemux/ebml.h	(.../trunk)	(revision 219)
+@@ -138,6 +138,12 @@
+ #define MATROSKA_ID_BLOCK                0xA1
+ #define MATROSKA_ID_REFERENCEBLOCK       0xFB
+ 
++/* IDs in the attachments master */
++#define MATROSKA_ID_ATTACHEDFILE	 0x61A7
++#define MATROSKA_ID_FILENAME		 0x466E
++#define MATROSKA_ID_FILEMIMETYPE	 0x4660
++#define MATROSKA_ID_FILEDATA		 0x465C
++#define MATROSKA_ID_FILEUID		 0x46AE
+ 
+ /* matroska track types */
+ #define MATROSKA_TRACK_VIDEO    0x01 /* rectangle-shaped pictures aka video */
+Index: mencoder.c
+===================================================================
+--- mencoder.c	(.../branches/upstream)	(revision 219)
++++ mencoder.c	(.../trunk)	(revision 219)
+@@ -85,6 +85,9 @@
+ #endif
+ 
+ #include "libmpcodecs/ae.h"
++
++#include "libsub/ass.h"
++
+ int vo_doublebuffering=0;
+ int vo_directrendering=0;
+ int vo_config_count=0;
+@@ -581,6 +584,8 @@
+ 	mencoder_exit(1,NULL);
+   }
+ 
++  ass_change_track(demuxer->sub->id);
++
+ d_audio=demuxer2 ? demuxer2->audio : demuxer->audio;
+ d_video=demuxer->video;
+ d_dvdsub=demuxer->sub;
+@@ -1486,6 +1491,10 @@
+          sub_last_pts = pts;
+       }
+   }
++  // ass/ssa subs
++  if (sh_video && sh_video->pts>0){
++    ass_find_sub((sh_video->pts+sub_delay) * 1000);
++  }
+ #endif
+ 
+ #ifdef USE_DVDREAD

@@ -1,7 +1,0 @@
-[Desktop Entry]
-Name=MPlayer
-Comment=Media Player for Linux
-Exec=gmplayer
-Icon=mplayer.xpm
-Terminal=0
-Type=Application
