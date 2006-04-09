@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /home/cvsroot/gentoo-x86/media-video/mpeg4ip/mpeg4ip-1.0.ebuild,v 1.5 2004/02/27 13:38:34 tester Exp $
 
-inherit cvs autotools
+inherit cvs autotools flag-o-matic
 
 DESCRIPTION="MPEG 4 implementation library"
 
@@ -49,9 +49,11 @@ src_unpack() {
 	sed -i 's:fexceptions :fexceptions -fpermissive :' \
 		server/mp4live/gui/Makefile.am
 	eautoreconf || die
+	touch bootstrapped
 }
 
 src_compile() {
+	filter-ldflags -Wl,--as-needed
 	local myconf
 	if use encode && use v4l2; then
 		myconf="${myconf} --enable-mp4live --enable-v4l2"
