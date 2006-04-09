@@ -14,6 +14,7 @@ KEYWORDS="~x86"
 IUSE="shorten flac mp3 vorbis cdr"
 
 DEPEND="dev-perl/TimeDate
+	virtual/perl-Digest-MD5
 	dev-perl/Audio-Wav
 	dev-perl/HTML-Parser"
 RDEPEND="${DEPEND}

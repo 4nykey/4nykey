@@ -16,6 +16,6 @@ SHA256 819b719a1ae43e1e3ee116be130921da2580c4868d332c40d3fd9af1ecad7108 files/di
 MD5 06a1dea35dc3ab1c33f0d523e9b7a6c8 files/mplayer-dirac-cvs.diff 32282
 RMD160 4fecdb18dcc3059b296902cebc38be21e99b1e02 files/mplayer-dirac-cvs.diff 32282
 SHA256 d4fb57d6acc43116455320be1725b623c14a4df9c276bcec56f789860bd7cdca files/mplayer-dirac-cvs.diff 32282
-MD5 b759bb2a3e6c72f08976a3d3c141b79d mplayer-cvs-1.0_pre7.ebuild 17132
-RMD160 937878e507c27fda1ce60e6082fcc4da2c072559 mplayer-cvs-1.0_pre7.ebuild 17132
-SHA256 5069af24816b340ea1bd8db939175e38fb8f17bdd65c96567b60f49976d9266b mplayer-cvs-1.0_pre7.ebuild 17132
+MD5 6583acc7efd32e4c0dd32c74afa8d78b mplayer-cvs-1.0_pre7.ebuild 17106
+RMD160 6b67a21fa8f748a7984e197f400dd48d9b01d818 mplayer-cvs-1.0_pre7.ebuild 17106
+SHA256 aba7503a3203d966dfa91a2b71364219d38220fe94e664d7cbada0cdcaae9669 mplayer-cvs-1.0_pre7.ebuild 17106
