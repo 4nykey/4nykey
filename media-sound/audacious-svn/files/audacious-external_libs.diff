@@ -38,8 +38,8 @@ Index: Plugins/Input/adplug/Makefile.in
  
  LIBDIR = $(plugindir)/$(INPUT_PLUGIN_DIR)
  
--LIBADD = -lstdc++ $(BINIO_LIBS) ./core/libadplugcore.a
-+LIBADD = -lstdc++ $(BINIO_LIBS) -ladplug
+-LIBADD = ./core/libadplugcore.a $(BINIO_LIBS) -lstdc++
++LIBADD = -ladplug $(BINIO_LIBS) -lstdc++
  
  SOURCES = adplug-xmms.cc
  
