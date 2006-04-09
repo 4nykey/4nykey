@@ -7,6 +7,3 @@ SHA256 275a07a91c224c3df56c37703f5ab63c7a2055c7852f74f2dddd483d1d14e3c2 files/fo
 MD5 b0cdcdb6f5f8a5cfc66123ff2c0e83a3 rezound-0.12.2_beta-r1.ebuild 2164
 RMD160 793f3e312f989eb3a437215555762d6d2c1dcd63 rezound-0.12.2_beta-r1.ebuild 2164
 SHA256 ae11e7c0e81f675ec8fac7454b803d9c2a15bf0647c8e5cb50b1dc18217c230d rezound-0.12.2_beta-r1.ebuild 2164
-MD5 a00eb9397f762ec49c5e5dfaf2c1d287 usr/share/applications/audacity.desktop 727
-RMD160 02262d362fcf5e070cc89cc2bcd50b8e141a5c85 usr/share/applications/audacity.desktop 727
-SHA256 7f565b3dd3327831ba0f40831d0cc2d085e44f81a6a60fc5602178d5b5dcc873 usr/share/applications/audacity.desktop 727
