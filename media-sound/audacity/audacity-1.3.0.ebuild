@@ -105,6 +105,9 @@ src_install() {
 	# Remove bad doc install
 	rm -rf ${D}/share/doc
 
-	insinto /usr/share/icons/hicolor/48x48/apps
+	insinto /usr/share/pixmaps
 	newins images/AudacityLogo48x48.xpm audacity.xpm
+	dosed \
+		'/^Name\[/d; s:^Icon=.*:Icon=audacity:; s:.*\(Desktop Entry\).*:[\1]:' \
+		/usr/share/applications/audacity.desktop
 }
