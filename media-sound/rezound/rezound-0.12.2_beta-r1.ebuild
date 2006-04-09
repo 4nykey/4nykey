@@ -81,4 +81,5 @@ src_install() {
 
 	docinto code
 	dodoc docs/code/*
+	make_desktop_entry rezound "Rezound" /usr/share/rezound/icon_logo_32.gif "AudioVideo"
 }

@@ -68,3 +68,23 @@
  
  noinst_HEADERS=\
  	fox_compat.h \
+--- src/frontend_fox/FXRezWaveView.cpp.orig	2005-02-15 07:11:54.000000000 +0200
++++ src/frontend_fox/FXRezWaveView.cpp	2006-04-08 23:51:05.000000000 +0300
+@@ -48,7 +48,7 @@
+ 
+ 	virtual void create();
+ 
+-	virtual FXbool canFocus() const;
++	virtual bool canFocus() const;
+ 
+ 
+ 	size_t getClickedCue(FXint x,FXint y);
+@@ -369,7 +369,7 @@
+ 	font->create();
+ }
+ 
+-FXbool FXWaveRuler::canFocus() const
++bool FXWaveRuler::canFocus() const
+ {
+ 	return 1;
+ }
