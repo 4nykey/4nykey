@@ -73,7 +73,7 @@ RDEPEND="xvid? ( >=media-libs/xvid-0.9.0 )
 	samba? ( >=net-fs/samba-2.2.8a )
 	sdl? ( media-libs/libsdl )
 	svga? ( media-libs/svgalib )
-	theora? ( media-libs/libtheora-exp )
+	theora? ( media-libs/libtheora )
 	live? ( >=media-plugins/live-2004.07.20 )
 	truetype? ( >=media-libs/freetype-2.1 )
 	xinerama? ( virtual/x11 )
@@ -312,7 +312,11 @@ src_compile() {
 	teh_conf bidi fribidi
 	teh_conf cdparanoia
 	if use dvd; then
-		teh_conf dvdread
+		if use dvdread; then
+			myconf="${myconf} --disable-mpdvdkit"
+		else
+			myconf="${myconf} --disable-dvdread"
+		fi
 	else
 		myconf="${myconf} --disable-dvdread --disable-mpdvdkit"
 	fi
