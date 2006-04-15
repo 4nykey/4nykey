@@ -2,16 +2,16 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit gnome2 distutils versionator
+inherit gnome2 distutils versionator virtualx
 
 DESCRIPTION="Text Editor for GNOME"
 HOMEPAGE="http://scribes.sourceforge.net/"
 RESTRICT="primaryuri"
-SRC_URI="http://openusability.org/download.php/86/${P}.tar.gz"
+SRC_URI="http://openusability.org/download.php/93/${P}.tar.gz"
 LICENSE="GPL-2"
 
 MY_PV="$(get_version_component_range -3)"
-S="${WORKDIR}/${PN}-${MY_PV}"
+#S="${WORKDIR}/${PN}-${MY_PV}"
 
 SLOT="0"
 KEYWORDS="~x86"
@@ -35,6 +35,18 @@ src_unpack() {
 	sed -i \
 		"/Get gconf's default source/,/Problem restarting down gconf/d" \
 		setup.py
+}
+
+src_compile() {
+	export maketype="distutils_src_compile"
+	virtualmake "$*"
+}
+
+src_install() {
+	export maketype="distutils_src_install"
+	virtualmake "$*"
+	insinto /etc/gconf/schemas
+	doins data/scribes.schemas
 }
 
 pkg_postinst() {
