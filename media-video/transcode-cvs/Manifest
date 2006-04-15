@@ -1,0 +1,6 @@
+MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-transcode-cvs-1.1.0 0
+RMD160 9c1185a5c5e9fc54612808977ee8f548b2258d31 files/digest-transcode-cvs-1.1.0 0
+SHA256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 files/digest-transcode-cvs-1.1.0 0
+MD5 35f2f4d98dda293c87fa8c18769aa88a transcode-cvs-1.1.0.ebuild 3839
+RMD160 d18dd25c3f752a738c613e47a8ea0a61a8643a40 transcode-cvs-1.1.0.ebuild 3839
+SHA256 9232f6976864945b388ef7db4df2bcc94d75c6450a98e022cc78c5e9aea74fef transcode-cvs-1.1.0.ebuild 3839
