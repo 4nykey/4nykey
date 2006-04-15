@@ -10,7 +10,7 @@ ESVN_REPO_URI="http://svn.xiph.org/experimental/j/ffmpeg2theora-exp"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="x86 amd64 ppc sparc alpha hppa"
+KEYWORDS="~x86"
 IUSE=""
 
 DEPEND="media-libs/libtheora-exp
