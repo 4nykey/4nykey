@@ -6,10 +6,7 @@ inherit cvs flag-o-matic
 
 DESCRIPTION="GNU Midnight Commander cli-based file manager"
 HOMEPAGE="http://www.ibiblio.org/mc/"
-#PORTAGE_ACTUAL_DISTDIR=/usr/portage/distfiles
-ECVS_SERVER="cvs.sv.gnu.org:/sources/mc"
-ECVS_MODULE="mc"
-S="${WORKDIR}/${ECVS_MODULE}"
+SRC_URI="http://download.fedora.redhat.com/pub/fedora/linux/core/updates/5/SRPMS/${P}-12.FC5.src.rpm"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -40,24 +37,17 @@ RDEPEND=">=sys-fs/e2fsprogs-1.19
 	amd64? ( 7zip? ( >=app-arch/p7zip-4.16 ) )"
 
 DEPEND="${RDEPEND}
+	app-arch/rpm2targz
 	dev-util/pkgconfig"
 
 src_unpack() {
-	cvs_src_unpack
+	# here goes teh unpack
+	cd ${WORKDIR}
+	rpm2tar ${DISTDIR}/${P}-12.FC5.src.rpm
+	tar xf ${P}-12.FC5.src.tar
+	tar xjf ${P}.tar.bz2
 	cd ${S}
-
-	epatch ${FILESDIR}/${P}-find.patch
-	#epatch ${FILESDIR}/${PN}-4.6.1-largefile.patch
-	# Fix building with gcc4.
-	#epatch ${FILESDIR}/${P}-gcc4.patch
-
-	# included is slang v2, which handles utf-8
-	# so external patched slang not required anymore
-	use unicode && epatch ${FILESDIR}/${P}-utf8*.patch
-
-	ebegin "Running autotools"
-	./autogen.sh >& /dev/null
-	eend $?
+	epatch ${FILESDIR}/${P}*.patch ${WORKDIR}/mc-utf8.patch
 }
 
 src_compile() {
