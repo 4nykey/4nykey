@@ -103,8 +103,6 @@ src_install() {
 
 	insinto /usr/share/mc/syntax
 	doins ${FILESDIR}/ebuild.syntax
-	cd ${D}/usr/share/mc/syntax
-	epatch ${FILESDIR}/${PN}-4.6.0-ebuild-syntax.patch
 
 	# http://bugs.gentoo.org/show_bug.cgi?id=71275
 	rm -f ${D}/usr/share/locale/locale.alias
