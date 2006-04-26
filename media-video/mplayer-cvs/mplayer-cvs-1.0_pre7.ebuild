@@ -502,6 +502,8 @@ src_compile() {
 	# support for blinkenlights
 	use bl && myconf="${myconf} --enable-bl"
 
+	has_version '>=gnome-extra/gnome-screensaver-2.14.0' || myconf="${myconf} --disable-dbus-glib"
+
 	#leave this in place till the configure/compilation borkage is completely corrected back to pre4-r4 levels.
 	# it's intended for debugging so we can get the options we configure mplayer w/, rather then hunt about.
 	# it *will* be removed asap; in the meantime, doesn't hurt anything.
