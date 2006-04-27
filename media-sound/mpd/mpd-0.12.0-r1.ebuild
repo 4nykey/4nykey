@@ -32,9 +32,6 @@ DEPEND="dev-util/gperf
 
 upgrade_warning() {
 	echo
-	ewarn "This package now correctly uses 'vorbis' USE flag, instead of 'ogg'."
-	ewarn "See http://bugs.gentoo.org/show_bug.cgi?id=101877 for details."
-	echo
 	ewarn "Home directory of user mpd, as well as default locations in mpd.conf have"
 	ewarn "been changed to /var/lib/mpd, please bear that in mind while updating"
 	ewarn "your mpd.conf file."
@@ -53,8 +50,9 @@ pkg_setup() {
 src_unpack() {
 	subversion_src_unpack
 	cd ${S}
-	has_version '>=media-libs/faad2-2.1' && \
+	if has_version '>=media-libs/faad2-2.1'; then
 		sed -i 's:faacDec:NeAACDec:g; s:MP4FF_.*la:MP4FF_LIB="-lmp4ff:' configure.ac
+	fi
 	eautoreconf || die
 }
 
@@ -117,28 +115,9 @@ src_install() {
 	dodir /var/log/mpd
 	keepdir /var/log/mpd
 
-	use alsa && \
-		dosed 's:need :need alsasound :' /etc/init.d/mpd
+	use alsa && dosed 's:need :need alsasound :' /etc/init.d/mpd
 }
 
 pkg_postinst() {
-	echo
-	einfo "The default config now binds the daemon strictly to localhost,"
-	einfo "rather than to all available IPs."
-	echo
-	if ! use libao ; then
-		ewarn "As you're not using libao for audio output, you need to"
-		ewarn "adjust audio_output sections in /etc/mpd.conf to use"
-		ewarn "ALSA or OSS. See"
-		ewarn "/usr/share/doc/${PF}/mpdconf.example.gz."
-		echo
-	fi
-	einfo "Please make sure that MPD's pid_file is set to /var/run/mpd/mpd.pid."
-	echo
-	draw_line
-	ewarn "Note that this is just a development version of Music Player Daemon,"
-	ewarn "so if you want to report any bug to MPD developers, please state this fact in"
-	ewarn "your bug report, as well as the fact that you used a ${P} Gentoo ebuild."
-	draw_line
 	upgrade_warning
 }

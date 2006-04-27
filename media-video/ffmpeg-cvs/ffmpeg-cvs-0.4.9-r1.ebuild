@@ -73,9 +73,7 @@ src_unpack() {
 	sed -i -e "s:-e debug=off::" tests/server-regression.sh
 
 	# skip running ldconfig on make install
-	for dir in libavcodec libavcodec/libpostproc libavformat libavutil
-		do sed -i /LDCONFIG/d $dir/Makefile
-	done
+	sed -i /LDCONFIG/d Makefile
 
 	epatch ${FILESDIR}/FFMpeg-20051205-dirac-0.5.x.patch
 }

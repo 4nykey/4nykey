@@ -21,7 +21,6 @@ RDEPEND=">=x11-libs/gtk+-2.0
 	>=gnome-base/gnome-panel-2.0"
 
 DEPEND="${RDEPEND}
-	sys-devel/autoconf
 	dev-util/pkgconfig
 	dev-util/intltool"
 
