@@ -6,8 +6,7 @@ inherit git
 
 DESCRIPTION="gxmms2 - A gtk2 frontend for xmms2"
 HOMEPAGE="http://wejp.homelinux.org/wejp/xmms2"
-#SRC_URI="http://wejp.homelinux.org/wejp/xmms2/gxmms2-0.5.1.tar.gz"
-EGIT_REPO_URI="rsync://git.xmms.se/xmms2/gxmms2.git/"
+EGIT_REPO_URI="git://git.xmms.se/xmms2/gxmms2.git/"
 
 LICENSE="GPL-2"
 SLOT="0"

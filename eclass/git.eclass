@@ -87,8 +87,9 @@ function git_fetch() {
 	EGIT_REPO_URI="${EGIT_REPO_URI} ${EGIT_PROJECT}"
 	# check for the protocol.
 	case ${EGIT_REPO_URI%%:*} in
-		rsync)	;;
+		git)	;;
 		ssh)	;;
+		rsync)	;;
 		*)
 			die "${EGITN}: fetch from "${EGIT_REPO_URI%:*}" is not yet
 implemented."

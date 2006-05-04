@@ -7,7 +7,7 @@ inherit git distutils
 DESCRIPTION="PyGTK XMMS2 Client"
 HOMEPAGE="http://git.xmms.se"
 SRC_URI=""
-EGIT_REPO_URI="rsync://git.xmms.se/xmms2/juxtapose.git/"
+EGIT_REPO_URI="git://git.xmms.se/xmms2/juxtapose.git/"
 
 LICENSE="GPL-2"
 SLOT="0"

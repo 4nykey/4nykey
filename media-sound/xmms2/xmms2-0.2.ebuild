@@ -7,10 +7,7 @@ inherit git
 DESCRIPTION="XMMS2 is a redesign of the XMMS music player"
 HOMEPAGE="http://xmms2.xmms.org/"
 SRC_URI=""
-EGIT_PROJECT="xmms2-devel"
-EGIT_REPO_URI="rsync://git.xmms.se/xmms2/${EGIT_PROJECT}.git/"
-#EPATCH_OPTS="-p1 --no-backup-if-mismatch"
-#EGIT_PATCHES="*.patch"
+EGIT_REPO_URI="git://git.xmms.se/xmms2/xmms2-devel.git/"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
