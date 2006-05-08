@@ -6,7 +6,7 @@ inherit eutils
 
 DESCRIPTION="CMus - ncurses based music player."
 SRC_URI="http://onion.dynserv.net/~timo/files/${P}.tar.bz2"
-HOMEPAGE="http://onion.dynserv.net/~timo/?page=Projects/cmus"
+HOMEPAGE="http://onion.dynserv.net/~timo/cmus.html"
 SLOT="0"
 IUSE="alsa arts debug flac oss mad modplug vorbis musepack ao"
 

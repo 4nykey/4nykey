@@ -1,2 +1,7 @@
-MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-gmpc-coveramazon-0.0.1 0
+EBUILD gmpc-coveramazon-0.0.1.ebuild 631 RMD160 3420b21d58df75ff1677364f5309e4ac2dd09024 SHA1 6520099a54793499ddfeb98d01431c1289dde087 SHA256 94090be879815b70ec2cf6f9edadb25dc80e92645a81ec58adb9d421067aa2a5 size 631
 MD5 73e3406e9df5ba6d3e0606ad331ac739 gmpc-coveramazon-0.0.1.ebuild 631
+RMD160 3420b21d58df75ff1677364f5309e4ac2dd09024 gmpc-coveramazon-0.0.1.ebuild 631
+SHA256 94090be879815b70ec2cf6f9edadb25dc80e92645a81ec58adb9d421067aa2a5 gmpc-coveramazon-0.0.1.ebuild 631
+MD5 68b329da9893e34099c7d8ad5cb9c940 files/digest-gmpc-coveramazon-0.0.1 1
+RMD160 c0da025038ed83c687ddc430da9846ecb97f3998 files/digest-gmpc-coveramazon-0.0.1 1
+SHA256 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b files/digest-gmpc-coveramazon-0.0.1 1

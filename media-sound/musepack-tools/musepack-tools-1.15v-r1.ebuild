@@ -9,7 +9,7 @@ inherit eutils flag-o-matic subversion
 DESCRIPTION="Musepack audio compression tools"
 HOMEPAGE="http://www.uni-jena.de/~pfk/mpp/ http://corecodec.org/projects/mpc/ http://www.musepack.net"
 ESVN_REPO_URI="http://svn.caddr.com/svn/${PN}/trunk"
-ESVN_PATCHES="gcc40.diff"
+ESVN_PATCHES="${FILESDIR}/*.diff"
 
 SLOT="0"
 LICENSE="GPL-2 LGPL-2.1"
@@ -45,8 +45,8 @@ src_compile() {
 	strip-flags
 	filter-flags "-mfpmath=sse" "-mfpmath=sse,387"
 	use static && export BLD_STATIC=1
-	use encode && MPPENC="mppenc "
-	ARCH="${CFLAGS}" CFLAGS= emake ${MPPENC}mppdec replaygain || die
+	use encode && MPPENC="mppenc"
+	ARCH="${CFLAGS}" CFLAGS= emake ${MPPENC} mppdec replaygain || die
 }
 
 src_install() {

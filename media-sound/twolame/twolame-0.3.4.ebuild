@@ -2,11 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit cvs
+inherit cvs autotools
 
-DESCRIPTION="TwoLAME is a fork of tooLAME - an optimized MPEG Audio Layer 2 encoder."
+DESCRIPTION="TwoLAME is an optimized MPEG Audio Layer 2 encoder (a fork of tooLAME)"
 HOMEPAGE="http://sourceforge.net/projects/twolame/"
-#SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
 ECVS_SERVER="cvs.sourceforge.net:/cvsroot/twolame"
 ECVS_MODULE="${PN}"
 S=${WORKDIR}/${PN}
@@ -23,9 +22,9 @@ DEPEND="${RDEPEND}
 src_unpack() {
 	cvs_src_unpack
 	cd ${S}
-	epatch ${FILESDIR}/config.diff
 	sed -i 's: doc::' Makefile.am
-	WANT_AUTOMAKE=1.7 ./autogen.sh || die
+	mkdir -p build
+	eautoreconf || die
 }
 
 src_install() {
