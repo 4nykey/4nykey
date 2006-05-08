@@ -20,7 +20,7 @@ KEYWORDS="~x86"
 IUSE="a52 3dfx nls unicode debug altivec httpd vlm gnutls live v4l cdda ogg matroska
 dvb dvd vcd ffmpeg aac dts flac mpeg vorbis theora X opengl truetype svg fbcon svga
 oss aalib ggi libcaca esd arts alsa wxwindows ncurses xosd lirc joystick hal stream
-mp3 xv bidi gtk2 sdl png xml2 samba daap corba screen mod speex nsplugin x264
+mp3 xv bidi gtk2 sdl png xml samba daap corba screen mod speex nsplugin x264
 dirac gnome libvc1 musepack"
 
 RDEPEND="!media-video/vlc
@@ -67,7 +67,7 @@ RDEPEND="!media-video/vlc
 		media-libs/libdvbpsi
 		aac? ( >=media-libs/faad2-2.0-r2 )
 		sdl? ( media-libs/sdl-image )
-		xml2? ( dev-libs/libxml2 )
+		xml? ( dev-libs/libxml2 )
 		samba? ( net-fs/samba )
 		vcd? ( >=dev-libs/libcdio-0.72
 			>=media-video/vcdimager-0.7.21 )
@@ -199,7 +199,7 @@ src_compile () {
 		$(use_enable sdl) \
 		$(use_enable hal) \
 		$(use_enable png) \
-		$(use_enable xml2 libxml2) \
+		$(use_enable xml libxml2) \
 		$(use_enable samba smb) \
 		$(use_enable daap) \
 		$(use_enable corba) \

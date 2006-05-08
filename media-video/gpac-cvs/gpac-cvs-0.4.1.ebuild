@@ -8,7 +8,6 @@ DESCRIPTION="GPAC is an implementation of the MPEG-4 Systems standard developed 
 HOMEPAGE="http://gpac.sourceforge.net/"
 NBV="610"
 WBV="600"
-#SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz
 SRC_URI="amr? ( http://www.3gpp.org/ftp/Specs/archive/26_series/26.104/26104-${NBV}.zip
 		http://www.3gpp.org/ftp/Specs/archive/26_series/26.204/26204-${WBV}.zip )"
 ECVS_SERVER="cvs.sourceforge.net:/cvsroot/gpac"
@@ -18,7 +17,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
 IUSE="aac amr debug ffmpeg gtk2 jpeg mad mozilla nsplugin vorbis oss png sdl theora
-truetype wxwindows xml2 xvid unicode X ssl"
+truetype wxwindows xml xvid unicode X ssl"
 S="${WORKDIR}/${PN/-cvs}"
 
 RDEPEND="jpeg? ( media-libs/jpeg )
@@ -33,10 +32,11 @@ RDEPEND="jpeg? ( media-libs/jpeg )
 	truetype? ( >=media-libs/freetype-2.1 )
 	sdl? ( media-libs/libsdl )
 	wxwindows? ( >=x11-libs/wxGTK-2.5.2 )
-	xml2? ( >=dev-libs/libxml2-2.6.0 )
 	ssl? ( dev-libs/openssl )
 	X? ( virtual/x11 )
-	xvid? ( >=media-libs/xvid-1.0.1 )"
+	xvid? ( >=media-libs/xvid-1.0.1 )
+	>=dev-libs/libxml2-2.6.0"
+#	xml? ( >=dev-libs/libxml2-2.6.0 )
 
 
 DEPEND="${RDEPEND}
@@ -96,8 +96,8 @@ src_compile() {
 		$(use_enable ssl) \
 		$(use_enable debug) \
 		$(use_enable oss oss-audio) \
-		$(use_enable xml2 svg) \
 		${myconf} || die "configure died"
+#		$(use_enable xml svg) \ # brakes build when disabled
 
 	sed -i "s:=/usr:=${D}usr:" config.mak
 

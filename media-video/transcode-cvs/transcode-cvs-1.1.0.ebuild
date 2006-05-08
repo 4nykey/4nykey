@@ -17,7 +17,7 @@ SLOT="0"
 KEYWORDS="~x86"
 IUSE="X 3dnow a52 dv dvdread extrafilters mp3 fame truetype gtk imagemagick jpeg
 lzo mjpeg mpeg mmx network ogg vorbis quicktime sdl sse sse2 theora v4l2 xvid
-xml2 ffmpeg"
+xml ffmpeg"
 
 RDEPEND="!media-video/transcode
 	a52? ( >=media-libs/a52dec-0.7.4 )
@@ -43,7 +43,7 @@ RDEPEND="!media-video/transcode
 		>=media-video/ffmpeg-0.4.9_p20050226-r3 )
 	|| ( sys-libs/glibc dev-libs/libiconv )
 	>=media-libs/libmpeg2-0.4.0b
-	xml2? ( dev-libs/libxml2 )
+	xml? ( dev-libs/libxml2 )
 	X? ( || ( (
 			x11-libs/libXaw
 			x11-libs/libXv )
@@ -106,7 +106,7 @@ src_compile() {
 		$(use_enable lzo) \
 		$(use_enable a52) \
 		$(use_enable mpeg libmpeg3) \
-		$(use_enable xml2 libxml2) \
+		$(use_enable xml libxml2) \
 		$(use_enable mjpeg mjpegtools) \
 		$(use_enable sdl) \
 		$(use_enable gtk) \
