@@ -18,7 +18,7 @@ IUSE="oss static djbfft"
 DEPEND="djbfft? ( sci-libs/djbfft )"
 RDEPEND="${DEPEND} virtual/libc"
 
-src_compile() {
+src_unpack() {
 	cvs_src_unpack
 	cd ${S}
 
