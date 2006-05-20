@@ -6,7 +6,7 @@ inherit flag-o-matic cvs autotools
 
 DESCRIPTION="library for decoding ATSC A/52 streams used in DVD"
 HOMEPAGE="http://liba52.sourceforge.net/"
-ECVS_SERVER="cvs.sourceforge.net:/cvsroot/liba52"
+ECVS_SERVER="liba52.cvs.sourceforge.net:/cvsroot/liba52"
 ECVS_MODULE="${PN}"
 S="${WORKDIR}/${ECVS_MODULE}"
 

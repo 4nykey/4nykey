@@ -6,7 +6,7 @@ inherit cvs autotools
 
 DESCRIPTION="TwoLAME is an optimized MPEG Audio Layer 2 encoder (a fork of tooLAME)"
 HOMEPAGE="http://sourceforge.net/projects/twolame/"
-ECVS_SERVER="cvs.sourceforge.net:/cvsroot/twolame"
+ECVS_SERVER="twolame.cvs.sourceforge.net:/cvsroot/twolame"
 ECVS_MODULE="${PN}"
 S=${WORKDIR}/${PN}
 

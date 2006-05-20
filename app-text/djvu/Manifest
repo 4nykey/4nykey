@@ -1,3 +1,11 @@
-MD5 bb4a68c305b5ffc794d1f67226177f5d djvu-3.5.16.ebuild 1691
-MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-djvu-3.5.16 0
+AUX gentoo-acdesktop.m4 2491 RMD160 1795c1b9bcb6aacd54962a65d5b8d551c15c17d4 SHA1 946fe237382867a0d580bcf6b57b2f818e6338e7 SHA256 0a9ec40c7ebe2a75025cd832a1d6eba25dc904593702e4e312662eb689ae5eef size 2491
 MD5 0da6de34d8db09192d2c881416108427 files/gentoo-acdesktop.m4 2491
+RMD160 1795c1b9bcb6aacd54962a65d5b8d551c15c17d4 files/gentoo-acdesktop.m4 2491
+SHA256 0a9ec40c7ebe2a75025cd832a1d6eba25dc904593702e4e312662eb689ae5eef files/gentoo-acdesktop.m4 2491
+EBUILD djvu-3.5.16.ebuild 1696 RMD160 2caeeda9decae7ce2ebbdfea5c8f64b076d82ccd SHA1 dbd259b854e5672ed93d853791a1abb75cfd5cfd SHA256 ef69b61f8b4cce29f6387c648c1cdafde18e42d9ec07468b4b59e5fbb866d0bb size 1696
+MD5 ab93166a92aa9acfe7fd1da7d4f1b525 djvu-3.5.16.ebuild 1696
+RMD160 2caeeda9decae7ce2ebbdfea5c8f64b076d82ccd djvu-3.5.16.ebuild 1696
+SHA256 ef69b61f8b4cce29f6387c648c1cdafde18e42d9ec07468b4b59e5fbb866d0bb djvu-3.5.16.ebuild 1696
+MD5 68b329da9893e34099c7d8ad5cb9c940 files/digest-djvu-3.5.16 1
+RMD160 c0da025038ed83c687ddc430da9846ecb97f3998 files/digest-djvu-3.5.16 1
+SHA256 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b files/digest-djvu-3.5.16 1

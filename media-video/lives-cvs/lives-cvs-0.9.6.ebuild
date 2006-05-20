@@ -8,7 +8,7 @@ DESCRIPTION="Linux Video Editing System"
 
 HOMEPAGE="http://lives.sourceforge.net/"
 
-ECVS_SERVER="cvs.sourceforge.net:/cvsroot/lives"
+ECVS_SERVER="lives.cvs.sourceforge.net:/cvsroot/lives"
 S="${WORKDIR}/${PN/-cvs}"
 
 LICENSE="GPL-2"

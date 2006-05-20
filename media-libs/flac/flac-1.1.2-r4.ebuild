@@ -9,7 +9,7 @@ DESCRIPTION="free lossless audio encoder which includes an XMMS plugin"
 HOMEPAGE="http://flac.sourceforge.net/"
 #SRC_URI="mirror://sourceforge/flac/${P}.tar.gz
 SRC_URI="mirror://gentoo/${PN}-patches-${PATCHLEVEL}.tar.bz2"
-ECVS_SERVER="cvs.sourceforge.net:/cvsroot/flac"
+ECVS_SERVER="flac.cvs.sourceforge.net:/cvsroot/flac"
 ECVS_MODULE="${PN}"
 S="${WORKDIR}/${ECVS_MODULE}"
 

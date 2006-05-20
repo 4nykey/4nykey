@@ -13,7 +13,7 @@ S="${WORKDIR}/${PN}"
 DESCRIPTION="Free crossplatform audio editor"
 HOMEPAGE="http://audacity.sourceforge.net/"
 #SRC_URI="mirror://sourceforge/${PN}/${MY_P}.tar.gz"
-ECVS_SERVER="cvs.sourceforge.net:/cvsroot/audacity"
+ECVS_SERVER="audacity.cvs.sourceforge.net:/cvsroot/audacity"
 ECVS_MODULE="audacity"
 
 LICENSE="GPL-2"

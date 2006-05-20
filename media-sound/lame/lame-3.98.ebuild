@@ -7,7 +7,7 @@ inherit flag-o-matic toolchain-funcs eutils cvs
 DESCRIPTION="LAME Ain't an MP3 Encoder"
 HOMEPAGE="http://lame.sourceforge.net"
 #SRC_URI="mirror://sourceforge/lame/${P}.tar.gz"
-ECVS_SERVER="cvs.sourceforge.net:/cvsroot/lame"
+ECVS_SERVER="lame.cvs.sourceforge.net:/cvsroot/lame"
 ECVS_MODULE="${PN}"
 S=${WORKDIR}/${PN}
 

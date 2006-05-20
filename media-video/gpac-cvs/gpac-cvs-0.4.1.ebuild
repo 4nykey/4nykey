@@ -10,7 +10,7 @@ NBV="610"
 WBV="600"
 SRC_URI="amr? ( http://www.3gpp.org/ftp/Specs/archive/26_series/26.104/26104-${NBV}.zip
 		http://www.3gpp.org/ftp/Specs/archive/26_series/26.204/26204-${WBV}.zip )"
-ECVS_SERVER="cvs.sourceforge.net:/cvsroot/gpac"
+ECVS_SERVER="gpac.cvs.sourceforge.net:/cvsroot/gpac"
 ECVS_MODULE="gpac"
 
 LICENSE="GPL-2"

@@ -8,7 +8,7 @@ DESCRIPTION="MPEG 4 implementation library"
 
 HOMEPAGE="http://www.mpeg4ip.net/"
 
-ECVS_SERVER="cvs.sourceforge.net:/cvsroot/mpeg4ip"
+ECVS_SERVER="mpeg4ip.cvs.sourceforge.net:/cvsroot/mpeg4ip"
 ECVS_MODULE="mpeg4ip"
 
 LICENSE="MPL-1.1 LGPL-2 GPL-2 LGPL-2.1 BSD UCL MPEG4"

@@ -7,7 +7,7 @@ inherit cvs autotools
 DESCRIPTION=""
 HOMEPAGE=""
 SRC_URI=""
-ECVS_SERVER="cvs.sourceforge.net:/cvsroot/avisynth2"
+ECVS_SERVER="avisynth2.cvs.sourceforge.net:/cvsroot/avisynth2"
 ECVS_MODULE="${PN}"
 ECVS_BRANCH="avisynth_3_0"
 S="${WORKDIR}/${ECVS_MODULE}"

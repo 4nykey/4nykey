@@ -7,7 +7,7 @@ inherit nsplugins flag-o-matic fdo-mime cvs
 DESCRIPTION="DjVu viewers, encoders and utilities."
 HOMEPAGE="http://djvu.sourceforge.net"
 #SRC_URI="mirror://sourceforge/djvu/${MY_P}.tar.gz"
-ECVS_SERVER="cvs.sourceforge.net:/cvsroot/djvu"
+ECVS_SERVER="djvu.cvs.sourceforge.net:/cvsroot/djvu"
 ECVS_MODULE="djvulibre-3.5"
 
 LICENSE="GPL-2"

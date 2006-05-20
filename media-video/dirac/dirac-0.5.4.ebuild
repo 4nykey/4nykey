@@ -6,7 +6,7 @@ inherit cvs autotools
 DESCRIPTION="Dirac is a general-purpose wavelet video codec"
 HOMEPAGE="http://www.bbc.co.uk/rd/projects/dirac/overview.shtml"
 #SRC_URI="mirror://sourceforge/dirac/${P}.tar.gz"
-ECVS_SERVER="cvs.sourceforge.net:/cvsroot/dirac"
+ECVS_SERVER="dirac.cvs.sourceforge.net:/cvsroot/dirac"
 ECVS_MODULE="compress"
 S="${WORKDIR}/${ECVS_MODULE}"
 

@@ -20,12 +20,12 @@ DEPEND="${RDEPEND}"
 
 src_unpack() {
 	# yup
-	ECVS_SERVER="cvs.sourceforge.net:/cvsroot/mp3gain"
+	ECVS_SERVER="mp3gain.cvs.sourceforge.net:/cvsroot/mp3gain"
 	ECVS_MODULE="aacgain" cvs_src_unpack
 	ECVS_MODULE="mp3gain" cvs_src_unpack
-	ECVS_SERVER="cvs.sourceforge.net:/cvsroot/mpeg4ip"
+	ECVS_SERVER="mpeg4ip.cvs.sourceforge.net:/cvsroot/mpeg4ip"
 	ECVS_MODULE="mpeg4ip/lib/mp4v2" cvs_src_unpack
-	ECVS_SERVER="cvs.sourceforge.net:/cvsroot/faac"
+	ECVS_SERVER="faac.cvs.sourceforge.net:/cvsroot/faac"
 	ECVS_MODULE="faad2/libfaad" cvs_src_unpack
 	# //yup
 	cp ${FILESDIR}/Makefile ${S}
