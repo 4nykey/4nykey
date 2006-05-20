@@ -122,7 +122,7 @@ src_compile() {
 	teh_conf en aac faac
 
 	use encode || myconf="${myconf} --disable-encoders --disable-muxers"
-	use dirac || myconf="${myconf} --disable-codec=dirac"
+	use dirac || myconf="${myconf} --disable-encoder=dirac --disable-decoder=dirac"
 
 	./configure \
 		$(use_enable static) \

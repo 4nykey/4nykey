@@ -1021,6 +1021,6 @@ diff -ruN --exclude=CVS ffmpeg-cvs/Makefile ffmpeg-cvs-dirac/Makefile
 +CFLAGS+=$(EXTRAINCS) 
 +endif
 +
- MANPAGE=doc/ffmpeg.1
- PROG=ffmpeg$(EXESUF)
- PROGTEST=output_example$(EXESUF)
+ MANPAGES=doc/ffmpeg.1
+ PROGS_G+=ffmpeg_g$(EXESUF)
+ PROGS+=ffmpeg$(EXESUF)
