@@ -66,7 +66,7 @@ pkg_setup() {
 		die "You need xorg-x11 emerged with xv support to compile transcode."
 	fi
 
-	filter-flags -maltivec -mabi=altivec -momit-leaf-frame-pointer
+	filter-flags -momit-leaf-frame-pointer
 	filter-ldflags -Wl,--as-needed
 }
 
@@ -74,11 +74,15 @@ src_unpack() {
 	cvs_src_unpack
 	cd ${S}
 
-	sed -i -e "s:\$(datadir)/doc/transcode:\$(datadir)/doc/${PF}:" \
-		${S}/Makefile.am ${S}/docs/Makefile.am ${S}/docs/html/Makefile.am \
-		${S}/docs/release-notes/Makefile.am
+	sed -i "s:\$(datadir)/doc/transcode:\$(datadir)/doc/${PF}:" \
+		${S}/Makefile.am ${S}/docs/Makefile.am ${S}/docs/html/Makefile.am
 
+	# don't use aux dir for autoconf junk
 	sed -i '/AC_CONFIG_AUX_DIR/d' configure.in
+
+	# fix liba52 detection through pkg-config (wrong module name)
+	sed -i 's:a52dec,:liba52,:' configure.in
+
 	eautoreconf || die
 }
 
@@ -104,7 +108,7 @@ src_compile() {
 		$(use_enable dv libdv) \
 		$(use_enable quicktime libquicktime) \
 		$(use_enable lzo) \
-		$(use_enable a52) \
+		$(use_enable a52) $(use_enable a52 a52-default-decoder) \
 		$(use_enable mpeg libmpeg3) \
 		$(use_enable xml libxml2) \
 		$(use_enable mjpeg mjpegtools) \
