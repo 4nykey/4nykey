@@ -1,2 +1,0 @@
-#!/bin/sh
-/usr/bin/mono /usr/@LIB@/@PROG@/bin/bless.exe "$@"
