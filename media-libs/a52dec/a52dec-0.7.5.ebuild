@@ -26,7 +26,7 @@ src_unpack() {
 	filter-flags -fprefetch-loop-arrays
 
 	sed -i 's:AC_CONFIG_HEADERS:AM_CONFIG_HEADER:' configure.in
-	use djbfft && sed -i 's:-lm:-lm -ldjbfft:' liba52/Makefile.am
+	sed -i 's:\(Libs.*\):\1 @LIBA52_LIBS@:' liba52/liba52.pc.in
 
 	eautoreconf || die
 }
