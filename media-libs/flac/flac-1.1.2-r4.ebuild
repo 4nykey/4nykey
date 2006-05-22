@@ -4,7 +4,7 @@
 
 inherit libtool cvs autotools
 
-PATCHLEVEL="2"
+PATCHLEVEL="3"
 DESCRIPTION="free lossless audio encoder which includes an XMMS plugin"
 HOMEPAGE="http://flac.sourceforge.net/"
 #SRC_URI="mirror://sourceforge/flac/${P}.tar.gz
@@ -28,7 +28,7 @@ DEPEND="${RDEPEND}
 
 src_unpack() {
 	unpack ${A}
-	rm -f ${WORKDIR}/patches/0{1,2,3,9}0*.patch
+	rm -f ${WORKDIR}/patches/{01,02,03,09,10}0*.patch
 	cvs_src_unpack
 	cd "${S}"
 
@@ -44,7 +44,7 @@ src_compile() {
 		$(use_enable sse) \
 		$(use_enable 3dnow) \
 		$(use_enable debug) \
-		$(use_enable doc) \
+		$(use_enable doc) $(use_enable doc doxygen-docs) \
 		$(use_with pic) \
 		--disable-dependency-tracking || die
 
