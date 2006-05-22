@@ -69,7 +69,6 @@ EGIT_STORE_DIR="${PORTAGE_ACTUAL_DISTDIR-${DISTDIR}}/git-src"
 #
 # git eclass can apply pathces in git_fetch().
 # you can use regexp in this valiable like *.diff or *.patch or etc.
-# NOTE: this patches will apply before eval ESVN_BOOTSTRAP.
 #
 # the process of applying the patch is:
 #   1. just epatch it, if the patch exists in the path.
@@ -163,7 +162,7 @@ to ${S}."
 						epatch ${lpatch}
 
 					else
-						die "${ESVN}; ${patch} is not found"
+						die "${EGIT}; ${patch} is not found"
 
 					fi
 				done
