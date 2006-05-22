@@ -62,14 +62,6 @@ diff -u -r1.19 mp4ffint.h
  static int32_t mp4ff_atom_compare(const int8_t a1, const int8_t b1, const int8_t c1, const int8_t d1,
                                    const int8_t a2, const int8_t b2, const int8_t c2, const int8_t d2);
  static uint8_t mp4ff_atom_name_to_type(const int8_t a, const int8_t b, const int8_t c, const int8_t d);
-@@ -347,7 +347,6 @@
- mp4ff_t *mp4ff_open_edit(mp4ff_callback_t *f);
- #endif
- void mp4ff_close(mp4ff_t *ff);
--void mp4ff_track_add(mp4ff_t *f);
- int32_t parse_sub_atoms(mp4ff_t *f, const uint64_t total_size,int meta_only);
- int32_t parse_atoms(mp4ff_t *f,int meta_only);
- 
 Index: common/mp4ff/mp4tagupdate.c
 ===================================================================
 RCS file: /cvsroot/faac/faad2/common/mp4ff/mp4tagupdate.c,v
