@@ -1,2 +1,7 @@
-MD5 7ce7007e485b9a4b2d5edce331e2bfcd liboggz-0.9.0.ebuild 488
-MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-liboggz-0.9.0 0
+EBUILD liboggz-0.9.0.ebuild 541 RMD160 b861c1383a06a057fba1ceadc6e83fab7e4bf1b5 SHA1 d8b41b876966f7c1271473046215f1086b168527 SHA256 147c1071af961b6c7f0aec7ac4c18ab27cdc38c1c5a9db3ea54ebcacd8e12d9d size 541
+MD5 b86434054c85122e352b0f5f171a32e7 liboggz-0.9.0.ebuild 541
+RMD160 b861c1383a06a057fba1ceadc6e83fab7e4bf1b5 liboggz-0.9.0.ebuild 541
+SHA256 147c1071af961b6c7f0aec7ac4c18ab27cdc38c1c5a9db3ea54ebcacd8e12d9d liboggz-0.9.0.ebuild 541
+MD5 68b329da9893e34099c7d8ad5cb9c940 files/digest-liboggz-0.9.0 1
+RMD160 c0da025038ed83c687ddc430da9846ecb97f3998 files/digest-liboggz-0.9.0 1
+SHA256 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b files/digest-liboggz-0.9.0 1

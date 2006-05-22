@@ -1,12 +1,15 @@
-MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-musepack-tools-1.15v-r1 0
-RMD160 9c1185a5c5e9fc54612808977ee8f548b2258d31 files/digest-musepack-tools-1.15v-r1 0
-SHA256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 files/digest-musepack-tools-1.15v-r1 0
+AUX encode_sv7-seeking.diff 1853 RMD160 5ef89a0a8a8ad7901faed42f77131d13877a8f4c SHA1 125900a4cfe4398842806cd4a7db83d85ddf2259 SHA256 df35917ae01f48d1de96beb2b251488ab78a1e113c88a0e67029b53ab73e96dd size 1853
 MD5 2dee71b56c027cca2b980abb14735e15 files/encode_sv7-seeking.diff 1853
 RMD160 5ef89a0a8a8ad7901faed42f77131d13877a8f4c files/encode_sv7-seeking.diff 1853
 SHA256 df35917ae01f48d1de96beb2b251488ab78a1e113c88a0e67029b53ab73e96dd files/encode_sv7-seeking.diff 1853
+AUX gcc40.diff 489 RMD160 0267bdb4125a7e34cbadfd1758de7d2b5dd3a270 SHA1 bea42955988784eeee82fabd36b6c214b0f467c8 SHA256 cc0ebb83432a19e879d85e060c8ff0236d9d370212d36981dc914f56b99da00c size 489
 MD5 0a93eb190659bb8a2edc100f06434369 files/gcc40.diff 489
 RMD160 0267bdb4125a7e34cbadfd1758de7d2b5dd3a270 files/gcc40.diff 489
 SHA256 cc0ebb83432a19e879d85e060c8ff0236d9d370212d36981dc914f56b99da00c files/gcc40.diff 489
+EBUILD musepack-tools-1.15v-r1.ebuild 1552 RMD160 2db189fb15b3b42e3cf873fc2bd96bd5f4aa0eff SHA1 25574e6be26a603324882457e4c665e814c455e3 SHA256 9c73d860433ca7e5dca0d961b34878a9e6883650f15cab26be824700b5b73731 size 1552
 MD5 cea02a12685563e1f63c7de0701e2dfd musepack-tools-1.15v-r1.ebuild 1552
 RMD160 2db189fb15b3b42e3cf873fc2bd96bd5f4aa0eff musepack-tools-1.15v-r1.ebuild 1552
 SHA256 9c73d860433ca7e5dca0d961b34878a9e6883650f15cab26be824700b5b73731 musepack-tools-1.15v-r1.ebuild 1552
+MD5 68b329da9893e34099c7d8ad5cb9c940 files/digest-musepack-tools-1.15v-r1 1
+RMD160 c0da025038ed83c687ddc430da9846ecb97f3998 files/digest-musepack-tools-1.15v-r1 1
+SHA256 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b files/digest-musepack-tools-1.15v-r1 1

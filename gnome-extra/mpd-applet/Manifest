@@ -1,9 +1,11 @@
+AUX autotools.diff 672 RMD160 807eff3ff9fe8a01d73c38b20fbb7830e4587987 SHA1 c463c61796944b977d56f2c6e102acb8af592db3 SHA256 803a89211e598522197d9abb9bfcccf0ef174adcff90f4df6ac15884d6c82482 size 672
 MD5 1219ca2d59abe1b78c5f500f1f70cd77 files/autotools.diff 672
 RMD160 807eff3ff9fe8a01d73c38b20fbb7830e4587987 files/autotools.diff 672
 SHA256 803a89211e598522197d9abb9bfcccf0ef174adcff90f4df6ac15884d6c82482 files/autotools.diff 672
-MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-mpd-applet-0.2 0
-RMD160 9c1185a5c5e9fc54612808977ee8f548b2258d31 files/digest-mpd-applet-0.2 0
-SHA256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 files/digest-mpd-applet-0.2 0
+EBUILD mpd-applet-0.2.ebuild 568 RMD160 b9c7ea10a77117aba996b2326aff6a5b0cdc1f4e SHA1 0ecdee74acf9a3682183c2108301ace357ef709e SHA256 a3cbb298c6ee4760baf9ed65d9c6fbb5e0426c840df819d6f21df63081a50de4 size 568
 MD5 1009596527f7ffb3009c86513ab99720 mpd-applet-0.2.ebuild 568
 RMD160 b9c7ea10a77117aba996b2326aff6a5b0cdc1f4e mpd-applet-0.2.ebuild 568
 SHA256 a3cbb298c6ee4760baf9ed65d9c6fbb5e0426c840df819d6f21df63081a50de4 mpd-applet-0.2.ebuild 568
+MD5 68b329da9893e34099c7d8ad5cb9c940 files/digest-mpd-applet-0.2 1
+RMD160 c0da025038ed83c687ddc430da9846ecb97f3998 files/digest-mpd-applet-0.2 1
+SHA256 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b files/digest-mpd-applet-0.2 1

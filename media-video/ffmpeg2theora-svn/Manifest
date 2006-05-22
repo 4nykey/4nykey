@@ -1,9 +1,11 @@
-MD5 7b81fceea8cae07a5c50ade3b584b155 ffmpeg2theora-svn-0.16.ebuild 917
-RMD160 8a824783b93eabf853599c9c022fbf9b4943b5b0 ffmpeg2theora-svn-0.16.ebuild 917
-SHA256 2d6d29a975fbe85cf82dc79f54d783c1c31de30b29a13168cc2a706d6c7b297f ffmpeg2theora-svn-0.16.ebuild 917
+AUX config.patch 1192 RMD160 f8f3696d5d47f32e5c4a7b384e63f95a656da267 SHA1 0dff7afb4ee86e642c50d8a4db09f593362e00cc SHA256 257f4f1517bb3e25198bc96d29d0f34bb832151c95c4e4b62a50eabf23253425 size 1192
 MD5 5f3594ff0e34bdb88d9f354b98ab4699 files/config.patch 1192
 RMD160 f8f3696d5d47f32e5c4a7b384e63f95a656da267 files/config.patch 1192
 SHA256 257f4f1517bb3e25198bc96d29d0f34bb832151c95c4e4b62a50eabf23253425 files/config.patch 1192
-MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-ffmpeg2theora-svn-0.16 0
-RMD160 9c1185a5c5e9fc54612808977ee8f548b2258d31 files/digest-ffmpeg2theora-svn-0.16 0
-SHA256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 files/digest-ffmpeg2theora-svn-0.16 0
+EBUILD ffmpeg2theora-svn-0.16.ebuild 917 RMD160 8a824783b93eabf853599c9c022fbf9b4943b5b0 SHA1 e7b01801113989d21b877cdcd3e157a99c951e3b SHA256 2d6d29a975fbe85cf82dc79f54d783c1c31de30b29a13168cc2a706d6c7b297f size 917
+MD5 7b81fceea8cae07a5c50ade3b584b155 ffmpeg2theora-svn-0.16.ebuild 917
+RMD160 8a824783b93eabf853599c9c022fbf9b4943b5b0 ffmpeg2theora-svn-0.16.ebuild 917
+SHA256 2d6d29a975fbe85cf82dc79f54d783c1c31de30b29a13168cc2a706d6c7b297f ffmpeg2theora-svn-0.16.ebuild 917
+MD5 68b329da9893e34099c7d8ad5cb9c940 files/digest-ffmpeg2theora-svn-0.16 1
+RMD160 c0da025038ed83c687ddc430da9846ecb97f3998 files/digest-ffmpeg2theora-svn-0.16 1
+SHA256 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b files/digest-ffmpeg2theora-svn-0.16 1

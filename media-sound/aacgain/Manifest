@@ -6,6 +6,13 @@ EBUILD aacgain-1.4.0.ebuild 900 RMD160 617742f3aaddf89f633d4e4388e74b4f0380fbb1 
 MD5 153285d5c7c067174db8f7a2bf188fd0 aacgain-1.4.0.ebuild 900
 RMD160 617742f3aaddf89f633d4e4388e74b4f0380fbb1 aacgain-1.4.0.ebuild 900
 SHA256 2c9fa0dba6c64f8ca81e802a74c460c55afa6b544973b96f4d8700887f22673a aacgain-1.4.0.ebuild 900
+EBUILD aacgain-1.5.ebuild 869 RMD160 343d8b72961f5a7b82e697b8dd66c8982eb9b94c SHA1 9d9ad348e8319d5c8ec4f73fa2ad35e01c7ca786 SHA256 496ef31ce7967fba6cd41d703fa857b8b59bd1f3a089aaf6b704140cfb2708c7 size 869
+MD5 7a5b502df3ad3b5741282b25b63c2f45 aacgain-1.5.ebuild 869
+RMD160 343d8b72961f5a7b82e697b8dd66c8982eb9b94c aacgain-1.5.ebuild 869
+SHA256 496ef31ce7967fba6cd41d703fa857b8b59bd1f3a089aaf6b704140cfb2708c7 aacgain-1.5.ebuild 869
 MD5 68b329da9893e34099c7d8ad5cb9c940 files/digest-aacgain-1.4.0 1
 RMD160 c0da025038ed83c687ddc430da9846ecb97f3998 files/digest-aacgain-1.4.0 1
 SHA256 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b files/digest-aacgain-1.4.0 1
+MD5 68b329da9893e34099c7d8ad5cb9c940 files/digest-aacgain-1.5 1
+RMD160 c0da025038ed83c687ddc430da9846ecb97f3998 files/digest-aacgain-1.5 1
+SHA256 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b files/digest-aacgain-1.5 1
