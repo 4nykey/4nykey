@@ -1,10 +1,10 @@
 # Copyright 1999-2005 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libebml/libebml-0.7.5.ebuild,v 1.1 2005/07/14 12:23:45 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libebml/libebml-0.7.6.ebuild,v 1.10 2006/05/08 07:40:11 corsair Exp $
+
+inherit toolchain-funcs flag-o-matic
 
 IUSE=""
-
-inherit flag-o-matic eutils
 
 DESCRIPTION="Extensible binary format library (kinda like XML)"
 HOMEPAGE="http://www.matroska.org/"
@@ -19,16 +19,12 @@ RDEPEND=""
 
 src_unpack() {
 	unpack ${A}
-
-	cd ${S}
-
-	sed -i -e 's:CXXFLAGS=:CXXFLAGS+=:g' ${S}/make/linux/Makefile
+	sed -i 's:\$(CXX) -shared:$(CXX) $(LDFLAGS) -shared:' ${S}/make/linux/Makefile
 }
 
 src_compile() {
 	cd ${S}/make/linux
-
-	emake PREFIX=/usr || die "make failed"
+	emake PREFIX=/usr CXX="$(tc-getCXX)"|| die "make failed"
 }
 
 src_install() {

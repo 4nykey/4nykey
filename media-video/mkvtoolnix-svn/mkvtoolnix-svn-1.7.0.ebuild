@@ -14,7 +14,7 @@ KEYWORDS="~x86"
 IUSE="wxwindows flac bzip2 lzo unicode"
 
 DEPEND="!media-video/mkvtoolnix
-	>=dev-libs/libebml-0.7.5
+	>=dev-libs/libebml-0.7.7
 	>=media-libs/libmatroska-0.8.0
 	media-libs/libogg
 	media-libs/libvorbis
