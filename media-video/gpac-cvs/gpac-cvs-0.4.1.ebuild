@@ -80,6 +80,8 @@ src_unpack() {
 }
 
 src_compile() {
+	append-flags -fno-strict-aliasing
+
 	local myconf
 	use mozilla || myconf="${myconf} --use-js=no"
 	use truetype || myconf="${myconf} --use-ft=no"
@@ -90,18 +92,21 @@ src_compile() {
 	use xvid || myconf="${myconf} --use-xvid=no"
 	use ffmpeg || myconf="${myconf} --use-ffmpeg=no"
 
-	econf \
+	./configure \
 		--mozdir=${D}usr/$(get_libdir)/${PLUGINS_DIR} \
 		$(use_enable amr) \
+		$(use_enable xml svg) \
 		$(use_enable ssl) \
 		$(use_enable debug) \
 		$(use_enable oss oss-audio) \
-		${myconf} || die "configure died"
-#		$(use_enable xml svg) \ # brakes build when disabled
+		${myconf} || die
 
+	# install to image dir
 	sed -i "s:=/usr:=${D}usr:" config.mak
+	# skip building generators dir (ifeq-ed in applications/Makefile)
+	sed -i "/SRC_LOCAL_PATH/d" config.mak
 
-	make OPTFLAGS="${CFLAGS} -fPIC" lib mods || die
+	make OPTFLAGS="${CFLAGS} -fPIC -DPIC" lib mods || die
 	make OPTFLAGS="${CFLAGS} -DGPAC_MODULES_PATH=\\\"/usr/$(get_libdir)/gpac\\\"" \
 		apps || die
 }
