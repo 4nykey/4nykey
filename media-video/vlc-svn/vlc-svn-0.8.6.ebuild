@@ -188,7 +188,7 @@ src_compile () {
 		$(use_enable xosd) \
 		$(use_enable lirc) \
 		$(use_enable joystick) \
-		$(use_enable live livedotcom) $(use_with live livedotcom-tree /usr/lib/live) \
+		$(use_enable live live555) $(use_with live live555-tree /usr/lib/live) \
 		$(use_enable mp3 mad) \
 		$(use_enable aac faad) \
 		$(use_enable a52) \
@@ -232,6 +232,4 @@ src_install() {
 		insinto /usr/share/icons/hicolor/${res}x${res}/apps/
 		newins ${S}/share/vlc${res}x${res}.png vlc.png
 	done
-
-	make_desktop_entry vlc "VLC Media Player" vlc "AudioVideo;Player"
 }
