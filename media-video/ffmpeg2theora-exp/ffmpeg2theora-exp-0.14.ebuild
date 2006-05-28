@@ -14,12 +14,12 @@ KEYWORDS="~x86"
 IUSE=""
 
 DEPEND="media-libs/libtheora-exp
-	media-video/ffmpeg-cvs
+	media-video/ffmpeg-svn
 	>=media-libs/libogg-1.1.0
 	>=media-libs/libvorbis-1.0.1"
 
 pkg_setup() {
-	if built_with_use ffmpeg-cvs theora; then
+	if built_with_use ffmpeg-svn theora; then
 		eerror "No-go. USE=-theora emerge ffmpeg"
 		die
 	fi

@@ -1,8 +1,8 @@
-# Copyright 1999-2005 Gentoo Foundation
+# Copyright 1999-2006 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-0.4.9_p20050906.ebuild,v 1.8 2005/10/06 03:41:04 vapier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-0.4.9_p20060517.ebuild,v 1.1 2006/05/17 09:52:14 lu_zero Exp $
 
-inherit cvs flag-o-matic multilib toolchain-funcs
+inherit subversion flag-o-matic toolchain-funcs
 
 DESCRIPTION="Complete solution to record, convert and stream audio and video. Includes libavcodec."
 HOMEPAGE="http://ffmpeg.sourceforge.net/"
@@ -10,16 +10,12 @@ NBV="540"
 WBV="520"
 SRC_URI="amr? ( http://www.3gpp.org/ftp/Specs/latest/Rel-5/26_series/26204-${WBV}.zip
 			http://www.3gpp.org/ftp/Specs/latest/Rel-5/26_series/26104-${NBV}.zip )"
-ECVS_SERVER="mplayerhq.hu:/cvsroot/ffmpeg"
-ECVS_MODULE="ffmpeg"
-S="${WORKDIR}/${ECVS_MODULE}"
+ESVN_REPO_URI="svn://www.mplayerhq.hu/ffmpeg/trunk"
 
 LICENSE="GPL-2"
 SLOT="0"
-# ~alpha need to test aac useflag
-# ~ia64 ~arm ~mips ~hppa
 KEYWORDS="~x86"
-IUSE="aac altivec debug doc ieee1394 a52 encode imlib mmx ogg vorbis oss test
+IUSE="aac debug doc ieee1394 a52 encode imlib mmx ogg vorbis oss test
 	theora threads truetype v4l xvid dts network zlib sdl amr dirac x264 static"
 
 DEPEND="imlib? ( media-libs/imlib2 )
@@ -32,7 +28,7 @@ DEPEND="imlib? ( media-libs/imlib2 )
 	theora? ( media-libs/libtheora )
 	aac? ( media-libs/faad2 media-libs/faac )
 	a52? ( >=media-libs/a52dec-0.7.4-r4 )
-	xvid? ( >=media-libs/xvid-1.0.3 )
+	xvid? ( >=media-libs/xvid-1.1.0 )
 	zlib? ( sys-libs/zlib )
 	dts? ( media-libs/libdts )
 	ieee1394? ( =media-libs/libdc1394-1*
@@ -44,7 +40,7 @@ DEPEND="imlib? ( media-libs/imlib2 )
 	test? ( net-misc/wget )"
 
 src_unpack() {
-	cvs_src_unpack
+	subversion_src_unpack
 
 	cd ${WORKDIR}
 	if use amr; then
@@ -59,7 +55,7 @@ src_unpack() {
 	use debug || append-flags "-fomit-frame-pointer"
 
 	# for some reason it tries to #include <X11/Xlib.h>, but doesn't use it
-	sed -i s:\#define\ HAVE_X11:\#define\ HAVE_LINUX: ffplay.c
+	sed -i 's:#define HAVE_X11:#define HAVE_LINUX:' ffplay.c
 
 	#ffmpeg doesn'g use libtool, so the condition for PIC code
 	#is __PIC__, not PIC.
@@ -68,6 +64,10 @@ src_unpack() {
 		libavcodec/msmpeg4.c \
 		libavutil/common.h \
 		|| die "sed failed (__PIC__)"
+
+	# Make it use pic always since we don't need textrels
+	use mmx ||
+	sed -i -e "s:LIBOBJFLAGS=\"\":LIBOBJFLAGS=\'\$\(PIC\)\':" configure
 
 	# To make sure the ffserver test will work 
 	sed -i -e "s:-e debug=off::" tests/server-regression.sh
@@ -93,9 +93,9 @@ teh_conf() {
 src_compile() {
 	#Note; library makefiles don't propogate flags from config.mak so
 	#use specified CFLAGS are only used in executables
-	filter-flags -fforce-addr -momit-leaf-frame-pointer
+	replace-flags -O0 -O2
 
-	local myconf="--enable-shared --enable-gpl --enable-pp --disable-opts"
+	local myconf="--enable-shared --enable-gpl --enable-pp --disable-opts --disable-strip"
 
 	teh_conf dis debug
 	teh_conf en encode mp3lame
@@ -151,4 +151,12 @@ src_test() {
 	for t in "codectest libavtest test-server" ; do
 		make ${t} || ewarn "Some tests in ${t} failed"
 	done
+}
+
+pkg_postinst() {
+
+	ewarn "ffmpeg may had ABI changes, if ffmpeg based programs"
+	ewarn "like xine-lib or vlc stop working as expected please"
+	ewarn "rebuild them."
+
 }

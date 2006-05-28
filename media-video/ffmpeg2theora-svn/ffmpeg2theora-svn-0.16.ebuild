@@ -16,7 +16,7 @@ IUSE=""
 DEPEND="!media-video/ffmpeg2theora
 	>=media-libs/libtheora-1.0_alpha4
 	|| ( >=media-video/ffmpeg-0.4.9_p20050226-r1
-		media-video/ffmpeg-cvs )
+		media-video/ffmpeg-svn )
 	>=media-libs/libogg-1.1.0
 	>=media-libs/libvorbis-1.0.1"
 

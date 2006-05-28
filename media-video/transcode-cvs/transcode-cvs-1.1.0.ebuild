@@ -39,7 +39,7 @@ RDEPEND="!media-video/transcode
 	jpeg? ( media-libs/jpeg )
 	gtk? ( =x11-libs/gtk+-1.2* )
 	truetype? ( >=media-libs/freetype-2 )
-	ffmpeg? || ( media-video/ffmpeg-cvs 
+	ffmpeg? || ( media-video/ffmpeg-svn 
 		>=media-video/ffmpeg-0.4.9_p20050226-r3 )
 	|| ( sys-libs/glibc dev-libs/libiconv )
 	>=media-libs/libmpeg2-0.4.0b

@@ -37,7 +37,7 @@ RDEPEND="!media-video/vlc
 		matroska? ( >=dev-libs/libebml-0.7.6
 			>=media-libs/libmatroska-0.7.5 )
 		mp3? ( media-libs/libmad )
-		ffmpeg? ( media-video/ffmpeg-cvs )
+		ffmpeg? ( media-video/ffmpeg-svn )
 		a52? ( media-libs/a52dec )
 		dts? ( media-libs/libdts )
 		flac? ( media-libs/flac )

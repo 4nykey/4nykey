@@ -26,7 +26,7 @@ DEPEND="sys-devel/libtool
 		mmx? ( >=dev-lang/nasm-0.98.19 )
 		xvid? ( >=media-libs/xvid-1.0 )
 		ffmpeg? || ( media-video/ffmpeg
-			media-video/ffmpeg-cvs )
+			media-video/ffmpeg-svn )
 		encode? (
 			aac? ( >=media-libs/faac-1.1 )
 			mp3? ( >=media-sound/lame-3.92 ) )
