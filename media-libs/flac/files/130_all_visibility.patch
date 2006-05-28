@@ -1,0 +1,292 @@
+This patch adds support for GCC's symbols visibility, by marking as visible
+only the exported API of the libraries (like done on Windows with the DLLs) and
+hiding the whole rest.
+This allows to reduce the quantity of symbols that needs to be bound every time
+a program running libFLAC is loaded.
+Index: flac-1.1.2/configure.in
+===================================================================
+--- flac-1.1.2.orig/configure.in
++++ flac-1.1.2/configure.in
+@@ -237,6 +237,9 @@ CXXFLAGS="$OUR_CFLAGS_HEAD $CXXFLAGS"
+ AM_CONDITIONAL(FLaC__HAS_AS__TEMPORARILY_DISABLED, test "yes" = "no")
+ AM_CONDITIONAL(FLaC__HAS_GAS__TEMPORARILY_DISABLED, test "yes" = "no")
+ 
++CC_ATTRIBUTE_VISIBILITY
++CC_FLAG_VISIBILITY([CFLAGS="$CFLAGS -fvisibility=hidden"; CXXFLAGS="$CXXFLAGS -fvisibility=hidden"])
++
+ AC_CONFIG_FILES([ \
+ 	Makefile \
+ 	src/Makefile \
+Index: flac-1.1.2/include/FLAC/export.h
+===================================================================
+--- flac-1.1.2.orig/include/FLAC/export.h
++++ flac-1.1.2/include/FLAC/export.h
+@@ -32,9 +32,17 @@
+ #ifndef FLAC__EXPORT_H
+ #define FLAC__EXPORT_H
+ 
++#ifdef HAVE_CONFIG_H
++#include "config.h"
++#endif
++
+ #if defined(FLAC__NO_DLL) || !defined(_MSC_VER)
+-#define FLAC_API
+ 
++#ifdef SUPPORT_ATTRIBUTE_VISIBILITY
++#define FLAC_API __attribute__((visibility("default")))
++#else
++#define FLAC_API
++#endif
+ #else
+ 
+ #ifdef FLAC_API_EXPORTS
+Index: flac-1.1.2/m4/attributes.m4
+===================================================================
+--- /dev/null
++++ flac-1.1.2/m4/attributes.m4
+@@ -0,0 +1,163 @@
++# Functions to check for attributes support in compiler
++
++AC_DEFUN([CC_ATTRIBUTE_CONSTRUCTOR], [
++	AC_CACHE_CHECK([if compiler supports __attribute__((constructor))],
++		[cc_cv_attribute_constructor],
++		[AC_COMPILE_IFELSE([
++			void ctor() __attribute__((constructor));
++			void ctor() { };
++			],
++			[cc_cv_attribute_constructor=yes],
++			[cc_cv_attribute_constructor=no])
++		])
++	
++	if test "x$cc_cv_attribute_constructor" = "xyes"; then
++		AC_DEFINE([SUPPORT_ATTRIBUTE_CONSTRUCTOR], 1, [Define this if the compiler supports the constructor attribute])
++		$1
++	else
++		true
++		$2
++	fi
++])
++
++AC_DEFUN([CC_ATTRIBUTE_FORMAT], [
++	AC_CACHE_CHECK([if compiler supports __attribute__((format(printf, n, n)))],
++		[cc_cv_attribute_format],
++		[AC_COMPILE_IFELSE([
++			void __attribute__((format(printf, 1, 2))) printflike(const char *fmt, ...) { }
++			],
++			[cc_cv_attribute_format=yes],
++			[cc_cv_attribute_format=no])
++		])
++	
++	if test "x$cc_cv_attribute_format" = "xyes"; then
++		AC_DEFINE([SUPPORT_ATTRIBUTE_FORMAT], 1, [Define this if the compiler supports the format attribute])
++		$1
++	else
++		true
++		$2
++	fi
++])
++
++AC_DEFUN([CC_ATTRIBUTE_FORMAT_ARG], [
++	AC_CACHE_CHECK([if compiler supports __attribute__((format_arg(printf)))],
++		[cc_cv_attribute_format_arg],
++		[AC_COMPILE_IFELSE([
++			void __attribute__((format_arg(printf, 1))) gettextlike(const char *fmt) { }
++			],
++			[cc_cv_attribute_format_arg=yes],
++			[cc_cv_attribute_format_arg=no])
++		])
++	
++	if test "x$cc_cv_attribute_format_arg" = "xyes"; then
++		AC_DEFINE([SUPPORT_ATTRIBUTE_FORMAT_ARG], 1, [Define this if the compiler supports the format_arg attribute])
++		$1
++	else
++		true
++		$2
++	fi
++])
++
++AC_DEFUN([CC_ATTRIBUTE_VISIBILITY], [
++	AC_CACHE_CHECK([if compiler supports __attribute__((visibility("...")))],
++		[cc_cv_attribute_visibility],
++		[AC_COMPILE_IFELSE([
++			void __attribute__((visibility("internal"))) internal_function() { }
++			void __attribute__((visibility("hidden"))) hidden_function() { }
++			void __attribute__((visibility("default"))) external_function() { }
++			],
++			[cc_cv_attribute_visibility=yes],
++			[cc_cv_attribute_visibility=no])
++		])
++	
++	if test "x$cc_cv_attribute_visibility" = "xyes"; then
++		AC_DEFINE([SUPPORT_ATTRIBUTE_VISIBILITY], 1, [Define this if the compiler supports the visibility attribute])
++		$1
++	else
++		true
++		$2
++	fi
++])
++
++AC_DEFUN([CC_FLAG_VISIBILITY], [
++	AC_CACHE_CHECK([if compiler supports -fvisibility=hidden],
++		[cc_cv_flag_visibility],
++		[
++		save_CFLAGS=$CFLAGS
++		CFLAGS="$CFLAGS -fvisibility=hidden"
++		AC_COMPILE_IFELSE([int a;],
++			[cc_cv_flag_visibility=yes],
++			[cc_cv_flag_visibility=no])
++		CFLAGS="$save_CFLAGS"
++		])
++	
++	if test "x$cc_cv_flag_visibility" = "xyes"; then
++		AC_DEFINE([SUPPORT_FLAG_VISIBILITY], 1, [Define this if the compiler supports the -fvisibility flag])
++		$1
++	else
++		true
++		$2
++	fi
++])
++
++AC_DEFUN([CC_ATTRIBUTE_NONNULL], [
++	AC_CACHE_CHECK([if compiler supports __attribute__((nonnull()))],
++		[cc_cv_attribute_nonnull],
++		[AC_COMPILE_IFELSE([
++			void some_function(void *foo, void *bar) __attribute__((nonnull()));
++			void some_function(void *foo, void *bar) { }
++			],
++			[cc_cv_attribute_nonnull=yes],
++			[cc_cv_attribute_nonnull=no])
++		])
++	
++	if test "x$cc_cv_attribute_nonnull" = "xyes"; then
++		AC_DEFINE([SUPPORT_ATTRIBUTE_NONNULL], 1, [Define this if the compiler supports the nonnull attribute])
++		$1
++	else
++		true
++		$2
++	fi
++])
++
++AC_DEFUN([CC_ATTRIBUTE_UNUSED], [
++	AC_CACHE_CHECK([if compiler supports __attribute__((unused))],
++		[cc_cv_attribute_unused],
++		[AC_COMPILE_IFELSE([
++			void some_function(void *foo, __attribute__((unused)) void *bar);
++			],
++			[cc_cv_attribute_unused=yes],
++			[cc_cv_attribute_unused=no])
++		])
++	
++	if test "x$cc_cv_attribute_unused" = "xyes"; then
++		AC_DEFINE([SUPPORT_ATTRIBUTE_UNUSED], 1, [Define this if the compiler supports the unused attribute])
++		$1
++	else
++		true
++		$2
++	fi
++])
++
++AC_DEFUN([CC_FUNC_EXPECT], [
++	AC_CACHE_CHECK([if compiler has __builtin_expect function],
++		[cc_cv_func_expect],
++		[AC_COMPILE_IFELSE([
++			int some_function()
++			{
++				int a = 3;
++				return (int)__builtin_expect(a, 3);
++			}
++			],
++			[cc_cv_func_expect=yes],
++			[cc_cv_func_expect=no])
++		])
++	
++	if test "x$cc_cv_func_expect" = "xyes"; then
++		AC_DEFINE([SUPPORT__BUILTIN_EXPECT], 1, [Define this if the compiler supports __builtin_expect() function])
++		$1
++	else
++		true
++		$2
++	fi
++])
+Index: flac-1.1.2/include/OggFLAC/export.h
+===================================================================
+--- flac-1.1.2.orig/include/OggFLAC/export.h
++++ flac-1.1.2/include/OggFLAC/export.h
+@@ -32,9 +32,17 @@
+ #ifndef OggFLAC__EXPORT_H
+ #define OggFLAC__EXPORT_H
+ 
++#ifdef HAVE_CONFIG_H
++#include "config.h"
++#endif
++
+ #if defined(FLAC__NO_DLL) || !defined(_MSC_VER)
+-#define OggFLAC_API
+ 
++#ifdef SUPPORT_ATTRIBUTE_VISIBILITY
++#define OggFLAC_API __attribute__((visibility("default")))
++#else
++#define OggFLAC_API
++#endif
+ #else
+ 
+ #ifdef OggFLAC_API_EXPORTS
+Index: flac-1.1.2/include/FLAC++/export.h
+===================================================================
+--- flac-1.1.2.orig/include/FLAC++/export.h
++++ flac-1.1.2/include/FLAC++/export.h
+@@ -32,9 +32,17 @@
+ #ifndef FLACPP__EXPORT_H
+ #define FLACPP__EXPORT_H
+ 
++#ifdef HAVE_CONFIG_H
++#include "config.h"
++#endif
++
+ #if defined(FLAC__NO_DLL) || !defined(_MSC_VER)
+-#define FLACPP_API
+ 
++#ifdef SUPPORT_ATTRIBUTE_VISIBILITY
++#define FLACPP_API __attribute__((visibility("default")))
++#else
++#define FLACPP_API
++#endif
+ #else
+ 
+ #ifdef FLACPP_API_EXPORTS
+Index: flac-1.1.2/include/OggFLAC++/export.h
+===================================================================
+--- flac-1.1.2.orig/include/OggFLAC++/export.h
++++ flac-1.1.2/include/OggFLAC++/export.h
+@@ -32,9 +32,18 @@
+ #ifndef OggFLACPP__EXPORT_H
+ #define OggFLACPP__EXPORT_H
+ 
++#ifdef HAVE_CONFIG_H
++#include "config.h"
++#endif
++
+ #if defined(FLAC__NO_DLL) || !defined(_MSC_VER)
+-#define OggFLACPP_API
+ 
++#ifdef SUPPORT_ATTRIBUTE_VISIBILITY
++
++#define OggFLACPP_API __attribute__((visibility("default")))
++#else
++#define OggFLACPP_API
++#endif
+ #else
+ 
+ #ifdef OggFLACPP_API_EXPORTS
+Index: flac-1.1.2/src/Makefile.am
+===================================================================
+--- flac-1.1.2.orig/src/Makefile.am
++++ flac-1.1.2/src/Makefile.am
+@@ -36,7 +36,6 @@ SUBDIRS = \
+ 	$(XMMS_DIRS) \
+ 	plugin_winamp2 \
+ 	test_grabbag \
+-	test_libFLAC \
+ 	test_libFLAC++ \
+ 	$(OGGFLAC_TEST_DIRS) \
+ 	test_seeking \

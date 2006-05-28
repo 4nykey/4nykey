@@ -1,16 +1,13 @@
 # Copyright 1999-2005 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/flac/flac-1.1.2-r3.ebuild,v 1.2 2005/10/19 19:05:09 metalgod Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/flac/flac-1.1.2-r5.ebuild,v 1.2 2006/05/28 02:16:10 flameeyes Exp $
 
-inherit libtool cvs autotools
+inherit libtool cvs autotools toolchain-funcs
 
-PATCHLEVEL="3"
 DESCRIPTION="free lossless audio encoder which includes an XMMS plugin"
 HOMEPAGE="http://flac.sourceforge.net/"
-#SRC_URI="mirror://sourceforge/flac/${P}.tar.gz
-SRC_URI="mirror://gentoo/${PN}-patches-${PATCHLEVEL}.tar.bz2"
 ECVS_SERVER="flac.cvs.sourceforge.net:/cvsroot/flac"
-ECVS_MODULE="${PN}"
+ECVS_MODULE="flac"
 S="${WORKDIR}/${ECVS_MODULE}"
 
 LICENSE="GPL-2 LGPL-2"
@@ -27,18 +24,20 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
 
 src_unpack() {
-	unpack ${A}
-	rm -f ${WORKDIR}/patches/{01,02,03,09,10}0*.patch
 	cvs_src_unpack
 	cd "${S}"
 
-	EPATCH_SUFFIX="patch" epatch "${WORKDIR}/patches"
+	# Enable only for GCC 4.1 and later
+	[[ $(gcc-major-version)$(gcc-minor-version) -ge 41 ]] || \
+		export EPATCH_EXCLUDE="130_all_visibility.patch"
+
+	sed -i 's:-O. ::' configure.in # 080_all_noextraflags.patch
+	EPATCH_SUFFIX="patch" epatch "${FILESDIR}"
 	AT_M4DIR="m4" eautoreconf
 	elibtoolize
 }
 
 src_compile() {
-	use doc || export ac_cv_prog_DOXYGEN=''
 	econf \
 		$(use_enable ogg) \
 		$(use_enable sse) \
@@ -46,13 +45,17 @@ src_compile() {
 		$(use_enable debug) \
 		$(use_enable doc) $(use_enable doc doxygen-docs) \
 		$(use_with pic) \
+		--disable-thorough-tests \
 		--disable-dependency-tracking || die
 
 	# the man page ebuild requires docbook2man... yick!
 	sed -i -e 's:include man:include:g' Makefile
 
-	# parallel make seems to mess up the building of the xmms input plugin
-	emake -j1 || die "make failed"
+	# FIXME parallel make seems to mess up the building of the xmms input plugin
+	local makeopts
+	use xmms && makeopts="-j1"
+
+	emake ${makeopts} || die "make failed"
 }
 
 src_install() {
