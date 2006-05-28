@@ -34,9 +34,9 @@ RDEPEND="jpeg? ( media-libs/jpeg )
 	wxwindows? ( >=x11-libs/wxGTK-2.5.2 )
 	ssl? ( dev-libs/openssl )
 	X? ( virtual/x11 )
+	xml? ( >=dev-libs/libxml2-2.6.0 )
 	xvid? ( >=media-libs/xvid-1.0.1 )
 	>=dev-libs/libxml2-2.6.0"
-#	xml? ( >=dev-libs/libxml2-2.6.0 )
 
 
 DEPEND="${RDEPEND}
@@ -93,6 +93,7 @@ src_compile() {
 	use ffmpeg || myconf="${myconf} --use-ffmpeg=no"
 
 	./configure \
+		--prefix=/usr \
 		--mozdir=${D}usr/$(get_libdir)/${PLUGINS_DIR} \
 		$(use_enable amr) \
 		$(use_enable xml svg) \
