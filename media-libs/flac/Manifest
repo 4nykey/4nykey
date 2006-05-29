@@ -14,10 +14,14 @@ AUX 130_all_visibility.patch 8025 RMD160 6f5489ee99cd16ebe2cb41b9375c691dc725784
 MD5 45fa0a56a849ecc5f22e902d8eb4d3ae files/130_all_visibility.patch 8025
 RMD160 6f5489ee99cd16ebe2cb41b9375c691dc7257848 files/130_all_visibility.patch 8025
 SHA256 ac288ac08063e9c8242365dca1d4e54662acba6f96397d52b04cf1b59ccb218e files/130_all_visibility.patch 8025
-EBUILD flac-1.1.2-r5.ebuild 1999 RMD160 b06470e8f703fa7e00e115f95a76ec31d9e392b5 SHA1 5aa92b1d2c57d841d15613e4f319e8e4dabe75c1 SHA256 094f1f98da26fad61c77c4b484b81ba690eb5b2b35fff9647d3e942ba9bf7c2a
-MD5 e2b0f57a482d49dbe0d5075f0cfbbefc flac-1.1.2-r5.ebuild 1999
-RMD160 b06470e8f703fa7e00e115f95a76ec31d9e392b5 flac-1.1.2-r5.ebuild 1999
-SHA256 094f1f98da26fad61c77c4b484b81ba690eb5b2b35fff9647d3e942ba9bf7c2a flac-1.1.2-r5.ebuild 1999
-MD5 68b329da9893e34099c7d8ad5cb9c940 files/digest-flac-1.1.2-r5 1
-RMD160 c0da025038ed83c687ddc430da9846ecb97f3998 files/digest-flac-1.1.2-r5 1
-SHA256 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b files/digest-flac-1.1.2-r5 1
+AUX 140_all_visibility-xmms.patch 470 RMD160 7bf5dcd7f9cc9ce6c53403c1da9c30d4108eae96 SHA1 068995741fbc68c36843cbe76623979ee544a196 SHA256 5e5a348d1c8e66b23a98a220d107e543e6e02e7f59417593b15d19c8b8e483b2
+MD5 1e3bb0e26c4be73c7cb5b74cd1e010ed files/140_all_visibility-xmms.patch 470
+RMD160 7bf5dcd7f9cc9ce6c53403c1da9c30d4108eae96 files/140_all_visibility-xmms.patch 470
+SHA256 5e5a348d1c8e66b23a98a220d107e543e6e02e7f59417593b15d19c8b8e483b2 files/140_all_visibility-xmms.patch 470
+EBUILD flac-1.1.2-r6.ebuild 1999 RMD160 b06470e8f703fa7e00e115f95a76ec31d9e392b5 SHA1 5aa92b1d2c57d841d15613e4f319e8e4dabe75c1 SHA256 094f1f98da26fad61c77c4b484b81ba690eb5b2b35fff9647d3e942ba9bf7c2a
+MD5 e2b0f57a482d49dbe0d5075f0cfbbefc flac-1.1.2-r6.ebuild 1999
+RMD160 b06470e8f703fa7e00e115f95a76ec31d9e392b5 flac-1.1.2-r6.ebuild 1999
+SHA256 094f1f98da26fad61c77c4b484b81ba690eb5b2b35fff9647d3e942ba9bf7c2a flac-1.1.2-r6.ebuild 1999
+MD5 68b329da9893e34099c7d8ad5cb9c940 files/digest-flac-1.1.2-r6 1
+RMD160 c0da025038ed83c687ddc430da9846ecb97f3998 files/digest-flac-1.1.2-r6 1
+SHA256 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b files/digest-flac-1.1.2-r6 1
