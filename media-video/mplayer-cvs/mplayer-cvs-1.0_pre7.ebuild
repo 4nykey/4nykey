@@ -45,7 +45,7 @@ RDEPEND="xvid? ( >=media-libs/xvid-0.9.0 )
 	cdparanoia? ( media-sound/cdparanoia )
 	dga? ( virtual/x11 )
 	directfb? ( dev-libs/DirectFB )
-	dts? ( media-libs/libdts )
+	dts? || ( media-libs/libdca media-libs/libdts )
 	dvd? ( dvdread? ( media-libs/libdvdread ) )
 	encode? (
 		media-sound/lame

@@ -12,7 +12,8 @@ ESVN_REPO_URI="svn://svn.berlios.de/avidemux/branches/avidemux_2.2_branch"
 LICENSE="GPL-2"
 SLOT="2"
 KEYWORDS="~x86"
-IUSE="a52 aac alsa altivec arts encode esd mp3 mmx nls png vorbis sdl truetype xvid xv oss x264"
+IUSE="a52 aac alsa altivec arts encode esd mp3 mmx nls png vorbis sdl truetype
+xvid xv oss x264 dts"
 
 RDEPEND=">=dev-libs/libxml2-2.6.7
 	>=x11-libs/gtk+-2.6.0
@@ -34,6 +35,7 @@ RDEPEND=">=dev-libs/libxml2-2.6.7
 	x264? ( media-libs/x264 )
 	png? ( media-libs/libpng )
 	esd? ( media-sound/esound )
+	dts? ( media-libs/libdca )
 	sdl? ( media-libs/libsdl )"
 
 DEPEND="$RDEPEND
@@ -80,6 +82,7 @@ src_compile() {
 		$(use_with aac faad2) \
 		$(use_with xvid) \
 		$(use_with esd) \
+		$(use_with dts libdca) \
 		--with-jsapi-include=/usr/include/js \
 		--disable-warnings --disable-dependency-tracking \
 		${myconf} || die "configure failed"

@@ -39,7 +39,7 @@ RDEPEND="!media-video/vlc
 		mp3? ( media-libs/libmad )
 		ffmpeg? ( media-video/ffmpeg-svn )
 		a52? ( media-libs/a52dec )
-		dts? ( media-libs/libdts )
+		dts? || ( media-libs/libdca media-libs/libdts )
 		flac? ( media-libs/flac )
 		mpeg? ( >=media-libs/libmpeg2-0.3.2 )
 		vorbis? ( media-libs/libvorbis )
