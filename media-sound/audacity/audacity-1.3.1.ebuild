@@ -4,24 +4,21 @@
 
 inherit cvs wxwidgets eutils
 
-IUSE="gtk2 encode flac mad vorbis libsamplerate alsa ladspa"
-
-#MY_PV="${PV/_/-}"
-#MY_P="${PN}-src-${MY_PV}"
-S="${WORKDIR}/${PN}"
+IUSE="encode flac mad vorbis libsamplerate alsa ladspa soundtouch unicode"
 
 DESCRIPTION="Free crossplatform audio editor"
 HOMEPAGE="http://audacity.sourceforge.net/"
-#SRC_URI="mirror://sourceforge/${PN}/${MY_P}.tar.gz"
 ECVS_SERVER="audacity.cvs.sourceforge.net:/cvsroot/audacity"
 ECVS_MODULE="audacity"
+
+S="${WORKDIR}/${ECVS_MODULE}"
 
 LICENSE="GPL-2"
 SLOT="0"
 
 KEYWORDS="~x86"
 
-DEPEND=">=x11-libs/wxGTK-2.4.2-r1
+RDEPEND=">=x11-libs/wxGTK-2.6.0
 	>=app-arch/zip-2.3
 	>=media-libs/id3lib-3.8.0
 	media-libs/libid3tag
@@ -32,18 +29,19 @@ DEPEND=">=x11-libs/wxGTK-2.4.2-r1
 	oggvorbis? ( >=media-libs/libvorbis-1.0 )
 	mad? ( media-libs/libmad )
 	jack? ( media-sound/jack-audio-connection-kit )
+	alsa? ( media-libs/alsa-lib )
 	ladspa? ( media-libs/ladspa-sdk )
+	soundtouch? ( media-libs/libsoundtouch )
 	encode? ( >=media-sound/lame-3.92 )"
+DEPEND="${RDEPEND} 
+	>=sys-devel/autoconf-2.5"
 
 pkg_setup() {
-	if has_version '>=x11-libs/wxGTK-2.6.0'; then
-		WX_GTK_VER="2.6"
-	fi
-
-	if use gtk2; then
-		need-wxwidgets gtk2
+	WX_GTK_VER="2.6"
+	if use unicode; then
+		need-wxwidgets unicode
 	else
-		need-wxwidgets gtk
+		need-wxwidgets gtk2
 	fi
 }
 
@@ -52,27 +50,24 @@ src_unpack() {
 	cd ${S}
 	sed -i 's:0\.15\.0:0.1.2:g' configure
 
+	epatch "${FILESDIR}/audacity-1.3.1-cvs.diff"
+
 	if use alsa || use jack ; then
-#		ECVS_SERVER="www.portaudio.com:/home/cvs"
-#		ECVS_MODULE="portaudio"
-#		ECVS_BRANCH="v19-devel"
-#		cvs_src_unpack
 		cd ${S}/lib-src/portaudio-v19
 		WANT_AUTOCONF=2.5 autoconf --force
 	fi
 }
 
 src_compile() {
-#	if use alsa; then
-#		cd ${WORKDIR}/portaudio
-#		econf --with-alsa || die
-#		make lib/libportaudio.a || die
-#	fi
-
 	if use libsamplerate; then
 		myconf="${myconf} --with-libsamplerate=system"
 	else
 		myconf="${myconf} --without-libsamplerate"
+	fi
+	if use soundtouch; then
+		myconf="${myconf}  --with-soundtouch=local"
+	else
+		myconf="${myconf} --without-soundtouch"
 	fi
 	use ladspa && LADSPA="yes" || LADSPA="no"
 	if use alsa || use jack; then
@@ -92,7 +87,7 @@ src_compile() {
 		--with-portaudio${PA_VERSION} \
 		${myconf} || die
 
-	# parallel borks
+	# parallel b0rks
 	emake -j1 || die
 }
 
