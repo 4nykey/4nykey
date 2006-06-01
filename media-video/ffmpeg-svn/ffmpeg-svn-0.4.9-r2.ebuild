@@ -74,8 +74,6 @@ src_unpack() {
 
 	# skip running ldconfig on make install
 	sed -i /LDCONFIG/d Makefile
-
-	epatch ${FILESDIR}/FFMpeg-20051205-dirac-0.5.x.patch
 }
 
 teh_conf() {
