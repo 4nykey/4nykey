@@ -2,9 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/audacity/audacity-1.2.3-r1.ebuild,v 1.1 2005/04/15 17:46:25 luckyduck Exp $
 
-inherit cvs wxwidgets eutils
+inherit cvs wxwidgets
 
-IUSE="encode flac mad vorbis libsamplerate alsa ladspa soundtouch unicode"
+IUSE="encode flac mad vorbis sndfile libsamplerate alsa jack oss ladspa soundtouch unicode"
 
 DESCRIPTION="Free crossplatform audio editor"
 HOMEPAGE="http://audacity.sourceforge.net/"
@@ -31,6 +31,7 @@ RDEPEND=">=x11-libs/wxGTK-2.6.0
 	jack? ( media-sound/jack-audio-connection-kit )
 	alsa? ( media-libs/alsa-lib )
 	ladspa? ( media-libs/ladspa-sdk )
+	sndfile? ( media-libs/libsndfile )
 	soundtouch? ( media-libs/libsoundtouch )
 	encode? ( >=media-sound/lame-3.92 )"
 DEPEND="${RDEPEND} 
@@ -49,13 +50,6 @@ src_unpack() {
 	cvs_src_unpack
 	cd ${S}
 	sed -i 's:0\.15\.0:0.1.2:g' configure
-
-	epatch "${FILESDIR}/audacity-1.3.1-cvs.diff"
-
-	if use alsa || use jack ; then
-		cd ${S}/lib-src/portaudio-v19
-		WANT_AUTOCONF=2.5 autoconf --force
-	fi
 }
 
 src_compile() {
@@ -70,21 +64,16 @@ src_compile() {
 		myconf="${myconf} --without-soundtouch"
 	fi
 	use ladspa && LADSPA="yes" || LADSPA="no"
-	if use alsa || use jack; then
-		PA_VERSION="=v19"
-		PMIXER="no"
-	else
-		PA_VERSION="=v18"
-		PMIXER="yes"
-	fi
 
 	ac_cv_path_WX_CONFIG=${WX_CONFIG} \
 	econf \
 		--with-nyquist=local \
 		--with-lib-preference=system \
 		--with-ladspa=${LADSPA} \
-		--with-portmixer=${PMIXER} \
-		--with-portaudio${PA_VERSION} \
+		--with-rtaudio=yes \
+		$(use_with alsa) \
+		$(use_with jack) \
+		$(use_with oss) \
 		${myconf} || die
 
 	# parallel b0rks
@@ -95,14 +84,17 @@ src_install() {
 	make DESTDIR="${D}" install || die
 
 	# Install our docs
-	dodoc LICENSE.txt README.txt audacity-1.2-help.htb
+	dodoc README.txt
+	dohtml -r help/webbrowser/
 
 	# Remove bad doc install
-	rm -rf ${D}/share/doc
+	rm -rf ${D}usr/share/doc/audacity
 
 	insinto /usr/share/pixmaps
-	newins images/AudacityLogo48x48.xpm audacity.xpm
+	newins images/AudacityLogo.xpm audacity.xpm
 	dosed \
 		'/^Name\[/d; s:^Icon=.*:Icon=audacity:; s:.*\(Desktop Entry\).*:[\1]:' \
 		/usr/share/applications/audacity.desktop
 }
+
+src_test() { :; }

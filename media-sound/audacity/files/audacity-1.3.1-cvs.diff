@@ -1,16 +1,19 @@
-Index: src/widgets/ImageRoll.cpp
+Index: configure
 ===================================================================
-RCS file: /cvsroot/audacity/audacity-src/src/widgets/ImageRoll.cpp,v
-retrieving revision 1.1
-diff -u -r1.1 ImageRoll.cpp
---- src/widgets/ImageRoll.cpp	30 May 2006 10:30:46 -0000	1.1
-+++ src/widgets/ImageRoll.cpp	31 May 2006 12:07:42 -0000
-@@ -15,6 +15,8 @@
+RCS file: /cvsroot/audacity/audacity-src/configure,v
+retrieving revision 1.87
+diff -u -r1.87 configure
+--- configure	14 Feb 2006 08:12:25 -0000	1.87
++++ configure	2 Jun 2006 13:23:07 -0000
+@@ -5598,11 +5598,6 @@
+ fi
  
- #include <wx/arrimpl.cpp>
- #include <wx/image.h>
-+#include <wx/dcclient.h>
-+#include <wx/dcmemory.h>
  
- WX_DEFINE_OBJARRAY(BitmapArray);
- WX_DEFINE_OBJARRAY(ImageArray);
+-if [ "$use_portmixer" = "yes" ] && [ "$use_portaudio" = "v19" ] ; then
+-   { { echo "$as_me:$LINENO: error: *** PortAudio v19 does not work with PortMixer (at least not yet) " >&5
+-echo "$as_me: error: *** PortAudio v19 does not work with PortMixer (at least not yet) " >&2;}
+-   { (exit 1); exit 1; }; }
+-fi
+ 
+ 
+ 
