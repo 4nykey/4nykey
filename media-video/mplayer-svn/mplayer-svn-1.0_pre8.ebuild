@@ -2,12 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/mplayer/mplayer-1.0_pre7.ebuild,v 1.2 2005/04/17 14:05:35 lu_zero Exp $
 
-inherit eutils flag-o-matic linux-mod cvs
+inherit flag-o-matic linux-mod subversion
 
 #RESTRICT="nostrip"
 IUSE="3dfx 3dnow 3dnowext aac aalib alsa altivec amr arts avi bidi bl cpudetection
-custom-cflags debug dga dirac doc dts dvb cdparanoia directfb dv dvd dvdread
-edl encode esd fbcon gif ggi gtk i8x0 ipv6 jack joystick jpeg libcaca lirc live lzo
+custom-cflags debug dga doc dts dvb cdparanoia directfb dv dvd dvdread
+encode esd fbcon gif ggi gtk i8x0 ipv6 jack joystick jpeg libcaca lirc live lzo
 mad matroska matrox mmx mmxext musepack mythtv nas nvidia vorbis opengl oss
 png real rtc samba sdl speex sse sse2 svga tga theora truetype v4l v4l2 X x264
 xanim xinerama xmms xv xvid xvmc gtk2"
@@ -19,7 +19,6 @@ WBV=520
 NAV=20060306
 SKINDIR="/usr/share/mplayer/skins/"
 
-S="${WORKDIR}/main"
 SRC_URI="mirror://mplayer/releases/fonts/font-arial-iso-8859-1.tar.bz2
 	mirror://mplayer/releases/fonts/font-arial-iso-8859-2.tar.bz2
 	mirror://mplayer/releases/fonts/font-arial-cp1250.tar.bz2
@@ -27,6 +26,7 @@ SRC_URI="mirror://mplayer/releases/fonts/font-arial-iso-8859-1.tar.bz2
 	amr? ( http://www.3gpp.org/ftp/Specs/latest/Rel-5/26_series/26204-${WBV}.zip
 		http://www.3gpp.org/ftp/Specs/latest/Rel-5/26_series/26104-${NBV}.zip )
 	gtk? ( mirror://mplayer/Skin/Blue-${BLUV}.tar.bz2 )"
+ESVN_REPO_URI="svn://svn.mplayerhq.hu/mplayer/trunk"
 
 # Only install Skin if GUI should be build (gtk as USE flag)
 DESCRIPTION="Media Player for Linux"
@@ -81,7 +81,6 @@ RDEPEND="xvid? ( >=media-libs/xvid-0.9.0 )
 	xmms? ( media-sound/xmms )
 	xanim? ( >=media-video/xanim-2.80.1-r4 )
 	musepack? ( >=media-libs/libmpcdec-1.2.1 )
-	dirac? ( >=media-video/dirac-0.5.2 )
 	aac? ( media-libs/faad2 )
 	x264? ( >=media-libs/x264-45 )
 	speex? ( >=media-libs/speex-1.1.0 )
@@ -157,17 +156,14 @@ pkg_setup() {
 }
 
 src_unpack() {
+	subversion_src_unpack
 
-	ECVS_SERVER="mplayerhq.hu:/cvsroot/mplayer"
-	ECVS_MODULE="main" cvs_src_unpack
-	ECVS_SERVER="mplayerhq.hu:/cvsroot/ffmpeg"
-	ECVS_MODULE="ffmpeg/libavcodec" cvs_src_unpack
-	ECVS_MODULE="ffmpeg/libavformat" cvs_src_unpack
-	ECVS_MODULE="ffmpeg/libavutil" cvs_src_unpack
+	# get current revision for version.h
+	REVISION="$(svnversion \
+		${ESVN_STORE_DIR}/${ESVN_PROJECT}/${ESVN_REPO_URI##*/})"
+	sed -i "s:\(revision=r\).*:\1${REVISION}:" ${S}/version.sh
 
 	cd ${WORKDIR}
-
-	mv -f ffmpeg/libav{codec,format,util} main
 
 	if use amr; then
 		unpack 26104-${NBV}.zip 26204-${WBV}.zip
@@ -204,8 +200,6 @@ src_unpack() {
 
 		mv ${WORKDIR}/svgalib_helper ${S}/libdha
 	fi
-
-	use dirac && epatch ${FILESDIR}/mplayer-dirac-cvs.diff
 
 	# cat a.avi b.avi | mencoder ...
 	#epatch ${FILESDIR}/demuxavifix.patch
@@ -320,7 +314,6 @@ src_compile() {
 	else
 		myconf="${myconf} --disable-dvdread --disable-mpdvdkit"
 	fi
-	teh_conf edl
 
 	if use encode ; then
 		teh_conf dv libdv
@@ -548,20 +541,17 @@ src_install() {
 	for i in DOCS TOOLS; do
 		find "${S}/$i" -name CVS -type d | xargs rm -rf
 	done
+
 	# Install the documentation; DOCS is all mixed up not just html
 	if use doc ; then
-		#for dir in de it tech zh
-		#	do cp -r "${S}/DOCS/$dir" "${D}/usr/share/doc/${PF}/"
-		#done
+		dohtml -r "${S}/DOCS/HTML/en/"
+		# Copy misc tools to documentation path, as they're not installed directly
+		# and yes, we are nuking the +x bit.
+		find "${S}/TOOLS" -type d | xargs -- chmod 0755
+		find "${S}/TOOLS" -type f | xargs -- chmod 0644
+		cp -r "${S}/TOOLS" "${D}/usr/share/doc/${PF}/" || die
 		cp -r "${S}/DOCS/tech" "${D}/usr/share/doc/${PF}/"
-		dohtml -r "${S}/DOCS/HTML/en/*"
 	fi
-
-	# Copy misc tools to documentation path, as they're not installed directly
-	# and yes, we are nuking the +x bit.
-	find "${S}/TOOLS" -type d | xargs -- chmod 0755
-	find "${S}/TOOLS" -type f | xargs -- chmod 0644
-	cp -r "${S}/TOOLS" "${D}/usr/share/doc/${PF}/" || die
 
 	# Install the default Skin and Gnome menu entry
 	if use gtk; then
@@ -582,8 +572,8 @@ src_install() {
 		cp -Rd ${x} ${D}/usr/share/mplayer/fonts
 	done
 	# Fix the font symlink ...
-	#rm -rf ${D}/usr/share/mplayer/font
-	#dosym fonts/font-arial-14-iso-8859-1 /usr/share/mplayer/font
+	rm -rf ${D}/usr/share/mplayer/font
+	dosym fonts/font-arial-14-iso-8859-1 /usr/share/mplayer/font
 
 	insinto /etc
 	newins ${S}/etc/example.conf mplayer.conf
@@ -591,14 +581,15 @@ src_install() {
 	dosed -e 's/fs=yes/fs=no/' /etc/mplayer.conf
 	dosym ../../../etc/mplayer.conf /usr/share/mplayer/mplayer.conf
 
-	#mv the midentify script to /usr/bin for emovix.
-	cp ${D}/usr/share/doc/${PF}/TOOLS/midentify ${D}/usr/bin
-	chmod a+x ${D}/usr/bin/midentify
-
 	insinto /usr/share/mplayer
-	doins ${S}/etc/codecs.conf
+	#doins ${S}/etc/codecs.conf
 	doins ${S}/etc/input.conf
 	doins ${S}/etc/menu.conf
+
+	# mv the midentify script to /usr/bin for emovix.
+	insinto /usr/bin
+	insopts -m0755
+	doins TOOLS/midentify
 }
 
 pkg_preinst() {
@@ -613,16 +604,6 @@ pkg_postinst() {
 
 	if use matrox; then
 		depmod -a &>/dev/null || :
-	fi
-
-	if use alsa ; then
-		einfo "For those using alsa, please note the ao driver name is no longer"
-		einfo "alsa9x or alsa1x.  It is now just 'alsa' (omit quotes)."
-		einfo "The syntax for optional drivers has also changed.  For example"
-		einfo "if you use a dmix driver called 'dmixer,' use"
-		einfo "ao=alsa:device=dmixer instead of ao=alsa:dmixer"
-		einfo "Some users may not need to specify the extra driver with the ao="
-		einfo "command."
 	fi
 }
 

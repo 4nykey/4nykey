@@ -13,7 +13,7 @@ KEYWORDS="~x86"
 IUSE=""
 
 RDEPEND="dev-python/pygtk
-	|| ( media-video/mplayer-cvs media-video/mplayer )
+	|| ( media-video/mplayer-svn media-video/mplayer )
 	media-video/dvdauthor
 	app-cdr/cdrtools"
 

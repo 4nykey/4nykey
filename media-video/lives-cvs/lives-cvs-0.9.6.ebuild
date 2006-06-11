@@ -19,10 +19,8 @@ KEYWORDS="~x86"
 
 IUSE="xmms matroska ogg theora libvisual sdl mjpegtools jack"
 
-DEPEND="|| ( media-video/mplayer-cvs
-			media-video/mplayer )
-		|| ( media-video/ffmpeg-svn
-			media-video/ffmpeg )
+DEPEND="|| ( media-video/mplayer-svn media-video/mplayer )
+		|| ( media-video/ffmpeg-svn media-video/ffmpeg )
 		jack? ( media-sound/jack-audio-connection-kit )
 		>=media-gfx/imagemagick-5.5.6
 		>=dev-lang/perl-5.8.0-r12

@@ -21,30 +21,30 @@ diff -u -r1.1179 configure
 --- configure	26 Apr 2006 01:59:05 -0000	1.1179
 +++ configure	29 Apr 2006 13:18:48 -0000
 @@ -222,6 +222,7 @@
+   --disable-gethostbyname2  gethostbyname() function is not provided by the C
+                             library [autodetect]
    --disable-ftp          Disable ftp support [enabled]
++  --disable-dbus-glib    Disable D-BUS GLib interface (required for GNOME screensaver support) [autodetect]
    --disable-vstream      Disable tivo vstream client support [autodetect]
    --disable-pthreads     Disable Posix threads support [autodetect]
-+  --disable-dbus-glib    Disable D-BUS GLib interface (required for GNOME screensaver support) [autodetect]
- 
- Codecs:
-   --enable-gif		 enable gif support [autodetect]
+   --enable-rpath         Enable runtime linker path for extra libs [disabled]
 @@ -1601,6 +1602,7 @@
+ _gethostbyname2=auto
+ _ftp=yes
  _musepack=auto
++_dbus_glib=auto
  _vstream=auto
  _pthreads=yes
-+_dbus_glib=auto
- for ac_option do
-   case "$ac_option" in
-   # Skip 1st pass
+ _rpath=no
 @@ -1878,6 +1880,8 @@
+   --disable-ftp)        _ftp=no         ;;
+   --enable-vstream)     _vstream=yes    ;;
    --disable-vstream)    _vstream=no     ;;
-   --enable-pthreads)    _pthreads=yes   ;;
-   --disable-pthreads)   _pthreads=no    ;;
 +  --enable-dbus-glib)   _dbus_glib=yes  ;;
 +  --disable-dbus-glib)  _dbus_glib=no   ;;
- 
-   --enable-fribidi)     _fribidi=yes    ;;
-   --disable-fribidi)    _fribidi=no     ;;
+   --enable-pthreads)    _pthreads=yes   ;;
+   --disable-pthreads)   _pthreads=no    ;;
+   --enable-rpath)       _rpath=yes      ;;
 @@ -6815,6 +6819,24 @@
  fi
  echores "$_gethostbyname2"
