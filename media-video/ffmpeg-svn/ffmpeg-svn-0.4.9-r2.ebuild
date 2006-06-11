@@ -10,13 +10,13 @@ NBV="540"
 WBV="520"
 SRC_URI="amr? ( http://www.3gpp.org/ftp/Specs/latest/Rel-5/26_series/26204-${WBV}.zip
 			http://www.3gpp.org/ftp/Specs/latest/Rel-5/26_series/26104-${NBV}.zip )"
-ESVN_REPO_URI="svn://www.mplayerhq.hu/ffmpeg/trunk"
+ESVN_REPO_URI="svn://svn.mplayerhq.hu/ffmpeg/trunk"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
 IUSE="aac debug doc ieee1394 a52 encode imlib mmx ogg vorbis oss test
-	theora threads truetype v4l xvid dts network zlib sdl amr dirac x264 static"
+	theora threads truetype v4l xvid dts network zlib sdl amr x264 static"
 
 DEPEND="imlib? ( media-libs/imlib2 )
 	truetype? ( >=media-libs/freetype-2 )
@@ -36,7 +36,6 @@ DEPEND="imlib? ( media-libs/imlib2 )
 	dev-util/pkgconfig
 	amr? ( app-arch/unzip )
 	x264? ( media-libs/x264 )
-	dirac? ( >=media-video/dirac-0.5.3 )
 	test? ( net-misc/wget )"
 
 src_unpack() {
@@ -115,12 +114,10 @@ src_compile() {
 	teh_conf en amr amr_wb
 	teh_conf en amr amr_if2
 	teh_conf en x264 x264
-	teh_conf en dirac
 	teh_conf en aac faad
 	teh_conf en aac faac
 
 	use encode || myconf="${myconf} --disable-encoders --disable-muxers"
-	use dirac || myconf="${myconf} --disable-encoder=dirac --disable-decoder=dirac"
 
 	./configure \
 		$(use_enable static) \
