@@ -7,7 +7,7 @@ inherit flag-o-matic linux-mod subversion
 #RESTRICT="nostrip"
 IUSE="3dfx 3dnow 3dnowext aac aalib alsa altivec amr arts avi bidi bl cpudetection
 custom-cflags debug dga doc dts dvb cdparanoia directfb dv dvd dvdread
-encode esd fbcon gif ggi gtk i8x0 ipv6 jack joystick jpeg libcaca lirc live lzo
+encode esd fbcon ffmpeg gif ggi gtk i8x0 ipv6 jack joystick jpeg libcaca lirc live lzo
 mad matroska matrox mmx mmxext musepack mythtv nas nvidia vorbis opengl oss
 png real rtc samba sdl speex sse sse2 svga tga theora truetype v4l v4l2 X x264
 xanim xinerama xmms xv xvid xvmc gtk2"
@@ -54,6 +54,7 @@ RDEPEND="xvid? ( >=media-libs/xvid-0.9.0 )
 		aac? ( media-libs/faac )
 		)
 	esd? ( media-sound/esound )
+	ffmpeg? ( media-video/ffmpeg-svn )
 	gif? ( ||( media-libs/giflib media-libs/libungif ) )
 	ggi? ( media-libs/libggi )
 	gtk? (
@@ -291,9 +292,8 @@ src_compile() {
 
 	# ugly optimizations cause MPlayer to cry on x86 systems!
 	if use x86 ; then
-		replace-flags -O0 -O2
-		replace-flags -O3 -O2
 		filter-flags -fPIC -fPIE
+		append-flags -O2
 	fi
 	fi
 
@@ -305,6 +305,11 @@ src_compile() {
 	myconf="${myconf} $(use_enable cpudetection runtime-cpudetection)"
 	teh_conf bidi fribidi
 	teh_conf cdparanoia
+	if use ffmpeg; then # use shared ffmpeg libs
+		for lib in avutil avcodec avformat postproc; do
+			myconf="${myconf} --disable-lib$lib" #--enable-lib"$lib"_so"
+		done
+	fi
 	if use dvd; then
 		if use dvdread; then
 			myconf="${myconf} --disable-mpdvdkit"
