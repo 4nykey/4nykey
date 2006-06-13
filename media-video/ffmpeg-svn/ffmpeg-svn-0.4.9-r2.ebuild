@@ -20,7 +20,7 @@ IUSE="aac debug doc ieee1394 a52 encode imlib mmx ogg vorbis oss test
 
 DEPEND="imlib? ( media-libs/imlib2 )
 	truetype? ( >=media-libs/freetype-2 )
-	sdl? ( >=media-libs/libsdl-1.2.1 )
+	sdl? ( >=media-libs/libsdl-1.2.10 )
 	doc? ( app-text/texi2html )
 	encode? ( media-sound/lame )
 	ogg? ( media-libs/libogg )

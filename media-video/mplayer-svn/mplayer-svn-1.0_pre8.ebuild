@@ -5,18 +5,18 @@
 inherit flag-o-matic linux-mod subversion
 
 #RESTRICT="nostrip"
-IUSE="3dfx 3dnow 3dnowext aac aalib alsa altivec amr arts avi bidi bl cpudetection
-custom-cflags debug dga doc dts dvb cdparanoia directfb dv dvd dvdread
-encode esd fbcon ffmpeg gif ggi gtk i8x0 ipv6 jack joystick jpeg libcaca lirc live lzo
-mad matroska matrox mmx mmxext musepack mythtv nas nvidia vorbis opengl oss
-png real rtc samba sdl speex sse sse2 svga tga theora truetype v4l v4l2 X x264
-xanim xinerama xmms xv xvid xvmc gtk2"
+IUSE="3dfx 3dnow 3dnowext aac aalib alsa altivec amr arts bidi bl cpudetection
+custom-cflags debug dga doc dts dvb cdparanoia directfb dv dvd dvdread dvdnav encode
+esd fbcon external-ffmpeg gif ggi gtk i8x0 ipv6 jack joystick jpeg libcaca lirc live
+lzo mad matroska matrox mmx mmxext musepack mythtv nas nvidia vorbis opengl oss png
+real rtc samba sdl speex sse sse2 svga tga theora truetype v4l v4l2 vidix win32codecs
+X x264 xanim xinerama xmms xv xvid xvmc gtk2"
 
 BLUV=1.4
 SVGV=1.9.17
 NBV=540
 WBV=520
-NAV=20060306
+NAV=20060518
 SKINDIR="/usr/share/mplayer/skins/"
 
 SRC_URI="mirror://mplayer/releases/fonts/font-arial-iso-8859-1.tar.bz2
@@ -35,7 +35,7 @@ HOMEPAGE="http://www.mplayerhq.hu/"
 # 'encode' in USE for MEncoder.
 RDEPEND="xvid? ( >=media-libs/xvid-0.9.0 )
 	x86? (
-		avi? ( >=media-libs/win32codecs-20040916 )
+		win32codecs? ( >=media-libs/win32codecs-20040916 )
 		real? ( >=media-video/realplayer-10.0.3 )
 		)
 	aalib? ( media-libs/aalib )
@@ -54,7 +54,7 @@ RDEPEND="xvid? ( >=media-libs/xvid-0.9.0 )
 		aac? ( media-libs/faac )
 		)
 	esd? ( media-sound/esound )
-	ffmpeg? ( media-video/ffmpeg-svn )
+	external-ffmpeg? ( media-video/ffmpeg-svn )
 	gif? ( ||( media-libs/giflib media-libs/libungif ) )
 	ggi? ( media-libs/libggi )
 	gtk? (
@@ -176,11 +176,26 @@ src_unpack() {
 		font-arial-iso-8859-1.tar.bz2 font-arial-iso-8859-2.tar.bz2 \
 		font-arial-cp1250.tar.bz2
 
-	use svga && unpack svgalib_helper-${SVGV}-mplayer.tar.bz2
 
 	use gtk && unpack Blue-${BLUV}.tar.bz2
 
+	if use svga
+	then
+		unpack svgalib_helper-${SVGV}-mplayer.tar.bz2
+
+		echo
+		einfo "Enabling svga non-root mode."
+		einfo "(You need a proper svgalib_helper.o module for your kernel"
+		einfo " to actually use this)"
+		echo
+
+		mv svgalib_helper ${S}/libdha
+	fi
+
+
 	cd ${S}
+
+	EPATCH_SUFFIX="diff" epatch "${FILESDIR}"
 
 	# Custom CFLAGS
 	if use custom-cflags ; then
@@ -190,22 +205,6 @@ src_unpack() {
 	# skip make distclean/depend
 	touch .developer
 	sed -i '/\$(MAKE) depend/d' Makefile
-
-	if use svga
-	then
-		echo
-		einfo "Enabling vidix non-root mode."
-		einfo "(You need a proper svgalib_helper.o module for your kernel"
-		einfo " to actually use this)"
-		echo
-
-		mv ${WORKDIR}/svgalib_helper ${S}/libdha
-	fi
-
-	# cat a.avi b.avi | mencoder ...
-	#epatch ${FILESDIR}/demuxavifix.patch
-
-	EPATCH_SUFFIX="diff" epatch "${FILESDIR}"
 
 	has_version '>=media-sound/twolame-0.3.4' && \
 		sed -i 's:twolame_set_VBR_q:twolame_set_VBR_level:' libmpcodecs/ae_twolame.c
@@ -285,7 +284,7 @@ src_compile() {
 
 	if use custom-cflags ; then
 	# let's play the filtration game!  MPlayer hates on all!
-	strip-flags
+	#strip-flags
 
 	#add -frename-registers per bug #75960
 	append-flags -frename-registers
@@ -305,11 +304,13 @@ src_compile() {
 	myconf="${myconf} $(use_enable cpudetection runtime-cpudetection)"
 	teh_conf bidi fribidi
 	teh_conf cdparanoia
-	if use ffmpeg; then # use shared ffmpeg libs
+
+	if use external-ffmpeg; then # use shared ffmpeg libs
 		for lib in avutil avcodec avformat postproc; do
-			myconf="${myconf} --disable-lib$lib" #--enable-lib"$lib"_so"
+			myconf="${myconf} --disable-lib$lib"
 		done
 	fi
+
 	if use dvd; then
 		if use dvdread; then
 			myconf="${myconf} --disable-mpdvdkit"
@@ -379,7 +380,7 @@ src_compile() {
 	teh_conf xvid
 	teh_conf x264
 	use x86 && teh_conf real
-	use x86 && teh_conf avi win32
+	use x86 && teh_conf win32codecs win32
 	teh_conf amr amr_nb
 	teh_conf amr amr_wb
 	myconf="${myconf} --disable-amr_nb-fixed"
@@ -415,7 +416,8 @@ src_compile() {
 	teh_conf sdl
 
 	teh_conf svga
-	teh_conf svga vidix
+	teh_conf vidix internal-vidix
+	teh_conf vidix external-vidix
 
 	teh_conf tga
 
