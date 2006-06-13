@@ -1,0 +1,51 @@
+Index: libvo/vo_svga.c
+===================================================================
+--- libvo/vo_svga.c	(revision 18678)
++++ libvo/vo_svga.c	(working copy)
+@@ -55,7 +55,7 @@
+ 
+ 
+ static int query_format(uint32_t format);
+-static void draw_alpha(int x0, int y0, int w, int h, unsigned char *src,
++static void draw_alpha(int x0, int y0, int w, int h, int dp, unsigned char *src,
+                        unsigned char *srca, int stride);
+ static uint32_t get_image(mp_image_t *mpi);
+ 
+@@ -684,13 +684,13 @@
+   return 0;
+ }
+ 
+-static void draw_alpha(int x0, int y0, int w, int h, unsigned char *src,
++static void draw_alpha(int x0, int y0, int w, int h, int dp, unsigned char *src,
+                        unsigned char *srca, int stride) {
+   char* base;
+ 
+   if( mp_msg_test(MSGT_VO,MSGL_DBG3) )
+-    mp_msg(MSGT_VO,MSGL_DBG3, "vo_svga: draw_alpha(x0=%d,y0=%d,w=%d,h=%d,src=%p,srca=%p,stride=%d\n",
+-           x0,y0,w,h,src,srca,stride);
++    mp_msg(MSGT_VO,MSGL_DBG3, "vo_svga: draw_alpha(x0=%d,y0=%d,w=%d,h=%d,dp=%d,src=%p,srca=%p,stride=%d\n",
++           x0,y0,w,h,dp,src,srca,stride);
+   if(!blackbar_osd) {
+     //drawing in the image, so place the stuff there
+     x0+=x_pos;
+@@ -702,16 +702,16 @@
+   base=PageStore[cpage].vbase + y0*mode_stride + x0*modeinfo->bytesperpixel;
+   switch (mode_bpp) {
+     case 32: 
+-      vo_draw_alpha_rgb32(w, h, src, srca, stride, base, mode_stride);
++      vo_draw_alpha_rgb32(w, h, dp, src, srca, stride, base, mode_stride);
+       break;
+     case 24: 
+-      vo_draw_alpha_rgb24(w, h, src, srca, stride, base, mode_stride);
++      vo_draw_alpha_rgb24(w, h, dp, src, srca, stride, base, mode_stride);
+       break;
+     case 16:
+-      vo_draw_alpha_rgb16(w, h, src, srca, stride, base, mode_stride);
++      vo_draw_alpha_rgb16(w, h, dp, src, srca, stride, base, mode_stride);
+       break;
+     case 15:
+-      vo_draw_alpha_rgb15(w, h, src, srca, stride, base, mode_stride);
++      vo_draw_alpha_rgb15(w, h, dp, src, srca, stride, base, mode_stride);
+       break;
+   }
+ }

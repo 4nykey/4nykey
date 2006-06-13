@@ -16,7 +16,7 @@ BLUV=1.4
 SVGV=1.9.17
 NBV=540
 WBV=520
-NAV=20060518
+NAV=20060612
 SKINDIR="/usr/share/mplayer/skins/"
 
 SRC_URI="mirror://mplayer/releases/fonts/font-arial-iso-8859-1.tar.bz2
@@ -25,6 +25,7 @@ SRC_URI="mirror://mplayer/releases/fonts/font-arial-iso-8859-1.tar.bz2
 	svga? ( http://mplayerhq.hu/~alex/svgalib_helper-${SVGV}-mplayer.tar.bz2 )
 	amr? ( http://www.3gpp.org/ftp/Specs/latest/Rel-5/26_series/26204-${WBV}.zip
 		http://www.3gpp.org/ftp/Specs/latest/Rel-5/26_series/26104-${NBV}.zip )
+	dvdnav? ( http://www.freeweb.hu/dcxx/mplayer/${NAV}/mplayer-dvdnav-patch.tar.gz )
 	gtk? ( mirror://mplayer/Skin/Blue-${BLUV}.tar.bz2 )"
 ESVN_REPO_URI="svn://svn.mplayerhq.hu/mplayer/trunk"
 
@@ -154,6 +155,11 @@ pkg_setup() {
 				REALLIBDIR="/opt/RealPlayer/codecs"
 	fi
 	CHARSET="`locale charmap`"
+	if use dvdread && use dvdnav; then
+		einfo "dvdnav only works when mpdvdkit enabled,"
+		einfo "emerge with USE=\"-dvdread\""
+		die "dvdnav patch requires mpdvdkit"
+	fi
 }
 
 src_unpack() {
@@ -192,6 +198,17 @@ src_unpack() {
 		mv svgalib_helper ${S}/libdha
 	fi
 
+	if use dvdnav; then
+		unpack mplayer-dvdnav-patch.tar.gz
+		cp mplayer-dvdnav-patch/*.txt ${S}/DOCS/tech
+		cp -r mplayer-dvdnav-patch/mplayer-add/* "${S}"
+		EPATCH_OPTS="-d ${S} ${EPATCH_OPTS}"
+		# and few fixes
+		sed -i 's:NULL, 0, 0, 0):NULL, 0):' mplayer-dvdnav-patch/navmplayer.patch
+		epatch "${FILESDIR}/mplayer-dvdnav-patch-vo_svga.patch"
+		# /fixes
+		epatch ${WORKDIR}/mplayer-dvdnav-patch/*.patch
+	fi
 
 	cd ${S}
 
@@ -316,6 +333,7 @@ src_compile() {
 			myconf="${myconf} --disable-mpdvdkit"
 		else
 			myconf="${myconf} --disable-dvdread"
+			myconf="${myconf} $(use_enable dvdnav) --disable-dvdnav-trace"
 		fi
 	else
 		myconf="${myconf} --disable-dvdread --disable-mpdvdkit"
