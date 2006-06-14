@@ -11,7 +11,7 @@ ESVN_REPO_URI="svn://svn.videolan.org/${PN}/trunk"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="X mp4 sdl threads test gtk"
+IUSE="X mp4 sdl threads gtk"
 
 RDEPEND="mp4? || ( media-video/gpac-cvs media-video/gpac )
 	X? ( x11-libs/libX11 )
@@ -50,8 +50,9 @@ src_compile() {
 }
 
 src_test() {
-	make checkasm || die
-	./checkasm || die
+	:
+#	make checkasm || die
+#	./checkasm || die
 }
 
 src_install() {
