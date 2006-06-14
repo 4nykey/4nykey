@@ -10,8 +10,11 @@ RESTRICT="primaryuri"
 SRC_URI="http://openusability.org/download.php/93/${P}.tar.gz"
 LICENSE="GPL-2"
 
-MY_PV="$(get_version_component_range -3)"
-#S="${WORKDIR}/${PN}-${MY_PV}"
+# doh
+#MY_PV="$(get_version_component_range -3)"
+MY_PV="0.2.4.3"
+# /doh
+S="${WORKDIR}/${PN}-${MY_PV}"
 
 SLOT="0"
 KEYWORDS="~x86"
