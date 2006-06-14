@@ -5,12 +5,12 @@
 inherit flag-o-matic linux-mod subversion
 
 #RESTRICT="nostrip"
-IUSE="3dfx 3dnow 3dnowext aac aalib alsa altivec amr arts bidi bl cpudetection
+IUSE="3dfx 3dnow 3dnowext aac aalib alsa altivec amr arts bidi bl cdio cpudetection
 custom-cflags debug dga doc dts dvb cdparanoia directfb dv dvd dvdread dvdnav encode
-esd fbcon external-ffmpeg gif ggi gtk i8x0 ipv6 jack joystick jpeg libcaca lirc live
-lzo mad matroska matrox mmx mmxext musepack mythtv nas nvidia vorbis opengl oss png
-real rtc samba sdl speex sse sse2 svga tga theora truetype v4l v4l2 vidix win32codecs
-X x264 xanim xinerama xmms xv xvid xvmc gtk2"
+esd external-faad external-ffmpeg fbcon gif ggi gtk i8x0 ipv6 jack joystick jpeg
+libcaca lirc live lzo mad matroska matrox mmx mmxext musepack mythtv nas nvidia opengl
+oss png real rtc samba sdl speex sse sse2 svga tga theora tremor truetype v4l v4l2
+vidix vorbis win32codecs X x264 xanim xinerama xmms xv xvid xvmc gtk2"
 
 BLUV=1.4
 SVGV=1.9.17
@@ -43,6 +43,7 @@ RDEPEND="xvid? ( >=media-libs/xvid-0.9.0 )
 	alsa? ( media-libs/alsa-lib )
 	arts? ( kde-base/arts )
 	bidi? ( dev-libs/fribidi )
+	cdio? ( dev-libs/libcdio )
 	cdparanoia? ( media-sound/cdparanoia )
 	dga? ( virtual/x11 )
 	directfb? ( dev-libs/DirectFB )
@@ -83,7 +84,7 @@ RDEPEND="xvid? ( >=media-libs/xvid-0.9.0 )
 	xmms? ( media-sound/xmms )
 	xanim? ( >=media-video/xanim-2.80.1-r4 )
 	musepack? ( >=media-libs/libmpcdec-1.2.1 )
-	aac? ( media-libs/faad2 )
+	external-faad? ( media-libs/faad2 )
 	x264? ( >=media-libs/x264-45 )
 	speex? ( >=media-libs/speex-1.1.0 )
 	sys-libs/ncurses"
@@ -320,7 +321,12 @@ src_compile() {
 	###############
 	myconf="${myconf} $(use_enable cpudetection runtime-cpudetection)"
 	teh_conf bidi fribidi
-	teh_conf cdparanoia
+
+	if use cdio; then
+		myconf="${myconf} --disable-cdparanoia"
+	else
+		teh_conf cdparanoia
+	fi
 
 	if use external-ffmpeg; then # use shared ffmpeg libs
 		for lib in avutil avcodec avformat postproc; do
@@ -376,22 +382,27 @@ src_compile() {
 	teh_conf v4l2 tv-v4l2
 	use jack || myconf="${myconf} --disable-jack"
 
-	#########
+	#######
 	# Codecs #
-	########
+	#######
 	teh_conf gif
 	teh_conf jpeg
 	#teh_conf ladspa
 	teh_conf dts libdts
 	teh_conf lzo liblzo
 	teh_conf matroska internal-matroska
-	teh_conf aac external-faad
 	if use aac; then
-		myconf="${myconf} --disable-internal-faad"
+		use external-faad && myconf="${myconf} --disable-internal-faad"
+		teh_conf encode faac
 	else
-		use !encode && myconf="${myconf} --disable-faac"
+		myconf="${myconf} --disable-internal-faad --disable-external-faad"
 	fi
-	teh_conf vorbis
+	if use vorbis; then
+		teh_conf tremor internal-tremor
+		teh_conf tremor external-tremor
+	else
+		myconf="${myconf} --disable-vorbis"
+	fi
 	teh_conf speex
 	teh_conf theora
 	use xmms && myconf="${myconf} --enable-xmms"
