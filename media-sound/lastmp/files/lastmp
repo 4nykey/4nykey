@@ -6,7 +6,7 @@ depend() {
 
 start () {
 	ebegin "Starting MPD last.fm client: lastmp"
-	start-stop-daemon --start -p /var/run/lastfm/lastmp.pid --exec /usr/bin/lastmp
+	start-stop-daemon --start -c lastmp -p /var/run/lastfm/lastmp.pid --exec /usr/bin/lastmp
 	eend $?
 }
 

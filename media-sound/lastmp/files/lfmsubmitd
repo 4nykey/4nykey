@@ -21,7 +21,7 @@ start () {
 	
 	ebegin "Starting MPD last.fm client: lastfmsubmitd"
 	LASTFM_USER="$LASTFM_USER" LASTFM_PASSWORD="$LASTFM_PASSWORD" start-stop-daemon --start \
-		-p /var/run/lastfm/lastfmsubmitd.pid --exec /usr/bin/lastfmsubmitd
+		-c lastmp -p /var/run/lastfm/lastfmsubmitd.pid --exec /usr/bin/lastfmsubmitd
 	eend $?
 }
 

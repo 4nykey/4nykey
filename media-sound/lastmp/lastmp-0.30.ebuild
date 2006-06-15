@@ -23,20 +23,20 @@ CFG="${CFG_DIR}/lastmp.cfg"
 
 pkg_setup() {
 	enewgroup lastfm || die "problem adding group lastfm"
-	enewuser lastfm '' '' '' lastfm || die "problem adding user lastfm"
+	enewuser lastmp '' '' '' lastfm || die "problem adding user lastmp"
 }
 
 src_install() {
 	distutils_src_install
-	diropts -m0755 -o lastfm -g lastfm
+	diropts -m0755 -o lastmp -g lastfm
 	dodir ${CFG_DIR}
 	keepdir ${CFG_DIR}
 	dodir /var/run/lastfm
 	keepdir /var/run/lastfm
 	dodir /var/log/lastfm
 	keepdir /var/log/lastfm
-	dodir /var/cache/lastfm
-	keepdir /var/cache/lastfm
+	dodir /var/spool/lastfm
+	keepdir /var/spool/lastfm
 	exeinto /etc/init.d
 	doexe ${FILESDIR}/l{fmsubmitd,astmp}
 }
@@ -53,7 +53,7 @@ pkg_config() {
 	
 	if [ ! -f $CFG ]; then
 		touch $CFG
-		chown lastfm:lastfm $CFG
+		chown lastmp:lastfm $CFG
 		chmod 0600 $CFG
 	fi
 	einfo "Please enter your last.fm username: "
