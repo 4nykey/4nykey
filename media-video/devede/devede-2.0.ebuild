@@ -19,7 +19,7 @@ RDEPEND="dev-python/pygtk
 
 src_install() {
 	exeinto /usr/bin
-	doexe devede.py
+	doexe devede
 	insinto /usr/share/${PN}
 	doins devede.glade pixmaps/*.png
 	insinto /usr/share/pixmaps
