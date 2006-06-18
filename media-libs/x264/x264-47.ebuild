@@ -12,6 +12,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
 IUSE="X mp4 sdl threads gtk"
+RESTRICT="test"
 
 RDEPEND="mp4? || ( media-video/gpac-cvs media-video/gpac )
 	X? ( x11-libs/libX11 )
@@ -33,9 +34,11 @@ src_unpack() {
 }
 
 src_compile() {
+	# added debug, otherwise configure adds '-s' to {c,ld}flags
 	./configure\
 		--enable-pic \
 		--enable-shared \
+		--enable-debug \
 		`use_enable X visualize` \
 		`use_enable threads pthread` \
 		`use_enable mp4 mp4-output`\
@@ -60,9 +63,8 @@ src_compile() {
 }
 
 src_test() {
-	:
-#	make checkasm || die
-#	./checkasm || die
+	make checkasm || die
+	./checkasm || die
 }
 
 src_install() {

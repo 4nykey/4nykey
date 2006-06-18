@@ -63,6 +63,8 @@ src_unpack() {
 
 	# make configure to pick theora, if presented
 	use theora && sed -i 's:ltheora 2:ltheora -logg 2:' configure
+	# skip stripping
+	sed -i 's:\$(STRIP):touch:; s:\(INSTFLAGS=\).*:\1:' Makefile
 
 	sed -i '/#include/s/\\/\//g' modules/svg_loader/svg_parser.c
 
