@@ -2,12 +2,13 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/avidemux/avidemux-2.0.38_rc2-r1.ebuild,v 1.1 2005/04/18 15:44:32 flameeyes Exp $
 
-inherit subversion flag-o-matic
+inherit subversion flag-o-matic autotools
 
 PATCHLEVEL=7
 DESCRIPTION="Great Video editing/encoding tool"
 HOMEPAGE="http://fixounet.free.fr/avidemux/"
 ESVN_REPO_URI="svn://svn.berlios.de/avidemux/branches/avidemux_2.2_branch"
+ESVN_PATCHES="*.diff"
 
 LICENSE="GPL-2"
 SLOT="2"
@@ -51,14 +52,17 @@ filter-ldflags "-Wl,--as-needed"
 
 src_unpack() {
 	subversion_src_unpack
-	cd ${S} || die
+	cd ${S}
 
-	sed -i 's:head -:head -n :g; s:ACLOCAL >:ACLOCAL 2>:g' admin/cvs.sh
-	has_version '>=media-libs/faad2-2.1' && \
-		sed -i 's:faacDecInit:NeAACDecInit:' configure.in.in
+	REVISION="$(svnversion \
+		${ESVN_STORE_DIR}/${ESVN_PROJECT}/${ESVN_REPO_URI##*/})"
+	sed -i "s:if .*svn/entries[^;]*: if true:; s:rev=\`.*:rev=${REVISION}:" \
+		configure.in.in
 
-	WANT_AUTOMAKE=1.7 \
-		make -f Makefile.dist || die "autotools failed."
+	sed -i '/configure.in.bot.end/d' admin/cvs.sh
+	/bin/sh admin/cvs.sh configure.in
+	touch acinclude.m4
+	eautoreconf
 }
 
 src_compile() {

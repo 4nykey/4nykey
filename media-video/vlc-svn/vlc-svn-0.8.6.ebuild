@@ -6,13 +6,15 @@
 # media-vidoe/vlc:tremor - Enables Tremor decoder support
 # media-video/vlc:tarkin - Enables experimental tarkin codec
 
-inherit libtool eutils wxwidgets flag-o-matic nsplugins multilib subversion 
+inherit wxwidgets flag-o-matic nsplugins multilib subversion autotools
 
 PATCHLEVEL="7"
 DESCRIPTION="VLC media player - Video player and streamer"
 HOMEPAGE="http://www.videolan.org/vlc/"
 SRC_URI="http://digilander.libero.it/dgp85/gentoo/vlc-patches-${PATCHLEVEL}.tar.bz2"
 ESVN_REPO_URI="svn://svn.videolan.org/vlc/trunk"
+ESVN_PATCHES="${FILESDIR}/*.diff"
+ESVN_BOOTSTRAP="./bootstrap"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -115,6 +117,7 @@ pkg_setup() {
 }
 
 src_unpack() {
+	export SKIP_AUTOTOOLS="indeed"
 	subversion_src_unpack
 
 	cd ${S}
@@ -126,14 +129,13 @@ src_unpack() {
 		"s:/truetype/freefont/FreeSerifBold.ttf:/ttf-bitstream-vera/VeraBd.ttf:" \
 		modules/misc/freetype.c
 
-	epatch ${FILESDIR}/*.diff
-	sed -i '/set -./d; s:="-1.9":="-1.7":' bootstrap
 	# if --disable-hal, any other modules, that use pkg-config for detection,
 	# (cdio, vcdinfo, gnome-vfs...) get all disabled somehow
 	sed -i 's:hal >= .*,:hal < 0.5,:' configure.ac
 
-	einfo "Running bootstrap"
-	./bootstrap > /dev/null
+	AT_M4DIR="${S}/m4"
+	autopoint -f
+	eautoreconf
 }
 
 src_compile () {
