@@ -68,6 +68,12 @@ src_unpack() {
 	use mmx ||
 	sed -i -e "s:LIBOBJFLAGS=\"\":LIBOBJFLAGS=\'\$\(PIC\)\':" configure
 
+	sed -i 's:\(logfile=config\)\.err:\1.log:' configure
+	# fix lame with --as-needed
+	sed -i 's:\( -lmp3lame\):\1 -lm:' configure
+	has_version '>=media-libs/faad2-2.1' && \
+		sed -i 's:faac\(DecOpen\):NeAAC\1:' configure
+
 	# To make sure the ffserver test will work 
 	sed -i -e "s:-e debug=off::" tests/server-regression.sh
 
@@ -92,7 +98,7 @@ src_compile() {
 	#use specified CFLAGS are only used in executables
 	replace-flags -O0 -O2
 
-	local myconf="--enable-shared --enable-gpl --enable-pp --disable-opts --disable-strip"
+	local myconf="--log --enable-shared --enable-gpl --enable-pp --disable-opts --disable-strip"
 
 	teh_conf dis debug
 	teh_conf en encode mp3lame

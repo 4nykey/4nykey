@@ -20,9 +20,19 @@ RDEPEND="mp4? || ( media-video/gpac-cvs media-video/gpac )
 DEPEND="${RDEPEND}
 	dev-lang/nasm"
 
-src_compile() {
-	sed -i 's:gpac_static:gpac:; s:/local::' configure
+src_unpack() {
+	subversion_src_unpack
+	cd ${S}
 
+	REVISION="$(svnversion \
+		${ESVN_STORE_DIR}/${ESVN_PROJECT}/${ESVN_REPO_URI##*/})"
+	sed -i "s:^VER=.*:VER=${REVISION}:" version.sh
+
+	sed -i 's:gpac_static:gpac:; s:/local::' configure
+	sed -i 's:-lintl::; s,\(all:.*\)\$(TEST_BIN) \(.*\),\1\2,' gtk/Makefile
+}
+
+src_compile() {
 	./configure\
 		--enable-pic \
 		--enable-shared \
