@@ -1,0 +1,13 @@
+Index: flac-1.1.2/src/libFLAC/metadata_object.c
+===================================================================
+--- flac-1.1.2.orig/src/libFLAC/metadata_object.c
++++ flac-1.1.2/src/libFLAC/metadata_object.c
+@@ -462,7 +462,7 @@ FLAC_API FLAC__StreamMetadata *FLAC__met
+ 				break;
+ 			case FLAC__METADATA_TYPE_SEEKTABLE:
+ 				to->data.seek_table.num_points = object->data.seek_table.num_points;
+-				if(!copy_bytes_((FLAC__byte**)&to->data.seek_table.points, (FLAC__byte*)object->data.seek_table.points, object->data.seek_table.num_points * sizeof(FLAC__StreamMetadata_SeekPoint))) {
++				if(!copy_bytes_(&to->data.seek_table.points, object->data.seek_table.points, object->data.seek_table.num_points * sizeof(FLAC__StreamMetadata_SeekPoint))) {
+ 					FLAC__metadata_object_delete(to);
+ 					return 0;
+ 				}

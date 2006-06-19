@@ -9,6 +9,7 @@ HOMEPAGE="http://flac.sourceforge.net/"
 ECVS_SERVER="flac.cvs.sourceforge.net:/cvsroot/flac"
 ECVS_MODULE="flac"
 S="${WORKDIR}/${ECVS_MODULE}"
+RESTRICT="test" # see #59482
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
@@ -71,6 +72,3 @@ pkg_postinst() {
 	ewarn "packages that linked against flac by running:"
 	ewarn "revdep-rebuild"
 }
-
-# see #59482
-src_test() { :; }
