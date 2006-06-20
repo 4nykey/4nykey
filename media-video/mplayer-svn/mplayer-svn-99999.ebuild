@@ -392,14 +392,14 @@ src_compile() {
 	teh_conf dts libdts
 	teh_conf lzo liblzo
 	if use aac; then
-		use external-faad && myconf="${myconf} --disable-internal-faad"
+		use external-faad && myconf="${myconf} --disable-faad-internal"
 		teh_conf encode faac
 	else
-		myconf="${myconf} --disable-internal-faad --disable-external-faad"
+		myconf="${myconf} --disable-faad-internal --disable-faad-external"
 	fi
 	if use vorbis; then
-		teh_conf tremor internal-tremor
-		teh_conf tremor external-tremor
+		teh_conf tremor tremor-internal
+		teh_conf tremor tremor-external
 	else
 		myconf="${myconf} --disable-vorbis"
 	fi
@@ -445,8 +445,8 @@ src_compile() {
 	teh_conf sdl
 
 	teh_conf svga
-	teh_conf vidix internal-vidix
-	teh_conf vidix external-vidix
+	teh_conf vidix vidix-internal
+	teh_conf vidix vidix-external
 
 	teh_conf tga
 
