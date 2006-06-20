@@ -8,9 +8,9 @@ inherit flag-o-matic linux-mod subversion
 IUSE="3dfx 3dnow 3dnowext aac aalib alsa altivec amr arts bidi bl cdio cpudetection
 custom-cflags debug dga doc dts dvb cdparanoia directfb dv dvd dvdread dvdnav encode
 esd external-faad external-ffmpeg fbcon gif ggi gtk i8x0 ipv6 jack joystick jpeg
-libcaca lirc live lzo mad matroska matrox mmx mmxext musepack mythtv nas nvidia opengl
+libcaca lirc live lzo mad matrox mmx mmxext musepack mythtv nas nvidia opengl
 oss png real rtc samba sdl speex sse sse2 svga tga theora tremor truetype v4l v4l2
-vidix vorbis win32codecs X x264 xanim xinerama xmms xv xvid xvmc gtk2"
+vidix vorbis win32codecs X x264 xanim xinerama xmms xv xvid xvmc"
 
 BLUV=1.4
 SVGV=1.9.17
@@ -62,8 +62,7 @@ RDEPEND="xvid? ( >=media-libs/xvid-0.9.0 )
 	gtk? (
 		media-libs/libpng
 		virtual/x11
-		!gtk2? ( =x11-libs/gtk+-1.2* )
-		gtk2? ( =x11-libs/gtk+-2* )
+		>=x11-libs/gtk+-1.2*
 		)
 	jpeg? ( media-libs/jpeg )
 	libcaca? ( media-libs/libcaca )
@@ -360,7 +359,7 @@ src_compile() {
 		myconf="${myconf} $(use_enable gtk gui)"
 		teh_conf xinerama
 		teh_conf xv
-		use !gtk2 && myconf="${myconf} --enable-old-gtk"
+		has_version '>=x11-libs/gtk+-2.0*' || myconf="${myconf} --enable-gtk1"
 	fi
 
 	# this looks like a hack, but the
@@ -392,7 +391,6 @@ src_compile() {
 	#teh_conf ladspa
 	teh_conf dts libdts
 	teh_conf lzo liblzo
-	teh_conf matroska internal-matroska
 	if use aac; then
 		use external-faad && myconf="${myconf} --disable-internal-faad"
 		teh_conf encode faac
