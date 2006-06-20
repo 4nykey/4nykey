@@ -28,6 +28,7 @@ SRC_URI="mirror://mplayer/releases/fonts/font-arial-iso-8859-1.tar.bz2
 	dvdnav? ( http://www.freeweb.hu/dcxx/mplayer/${NAV}/mplayer-dvdnav-patch.tar.gz )
 	gtk? ( mirror://mplayer/Skin/Blue-${BLUV}.tar.bz2 )"
 ESVN_REPO_URI="svn://svn.mplayerhq.hu/mplayer/trunk"
+ESVN_OPTIONS="-r${PV}"
 
 # Only install Skin if GUI should be build (gtk as USE flag)
 DESCRIPTION="Media Player for Linux"
