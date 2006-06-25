@@ -8,7 +8,7 @@ DESCRIPTION="CMus - ncurses based music player."
 SRC_URI="http://onion.dynserv.net/~timo/files/${P}.tar.bz2"
 HOMEPAGE="http://onion.dynserv.net/~timo/cmus.html"
 SLOT="0"
-IUSE="alsa arts debug flac oss mad modplug vorbis musepack ao"
+IUSE="alsa arts flac oss mad modplug vorbis musepack ao"
 
 DEPEND="sys-libs/ncurses
 	alsa? ( >=media-libs/alsa-lib-0.9.0 )
@@ -26,8 +26,7 @@ RDEPEND=${DEPEND}
 LICENSE="GPL-2"
 KEYWORDS="~x86"
 
-pkg_setup()
-{
+pkg_setup() {
 	if ! built_with_use sys-libs/ncurses unicode
 	then
 		eerror "You need sys-libs/ncurses compiled with the unicode USE flag."
@@ -35,34 +34,34 @@ pkg_setup()
 	fi
 }
 
-src_compile()
-{
-	local debuglevel
+teh_conf() {
+	local arg
+	[ -n "$2" ] && arg="$2" || arg="$1"
+	arg=$(echo config_$arg | tr [:lower:] [:upper:])
+	use $1 && arg="$arg=y" || arg="$arg=n"
+	myconf="${myconf} $arg"
+}
 
-	if use debug
-	then
-		debuglevel=2
-	else
-		debuglevel=0
-	fi
+src_compile() {
+	local myconf
+	teh_conf flac
+	teh_conf mad
+	teh_conf modplug
+	teh_conf musepack mpc
+	teh_conf vorbis
+	teh_conf alsa
+	teh_conf ao
+	teh_conf arts
+	teh_conf oss
+
 	./configure \
-		--prefix=/usr \
-		`use_enable alsa` \
-		`use_enable arts` \
-		`use_enable ao` \
-		`use_enable flac` \
-		`use_enable oss` \
-		`use_enable mad` \
-		`use_enable modplug` \
-		`use_enable vorbis` \
-		`use_enable musepack mpc` \
-		--debug=$debuglevel \
-		|| die
+		prefix=/usr \
+		${myconf} || die
 	emake || die
 }
 
-src_install()
-{
+src_install() {
 	make DESTDIR=${D} install || die
-	dodoc AUTHORS HACKING README
+	rm -rf ${D}usr/share/doc
+	dodoc AUTHORS HACKING README cmus-status-display
 }
