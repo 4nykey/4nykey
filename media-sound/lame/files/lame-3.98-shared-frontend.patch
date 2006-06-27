@@ -1,0 +1,11 @@
+--- lame-3.96.1.orig/frontend/Makefile.in	2004-01-21 05:50:29.000000000 -0800
++++ lame-3.96.1/frontend/Makefile.in	2004-10-03 16:39:19.711701553 -0700
+@@ -91,7 +91,7 @@
+ 	$(top_builddir)/libmp3lame/libmp3lame.la \
+ 	@FRONTEND_LDADD@
+ 
+-LDFLAGS = @LDFLAGS@ @FRONTEND_LDFLAGS@ @SNDFILE_LIBS@ -static
++LDFLAGS = @LDFLAGS@ @FRONTEND_LDFLAGS@ @SNDFILE_LIBS@
+ LIBOBJS = @LIBOBJS@
+ LIBS = @LIBS@
+ LIBTOOL = @LIBTOOL@

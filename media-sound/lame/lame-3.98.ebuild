@@ -14,10 +14,12 @@ S=${WORKDIR}/${PN}
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="gtk debug static pic"
+IUSE="gtk debug static pic sndfile"
 
 RDEPEND=">=sys-libs/ncurses-5.2
-	gtk? ( =x11-libs/gtk+-1.2* )"
+	gtk? ( =x11-libs/gtk+-1.2* )
+	sndfile? ( media-libs/libsndfile )
+"
 DEPEND="${RDEPEND}
 	x86? ( dev-lang/nasm )
 	sys-devel/autoconf"
@@ -27,7 +29,7 @@ src_unpack() {
 	cd ${S} || die
 
 	# The frontened tries to link staticly, but we prefer shared libs
-	epatch ${FILESDIR}/${PN}-3.96.1-shared-frontend.patch
+	epatch ${FILESDIR}/${P}-shared-frontend.patch
 
 	# If ccc (alpha compiler) is installed on the system, the default
 	# configure is broken, fix it to respect CC.  This is only
@@ -35,9 +37,6 @@ src_unpack() {
 	# ccc binary in their PATH.  Bug #41908  (26 Jul 2004 agriffis)
 	epatch ${FILESDIR}/${PN}-3.96-ccc.patch
 
-	epatch ${FILESDIR}/conf.diff
-
-	autoconf || die
 	epunt_cxx # embedded bug #74498
 }
 
@@ -52,6 +51,13 @@ src_compile() {
 	local myconf=""
 	if use gtk; then
 		myconf="${myconf} --enable-mp3x"
+	else
+		myconf="${myconf} --disable-gtktest"
+	fi
+	if use sndfile; then
+		myconf="${myconf} --with-fileio=sndfile"
+	else
+		myconf="${myconf} --with-fileio=lame"
 	fi
 
 	# as of 3.95.1 changed from "yes" to "norm" ("alot" is also accepted)
