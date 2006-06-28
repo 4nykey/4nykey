@@ -15,14 +15,14 @@ ESVN_REPO_URI="svn://svn.mplayerhq.hu/ffmpeg/trunk"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="aac debug doc ieee1394 a52 encode imlib mmx ogg vorbis oss test
+IUSE="aac debug doc ieee1394 a52 encode imlib mmx ogg vorbis oss test lame
 	theora threads truetype v4l xvid dts network zlib sdl amr x264 static"
 
 DEPEND="imlib? ( media-libs/imlib2 )
 	truetype? ( >=media-libs/freetype-2 )
 	sdl? ( >=media-libs/libsdl-1.2.10 )
 	doc? ( app-text/texi2html )
-	encode? ( media-sound/lame )
+	lame? ( media-sound/lame )
 	ogg? ( media-libs/libogg )
 	vorbis? ( media-libs/libvorbis )
 	theora? ( media-libs/libtheora )
@@ -49,6 +49,10 @@ src_unpack() {
 	fi
 
 	cd ${S}
+
+	REVISION="$(svnversion \
+		${ESVN_STORE_DIR}/${ESVN_PROJECT}/${ESVN_REPO_URI##*/})"
+	sed -i "s:\(svn_revision=\)\`.*:\1${REVISION}:" version.sh
 
 	#Append -fomit-frame-pointer to avoid some common issues
 	use debug || append-flags "-fomit-frame-pointer"
@@ -101,7 +105,7 @@ src_compile() {
 	local myconf="--log --enable-shared --enable-gpl --enable-pp --disable-opts --disable-strip"
 
 	teh_conf dis debug
-	teh_conf en encode mp3lame
+	teh_conf en lame mp3lame
 	teh_conf en a52
 	teh_conf dis oss audio-oss
 	teh_conf dis v4l
