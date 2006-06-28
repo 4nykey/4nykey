@@ -1,0 +1,12 @@
+--- old-dvdauthor/src/subfont.c	2006-06-27 23:55:20.000000000 +0300
++++ new-dvdauthor/src/subfont.c	2006-06-27 23:55:20.000000000 +0300
+@@ -195,7 +195,7 @@
+     if (error) WARNING("spacewidth set to default.");
+     else space_advance = f266ToInt(face->glyph->advance.x);
+ 
+-    if (!desc->spacewidth) desc->spacewidth = 2*padding + space_advance;
++    if (!desc->spacewidth) desc->spacewidth = space_advance;
+     if (!desc->charspace) desc->charspace = -2*padding;
+     if (!desc->height) desc->height = f266ToInt(face->size->metrics.height);
+ 
+
