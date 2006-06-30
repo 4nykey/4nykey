@@ -17,6 +17,7 @@ MF = $(shell [ $(CC_MAJ)$(CC_MIN) -ge 30 ] && echo f || echo m)
 #MINGW = 1
 USE_ASM = 1
 #USE_ESD = 1
+#USE_OSS = 1
 
 # Compiler flags
 WARN = #\
@@ -35,7 +36,11 @@ WARN = #\
 	-Wnested-externs \
 	-Wno-long-long \
 
+OPTIMIZE = -O2
+
 FLAGS = \
+	$(OPTIMIZE) \
+	$(CFLAGS) \
 	-fomit-frame-pointer \
 	-mno-ieee-fp \
 	-ffast-math \
@@ -60,8 +65,7 @@ endif
 #PROFILE = -DPROFILE
 #DEBUG = -DNDEBUG
 
-CFLAGS += \
-	$(FLAGS) \
+FLAGS += \
 	$(FEATURE) \
 	$(WARN) \
 	$(PROFILE) \
@@ -72,7 +76,7 @@ CFLAGS += \
 ifdef USE_ASM
 	NASM = nasm
 	#NASMFLAGS += -DUSE_FXCH
-	CFLAGS += -DUSE_ASM
+	FLAGS += -DUSE_ASM
 endif
 
 ifdef MINGW
@@ -92,11 +96,16 @@ ifdef BLD_STATIC
 endif
 
 ifdef USE_ESD
-	CFLAGS += -DUSE_ESD_AUDIO
+	FLAGS += -DUSE_ESD_AUDIO
 	LDADD += $(shell esd-config --libs)
 endif
 
-# Sources and objects
+ifdef USE_OSS
+	FLAGS += -DUSE_OSS_AUDIO
+else
+	FLAGS += -DNO_DEV_AUDIO
+endif
+
 COMMON_SRC = \
 	huffsv7.c \
 	profile.c \
@@ -172,27 +181,24 @@ DEPENDS_DEC = $(MAKEFILE) mppdec.h mpp.h config.h profile.h version
 DEPENDS_ENC = $(DEPENDS_DEC) mppenc.h minimax.h
 
 %_enc.o: %.c $(DEPENDS_ENC)
-	$(CC) -c $(CFLAGS) -DMPP_ENCODER -o $@ $<
+	$(CC) -c $(FLAGS) -DMPP_ENCODER -o $@ $<
 
 %_dec.o: %.c $(DEPENDS_DEC)
-	$(CC) -c $(CFLAGS) -DMPP_DECODER -o $@ $<
+	$(CC) -c $(FLAGS) -DMPP_DECODER -o $@ $<
 
 %.o: %.nas $(DEPENDS_ASM)
 	$(NASM) $(NASMFLAGS) $< -o $@ -l $(patsubst %.lst,%.nas,$@)
 
 all:	$(ALL_TARGETS)
 
-#$(MPPENC_TARGET): CFLAGS += -DMPP_ENCODER
 $(MPPENC_TARGET): $(MPPENC_OBJ) $(ASM_ENC_OBJ)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LDADD)
+	$(CC) $(FLAGS) $(LDFLAGS) -o $@ $^ $(LDADD)
 
-#$(MPPDEC_TARGET): CFLAGS += -DMPP_DECODER
 $(MPPDEC_TARGET): $(MPPDEC_OBJ) $(ASM_DEC_OBJ)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LDADD)
+	$(CC) $(FLAGS) $(LDFLAGS) -o $@ $^ $(LDADD)
 
-$(REPLAY_TARGET): CFLAGS += -DMPP_DECODER
 $(REPLAY_TARGET): $(REPLAY_OBJ)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(REPLAY_OBJ) $(LDADD)
+	$(CC) $(FLAGS) $(LDFLAGS) -o $@ $(REPLAY_OBJ) $(LDADD)
 
 clean:
 	$(RM) $(MPPENC_OBJ) $(MPPDEC_OBJ) $(ASM_ENC_OBJ) $(ASM_DEC_OBJ) $(REPLAY_OBJ) $(MPPENC_TARGET) $(MPPDEC_TARGET) $(REPLAY_TARGET) *.lst

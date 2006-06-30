@@ -46,11 +46,7 @@ src_compile() {
 
 	use static && export BLD_STATIC=1
 	use esd && export USE_ESD=1
-	if use oss; then
-		append-flags -DUSE_OSS_AUDIO
-	else
-		append-flags -DNO_DEV_AUDIO
-	fi
+	use oss && export USE_OSS=1
 	[[ $(tc-arch) == "x86" ]] && export USE_ASM=1
 	use encode && MPPENC="mppenc"
 
