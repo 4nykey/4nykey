@@ -72,7 +72,7 @@ src_unpack() {
 	use nsplugin || sed -i 's:osmozilla::' applications/Makefile
 	use X || sed -i 's:PLUGDIRS+=x11_out:PLUGDIRS+=:' modules/Makefile
 
-	epatch ${FILESDIR}/*.diff
+	epatch ${FILESDIR}/${PN}-*.diff
 
 	if use amr; then
 		cd modules/amr_float_dec

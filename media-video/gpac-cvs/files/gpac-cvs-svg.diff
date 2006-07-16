@@ -1,0 +1,36 @@
+Index: modules/svg_loader/lsr_parser.c
+===================================================================
+RCS file: /cvsroot/gpac/gpac/modules/svg_loader/lsr_parser.c,v
+retrieving revision 1.11
+diff -u -r1.11 lsr_parser.c
+--- modules/svg_loader/lsr_parser.c	11 Jul 2006 08:04:51 -0000	1.11
++++ modules/svg_loader/lsr_parser.c	14 Jul 2006 12:54:47 -0000
+@@ -39,10 +39,12 @@
+ 	return NULL;
+ }
+ 
++#if 0
+ Bool SVG_CheckDownload(SVGParser *parser)
+ {
+ 	return 1;
+ }
++#endif
+ 
+ GF_Err lsr_parse_command(SVGParser *parser, xmlNodePtr com)
+ {
+Index: modules/svg_loader/svg_parser.c
+===================================================================
+RCS file: /cvsroot/gpac/gpac/modules/svg_loader/svg_parser.c,v
+retrieving revision 1.69
+diff -u -r1.69 svg_parser.c
+--- modules/svg_loader/svg_parser.c	11 Jul 2006 15:39:46 -0000	1.69
++++ modules/svg_loader/svg_parser.c	14 Jul 2006 12:55:10 -0000
+@@ -365,7 +365,7 @@
+ 	return ID;
+ }
+ 
+-static u32 svg_get_node_id(SVGParser *parser, xmlChar *nodename)
++extern u32 svg_get_node_id(SVGParser *parser, xmlChar *nodename)
+ {
+ 	GF_Node *n;
+ 	u32 ID;
