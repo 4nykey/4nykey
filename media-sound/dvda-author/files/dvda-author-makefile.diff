@@ -1,0 +1,29 @@
+Index: src/Makefile
+===================================================================
+RCS file: /cvsroot/dvd-audio/dvda-author/src/Makefile,v
+retrieving revision 1.4
+diff -u -r1.4 Makefile
+--- src/Makefile	26 Mar 2005 22:32:22 -0000	1.4
++++ src/Makefile	13 Jul 2006 17:15:30 -0000
+@@ -7,8 +7,8 @@
+ 
+ CC=$(CROSS)gcc
+ AR=$(CROSS)ar
+-CFLAGS=-Wall
+-LIBS=-lm
++CFLAGS+=-Wall
++LIBS=-lm -lFLAC
+ TARGETS=dvda-author$(EXT)
+ OBJS=dvda-author.o audio.o ats.o atsi.o amg.o samg.o
+ 
+@@ -19,8 +19,8 @@
+ .PHONY: all
+ all: $(TARGETS)
+ 
+-dvda-author$(EXT): $(OBJS) $(FLACOBJS)
+-	$(CC) $(CFLAGS) $(LIBS) -o $@ $^
++dvda-author$(EXT): $(OBJS)
++	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
+ 
+ dvda-author.o: dvda-author.c version.h audio.h ats.h atsi.h
+ ats.o: ats.c ats.h audio.h
