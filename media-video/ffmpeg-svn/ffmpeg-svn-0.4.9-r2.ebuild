@@ -15,7 +15,7 @@ ESVN_REPO_URI="svn://svn.mplayerhq.hu/ffmpeg/trunk"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="aac debug doc ieee1394 a52 encode imlib mmx ogg vorbis oss test lame
+IUSE="aac debug doc ieee1394 a52 encode imlib mmx ogg vorbis oss lame
 	theora threads truetype v4l xvid dts network zlib sdl amr x264 static"
 
 DEPEND="imlib? ( media-libs/imlib2 )
@@ -57,9 +57,6 @@ src_unpack() {
 	#Append -fomit-frame-pointer to avoid some common issues
 	use debug || append-flags "-fomit-frame-pointer"
 
-	# for some reason it tries to #include <X11/Xlib.h>, but doesn't use it
-	sed -i 's:#define HAVE_X11:#define HAVE_LINUX:' ffplay.c
-
 	#ffmpeg doesn'g use libtool, so the condition for PIC code
 	#is __PIC__, not PIC.
 	sed -i -e 's/#\(\(.*def *\)\|\(.*defined *\)\|\(.*defined(*\)\)PIC/#\1__PIC__/' \
@@ -72,7 +69,7 @@ src_unpack() {
 	use mmx ||
 	sed -i -e "s:LIBOBJFLAGS=\"\":LIBOBJFLAGS=\'\$\(PIC\)\':" configure
 
-	sed -i 's:\(logfile=config\)\.err:\1.log:' configure
+	sed -i 's:\(logfile="config\)\.err:\1.log:' configure
 	# fix lame with --as-needed
 	sed -i 's:\( -lmp3lame\):\1 -lm:' configure
 	has_version '>=media-libs/faad2-2.1' && \
@@ -83,6 +80,9 @@ src_unpack() {
 
 	# skip running ldconfig on make install
 	sed -i /LDCONFIG/d Makefile
+
+	# fix configure puttting double DESTDIR's in common.mak
+	epatch "${FILESDIR}/${PN}-configure_dblprefix.diff"
 }
 
 teh_conf() {
@@ -130,21 +130,15 @@ src_compile() {
 	use encode || myconf="${myconf} --disable-encoders --disable-muxers"
 
 	./configure \
-		$(use_enable static) \
 		--prefix=/usr \
+		$(use_enable static) \
 		${myconf} || die "Configure failed"
 	emake CC="$(tc-getCC)" || die "emake failed"
 }
 
 src_install() {
 	use doc && make documentation
-	make DESTDIR=${D} \
-		prefix=${D}/usr \
-		libdir=${D}/usr/$(get_libdir) \
-		mandir=${D}/usr/share/man \
-		infodir=${D}/usr/share/info \
-		bindir=${D}/usr/bin \
-		install || die "Install Failed"
+	make DESTDIR=${D} install || die "Install Failed"
 
 	dodoc Changelog CREDITS README MAINTAINERS doc/*.txt
 }
