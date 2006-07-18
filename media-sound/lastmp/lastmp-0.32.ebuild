@@ -16,53 +16,52 @@ S="${WORKDIR}/${MY_P}"
 
 RDEPEND="media-libs/py-libmpdclient"
 
-DOCS="NEWS"
+DOCS="INSTALL NEWS"
 
-CFG_DIR="/etc/lastmp"
-CFG="${CFG_DIR}/lastmp.cfg"
+CFG="/etc/lastfmsubmitd.conf"
+GROUP="lastfm"
+USER="lastmp"
 
 pkg_setup() {
-	enewgroup lastfm || die "problem adding group lastfm"
-	enewuser lastmp '' '' '' lastfm || die "problem adding user lastmp"
+	enewgroup ${GROUP} || die "problem adding group lastfm"
+	enewuser ${USER} '' '' '' ${GROUP} || die "problem adding user lastmp"
+}
+
+src_unpack() {
+	unpack ${A}
+	# make it use spool dir from conf file
+	sed -i 's:\(lastfm.submit(\[sub\]\)):\1, conf.spool_path):g' ${S}/lastmp
 }
 
 src_install() {
 	distutils_src_install
-	diropts -m0755 -o lastmp -g lastfm
-	dodir ${CFG_DIR}
-	keepdir ${CFG_DIR}
-	dodir /var/run/lastfm
-	keepdir /var/run/lastfm
-	dodir /var/log/lastfm
-	keepdir /var/log/lastfm
-	dodir /var/spool/lastfm
-	keepdir /var/spool/lastfm
+		
+	diropts -m0755 -o ${USER} -g ${GROUP}
+	dodir /var/run/lastmp
+	keepdir /var/run/lastmp
+	dodir /var/log/lastmp
+	keepdir /var/log/lastmp
+	dodir /var/spool/lastmp
+	keepdir /var/spool/lastmp
+
 	exeinto /etc/init.d
 	doexe ${FILESDIR}/l{fmsubmitd,astmp}
+
+	insinto /etc
+	insopts -m0600 -o ${USER} -g ${GROUP}
+	doins ${FILESDIR}/*.conf
 }
 
 pkg_config() {
 	einfo "This will configure LastMP"
-	if [ -e ${CFG} ]; then
-		ewarn "You already have a LastMP configuration file."
-		ewarn "Press Control-C to abort or press ENTER to create a new one."
-	else
-		einfo "Press ENTER to continue..."
-	fi
-	read -s
 	
-	if [ ! -f $CFG ]; then
-		touch $CFG
-		chown lastmp:lastfm $CFG
-		chmod 0600 $CFG
-	fi
 	einfo "Please enter your last.fm username: "
 	read -e USERNAME
 	einfo "and your password:"
 	read -s -e PASSWORD
 	
-	echo "LASTFM_USER=$USERNAME" > $CFG
-	echo "LASTFM_PASSWORD=$PASSWORD" >> $CFG
+	sed -i "s,\(\<user\>:\).*,\1 $USERNAME," $CFG
+	sed -i "s,\(\<password\>:\).*,\1 $PASSWORD," $CFG
 
 	einfo
 	einfo "You can now try running LastMP:"
@@ -70,7 +69,7 @@ pkg_config() {
 }
 
 pkg_postinst() {
-	einfo "To configure LastMP, you should run:"
+	einfo "If this is a new install, you should run:"
 	einfo "\"ebuild /var/db/pkg/media-sound/${PF}/${PF}.ebuild config\""
-	einfo "if this is a new install."
+	einfo "and/or edit /etc/last{mp,fmsubmitd}.conf"
 }
