@@ -7,7 +7,7 @@ inherit distutils subversion
 DESCRIPTION="pyflac provides Python wrappers to libFLAC"
 HOMEPAGE="http://lists.xiph.org/pipermail/flac-dev/2004-August/001571.html"
 
-ESVN_REPO_URI="http://svn.sacredchao.net/svn/quodlibet/trunk/pyflac"
+ESVN_REPO_URI="http://svn.sacredchao.net/svn/quodlibet/garbage/pyflac"
 LICENSE="GPL-2"
 SLOT="0"
 
