@@ -13,13 +13,14 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
 IUSE="aac alsa libao audiofile flac icecast ipv6 mad mikmod mp3 musepack vorbis
-oss unicode ogg"
+oss unicode ogg pulse"
 
 DEPEND="dev-util/gperf
 	sys-libs/zlib
 	aac? ( >=media-libs/faad2-2.0_rc2 )
 	alsa? ( media-libs/alsa-lib )
 	ao? ( >=media-libs/libao-0.8.4 )
+	pulse? ( media-sound/pulseaudio )
 	audiofile? ( media-libs/audiofile )
 	flac? ( >=media-libs/flac-1.1.0 )
 	ogg? ( media-libs/libogg )
@@ -50,9 +51,6 @@ pkg_setup() {
 src_unpack() {
 	subversion_src_unpack
 	cd ${S}
-	if has_version '>=media-libs/faad2-2.1'; then
-		sed -i 's:faacDec:NeAACDec:g; s:MP4FF_.*la:MP4FF_LIB="-lmp4ff:' configure.ac
-	fi
 	eautoreconf || die
 }
 
@@ -65,6 +63,7 @@ src_compile() {
 		$(use_enable mp3) \
 		$(use_enable aac) \
 		$(use_enable libao ao) \
+		$(use_enable pulse) \
 		$(use_enable audiofile) \
 		$(use_enable flac) \
 		$(use_enable icecast shout) \
