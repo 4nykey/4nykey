@@ -34,16 +34,20 @@ src_unpack() {
 }
 
 src_compile() {
-	# added debug, otherwise configure adds '-s' to {c,ld}flags
+	local myconf
+	use X && myconf="--enable-visualize"
+
+	# w/o debug configure adds '-s' to {c,ld}flags
 	./configure\
 		--enable-pic \
 		--enable-shared \
 		--enable-debug \
-		`use_enable X visualize` \
+		--disable-avis-input \
 		`use_enable threads pthread` \
 		`use_enable mp4 mp4-output`\
 		--extra-cflags="${CFLAGS}"\
-		--extra-ldflags="$LDFLAGS" || die
+		--extra-ldflags="$LDFLAGS" \
+		${myconf} || die
 
 	einfo "Make lib and CLI encoder"
 	make || die
