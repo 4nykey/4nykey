@@ -33,6 +33,7 @@ src_unpack() {
 
 src_compile() {
 	econf \
+		--enable-shared \
 		$(use_enable djbfft) \
 		$(use_enable oss) \
 		$(use_enable static) || die "configure failed"
