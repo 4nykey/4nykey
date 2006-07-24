@@ -13,8 +13,8 @@ DESCRIPTION="VLC media player - Video player and streamer"
 HOMEPAGE="http://www.videolan.org/vlc/"
 SRC_URI="http://digilander.libero.it/dgp85/gentoo/vlc-patches-${PATCHLEVEL}.tar.bz2"
 ESVN_REPO_URI="svn://svn.videolan.org/vlc/trunk"
-ESVN_PATCHES="${FILESDIR}/*.diff"
-ESVN_BOOTSTRAP="./bootstrap"
+ESVN_PATCHES="${FILESDIR}/${PN}-*.diff"
+ESVN_BOOTSTRAP="bootstrap"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -119,6 +119,9 @@ pkg_setup() {
 src_unpack() {
 	export SKIP_AUTOTOOLS="indeed"
 	subversion_src_unpack
+	REVISION="$(svnversion \
+		${ESVN_STORE_DIR}/${ESVN_PROJECT}/${ESVN_REPO_URI##*/})"
+	sed -i "s:\(VLC_CHANGESET=\)'.*:\1${REVISION}:" ${S}/toolbox
 
 	cd ${S}
 

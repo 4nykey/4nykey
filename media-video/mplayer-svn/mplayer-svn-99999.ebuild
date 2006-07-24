@@ -168,7 +168,7 @@ src_unpack() {
 	# get svn revision for version.h
 	REVISION="$(svnversion \
 		${ESVN_STORE_DIR}/${ESVN_PROJECT}/${ESVN_REPO_URI##*/})"
-	sed -i "s:\(revision=r\).*:\1${REVISION}:" ${S}/version.sh
+	sed -i "s:\(svn_revision=\)\`.*:\1${REVISION}:" ${S}/version.sh
 
 	cd ${WORKDIR}
 

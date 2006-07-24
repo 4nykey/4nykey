@@ -16,7 +16,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
 IUSE="aac debug doc ieee1394 a52 encode imlib mmx ogg vorbis oss lame
-	theora threads truetype v4l xvid dts network zlib sdl amr x264 static"
+	threads truetype v4l xvid dts network zlib sdl amr x264 static"
 
 DEPEND="imlib? ( media-libs/imlib2 )
 	truetype? ( >=media-libs/freetype-2 )
@@ -25,7 +25,6 @@ DEPEND="imlib? ( media-libs/imlib2 )
 	lame? ( media-sound/lame )
 	ogg? ( media-libs/libogg )
 	vorbis? ( media-libs/libvorbis )
-	theora? ( media-libs/libtheora )
 	aac? ( media-libs/faad2 media-libs/faac )
 	a52? ( >=media-libs/a52dec-0.7.4-r4 )
 	xvid? ( >=media-libs/xvid-1.1.0 )
@@ -81,8 +80,7 @@ src_unpack() {
 	# skip running ldconfig on make install
 	sed -i /LDCONFIG/d Makefile
 
-	# fix configure puttting double DESTDIR's in common.mak
-	epatch "${FILESDIR}/${PN}-configure_dblprefix.diff"
+	epatch "${FILESDIR}/${PN}-pkfconfig.diff"
 }
 
 teh_conf() {
@@ -115,7 +113,6 @@ src_compile() {
 	teh_conf en xvid
 	teh_conf en ogg libogg
 	teh_conf en vorbis
-	teh_conf en theora
 	teh_conf en dts
 	teh_conf dis network
 	teh_conf dis zlib

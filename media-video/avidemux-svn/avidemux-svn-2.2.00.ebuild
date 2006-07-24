@@ -69,6 +69,7 @@ src_compile() {
 	local myconf
 	use mmx || myconf="${myconf} --disable-mmx"
 	use encode && myconf="${myconf} $(use_with mp3 lame) $(use_with aac faac)"
+	use x264 || export ac_cv_header_x264_h="no"
 	has_version '>=media-libs/faad2-2.1' || myconf="${myconf} --with-newfaad"
 
 	econf \

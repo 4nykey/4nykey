@@ -1,0 +1,52 @@
+Index: configure
+===================================================================
+--- configure	(revision 5789)
++++ configure	(working copy)
+@@ -2125,9 +2125,9 @@
+ # libavutil.pc
+ cat <<EOF >libavutil.pc
+ prefix=$PREFIX
+-exec_prefix=\${PREFIX}
++exec_prefix=\${prefix}
+ libdir=\${exec_prefix}/lib
+-includedir=\${PREFIX}/include
++includedir=\${prefix}/include
+ 
+ Name: libavutil
+ Description: FFmpeg utility library
+@@ -2156,9 +2156,9 @@
+ # libavcodec.pc
+ cat <<EOF >libavcodec.pc
+ prefix=$PREFIX
+-exec_prefix=\${PREFIX}
++exec_prefix=\${prefix}
+ libdir=\${exec_prefix}/lib
+-includedir=\${PREFIX}/include
++includedir=\${prefix}/include
+ 
+ Name: libavcodec
+ Description: FFmpeg codec library
+@@ -2187,9 +2187,9 @@
+ # libavformat.pc
+ cat <<EOF >libavformat.pc
+ prefix=$PREFIX
+-exec_prefix=\${PREFIX}
++exec_prefix=\${prefix}
+ libdir=\${exec_prefix}/lib
+-includedir=\${PREFIX}/include
++includedir=\${prefix}/include
+ 
+ Name: libavformat
+ Description: FFmpeg container format library
+@@ -2219,9 +2219,9 @@
+ # libpostproc.pc
+ cat <<EOF >libpostproc.pc
+ prefix=$PREFIX
+-exec_prefix=\${PREFIX}
++exec_prefix=\${prefix}
+ libdir=\${exec_prefix}/lib
+-includedir=\${PREFIX}/include
++includedir=\${prefix}/include
+ 
+ Name: libpostproc
+ Description: FFmpeg post processing library
