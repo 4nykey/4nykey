@@ -1,0 +1,15 @@
+--- Makefile.orig	2006-04-10 05:21:36.000000000 +0300
++++ Makefile	2006-07-24 22:12:25.000000000 +0300
+@@ -219,11 +219,7 @@
+ 
+ $(TARGET): $(OBJECTS)
+ 	@echo "linking binary '$(TARGET)'"
+-	@$(CC) $(lCFLAGS) -o $(TARGET) $(lLDFLAGS) $(OBJECTS)
+-ifneq ($(DEBUG), 1)
+-	@echo "stripping binary '$(TARGET)'"
+-	@strip $(TARGET)
+-endif
++	@$(CC) $(lCFLAGS) -o $(TARGET) $(OBJECTS) $(lLDFLAGS)
+ 
+ $(OBJECTS): $(OBJECTS_DIR)/%.o: %.c
+ 	@echo "compiling '$*.c'"

@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/mkvtoolnix/mkvtoolnix-1.6.5.ebuild,v 1.4 2006/03/14 21:46:21 flameeyes Exp $
 
-inherit subversion autotools wxwidgets flag-o-matic
+inherit subversion autotools wxwidgets
 
 DESCRIPTION="Tools to create, alter, and inspect Matroska files"
 HOMEPAGE="http://www.bunkus.org/videotools/mkvtoolnix"
@@ -37,8 +37,6 @@ pkg_setup() {
 		else
 			need-wxwidgets gtk2
 		fi
-		# wxWidgets does not like --as-needed
-		filter-ldflags -Wl,--as-needed --as-needed
 	fi
 }
 

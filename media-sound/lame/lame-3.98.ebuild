@@ -31,6 +31,9 @@ src_unpack() {
 	# The frontened tries to link staticly, but we prefer shared libs
 	epatch ${FILESDIR}/${P}-shared-frontend.patch
 
+	# make it link with --as-needed
+	epatch ${FILESDIR}/${PN}-as_needed.diff
+
 	# If ccc (alpha compiler) is installed on the system, the default
 	# configure is broken, fix it to respect CC.  This is only
 	# directly broken for ARCH=alpha but would affect anybody with a

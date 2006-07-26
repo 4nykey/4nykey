@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-misc/emelfm2/emelfm2-0.0.9-r1.ebuild,v 1.5 2005/06/12 12:10:28 swegener Exp $
 
-inherit flag-o-matic toolchain-funcs
+inherit eutils toolchain-funcs
 
 DESCRIPTION="A file manager that implements the popular two-pane design based on gtk+-2"
 HOMEPAGE="http://emelfm2.net/"
@@ -18,12 +18,11 @@ RDEPEND=">=x11-libs/gtk+-2.4
 	virtual/fam"
 DEPEND="${RDEPEND}"
 
-pkg_setup() {
-	filter-ldflags -Wl,--as-needed
-}
-
 src_unpack() {
 	unpack ${A}
+	cd ${S}
+	epatch "${FILESDIR}/${PN}-as_needed.diff"
+	rm docs/*GPL
 }
 
 src_compile() {
