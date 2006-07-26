@@ -7,7 +7,7 @@ inherit subversion flag-o-matic autotools
 PATCHLEVEL=7
 DESCRIPTION="Great Video editing/encoding tool"
 HOMEPAGE="http://fixounet.free.fr/avidemux/"
-ESVN_REPO_URI="svn://svn.berlios.de/avidemux/branches/avidemux_2.2_branch"
+ESVN_REPO_URI="svn://svn.berlios.de/avidemux/branches/avidemux_2.3_branch"
 ESVN_PATCHES="*.diff"
 
 LICENSE="GPL-2"
@@ -18,7 +18,7 @@ xvid xv oss x264 dts"
 
 RDEPEND=">=dev-libs/libxml2-2.6.7
 	>=x11-libs/gtk+-2.6.0
-	dev-lang/spidermonkey
+	>=dev-lang/spidermonkey-1.5-r2
 	xv? ( virtual/x11 )
 	a52? ( >=media-libs/a52dec-0.7.4 )
 	encode? ( >=media-sound/lame-3.93 )
@@ -48,7 +48,6 @@ filter-flags "-fno-default-inline"
 filter-flags "-funroll-loops"
 filter-flags "-funroll-all-loops"
 filter-flags "-fforce-addr"
-filter-ldflags "-Wl,--as-needed"
 
 src_unpack() {
 	subversion_src_unpack
