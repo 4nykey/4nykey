@@ -16,20 +16,21 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
 IUSE="X 3dnow a52 dv dvdread extrafilters mp3 fame truetype gtk imagemagick jpeg
-lzo mjpeg mpeg mmx network ogg vorbis quicktime sdl sse sse2 theora v4l2 xvid
-xml ffmpeg"
+lzo mjpeg mmx network ogg vorbis quicktime sdl sse sse2 theora v4l2 xvid xml
+postproc x264"
 
 RDEPEND="!media-video/transcode
 	a52? ( >=media-libs/a52dec-0.7.4 )
 	dv? ( >=media-libs/libdv-0.99 )
 	dvdread? ( >=media-libs/libdvdread-0.9.0 )
 	xvid? ( >=media-libs/xvid-1.0.2 )
+	x264? || ( media-libs/x264
+		media-libs/x264-svn )
 	mjpeg? ( >=media-video/mjpegtools-1.6.2-r3 )
 	lzo? ( >=dev-libs/lzo-2 )
 	fame? ( >=media-libs/libfame-0.9.1 )
 	imagemagick? ( >=media-gfx/imagemagick-5.5.6.0 )
 	media-libs/libexif
-	mpeg? ( media-libs/libmpeg3 )
 	mp3? ( >=media-sound/lame-3.93 )
 	sdl? ( media-libs/libsdl )
 	quicktime? ( >=media-libs/libquicktime-0.9.3 )
@@ -39,10 +40,10 @@ RDEPEND="!media-video/transcode
 	jpeg? ( media-libs/jpeg )
 	gtk? ( =x11-libs/gtk+-1.2* )
 	truetype? ( >=media-libs/freetype-2 )
-	ffmpeg? || ( media-video/ffmpeg-svn 
+	|| ( media-video/ffmpeg-svn 
 		>=media-video/ffmpeg-0.4.9_p20050226-r3 )
-	|| ( sys-libs/glibc dev-libs/libiconv )
 	>=media-libs/libmpeg2-0.4.0b
+	|| ( sys-libs/glibc dev-libs/libiconv )
 	xml? ( dev-libs/libxml2 )
 	X? ( || ( (
 			x11-libs/libXaw
@@ -57,9 +58,7 @@ DEPEND="${RDEPEND}
 			x11-libs/libXv
 			x11-proto/xextproto )
 		virtual/x11 ) )
-	sys-devel/autoconf
-	sys-devel/automake
-	sys-devel/libtool"
+"
 
 pkg_setup() {
 	if has_version '<x11-base/xorg-x11-7.0' && ! built_with_use x11-base/xorg-x11 xv; then
@@ -67,7 +66,6 @@ pkg_setup() {
 	fi
 
 	filter-flags -momit-leaf-frame-pointer
-	filter-ldflags -Wl,--as-needed
 }
 
 src_unpack() {
@@ -80,26 +78,21 @@ src_unpack() {
 	# don't use aux dir for autoconf junk
 	sed -i '/AC_CONFIG_AUX_DIR/d' configure.in
 
-	# fix liba52 detection through pkg-config (wrong module name)
-	sed -i 's:a52dec,:liba52,:' configure.in
-
+	epatch ${FILESDIR}/${PN}-*.diff
 	eautoreconf || die
 }
 
 src_compile() {
-	use xvid \
-		&& myconf="${myconf} --with-default-xvid=xvid4"
-
-	myconf="${myconf} $(use_enable mmx) \
-			$(use_enable 3dnow) \
-			$(use_enable sse) \
-			$(use_enable sse2)"
-
 	append-flags -DDCT_YUV_PRECISION=1
 	econf \
-		$(use_enable network netstream) \
+		$(use_enable mmx) \
+		$(use_enable 3dnow) \
+		$(use_enable sse) \
+		$(use_enable sse2) \
 		$(use_enable truetype freetype2) \
 		$(use_enable v4l2 v4l) \
+		$(use_enable xvid) \
+		$(use_enable x264) \
 		$(use_enable mp3 lame) \
 		$(use_enable ogg) \
 		$(use_enable vorbis) \
@@ -108,8 +101,7 @@ src_compile() {
 		$(use_enable dv libdv) \
 		$(use_enable quicktime libquicktime) \
 		$(use_enable lzo) \
-		$(use_enable a52) $(use_enable a52 a52-default-decoder) \
-		$(use_enable mpeg libmpeg3) \
+		$(use_enable a52) \
 		$(use_enable xml libxml2) \
 		$(use_enable mjpeg mjpegtools) \
 		$(use_enable sdl) \
@@ -117,13 +109,10 @@ src_compile() {
 		$(use_enable fame libfame) \
 		$(use_enable imagemagick) \
 		$(use_enable jpeg libjpeg) \
-		--with-mod-path=/usr/$(get_libdir)/transcode \
 		$(use_with X x) \
-		$(use_with ffmpeg libpostproc-builddir "${ROOT}/usr/$(get_libdir)") \
-		${myconf} \
-		--with-lzo-includes=/usr/include/lzo \
-		--disable-avifile \
-		|| die
+		$(use_enable postproc libpostproc) \
+		--with-mod-path=/usr/$(get_libdir)/transcode \
+		--with-lzo-includes=/usr/include/lzo || die
 
 	emake all || die
 }

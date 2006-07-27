@@ -1,0 +1,16 @@
+Index: acinclude.m4
+===================================================================
+RCS file: /cvstc/transcode/acinclude.m4,v
+retrieving revision 1.72
+diff -u -r1.72 acinclude.m4
+--- acinclude.m4	6 Jun 2006 02:10:52 -0000	1.72
++++ acinclude.m4	26 Jul 2006 16:25:43 -0000
+@@ -191,7 +191,7 @@
+ ],    [AC_DEFINE([HAVE_STRUCT_V4L2_BUFFER], 1,
+         [define if your videodev2 header has struct v4l2_buffer])
+         AC_MSG_RESULT([yes])],
+-      [v4l2=no AC_MSG_RESULT([no])])
++      [AC_MSG_RESULT([no])])
+   fi
+ 
+   if test x"$v4l" = x"yes" -o x"$v4l2" = x"yes" ; then

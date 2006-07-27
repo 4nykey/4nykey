@@ -10,6 +10,6 @@ diff -u -r1.61 Makefile.am
  	-lpthread \
  	@SDL_LIBS@ $(GUILIBS) @FFMPEG_LIB@ @LIBVORBIS_LIB@ $(XVID_LIB) \
 -	@X264_LIB@ 
-+	@X264_LIB@ -lasound
++	@X264_LIB@ @ALSA_LIBS@
  
  EXTRA_DIST = $(ed2) video_v4l_source.cpp 
