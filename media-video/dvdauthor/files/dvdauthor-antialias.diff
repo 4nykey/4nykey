@@ -1,0 +1,30 @@
+--- old-dvdauthor/src/subfont.c	2006-07-27 03:09:22.000000000 +0300
++++ new-dvdauthor/src/subfont.c	2006-07-27 03:09:22.000000000 +0300
+@@ -150,7 +150,7 @@
+ 		      int unicode) {
+     FT_Error	error;
+     FT_Face face = desc->faces[pic_idx];
+-    int	const	load_flags = FT_LOAD_DEFAULT | FT_LOAD_NO_HINTING | FT_LOAD_MONOCHROME | FT_LOAD_RENDER;
++    int	const	load_flags = FT_LOAD_DEFAULT | FT_LOAD_TARGET_NORMAL | FT_LOAD_MONOCHROME | FT_LOAD_RENDER;
+ 	/* int	const	load_flags = FT_LOAD_DEFAULT | FT_LOAD_NO_HINTING; */ /* Anti-aliasing */
+ 	int		ymin = INT_MAX, ymax = INT_MIN;
+     int		space_advance = 20;
+@@ -195,7 +195,7 @@
+     if (error) WARNING("spacewidth set to default.");
+     else space_advance = f266ToInt(face->glyph->advance.x);
+ 
+-    if (!desc->spacewidth) desc->spacewidth = 2*padding + space_advance;
++    if (!desc->spacewidth) desc->spacewidth = space_advance - 2*padding;
+     if (!desc->charspace) desc->charspace = -2*padding;
+     if (!desc->height) desc->height = f266ToInt(face->size->metrics.height);
+ 
+@@ -516,7 +516,7 @@
+     int width, height, stride, maxw, off;
+     unsigned char *abuffer, *bbuffer;
+ 
+-    int	const	load_flags = FT_LOAD_DEFAULT | FT_LOAD_NO_HINTING | FT_LOAD_MONOCHROME | FT_LOAD_RENDER;
++    int	const	load_flags = FT_LOAD_DEFAULT | FT_LOAD_TARGET_NORMAL | FT_LOAD_MONOCHROME | FT_LOAD_RENDER;
+ 	/* int	const	load_flags = FT_LOAD_DEFAULT | FT_LOAD_NO_HINTING; */ /* Anti-aliasing */
+ 
+     int		pen_xa;
+
