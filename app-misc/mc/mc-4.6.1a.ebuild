@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-misc/mc/mc-4.6.0-r14.ebuild,v 1.6 2006/01/03 22:02:11 sekretarz Exp $
 
-inherit flag-o-matic
+inherit rpm flag-o-matic
 
 DESCRIPTION="GNU Midnight Commander cli-based file manager"
 HOMEPAGE="http://www.ibiblio.org/mc/"
@@ -37,15 +37,10 @@ RDEPEND=">=sys-fs/e2fsprogs-1.19
 	amd64? ( 7zip? ( >=app-arch/p7zip-4.16 ) )"
 
 DEPEND="${RDEPEND}
-	app-arch/rpm2targz
 	dev-util/pkgconfig"
 
 src_unpack() {
-	# here goes teh unpack
-	cd ${WORKDIR}
-	rpm2tar ${DISTDIR}/${P}-12.FC5.src.rpm
-	tar xf ${P}-12.FC5.src.tar
-	tar xjf ${P}.tar.bz2
+	rpm_src_unpack
 	cd ${S}
 	epatch ${FILESDIR}/${P}*.patch ${WORKDIR}/mc-utf8.patch
 }
