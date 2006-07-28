@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/vstrip/vstrip-0.8f.ebuild,v 1.3 2005/09/16 02:36:27 mr_bones_ Exp $
 
-inherit eutils
+inherit eutils flag-o-matic
 
 DESCRIPTION="A program to split non-css dvd vobs into individual chapters"
 HOMEPAGE="http://www.maven.de/code"
@@ -30,10 +30,11 @@ src_unpack() {
 		echo >>$file
 	done
 
-	epatch "${FILESDIR}/vstrip_makefile.diff"
+	sed -i 's,^CFLAGS :=,CFLAGS +=,' Makefile
 }
 
 src_compile() {
+	append-lfs-flags
 	emake || die "emake failed"
 }
 
