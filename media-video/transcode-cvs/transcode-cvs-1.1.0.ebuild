@@ -11,6 +11,7 @@ ECVS_MODULE="transcode"
 ECVS_USER="cvs"
 #ECVS_BRANCH="new-module-system"
 S="${WORKDIR}/${ECVS_MODULE}"
+#ESVN_PATCHES="${PN}-*.diff"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -78,7 +79,6 @@ src_unpack() {
 	# don't use aux dir for autoconf junk
 	sed -i '/AC_CONFIG_AUX_DIR/d' configure.in
 
-	epatch ${FILESDIR}/${PN}-*.diff
 	eautoreconf || die
 }
 

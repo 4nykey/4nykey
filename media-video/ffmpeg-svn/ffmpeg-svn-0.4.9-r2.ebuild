@@ -11,6 +11,7 @@ WBV="520"
 SRC_URI="amr? ( http://www.3gpp.org/ftp/Specs/latest/Rel-5/26_series/26204-${WBV}.zip
 			http://www.3gpp.org/ftp/Specs/latest/Rel-5/26_series/26104-${NBV}.zip )"
 ESVN_REPO_URI="svn://svn.mplayerhq.hu/ffmpeg/trunk"
+#ESVN_PATCHES="${PN}-*.diff"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -79,8 +80,6 @@ src_unpack() {
 
 	# skip running ldconfig on make install
 	sed -i /LDCONFIG/d Makefile
-
-	epatch "${FILESDIR}/${PN}-pkfconfig.diff"
 }
 
 teh_conf() {
