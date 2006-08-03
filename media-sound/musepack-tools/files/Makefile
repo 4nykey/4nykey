@@ -9,13 +9,14 @@ DESTDIR = $(pwd)/debian/musepack-encoder/
 
 CC_MAJ = $(shell $(CC) -dumpversion | cut -d. -f1)
 CC_MIN = $(shell $(CC) -dumpversion | cut -d. -f2)
+MINGW = $(shell $(CC) -dumpmachine | grep -qi mingw && echo 1 )
+USE_ASM = $(shell $(CC) -dumpmachine | grep -qi 86 && echo 1 )
 MF = $(shell [ $(CC_MAJ)$(CC_MIN) -ge 30 ] && echo f || echo m)
-#TUNE = $(shell [ $(CC_MAJ)$(CC_MIN) -ge 34 ] && echo tune || echo cpu)
 
 # Build options
 #BLD_STATIC = 1
 #MINGW = 1
-USE_ASM = 1
+#USE_ASM = 1
 #USE_ESD = 1
 #USE_OSS = 1
 
