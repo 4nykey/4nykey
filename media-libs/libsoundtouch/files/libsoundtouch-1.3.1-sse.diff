@@ -1,0 +1,15 @@
+--- source/SoundTouch/Makefile.in.orig	2006-03-19 14:09:39.000000000 +0200
++++ source/SoundTouch/Makefile.in	2006-08-02 15:19:44.000000000 +0300
+@@ -191,9 +191,11 @@
+ 
+ # ??? test for -fcheck-new in configure.ac
+ # other compiler flags to add
+-AM_CXXFLAGS = -O3 -msse -fcheck-new -I../../include
++AM_CXXFLAGS = -fcheck-new -I../../include
+ all: all-am
+ 
++sse_optimized.lo : override CXXFLAGS += -msse
++
+ .SUFFIXES:
+ .SUFFIXES: .cpp .lo .o .obj
+ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/config/am_include.mk $(am__configure_deps)
