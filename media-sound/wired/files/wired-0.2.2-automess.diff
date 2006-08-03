@@ -1,0 +1,39 @@
+--- configure.ac.orig	2006-05-18 21:26:02.000000000 +0300
++++ configure.ac	2006-08-02 19:37:42.000000000 +0300
+@@ -83,6 +83,15 @@
+ AC_SUBST(SAMPLERATE_CFLAGS)
+ AC_SUBST(SAMPLERATE_LIBS)
+ 
++PKG_CHECK_MODULES(XML2, libxml-2.0,
++            ac_cv_libxml2=1, ac_cv_libxml2=0)
++AC_SUBST(XML2_CFLAGS)
++AC_SUBST(XML2_LIBS)
++
++PKG_CHECK_MODULES(PORTAUDIO, portaudio-2.0 >= 19,
++            ac_cv_portaudio=1, ac_cv_portaudio=0)
++AC_SUBST(PORTAUDIO_CFLAGS)
++AC_SUBST(PORTAUDIO_LIBS)
+ 
+ # Checks for typedefs, structures, and compiler characteristics.
+ AC_HEADER_STDBOOL
+--- src/Makefile.am.orig	2006-02-05 19:56:35.000000000 +0200
++++ src/Makefile.am	2006-08-02 19:34:58.000000000 +0300
+@@ -19,9 +19,9 @@
+ 	codec		\
+ 	wiredvideo
+ 
+-DEPS_LIBS = libs/WiredWidgets/src/.libs/libWiredWidgets.so libs/WiredAkai/src/.libs/libWiredAkai.so -Lfileloader -lfileloader
++DEPS_LIBS = -Llibs/WiredWidgets/src -lWiredWidgets -Llibs/WiredAkai/src -lWiredAkai
+ 
+-wired_LDFLAGS = $(shell wx-config --libs) -lsndfile -lasound -Lmidi/portmidi $(DEPS_LIBS) -lportaudio  -L/usr/pkg/lib/ `xml2-config --libs` @SAMPLERATE_LIBS@
++EXTRA_LIBS = $(DEPS_LIBS) -lsndfile -lasound @PORTAUDIO_LIBS@ @XML2_LIBS@ @SAMPLERATE_LIBS@
+ 
+ wired_CPPFLAGS = $(shell wx-config --cflags) -Igui -Iplugins -Ifileloader -I/opt/gnome/include -Isequencer -Iredist -Iaudio -Iengine -Imixer -Imidi -Imidi/portmidi/pm_common -Imidi/portmidi/porttime -I. -Iasm -Ieditmidi -Iundo -I.  -I/usr/pkg/include/libxml2/ -I/usr/pkg/include `xml2-config --cflags` @SAMPLERATE_CFLAGS@
+ 
+@@ -47,4 +47,5 @@
+ 	dssi/libwireddssi.a		\
+ 	samplerate/libwiredsamplerate.a	\
+ 	codec/libwiredCodec.a	\
+-	wiredvideo/libwiredvideo.a
++	wiredvideo/libwiredvideo.a \
++	$(EXTRA_LIBS)
