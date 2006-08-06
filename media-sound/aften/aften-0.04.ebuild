@@ -3,29 +3,30 @@
 # $Header: $
 
 DESCRIPTION="Aften is an open-source A/52 (AC-3) audio encoder"
-HOMEPAGE="http://jbr.homelinux.org/aften/"
-SRC_URI="http://jbr.homelinux.org/aften/${P}.tar.bz2"
+HOMEPAGE="http://aften.sourceforge.net/"
+SRC_URI="mirror://sourceforge/${PN}/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="mmx debug"
+IUSE="debug"
 
 DEPEND=""
 RDEPEND=""
 
 src_compile() {
 	local myconf
-	use mmx || myconf="${myconf} --disable-mmx"
 	use debug || myconf="${myconf} --disable-debug"
 	./configure \
+		--prefix=/usr \
+		--log=config.log \
 		--disable-strip \
 		--disable-opts \
 		${myconf} || die
-	emake || die
+	make || die
 }
 
 src_install() {
-	dobin aften util/wav{info,rms}
+	make DESTDIR="${D}" install || die
 	dodoc Changelog README
 }
