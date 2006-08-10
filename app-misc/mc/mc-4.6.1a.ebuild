@@ -43,39 +43,47 @@ src_unpack() {
 	rpm_src_unpack
 	cd ${S}
 	epatch ${FILESDIR}/${P}*.patch ${WORKDIR}/mc-utf8.patch
+	sed -i "s:-lslang:-lslang-2:g" configure
 }
 
 src_compile() {
-	append-flags -I/usr/include/gssapi
 	filter-flags -malign-double
 
 	local myconf=""
 
 	if use slang; then
 		myconf="${myconf} --with-screen=slang"
+		CPPFLAGS="${CPPFLAGS} -I/usr/include/slang-2"
 	elif use ncurses && ! use unicode; then
 		myconf="${myconf} --with-screen=ncurses"
 	else
 		myconf="${myconf} --with-screen=mcslang"
 	fi
 
-	myconf="${myconf} `use_with gpm gpm-mouse`"
+	if use nls; then
+		myconf="${myconf} --with-included-gettext"
+	else
+		myconf="${myconf} --disable-nls"
+	fi
 
-	use nls \
-	    && myconf="${myconf} --with-included-gettext" \
-	    || myconf="${myconf} --disable-nls"
+	if use samba; then
+		myconf="${myconf} \
+			--with-samba \
+			--with-configdir=/etc/samba \
+			--with-codepagedir=/var/lib/samba/codepages \
+			--with-privatedir=/etc/samba/private"
+	else
+		myconf="${myconf} --without-samba"
+	fi
 
-	myconf="${myconf} `use_with X x`"
-
-	use samba \
-	    && myconf="${myconf} --with-samba --with-configdir=/etc/samba --with-codepagedir=/var/lib/samba/codepages --with-privatedir=/etc/samba/private" \
-	    || myconf="${myconf} --without-samba"
-
+	CPPFLAGS="${CPPFLAGS}" \
 	econf \
 	    --with-vfs \
 	    --with-ext2undel \
 	    --with-edit \
 		--enable-charset \
+		$(use_with gpm gpm-mouse) \
+		$(use_with X x) \
 	    ${myconf} || die
 
 	emake || die
