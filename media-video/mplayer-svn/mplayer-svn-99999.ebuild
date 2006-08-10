@@ -426,11 +426,7 @@ src_compile() {
 		myconf="${myconf} --disable-tdfxvid"
 	fi
 
-	if use dvb ; then
-		myconf="${myconf} --with-dvbincdir=/usr/src/linux/include"
-	else
-		myconf="${myconf} --disable-dvbhead"
-	fi
+	teh_conf dvb dvbhead
 
 	teh_conf aalib aa
 	teh_conf directfb
@@ -545,7 +541,6 @@ src_compile() {
 		--enable-largefiles \
 		--enable-menu \
 		--with-reallibdir=${REALLIBDIR} \
-		--with-x11incdir=/usr/X11R6/include \
 		--charset=${CHARSET} \
 		${myconf} || die
 
