@@ -24,7 +24,7 @@ DEPEND="${RDEPEND}"
 src_unpack() {
 	unpack ${A}
 	sed -i 's:\(ACLOCAL_M4 = \).*:\1:' ${S}/Makefile.in
-	sed -i 's:\\d\\\.:0-9.:' ${S}/src/SubtitleMPsub.cc
+#	sed -i 's:\\d\\\.:0-9.:' ${S}/src/SubtitleMPsub.cc
 }
 
 src_install() {
