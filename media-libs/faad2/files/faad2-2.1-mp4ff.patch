@@ -11,19 +11,3 @@ diff -u -r1.8 Makefile.am
  
  libmp4ff_la_CFLAGS = -DUSE_TAGGING=1
  
-Index: plugins/xmms/src/Makefile.am
-===================================================================
-RCS file: /cvsroot/faac/faad2/plugins/xmms/src/Makefile.am,v
-retrieving revision 1.9
-diff -u -r1.9 Makefile.am
---- plugins/xmms/src/Makefile.am	22 Aug 2004 17:48:37 -0000	1.9
-+++ plugins/xmms/src/Makefile.am	27 Jul 2005 14:27:29 -0000
-@@ -5,7 +5,7 @@
-        -I$(top_srcdir)/include -I$(top_srcdir)/common/mp4ff
- 
- libmp4_la_LIBADD = $(top_builddir)/libfaad/libfaad.la \
--       $(top_builddir)/common/mp4ff/libmp4ff.a
-+       $(top_builddir)/common/mp4ff/libmp4ff.la
- 
- libmp4_la_LDFLAGS = -module -avoid-version `$(XMMS_CONFIG) --libs` -lpthread
- 

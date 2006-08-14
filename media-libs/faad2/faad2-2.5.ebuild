@@ -27,7 +27,7 @@ src_unpack() {
 	cvs_src_unpack
 
 	cd ${S}
-	epatch ${FILESDIR}/${P}-*.patch
+	epatch ${FILESDIR}/${PN}-*.patch
 	eautoreconf || die
 }
 

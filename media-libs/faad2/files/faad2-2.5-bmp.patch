@@ -1,0 +1,68 @@
+Index: configure.in
+===================================================================
+RCS file: /cvsroot/faac/faad2/configure.in,v
+retrieving revision 1.31
+diff -u -r1.31 configure.in
+--- configure.in	13 Aug 2006 14:13:31 -0000	1.31
++++ configure.in	13 Aug 2006 21:48:31 -0000
+@@ -29,9 +29,6 @@
+ AC_ARG_WITH(xmms,[  --with-xmms             compile XMMS-1 plugin],
+ 	     WITHXMMS=$withval, WITHXMMS=no)
+ 
+-AC_ARG_WITH(bmp,[  --with-bmp              compile beep media player plugin],
+-	     [WITHBMP=$withval;WITHXMMS=$withval], [WITHBMP=no])
+-
+ AC_ARG_WITH(drm,[  --with-drm              compile libfaad with DRM support],
+ 	     WITHDRM=$withval, WITHDRM=no)
+ 
+@@ -114,12 +111,6 @@
+  AM_CONDITIONAL(HAVE_XMMS, false)
+ fi
+ 
+-if test x$WITHBMP = xyes; then
+-  AC_DEFINE([HAVE_BMP], 1, [User wants beep media player plugin built])
+-  AM_CONDITIONAL([HAVE_XMMS], true)
+-  AM_CONDITIONAL([HAVE_BMP], true)
+-fi
+-
+ if test x$WITHDRM = xyes; then
+   AC_DEFINE(DRM, 1, [Define if you want to use libfaad together with Digital Radio Mondiale (DRM)])
+   AC_DEFINE(DRM_PS, 1, [Define if you want support for Digital Radio Mondiale (DRM) parametric stereo])
+Index: plugins/Makefile.am
+===================================================================
+RCS file: /cvsroot/faac/faad2/plugins/Makefile.am,v
+retrieving revision 1.10
+diff -u -r1.10 Makefile.am
+--- plugins/Makefile.am	7 Aug 2006 18:47:45 -0000	1.10
++++ plugins/Makefile.am	13 Aug 2006 21:48:31 -0000
+@@ -8,10 +8,6 @@
+ if HAVE_XMMS
+ SUBDIRS = xmms
+ else
+-if HAVE_BMP
+-SUBDIRS = bmp
+-else
+ SUBDIRS =
+-endif #HAVE_BMP
+ endif #HAVE_XMMS
+ endif #HAVE_MPEG4IP_PLUG
+Index: plugins/xmms/src/Makefile.am
+===================================================================
+RCS file: /cvsroot/faac/faad2/plugins/xmms/src/Makefile.am,v
+retrieving revision 1.11
+diff -u -r1.11 Makefile.am
+--- plugins/xmms/src/Makefile.am	7 Aug 2006 18:47:45 -0000	1.11
++++ plugins/xmms/src/Makefile.am	13 Aug 2006 21:48:31 -0000
+@@ -1,12 +1,6 @@
+-if HAVE_BMP
+-libdir=$(shell pkg-config --variable=input-plugin-dir bmp)
+-local_CFLAGS=$(shell pkg-config --cflags bmp)
+-local_LDFLAGS=$(shell pkg-config --libs bmp)
+-else
+ local_CFLAGS=`$(XMMS_CONFIG) --cflags` -Wall
+ local_LDFLAGS=`$(XMMS_CONFIG) --libs`
+ libdir = `$(XMMS_CONFIG) --input-plugin-dir`
+-endif #HAVE_BMP
+ lib_LTLIBRARIES = libmp4.la
+ 
+ libmp4_la_CFLAGS = $(local_CFLAGS) -Wall \
