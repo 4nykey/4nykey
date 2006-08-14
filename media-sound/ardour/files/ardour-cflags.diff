@@ -1,0 +1,118 @@
+Index: libs/pbd/SConscript
+===================================================================
+--- libs/pbd/SConscript	(revision 816)
++++ libs/pbd/SConscript	(working copy)
+@@ -45,7 +45,7 @@
+ 
+ conf = Configure(pbd)
+ if conf.CheckFunc('getmntent'):
+-    conf.env.Append(CCFLAGS="-DHAVE_GETMNTENT")
++    conf.env.Append(CXXFLAGS="-DHAVE_GETMNTENT")
+ if conf.CheckCHeader('execinfo.h'):
+     conf.env.Append(CXXFLAGS="-DHAVE_EXECINFO")
+ pbd = conf.Finish()
+Index: SConstruct
+===================================================================
+--- SConstruct	(revision 816)
++++ SConstruct	(working copy)
+@@ -23,9 +23,14 @@
+ # Command-line options
+ #
+ 
++def SimpleListOption(key, help, default=[]):
++    return(key, help, default, None, lambda val: string.split(val))
++
+ opts = Options('scache.conf')
+ opts.AddOptions(
+   ('ARCH', 'Set architecture-specific compilation flags by hand (all flags as 1 argument)',''),
++    SimpleListOption('CCFLAGS', 'C compilerflags', ''),
++    SimpleListOption('CXXFLAGS', 'C++ compilerflags', ''),
+     BoolOption('COREAUDIO', 'Compile with Apple\'s CoreAudio library', 0),
+     BoolOption('DEBUG', 'Set to build with debugging information and no optimizations', 0),
+     PathOption('DESTDIR', 'Set the intermediate install "prefix"', '/'),
+@@ -542,7 +547,7 @@
+ 
+ #    libraries['flowcanvas'] = LibraryInfo(LIBS='flowcanvas', LIBPATH='#/libs/flowcanvas', CPPPATH='#libs/flowcanvas')
+     libraries['soundtouch'] = LibraryInfo()
+-    libraries['soundtouch'].ParseConfig ('pkg-config --cflags --libs libSoundTouch')
++    libraries['soundtouch'].ParseConfig ('pkg-config --cflags --libs soundtouch-1.0')
+ 
+     libraries['appleutility'] = LibraryInfo(LIBS='libappleutility',
+                                             LIBPATH='#libs/appleutility',
+@@ -817,16 +822,17 @@
+ #
+ 
+ opt_flags[:0] = [
+-    "-O3",
+     "-fomit-frame-pointer",
+     "-ffast-math",
+     "-fstrength-reduce"
+     ]
+ 
+ if env['DEBUG'] == 1:
+-    env.Append(CCFLAGS=" ".join (debug_flags))
++    env.Append(CCFLAGS=debug_flags)
++    env.Append(CXXFLAGS=debug_flags)
+ else:
+-    env.Append(CCFLAGS=" ".join (opt_flags))
++    env.Append(CCFLAGS=opt_flags)
++    env.Append(CXXFLAGS=opt_flags)
+ 
+ #
+ # warnings flags
+Index: libs/gtkmm2ext/SConscript
+===================================================================
+--- libs/gtkmm2ext/SConscript	(revision 816)
++++ libs/gtkmm2ext/SConscript	(working copy)
+@@ -57,8 +57,8 @@
+ 
+ gtkmm2ext.VersionBuild(['version.cc','gtkmm2ext/version.h'], 'SConscript')
+ 
+-gtkmm2ext.Append(CCFLAGS="-D_REENTRANT")
+-gtkmm2ext.Append(CCFLAGS="-DLOCALEDIR=\\\""+final_prefix+"/share/locale\\\"")
++gtkmm2ext.Append(CXXFLAGS="-D_REENTRANT")
++gtkmm2ext.Append(CXXFLAGS="-DLOCALEDIR=\\\""+final_prefix+"/share/locale\\\"")
+ 
+ libgtkmm2ext = gtkmm2ext.SharedLibrary('gtkmm2ext', gtkmm2ext_files)
+ 
+Index: gtk2_ardour/SConscript
+===================================================================
+--- gtk2_ardour/SConscript	(revision 816)
++++ gtk2_ardour/SConscript	(working copy)
+@@ -51,11 +51,11 @@
+ 
+ if gtkardour['DMALLOC']:
+ 	gtkardour.Merge([libraries['dmalloc']])
+-	gtkardour.Append(CCFLAGS='-DUSE_DMALLOC')
++	gtkardour.Append(CXXFLAGS='-DUSE_DMALLOC')
+ 
+ if gtkardour['FFT_ANALYSIS']:
+ 	gtkardour.Merge ([libraries['fftw3f']])
+-	gtkardour.Append(CCFLAGS='-DFFT_ANALYSIS')
++	gtkardour.Append(CXXFLAGS='-DFFT_ANALYSIS')
+ 
+ skipped_files=Split("""
+ connection_editor.cc
+@@ -215,11 +215,11 @@
+ 
+ if env['VST']:
+ 	extra_sources += vst_files
+-	gtkardour.Append (CCFLAGS="-DVST_SUPPORT", CPPPATH="#libs/fst")
++	gtkardour.Append (CXXFLAGS="-DVST_SUPPORT", CPPPATH="#libs/fst")
+ 
+ if gtkardour['COREAUDIO']:
+     extra_sources += coreaudio_files
+-    gtkardour.Append(CCFLAGS='-DHAVE_COREAUDIO')
++    gtkardour.Append(CXXFLAGS='-DHAVE_COREAUDIO')
+     gtkardour.Append(LINKFLAGS='-framework Carbon')
+     gtkardour.Merge([libraries['appleutility']])
+  
+@@ -228,7 +228,7 @@
+ 
+ intl_files += extra_sources
+ 
+-gtkardour.Append(CCFLAGS="-D_REENTRANT -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE")
++gtkardour.Append(CXXFLAGS="-D_REENTRANT -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE")
+ gtkardour.Append(CXXFLAGS="-DLOCALEDIR=\\\""+final_prefix+"/share/locale\\\"")
+ 
+ versionflag = '-DVERSIONSTRING=\\\"' + env['VERSION'] + '\\\"'
