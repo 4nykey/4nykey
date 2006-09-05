@@ -6,7 +6,7 @@ inherit subversion autotools
 
 DESCRIPTION="The Theora Video Compression Codec (experimental version)"
 HOMEPAGE="http://www.theora.org/"
-ESVN_REPO_URI="http://svn.xiph.org/experimental/derf/theora-exp"
+ESVN_REPO_URI="http://svn.xiph.org/trunk/theora-exp"
 
 LICENSE="xiph"
 SLOT="0"
@@ -20,7 +20,7 @@ src_unpack() {
 	subversion_src_unpack
 	cd ${S}
 	AT_M4DIR="${S}/m4"
-	eautoreconf || die
+	eautoreconf
 }
 
 src_compile() {
