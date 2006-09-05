@@ -5,7 +5,7 @@
 IUSE="alsa esd fam fftw gsl gtk guile jack ladspa motif nls opengl ruby vorbis
 mp3 speex flac timidity shorten wavpack"
 
-inherit multilib flag-o-matic
+inherit multilib
 
 S="${WORKDIR}/${P/\.*//}"
 DESCRIPTION="Snd is a sound editor"
@@ -55,7 +55,6 @@ pkg_setup() {
 		ewarn "ESD will be the default ao, as it takes precedence over ALSA,"
 		ewarn "the two are not compatible."
 	fi
-	filter-ldflags -Wl,--as-needed
 }
 
 src_compile() {
@@ -84,7 +83,13 @@ src_compile() {
 		$(use_with motif) \
 		$(use_enable nls) \
 		$(use_with ruby) \
+		--without-builtin-gtkrc \
 		--with-float-samples \
+		--with-sample-width=16 \
+		--with-modules \
+		--with-midi \
+		--with-shared-sndlib \
+		--disable-deprecated \
 		${myconf} || die
 
 	emake || die
@@ -92,10 +97,26 @@ src_compile() {
 
 src_install () {
 	dobin snd
-
-	insinto /usr/$(get_libdir)/snd/scheme
-	doins *.scm
-
 	dodoc README.Snd HISTORY.Snd TODO.Snd Snd.ad
 	dohtml -r *.html *.png tutorial
+
+	insinto /etc
+
+	if use guile; then
+		echo \
+			"(set! %load-path (cons \"/usr/$(get_libdir)/snd/guile\" %load-path))">\
+			${T}/snd_guile.conf
+		echo "(set! (html-dir) \"/usr/share/doc/${P}/html\")" >> ${T}/snd_guile.conf
+		doins ${T}/snd_guile.conf
+		insinto /usr/$(get_libdir)/snd/guile
+		doins *.scm
+	fi
+
+	if use ruby; then
+		echo "$:.push(\"/usr/$(get_libdir)/snd/ruby\")" > ${T}/snd_ruby.conf
+		echo "set_html_dir(\"/usr/share/doc/${P}/html\")" >> ${T}/snd_ruby.conf
+		doins ${T}/snd_ruby.conf
+		insinto /usr/$(get_libdir)/snd/ruby
+		doins *.rb
+	fi
 }
