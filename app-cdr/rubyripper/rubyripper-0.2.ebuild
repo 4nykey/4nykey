@@ -25,16 +25,19 @@ src_unpack() {
 }
 
 src_install() {
+	RUBY=/usr/bin/ruby
 	local sitelibdir
 	sitelibdir=$(${RUBY} -r rbconfig -e 'print Config::CONFIG["sitelibdir"]')
 	insinto ${sitelibdir}
 	doins rr_lib.rb rubyripper_cli.rb
-	echo -e "#!/bin/sh\n${RUBY} ${sitelibdir}/rubyripper_cli.rb" > ${T}/blah
-	newbin ${T}/blah rubyripper
+	echo -e \
+		"#!/bin/sh\n${RUBY} ${sitelibdir}/rubyripper_cli.rb" > ${T}/rubyripper
+	dobin ${T}/rubyripper
 	if use gtk; then
 		doins rubyripper_gtk2.rb
-		echo -e "#!/bin/sh\n${RUBY} ${sitelibdir}/rubyripper_gtk2.rb" > ${T}/blah
-		newbin ${T}/blah rubyripper-gui
+		echo -e "#!/bin/sh\n${RUBY} ${sitelibdir}/rubyripper_gtk2.rb" > \
+			${T}/rubyripper-gui
+		dobin ${T}/rubyripper-gui
 		insinto /usr/share/${PN}/glade
 		doins ${S}/rubyripper.glade
 	fi
