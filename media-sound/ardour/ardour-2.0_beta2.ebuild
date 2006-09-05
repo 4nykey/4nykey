@@ -39,7 +39,7 @@ src_compile() {
 	# Required for scons to "see" intermediate install location
 	mkdir -p ${D}
 
-	local myconf="PREFIX=/usr SYSLIBS=1"
+	local myconf="PREFIX=/usr DESTDIR=${D} SYSLIBS=1"
 	! use altivec; myconf="${myconf} ALTIVEC=$?"
 	! use debug; myconf="${myconf} ARDOUR_DEBUG=$?"
 	! use nls; myconf="${myconf} NLS=$?" 
@@ -56,7 +56,7 @@ src_compile() {
 }
 
 src_install() {
-	scons DESTDIR="${D}" install || die "make install failed"
+	scons install || die "make install failed"
 
 	dodoc DOCUMENTATION/*
 }
