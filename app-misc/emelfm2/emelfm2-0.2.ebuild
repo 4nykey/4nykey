@@ -10,7 +10,7 @@ SRC_URI="http://emelfm2.net/rel/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86 ~ppc ~amd64"
+KEYWORDS="~x86"
 IUSE="nls fam"
 RESTRICT="test" # requires splint
 
@@ -21,8 +21,9 @@ DEPEND="${RDEPEND}"
 src_unpack() {
 	unpack ${A}
 	cd ${S}
-	epatch "${FILESDIR}/${PN}-as_needed.diff"
-	rm docs/*GPL
+	# don't strip binary/bzip manpages
+	sed -i "/bzip2/d; /\<strip\>/d" Makefile
+	rm docs/*{GPL,txt,INSTALL}
 }
 
 src_compile() {
