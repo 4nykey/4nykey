@@ -1,0 +1,32 @@
+--- acinclude.m4.orig	2006-08-29 13:19:19.000000000 +0300
++++ acinclude.m4	2006-08-29 14:04:21.000000000 +0300
+@@ -53,7 +53,20 @@
+    dnl ... TODO: I don't know if stock, unmodified soundtouch is
+    dnl suitable for audacity, so I don't allow it
+ 
+-   LIBSOUNDTOUCH_SYSTEM_AVAILABLE="no"
++   PKG_CHECK_MODULES(SOUNDTOUCH, soundtouch-1.0,
++                     soundtouch_available_system="yes",
++                     soundtouch_available_system="no")
++
++   if test "x$soundtouch_available_system" = "xyes" ; then
++      LIBSOUNDTOUCH_SYSTEM_AVAILABLE="yes"
++      LIBSOUNDTOUCH_SYSTEM_LIBS=$SOUNDTOUCH_LIBS
++      LIBSOUNDTOUCH_SYSTEM_CXXFLAGS=$SOUNDTOUCH_CFLAGS
++      LIBSOUNDTOUCH_SYSTEM_CPPSYMBOLS="USE_SOUNDTOUCH"
++      AC_MSG_NOTICE([Libsoundtouch libraries are available as system libraries])
++   else
++      LIBSOUNDTOUCH_SYSTEM_AVAILABLE="no"
++      AC_MSG_NOTICE([Libsoundtouch libraries are NOT available as system libraries])
++   fi
+ 
+    dnl see if libresample is available locally
+ 
+@@ -155,6 +155,7 @@
+       LIBSAMPLERATE_SYSTEM_AVAILABLE="yes"
+       LIBSAMPLERATE_SYSTEM_LIBS=$SAMPLERATE_LIBS
+       LIBSAMPLERATE_SYSTEM_CXXFLAGS=$SAMPLERATE_CFLAGS
++      LIBSAMPLERATE_SYSTEM_CPPSYMBOLS="USE_LIBSAMPLERATE"
+       AC_MSG_NOTICE([Libsamplerate libraries are available as system libraries])
+    else
+       LIBSAMPLERATE_SYSTEM_AVAILABLE="no"

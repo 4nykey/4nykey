@@ -1,0 +1,11 @@
+--- locale/Makefile.in.orig	2006-08-29 17:29:42.000000000 +0300
++++ locale/Makefile.in	2006-08-29 18:26:38.000000000 +0300
+@@ -17,7 +17,7 @@
+ INSTALL=@INSTALL@
+ AUDACITY_NAME=@AUDACITY_NAME@
+ ifdef DESTDIR
+-   INSTALL_PATH=$(top_srcdir)/$(DESTDIR)
++   INSTALL_PATH=$(DESTDIR)
+ else
+    INSTALL_PATH=
+ endif
