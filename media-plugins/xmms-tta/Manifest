@@ -1,2 +1,8 @@
+DIST ttaplugin-xmms-1.2-src.tgz 25399 RMD160 767645a1e113b7a4b56215b6dbec66aea8cf0427 SHA1 8b08ab6739cbee9557f2e6d78f75ca3619c0e12f SHA256 65d4cbb3274d0b6ead7b8fd6a69af099fe277ceebe34bbf57fccd3b1b1220b44
+EBUILD xmms-tta-1.2.ebuild 832 RMD160 d53c554f746d284e3d90c02b8991e1f3d8bf114e SHA1 8e901cf570e3995b8ee6b0753a1fcd18f88454f1 SHA256 3b493675eafbf1d88190e81f60c50733ba850ceb9c9e25dfc2f9f00ad6261faa
 MD5 ed433ea44833dbc4cf7ccb1abde8af1c xmms-tta-1.2.ebuild 832
-MD5 a35f256ec5724bb0036f288afa43d2db files/digest-xmms-tta-1.2 70
+RMD160 d53c554f746d284e3d90c02b8991e1f3d8bf114e xmms-tta-1.2.ebuild 832
+SHA256 3b493675eafbf1d88190e81f60c50733ba850ceb9c9e25dfc2f9f00ad6261faa xmms-tta-1.2.ebuild 832
+MD5 9ac06c2a4d7d2be3fdd674d7e00ff144 files/digest-xmms-tta-1.2 256
+RMD160 9de65b8fa6a99291a6cb044ac870ca17dff33706 files/digest-xmms-tta-1.2 256
+SHA256 4c9b589d8954b28d4843b98d54479c37055f675072a3869ef39817d307ca3a3c files/digest-xmms-tta-1.2 256

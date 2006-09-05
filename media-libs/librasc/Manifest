@@ -1,2 +1,8 @@
-MD5 12c7358a6bf77ebfd1a445ef2740ee2d files/digest-librasc-0.1 64
+DIST librasc-0.1.tar.bz2 370188 RMD160 8d8b6e57a46a4910ecaee35d5e0f956662429809 SHA1 e9beae8da995f178c01be3ce472edeea13d92700 SHA256 5a2c2a2cd20e347faba16fe8d8e1de0cf386e37a5ceb0b96682dc8425417d74c
+EBUILD librasc-0.1.ebuild 531 RMD160 0f7eaab19d4886aff443b4875adbfcbf50690134 SHA1 dca7a40db013df5c0cdd674b173ac8181cc10ab9 SHA256 e55b63fa3b15a5f262a689bdf4ee6091e63d9e4ca90ef077a4ffcdd619654b36
 MD5 4059d9e8bbc40ae3a7de5e58af7aaf21 librasc-0.1.ebuild 531
+RMD160 0f7eaab19d4886aff443b4875adbfcbf50690134 librasc-0.1.ebuild 531
+SHA256 e55b63fa3b15a5f262a689bdf4ee6091e63d9e4ca90ef077a4ffcdd619654b36 librasc-0.1.ebuild 531
+MD5 f429ec8d26506849dfccaad1607e66d2 files/digest-librasc-0.1 238
+RMD160 78eafafcfe39c036e1cddf20dce7cd8a2736cd4e files/digest-librasc-0.1 238
+SHA256 054e9331c7dfbbfde7da91cb0b5b2dce3a9f9cacd47577dd1bced93f157586a1 files/digest-librasc-0.1 238
