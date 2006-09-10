@@ -69,7 +69,7 @@ pkg_config() {
 }
 
 pkg_postinst() {
-	einfo "If this is a new install, you should run:"
-	einfo "\"ebuild /var/db/pkg/media-sound/${PF}/${PF}.ebuild config\""
-	einfo "and/or edit /etc/last{mp,fmsubmitd}.conf"
+	elog "If this is a new install, you should run:"
+	elog "    \"emerge --config =${CATEGORY}/${PF}\""
+	elog "and/or edit /etc/last{mp,fmsubmitd}.conf"
 }

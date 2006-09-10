@@ -52,6 +52,12 @@ pkg_config() {
 	einfo "\"/etc/init.d/scmpc start\""
 }
 
+src_unpack() {
+	unpack ${A}
+	# make it '-Wl,--as-needed' friendly
+	sed -i 's:\($(LDLIBS)\) \($(OBJS) -o $@\):\2 \1:' ${S}/src/Rules.mk
+}
+
 src_install() {
 	make DESTDIR="${D}" install || die "Install failed!"
 
@@ -79,7 +85,7 @@ src_install() {
 }
 
 pkg_postinst() {
-	einfo "To configure scmpc, you should run:"
-	einfo "\"ebuild /var/db/pkg/media-sound/${PF}/${PF}.ebuild config\""
-	einfo "if this is a new install."
+	elog "To configure scmpc, you should run:"
+	elog "    \`emerge --config =${CATEGORY}/${PF}'"
+	elog "if this is a new install."
 }
