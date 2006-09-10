@@ -10,7 +10,7 @@ HOMEPAGE="http://www.gnomefiles.org/app.php?soft_id=531"
 SLOT="0"
 KEYWORDS="~x86"
 LICENSE="GPL-2"
-IUSE="oggvorbis mp3 flac doc libnotify"
+IUSE="vorbis mp3 flac doc libnotify"
 
 RDEPEND=">=x11-libs/gtk+-2.4
 	>=gnome-base/libgnomeui-2.6
@@ -21,7 +21,7 @@ RDEPEND=">=x11-libs/gtk+-2.4
 	>=gnome-extra/gnome-media-2.8
 	libnotify? ( >=x11-libs/libnotify-0.2.1 )
 	media-plugins/gst-plugins-cdparanoia
-	oggvorbis? (media-plugins/gst-plugins-vorbis)
+	vorbis? (media-plugins/gst-plugins-vorbis)
 	mp3? (media-plugins/gst-plugins-lame)
 	flac? (media-plugins/gst-plugins-flac)"
 DEPEND="${RDEPEND}"
