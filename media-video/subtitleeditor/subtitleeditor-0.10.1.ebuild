@@ -13,22 +13,33 @@ S="${WORKDIR}/${MY_P}"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE=""
+IUSE="spell cairo debug"
 
 RDEPEND=">=dev-cpp/gtkmm-2.6.0
 	>=dev-cpp/libglademm-2.4.0
 	>=media-libs/gst-plugins-base-0.10.0
-	app-text/aspell"
-DEPEND="${RDEPEND}"
+	spell? ( app-text/aspell )
+	cairo? ( x11-libs/cairo )
+"
+DEPEND="${RDEPEND}
+"
 
 src_unpack() {
 	unpack ${A}
 	sed -i 's:\(ACLOCAL_M4 = \).*:\1:' ${S}/Makefile.in
-#	sed -i 's:\\d\\\.:0-9.:' ${S}/src/SubtitleMPsub.cc
+}
+
+src_compile() {
+	econf \
+		$(use_enable spell aspell) \
+		$(use_enable cairo) \
+		$(use_enable debug) || die
+	emake || die
 }
 
 src_install() {
 	einstall || die
 	dodoc AUTHORS ChangeLog NEWS README TODO
-	make_desktop_entry subtitleeditor "Subtitle Editor" /usr/share/subtitleeditor/subtitleeditor.png "Application;AudioVideo;GTK"
+	insinto /usr/share/pixmaps
+	doins share/subtitleeditor-icon.png
 }
