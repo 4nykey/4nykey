@@ -27,18 +27,9 @@ Index: SConstruct
    ('ARCH', 'Set architecture-specific compilation flags by hand (all flags as 1 argument)',''),
 +    SimpleListOption('CCFLAGS', 'C compilerflags', ''),
 +    SimpleListOption('CXXFLAGS', 'C++ compilerflags', ''),
+     BoolOption('AUDIOUNITS', 'Compile with Apple\'s AudioUnit library. (experimental)', 0),
      BoolOption('COREAUDIO', 'Compile with Apple\'s CoreAudio library', 0),
      BoolOption('DEBUG', 'Set to build with debugging information and no optimizations', 0),
-     PathOption('DESTDIR', 'Set the intermediate install "prefix"', '/'),
-@@ -542,7 +547,7 @@
- 
- #    libraries['flowcanvas'] = LibraryInfo(LIBS='flowcanvas', LIBPATH='#/libs/flowcanvas', CPPPATH='#libs/flowcanvas')
-     libraries['soundtouch'] = LibraryInfo()
--    libraries['soundtouch'].ParseConfig ('pkg-config --cflags --libs libSoundTouch')
-+    libraries['soundtouch'].ParseConfig ('pkg-config --cflags --libs soundtouch-1.0')
- 
-     libraries['appleutility'] = LibraryInfo(LIBS='libappleutility',
-                                             LIBPATH='#libs/appleutility',
 @@ -817,16 +822,17 @@
  #
  
@@ -100,10 +91,10 @@ Index: gtk2_ardour/SConscript
 -	gtkardour.Append (CCFLAGS="-DVST_SUPPORT", CPPPATH="#libs/fst")
 +	gtkardour.Append (CXXFLAGS="-DVST_SUPPORT", CPPPATH="#libs/fst")
  
- if gtkardour['COREAUDIO']:
-     extra_sources += coreaudio_files
--    gtkardour.Append(CCFLAGS='-DHAVE_COREAUDIO')
-+    gtkardour.Append(CXXFLAGS='-DHAVE_COREAUDIO')
+ if gtkardour['AUDIOUNITS']:
+     extra_sources += audiounit_files
+-    gtkardour.Append(CCFLAGS='-DHAVE_AUDIOUNITS')
++    gtkardour.Append(CCFLAGS='-DHAVE_AUDIOUNITS')
      gtkardour.Append(LINKFLAGS='-framework Carbon')
      gtkardour.Merge([libraries['appleutility']])
   

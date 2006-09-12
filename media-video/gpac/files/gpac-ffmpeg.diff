@@ -1,0 +1,32 @@
+Index: configure
+===================================================================
+RCS file: /cvsroot/gpac/gpac/configure,v
+retrieving revision 1.17
+diff -u -r1.17 configure
+--- configure	12 Jul 2006 17:25:26 -0000	1.17
++++ configure	19 Jul 2006 13:22:06 -0000
+@@ -555,6 +555,8 @@
+ 
+ if $cc -o $TMPO $TMPC -lz -lavcodec -lavformat 2> /dev/null  ; then
+ has_ffmpeg="system"
++elif $cc -o $TMPO $TMPC $(pkg-config libavformat --libs --cflags) 2> /dev/null ; then
++has_ffmpeg="system"
+ elif test "$alt_macosx_dir" != "" ; then
+  if $cc -o $TMPO $TMPC -I$alt_macosx_dir/include -L$alt_macosx_dir/lib -lz -lavcodec -lavformat 2> /dev/null ; then
+  has_ffmpeg="system"
+Index: modules/ffmpeg_in/ffmpeg_decode.c
+===================================================================
+RCS file: /cvsroot/gpac/gpac/modules/ffmpeg_in/ffmpeg_decode.c,v
+retrieving revision 1.12
+diff -u -r1.12 ffmpeg_decode.c
+--- modules/ffmpeg_in/ffmpeg_decode.c	24 May 2006 09:52:56 -0000	1.12
++++ modules/ffmpeg_in/ffmpeg_decode.c	14 Jul 2006 14:06:28 -0000
+@@ -659,7 +659,7 @@
+ {
+ 	FFDec *ffd = dec->privateStack;
+ 	if (ffd->codec) {
+-		sprintf(szCodec, "FFMPEG %s (v%s)", ffd->codec->name ? ffd->codec->name : "unknown", FFMPEG_VERSION);
++		sprintf(szCodec, "FFMPEG %s", ffd->codec->name ? ffd->codec->name : "unknown");
+ 		return szCodec;
+ 	}
+ 	return NULL;

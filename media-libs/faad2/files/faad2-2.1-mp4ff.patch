@@ -5,9 +5,10 @@ retrieving revision 1.8
 diff -u -r1.8 Makefile.am
 --- common/mp4ff/Makefile.am	22 Aug 2004 17:48:35 -0000	1.8
 +++ common/mp4ff/Makefile.am	27 Jul 2005 14:27:07 -0000
-@@ -1,4 +1,4 @@
+@@ -1,4 +1,5 @@
 -noinst_LTLIBRARIES = libmp4ff.la
 +lib_LTLIBRARIES = libmp4ff.la
++include_HEADERS = $(top_srcdir)/common/mp4ff/mp4ff.h
  
  libmp4ff_la_CFLAGS = -DUSE_TAGGING=1
  

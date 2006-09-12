@@ -1,42 +1,52 @@
-# Copyright 1999-2004 Gentoo Foundation.
+# Copyright 1999-2006 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/faad2/faad2-2.0-r13.ebuild,v 1.1 2006/06/17 16:26:47 flameeyes Exp $
 
-inherit cvs flag-o-matic autotools
+inherit eutils libtool flag-o-matic autotools
+
+PATCHLEVEL="5"
 
 DESCRIPTION="AAC audio decoding library"
-HOMEPAGE="http://faac.sourceforge.net/"
-ECVS_SERVER="faac.cvs.sourceforge.net:/cvsroot/faac"
-ECVS_MODULE="faad2"
-
-S="${WORKDIR}/${ECVS_MODULE}"
+HOMEPAGE="http://www.audiocoding.com/"
+SRC_URI="mirror://sourceforge/faac/${PN}-${PV/_/-}.tar.gz"
+#	mirror://gentoo/${PN}-patches-${PATCHLEVEL}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
 IUSE="xmms mp4"
 
-RDEPEND="xmms? ( >=media-sound/xmms-1.2.7
-	mp4? || ( media-video/mpeg4ip-cvs
-		media-video/mpeg4ip )
-	media-libs/id3lib )"
+RDEPEND="xmms? ( >=media-sound/xmms-1.2.7 media-libs/id3lib )
+	|| ( media-libs/libmp4v2 =media-video/mpeg4ip-9999 )
+	mp4? ( media-video/mpeg4ip )
+"
 
 DEPEND="${RDEPEND}"
 
-src_unpack() {
-	cvs_src_unpack
+S="${WORKDIR}/${PN}"
 
+src_unpack() {
+	unpack ${A}
 	cd ${S}
+
+	find ${S} -type f -print0 | xargs -0 dos2unix -q
+#	EPATCH_SUFFIX="patch" epatch "${WORKDIR}/patches"
 	epatch ${FILESDIR}/${PN}-*.patch
-	eautoreconf || die
+	eautoreconf
 }
 
 src_compile() {
-	filter-flags -mfpmath=sse #34392
-	# enabling drm brakes decoding of he-aac 5.1 streams
-	#append-flags -DDRM #48140
+	# see #34392
+	filter-flags -mfpmath=sse
 
-	econf --without-drm \
+	append-flags -fno-strict-aliasing
+
+	# mp4v2 needed for rhythmbox
+	# drm needed for nothing but doesn't hurt
+	#  but breakes decoding of he-aac 5.1 streams
+	econf \
+		--without-drm \
+		--without-bmp \
 		$(use_with xmms) \
 		$(use_with mp4 mpeg4ip) || die
 
@@ -45,5 +55,12 @@ src_compile() {
 
 src_install() {
 	make DESTDIR=${D} install || die
+
 	dodoc AUTHORS ChangeLog NEWS README README.linux TODO
+
+	# unneeded include, <systems.h> breaks building of apps, but
+	# it is necessary because includes <sys/types.h>,
+	# which is needed by /usr/include/mp4.h... so we just
+	# include <sys/types.h> instead.  See bug #55767
+	dosed "s:\"mp4ff_int_types.h\":<stdint.h>:" /usr/include/mp4ff.h
 }

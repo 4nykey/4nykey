@@ -6,7 +6,6 @@ inherit subversion
 
 DESCRIPTION="Aften is an open-source A/52 (AC-3) audio encoder"
 HOMEPAGE="http://aften.sourceforge.net/"
-#SRC_URI="mirror://sourceforge/${PN}/${P}.tar.bz2"
 ESVN_REPO_URI="https://svn.sourceforge.net/svnroot/aften"
 
 LICENSE="GPL-2"

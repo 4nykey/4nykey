@@ -6,7 +6,6 @@ inherit git
 
 DESCRIPTION="CMus - ncurses based music player."
 HOMEPAGE="http://onion.dynserv.net/~timo/cmus.html"
-#SRC_URI="http://onion.dynserv.net/~timo/files/${P}.tar.bz2"
 EGIT_REPO_URI="git://onion.dynserv.net/git/cmus.git"
 SLOT="0"
 IUSE="alsa arts flac oss mad modplug vorbis musepack ao"
@@ -20,12 +19,12 @@ DEPEND="sys-libs/ncurses
 	modplug? ( >=media-libs/libmodplug-0.7 )
 	vorbis? ( >=media-libs/libvorbis-1.0 )
 	musepack? ( media-libs/libmpcdec )
-	"
+"
 
 RDEPEND=${DEPEND}
 
 LICENSE="GPL-2"
-KEYWORDS="~x86"
+KEYWORDS="-*"
 
 pkg_setup() {
 	if ! built_with_use sys-libs/ncurses unicode
