@@ -1,7 +1,0 @@
-EBUILD transcode-cvs-1.1.0.ebuild 3585 RMD160 6c193e6ec043716837505dca9b02dab10aadc172 SHA1 125d644d27a6c3b159c9c6bdebbc740713dbf803 SHA256 31cc75335f2a0792eb91bfe7324059a5755818c65dbc133dfc0397f9dbb9e508
-MD5 4f79fff873339176266df8f53ebf32ae transcode-cvs-1.1.0.ebuild 3585
-RMD160 6c193e6ec043716837505dca9b02dab10aadc172 transcode-cvs-1.1.0.ebuild 3585
-SHA256 31cc75335f2a0792eb91bfe7324059a5755818c65dbc133dfc0397f9dbb9e508 transcode-cvs-1.1.0.ebuild 3585
-MD5 68b329da9893e34099c7d8ad5cb9c940 files/digest-transcode-cvs-1.1.0 1
-RMD160 c0da025038ed83c687ddc430da9846ecb97f3998 files/digest-transcode-cvs-1.1.0 1
-SHA256 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b files/digest-transcode-cvs-1.1.0 1

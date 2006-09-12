@@ -1,7 +1,0 @@
-EBUILD lives-cvs-0.9.6.ebuild 1736 RMD160 bc10a2324126b535652f8b2dc7c1117036cf40dd SHA1 09e6dde572ae6d8241640db751e9bbc53992f98f SHA256 6dd20a5b794a979ccd021274028aad5bdeb0bc967b80c6c2140be2a732ef5cce
-MD5 4430f16ec6bf661c5b2c12f8c5b98464 lives-cvs-0.9.6.ebuild 1736
-RMD160 bc10a2324126b535652f8b2dc7c1117036cf40dd lives-cvs-0.9.6.ebuild 1736
-SHA256 6dd20a5b794a979ccd021274028aad5bdeb0bc967b80c6c2140be2a732ef5cce lives-cvs-0.9.6.ebuild 1736
-MD5 68b329da9893e34099c7d8ad5cb9c940 files/digest-lives-cvs-0.9.6 1
-RMD160 c0da025038ed83c687ddc430da9846ecb97f3998 files/digest-lives-cvs-0.9.6 1
-SHA256 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b files/digest-lives-cvs-0.9.6 1
