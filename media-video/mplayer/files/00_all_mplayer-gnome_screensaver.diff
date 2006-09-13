@@ -36,34 +36,26 @@ diff -u -r1.1179 configure
  _vstream=auto
  _pthreads=yes
  _rpath=no
-@@ -1878,6 +1880,8 @@
+@@ -1878,6 +1880,7 @@
    --disable-ftp)        _ftp=no         ;;
    --enable-vstream)     _vstream=yes    ;;
    --disable-vstream)    _vstream=no     ;;
-+  --enable-dbus-glib)   _dbus_glib=yes  ;;
 +  --disable-dbus-glib)  _dbus_glib=no   ;;
    --enable-pthreads)    _pthreads=yes   ;;
    --disable-pthreads)   _pthreads=no    ;;
    --enable-rpath)       _rpath=yes      ;;
-@@ -6815,6 +6819,24 @@
+@@ -6815,6 +6819,17 @@
  fi
  echores "$_gethostbyname2"
  
 +echocheck "D-BUS GLib interface"
-+if test "$_dbus_glib" = auto && pkg-config --exists dbus-glib-1; then
-+  _dbus_glib=yes
-+  _inc_dbus_glib=`pkg-config --cflags dbus-glib-1 2>/dev/null`
-+  _ld_dbus_glib=`pkg-config --libs dbus-glib-1 2>/dev/null`
-+fi
-+
-+if test "$_dbus_glib" = yes; then
-+  _def_dbus_glib='#define HAVE_DBUS_GLIB 1'
-+  # Enable GNOME screensaver support if both D-BUS GLib and X11 are present
-+  if test "$_x11" = yes; then
-+    _vosrc="$_vosrc gnome_screensaver.c"
++if test "$_dbus_glib" = auto ; then
++  _dbus_glib=no
++  if pkg-config --exists dbus-glib-1 ; then
++    _inc_dbus_glib=`pkg-config --cflags dbus-glib-1`
++    _ld_dbus_glib=`pkg-config --libs dbus-glib-1`
++    _dbus_glib=yes
 +  fi
-+else
-+  _def_dbus_glib='#undef HAVE_DBUS_GLIB'
 +fi
 +echores "$_dbus_glib"
 +

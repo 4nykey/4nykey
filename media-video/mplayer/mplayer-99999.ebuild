@@ -150,7 +150,7 @@ teh_conf() {
 	# avoid using --enable-xxx options,
 	# except {gui,debug} and those, disabled by default
 	if ! use $1; then
-		myconf="${myconf} --disable-$( [ -n "$2" ] && echo $2 || echo $1)"
+		myconf="${myconf} --disable-$([[ -n "$2" ]] && echo $2 || echo $1)"
 	fi
 }
 
@@ -385,7 +385,7 @@ src_compile() {
 	teh_conf truetype freetype
 	teh_conf v4l tv-v4l
 	teh_conf v4l2 tv-v4l2
-	use jack || myconf="${myconf} --disable-jack"
+	teh_conf dbus dbus-glib
 
 	#######
 	# Codecs #
@@ -483,6 +483,7 @@ src_compile() {
 	# Audio Output #
 	#############
 	teh_conf alsa
+	teh_conf jack
 	teh_conf arts
 	teh_conf esd
 	teh_conf mad
@@ -544,7 +545,6 @@ src_compile() {
 		--enable-menu \
 		--with-reallibdir=${REALLIBDIR} \
 		--charset=${CHARSET} \
-		$(use_enable dbus dbus-glib) \
 		${myconf} || die
 
 	# we run into problems if -jN > -j1
