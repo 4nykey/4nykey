@@ -89,16 +89,15 @@ src_install() {
 	if use unicode; then
 		dosed 's:^#filesystem_charset.*$:filesystem_charset "UTF-8":' /etc/mpd.conf
 	fi
-	dosed 's:^\(#user[ \t]*\).*$:\1"mpd":' /etc/mpd.conf
-	dosed 's:^\(#bind_to_address[ \t]*\).*$:\1"localhost":' /etc/mpd.conf
-	dosed 's:^\(port[ \t]*\).*$:\1"6600":' /etc/mpd.conf
-	dosed 's:^\(music_directory[ \t]*\).*$:\1"/var/lib/mpd/music":' /etc/mpd.conf
-	dosed 's:^\(playlist_directory[ \t]*\).*$:\1"/var/lib/mpd/playlists":' /etc/mpd.conf
-	dosed 's:^\(log_file[ \t]*\).*$:\1"/var/log/mpd/mpd.log":' /etc/mpd.conf
-	dosed 's:^\(error_file[ \t]*\).*$:\1"/var/log/mpd/errors.log":' /etc/mpd.conf
-	dosed 's:^\(pid_file[ \t]*\).*$:\1"/var/run/mpd/mpd.pid":' /etc/mpd.conf
-	dosed 's:^\(db_file[ \t]*\).*:\1"/var/lib/mpd/database":' /etc/mpd.conf
-	dosed 's:^\(#state_file[ \t]*\).*$:\1"/var/lib/mpd/state":' /etc/mpd.conf
+	dosed 's:^[#]*\(user[ \t]*\).*$:\1"mpd":' /etc/mpd.conf
+	dosed 's:^\([#]*bind_to_address[ \t]*\).*$:\1"localhost":' /etc/mpd.conf
+	dosed 's:^[#]*\(music_directory[ \t]*\).*$:\1"/var/lib/mpd/music":' /etc/mpd.conf
+	dosed 's:^[#]*\(playlist_directory[ \t]*\).*$:\1"/var/lib/mpd/playlists":' /etc/mpd.conf
+	dosed 's:^[#]*\(log_file[ \t]*\).*$:\1"/var/log/mpd/mpd.log":' /etc/mpd.conf
+	dosed 's:^[#]*\(error_file[ \t]*\).*$:\1"/var/log/mpd/errors.log":' /etc/mpd.conf
+	dosed 's:^[#]*\(pid_file[ \t]*\).*$:\1"/var/run/mpd/mpd.pid":' /etc/mpd.conf
+	dosed 's:^[#]*\(db_file[ \t]*\).*:\1"/var/lib/mpd/database":' /etc/mpd.conf
+	dosed 's:^\([#]*state_file[ \t]*\).*$:\1"/var/lib/mpd/state":' /etc/mpd.conf
 
 	diropts -m0750 -o mpd -g audio
 	dodir /var/lib/mpd/music
