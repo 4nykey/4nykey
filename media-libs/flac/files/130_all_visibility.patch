@@ -283,9 +283,9 @@ Index: flac-1.1.2/src/Makefile.am
 --- flac-1.1.2.orig/src/Makefile.am
 +++ flac-1.1.2/src/Makefile.am
 @@ -36,7 +36,6 @@ SUBDIRS = \
- 	$(XMMS_DIRS) \
  	plugin_winamp2 \
  	test_grabbag \
+ 	test_libs_common \
 -	test_libFLAC \
  	test_libFLAC++ \
  	$(OGGFLAC_TEST_DIRS) \
