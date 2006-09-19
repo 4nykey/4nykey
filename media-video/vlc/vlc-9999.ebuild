@@ -6,7 +6,7 @@
 # media-vidoe/vlc:tremor - Enables Tremor decoder support
 # media-video/vlc:tarkin - Enables experimental tarkin codec
 
-inherit wxwidgets flag-o-matic nsplugins multilib subversion autotools
+inherit wxwidgets flag-o-matic nsplugins multilib subversion autotools qt4
 
 PATCHLEVEL="7"
 DESCRIPTION="VLC media player - Video player and streamer"
@@ -19,85 +19,85 @@ ESVN_BOOTSTRAP="bootstrap"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="a52 3dfx nls unicode debug altivec httpd vlm gnutls live v4l cdda ogg matroska
+IUSE="
+a52 3dfx nls unicode debug altivec httpd vlm gnutls live v4l cdda ogg matroska
 dvb dvd vcd ffmpeg aac dts flac mpeg vorbis theora X opengl truetype svg fbcon svga
 oss aalib ggi libcaca esd arts alsa wxwindows ncurses xosd lirc joystick hal stream
 mp3 xv bidi sdl png xml samba daap corba screen mod speex nsplugin x264
-dirac gnome musepack"
+dirac gnome musepack qt4 portaudio
+"
 
-RDEPEND="hal? ( >=sys-apps/hal-0.5.0 )
-		cdda? ( >=dev-libs/libcdio-0.71
-			>=media-libs/libcddb-0.9.5 )
-		live? ( >=media-plugins/live-2005.01.29 )
-		dvd? (  media-libs/libdvdread
-				media-libs/libdvdcss
-				>=media-libs/libdvdnav-0.1.9
-				media-libs/libdvdplay )
-		esd? ( media-sound/esound )
-		ogg? ( media-libs/libogg )
-		matroska? ( >=dev-libs/libebml-0.7.6
-			>=media-libs/libmatroska-0.7.5 )
-		mp3? ( media-libs/libmad )
-		ffmpeg? || ( media-video/ffmpeg-svn media-video/ffmpeg )
-		a52? ( media-libs/a52dec )
-		dts? || ( media-libs/libdca media-libs/libdts )
-		flac? ( media-libs/flac )
-		mpeg? ( >=media-libs/libmpeg2-0.3.2 )
-		vorbis? ( media-libs/libvorbis )
-		theora? ( media-libs/libtheora )
-		X? ( virtual/x11 )
-		xv? ( virtual/x11 )
-		truetype? ( media-libs/freetype
-			media-fonts/ttf-bitstream-vera )
-		svga? ( media-libs/svgalib )
-		ggi? ( media-libs/libggi )
-		aalib? ( media-libs/aalib )
-		libcaca? ( media-libs/libcaca )
-		arts? ( kde-base/arts )
-		alsa? ( virtual/alsa )
-		wxwindows? ( =x11-libs/wxGTK-2.6* )
-		ncurses? ( sys-libs/ncurses )
-		xosd? ( x11-libs/xosd )
-		lirc? ( app-misc/lirc )
-		3dfx? ( media-libs/glide-v3 )
-		bidi? ( >=dev-libs/fribidi-0.10.4 )
-		gnutls? ( >=net-libs/gnutls-1.0.17 )
-		opengl? ( virtual/opengl )
-		sys-libs/zlib
-		png? ( media-libs/libpng )
-		media-libs/libdvbpsi
-		aac? ( >=media-libs/faad2-2.0-r2 )
-		sdl? ( media-libs/sdl-image )
-		xml? ( dev-libs/libxml2 )
-		samba? ( net-fs/samba )
-		vcd? ( >=dev-libs/libcdio-0.72
-			>=media-video/vcdimager-0.7.21 )
-		daap? ( >=media-libs/libopendaap-0.3.0 )
-		corba? ( >=gnome-base/orbit-2.8.0
-			>=dev-libs/glib-2.3.2 )
-		v4l? ( sys-kernel/linux-headers )
-		dvb? ( sys-kernel/linux-headers )
-		joystick? ( sys-kernel/linux-headers )
-		mod? ( media-libs/libmodplug )
-		speex? ( media-libs/speex )
-		svg? ( >=gnome-base/librsvg-2.5.0 )
-		x264? ( media-libs/x264 )
-		dirac? ( media-video/dirac )
-		musepack? ( media-libs/libmpcdec )
-		gnome? ( =gnome-base/gnome-vfs-2* )
-		nsplugin? ( >=net-libs/gecko-sdk-1.7.8 )"
-#		threads? ( dev-libs/pth )
-#		portaudio? ( >=media-libs/portaudio-0.19 )
-# 		slp? ( net-libs/openslp )
+RDEPEND="
+	hal? ( >=sys-apps/hal-0.5.0 )
+	cdda? ( >=dev-libs/libcdio-0.71
+		>=media-libs/libcddb-0.9.5 )
+	live? ( >=media-plugins/live-2005.01.29 )
+	dvd? (  media-libs/libdvdread
+		media-libs/libdvdcss
+		>=media-libs/libdvdnav-0.1.9
+		media-libs/libdvdplay )
+	esd? ( media-sound/esound )
+	ogg? ( media-libs/libogg )
+	matroska? ( >=dev-libs/libebml-0.7.6
+		>=media-libs/libmatroska-0.7.5 )
+	mp3? ( media-libs/libmad )
+	ffmpeg? || ( media-video/ffmpeg-svn media-video/ffmpeg )
+	a52? ( media-libs/a52dec )
+	dts? || ( media-libs/libdca media-libs/libdts )
+	flac? ( media-libs/flac )
+	mpeg? ( >=media-libs/libmpeg2-0.3.2 )
+	vorbis? ( media-libs/libvorbis )
+	theora? ( media-libs/libtheora )
+	X? ( virtual/x11 )
+	xv? ( virtual/x11 )
+	truetype? ( media-libs/freetype
+		media-fonts/ttf-bitstream-vera )
+	svga? ( media-libs/svgalib )
+	ggi? ( media-libs/libggi )
+	aalib? ( media-libs/aalib )
+	libcaca? ( media-libs/libcaca )
+	arts? ( kde-base/arts )
+	alsa? ( virtual/alsa )
+	wxwindows? ( =x11-libs/wxGTK-2.6* )
+	ncurses? ( sys-libs/ncurses )
+	xosd? ( x11-libs/xosd )
+	lirc? ( app-misc/lirc )
+	3dfx? ( media-libs/glide-v3 )
+	bidi? ( >=dev-libs/fribidi-0.10.4 )
+	gnutls? ( >=net-libs/gnutls-1.0.17 )
+	opengl? ( virtual/opengl )
+	sys-libs/zlib
+	png? ( media-libs/libpng )
+	media-libs/libdvbpsi
+	aac? ( >=media-libs/faad2-2.0-r2 )
+	sdl? ( media-libs/sdl-image )
+	xml? ( dev-libs/libxml2 )
+	samba? ( net-fs/samba )
+	vcd? ( >=dev-libs/libcdio-0.72
+		>=media-video/vcdimager-0.7.21 )
+	daap? ( >=media-libs/libopendaap-0.3.0 )
+	corba? ( >=gnome-base/orbit-2.8.0
+		>=dev-libs/glib-2.3.2 )
+	v4l? ( sys-kernel/linux-headers )
+	dvb? ( sys-kernel/linux-headers )
+	joystick? ( sys-kernel/linux-headers )
+	mod? ( media-libs/libmodplug )
+	speex? ( media-libs/speex )
+	svg? ( >=gnome-base/librsvg-2.5.0 )
+	x264? ( media-libs/x264 )
+	dirac? ( media-video/dirac )
+	musepack? ( media-libs/libmpcdec )
+	gnome? ( =gnome-base/gnome-vfs-2* )
+	nsplugin? ( >=net-libs/gecko-sdk-1.7.8 )
+	portaudio? ( >=media-libs/portaudio-0.19 )
+	qt4? ( $(qt4_min_version 4) )
+"
 
-DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
-
-pkg_setup() {
-	if has_version '>=media-video/dirac-0.5.0'; then
-		DIRAC_INC="`pkg-config dirac --cflags-only-I --silence-errors`"
-	fi
-}
+DEPEND="
+	${RDEPEND}
+	sys-devel/gettext
+	dev-util/pkgconfig
+"
 
 src_unpack() {
 	if use wxwindows; then
@@ -111,6 +111,7 @@ src_unpack() {
 
 	export SKIP_AUTOTOOLS="indeed"
 	subversion_src_unpack
+
 	REVISION="$(svnversion \
 		${ESVN_STORE_DIR}/${ESVN_PROJECT}/${ESVN_REPO_URI##*/})"
 	sed -i "s:\(VLC_CHANGESET=\)'.*:\1${REVISION}:" ${S}/toolbox
@@ -119,6 +120,7 @@ src_unpack() {
 
 	sed -i -e \
 		"s:/glide:/glide3:; s:glide2x:glide3:" configure.ac || die "sed glide failed."
+
 	# Fix the default font
 	sed -i -e \
 		"s:/truetype/freefont/FreeSerifBold.ttf:/ttf-bitstream-vera/VeraBd.ttf:" \
@@ -144,9 +146,7 @@ src_compile () {
 	use wxwindows && \
 		myconf="${myconf} --with-wx-config=$(basename ${WX_CONFIG}) --with-wx-config-path=$(dirname ${WX_CONFIG})"
 
-	# Portaudio support needs at least v19
-	# pth (threads) support is quite unstable with latest ffmpeg/libmatroska.
-	CPPFLAGS="${CPPFLAGS} ${DIRAC_INC}" \
+	ac_cv_c_fast_math="no" ac_cv_c_unroll_loops="no" \
 	econf \
 		$(use_enable ffmpeg) \
 		$(use_enable altivec) \
@@ -205,9 +205,8 @@ src_compile () {
 		$(use_enable musepack mpc) \
 		$(use_enable gnome gnomevfs) \
 		$(use_enable nsplugin mozilla) \
-		--disable-pth \
-		--disable-portaudio \
-		--disable-slp \
+		$(use_enable portaudio) \
+		$(use_enable qt4) \
 		${myconf} || die "configuration failed"
 
 	emake || die "make of VLC failed"
