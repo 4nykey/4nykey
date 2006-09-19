@@ -29,7 +29,7 @@ src_unpack() {
 	cd ${S} || die
 
 	# The frontened tries to link staticly, but we prefer shared libs
-	epatch ${FILESDIR}/${P}-shared-frontend.patch
+	epatch ${FILESDIR}/${PN}-3.98-shared-frontend.patch
 
 	# make it link with --as-needed
 	epatch ${FILESDIR}/${PN}-as_needed.diff
