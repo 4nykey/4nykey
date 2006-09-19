@@ -4,15 +4,15 @@
 
 inherit libtool flag-o-matic eutils toolchain-funcs
 
-AOTUV="b4.51"
+AOTUV="r1"
 DESCRIPTION="the Ogg Vorbis sound file format library"
 HOMEPAGE="http://www.xiph.org/ogg/vorbis/index.html http://www.geocities.jp/aoyoume/aotuv/"
-SRC_URI="http://www.geocities.jp/aoyoume/aotuv/${PN}-aotuv_${AOTUV}.tar.gz.tgz"
+SRC_URI="http://www.geocities.jp/aoyoume/aotuv/source_code/${PN}-aotuv_${AOTUV}.tar.bz2"
 S="${WORKDIR}/aotuv-${AOTUV}_${PV}"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="-*"
 IUSE="pic static"
 
 RDEPEND=">=media-libs/libogg-1.0"
