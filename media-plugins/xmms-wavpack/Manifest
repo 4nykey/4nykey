@@ -1,7 +1,0 @@
-EBUILD xmms-wavpack-1.0.ebuild 488 RMD160 64bb0774fb4af69cedd032451423a6f379b3dced SHA1 48fe85c94e4e954110c32a780b9ab37636b44828 SHA256 f829a19bd712440f932ee7e1ba806a3625d502154e90ea201fb09fdc228eaa77 size 488
-MD5 d00c50e58857c9ecaeb80caa19f05cbd xmms-wavpack-1.0.ebuild 488
-RMD160 64bb0774fb4af69cedd032451423a6f379b3dced xmms-wavpack-1.0.ebuild 488
-SHA256 f829a19bd712440f932ee7e1ba806a3625d502154e90ea201fb09fdc228eaa77 xmms-wavpack-1.0.ebuild 488
-MD5 68b329da9893e34099c7d8ad5cb9c940 files/digest-xmms-wavpack-1.0 1
-RMD160 c0da025038ed83c687ddc430da9846ecb97f3998 files/digest-xmms-wavpack-1.0 1
-SHA256 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b files/digest-xmms-wavpack-1.0 1

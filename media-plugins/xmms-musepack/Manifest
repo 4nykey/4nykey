@@ -1,8 +1,0 @@
-DIST xmms-musepack-1.2.tar.bz2 218780 RMD160 13f9cee3ec1c30bdd39e5b0865d050a60de81143 SHA1 513d75588b500931cd10696b3fd0e853784f762d SHA256 dcac041ae6a1c11a06ca805cd32acc513e2b4d32b4fe0219ebdc4865edddd455
-EBUILD xmms-musepack-1.2.ebuild 628 RMD160 bb6abbb9b3f7d7f6ccd1311c329ba2caaeec0f6f SHA1 48e26152cedf571d7edb88532c30f0e20aa28207 SHA256 5fef7ccc5f58f485552a181034a4632825eb356ac83041269bb0666fde8b0154
-MD5 d585094e384e54ae0846267f1768e4ae xmms-musepack-1.2.ebuild 628
-RMD160 bb6abbb9b3f7d7f6ccd1311c329ba2caaeec0f6f xmms-musepack-1.2.ebuild 628
-SHA256 5fef7ccc5f58f485552a181034a4632825eb356ac83041269bb0666fde8b0154 xmms-musepack-1.2.ebuild 628
-MD5 4d4e4338c51ceb3c82108eab97761c13 files/digest-xmms-musepack-1.2 256
-RMD160 0712d7cc79d8faba59ff9a31457c3540ea41dbb7 files/digest-xmms-musepack-1.2 256
-SHA256 0ac7b95f66b81963ab1ab4fbe0199f2b95c50ba5f345cf710893e9f0a76e49e5 files/digest-xmms-musepack-1.2 256
