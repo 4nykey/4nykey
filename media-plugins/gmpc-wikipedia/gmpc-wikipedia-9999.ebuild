@@ -4,17 +4,18 @@
 
 inherit subversion autotools
 
-DESCRIPTION="Amazon cover art provider for gmpc"
+DESCRIPTION="Wikipedia plugin for gmpc"
 HOMEPAGE="http://cms.qballcow.nl/index.php?page=Plugins"
 ESVN_REPO_URI="https://svn.qballcow.nl/${PN}/trunk"
 
-KEYWORDS="~x86"
-SLOT="0"
 LICENSE="GPL-2"
+SLOT="0"
+KEYWORDS="~x86"
 IUSE=""
 
 RDEPEND="
-	>=media-sound/gmpc-0.13.0
+	>=media-sound/gmpc-0.12.1
+	www-client/mozilla-firefox
 "
 DEPEND="
 	${RDEPEND}
