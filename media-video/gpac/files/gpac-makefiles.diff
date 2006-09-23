@@ -129,7 +129,7 @@ diff -u -r1.4 Makefile
  endif
  
 -CFLAGS= $(OPTFLAGS) -Wall -I$(SRC_PATH)/include \
-+CFLAGS= $(OPTFLAGS) -fPIC -Wall -I$(SRC_PATH)/include -I/usr/lib/gecko-sdk/include #\
++CFLAGS= $(OPTFLAGS) -fPIC -Wall -I$(SRC_PATH)/include $(MOZILLA_INC) #\
    -I$(GECKO_PATH) \
    -I$(GECKO_PATH)/plugin/include  \
    -I$(GECKO_PATH)/nspr/include \

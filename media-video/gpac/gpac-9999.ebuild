@@ -16,31 +16,41 @@ ECVS_MODULE="gpac"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="aac amr debug ffmpeg jpeg mad mozilla nsplugin vorbis oss png sdl theora
-truetype wxwindows xml xvid unicode X ssl"
-S="${WORKDIR}/${PN/-cvs}"
+IUSE="aac amr debug ffmpeg jpeg mad javascript nsplugin vorbis oss png sdl
+theora truetype wxwindows xml xvid unicode X ssl gecko-sdk"
+S="${WORKDIR}/${PN}"
 
-RDEPEND="jpeg? ( media-libs/jpeg )
+RDEPEND="
+	jpeg? ( media-libs/jpeg )
 	mad? ( media-libs/libmad )
-	mozilla? ( dev-lang/spidermonkey )
-	nsplugin? ( net-libs/gecko-sdk )
+	javascript? ( dev-lang/spidermonkey )
+	nsplugin? (
+		!gecko-sdk? ( www-client/mozilla-firefox )
+		gecko-sdk? ( net-libs/gecko-sdk )
+	)
 	aac? ( media-libs/faad2 )
-	ffmpeg? || ( media-video/ffmpeg-svn media-video/ffmpeg )
+	ffmpeg? ( media-video/ffmpeg )
 	vorbis? ( media-libs/libvorbis )
 	theora? ( media-libs/libtheora )
 	png? ( media-libs/libpng )
 	truetype? ( >=media-libs/freetype-2.1 )
-	sdl? ( media-libs/libsdl )
 	wxwindows? ( >=x11-libs/wxGTK-2.5.2 )
 	ssl? ( dev-libs/openssl )
-	X? ( virtual/x11 )
 	xml? ( >=dev-libs/libxml2-2.6.0 )
 	xvid? ( >=media-libs/xvid-1.0.1 )
-	>=dev-libs/libxml2-2.6.0"
-
-
-DEPEND="${RDEPEND}
-	amr? ( app-arch/unzip )"
+	sdl? ( media-libs/libsdl )
+	X? ( virtual/x11
+		|| ( (
+			x11-libs/libXt
+			x11-libs/libX11
+			x11-libs/libXext
+			) virtual/x11 )
+		)
+"
+DEPEND="
+	${RDEPEND}
+	amr? ( app-arch/unzip )
+"
 
 src_unpack() {
 	cvs_src_unpack
@@ -70,7 +80,7 @@ src_unpack() {
 	use nsplugin || sed -i 's:osmozilla::' applications/Makefile
 	use X || sed -i 's:PLUGDIRS+=x11_out:PLUGDIRS+=:' modules/Makefile
 
-	epatch ${FILESDIR}/${PN}-*.diff
+	epatch "${FILESDIR}"/${PN}-*.diff
 
 	if use amr; then
 		cd modules/amr_float_dec
@@ -83,7 +93,7 @@ src_compile() {
 	append-flags -fno-strict-aliasing
 
 	local myconf
-	use mozilla || myconf="${myconf} --use-js=no"
+	use javascript || myconf="${myconf} --use-js=no"
 	use truetype || myconf="${myconf} --use-ft=no"
 	use jpeg || myconf="${myconf} --use-jpeg=no"
 	use png || myconf="${myconf} --use-png=no"
@@ -106,9 +116,20 @@ src_compile() {
 	sed -i "s:=/usr:=${D}usr:" config.mak
 	# skip building generators dir (ifeq-ed in applications/Makefile)
 	sed -i "/SRC_LOCAL_PATH/d" config.mak
+	# point to prefered gecko provider
+	if use nsplugin; then
+		local mozinc
+		if use gecko-sdk; then
+			mozinc="$(gecko-sdk-config --cflags)"
+		else
+			mozinc="$(pkg-config firefox-plugin --cflags)"
+		fi
+	fi
+	echo "MOZILLA_INC=${mozinc}" >> config.mak
 
 	make OPTFLAGS="${CFLAGS} -fPIC -DPIC" lib mods || die
-	make OPTFLAGS="${CFLAGS} -DGPAC_MODULES_PATH=\\\"/usr/$(get_libdir)/gpac\\\"" \
+	make \
+	OPTFLAGS="${CFLAGS} -DGPAC_MODULES_PATH=\\\"/usr/$(get_libdir)/gpac\\\"" \
 		apps || die
 }
 
