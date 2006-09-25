@@ -24,7 +24,8 @@ SLOT="0"
 
 KEYWORDS="~x86"
 
-RDEPEND=">=x11-libs/wxGTK-2.6.0
+RDEPEND="
+	>=x11-libs/wxGTK-2.6.0
 	>=app-arch/zip-2.3
 	libsamplerate? ( >=media-libs/libsamplerate-0.0.14 )
 	ladspa? ( >=media-libs/ladspa-sdk-1.12 )
@@ -36,17 +37,19 @@ RDEPEND=">=x11-libs/wxGTK-2.6.0
 	alsa? ( media-libs/alsa-lib )
 	!static? ( media-libs/libsndfile )
 	soundtouch? ( media-libs/libsoundtouch )
-	lame? ( >=media-sound/lame-3.92 )"
+	lame? ( >=media-sound/lame-3.92 )
+"
 #	=media-libs/portaudio-18*
-DEPEND="${RDEPEND} 
-	>=sys-devel/autoconf-2.5"
+DEPEND="
+	${RDEPEND} 
+"
 
 src_unpack() {
 	cvs_src_unpack
 	cd ${S}
 	epatch ${FILESDIR}/${PN}-*.diff
 	sed -i 's: Win32/Makefile\.mingw::' lib-src/libsamplerate/configure
-	eautoreconf
+	AT_NO_RECURSIVE="yes" eautoreconf
 }
 
 src_compile() {
@@ -60,7 +63,9 @@ src_compile() {
 		econf \
 			$(use_with alsa) \
 			$(use_with jack) \
-			$(use_with oss) || die
+			$(use_with oss) \
+			|| die
+		emake lib/libportaudio.la || die
 		cd ${S}
 	else
 		PORTAUDIO=18
@@ -80,7 +85,8 @@ src_compile() {
 		$(use_with mad libmad ${LIBPREF}) \
 		$(use_with mad id3tag ${LIBPREF}) \
 		$(use_with vorbis vorbis ${LIBPREF}) \
-		$(use_with flac flac ${LIBPREF}) || die
+		$(use_with flac flac ${LIBPREF}) \
+		|| die
 
 	# parallel b0rks
 	emake -j1 || die
