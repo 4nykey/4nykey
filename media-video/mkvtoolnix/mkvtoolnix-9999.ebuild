@@ -13,7 +13,8 @@ SLOT="0"
 KEYWORDS="~x86"
 IUSE="wxwindows flac bzip2 lzo unicode"
 
-DEPEND=">=dev-libs/libebml-0.7.7
+RDEPEND="
+	>=dev-libs/libebml-0.7.7
 	>=media-libs/libmatroska-0.8.0
 	media-libs/libogg
 	media-libs/libvorbis
@@ -22,7 +23,13 @@ DEPEND=">=dev-libs/libebml-0.7.7
 	wxwindows? ( =x11-libs/wxGTK-2.6* )
 	flac? ( >=media-libs/flac-1.1.0 )
 	bzip2? ( app-arch/bzip2 )
-	lzo? ( dev-libs/lzo )"
+	lzo? ( dev-libs/lzo )
+	sys-apps/file
+	dev-libs/pcre++
+"
+DEPEND="
+	${RDEPEND}
+"
 
 pkg_setup() {
 	WX_GTK_VER="2.6"
@@ -30,8 +37,6 @@ pkg_setup() {
 		built_with_use x11-libs/wxGTK X ||
 			die "You must compile wxGTK with X useflag."
 		if use unicode; then
-			built_with_use x11-libs/wxGTK unicode ||
-				die "You must compile wxGTK with unicode useflag."
 			need-wxwidgets unicode
 		else
 			need-wxwidgets gtk2
