@@ -23,22 +23,23 @@ Index: src/Makefile.am
 ===================================================================
 --- src/Makefile.am	(revision 903)
 +++ src/Makefile.am	(working copy)
-@@ -21,9 +21,9 @@
+@@ -21,9 +21,10 @@
  #	portaudio
  
  
--DEPS_LIBS = libs/WiredWidgets/src/.libs/libWiredWidgets.so libs/WiredAkai/src/.libs/libWiredAkai.so -Lfileloader -lfileloader
+-DEPS_LIBS = libs/WiredWidgets/src/.libs/libWiredWidgets.so libs/WiredAkai/src/.libs/libWiredAkai.so
 +DEPS_LIBS = -Llibs/WiredWidgets/src -lWiredWidgets -Llibs/WiredAkai/src -lWiredAkai
  
--wired_LDFLAGS = $(shell wx-config --libs) -lsndfile -lasound -Lmidi/portmidi $(DEPS_LIBS) -lportaudio  -L/usr/pkg/lib/ `xml2-config --libs` @SAMPLERATE_LIBS@
-+EXTRA_LIBS = $(DEPS_LIBS) -lsndfile -lasound @PORTAUDIO_LIBS@ @XML2_LIBS@ @SAMPLERATE_LIBS@
+-wired_LDFLAGS = $(shell wx-config --libs) -lsndfile -lasound -Lmidi/portmidi $(DEPS_LIBS) -Lfileloader -lfileloader -L/usr/pkg/lib/ `xml2-config --libs` @SAMPLERATE_LIBS@ -lportaudio
++wired_LDFLAGS = -Lmidi/portmidi -Lfileloader
++EXTRA_LIBS = $(DEPS_LIBS) -lfileloader -lportaudio -lsndfile -lasound @XML2_LIBS@ @SAMPLERATE_LIBS@
  
  wired_CPPFLAGS = $(shell wx-config --cflags) -Igui -Iplugins -Ifileloader -I/opt/gnome/include -Isequencer -Iredist -Iaudio -Iengine -Imixer -Imidi -Imidi/portmidi/pm_common -Imidi/portmidi/porttime -I. -Iasm -Ieditmidi -Iundo -I.  -I/usr/pkg/include/libxml2/ -I/usr/pkg/include `xml2-config --cflags` @SAMPLERATE_CFLAGS@
  
 @@ -49,4 +49,5 @@
- 	samplerate/libwiredsamplerate.a	\
- 	codec/libwiredCodec.a		\
- 	wiredvideo/libwiredvideo.a	\
+ 	samplerate/libwiredsamplerate.a		\
+ 	codec/libwiredCodec.a			\
+ 	wiredvideo/libwiredvideo.a		\
 -	dssi/libwireddssi.a
 +	dssi/libwireddssi.a \
 +	$(EXTRA_LIBS)

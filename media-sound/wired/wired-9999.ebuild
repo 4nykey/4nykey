@@ -12,54 +12,75 @@ LICENSE="GPL-2"
 SLOT="0"
 
 KEYWORDS="~x86"
-IUSE="debug dssi nls"
+IUSE="debug dssi nls soundtouch encode"
 
-RDEPEND=">=x11-libs/wxGTK-2.6
+RDEPEND="
+	>=x11-libs/wxGTK-2.6
 	media-libs/alsa-lib
 	>=media-libs/libsndfile-1.0
-	>=media-libs/libsoundtouch-1.2.1
+	soundtouch? ( >=media-libs/libsoundtouch-1.2.1 )
 	dev-libs/libxml2
 	media-libs/libsamplerate
-	>=media-libs/portaudio-19
-	dssi? ( >=media-libs/dssi-0.9 )"
-
-DEPEND="${RDEPEND}"
+	dssi? ( >=media-libs/dssi-0.9 )
+	encode? ( media-libs/flac media-libs/libvorbis )
+"
+DEPEND="
+	${RDEPEND}
+	sys-devel/gettext
+"
 
 pkg_setup() {
 	if ! built_with_use x11-libs/wxGTK X ; then
-		die "x11-libs/wxGTK MUST be compiled with X support"
+		die "x11-libs/wxGTK must be compiled with X support"
 	fi
+	append-flags -fno-strict-aliasing
 }
 
 src_unpack() {
 	subversion_src_unpack
 	cd ${S}
+
 	# make --as-needed work
-	epatch "${FILESDIR}/${P}-automess.diff"
-	# hardcode portaudio header path
-	grep -rl "portaudio\.h" . |
-		xargs sed -i "s:\(portaudio\.h\):portaudio19/\1:"
+	epatch "${FILESDIR}"/${P}-automess.diff
+	sed -i 's:\[FLAC++\]:[FLAC]:' configure.ac
 	# make autoheader happy
 	sed -i 's:\(PACKAGE_LOCALE_DIR,.*\)):\1, ""):' configure.ac
-	# fix nls
-	sed -i 's:use-libtool:external:; s:intl/Makefile::' configure.ac
-	sed -i 's:intl ::' Makefile.am
-	eautoreconf
-	append-flags -fno-strict-aliasing
+	# don't install portaudio
+	sed -i "s:src/portaudio ::" Makefile.am
+
+	autopoint --force || die
+	AT_NO_RECURSIVE="yes" eautoreconf
 }
 
 src_compile() {
+	# first build pa statically
+	cd src/portaudio
+	econf \
+		--enable-static \
+		--disable-shared \
+		$(use_with alsa) \
+		$(use_with jack) \
+		$(use_with oss) \
+		|| die
+	emake lib/libportaudio.la || die
+
+	cd ${S}
 	econf \
 		--disable-static \
 		--disable-optimize \
-		--disable-nls \
-	    $(use_enable debug) \
-	    $(use_enable dssi) || die
+		$(use_enable nls) \
+		$(use_enable debug) \
+		$(use_enable dssi) \
+		$(use_enable soundtouch plugins) \
+		$(use_enable encode codecs) \
+		--enable-portaudio \
+		--no-recursion \
+		|| die
 
 	emake CXXFLAGS="${CXXFLAGS}" || die
 }
 
 src_install() {
-	emake install DESTDIR=${D} || die "Install failed"
+	einstall MKINSTALLDIRS="${S}/config/mkinstalldirs" || die
 	dodoc AUTHORS BUGS NEWS README TODO 
 }
