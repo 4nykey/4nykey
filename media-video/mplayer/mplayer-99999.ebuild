@@ -57,7 +57,7 @@ RDEPEND="xvid? ( >=media-libs/xvid-0.9.0 )
 		aac? ( media-libs/faac )
 		)
 	esd? ( media-sound/esound )
-	external-ffmpeg? || ( media-video/ffmpeg-svn media-video/ffmpeg )
+	external-ffmpeg? ( media-video/ffmpeg )
 	gif? ( ||( media-libs/giflib media-libs/libungif ) )
 	ggi? ( media-libs/libggi )
 	gtk? (
