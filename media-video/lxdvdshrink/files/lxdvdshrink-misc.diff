@@ -1,0 +1,44 @@
+diff -ru lxDVDshrink/dvd.pm lxDVDshrink_nu/dvd.pm
+--- lxDVDshrink/dvd.pm	2006-09-07 11:28:46.000000000 +0300
++++ lxDVDshrink_nu/dvd.pm	2006-09-17 14:28:16.000000000 +0300
+@@ -9,7 +9,7 @@
+ use strict;
+ use warnings;
+ 
+-use common; my $f = common->new; # obecne funkce
++use LxDVDShrink::common; my $f = common->new; # obecne funkce
+ 
+ use constant TRUE  => 1;
+ use constant FALSE => 0;
+diff -ru lxDVDshrink/lxdvdshrink.pl lxDVDshrink_nu/lxdvdshrink.pl
+--- lxDVDshrink/lxdvdshrink.pl	2006-09-11 18:42:47.000000000 +0300
++++ lxDVDshrink_nu/lxdvdshrink.pl	2006-09-17 14:29:21.000000000 +0300
+@@ -6,10 +6,10 @@
+ use XML::XPath;
+ use Data::Dumper;
+ 
+-use dvd; my $d = dvd->new; # balicek pro dvd
+-use term; my $t = term->new; # procedury pro specialne pro terminal
+-use common; my $f = common->new; # obecne funkce
+-use messages; my $m = messages->new; # hlaseni programu
++use LxDVDShrink::dvd; my $d = dvd->new; # balicek pro dvd
++use LxDVDShrink::term; my $t = term->new; # procedury pro specialne pro terminal
++use LxDVDShrink::common; my $f = common->new; # obecne funkce
++use LxDVDShrink::messages; my $m = messages->new; # hlaseni programu
+ 
+ my $dvdshrink = dvdshrink->new; $dvdshrink->run; # spust telo programu
+ 
+diff -ru lxDVDshrink/term.pm lxDVDshrink_nu/term.pm
+--- lxDVDshrink/term.pm	2006-09-07 10:42:40.000000000 +0300
++++ lxDVDshrink_nu/term.pm	2006-09-17 14:28:45.000000000 +0300
+@@ -4,8 +4,8 @@
+ use warnings;
+ use Data::Dumper;
+ 
+-use common; my $f = common->new; # obecne funkce
+-use messages; my $m = messages->new; # hlaseni programu
++use LxDVDShrink::common; my $f = common->new; # obecne funkce
++use LxDVDShrink::messages; my $m = messages->new; # hlaseni programu
+ $m->en;
+ 
+ use constant TRUE  => 1;
