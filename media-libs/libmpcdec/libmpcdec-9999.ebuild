@@ -2,21 +2,28 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit subversion
+inherit subversion autotools
 
 DESCRIPTION="Musepack decoder library"
 HOMEPAGE="http://www.musepack.net"
-#SRC_URI="http://musepack.origean.net/files/source/${P}.tar.bz2"
-ESVN_REPO_URI="http://svn.caddr.com/svn/libmpcdec/trunk"
-ESVN_BOOTSTRAP="WANT_AUTOMAKE=1.6 ./autogen.sh"
+ESVN_REPO_URI="http://svn.musepack.net/libmpcdec/trunk"
 
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~x86"
 IUSE="static"
 
+src_unpack() {
+	subversion_src_unpack
+	cd ${S}
+	sed -i "/^CFLAGS=/d" configure.ac
+	eautoreconf
+}
+
 src_compile() {
-	econf `use_enable static` || die
+	econf \
+		$(use_enable static) \
+		|| die
 	emake || die
 }
 

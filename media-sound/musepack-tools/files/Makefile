@@ -54,7 +54,7 @@ ifneq ($(CC_MAJ),4)
 FLAGS += -fmove-all-movables
 endif
 ifneq ($(CC_MAJ),2)
-# unset optimizations that tend to break mppenc encodings
+# unset unsafe optimizations
 FLAGS += \
 	-fno-strict-aliasing \
 	-fno-gcse \
@@ -74,34 +74,33 @@ FLAGS += \
 	-DMPPDEC_VERSION=\"$(MPPDEC_VERSION)\" \
 	-DMPPENC_VERSION=\"$(MPPENC_VERSION)\" \
 
-ifdef USE_ASM
+ifneq ($(USE_ASM),)
 	NASM = nasm
 	#NASMFLAGS += -DUSE_FXCH
 	FLAGS += -DUSE_ASM
 endif
 
-ifdef MINGW
+ifneq ($(MINGW),)
 EXEEXT = .exe
 LDADD = -lwinmm -lws2_32
 NASMFLAGS = -f win32
 else
 LDADD = -lm
 NASMFLAGS = -f elf
-# These two already defined in mppenc.h for win32
 FEATURE += -DCVD_FASTLOG
 FEATURE += -DFAST_MATH
 endif
 
-ifdef BLD_STATIC
+ifneq ($(BLD_STATIC),)
 	LDFLAGS += -static
 endif
 
-ifdef USE_ESD
+ifneq ($(USE_ESD),)
 	FLAGS += -DUSE_ESD_AUDIO
 	LDADD += $(shell esd-config --libs)
 endif
 
-ifdef USE_OSS
+ifneq ($(USE_OSS),)
 	FLAGS += -DUSE_OSS_AUDIO
 else
 	FLAGS += -DNO_DEV_AUDIO
@@ -153,12 +152,12 @@ REPLAY_SRC = \
 	stderr.c \
 	_setargv.c \
 
-ifdef USE_ASM
+ifneq ($(USE_ASM),)
 	ASM_ENC_SRC = fft4gasm.o
 	ASM_DEC_SRC = synthasm.o cpu_feat.o
 endif
 
-ifdef MINGW
+ifneq ($(MINGW),)
 MPPENC_SRC += winmsg.c
 endif
 
@@ -168,38 +167,38 @@ MPPENC_OBJ = $(MPPENC_SRC:.c=_enc.o)
 MPPDEC_OBJ = $(MPPDEC_SRC:.c=_dec.o)
 REPLAY_OBJ = $(REPLAY_SRC:.c=_dec.o)
 
-# Targets and general dependencies
-MPPDEC_TARGET = mppdec$(EXEEXT)
-MPPENC_TARGET = mppenc$(EXEEXT)
-#STREAM_TARGET = streamserver$(EXEEXT)
-REPLAY_TARGET = replaygain$(EXEEXT)
-#CLIPSTAT_TARGET = clipstat$(EXEEXT)
-#TAGGER_TARGET = tagger$(EXEEXT)
+# Targets and dependencies
+MPPDEC_TARGET = mppdec
+MPPENC_TARGET = mppenc
+STREAM_TARGET = streamserver
+REPLAY_TARGET = replaygain
+CLIPST_TARGET = clipstat
+TAGGER_TARGET = tagger
 ALL_TARGETS = $(MPPENC_TARGET) $(MPPDEC_TARGET) $(REPLAY_TARGET)
 
-DEPENDS_ASM = $(MAKEFILE) tools.inc version
-DEPENDS_DEC = $(MAKEFILE) mppdec.h mpp.h config.h profile.h version
-DEPENDS_ENC = $(DEPENDS_DEC) mppenc.h minimax.h
+DEPS_ASM = $(MAKEFILE) tools.inc version
+DEPS_DEC = $(MAKEFILE) mppdec.h mpp.h config.h profile.h version
+DEPS_ENC = $(DEPS_DEC) mppenc.h minimax.h
 
-%_enc.o: %.c $(DEPENDS_ENC)
+%_enc.o: %.c $(DEPS_ENC)
 	$(CC) -c $(FLAGS) -DMPP_ENCODER -o $@ $<
 
-%_dec.o: %.c $(DEPENDS_DEC)
+%_dec.o: %.c $(DEPS_DEC)
 	$(CC) -c $(FLAGS) -DMPP_DECODER -o $@ $<
 
-%.o: %.nas $(DEPENDS_ASM)
+%.o: %.nas $(DEPS_ASM)
 	$(NASM) $(NASMFLAGS) $< -o $@ -l $(patsubst %.lst,%.nas,$@)
 
 all:	$(ALL_TARGETS)
 
 $(MPPENC_TARGET): $(MPPENC_OBJ) $(ASM_ENC_OBJ)
-	$(CC) $(FLAGS) $(LDFLAGS) -o $@ $^ $(LDADD)
+	$(CC) $(FLAGS) $(LDFLAGS) -o $@$(EXEEXT) $^ $(LDADD)
 
 $(MPPDEC_TARGET): $(MPPDEC_OBJ) $(ASM_DEC_OBJ)
-	$(CC) $(FLAGS) $(LDFLAGS) -o $@ $^ $(LDADD)
+	$(CC) $(FLAGS) $(LDFLAGS) -o $@$(EXEEXT) $^ $(LDADD)
 
 $(REPLAY_TARGET): $(REPLAY_OBJ)
-	$(CC) $(FLAGS) $(LDFLAGS) -o $@ $(REPLAY_OBJ) $(LDADD)
+	$(CC) $(FLAGS) $(LDFLAGS) -o $@$(EXEEXT) $(REPLAY_OBJ) $(LDADD)
 
 clean:
 	$(RM) $(MPPENC_OBJ) $(MPPDEC_OBJ) $(ASM_ENC_OBJ) $(ASM_DEC_OBJ) $(REPLAY_OBJ) $(MPPENC_TARGET) $(MPPDEC_TARGET) $(REPLAY_TARGET) *.lst
