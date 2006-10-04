@@ -10,20 +10,23 @@ SRC_URI="http://download.gna.org/gaupol/${PV/\.0/}/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~x86"
 IUSE="spell"
 RESTRICT="primaryuri"
 
-RDEPEND=">=dev-lang/python-2.4
+RDEPEND="
+	>=dev-lang/python-2.4
 	>=dev-python/pygtk-2.8
 	dev-python/chardet
 	spell? (
 		>=dev-python/pyenchant-1.1.3
-		app-text/iso-codes )"
-
-DEPEND="${RDEPEND}
+		app-text/iso-codes )
+"
+DEPEND="
+	${RDEPEND}
 	sys-devel/gettext
-	dev-util/intltool"
+	dev-util/intltool
+"
 
 src_install() {
 	distutils_src_install
@@ -33,7 +36,7 @@ src_install() {
 
 pkg_postinst() {
 	elog "Please note that an external video player is required for"
-	elog "preview. MPlayer or VLC is recommended."
+	elog "preview, such as MPlayer or VLC."
 	if use spell; then
 		elog "Additionally, spell-checking requires a dictionary, any of"
 		elog "Aspell/Pspell, Ispell, MySpell, Uspell, Hspell or AppleSpell."
