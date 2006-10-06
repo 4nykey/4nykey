@@ -16,7 +16,6 @@ IUSE="static esd 16bit encode oss"
 
 RDEPEND="
 	esd? ( media-sound/esound )
-	media-libs/id3lib
 "
 DEPEND="
 	${RDEPEND}
