@@ -12,8 +12,8 @@ S="${WORKDIR}/${ECVS_MODULE}"
 RESTRICT="test" # see #59482
 
 LICENSE="GPL-2 LGPL-2"
-SLOT="0"
-KEYWORDS="~x86"
+SLOT="1.1.3"
+KEYWORDS="-*"
 IUSE="3dnow debug doc ogg sse xmms pic"
 
 RDEPEND="ogg? ( >=media-libs/libogg-1.0_rc2 )
@@ -28,6 +28,7 @@ src_unpack() {
 	cvs_src_unpack
 	cd "${S}"
 
+if false; then
 	# Enable only for GCC 4.1 and later
 	[[ $(gcc-major-version)$(gcc-minor-version) -ge 41 ]] || \
 		export EPATCH_EXCLUDE="130_all_visibility.patch"
@@ -36,9 +37,13 @@ src_unpack() {
 	EPATCH_SUFFIX="patch" epatch "${FILESDIR}"
 	AT_M4DIR="m4" eautoreconf
 	elibtoolize
+else
+	sed -i "s:-O3.*-finline-functions:${CFLAGS}:" build/{lib,exe}.mk
+fi
 }
 
 src_compile() {
+if false; then
 	econf \
 		$(use_enable ogg) \
 		$(use_enable sse) \
@@ -57,18 +62,31 @@ src_compile() {
 	use xmms && makeopts="-j1"
 
 	emake ${makeopts} || die "make failed"
+else
+	sed -i "s:\(LINKAGE = \)-.*:\1$(LDFLAGS):" build/config.mk
+	CFG="$(use debug && echo debug || echo release)"
+	make CONFIG=${CFG} -f Makefile.lite flac metaflac
+fi
 }
 
 src_install() {
+if false; then
 	make DESTDIR="${D}" docdir="/usr/share/doc/${PF}" \
 		install || die "make install failed"
+else
+	dobin obj/${CFG}/bin/{,meta}flac
+fi
 	dodoc AUTHORS README
 
 	doman man/{flac,metaflac}.1
 }
 
 pkg_postinst() {
+if false; then
 	ewarn "If you've upgraded from a previous version of flac, you may need to re-emerge"
 	ewarn "packages that linked against flac by running:"
 	ewarn "revdep-rebuild"
+else
+	elog "To prevent massive breakage we're installing binaries only for now"
+fi
 }
