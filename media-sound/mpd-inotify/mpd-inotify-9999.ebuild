@@ -10,7 +10,7 @@ ESVN_REPO_URI="http://svn.syscrash.ca/tinystuff/mpd_inotify"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="-*"
 IUSE=""
 
 DEPEND=""
