@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit eutils
+inherit autotools
 
 DESCRIPTION="WaveMixer is a multitrack wave editor"
 HOMEPAGE="http://wavemixer.sf.net/"
@@ -13,18 +13,21 @@ SLOT="0"
 KEYWORDS="~x86"
 IUSE=""
 
-RDEPEND=">=dev-cpp/gtkmm-2.4.0
+RDEPEND="
+	>=dev-cpp/gtkmm-2.4.0
 	=dev-libs/libsigc++-1.2*
-	>=media-libs/gstreamer-0.8.0
+	=media-libs/gstreamer-0.8*
 	>=media-libs/taglib-1.1
 	>=media-libs/librasc-0.0.1
 	>=media-sound/esound-0.2.0
 	>=media-sound/jack-audio-connection-kit-0.90.0
 	media-sound/sox
-	>=dev-libs/libxml2-2.6.11"
-DEPEND="${RDEPEND}
+	>=dev-libs/libxml2-2.6.11
+"
+DEPEND="
+	${RDEPEND}
 	dev-util/intltool
-	sys-devel/autoconf"
+"
 
 src_unpack() {
 	unpack ${A}
@@ -32,8 +35,8 @@ src_unpack() {
 	# check for gtkmm <= 2.8 will fail with 2.8.1
 	epatch ${FILESDIR}/gtkmm_cfg_fix.diff
 	sed -i "/\<CXXFLAGS\>/d" src/Makefile.am
-	intltoolize -f
-	autoreconf -fi
+	intltoolize -f || die
+	eautoreconf
 }
 
 src_install() {
