@@ -63,7 +63,6 @@ if false; then
 
 	emake ${makeopts} || die "make failed"
 else
-	sed -i "s:\(LINKAGE = \)-.*:\1$(LDFLAGS):" build/config.mk
 	CFG="$(use debug && echo debug || echo release)"
 	make CONFIG=${CFG} -f Makefile.lite flac metaflac
 fi

@@ -6,25 +6,24 @@ inherit subversion autotools
 
 DESCRIPTION="the Ogg media file format library"
 HOMEPAGE="http://www.xiph.org/ogg/vorbis/index.html"
-#SRC_URI="http://downloads.xiph.org/releases/ogg/${P}.tar.gz"
 ESVN_REPO_URI="http://svn.xiph.org/trunk/ogg"
 
 LICENSE="as-is"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="static"
+IUSE="doc"
 
 DEPEND="virtual/libc"
 
 src_unpack() {
 	subversion_src_unpack
 	cd ${S}
+	if use doc; then
+		sed -i "s:[$]\{1\}(VERSION):${PV}:" doc/{.,libogg}/Makefile.am
+	else
+		sed -i "s: \<doc\>::" Makefile.am
+	fi
 	eautoreconf
-}
-
-src_compile() {
-	econf `use_enable static` || die
-	emake || die
 }
 
 src_install() {
