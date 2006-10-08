@@ -4,10 +4,8 @@
 
 inherit cvs autotools
 
-# static: uses system libs instead of bundled with audacity,
-#	for wx - runs `wx-config --static=yes';
-# no sndfile flag, as:
-#	"we need to have libsndfile one way or another"
+# static: use sources bundled with audacity instead of system libs,
+#	for wx - run `wx-config --static=yes';
 IUSE="lame flac mad vorbis libsamplerate alsa jack oss ladspa soundtouch
 static unicode"
 
@@ -15,7 +13,7 @@ DESCRIPTION="Free crossplatform audio editor"
 HOMEPAGE="http://audacity.sourceforge.net/"
 ECVS_SERVER="audacity.cvs.sourceforge.net:/cvsroot/audacity"
 ECVS_MODULE="audacity"
-RESTRICT="test"
+RESTRICT="test confcache"
 
 S="${WORKDIR}/${ECVS_MODULE}"
 
@@ -59,26 +57,20 @@ src_compile() {
 
 	if use alsa || use jack; then
 		PORTAUDIO=19
-		cd lib-src/portaudio-v19
-		econf \
-			$(use_with alsa) \
-			$(use_with jack) \
-			$(use_with oss) \
-			|| die
-		emake lib/libportaudio.la || die
-		cd ${S}
 	else
 		PORTAUDIO=18
 	fi
 
 	econf \
-		$(use_enable static) \
 		$(use_enable unicode) \
 		$(use_with ladspa) \
 		--with-lib-preference=${LIBPREF} \
 		--with-nyquist=local \
 		--with-libsndfile=${LIBPREF} \
 		--with-portaudio=v${PORTAUDIO} \
+		$(use_with alsa) \
+		$(use_with jack) \
+		$(use_with oss) \
 		$(use_with libsamplerate libsamplerate ${LIBPREF}) \
 		$(use_with !libsamplerate libresample ${LIBPREF}) \
 		$(use_with soundtouch soundtouch ${LIBPREF}) \
