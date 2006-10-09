@@ -6,7 +6,6 @@ inherit nsplugins flag-o-matic fdo-mime eutils multilib toolchain-funcs cvs auto
 
 DESCRIPTION="DjVu viewers, encoders and utilities."
 HOMEPAGE="http://djvu.sourceforge.net"
-#SRC_URI="mirror://sourceforge/djvu/${PN}libre-${PV}.tar.gz"
 ECVS_SERVER="djvu.cvs.sourceforge.net:/cvsroot/djvu"
 ECVS_MODULE="djvulibre-3.5"
 S=${WORKDIR}/${ECVS_MODULE}
@@ -24,7 +23,6 @@ src_unpack() {
 	cvs_src_unpack
 
 	cd ${S}
-#	epatch "${FILESDIR}/${P}-dont-prestrip-bins.patch"
 	sed -i 's:-\<s\> ::' {gui/djview,tools,xmltools}/Makefile.in
 
 	# do not break with --as-needed
