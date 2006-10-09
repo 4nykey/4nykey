@@ -1,0 +1,8 @@
+DIST computertemp-0.9.3.tar.gz 176500 RMD160 b6ebb771f9412f1f36c6dc989f0ea69cf00f6390 SHA1 365620146be701eb1702c42c1b17a4a82bc5b088 SHA256 d6ffbe399a5dd413571bb620621bbb32d97bd865feb96e6a38dc18107047348e
+EBUILD computertemp-applet-0.9.3.ebuild 577 RMD160 5d50e6525e17ee8616c2595c22934b14fa6cf638 SHA1 9e85d7bde3c0ca741ea6ffda82760a5ec50fb0bd SHA256 b4f2e32e9d29c84e928ca9d70336f6341beb643fb7529418bc293f51965b835a
+MD5 c694fc66fe2ba5738ffda307b324e0d5 computertemp-applet-0.9.3.ebuild 577
+RMD160 5d50e6525e17ee8616c2595c22934b14fa6cf638 computertemp-applet-0.9.3.ebuild 577
+SHA256 b4f2e32e9d29c84e928ca9d70336f6341beb643fb7529418bc293f51965b835a computertemp-applet-0.9.3.ebuild 577
+MD5 ed979f84237ef5fb66a82869ce7501d3 files/digest-computertemp-applet-0.9.3 256
+RMD160 04bb62c5f6b72937ddf4b2abf6d994147b41fc6d files/digest-computertemp-applet-0.9.3 256
+SHA256 314ccd5e28a5fa50e988f545d1105737b6e025c3ef44b578bc6050f934483fcb files/digest-computertemp-applet-0.9.3 256
