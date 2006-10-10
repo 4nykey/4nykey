@@ -38,6 +38,8 @@ DEPEND="${RDEPEND}
 src_compile() {
 	# Required for scons to "see" intermediate install location
 	mkdir -p ${D}
+	# fix path in launcher
+	sed -i "s:%INSTALL_PREFIX%:/usr:" gtk2_ardour/ardour.sh.in
 
 	local myconf="PREFIX=/usr DESTDIR=${D} SYSLIBS=1"
 	! use altivec; myconf="${myconf} ALTIVEC=$?"
