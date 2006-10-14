@@ -15,8 +15,13 @@ SLOT="0"
 KEYWORDS="~x86"
 IUSE="oss static djbfft"
 
-DEPEND="djbfft? ( sci-libs/djbfft )"
-RDEPEND="${DEPEND} virtual/libc"
+DEPEND="
+	djbfft? ( sci-libs/djbfft )
+	oss? ( virtual/os-headers )
+"
+RDEPEND="
+	${DEPEND}
+"
 
 src_unpack() {
 	cvs_src_unpack
@@ -30,7 +35,7 @@ src_unpack() {
 
 	epatch "${FILESDIR}/${PN}-no_ext_wavhdr.diff"
 
-	eautoreconf || die
+	eautoreconf
 }
 
 src_compile() {
@@ -38,7 +43,7 @@ src_compile() {
 		--enable-shared \
 		$(use_enable djbfft) \
 		$(use_enable oss) \
-		$(use_enable static) || die "configure failed"
+		|| die "configure failed"
 
 	emake || die "emake failed"
 }

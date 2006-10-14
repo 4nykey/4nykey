@@ -7,10 +7,14 @@ inherit eutils
 DESCRIPTION="CMus - ncurses based music player."
 SRC_URI="http://onion.dynserv.net/~timo/files/${P}.tar.bz2"
 HOMEPAGE="http://onion.dynserv.net/~timo/cmus.html"
+
+LICENSE="GPL-2"
+KEYWORDS="~x86"
 SLOT="0"
 IUSE="alsa arts flac oss mad modplug vorbis musepack ao"
 
-DEPEND="sys-libs/ncurses
+DEPEND="
+	sys-libs/ncurses
 	alsa? ( >=media-libs/alsa-lib-0.9.0 )
 	arts? ( kde-base/arts )
 	ao? ( media-libs/libao )
@@ -19,12 +23,11 @@ DEPEND="sys-libs/ncurses
 	modplug? ( >=media-libs/libmodplug-0.7 )
 	vorbis? ( >=media-libs/libvorbis-1.0 )
 	musepack? ( media-libs/libmpcdec )
-	"
-
-RDEPEND=${DEPEND}
-
-LICENSE="GPL-2"
-KEYWORDS="~x86"
+	oss? ( virtual/os-headers )
+"
+RDEPEND="
+	${DEPEND}
+"
 
 pkg_setup() {
 	if ! built_with_use sys-libs/ncurses unicode

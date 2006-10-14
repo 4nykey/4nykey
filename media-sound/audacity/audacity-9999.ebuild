@@ -2,25 +2,23 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/audacity/audacity-1.2.3-r1.ebuild,v 1.1 2005/04/15 17:46:25 luckyduck Exp $
 
-inherit cvs autotools
-
-# static: use sources bundled with audacity instead of system libs,
-#	for wx - run `wx-config --static=yes';
-IUSE="lame flac mad vorbis libsamplerate alsa jack oss ladspa soundtouch
-static unicode"
+inherit cvs autotools flag-o-matic
 
 DESCRIPTION="Free crossplatform audio editor"
 HOMEPAGE="http://audacity.sourceforge.net/"
 ECVS_SERVER="audacity.cvs.sourceforge.net:/cvsroot/audacity"
 ECVS_MODULE="audacity"
-RESTRICT="test confcache"
-
 S="${WORKDIR}/${ECVS_MODULE}"
+RESTRICT="test confcache"
 
 LICENSE="GPL-2"
 SLOT="0"
-
 KEYWORDS="~x86"
+# static: use sources bundled with audacity instead of system libs,
+#	for wx - run `wx-config --static=yes';
+IUSE="lame flac mad vorbis libsamplerate alsa jack oss ladspa soundtouch
+static unicode"
+
 
 RDEPEND="
 	>=x11-libs/wxGTK-2.6.0
@@ -36,8 +34,8 @@ RDEPEND="
 	!static? ( media-libs/libsndfile )
 	soundtouch? ( media-libs/libsoundtouch )
 	lame? ( >=media-sound/lame-3.92 )
+	oss? ( virtual/os-headers )
 "
-#	=media-libs/portaudio-18*
 DEPEND="
 	${RDEPEND} 
 "
@@ -45,14 +43,13 @@ DEPEND="
 src_unpack() {
 	cvs_src_unpack
 	cd ${S}
-	epatch ${FILESDIR}/${PN}-*.diff
+	epatch "${FILESDIR}"/${PN}-*.diff
 	sed -i 's: Win32/Makefile\.mingw::' lib-src/libsamplerate/configure
 	AT_NO_RECURSIVE="yes" eautoreconf
+	append-flags -fno-strict-aliasing
 }
 
 src_compile() {
-	CXXFLAGS="${CXXFLAGS} -fno-strict-aliasing"
-
 	use static && LIBPREF="local" || LIBPREF="system"
 
 	if use alsa || use jack; then

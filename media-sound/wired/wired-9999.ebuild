@@ -23,6 +23,7 @@ RDEPEND="
 	media-libs/libsamplerate
 	dssi? ( >=media-libs/dssi-0.9 )
 	encode? ( media-libs/flac media-libs/libvorbis )
+	oss? ( virtual/os-headers )
 "
 DEPEND="
 	${RDEPEND}

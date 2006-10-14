@@ -39,6 +39,7 @@ RDEPEND="
 	xml? ( >=dev-libs/libxml2-2.6.0 )
 	xvid? ( >=media-libs/xvid-1.0.1 )
 	sdl? ( media-libs/libsdl )
+	oss? ( virtual/os-headers )
 	X? ( virtual/x11
 		|| ( (
 			x11-libs/libXt

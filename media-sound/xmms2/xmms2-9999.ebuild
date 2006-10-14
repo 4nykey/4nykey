@@ -41,9 +41,12 @@ RDEPEND=">=dev-libs/glib-2.2.0
 	ecore? ( x11-libs/ecore )
 	avahi? ( net-dns/avahi )
 	fam? ( app-admin/gamin )
+	oss? ( virtual/os-headers )
 "
-DEPEND="${RDEPEND}
-	dev-util/scons"
+DEPEND="
+	${RDEPEND}
+	dev-util/scons
+"
 
 pick_plug() {
 	use $1 || myconf="${myconf} $( [ -n "$2" ] && echo $2 || echo $1)"

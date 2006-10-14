@@ -35,7 +35,8 @@ DESCRIPTION="Media Player for Linux"
 HOMEPAGE="http://www.mplayerhq.hu/"
 
 # 'encode' in USE for MEncoder.
-RDEPEND="xvid? ( >=media-libs/xvid-0.9.0 )
+RDEPEND="
+	xvid? ( >=media-libs/xvid-0.9.0 )
 	x86? (
 		win32codecs? ( >=media-libs/win32codecs-20040916 )
 		real? ( >=media-video/realplayer-10.0.3 )
@@ -89,9 +90,10 @@ RDEPEND="xvid? ( >=media-libs/xvid-0.9.0 )
 	speex? ( >=media-libs/speex-1.1.0 )
 	dbus? || ( dev-libs/dbus-glib <sys-apps/dbus-0.90 )
 	sys-libs/ncurses
+	oss? ( virtual/os-headers )
 "
-
-DEPEND="${RDEPEND}
+DEPEND="
+	${RDEPEND}
 	doc? ( dev-libs/libxslt
 		>=app-text/docbook-xml-dtd-4.1.2
 		>=app-text/docbook-xsl-stylesheets-1.62.4 )

@@ -15,14 +15,20 @@ SLOT="0"
 KEYWORDS="~x86"
 IUSE="oss debug"
 
-DEPEND="!media-libs/libdts"
-RDEPEND="${DEPEND}"
+RDEPEND="
+	!media-libs/libdts
+	oss? ( virtual/os-headers )
+"
+DEPEND="
+	${RDEPEND}
+"
 
 src_compile() {
 	econf \
 		--enable-shared \
 		$(use_enable oss) \
-		$(use_enable debug) || die
+		$(use_enable debug) \
+		|| die
 	emake || die "emake failed"
 }
 

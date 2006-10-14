@@ -7,6 +7,7 @@ inherit subversion autotools
 DESCRIPTION="A development version of Music Player Daemon (mpd)"
 HOMEPAGE="http://www.musicpd.org"
 ESVN_REPO_URI="https://svn.musicpd.org/${PN}/trunk"
+ESVN_BOOTSTRAP="eautoreconf"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -14,7 +15,7 @@ KEYWORDS="~x86"
 IUSE="aac alsa ao audiofile flac icecast ipv6 mad mikmod musepack vorbis oss
 unicode ogg pulseaudio"
 
-DEPEND="dev-util/gperf
+RDEPEND="
 	!media-sound/mpd-svn
 	!sys-cluster/mpich2
 	sys-libs/zlib
@@ -30,19 +31,15 @@ DEPEND="dev-util/gperf
 	mikmod? ( media-libs/libmikmod )
 	musepack? ( media-libs/libmpcdec )
 	pulseaudio? ( media-sound/pulseaudio )
-	vorbis? ( media-libs/libvorbis )"
+	vorbis? ( media-libs/libvorbis )
+	oss? ( virtual/os-headers )
+"
 
 pkg_setup() {
 	enewuser mpd '' '' "/var/lib/mpd" audio || die "problem adding user mpd"
 
 	# also change the homedir if the user has existed before
 	usermod -d "/var/lib/mpd" mpd
-}
-
-src_unpack() {
-	subversion_src_unpack
-	cd ${S}
-	eautoreconf
 }
 
 src_compile() {

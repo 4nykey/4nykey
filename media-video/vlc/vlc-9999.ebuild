@@ -91,8 +91,8 @@ RDEPEND="
 	nsplugin? ( >=net-libs/gecko-sdk-1.7.8 )
 	portaudio? ( >=media-libs/portaudio-0.19 )
 	qt4? ( $(qt4_min_version 4) )
+	oss? ( virtual/os-headers )
 "
-
 DEPEND="
 	${RDEPEND}
 	sys-devel/gettext

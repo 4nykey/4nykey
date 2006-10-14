@@ -13,9 +13,14 @@ SLOT="19"
 KEYWORDS="~x86"
 IUSE="jack alsa oss doc"
 
-RDEPEND="alsa? ( media-libs/alsa-lib )
-	jack? ( media-sound/jack-audio-connection-kit )"
-DEPEND="${RDEPEND}"
+RDEPEND="
+	alsa? ( media-libs/alsa-lib )
+	jack? ( media-sound/jack-audio-connection-kit )
+	oss? ( virtual/os-headers )
+"
+DEPEND="
+	${RDEPEND}
+"
 
 src_unpack() {
 	subversion_src_unpack
@@ -31,7 +36,8 @@ src_compile() {
 		--includedir=/usr/include/portaudio19 \
 		$(use_with oss) \
 		$(use_with alsa) \
-		$(use_with jack) || die
+		$(use_with jack) \
+		|| die
 	emake || die
 }
 

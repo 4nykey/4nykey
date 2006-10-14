@@ -16,10 +16,10 @@ KEYWORDS="~x86"
 IUSE="a52 aac alsa altivec arts encode esd mp3 mmx nls png vorbis sdl truetype
 xvid xv oss x264 dts"
 
-RDEPEND=">=dev-libs/libxml2-2.6.7
+RDEPEND="
+	>=dev-libs/libxml2-2.6.7
 	>=x11-libs/gtk+-2.6.0
 	>=dev-lang/spidermonkey-1.5-r2
-	xv? ( virtual/x11 )
 	a52? ( >=media-libs/a52dec-0.7.4 )
 	encode? ( >=media-sound/lame-3.93 )
 	aac? ( >=media-libs/faad2-2.0-r2
@@ -37,12 +37,22 @@ RDEPEND=">=dev-libs/libxml2-2.6.7
 	png? ( media-libs/libpng )
 	esd? ( media-sound/esound )
 	dts? ( media-libs/libdca )
-	sdl? ( media-libs/libsdl )"
+	sdl? ( media-libs/libsdl )
+	oss? ( virtual/os-headers )
+	|| (
+		(
+			xv? ( x11-libs/libXv )
+			x11-libs/libX11
+			x11-libs/libXext
+			x11-libs/libXrender
+		) virtual/x11
+	)
+"
 
-DEPEND="$RDEPEND
+DEPEND="
+	$RDEPEND
 	dev-util/pkgconfig
-	>=sys-devel/autoconf-2.58
-	>=sys-devel/automake-1.8.3"
+"
 
 filter-flags "-fno-default-inline"
 filter-flags "-funroll-loops"

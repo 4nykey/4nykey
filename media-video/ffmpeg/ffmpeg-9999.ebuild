@@ -16,10 +16,11 @@ ESVN_REPO_URI="svn://svn.mplayerhq.hu/ffmpeg/trunk"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="aac debug doc ieee1394 a52 encode imlib mmx ogg vorbis oss lame
-	threads truetype v4l xvid dts network zlib sdl amr x264 static"
+IUSE="aac debug doc ieee1394 a52 encode imlib mmx ogg vorbis oss lame threads
+truetype v4l xvid dts network zlib sdl amr x264 static"
 
-RDEPEND="imlib? ( media-libs/imlib2 )
+RDEPEND="
+	imlib? ( media-libs/imlib2 )
 	truetype? ( >=media-libs/freetype-2 )
 	sdl? ( >=media-libs/libsdl-1.2.10 )
 	lame? ( media-sound/lame )
@@ -33,8 +34,10 @@ RDEPEND="imlib? ( media-libs/imlib2 )
 	ieee1394? ( =media-libs/libdc1394-1*
 	            sys-libs/libraw1394 )
 	x264? ( media-libs/x264 )
+	oss? ( virtual/os-headers )
 "
-DEPEND="${RDEPEND}
+DEPEND="
+	${RDEPEND}
 	amr? ( app-arch/unzip )
 	dev-util/pkgconfig
 	doc? ( app-text/texi2html )
