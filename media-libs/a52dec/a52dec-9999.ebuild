@@ -33,7 +33,7 @@ src_unpack() {
 	sed -i 's:AC_CONFIG_HEADERS:AM_CONFIG_HEADER:' configure.in
 	sed -i 's:\(Libs.*\):\1 @LIBA52_LIBS@:' liba52/liba52.pc.in
 
-	epatch "${FILESDIR}/${PN}-no_ext_wavhdr.diff"
+	epatch "${FILESDIR}"/${PN}-*.diff
 
 	eautoreconf
 }
