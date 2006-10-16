@@ -15,11 +15,15 @@ SLOT="0"
 KEYWORDS="~x86"
 IUSE=""
 
-DEPEND=">=net-misc/curl-7.10.0
+RDEPEND="
+	>=net-misc/curl-7.10.0
 	dev-libs/libdaemon
 	dev-libs/confuse
-	dev-libs/argtable"
-RDEPEND="${DEPEND}"
+	dev-libs/argtable
+"
+DEPEND="
+	${RDEPEND}
+"
 
 CFG=/etc/scmpc.conf
 
@@ -31,21 +35,14 @@ pkg_setup() {
 pkg_config() {
 	einfo "This will create system-wide configure file for scmpc,"
 	einfo "if you rather run it as a user, refer to scmpc(1)."
-	if [ ! "$(grep 'password = ""' ${CFG})" ]; then
-		ewarn "You already have last.fm password in scmpc configuration file."
-		ewarn "Press Control-C to abort or press ENTER to reconfigure."
-	else
-		einfo "Press ENTER to continue..."
-	fi
-	read -s
 	
 	einfo "Please enter your last.fm username: "
 	read -e USERNAME
 	einfo "and password (will not be echoed):"
 	read -s -e PASSWORD
 	
-	sed -i "s:username = \"\":username = \"$USERNAME\":" $CFG
-	sed -i "s:password = \"\":password = \"$PASSWORD\":" $CFG
+	sed -i "s:username = .*:username = \"$USERNAME\":" $CFG
+	sed -i "s:password = .*:password = \"$PASSWORD\":" $CFG
 
 	einfo
 	einfo "You can now try running scmpc:"
@@ -74,7 +71,6 @@ src_install() {
 	newins ${T}/foo scmpc.log
 	insinto /var/cache
 	newins ${T}/foo scmpc.cache
-#	fowners scmpc:lastfm /var/log/scmpc.log /var/cache/scmpc.cache
 
 	diropts -m0755 -oscmpc -glastfm
 	dodir /var/run/scmpc

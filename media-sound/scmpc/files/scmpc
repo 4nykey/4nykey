@@ -10,7 +10,7 @@ checkconfig() {
 	if [ "$(grep 'password = ""' ${CFG})" ]; then
 		eerror "You are trying to run scmpc system-wide, but"
 		eerror "no password stored in scmpc configuration file ${CFG},"
-		eerror "run \"ebuild /var/db/pkg/media-sound/scmpc-\${PV}/scmpc-\${PV}.ebuild config\""
+		eerror "run \"emerge --config media-sound/scmpc\""
 		return 1
 	fi
 }
