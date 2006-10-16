@@ -70,6 +70,8 @@ src_unpack() {
 		sed -i "s:wx-config:${WX_CONFIG}:g" configure
 	fi
 
+	epatch "${FILESDIR}"/${PN}-*.diff
+
 	# make configure to pick theora, if presented
 	use theora && sed -i 's:ltheora 2:ltheora -logg 2:' configure
 	# skip stripping
@@ -80,8 +82,6 @@ src_unpack() {
 	use sdl || sed -i 's:^has_sdl=yes:has_sdl=no:' configure
 	use nsplugin || sed -i 's:osmozilla::' applications/Makefile
 	use X || sed -i 's:PLUGDIRS+=x11_out:PLUGDIRS+=:' modules/Makefile
-
-	epatch "${FILESDIR}"/${PN}-*.diff
 
 	if use amr; then
 		cd modules/amr_float_dec
