@@ -136,15 +136,7 @@ DEPEND="
 		   x11-proto/xf86vidmodeproto )
 	X? ( x11-proto/xextproto
 		 x11-proto/xf86vidmodeproto )
-	iconv? ( virtual/libiconv )
 "
-
-LANGS="bg cs de da el en es fr hu ja ko mk nl no pl pt_BR ro ru sk tr uk zh_CN
-zh_TW"
-
-for X in ${LANGS} ; do
-	IUSE="${IUSE} linguas_${X}"
-done
 
 teh_conf() {
 	# avoid using --enable-xxx options,
@@ -158,8 +150,7 @@ pkg_setup() {
 	if use real && use x86; then
 		REALLIBDIR="/opt/RealPlayer/codecs"
 	fi
-	unset LC_ALL
-	CHARSET="$(locale charmap)"
+	LINGUAS="en"
 }
 
 src_unpack() {
@@ -216,9 +207,6 @@ src_unpack() {
 
 src_compile() {
 
-	# have fun with LINGUAS variable
-	[[ -n $LINGUAS ]] && LINGUAS=${LINGUAS//da/dk}
-
 	local myconf="${myconf} --disable-tv-bsdbt848 --disable-external-vidix"
 	################
 	#Optional features#
@@ -229,8 +217,6 @@ src_compile() {
 	fi
 
 	teh_conf bidi fribidi
-
-	myconf="${myconf} --charset=${CHARSET}"
 
 	teh_conf enca
 
