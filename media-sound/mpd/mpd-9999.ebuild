@@ -33,6 +33,7 @@ RDEPEND="
 	pulseaudio? ( media-sound/pulseaudio )
 	vorbis? ( media-libs/libvorbis )
 	oss? ( virtual/os-headers )
+	jack? ( media-sound/jack-audio-connection-kit )
 "
 
 pkg_setup() {
@@ -48,6 +49,7 @@ src_compile() {
 	econf \
 		$(use_enable alsa) \
 		$(use_enable alsa alsatest) \
+		$(use_enable jack) \
 		$(use_enable oss) \
 		$(use_enable aac) \
 		$(use_enable ao) \
