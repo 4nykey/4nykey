@@ -37,7 +37,7 @@ dvdread dvdnav enca encode esd external-faad external-ffmpeg fbcon fontconfig
 gif ggi gtk ipv6 jack joystick jpeg ladspa libcaca lirc live livecd lzo mad
 matrox mmx mmxext musepack nas openal opengl oss png real rtc samba sdl speex
 sse sse2 svga tga theora tremor truetype v4l v4l2 vorbis win32codecs X x264
-xanim xinerama xmms xv xvid xvmc
+xanim xinerama xmms xv xvid xvmc twolame
 "
 
 # 'encode' in USE for MEncoder.
@@ -207,7 +207,7 @@ src_unpack() {
 
 src_compile() {
 
-	local myconf="${myconf} --disable-tv-bsdbt848 --disable-external-vidix"
+	local myconf="${myconf} --disable-tv-bsdbt848 --disable-vidix-external"
 	################
 	#Optional features#
 	###############
@@ -419,7 +419,6 @@ src_compile() {
 		--enable-menu \
 		--enable-network --enable-ftp \
 		--with-reallibdir=${REALLIBDIR} \
-		--with-x11incdir=/usr/X11R6/include \
 		${myconf} || die
 
 	# we run into problems if -jN > -j1
