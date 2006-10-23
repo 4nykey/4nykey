@@ -16,12 +16,19 @@ SLOT="0"
 KEYWORDS="~x86"
 IUSE="mp4"
 
-RDEPEND=">=media-libs/libsndfile-1.0.0
-	mp4? || ( media-video/mpeg4ip-cvs
-		media-libs/libmp4v2 )"
-
-DEPEND="${RDEPEND}
-	!<media-libs/faad2-2.0-r3"
+RDEPEND="
+	>=media-libs/libsndfile-1.0.0
+	mp4? (
+		|| (
+			media-libs/libmp4v2
+			=media-video/mpeg4ip-9999
+		)
+	)
+"
+DEPEND="
+	${RDEPEND}
+	!<media-libs/faad2-2.0-r3
+"
 
 src_unpack() {
 	cvs_src_unpack
@@ -31,7 +38,9 @@ src_unpack() {
 }
 	
 src_compile() {
-	econf $(use_with mp4 mp4v2) || die
+	econf \
+		$(use_with mp4 mp4v2) \
+		|| die
 	emake || die
 }
 

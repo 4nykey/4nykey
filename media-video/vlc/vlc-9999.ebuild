@@ -41,9 +41,14 @@ RDEPEND="
 	matroska? ( >=dev-libs/libebml-0.7.6
 		>=media-libs/libmatroska-0.7.5 )
 	mp3? ( media-libs/libmad )
-	ffmpeg? || ( media-video/ffmpeg-svn media-video/ffmpeg )
+	ffmpeg? ( media-video/ffmpeg )
 	a52? ( media-libs/a52dec )
-	dts? || ( media-libs/libdca media-libs/libdts )
+	dts? (
+		|| (
+			media-libs/libdca
+			media-libs/libdts
+		)
+	)
 	flac? ( media-libs/flac )
 	mpeg? ( >=media-libs/libmpeg2-0.3.2 )
 	vorbis? ( media-libs/libvorbis )

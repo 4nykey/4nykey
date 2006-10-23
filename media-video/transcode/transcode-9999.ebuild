@@ -24,8 +24,12 @@ RDEPEND="a52? ( >=media-libs/a52dec-0.7.4 )
 	dv? ( >=media-libs/libdv-0.99 )
 	dvdread? ( >=media-libs/libdvdread-0.9.0 )
 	xvid? ( >=media-libs/xvid-1.0.2 )
-	x264? || ( media-libs/x264
-		media-libs/x264-svn )
+	x264? (
+		|| (
+			media-libs/x264
+			media-libs/x264-svn
+		)
+	)
 	mjpeg? ( >=media-video/mjpegtools-1.6.2-r3 )
 	lzo? ( >=dev-libs/lzo-2 )
 	fame? ( >=media-libs/libfame-0.9.1 )
@@ -40,17 +44,20 @@ RDEPEND="a52? ( >=media-libs/a52dec-0.7.4 )
 	jpeg? ( media-libs/jpeg )
 	gtk? ( =x11-libs/gtk+-1.2* )
 	truetype? ( >=media-libs/freetype-2 )
-	|| ( media-video/ffmpeg-svn 
-		>=media-video/ffmpeg-0.4.9_p20050226-r3 )
+	>=media-video/ffmpeg-0.4.9_p20050226-r3
 	>=media-libs/libmpeg2-0.4.0b
-	|| ( sys-libs/glibc dev-libs/libiconv )
+	virtual/libiconv
 	xml? ( dev-libs/libxml2 )
-	X? ( || ( (
-			x11-libs/libXaw
-			x11-libs/libXv )
-		virtual/x11 ) )
+	X? (
+		|| (
+			(
+				x11-libs/libXaw
+				x11-libs/libXv
+			)
+			virtual/x11
+		)
+	)
 "
-
 DEPEND="${RDEPEND}
 	v4l2? ( >=sys-kernel/linux-headers-2.6.11 )
 "

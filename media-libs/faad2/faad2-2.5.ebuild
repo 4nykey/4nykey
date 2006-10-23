@@ -2,26 +2,25 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/faad2/faad2-2.0-r13.ebuild,v 1.1 2006/06/17 16:26:47 flameeyes Exp $
 
-inherit eutils libtool flag-o-matic autotools
-
-PATCHLEVEL="5"
+inherit eutils flag-o-matic autotools
 
 DESCRIPTION="AAC audio decoding library"
 HOMEPAGE="http://www.audiocoding.com/"
 SRC_URI="mirror://sourceforge/faac/${PN}-${PV/_/-}.tar.gz"
-#	mirror://gentoo/${PN}-patches-${PATCHLEVEL}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
 IUSE="xmms mp4"
 
-RDEPEND="xmms? ( >=media-sound/xmms-1.2.7 media-libs/id3lib )
-	|| ( media-libs/libmp4v2 =media-video/mpeg4ip-9999 )
+RDEPEND="
+	xmms? ( >=media-sound/xmms-1.2.7 media-libs/id3lib )
 	mp4? ( media-video/mpeg4ip )
 "
-
-DEPEND="${RDEPEND}"
+DEPEND="
+	${RDEPEND}
+	app-text/dos2unix
+"
 
 S="${WORKDIR}/${PN}"
 
@@ -41,14 +40,14 @@ src_compile() {
 
 	append-flags -fno-strict-aliasing
 
-	# mp4v2 needed for rhythmbox
 	# drm needed for nothing but doesn't hurt
 	#  but breakes decoding of he-aac 5.1 streams
 	econf \
 		--without-drm \
 		--without-bmp \
 		$(use_with xmms) \
-		$(use_with mp4 mpeg4ip) || die
+		$(use_with mp4 mpeg4ip) \
+		|| die
 
 	emake || die
 }

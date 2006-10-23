@@ -56,7 +56,12 @@ RDEPEND="
 	cdparanoia? ( media-sound/cdparanoia )
 	dga? ( x11-libs/libXxf86dga )
 	directfb? ( dev-libs/DirectFB )
-	dts? || ( media-libs/libdca media-libs/libdts )
+	dts? (
+		|| (
+			media-libs/libdca
+			media-libs/libdts
+		)
+	)
 	dvb? ( media-tv/linuxtv-dvb-headers )
 	dvd? ( dvdread? ( media-libs/libdvdread ) )
 	encode? (
@@ -406,7 +411,6 @@ src_compile() {
 			replace-flags -O3 -O2
 			filter-flags -fPIC -fPIE
 		fi
-	append-flags -D__STDC_LIMIT_MACROS
 	else
 	unset CFLAGS CXXFLAGS
 	fi

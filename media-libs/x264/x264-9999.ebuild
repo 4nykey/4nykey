@@ -14,12 +14,16 @@ KEYWORDS="~x86"
 IUSE="X mp4 sdl threads gtk"
 RESTRICT="test"
 
-RDEPEND="mp4? || ( media-video/gpac-cvs media-video/gpac )
+RDEPEND="
+	mp4? ( media-video/gpac )
 	X? ( x11-libs/libX11 )
 	gtk? ( >=x11-libs/gtk+-2.6.0 )
-	sdl? ( media-libs/libsdl )"
-DEPEND="${RDEPEND}
-	dev-lang/nasm"
+	sdl? ( media-libs/libsdl )
+"
+DEPEND="
+	${RDEPEND}
+	dev-lang/nasm
+"
 
 src_unpack() {
 	subversion_src_unpack

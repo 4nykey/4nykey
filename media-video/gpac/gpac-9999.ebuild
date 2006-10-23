@@ -40,13 +40,16 @@ RDEPEND="
 	xvid? ( >=media-libs/xvid-1.0.1 )
 	sdl? ( media-libs/libsdl )
 	oss? ( virtual/os-headers )
-	X? ( virtual/x11
-		|| ( (
-			x11-libs/libXt
-			x11-libs/libX11
-			x11-libs/libXext
-			) virtual/x11 )
+	X? (
+		|| (
+			(
+				x11-libs/libXt
+				x11-libs/libX11
+				x11-libs/libXext
+			)
+			virtual/x11
 		)
+	)
 "
 DEPEND="
 	${RDEPEND}

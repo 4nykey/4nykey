@@ -10,14 +10,18 @@ ESVN_REPO_URI="http://svn.xiph.org/trunk/ffmpeg2theora"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="x86 amd64 ppc sparc alpha hppa"
+KEYWORDS="~x86"
 IUSE=""
 
-DEPEND=">=media-libs/libtheora-1.0_alpha4
-	|| ( >=media-video/ffmpeg-0.4.9_p20050226-r1
-		media-video/ffmpeg-svn )
+RDEPEND="
+	>=media-libs/libtheora-1.0_alpha4
+	>=media-video/ffmpeg-0.4.9_p20050226-r1
 	>=media-libs/libogg-1.1.0
-	>=media-libs/libvorbis-1.0.1"
+	>=media-libs/libvorbis-1.0.1
+"
+DEPEND="
+	${RDEPEND}
+"
 
 src_unpack() {
 	subversion_src_unpack

@@ -17,9 +17,12 @@ RDEPEND="
 	>=x11-libs/gtk+-2.6
 	x11-libs/startup-notification
 	hal? (
-		|| ( dev-libs/dbus-glib <sys-apps/dbus-0.90 )
-		>=sys-apps/hal-0.5
+		|| (
+			dev-libs/dbus-glib
+			<sys-apps/dbus-0.90
 		)
+		>=sys-apps/hal-0.5
+	)
 	fam? ( virtual/fam )
 "
 DEPEND="

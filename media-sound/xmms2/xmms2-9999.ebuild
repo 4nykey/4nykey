@@ -15,7 +15,8 @@ KEYWORDS="~x86"
 IUSE="vorbis flac sid python ruby alsa curl aac gnome jack mad oss samba modplug
 speex sdl musepack encode ape mms wma java boost ecore avahi fam"
 
-RDEPEND=">=dev-libs/glib-2.2.0
+RDEPEND="
+	>=dev-libs/glib-2.2.0
 	mad? ( media-libs/libmad )
 	=dev-db/sqlite-3*
 	curl? ( >=net-misc/curl-7.11.2 )
@@ -32,7 +33,7 @@ RDEPEND=">=dev-libs/glib-2.2.0
 	musepack? ( media-libs/libmpcdec )
 	ape? ( media-sound/mac )
 	mms? ( media-libs/libmms )
-	wma? || ( media-video/ffmpeg-svn media-video/ffmpeg )
+	wma? ( media-video/ffmpeg )
 	sdl? ( media-libs/sdl-ttf )
 	python? ( dev-python/pyrex )
 	ruby? ( >=dev-lang/ruby-1.8 )

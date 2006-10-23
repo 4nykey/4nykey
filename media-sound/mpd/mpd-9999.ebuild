@@ -13,7 +13,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
 IUSE="aac alsa ao audiofile flac icecast ipv6 mad mikmod musepack vorbis oss
-unicode ogg pulseaudio"
+unicode ogg pulseaudio jack"
 
 RDEPEND="
 	!media-sound/mpd-svn

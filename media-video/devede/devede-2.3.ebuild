@@ -12,10 +12,12 @@ SLOT="0"
 KEYWORDS="~x86"
 IUSE=""
 
-RDEPEND="dev-python/pygtk
-	|| ( media-video/mplayer-svn media-video/mplayer )
+RDEPEND="
+	dev-python/pygtk
+	media-video/mplayer
 	media-video/dvdauthor
-	app-cdr/cdrtools"
+	app-cdr/cdrtools
+"
 
 src_install() {
 	exeinto /usr/bin

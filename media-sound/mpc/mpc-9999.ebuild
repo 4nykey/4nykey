@@ -13,8 +13,10 @@ KEYWORDS="~x86"
 SLOT="0"
 LICENSE="GPL-2"
 
-DEPEND="virtual/libc
-	nls? ( || ( sys-libs/glibc dev-libs/libiconv ) )"
+DEPEND="
+	virtual/libc
+	nls? ( virtual/libiconv )
+"
 
 src_unpack() {
 	subversion_src_unpack
@@ -23,8 +25,10 @@ src_unpack() {
 }
 
 src_compile() {
-	econf --disable-dependency-tracking \
-		$(use_enable nls iconv) || die "econf failed"
+	econf \
+		--disable-dependency-tracking \
+		$(use_enable nls iconv) \
+		|| die "econf failed"
 	emake || die "emake failed"
 }
 

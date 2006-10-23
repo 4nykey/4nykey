@@ -15,12 +15,14 @@ SLOT="0"
 KEYWORDS="-*"
 IUSE="xmms mp4"
 
-RDEPEND="xmms? ( >=media-sound/xmms-1.2.7
-	mp4? || ( media-video/mpeg4ip-cvs
-		media-video/mpeg4ip )
-	media-libs/id3lib )"
-
-DEPEND="${RDEPEND}"
+RDEPEND="
+	xmms? ( >=media-sound/xmms-1.2.7
+	mp4? ( media-video/mpeg4ip )
+	media-libs/id3lib
+"
+DEPEND="
+	${RDEPEND}
+"
 
 src_unpack() {
 	cvs_src_unpack
@@ -32,12 +34,15 @@ src_unpack() {
 
 src_compile() {
 	filter-flags -mfpmath=sse #34392
+
 	# enabling drm brakes decoding of he-aac 5.1 streams
 	#append-flags -DDRM #48140
 
-	econf --without-drm \
+	econf \
+		--without-drm \
 		$(use_with xmms) \
-		$(use_with mp4 mpeg4ip) || die
+		$(use_with mp4 mpeg4ip) \
+		|| die
 
 	emake || die
 }

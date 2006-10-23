@@ -16,9 +16,11 @@ IUSE="doc dbus"
 RDEPEND="
 	>=x11-libs/gtksourceview-1.8.0
 	>=gnome-base/gconf-2
-	dbus? || ( 
-		dev-libs/dbus-glib
-		<sys-apps/dbus-0.90
+	dbus? (
+		|| (
+			dev-libs/dbus-glib
+			<sys-apps/dbus-0.90
+		)
 	)
 "
 DEPEND="

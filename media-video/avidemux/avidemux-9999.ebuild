@@ -20,8 +20,8 @@ RDEPEND="
 	>=dev-libs/libxml2-2.6.7
 	>=x11-libs/gtk+-2.6.0
 	>=dev-lang/spidermonkey-1.5-r2
-	a52? ( >=media-libs/a52dec-0.7.4 )
-	encode? ( >=media-sound/lame-3.93 )
+	a52? ( >=media-libs/a52dec-0.7.4
+		encode? ( media-sound/aften ) )
 	aac? ( >=media-libs/faad2-2.0-r2
 		encode? ( >=media-libs/faac-1.23.5 ) )
 	mp3? ( media-libs/libmad
@@ -45,10 +45,10 @@ RDEPEND="
 			x11-libs/libX11
 			x11-libs/libXext
 			x11-libs/libXrender
-		) virtual/x11
+		)
+		virtual/x11
 	)
 "
-
 DEPEND="
 	$RDEPEND
 	dev-util/pkgconfig

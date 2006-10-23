@@ -21,14 +21,15 @@ KEYWORDS="~x86"
 IUSE="crypt encode gtk ipv6 mmx static v4l2 xvid ffmpeg mpeg aac mp3 a52 mad
 x264 id3 alsa sdl"
 
-RDEPEND="gtk? ( >=x11-libs/gtk+-2 )
+RDEPEND="
+		gtk? ( >=x11-libs/gtk+-2 )
 		mmx? ( >=dev-lang/nasm-0.98.19 )
 		xvid? ( >=media-libs/xvid-1.0 )
-		ffmpeg? || ( media-video/ffmpeg-svn
-			media-video/ffmpeg )
+		ffmpeg? ( media-video/ffmpeg )
 		encode? (
 			aac? ( >=media-libs/faac-1.1 )
-			mp3? ( >=media-sound/lame-3.92 ) )
+			mp3? ( >=media-sound/lame-3.92 )
+		)
 		a52? ( media-libs/a52dec )
 		mpeg? ( media-libs/libmpeg2 )
 		mad? ( media-libs/libmad )
@@ -38,7 +39,8 @@ RDEPEND="gtk? ( >=x11-libs/gtk+-2 )
 		alsa? ( media-libs/alsa-lib )
 		media-libs/libmpeg2
 "
-DEPEND="${RDEPEND}
+DEPEND="
+	${RDEPEND}
 "
 
 src_unpack() {
