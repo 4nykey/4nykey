@@ -15,8 +15,9 @@ SLOT="1"
 KEYWORDS="~x86 ~ppc ~sparc ~alpha hppa ~amd64 ~ia64 ppc64"
 IUSE="doc"
 
-DEPEND="virtual/libc
-	x86? ( >=dev-lang/nasm-0.98.36 )"
+DEPEND="
+	x86? ( >=dev-lang/nasm-0.98.36 )
+"
 
 S="${WORKDIR}/${ECVS_MODULE}/build/generic"
 

@@ -13,8 +13,6 @@ SLOT="0"
 KEYWORDS="~x86"
 IUSE="doc"
 
-DEPEND="virtual/libc"
-
 src_unpack() {
 	subversion_src_unpack
 	cd ${S}

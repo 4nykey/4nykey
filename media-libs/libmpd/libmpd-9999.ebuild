@@ -12,8 +12,6 @@ SLOT="0"
 LICENSE="GPL-2"
 KEYWORDS="~x86"
 
-DEPEND="virtual/libc"
-
 src_unpack() {
 	subversion_src_unpack
 	cd ${S}

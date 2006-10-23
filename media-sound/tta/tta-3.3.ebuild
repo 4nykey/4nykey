@@ -12,8 +12,6 @@ SRC_URI="${HOMEPAGE}/ftp/${P/a/aenc}-src.zip"
 
 S="${WORKDIR}"
 
-DEPEND="virtual/libc"
-
 src_compile() {
 	sed -i '/^CFLAGS/d' Makefile
 	emake

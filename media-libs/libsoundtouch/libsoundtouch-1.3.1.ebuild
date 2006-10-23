@@ -16,9 +16,6 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~x86"
 
-RDEPEND="virtual/libc"
-DEPEND="${RDEPEND}"
-
 src_unpack() {
 	unpack ${A} || die "unpack failed"
 	cd ${S}

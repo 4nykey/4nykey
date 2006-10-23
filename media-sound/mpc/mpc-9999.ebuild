@@ -14,7 +14,6 @@ SLOT="0"
 LICENSE="GPL-2"
 
 DEPEND="
-	virtual/libc
 	nls? ( virtual/libiconv )
 "
 

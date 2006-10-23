@@ -14,9 +14,6 @@ SLOT="0"
 KEYWORDS="~x86"
 IUSE=""
 
-DEPEND="virtual/libc"
-RDEPEND="${DEPEND}"
-
 src_compile() {
 	echo "$(tc-getCXX) $CFLAGS $LDFLAGS -o mp3val *.cpp"
 	$(tc-getCXX) $CFLAGS $LDFLAGS -o mp3val *.cpp || die
