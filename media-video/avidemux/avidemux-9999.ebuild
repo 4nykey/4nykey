@@ -52,6 +52,7 @@ RDEPEND="
 DEPEND="
 	$RDEPEND
 	dev-util/pkgconfig
+	sys-devel/gettext
 "
 
 filter-flags "-fno-default-inline"
@@ -70,6 +71,7 @@ src_unpack() {
 
 	sed -i '/configure.in.bot.end/d' admin/cvs.sh
 	/bin/sh admin/cvs.sh configure.in
+	autopoint --force || die
 	touch acinclude.m4
 	eautoreconf
 }
