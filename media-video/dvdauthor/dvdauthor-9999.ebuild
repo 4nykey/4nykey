@@ -14,12 +14,17 @@ SLOT="0"
 KEYWORDS="~x86"
 IUSE="doc"
 
-DEPEND="media-libs/libdvdread
+RDEPEND="
+	media-libs/libdvdread
 	>=media-gfx/imagemagick-5.5.7.14
 	>=dev-libs/libxml2-2.5.0
 	media-libs/libpng
-	doc? ( docbook-sgml-utils )
-	"
+"
+DEPEND="
+	${RDEPEND}
+	sys-devel/gettext
+	doc? ( app-text/docbook-sgml-utils )
+"
 
 src_unpack() {
 	darcs_src_unpack
@@ -27,6 +32,8 @@ src_unpack() {
 	sed -i '/AC_CONFIG_AUX_DIR/d' configure.ac
 	use doc || sed -i 's:\<doc\>::' Makefile.am
 	epatch ${FILESDIR}/${PN}-*.diff
+	# make automake-1.10 happy
+	cp /usr/share/gettext/config.rpath .
 	eautoreconf
 }
 

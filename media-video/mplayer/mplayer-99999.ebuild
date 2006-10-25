@@ -105,7 +105,7 @@ RDEPEND="
 		x11-libs/libXxf86vm
 		x11-libs/libXext
 	)
-	jack? ( jack-audio-connection-kit )
+	jack? ( media-sound/jack-audio-connection-kit )
 	xmms? ( media-sound/xmms )
 	xanim? ( >=media-video/xanim-2.80.1-r4 )
 	external-faad? ( media-libs/faad2 )
@@ -404,7 +404,7 @@ src_compile() {
 	if use custom-cflags
 	then
 	# let's play the filtration game!  MPlayer hates on all!
-	strip-flags
+	#strip-flags
 	# ugly optimizations cause MPlayer to cry on x86 systems!
 		if use x86 ; then
 			replace-flags -O0 -O2

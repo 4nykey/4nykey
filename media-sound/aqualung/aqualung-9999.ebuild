@@ -21,7 +21,7 @@ RDEPEND="
 	dev-libs/libxml2
 	oss? ( virtual/os-headers )
 	alsa? ( media-libs/alsa-lib )
-	jack? ( jack-audio-connection-kit )
+	jack? ( media-sound/jack-audio-connection-kit )
 	libsamplerate? ( media-libs/libsamplerate )
 	sndfile? ( media-libs/libsndfile )
 	flac? ( media-libs/flac )

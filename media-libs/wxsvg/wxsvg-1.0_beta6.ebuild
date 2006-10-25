@@ -15,13 +15,17 @@ KEYWORDS="~x86"
 
 IUSE="debug cairo unicode"
 
-RDEPEND=">=x11-libs/wxGTK-2.4.2
+RDEPEND="
+	>=x11-libs/wxGTK-2.4.2
 	!cairo? ( media-libs/libart_lgpl )
 	cairo? ( x11-libs/cairo )
-	media-libs/fontconfig"
+	media-libs/fontconfig
+"
 
-DEPEND="${RDEPEND}
-	cairo? (dev-util/pkgconfig)"
+DEPEND="
+	${RDEPEND}
+	dev-util/pkgconfig
+"
 
 S="${WORKDIR}/${MY_P}"
 
