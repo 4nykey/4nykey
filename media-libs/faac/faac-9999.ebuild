@@ -20,8 +20,8 @@ RDEPEND="
 	>=media-libs/libsndfile-1.0.0
 	mp4? (
 		|| (
-			media-libs/libmp4v2
 			=media-video/mpeg4ip-9999
+			media-libs/libmp4v2
 		)
 	)
 "

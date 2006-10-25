@@ -9,7 +9,7 @@ HOMEPAGE="http://onion.dynserv.net/~timo/cmus.html"
 EGIT_REPO_URI="git://onion.dynserv.net/git/cmus.git"
 
 LICENSE="GPL-2"
-KEYWORDS="-*"
+KEYWORDS="~x86"
 SLOT="0"
 IUSE="alsa arts flac oss mad modplug vorbis musepack ao"
 
