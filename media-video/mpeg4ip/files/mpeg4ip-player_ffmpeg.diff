@@ -1,0 +1,22 @@
+--- player/plugin/audio/ffmpeg/ffmpeg.cpp.orig	2006-10-24 22:21:13.000000000 +0300
++++ player/plugin/audio/ffmpeg/ffmpeg.cpp	2006-10-24 22:46:19.000000000 +0300
+@@ -167,7 +167,7 @@
+     break;
+   }
+   if (userdata) {
+-    ffmpeg->m_c->extradata = (void *)userdata;
++    ffmpeg->m_c->extradata = (uint8_t *)userdata;
+     ffmpeg->m_c->extradata_size = ud_size;
+   }
+   ffmpeg_interface_lock();
+--- player/plugin/video/ffmpeg/ffmpeg.cpp.orig	2006-10-24 22:21:13.000000000 +0300
++++ player/plugin/video/ffmpeg/ffmpeg.cpp	2006-10-24 22:48:57.000000000 +0300
+@@ -259,7 +259,7 @@
+   }
+     break;
+   case CODEC_ID_SVQ3:
+-    ffmpeg->m_c->extradata = (void *)userdata;
++    ffmpeg->m_c->extradata = (uint8_t *)userdata;
+     ffmpeg->m_c->extradata_size = ud_size;
+     if (vinfo != NULL) {
+       ffmpeg->m_c->width = vinfo->width;

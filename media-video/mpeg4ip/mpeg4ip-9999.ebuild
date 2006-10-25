@@ -88,6 +88,7 @@ src_compile() {
 		$(use_enable id3 id3tags) \
 		$(use_enable crypt ismacryp) \
 		$(use_enable static) \
+		$(use_enable ffmpeg) \
 		${myconf} || die "configure failed"
 
 	emake || die "emake failed"

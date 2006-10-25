@@ -45,8 +45,8 @@ diff -u -r1.22 Makefile.am
  endif
  endif
  
--SUBDIRS = utils audio avi fposrec gnu ismacryp mp4av mp4 mp4v2 msg_queue rtp sdp mpeg2t mpeg2ps srtp $(extradir) 
-+SUBDIRS = utils audio avi fposrec gnu ismacryp mp4v2 mp4av mp4 msg_queue rtp sdp mpeg2t mpeg2ps srtp $(extradir) 
+-SUBDIRS = utils audio avi ffmpeg fposrec gnu ismacryp mp4av mp4 mp4v2 msg_queue rtp sdp mpeg2t mpeg2ps srtp $(extradir)
++SUBDIRS = utils audio avi ffmpeg fposrec gnu ismacryp mp4v2 mp4av mp4 msg_queue rtp sdp mpeg2t mpeg2ps srtp $(extradir)
 Index: lib/mp4v2/util/Makefile.am
 ===================================================================
 RCS file: /cvsroot/mpeg4ip/mpeg4ip/lib/mp4v2/util/Makefile.am,v
@@ -75,7 +75,7 @@ diff -u -r1.65 Makefile.am
  	video_sdl_sync.cpp \
  	video_sdl_sync.h 
 +libmp4syncsdl_la_LIBADD = \
-+	-lm $(SDL_AUDIO_LIB)
++	-lm
  
  include_HEADERS = \
  	codec_plugin.h \

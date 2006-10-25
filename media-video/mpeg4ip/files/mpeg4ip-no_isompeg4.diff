@@ -7,7 +7,7 @@ diff -u -r1.13 Makefile.am
 +++ common/video/Makefile.am	6 May 2005 22:51:37 -0000
 @@ -1 +1 @@
 -SUBDIRS = iso-mpeg4
-+SUBDIRS = #iso-mpeg4 
++SUBDIRS = 
 Index: player/src/codec/Makefile.am
 ===================================================================
 RCS file: /cvsroot/mpeg4ip/mpeg4ip/player/src/codec/Makefile.am,v
@@ -18,3 +18,13 @@ diff -u -r1.3 Makefile.am
 @@ -1 +1 @@
 -SUBDIRS = aa mp3 mpeg4 wav
 +SUBDIRS = aa mp3 wav
+--- configure.in.orig	2006-10-08 22:32:08.000000000 +0300
++++ configure.in	2006-10-24 13:38:56.000000000 +0300
+@@ -37,7 +37,6 @@
+    AC_CONFIG_SUBDIRS(lib/SDLAudio)
+ fi
+ AM_CONDITIONAL(HAVE_MAC_OSX, $have_macosx)
+-AC_CONFIG_SUBDIRS(common/video/iso-mpeg4)
+ 
+ AC_LIBTOOL_DLOPEN
+ AM_PROG_LIBTOOL
