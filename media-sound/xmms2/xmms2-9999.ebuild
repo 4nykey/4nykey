@@ -12,8 +12,11 @@ EGIT_REPO_URI="git://git.xmms.se/xmms2/xmms2-devel.git/"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="vorbis flac sid python ruby alsa curl aac gnome jack mad oss samba modplug
-speex sdl musepack encode ape mms wma java boost ecore avahi fam"
+IUSE="
+vorbis flac sid python ruby alsa curl aac gnome jack mad oss samba modplug
+speex sdl musepack encode ape mms wma java boost ecore avahi fam fftw
+libsamplerate
+"
 
 RDEPEND="
 	>=dev-libs/glib-2.2.0
@@ -43,10 +46,13 @@ RDEPEND="
 	avahi? ( net-dns/avahi )
 	fam? ( app-admin/gamin )
 	oss? ( virtual/os-headers )
+	fftw? ( >=sci-libs/fftw-3 )
+	libsamplerate? ( media-libs/libsamplerate )
 "
 DEPEND="
 	${RDEPEND}
 	dev-util/scons
+	dev-util/pkgconfig
 "
 
 pick_plug() {
@@ -57,6 +63,7 @@ src_compile() {
 	local myconf
 	pick_plug alsa
 	pick_plug curl curl_http
+	pick_plug curl lastfm
 	pick_plug aac faad
 	pick_plug flac
 	pick_plug gnome gnomevfs
@@ -80,6 +87,9 @@ src_compile() {
 	pick_plug ecore xmmsclient-ecore
 	pick_plug avahi xmms2-mdns-avahi
 	pick_plug fam xmms2-mlib-updater
+	if ! use fftw && ! use libsamplerate; then
+		myconf="${myconf} vocoder"
+	fi
 
 	scons \
 		INSTALLDIR=${D} \
