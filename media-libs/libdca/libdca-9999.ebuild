@@ -17,10 +17,10 @@ IUSE="oss debug"
 
 RDEPEND="
 	!media-libs/libdts
-	oss? ( virtual/os-headers )
 "
 DEPEND="
 	${RDEPEND}
+	oss? ( virtual/os-headers )
 "
 
 src_compile() {

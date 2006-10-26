@@ -27,7 +27,6 @@ RDEPEND="
 	mp3? ( media-libs/libmad
 		encode? ( >=media-sound/lame-3.93 ) )
 	xvid? ( >=media-libs/xvid-1.0.0 )
-	x86? ( dev-lang/nasm )
 	nls? ( >=sys-devel/gettext-0.12.1 )
 	vorbis? ( >=media-libs/libvorbis-1.0.1 )
 	arts? ( >=kde-base/arts-1.2.3 )
@@ -36,9 +35,13 @@ RDEPEND="
 	x264? ( media-libs/x264 )
 	png? ( media-libs/libpng )
 	esd? ( media-sound/esound )
-	dts? ( media-libs/libdca )
+	dts? (
+		|| (
+			media-libs/libdca
+			media-libs/libdts
+		)
+	)
 	sdl? ( media-libs/libsdl )
-	oss? ( virtual/os-headers )
 	|| (
 		(
 			xv? ( x11-libs/libXv )
@@ -51,6 +54,8 @@ RDEPEND="
 "
 DEPEND="
 	$RDEPEND
+	oss? ( virtual/os-headers )
+	x86? ( dev-lang/nasm )
 	dev-util/pkgconfig
 	sys-devel/gettext
 "

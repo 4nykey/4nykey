@@ -32,8 +32,11 @@ RDEPEND="
 	musepack? ( media-libs/libmpcdec )
 	pulseaudio? ( media-sound/pulseaudio )
 	vorbis? ( media-libs/libvorbis )
-	oss? ( virtual/os-headers )
 	jack? ( media-sound/jack-audio-connection-kit )
+"
+DEPEND="
+	${RDEPEND}
+	oss? ( virtual/os-headers )
 "
 
 pkg_setup() {

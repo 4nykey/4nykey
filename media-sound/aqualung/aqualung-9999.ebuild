@@ -19,7 +19,6 @@ ape taglib ladspa cddb pda systray"
 RDEPEND="
 	>=x11-libs/gtk+-2.6
 	dev-libs/libxml2
-	oss? ( virtual/os-headers )
 	alsa? ( media-libs/alsa-lib )
 	jack? ( media-sound/jack-audio-connection-kit )
 	libsamplerate? ( media-libs/libsamplerate )
@@ -38,8 +37,9 @@ RDEPEND="
 	systray? ( >=x11-libs/gtk+-2.10 )
 "
 DEPEND="
-	>=dev-util/pkgconfig-0.9.0
 	${RDEPEND}
+	oss? ( virtual/os-headers )
+	>=dev-util/pkgconfig-0.9.0
 "
 
 S="${WORKDIR}/${ECVS_MODULE}"

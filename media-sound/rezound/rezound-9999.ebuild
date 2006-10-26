@@ -28,18 +28,16 @@ COMMON_DEPS="
 	portaudio? ( >=media-libs/portaudio-18 )
 	soundtouch? ( >=media-libs/libsoundtouch-1.2.1 )
 	vorbis? ( media-libs/libvorbis media-libs/libogg )
-	oss? ( virtual/os-headers )
 "
-
 # optional packages (don't need to be installed during emerge):
 RDEPEND="
 	${COMMON_DEPS}
 	lame? ( >=media-sound/lame-3.92 )
 	cdr? ( app-cdr/cdrdao )
 "
-
 DEPEND="
 	${COMMON_DEPS}
+	oss? ( virtual/os-headers )
 	sys-devel/bison
 	sys-devel/flex
 	sys-devel/gettext

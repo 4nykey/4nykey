@@ -24,10 +24,6 @@ RDEPEND="
 	jpeg? ( media-libs/jpeg )
 	mad? ( media-libs/libmad )
 	javascript? ( dev-lang/spidermonkey )
-	nsplugin? (
-		!gecko-sdk? ( www-client/mozilla-firefox )
-		gecko-sdk? ( net-libs/gecko-sdk )
-	)
 	aac? ( media-libs/faad2 )
 	ffmpeg? ( media-video/ffmpeg )
 	vorbis? ( media-libs/libvorbis )
@@ -39,7 +35,6 @@ RDEPEND="
 	xml? ( >=dev-libs/libxml2-2.6.0 )
 	xvid? ( >=media-libs/xvid-1.0.1 )
 	sdl? ( media-libs/libsdl )
-	oss? ( virtual/os-headers )
 	X? (
 		|| (
 			(
@@ -53,7 +48,12 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
+	oss? ( virtual/os-headers )
 	amr? ( app-arch/unzip )
+	nsplugin? (
+		!gecko-sdk? ( www-client/mozilla-firefox )
+		gecko-sdk? ( net-libs/gecko-sdk )
+	)
 "
 
 src_unpack() {

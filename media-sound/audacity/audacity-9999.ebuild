@@ -34,10 +34,10 @@ RDEPEND="
 	!static? ( media-libs/libsndfile )
 	soundtouch? ( media-libs/libsoundtouch )
 	lame? ( >=media-sound/lame-3.92 )
-	oss? ( virtual/os-headers )
 "
 DEPEND="
 	${RDEPEND} 
+	oss? ( virtual/os-headers )
 "
 
 src_unpack() {

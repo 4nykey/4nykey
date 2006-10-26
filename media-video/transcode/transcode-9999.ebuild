@@ -59,7 +59,7 @@ RDEPEND="a52? ( >=media-libs/a52dec-0.7.4 )
 	)
 "
 DEPEND="${RDEPEND}
-	v4l2? ( >=sys-kernel/linux-headers-2.6.11 )
+	v4l2? ( >=virtual/os-headers-2.6.11 )
 "
 
 pkg_setup() {

@@ -17,7 +17,7 @@ KEYWORDS="~x86"
 SLOT="0"
 IUSE="alsa arts flac oss mad modplug vorbis musepack ao"
 
-DEPEND="
+RDEPEND="
 	sys-libs/ncurses
 	alsa? ( >=media-libs/alsa-lib-0.9.0 )
 	arts? ( kde-base/arts )
@@ -27,10 +27,10 @@ DEPEND="
 	modplug? ( >=media-libs/libmodplug-0.7 )
 	vorbis? ( >=media-libs/libvorbis-1.0 )
 	musepack? ( media-libs/libmpcdec )
-	oss? ( virtual/os-headers )
 "
-RDEPEND="
-	${DEPEND}
+DEPEND="
+	${RDEPEND}
+	oss? ( virtual/os-headers )
 "
 
 pkg_setup() {

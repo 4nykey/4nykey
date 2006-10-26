@@ -38,19 +38,21 @@ RDEPEND="
 	mms? ( media-libs/libmms )
 	wma? ( media-video/ffmpeg )
 	sdl? ( media-libs/sdl-ttf )
-	python? ( dev-python/pyrex )
+	python? ( dev-lang/python )
 	ruby? ( >=dev-lang/ruby-1.8 )
-	java? ( >=dev-lang/swig-1.3.25 virtual/jdk )
+	java? ( virtual/jre )
 	boost? ( dev-libs/boost )
 	ecore? ( x11-libs/ecore )
 	avahi? ( net-dns/avahi )
 	fam? ( app-admin/gamin )
-	oss? ( virtual/os-headers )
 	fftw? ( >=sci-libs/fftw-3 )
 	libsamplerate? ( media-libs/libsamplerate )
 "
 DEPEND="
 	${RDEPEND}
+	oss? ( virtual/os-headers )
+	python? ( dev-python/pyrex )
+	java? ( >=dev-lang/swig-1.3.25 virtual/jdk )
 	dev-util/scons
 	dev-util/pkgconfig
 "

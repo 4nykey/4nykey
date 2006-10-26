@@ -4,24 +4,31 @@
 
 inherit subversion autotools
 
+AT_M4DIR="m4"
 DESCRIPTION="The Theora Video Compression Codec"
 HOMEPAGE="http://www.theora.org/"
+ESVN_REPO_URI="http://svn.xiph.org/trunk/theora"
+ESVN_BOOTSTRAP="eautoreconf"
 
 LICENSE="xiph"
 SLOT="0"
 KEYWORDS="~x86"
 IUSE="encode mmx static player"
-ESVN_REPO_URI="http://svn.xiph.org/trunk/theora"
 
-DEPEND=">=media-libs/libogg-1.1.0
+RDEPEND="
+	>=media-libs/libogg-1.1.0
 	>=media-libs/libvorbis-1.0.1
-	player? ( media-libs/libsdl 
-		virtual/os-headers )"
+	player? ( media-libs/libsdl )
+"
+DEPEND="
+	${RDEPEND}
+	player? ( virtual/os-headers )
+"
 
 src_unpack() {
 	subversion_src_unpack
 	cd ${S}
-	AT_M4DIR="${S}/m4" eautoreconf || die
+#	AT_M4DIR="${S}/m4" eautoreconf || die
 }
 
 src_compile() {

@@ -16,10 +16,10 @@ IUSE="jack alsa oss doc"
 RDEPEND="
 	alsa? ( media-libs/alsa-lib )
 	jack? ( media-sound/jack-audio-connection-kit )
-	oss? ( virtual/os-headers )
 "
 DEPEND="
 	${RDEPEND}
+	oss? ( virtual/os-headers )
 "
 
 src_unpack() {

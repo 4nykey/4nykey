@@ -53,8 +53,18 @@ RDEPEND="
 	mpeg? ( >=media-libs/libmpeg2-0.3.2 )
 	vorbis? ( media-libs/libvorbis )
 	theora? ( media-libs/libtheora )
-	X? ( virtual/x11 )
-	xv? ( virtual/x11 )
+	X? (
+		|| (
+			(
+				x11-libs/libX11
+				x11-libs/libXext
+				xv? ( x11-libs/libXv )
+				xinerama? ( x11-libs/libXinerama )
+			)
+			<virtual/x11-7
+		)
+		opengl? ( virtual/opengl )
+	)
 	truetype? ( media-libs/freetype
 		media-fonts/ttf-bitstream-vera )
 	svga? ( media-libs/svgalib )
@@ -83,9 +93,6 @@ RDEPEND="
 	daap? ( >=media-libs/libopendaap-0.3.0 )
 	corba? ( >=gnome-base/orbit-2.8.0
 		>=dev-libs/glib-2.3.2 )
-	v4l? ( sys-kernel/linux-headers )
-	dvb? ( sys-kernel/linux-headers )
-	joystick? ( sys-kernel/linux-headers )
 	mod? ( media-libs/libmodplug )
 	speex? ( media-libs/speex )
 	svg? ( >=gnome-base/librsvg-2.5.0 )
@@ -96,24 +103,33 @@ RDEPEND="
 	nsplugin? ( >=net-libs/gecko-sdk-1.7.8 )
 	portaudio? ( >=media-libs/portaudio-0.19 )
 	qt4? ( $(qt4_min_version 4) )
-	oss? ( virtual/os-headers )
 "
 DEPEND="
 	${RDEPEND}
+	oss? ( virtual/os-headers )
+	v4l? ( virtual/os-headers )
+	dvb? ( virtual/os-headers )
+	joystick? ( virtual/os-headers )
 	sys-devel/gettext
 	dev-util/pkgconfig
 "
 
-src_unpack() {
+pkg_setup() {
 	if use wxwindows; then
 		WX_GTK_VER="2.6"
 		if use unicode; then
-			need-wxwidgets unicode || die "You need to install wxGTK with unicode support."
+			need-wxwidgets unicode
 		else
-			need-wxwidgets gtk2 || die "You need to install wxGTK with gtk2 support."
+			need-wxwidgets gtk2
 		fi
 	fi
+	if use skins && ! use truetype; then
+		eerror "Trying to build with skins support but without truetype."
+		die "You have to use 'truetype' to use 'skins'"
+	fi
+}
 
+src_unpack() {
 	export SKIP_AUTOTOOLS="indeed"
 	subversion_src_unpack
 
@@ -124,7 +140,8 @@ src_unpack() {
 	cd ${S}
 
 	sed -i -e \
-		"s:/glide:/glide3:; s:glide2x:glide3:" configure.ac || die "sed glide failed."
+		"s:/glide:/glide3:; s:glide2x:glide3:" configure.ac \
+		|| die "sed glide failed."
 
 	# Fix the default font
 	sed -i -e \
@@ -133,25 +150,24 @@ src_unpack() {
 
 	# helps -Wl,--as-needed
 	sed -i "s:\(libvlc_la_LIBADD = .*\):\1 -ldl:" src/Makefile.am
+	sed -i "s:\(libmono_plugin_la_LIBADD =.*\):\1 -lm:"	\
+		modules/audio_filter/channel_mixer/Makefile.am
 
-	autopoint -f
-	AT_M4DIR="${S}/m4"
-	eautoreconf
+	autopoint -f || die
+	AT_M4DIR="${S}/m4" eautoreconf
 }
 
 src_compile () {
-	# reason why:
-	# skins2 interface is horribly broken for some reason.
-	# Therefore it's being disabled for the standard wxwindows
-	# interface which isn't
-	myconf="${myconf} --disable-skins2"
+	local myconf="${myconf} --with-tuning=no"
 
-	use nsplugin && myconf="${myconf} --with-mozilla-sdk-path=/usr/$(get_libdir)/gecko-sdk"
+	use nsplugin && \
+		myconf="${myconf} --with-mozilla-sdk-path=/usr/$(get_libdir)/gecko-sdk"
 
 	use wxwindows && \
-		myconf="${myconf} --with-wx-config=$(basename ${WX_CONFIG}) --with-wx-config-path=$(dirname ${WX_CONFIG})"
+		myconf="${myconf} --with-wx-config=$(basename ${WX_CONFIG})"
+		myconf="${myconf} --with-wx-config-path=$(dirname ${WX_CONFIG})"
 
-	ac_cv_c_fast_math="no" ac_cv_c_unroll_loops="no" \
+	ac_cv_c_unroll_loops="no" \
 	econf \
 		$(use_enable ffmpeg) \
 		$(use_enable altivec) \
@@ -163,7 +179,8 @@ src_compile () {
 		$(use_enable v4l) \
 		$(use_enable cdda) \
 		$(use_enable vcd) \
-		$(use_enable dvb) $(use_enable dvb pvr) \
+		$(use_enable dvb) \
+		$(use_enable dvb pvr) \
 		$(use_enable ogg) \
 		$(use_enable matroska mkv) \
 		$(use_enable flac) \
@@ -171,10 +188,13 @@ src_compile () {
 		$(use_enable theora) \
 		$(use_enable X x11) \
 		$(use_enable xv xvideo) \
-		$(use_enable opengl glx) $(use_enable opengl) \
+		$(use_enable opengl glx) \
+		$(use_enable opengl) \
 		$(use_enable truetype freetype) \
 		$(use_enable bidi fribidi) \
-		$(use_enable dvd dvdread) $(use_enable dvd dvdplay) $(use_enable dvd dvdnav) \
+		$(use_enable dvd dvdread) \
+		$(use_enable dvd dvdplay) \
+		$(use_enable dvd dvdnav) \
 		$(use_enable fbcon fb) \
 		$(use_enable svga svgalib) \
 		$(use_enable 3dfx glide) \
@@ -189,7 +209,8 @@ src_compile () {
 		$(use_enable xosd) \
 		$(use_enable lirc) \
 		$(use_enable joystick) \
-		$(use_enable live live555) $(use_with live live555-tree /usr/lib/live) \
+		$(use_enable live live555) \
+		$(use_with live live555-tree /usr/lib/live) \
 		$(use_enable mp3 mad) \
 		$(use_enable aac faad) \
 		$(use_enable a52) \
@@ -212,19 +233,23 @@ src_compile () {
 		$(use_enable nsplugin mozilla) \
 		$(use_enable portaudio) \
 		$(use_enable qt4) \
+		$(use_enable skins skins2) \
 		${myconf} || die "configuration failed"
 
 	emake || die "make of VLC failed"
 }
 
 src_install() {
-	make DESTDIR="${D}" plugindir="/usr/$(get_libdir)/${PLUGINS_DIR}" install || die "Installation failed!"
+	make \
+		DESTDIR="${D}" \
+		plugindir="/usr/$(get_libdir)/${PLUGINS_DIR}" \
+		install \
+		|| die "Installation failed!"
 
 	dodoc AUTHORS MAINTAINERS HACKING THANKS TODO NEWS README \
-		doc/fortunes.txt doc/intf-cdda.txt doc/intf-vcd.txt
+		doc/{,subtitles}/*.txt
 
-	rm -r ${D}/usr/share/vlc/{,k,q,g,gnome-}vlc*.{png,xpm} \
-		${D}/usr/share/vlc/vlc*.ico ${D}/usr/share/vlc/skins2 \
+	rm -r ${D}/usr/share/vlc/{,k,q,g,gnome-}vlc*.{png,xpm,ico} \
 		${D}/usr/share/doc/vlc
 
 	for res in 16 32 48; do

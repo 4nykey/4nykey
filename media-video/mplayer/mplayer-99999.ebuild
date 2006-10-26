@@ -110,7 +110,6 @@ RDEPEND="
 	xanim? ( >=media-video/xanim-2.80.1-r4 )
 	external-faad? ( media-libs/faad2 )
 	sys-libs/ncurses
-	oss? ( virtual/os-headers )
 	dvdnav? ( media-libs/libdvdnav )
 	ladspa? ( media-libs/ladspa-sdk )
 	fontconfig? ( media-libs/fontconfig )
@@ -127,6 +126,7 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
+	oss? ( virtual/os-headers )
 	doc? (
 		dev-libs/libxslt
 		>=app-text/docbook-xml-dtd-4.1.2

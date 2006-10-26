@@ -39,10 +39,10 @@ RDEPEND="
 	ieee1394? ( =media-libs/libdc1394-1*
 	            sys-libs/libraw1394 )
 	x264? ( media-libs/x264 )
-	oss? ( virtual/os-headers )
 "
 DEPEND="
 	${RDEPEND}
+	oss? ( virtual/os-headers )
 	amr? ( app-arch/unzip )
 	dev-util/pkgconfig
 	doc? ( app-text/texi2html )
