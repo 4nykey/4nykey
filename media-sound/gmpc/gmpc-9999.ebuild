@@ -7,11 +7,12 @@ inherit subversion autotools
 DESCRIPTION="A Gnome client for the Music Player Daemon."
 HOMEPAGE="http://cms.qballcow.nl/index.php?page=Gnome_Music_Player_Client"
 ESVN_REPO_URI="https://svn.musicpd.org/${PN}/trunk"
+ESVN_BOOTSTRAP="eautoreconf"
 
 KEYWORDS="~x86"
 SLOT="0"
 LICENSE="GPL-2"
-IUSE="gnome"
+IUSE=""
 
 RDEPEND=">=x11-libs/gtk+-2.8
 	=gnome-base/libglade-2*
@@ -19,15 +20,12 @@ RDEPEND=">=x11-libs/gtk+-2.8
 	dev-perl/XML-Parser
 	media-libs/libmpd
 "
-DEPEND="${RDEPEND}"
-
-src_unpack() {
-	subversion_src_unpack
-	cd ${S}
-	eautoreconf
-}
+DEPEND="
+	${RDEPEND}
+	=dev-util/gob-2*
+"
 
 src_install() {
-	make DESTDIR=${D} install || die "make install failed"
+	einstall || die
 	dodoc AUTHORS ChangeLog NEWS README doc/*.txt
 }
