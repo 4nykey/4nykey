@@ -1,0 +1,18 @@
+--- configure.ac.orig	2006-10-26 00:02:03.000000000 +0300
++++ configure.ac	2006-10-26 01:11:48.000000000 +0300
+@@ -130,6 +130,7 @@
+ dnl Check for assembler (ffmpeg need it), don't call this before LIBTOOL
+ dnl ---------------------------------------------
+ 
++AM_PROG_AS
+ AM_PROG_AS_MOD
+ 
+ 
+@@ -180,6 +181,7 @@
+ fi
+ 
+ AM_GNU_GETTEXT([external])
++AM_GNU_GETTEXT_VERSION([0.11.5])
+ AC_PROG_GMSGFMT_PLURAL
+ 
+ AC_CHECK_FUNCS([nl_langinfo])
