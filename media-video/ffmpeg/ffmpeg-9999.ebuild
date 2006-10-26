@@ -6,10 +6,14 @@ inherit subversion flag-o-matic toolchain-funcs
 
 DESCRIPTION="Complete solution to record, convert and stream audio and video. Includes libavcodec."
 HOMEPAGE="http://ffmpeg.sourceforge.net/"
-NBV="540"
-WBV="520"
-SRC_URI="amr? ( http://www.3gpp.org/ftp/Specs/latest/Rel-5/26_series/26204-${WBV}.zip
-			http://www.3gpp.org/ftp/Specs/latest/Rel-5/26_series/26104-${NBV}.zip )"
+NBV="610"
+WBV="600"
+SRC_URI="
+	amr? ( 
+		http://www.3gpp.org/ftp/Specs/archive/26_series/26.204/26204-${WBV}.zip
+		http://www.3gpp.org/ftp/Specs/archive/26_series/26.104/26104-${NBV}.zip
+	)
+"
 ESVN_REPO_URI="svn://svn.mplayerhq.hu/ffmpeg/trunk"
 #ESVN_PATCHES="${PN}-*.diff"
 

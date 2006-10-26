@@ -6,9 +6,8 @@ inherit flag-o-matic linux-mod subversion
 
 BLUV=1.6
 SVGV=1.9.17
-NBV=540
-WBV=520
-NAV=20060614
+NBV=610
+WBV=600
 SKINDIR="/usr/share/mplayer/skins/"
 DESCRIPTION="Media Player for Linux"
 HOMEPAGE="http://www.mplayerhq.hu/"
@@ -20,8 +19,8 @@ SRC_URI="
 	)
 	svga? ( http://mplayerhq.hu/~alex/svgalib_helper-${SVGV}-mplayer.tar.bz2 )
 	amr? (
-		http://www.3gpp.org/ftp/Specs/latest/Rel-5/26_series/26204-${WBV}.zip
-		http://www.3gpp.org/ftp/Specs/latest/Rel-5/26_series/26104-${NBV}.zip
+		http://www.3gpp.org/ftp/Specs/archive/26_series/26.204/26204-${WBV}.zip
+		http://www.3gpp.org/ftp/Specs/archive/26_series/26.104/26104-${NBV}.zip
 	)
 	gtk? ( mirror://mplayer/Skin/Blue-${BLUV}.tar.bz2 )
 "
