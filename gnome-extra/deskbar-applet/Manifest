@@ -1,0 +1,12 @@
+AUX deskbar-applet-2.15.3-multilib.patch 4033 RMD160 8b4ff5d0bfb27102334d22d36a6011787a736c96 SHA1 6e9e147fb12d6ce1d37fe4801e4d9b357097888a SHA256 e0c7a9d8dd4c85038498d29d6f5c16c36ca1c0e49da17435eeb880e7d79d5649
+MD5 656c1e0e9cfcd770b05bc5e6f42fd994 files/deskbar-applet-2.15.3-multilib.patch 4033
+RMD160 8b4ff5d0bfb27102334d22d36a6011787a736c96 files/deskbar-applet-2.15.3-multilib.patch 4033
+SHA256 e0c7a9d8dd4c85038498d29d6f5c16c36ca1c0e49da17435eeb880e7d79d5649 files/deskbar-applet-2.15.3-multilib.patch 4033
+DIST deskbar-applet-2.16.1.tar.bz2 615223 RMD160 d02576ce3b841f24c4ca175259ede6a84ffa1e76 SHA1 c8d474dc8156bc8f9e6c9e7ce3fe973afe6078dc SHA256 12ea52337279a6b63ae8bb7a87012e3d5c1f6e6ee04be7bc8e3405fcf78993a2
+EBUILD deskbar-applet-2.16.1.ebuild 1322 RMD160 7e3db41227f326c53afeda9b993e5e4aed50a0ac SHA1 1a8839d967e4da1d91bcb9c0203b155627cc5f6c SHA256 46e3a6790e61a496b794157455cdabf1cabb8f2ac01b63954726b3e3f1f195de
+MD5 3a1e321ba05b7d55106ac1227bb51cb3 deskbar-applet-2.16.1.ebuild 1322
+RMD160 7e3db41227f326c53afeda9b993e5e4aed50a0ac deskbar-applet-2.16.1.ebuild 1322
+SHA256 46e3a6790e61a496b794157455cdabf1cabb8f2ac01b63954726b3e3f1f195de deskbar-applet-2.16.1.ebuild 1322
+MD5 730d3fe4a3fb58d0ec17d06931a999b3 files/digest-deskbar-applet-2.16.1 268
+RMD160 26e10fd9e925ceed138df35d2a648801cdd34ff7 files/digest-deskbar-applet-2.16.1 268
+SHA256 5c3c1f6ae63733c25d45523c1125a4b59bfb8993865ea6c25daf09f95def9bd4 files/digest-deskbar-applet-2.16.1 268
