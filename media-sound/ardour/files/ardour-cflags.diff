@@ -15,31 +15,34 @@ Index: SConstruct
 ===================================================================
 --- SConstruct	(revision 816)
 +++ SConstruct	(working copy)
-@@ -23,9 +23,14 @@
- # Command-line options
- #
- 
-+def SimpleListOption(key, help, default=[]):
-+    return(key, help, default, None, lambda val: string.split(val))
-+
- opts = Options('scache.conf')
- opts.AddOptions(
-   ('ARCH', 'Set architecture-specific compilation flags by hand (all flags as 1 argument)',''),
-+    SimpleListOption('CCFLAGS', 'C compilerflags', ''),
-+    SimpleListOption('CXXFLAGS', 'C++ compilerflags', ''),
-     BoolOption('AUDIOUNITS', 'Compile with Apple\'s AudioUnit library. (experimental)', 0),
-     BoolOption('COREAUDIO', 'Compile with Apple\'s CoreAudio library', 0),
-     BoolOption('DEBUG', 'Set to build with debugging information and no optimizations', 0),
-@@ -817,16 +822,17 @@
+@@ -805,10 +805,6 @@
+             if "3dnow" in x86_flags:
+                 opt_flags.append ("-m3dnow")
+             
+-            if config[config_cpu] == "i586":
+-                opt_flags.append ("-march=i586")
+-            elif config[config_cpu] == "i686":
+-                opt_flags.append ("-march=i686")
+     
+     if ((env['DIST_TARGET'] == 'i686') or (env['DIST_TARGET'] == 'x86_64')) and build_host_supports_sse:
+         opt_flags.extend (["-msse", "-mfpmath=sse"])
+@@ -847,16 +847,22 @@
  #
  
  opt_flags[:0] = [
 -    "-O3",
      "-fomit-frame-pointer",
-     "-ffast-math",
-     "-fstrength-reduce"
+-    "-ffast-math",
+-    "-fstrength-reduce"
      ]
  
++if os.environ.has_key('CFLAGS'):
++    env['CCFLAGS'] = os.environ['CFLAGS'].split()
++if os.environ.has_key('CXXFLAGS'):
++    env['CXXFLAGS'] = os.environ['CXXFLAGS'].split()
++if os.environ.has_key('LDFLAGS'):
++    env['LDFLAGS'] = os.environ['LDFLAGS'].split()
++
  if env['DEBUG'] == 1:
 -    env.Append(CCFLAGS=" ".join (debug_flags))
 +    env.Append(CCFLAGS=debug_flags)

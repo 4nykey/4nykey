@@ -12,9 +12,10 @@ ESVN_PATCHES="ardour-cflags.diff"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="nls debug sse altivec fftw osc vst ladspa"
+IUSE="nls debug sse fftw osc vst ladspa"
 
-RDEPEND=">=media-libs/liblrdf-0.3.6
+RDEPEND="
+	>=media-libs/liblrdf-0.3.6
 	>=media-libs/raptor-1.2.0
 	>=media-libs/libsamplerate-0.0.14
 	fftw? ( =sci-libs/fftw-3* )
@@ -28,22 +29,27 @@ RDEPEND=">=media-libs/liblrdf-0.3.6
 	media-libs/libsoundtouch
 	ladspa? ( >=media-libs/ladspa-sdk-1.12 )
 "
-
-DEPEND="${RDEPEND}
+DEPEND="
+	${RDEPEND}
 	dev-util/pkgconfig
 	>=dev-util/scons-0.96.1
 	nls? ( sys-devel/gettext )
 "
 
+src_unpack() {
+	subversion_src_unpack
+	SVN_DIR="${ESVN_STORE_DIR}/${ESVN_PROJECT}/${ESVN_REPO_URI##*/}"
+	sed -i "s:svn info \":svn info ${SVN_DIR}/\":" ${S}/SConstruct
+	# fix path in launcher
+	sed -i "s:%INSTALL_PREFIX%:/usr:" ${S}/gtk2_ardour/ardour.sh.in
+}
+
 src_compile() {
 	# Required for scons to "see" intermediate install location
 	mkdir -p ${D}
-	# fix path in launcher
-	sed -i "s:%INSTALL_PREFIX%:/usr:" gtk2_ardour/ardour.sh.in
 
 	local myconf="PREFIX=/usr DESTDIR=${D} SYSLIBS=1"
-	! use altivec; myconf="${myconf} ALTIVEC=$?"
-	! use debug; myconf="${myconf} ARDOUR_DEBUG=$?"
+	! use debug; myconf="${myconf} DEBUG=$?"
 	! use nls; myconf="${myconf} NLS=$?" 
 	! use fftw; myconf="${myconf} FFT_ANALYSIS=$?" 
 	! use osc; myconf="${myconf} LIBLO=$?" 
@@ -51,9 +57,6 @@ src_compile() {
 
 	cd ${S}
 	scons \
-		CCFLAGS="${CFLAGS}" \
-		CXXFLAGS="${CXXFLAGS}" \
-		${MAKEOPTS} \
 		${myconf} || die "make failed"
 }
 
