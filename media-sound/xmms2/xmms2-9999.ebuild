@@ -113,11 +113,5 @@ src_install() {
 		${MAKEOPTS} \
 		install || die
 
-	if false; then
-	exeinto /etc/init.d
-	newexe ${FILESDIR}/xmms2-initscript-gentoo xmms2d
-	insinto /etc/conf.d
-	newins ${FILESDIR}/xmms2-initscript-gentoo.conf xmms2d
-	fi
 	dodoc AUTHORS ChangeLog README TODO
 }

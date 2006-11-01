@@ -85,8 +85,7 @@ src_install() {
 	insinto /etc
 	newins doc/mpdconf.example mpd.conf
 
-	exeinto /etc/init.d
-	newexe ${FILESDIR}/mpd-0.12.rc6 mpd
+	newinitd ${FILESDIR}/mpd-0.12.rc6 mpd
 
 	if use unicode; then
 		dosed 's:^#filesystem_charset.*$:filesystem_charset "UTF-8":' /etc/mpd.conf

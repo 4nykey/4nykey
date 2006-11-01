@@ -25,6 +25,5 @@ src_compile() {
 
 src_install() {
 	dobin ${PN}
-	exeinto /etc/init.d
-	newexe "${FILESDIR}"/init_d mpd-inotify
+	newinitd "${FILESDIR}"/init_d mpd-inotify
 }

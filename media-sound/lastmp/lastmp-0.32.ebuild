@@ -44,8 +44,7 @@ src_install() {
 	dodir /var/spool/lastmp
 	keepdir /var/spool/lastmp
 
-	exeinto /etc/init.d
-	doexe ${FILESDIR}/l{fmsubmitd,astmp}
+	doinitd ${FILESDIR}/l{fmsubmitd,astmp}
 
 	insinto /etc
 	insopts -m0600 -o ${USER} -g ${GROUP}
