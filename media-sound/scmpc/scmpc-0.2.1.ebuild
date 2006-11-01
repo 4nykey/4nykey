@@ -6,7 +6,7 @@ inherit eutils
 
 DESCRIPTION="A multithreaded MPD client for Audioscrobbler"
 HOMEPAGE="http://scmpc.berlios.de"
-SRC_URI="http://download.berlios.de/${PN}/${P}.tar.bz2"
+SRC_URI="mirror://berlios/${PN}/${P}.tar.bz2"
 
 RESTRICT="primaryuri"
 
@@ -58,8 +58,7 @@ src_unpack() {
 src_install() {
 	make DESTDIR="${D}" install || die "Install failed!"
 
-	exeinto /etc/init.d
-	doexe ${FILESDIR}/scmpc
+	doinitd ${FILESDIR}/scmpc
 
 	insinto /etc
 	insopts -m0600

@@ -7,13 +7,13 @@ MY_P="${MY_PN}-${PV}"
 DESCRIPTION="Candido is the Gtk2 cairo-based engine"
 HOMEPAGE="http://candido.berlios.de/"
 SRC_URI="
-	http://download.berlios.de/candido/${MY_P}.tar.bz2
+	mirror://berlios/candido/${MY_P}.tar.bz2
 	http://candido.berlios.de/media/download_gallery/Candido.tar.bz2
 	http://candido.berlios.de/media/download_gallery/Candido-Graphite.tar.bz2
 	http://candido.berlios.de/media/download_gallery/Candido-NeoGraphite.tar.bz2
 	gdm? ( http://candido.berlios.de/media/download_gallery/Candido-Gdm.tar.bz2 )
 	metacity? (
-		http://download.berlios.de/candido/Candido-Engine-Metacity.tar.bz2
+		mirror://berlios/candido/Candido-Engine-Metacity.tar.bz2
 		http://candido.berlios.de/media/download_gallery/Candido-Selected.tar.bz2
 		http://candido.berlios.de/media/download_gallery/Candido-Graphite-Metacity-Fat.tar.bz2
 	)
