@@ -10,6 +10,6 @@ EBUILD dvda-author-0.1.ebuild 940 RMD160 42f530fbd4b862adb21b95b5cb798d5aaa14c89
 MD5 bcfeb5439c4cc3a172cba2d0f989bbe0 dvda-author-0.1.ebuild 940
 RMD160 42f530fbd4b862adb21b95b5cb798d5aaa14c896 dvda-author-0.1.ebuild 940
 SHA256 3975d5214f6b7b0c6c7ad5b83a82496804b354a932a839db4c9ee65180724d14 dvda-author-0.1.ebuild 940
-MD5 68b329da9893e34099c7d8ad5cb9c940 files/digest-dvda-author-0.1 1
-RMD160 c0da025038ed83c687ddc430da9846ecb97f3998 files/digest-dvda-author-0.1 1
-SHA256 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b files/digest-dvda-author-0.1 1
+MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-dvda-author-0.1 0
+RMD160 9c1185a5c5e9fc54612808977ee8f548b2258d31 files/digest-dvda-author-0.1 0
+SHA256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 files/digest-dvda-author-0.1 0

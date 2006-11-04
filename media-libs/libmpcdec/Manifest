@@ -10,6 +10,6 @@ SHA256 846da0c513a73b4563922bef9b020edd05d80e8177e25c4681bae24e44190520 libmpcde
 MD5 0fbfbe6a80add64b51da296bbbde493a files/digest-libmpcdec-1.2.2 250
 RMD160 c8b4773fd387a3292fcc187b1c737bdaa73b2c7a files/digest-libmpcdec-1.2.2 250
 SHA256 cc2d50f0ee1f2ce2ff31ee5fb2a5ccab06c2f57edfdd79f66b1f1f6d4b0d8928 files/digest-libmpcdec-1.2.2 250
-MD5 68b329da9893e34099c7d8ad5cb9c940 files/digest-libmpcdec-9999 1
-RMD160 c0da025038ed83c687ddc430da9846ecb97f3998 files/digest-libmpcdec-9999 1
-SHA256 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b files/digest-libmpcdec-9999 1
+MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-libmpcdec-9999 0
+RMD160 9c1185a5c5e9fc54612808977ee8f548b2258d31 files/digest-libmpcdec-9999 0
+SHA256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 files/digest-libmpcdec-9999 0

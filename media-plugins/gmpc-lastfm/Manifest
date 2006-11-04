@@ -2,6 +2,6 @@ EBUILD gmpc-lastfm-9999.ebuild 549 RMD160 cab7227044de0f5824c5df30cc48a7ce35c63d
 MD5 f4f72d60e2ea55123d3919e76eaf8658 gmpc-lastfm-9999.ebuild 549
 RMD160 cab7227044de0f5824c5df30cc48a7ce35c63d1b gmpc-lastfm-9999.ebuild 549
 SHA256 579461aae53eef408dd00b674e7b9cd6968d87f7fbf7c745446c87f9c8c32a87 gmpc-lastfm-9999.ebuild 549
-MD5 68b329da9893e34099c7d8ad5cb9c940 files/digest-gmpc-lastfm-9999 1
-RMD160 c0da025038ed83c687ddc430da9846ecb97f3998 files/digest-gmpc-lastfm-9999 1
-SHA256 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b files/digest-gmpc-lastfm-9999 1
+MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-gmpc-lastfm-9999 0
+RMD160 9c1185a5c5e9fc54612808977ee8f548b2258d31 files/digest-gmpc-lastfm-9999 0
+SHA256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 files/digest-gmpc-lastfm-9999 0

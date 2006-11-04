@@ -2,6 +2,6 @@ EBUILD libtheora-exp-9999.ebuild 734 RMD160 00d82e5921bd4f05e052c08772f06fe35671
 MD5 7da01bfebfd663a03c6703768983421f libtheora-exp-9999.ebuild 734
 RMD160 00d82e5921bd4f05e052c08772f06fe35671711a libtheora-exp-9999.ebuild 734
 SHA256 062d3597052fa2ccf8dad9677c84e2c3fd9f186b5ca11188013ea10b71b9c722 libtheora-exp-9999.ebuild 734
-MD5 68b329da9893e34099c7d8ad5cb9c940 files/digest-libtheora-exp-9999 1
-RMD160 c0da025038ed83c687ddc430da9846ecb97f3998 files/digest-libtheora-exp-9999 1
-SHA256 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b files/digest-libtheora-exp-9999 1
+MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-libtheora-exp-9999 0
+RMD160 9c1185a5c5e9fc54612808977ee8f548b2258d31 files/digest-libtheora-exp-9999 0
+SHA256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 files/digest-libtheora-exp-9999 0

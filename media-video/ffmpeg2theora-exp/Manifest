@@ -2,6 +2,6 @@ EBUILD ffmpeg2theora-exp-0.14.ebuild 951 RMD160 9b9f68096b9c8bfcf93f85f655924b1d
 MD5 07a331d604804dfe1ea48cea2eef6009 ffmpeg2theora-exp-0.14.ebuild 951
 RMD160 9b9f68096b9c8bfcf93f85f655924b1dc642379f ffmpeg2theora-exp-0.14.ebuild 951
 SHA256 4efcb32b9be6424d7909a4247d79c0066400e470775d82a5c77c6f1da5131268 ffmpeg2theora-exp-0.14.ebuild 951
-MD5 68b329da9893e34099c7d8ad5cb9c940 files/digest-ffmpeg2theora-exp-0.14 1
-RMD160 c0da025038ed83c687ddc430da9846ecb97f3998 files/digest-ffmpeg2theora-exp-0.14 1
-SHA256 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b files/digest-ffmpeg2theora-exp-0.14 1
+MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-ffmpeg2theora-exp-0.14 0
+RMD160 9c1185a5c5e9fc54612808977ee8f548b2258d31 files/digest-ffmpeg2theora-exp-0.14 0
+SHA256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 files/digest-ffmpeg2theora-exp-0.14 0

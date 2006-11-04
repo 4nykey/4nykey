@@ -1,7 +1,7 @@
-EBUILD vorbis-tools-1.1.1-r2.ebuild 1485 RMD160 90cb262d8222dd7be7e36eeacb19c41e527bb493 SHA1 cffb819616ba4e259dcb36aa1a4caea19316b161 SHA256 9a131872d32ef923d2bb56a62982a05d43a82f1ba3c55ab18268094bed89ba4b size 1485
+EBUILD vorbis-tools-1.1.1-r2.ebuild 1485 RMD160 90cb262d8222dd7be7e36eeacb19c41e527bb493 SHA1 cffb819616ba4e259dcb36aa1a4caea19316b161 SHA256 9a131872d32ef923d2bb56a62982a05d43a82f1ba3c55ab18268094bed89ba4b
 MD5 f1aeac5a5a07114d1aa3ef59639c7d4c vorbis-tools-1.1.1-r2.ebuild 1485
 RMD160 90cb262d8222dd7be7e36eeacb19c41e527bb493 vorbis-tools-1.1.1-r2.ebuild 1485
 SHA256 9a131872d32ef923d2bb56a62982a05d43a82f1ba3c55ab18268094bed89ba4b vorbis-tools-1.1.1-r2.ebuild 1485
-MD5 68b329da9893e34099c7d8ad5cb9c940 files/digest-vorbis-tools-1.1.1-r2 1
-RMD160 c0da025038ed83c687ddc430da9846ecb97f3998 files/digest-vorbis-tools-1.1.1-r2 1
-SHA256 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b files/digest-vorbis-tools-1.1.1-r2 1
+MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-vorbis-tools-1.1.1-r2 0
+RMD160 9c1185a5c5e9fc54612808977ee8f548b2258d31 files/digest-vorbis-tools-1.1.1-r2 0
+SHA256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 files/digest-vorbis-tools-1.1.1-r2 0
