@@ -20,19 +20,18 @@ ESVN_REPO_URI="svn://svn.mplayerhq.hu/ffmpeg/trunk"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="aac debug doc ieee1394 a52 encode imlib mmx ogg vorbis oss lame threads
-truetype v4l xvid dts network zlib sdl amr x264 static"
+IUSE="aac debug doc ieee1394 a52 encode imlib mmx ogg vorbis oss threads
+truetype v4l xvid dts network zlib X amr x264 static mp3"
 
 RDEPEND="
 	imlib? ( media-libs/imlib2 )
 	truetype? ( >=media-libs/freetype-2 )
-	sdl? ( >=media-libs/libsdl-1.2.10 )
-	lame? ( media-sound/lame )
+	X? ( >=media-libs/libsdl-1.2.10 )
+	mp3? ( encode? ( media-sound/lame ) )
 	ogg? ( media-libs/libogg )
 	vorbis? ( media-libs/libvorbis )
-	aac? ( media-libs/faad2 media-libs/faac )
+	aac? ( media-libs/faad2 )
 	a52? ( >=media-libs/a52dec-0.7.4-r4 )
-	xvid? ( >=media-libs/xvid-1.1.0 )
 	zlib? ( sys-libs/zlib )
 	dts? (
 		|| (
@@ -40,9 +39,15 @@ RDEPEND="
 			media-libs/libdts
 		)
 	)
-	ieee1394? ( =media-libs/libdc1394-1*
-	            sys-libs/libraw1394 )
-	x264? ( media-libs/x264 )
+	ieee1394? (
+		=media-libs/libdc1394-1*
+		sys-libs/libraw1394
+	)
+	encode? (
+		aac? ( media-libs/faac )
+		xvid? ( >=media-libs/xvid-1.1.0 )
+		x264? ( media-libs/x264 )
+	)
 "
 DEPEND="
 	${RDEPEND}
@@ -86,7 +91,7 @@ src_unpack() {
 
 	sed -i 's:\(logfile="config\)\.err:\1.log:' configure
 	# fix lame with --as-needed
-	sed -i 's:\( -lmp3lame\):\1 -lm:' configure
+#	sed -i 's:\( -lmp3lame\):\1 -lm:' configure
 	has_version '>=media-libs/faad2-2.1' && \
 		sed -i 's:faac\(DecOpen\):NeAAC\1:' configure
 
@@ -117,26 +122,28 @@ src_compile() {
 	local myconf="--log --enable-shared --enable-gpl --enable-pp --disable-opts --disable-strip"
 
 	teh_conf dis debug
-	teh_conf en lame mp3lame
+	if use encode; then
+		teh_conf en mp3 mp3lame
+		teh_conf en xvid
+		teh_conf en x264 x264
+		teh_conf en aac faac
+	fi
 	teh_conf en a52
 	teh_conf dis oss audio-oss
 	teh_conf dis v4l
 	teh_conf dis ieee1394 dv1394
 	teh_conf en ieee1394 dc1394
 	teh_conf en threads pthreads
-	teh_conf en xvid
 	teh_conf en ogg libogg
 	teh_conf en vorbis
 	teh_conf en dts
 	teh_conf dis network
 	teh_conf dis zlib
-	teh_conf dis sdl ffplay
+	teh_conf dis X ffplay
 	teh_conf en amr amr_nb
 	teh_conf en amr amr_wb
 	teh_conf en amr amr_if2
-	teh_conf en x264 x264
 	teh_conf en aac faad
-	teh_conf en aac faac
 
 	use encode || myconf="${myconf} --disable-encoders --disable-muxers"
 

@@ -53,7 +53,6 @@ RDEPEND="
 	bidi? ( dev-libs/fribidi )
 	cdio? ( dev-libs/libcdio )
 	cdparanoia? ( media-sound/cdparanoia )
-	dga? ( x11-libs/libXxf86dga )
 	directfb? ( dev-libs/DirectFB )
 	dts? (
 		|| (
@@ -75,14 +74,6 @@ RDEPEND="
 	enca? ( app-i18n/enca )
 	gif? ( media-libs/giflib )
 	ggi? ( media-libs/libggi )
-	gtk? (
-		media-libs/libpng
-		x11-libs/libXxf86vm
-		x11-libs/libXext
-		x11-libs/libXi
-		=x11-libs/gtk+-2*
-		=dev-libs/glib-2*
-	)
 	jpeg? ( media-libs/jpeg )
 	libcaca? ( media-libs/libcaca )
 	lirc? ( app-misc/lirc )
@@ -99,11 +90,6 @@ RDEPEND="
 	theora? ( media-libs/libtheora )
 	live? ( >=media-plugins/live-2004.07.20 )
 	truetype? ( >=media-libs/freetype-2.1 )
-	xinerama? (
-		x11-libs/libXinerama
-		x11-libs/libXxf86vm
-		x11-libs/libXext
-	)
 	jack? ( media-sound/jack-audio-connection-kit )
 	xmms? ( media-sound/xmms )
 	xanim? ( >=media-video/xanim-2.80.1-r4 )
@@ -112,15 +98,23 @@ RDEPEND="
 	dvdnav? ( media-libs/libdvdnav )
 	ladspa? ( media-libs/ladspa-sdk )
 	fontconfig? ( media-libs/fontconfig )
-	xv? (
-		x11-libs/libXv
-		x11-libs/libXxf86vm
-		x11-libs/libXext
-		xvmc? ( x11-libs/libXvMC )
-	)
 	X? (
 		x11-libs/libXxf86vm
 		x11-libs/libXext
+		dga? ( x11-libs/libXxf86dga )
+		xv? (
+			x11-libs/libXv
+			xvmc? ( x11-libs/libXvMC )
+		)
+		xinerama? (
+			x11-libs/libXinerama
+		)
+		gtk? (
+			media-libs/libpng
+			x11-libs/libXi
+			=x11-libs/gtk+-2*
+			=dev-libs/glib-2*
+		)
 	)
 "
 DEPEND="
@@ -132,19 +126,20 @@ DEPEND="
 		>=app-text/docbook-xsl-stylesheets-1.62.4
 	)
 	amr? ( app-arch/unzip )
-	dga? ( x11-proto/xf86dgaproto )
-	xinerama? ( x11-proto/xineramaproto )
-	xv? ( x11-proto/videoproto
-		  x11-proto/xf86vidmodeproto )
-	gtk? ( x11-proto/xextproto
-		   x11-proto/xf86vidmodeproto )
-	X? ( x11-proto/xextproto
-		 x11-proto/xf86vidmodeproto )
+	X? (
+		x11-proto/xextproto
+		x11-proto/xf86vidmodeproto
+		dga? ( x11-proto/xf86dgaproto )
+		xv? (
+			x11-proto/videoproto
+		)
+		xinerama? ( x11-proto/xineramaproto )
+	)
 "
 
 teh_conf() {
 	# avoid using --enable-xxx options,
-	# except {gui,debug} and those, disabled by default
+	# except gui, debug and those, disabled by default
 	if ! use $1; then
 		myconf="${myconf} --disable-$([[ -n "$2" ]] && echo $2 || echo $1)"
 	fi
@@ -163,14 +158,14 @@ src_unpack() {
 	# get svn revision for version.h
 	REVISION="$(svnversion \
 		${ESVN_STORE_DIR}/${ESVN_PROJECT}/${ESVN_REPO_URI##*/})"
-	sed -i "s:\(svn_revision=\)UNKNOWN:\1${REVISION}:" ${S}/version.sh
+	sed -i "s:UNKNOWN:${REVISION}:" ${S}/version.sh
 
 	cd ${WORKDIR}
 
 	if use amr; then
 		unpack 26104-${NBV}.zip 26204-${WBV}.zip
-		unzip -ajq 26204-${WBV}_ANSI-C_source_code.zip -d ${S}/libavcodec/amrwb_float
-		unzip -ajq 26104-${NBV}_ANSI_C_source_code.zip -d ${S}/libavcodec/amr_float
+		unzip -jaq 26204-${WBV}_ANSI-C_source_code.zip -d ${S}/libavcodec/amrwb_float
+		unzip -jaq 26104-${NBV}_ANSI_C_source_code.zip -d ${S}/libavcodec/amr_float
 	fi
 
 	if use bitmap-fonts; then
@@ -180,7 +175,7 @@ src_unpack() {
 	fi
 
 
-	use gtk && unpack Blue-${BLUV}.tar.bz2
+	use X && use gtk && unpack Blue-${BLUV}.tar.bz2
 
 	if use svga
 	then
@@ -198,6 +193,7 @@ src_unpack() {
 	cd ${S}
 
 	EPATCH_SUFFIX="diff" epatch "${FILESDIR}"
+	sed -i "s:\(EXTRA_INC = .*\):\1 $_inc_libavformat:" configure
 
 	# skip make distclean/depend
 	touch .developer
@@ -259,7 +255,7 @@ src_compile() {
 		myconf="${myconf} --disable-twolame --disable-faac"
 	fi
 
-	if use !gtk && use !X && use !xv && use !xinerama; then
+	if use !X; then
 		myconf="${myconf} --disable-gui --disable-x11 --disable-xv --disable-xmga --disable-xinerama --disable-vm --disable-xvmc"
 	else
 		#note we ain't touching --enable-vm.  That should be locked down in the future.
@@ -268,8 +264,12 @@ src_compile() {
 		teh_conf xv
 	fi
 
-	teh_conf dga
-	teh_conf 3dfx dga
+	if use X; then
+		teh_conf dga
+		teh_conf 3dfx dga
+	else
+		myconf="${myconf} --disable-dga"
+	fi
 
 	# disable png *only* if gtk && png aren't on
 	if ! use png || ! use gtk; then
@@ -346,7 +346,7 @@ src_compile() {
 
 	teh_conf tga
 
-	if use xv && use xvmc
+	if use X && use xv && use xvmc
 	then
 		myconf="${myconf} --enable-xvmc --with-xvmclib=XvMCW"
 	else
@@ -421,7 +421,7 @@ src_compile() {
 		--enable-largefiles \
 		--enable-menu \
 		--enable-network --enable-ftp \
-		--with-reallibdir=${REALLIBDIR} \
+		--realcodecsdir=${REALLIBDIR} \
 		${myconf} || die
 
 	# we run into problems if -jN > -j1
@@ -459,7 +459,7 @@ src_install() {
 	fi
 
 	# Install the default Skin and Gnome menu entry
-	if use gtk; then
+	if use X && use gtk; then
 		if [ -d "${ROOT}${SKINDIR}default" ]; then dodir ${SKINDIR}; fi
 		cp -r ${WORKDIR}/Blue ${D}${SKINDIR}default || die
 
