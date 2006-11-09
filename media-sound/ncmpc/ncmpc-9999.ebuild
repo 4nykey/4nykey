@@ -8,13 +8,15 @@ DESCRIPTION="A curses client for the Music Player Daemon (MPD)"
 HOMEPAGE="http://www.musicpd.org/?page=ncmpc"
 ESVN_REPO_URI="https://svn.musicpd.org/ncmpc/branches/tradiaz"
 ESVN_PATCHES="${PN}-*.patch"
+ESVN_BOOTSTRAP="eautoreconf"
+AT_M4DIR="m4"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
 IUSE="nls unicode lyrics raw-mode mouse debug"
 
-RDEPEND="
+DEPEND="
 	sys-libs/ncurses
 	dev-libs/popt
 	nls? ( >=dev-libs/glib-2.4 )
@@ -22,19 +24,13 @@ RDEPEND="
 		>=dev-libs/glib-2.4
 		net-misc/curl
 		dev-libs/expat
-		)
-	!media-sound/ncmpc
-	!media-sound/ncmpc-live
+	)
 "
-DEPEND="${RDEPEND}"
-
-src_unpack() {
-	subversion_src_unpack
-	cd ${S}
-	# hackery-moo
-	install /usr/share/automake/mkinstalldirs .
-	AT_M4DIR="m4" eautoreconf
-}
+RDEPEND="
+	media-sound/mpd
+	!media-sound/ncmpc-live
+	${DEPEND}
+"
 
 src_compile() {
 	econf \
@@ -51,8 +47,8 @@ src_compile() {
 		--enable-clock-screen \
 		|| die "econf failed"
 
-		emake || die "make failed"
-}																																	
+	emake || die "make failed"
+}
 
 src_install() {
 	make install DESTDIR=${D} docdir=/usr/share/doc/${PF} || die

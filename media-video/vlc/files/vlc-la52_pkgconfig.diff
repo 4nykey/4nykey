@@ -12,6 +12,6 @@ Index: configure.ac
 +        VLC_ADD_CFLAGS([a52tofloat32],[$LIBA52_CFLAGS])],[
          AC_MSG_ERROR([Could not find liba52 on your system: you may get it from http://liba52.sf.net/. Alternatively you can use --disable-a52 to disable the a52 plugin.])
 +        ])
-       ])
-     ])
-     CPPFLAGS="${CPPFLAGS_save}"
+         ])
+     ],[
+       AC_MSG_ERROR([Could not find liba52 on your system: you may get it from http://liba52.sf.net/. Alternatively you can use --disable-a52 to disable the a52 plugin.])
