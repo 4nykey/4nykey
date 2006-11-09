@@ -11,39 +11,51 @@ SRC_URI="http://emelfm2.net/rel/${P}.tar.gz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="nls fam"
+IUSE="nls fam debug inotify unicode"
 RESTRICT="test" # requires splint
 
-RDEPEND=">=x11-libs/gtk+-2.4
-	virtual/fam"
-DEPEND="${RDEPEND}"
+RDEPEND="
+	>=x11-libs/gtk+-2.4
+	virtual/fam
+"
+DEPEND="
+	${RDEPEND}
+"
+
+teh_conf() {
+	use !$1; myconf="${myconf} $2=$?"
+}
 
 src_unpack() {
 	unpack ${A}
 	cd ${S}
-	# don't strip binary/bzip manpages
+	# prevent stripping binaries, bzipping manpages
 	sed -i "/bzip2/d; /\<strip\>/d" Makefile
+	# make it more verbose
+	sed -i "s:@\$(:\$(:" Makefile
 	rm docs/*{GPL,txt,INSTALL}
 }
 
 src_compile() {
-	local myconf
-
-	use nls && myconf="-DENABLE_NLS"
+	myconf="CC=$(tc-getCC) USE_LATEST=1"
+	teh_conf nls I18N
+	teh_conf debug DEBUG
+	teh_conf unicode FILES_UTF8ONLY
+	if use kernel_linux; then
+		teh_conf inotify USE_INOTIFY
+	elif has_version 'app-admin/fam'; then
+		teh_conf fam USE_FAM
+	elif has_version 'app-admin/gamin'; then
+		teh_conf fam USE_GAMIN
+	fi
 	emake PREFIX=/usr \
-		CC="$(tc-getCC) ${CFLAGS}" \
-		NLS=${myconf} || die "emake failed"
+		${myconf} || die "emake failed"
 }
 
 src_install() {
-	local myconf
-
-	use nls && myconf="-DENABLE_NLS"
 	dodir /usr/bin
-
-	make PREFIX=${D}/usr \
-		NLS=${myconf} \
+	emake PREFIX=${D}/usr \
 		DOC_DIR=${D}/usr/share/doc/${PF} \
-		install || die "make install failed"
+		${myconf} install || die "make install failed"
 	prepalldocs
 }
