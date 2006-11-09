@@ -184,7 +184,7 @@ DEPS_ENC = $(DEPS_DEC) mppenc.h minimax.h
 	$(CC) -c $(FLAGS) -DMPP_ENCODER -o $@ $<
 
 %_dec.o: %.c $(DEPS_DEC)
-	$(CC) -c $(FLAGS) -DMPP_DECODER -o $@ $<
+	$(CC) -c $(FLAGS) -DMPP_DECODER -DUSE_SV8 -o $@ $<
 
 %.o: %.nas $(DEPS_ASM)
 	$(NASM) $(NASMFLAGS) $< -o $@ -l $(patsubst %.lst,%.nas,$@)

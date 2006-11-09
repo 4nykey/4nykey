@@ -1,0 +1,59 @@
+--- encode_sv7.c.orig	2005-03-05 19:02:00.000000000 +0200
++++ encode_sv7.c	2006-09-22 22:39:14.000000000 +0300
+@@ -92,7 +92,8 @@
+ 
+     WriteBits ( 1            ,  1 );    // true gapless: used?
+     WriteBits ( SamplesRest  , 11 );    // true gapless: valid samples in last frame
+-    WriteBits ( 0            , 20 );
++    WriteBits ( 1            , 1 );		// we now support fast seeking
++    WriteBits ( 0            , 19 );
+ 
+     WriteBits ( (MPPENC_VERSION[0]&15)*100 + (MPPENC_VERSION[2]&15)*10 + (MPPENC_VERSION[3]&15),
+                                 8 );    // for future use
+@@ -108,7 +109,7 @@
+ 
+ #define ENCODE_SCF1( new, old, rll )                         \
+         d = new - old + 7;                                   \
+-        if ( d <= 14u  &&  (rll < 32  || (int)new < 0 ) ) {  \
++        if ( d <= 14u  && rll < 32) {                        \
+             WriteBits ( Table[d].Code, Table[d].Length );    \
+         }                                                    \
+         else {                                               \
+@@ -241,7 +242,7 @@
+                 break;
+             case 2:
+                 ENCODE_SCF1 ( SCF_Index_L[n][0], SCF_Last_L[n]    , DSCF_RLL_L[n] );
+-                ENCODE_SCFn ( SCF_Index_L[n][2], SCF_Index_L[n][1], DSCF_RLL_L[n] );
++                ENCODE_SCFn ( SCF_Index_L[n][2], SCF_Index_L[n][0], DSCF_RLL_L[n] );
+                 SCF_Last_L[n] = SCF_Index_L[n][2];
+                 break;
+             case 3:
+@@ -250,7 +251,8 @@
+                 break;
+             }
+         }
+-        DSCF_RLL_L[n]++;        // Increased counters for SCF that haven't been initialized again
++        if (DSCF_RLL_L[n] <= 32)
++            DSCF_RLL_L[n]++;        // Increased counters for SCF that haven't been initialized again
+ 
+         if ( Res_R[n] ) {
+             switch ( SCFI_R[n] ) {
+@@ -267,7 +269,7 @@
+                 break;
+             case 2:
+                 ENCODE_SCF1 ( SCF_Index_R[n][0], SCF_Last_R[n]    , DSCF_RLL_R[n] );
+-                ENCODE_SCFn ( SCF_Index_R[n][2], SCF_Index_R[n][1], DSCF_RLL_R[n] );
++                ENCODE_SCFn ( SCF_Index_R[n][2], SCF_Index_R[n][0], DSCF_RLL_R[n] );
+                 SCF_Last_R[n] = SCF_Index_R[n][2];
+                 break;
+             case 3:
+@@ -276,7 +278,8 @@
+                 break;
+             }
+         }
+-        DSCF_RLL_R[n]++;          // Increased counters for SCF that haven't been freshly initialized
++        if (DSCF_RLL_R[n] <= 32)
++            DSCF_RLL_R[n]++;          // Increased counters for SCF that haven't been freshly initialized
+     }
+ 
+     /*********************************** Samples *********************************/
