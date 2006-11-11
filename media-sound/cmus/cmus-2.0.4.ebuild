@@ -42,8 +42,7 @@ pkg_setup() {
 }
 
 teh_conf() {
-	local arg
-	[ -n "$2" ] && arg="$2" || arg="$1"
+	local arg="${2:-$1}"
 	arg=$(echo config_$arg | tr [:lower:] [:upper:])
 	use $1 && arg="$arg=y" || arg="$arg=n"
 	myconf="${myconf} $arg"

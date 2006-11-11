@@ -13,10 +13,9 @@ S="${WORKDIR}/${ECVS_MODULE}"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="-*"
-IUSE="xmms mp4"
+IUSE="mp4"
 
 RDEPEND="
-	xmms? ( >=media-sound/xmms-1.2.7
 	mp4? ( media-video/mpeg4ip )
 	media-libs/id3lib
 "
@@ -40,7 +39,7 @@ src_compile() {
 
 	econf \
 		--without-drm \
-		$(use_with xmms) \
+		--without-xmms \
 		$(use_with mp4 mpeg4ip) \
 		|| die
 

@@ -14,15 +14,18 @@ RESTRICT="test" # see #59482
 LICENSE="GPL-2 LGPL-2"
 SLOT="1.1.3"
 KEYWORDS="-*"
-IUSE="3dnow debug doc ogg sse xmms pic"
+IUSE="3dnow debug doc ogg sse pic"
 
-RDEPEND="ogg? ( >=media-libs/libogg-1.0_rc2 )
-	xmms? ( media-sound/xmms )"
-DEPEND="${RDEPEND}
+RDEPEND="
+	ogg? ( >=media-libs/libogg-1.0_rc2 )
+"
+DEPEND="
+	${RDEPEND}
 	x86? ( dev-lang/nasm )
 	sys-apps/gawk
 	doc? ( app-doc/doxygen )
-	dev-util/pkgconfig"
+	dev-util/pkgconfig
+"
 
 src_unpack() {
 	cvs_src_unpack
@@ -57,13 +60,9 @@ if false; then
 	# the man page ebuild requires docbook2man... yick!
 	sed -i -e 's:include man:include:g' Makefile
 
-	# FIXME parallel make seems to mess up the building of the xmms input plugin
-	local makeopts
-	use xmms && makeopts="-j1"
-
-	emake ${makeopts} || die "make failed"
+	emake || die "make failed"
 else
-	CFG="$(use debug && echo debug || echo release)"
+	CFG="$(usev debug || echo release)"
 	make CONFIG=${CFG} -f Makefile.lite flac metaflac
 fi
 }

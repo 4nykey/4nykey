@@ -11,10 +11,9 @@ SRC_URI="mirror://sourceforge/faac/${PN}-${PV/_/-}.tar.gz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="xmms mp4"
+IUSE="mp4"
 
 RDEPEND="
-	xmms? ( >=media-sound/xmms-1.2.7 media-libs/id3lib )
 	mp4? ( media-video/mpeg4ip )
 "
 DEPEND="
@@ -45,7 +44,7 @@ src_compile() {
 	econf \
 		--without-drm \
 		--without-bmp \
-		$(use_with xmms) \
+		--without-xmms \
 		$(use_with mp4 mpeg4ip) \
 		|| die
 

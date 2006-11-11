@@ -30,7 +30,6 @@ RDEPEND="
 	media-video/mplayer
 	media-sound/sox
 	media-gfx/imagemagick
-	xmms? ( media-sound/xmms )
 	cdr? ( virtual/cdrtools )
 	perl? ( >=dev-lang/perl-5.8.0-r12
 		ffmpeg? ( media-video/ffmpeg )

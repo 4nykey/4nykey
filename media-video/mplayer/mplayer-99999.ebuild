@@ -36,7 +36,7 @@ dvdread dvdnav enca encode esd external-faad external-ffmpeg fbcon fontconfig
 gif ggi gtk ipv6 jack joystick jpeg ladspa libcaca lirc live livecd lzo mad
 matrox mmx mmxext musepack nas openal opengl oss png real rtc samba sdl speex
 sse sse2 svga tga theora tremor truetype v4l v4l2 vorbis win32codecs X x264
-xanim xinerama xmms xv xvid xvmc twolame
+xanim xinerama xv xvid xvmc twolame
 "
 
 # 'encode' in USE for MEncoder.
@@ -91,7 +91,6 @@ RDEPEND="
 	live? ( >=media-plugins/live-2004.07.20 )
 	truetype? ( >=media-libs/freetype-2.1 )
 	jack? ( media-sound/jack-audio-connection-kit )
-	xmms? ( media-sound/xmms )
 	xanim? ( >=media-video/xanim-2.80.1-r4 )
 	external-faad? ( media-libs/faad2 )
 	sys-libs/ncurses
@@ -140,9 +139,7 @@ DEPEND="
 teh_conf() {
 	# avoid using --enable-xxx options,
 	# except gui, debug and those, disabled by default
-	if ! use $1; then
-		myconf="${myconf} --disable-$([[ -n "$2" ]] && echo $2 || echo $1)"
-	fi
+	use $1 || myconf="${myconf} --disable-${2:-$1}"
 }
 
 pkg_setup() {
@@ -309,7 +306,6 @@ src_compile() {
 	fi
 	teh_conf theora
 	teh_conf speex
-	use xmms && myconf="${myconf} --enable-xmms"
 	teh_conf xvid
 	use x86 && teh_conf real
 	! use livecd && ! use bindist && \
@@ -387,8 +383,6 @@ src_compile() {
 	then
 		myconf="${myconf} --enable-linux-devfs"
 	fi
-
-	use xmms && myconf="${myconf} --with-xmmslibdir=/usr/$(get_libdir)"
 
 	use live && myconf="${myconf} --with-livelibdir=/usr/$(get_libdir)/live"
 

@@ -58,7 +58,7 @@ DEPEND="
 "
 
 pick_plug() {
-	use $1 || myconf="${myconf} $( [ -n "$2" ] && echo $2 || echo $1)"
+	use $1 || myconf="${myconf} ${2:-$1}"
 }
 
 src_compile() {
