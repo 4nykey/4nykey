@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit subversion gnome2
+inherit gnome2 subversion
 
 DESCRIPTION="MPD applet for GNOME panel"
 HOMEPAGE="http://www.musicpd.org"
