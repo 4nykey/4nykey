@@ -11,7 +11,7 @@ ESVN_REPO_URI="http://svn.musepack.net/libmpcdec/trunk"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="static"
+IUSE=""
 
 src_unpack() {
 	subversion_src_unpack
@@ -20,14 +20,7 @@ src_unpack() {
 	eautoreconf
 }
 
-src_compile() {
-	econf \
-		$(use_enable static) \
-		|| die
-	emake || die
-}
-
 src_install() {
-	make DESTDIR="${D}" install || die
+	einstall || die
 	dodoc README
 }

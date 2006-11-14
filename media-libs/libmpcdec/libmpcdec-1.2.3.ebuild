@@ -2,21 +2,25 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+inherit autotools
+
 DESCRIPTION="Musepack decoder library"
 HOMEPAGE="http://www.musepack.net"
-SRC_URI="http://files2.musepack.net/source/${P}.tar.bz2"
+SRC_URI="http://files.musepack.net/source/${P}.tar.bz2"
 
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="static"
+IUSE=""
 
-src_compile() {
-	econf `use_enable static` || die
-	emake || die
+src_unpack() {
+	unpack ${A}
+	cd ${S}
+	sed -i "/^CFLAGS=/d" configure.ac
+	eautoreconf
 }
 
 src_install() {
-	make DESTDIR="${D}" install || die
+	einstall || die
 	dodoc README
 }
