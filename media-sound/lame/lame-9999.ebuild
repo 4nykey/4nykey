@@ -41,6 +41,9 @@ src_unpack() {
 	epatch ${FILESDIR}/${PN}-3.96-ccc.patch
 
 	epunt_cxx # embedded bug #74498
+
+	sed -i "s:-I\(\${SNDFILE_CFLAGS\):\1:" configure
+	sed -i "s:^\(INCLUDES = .*\):\1 -Ix86_64:" libmp3lame/Makefile.in
 }
 
 src_compile() {

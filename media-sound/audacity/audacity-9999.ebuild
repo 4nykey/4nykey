@@ -17,7 +17,7 @@ KEYWORDS="~x86"
 # static: use sources bundled with audacity instead of system libs,
 #	for wx - run `wx-config --static=yes';
 IUSE="lame flac mad vorbis libsamplerate alsa jack oss ladspa soundtouch
-static unicode"
+static unicode twolame"
 
 
 RDEPEND="
@@ -32,9 +32,10 @@ RDEPEND="
 	jack? ( media-sound/jack-audio-connection-kit )
 	alsa? ( media-libs/alsa-lib )
 	!static? ( media-libs/libsndfile )
-	soundtouch? ( media-libs/libsoundtouch )
+	soundtouch? ( >=media-libs/libsoundtouch-1.3.1 )
 	lame? ( >=media-sound/lame-3.92 )
 "
+#	twolame? ( media-sound/twolame )
 DEPEND="
 	${RDEPEND} 
 	oss? ( virtual/os-headers )
@@ -75,7 +76,9 @@ src_compile() {
 		$(use_with mad id3tag ${LIBPREF}) \
 		$(use_with vorbis vorbis ${LIBPREF}) \
 		$(use_with flac flac ${LIBPREF}) \
+		$(use_with twolame libtwolame) \
 		|| die
+#		$(use_with twolame libtwolame ${LIBPREF}) \
 
 	# parallel b0rks
 	emake -j1 || die
