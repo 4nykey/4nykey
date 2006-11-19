@@ -12,15 +12,17 @@ SRC_URI="ftp://ftp.gnu.org/gnu/${PN}/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-# -amd64, -sparc: 0.6.2 - eradicator - segfault on startup
-# added ~amd64 , seems to work now (0.7)
-KEYWORDS="~amd64 ~x86 -sparc"
+KEYWORDS="~x86"
 
-DEPEND=">=gnome-base/libglade-2.0.1
-	gnome-base/gnome-libs
+RDEPEND="
+	>=gnome-base/libglade-2.0.1
 	>=gnome-base/libgnomeui-2.2.0.1
 	>=media-libs/audiofile-0.2.3
-	libsamplerate? ( media-libs/libsamplerate )"
+	libsamplerate? ( media-libs/libsamplerate )
+"
+DEPEND="
+	${RDEPEND}
+"
 
 src_unpack() {
 	unpack ${A} || die "unpack failure"
