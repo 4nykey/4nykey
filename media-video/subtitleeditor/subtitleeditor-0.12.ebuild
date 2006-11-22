@@ -13,13 +13,16 @@ S="${WORKDIR}/${MY_P}"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="spell cairo debug"
+IUSE="spell cairo debug xml"
 
-RDEPEND=">=dev-cpp/gtkmm-2.6.0
+RDEPEND="
+	>=dev-cpp/gtkmm-2.6.0
 	>=dev-cpp/libglademm-2.4.0
-	>=media-libs/gst-plugins-base-0.10.0
-	spell? ( app-text/aspell )
+	>=media-libs/gst-plugins-good-0.10.0
+	dev-libs/libpcre
+	spell? ( app-text/enchant )
 	cairo? ( x11-libs/cairo )
+	xml? ( dev-cpp/libxmlpp )
 "
 DEPEND="${RDEPEND}
 "
@@ -31,9 +34,11 @@ src_unpack() {
 
 src_compile() {
 	econf \
-		$(use_enable spell aspell) \
+		$(use_enable debug) \
+		$(use_enable spell enchant) \
 		$(use_enable cairo) \
-		$(use_enable debug) || die
+		|| die
+#		$(use_enable xml ttxt) \
 	emake || die
 }
 
