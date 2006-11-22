@@ -6,27 +6,27 @@ diff -u -r1.3 Makefile
 --- Makefile	1 Aug 2005 20:42:56 -0000	1.3
 +++ Makefile	4 Aug 2005 20:46:37 -0000
 @@ -61,12 +61,11 @@
- 
  install:
-	install -d "$(prefix)/bin"
--	install $(INSTFLAGS) -m 755 bin/gcc/MP4Box "$(prefix)/bin"
-+	install $(INSTFLAGS) -m 755 bin/gcc/mp4box "$(prefix)/bin"
-	$(MAKE) -C applications install
-	install -d "$(moddir)"
-	install bin/gcc/*.$(DYN_LIB_SUFFIX) "$(moddir)"
-	rm -f $(moddir)/libgpac.$(DYN_LIB_SUFFIX)
--	rm -f $(moddir)/nposmozilla.$(DYN_LIB_SUFFIX)
+ 	install -d "$(DESTDIR)$(prefix)"
+ 	install -d "$(DESTDIR)$(prefix)/bin"
+-	install $(INSTFLAGS) -m 755 bin/gcc/MP4Box "$(DESTDIR)$(prefix)/bin"
++	install $(INSTFLAGS) -m 755 bin/gcc/mp4box "$(DESTDIR)$(prefix)/bin"
+ 	$(MAKE) -C applications install
+ 	install -d "$(DESTDIR)$(moddir)"
+ 	install bin/gcc/*.$(DYN_LIB_SUFFIX) "$(DESTDIR)$(moddir)"
+ 	rm -f $(DESTDIR)$(moddir)/libgpac.$(DYN_LIB_SUFFIX)
+-	rm -f $(DESTDIR)$(moddir)/nposmozilla.$(DYN_LIB_SUFFIX)
  ifeq ($(CONFIG_WIN32),yes)
-	install $(INSTFLAGS) -m 755 bin/gcc/libgpac.dll $(prefix)/lib
+ 	install $(INSTFLAGS) -m 755 bin/gcc/libgpac.dll $(prefix)/lib
  else
 @@ -80,7 +80,6 @@
  else
-	install -s -m 755 bin/gcc/libgpac.$(DYN_LIB_SUFFIX) $(prefix)/lib/libgpac-$(VERSION).$(DYN_LIB_SUFFIX)
-	ln -sf libgpac-$(VERSION).$(DYN_LIB_SUFFIX) $(prefix)/lib/libgpac.$(DYN_LIB_SUFFIX)
+ 	install $(INSTFLAGS) -m 755 bin/gcc/libgpac.$(DYN_LIB_SUFFIX) $(DESTDIR)$(prefix)/lib/libgpac-$(VERSION).$(DYN_LIB_SUFFIX)
+ 	ln -sf libgpac-$(VERSION).$(DYN_LIB_SUFFIX) $(DESTDIR)$(prefix)/lib/libgpac.$(DYN_LIB_SUFFIX)
 -	ldconfig || true
  endif
  endif
-	install -d "$(mandir)/man1"
+ 	install -d "$(DESTDIR)$(mandir)/man1"
 Index: applications/mp4client/Makefile
 ===================================================================
 RCS file: /cvsroot/gpac/gpac/applications/mp4client/Makefile,v
