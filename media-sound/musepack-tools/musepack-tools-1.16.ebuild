@@ -39,7 +39,7 @@ src_unpack() {
 	use encode || sed -i "/add_subdirectory/d" CMakeLists.txt
 
 	mv ../${MPPDEC} mppdec
-	epatch "${FILESDIR}"/mppdec-gcc40.diff
+	epatch "${FILESDIR}"/mppdec-*.diff
 	echo "add_subdirectory(mppdec)" >> CMakeLists.txt
 	cp "${FILESDIR}"/CMakeLists.txt mppdec/
 	sed -i \
