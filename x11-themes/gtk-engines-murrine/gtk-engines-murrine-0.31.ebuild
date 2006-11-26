@@ -4,14 +4,14 @@
 
 MY_PN="${PN##*-}"
 MY_P="${MY_PN}-${PV}"
-CFGRATOR="${MY_PN}-configurator-0.3"
+CFGRATOR="${MY_PN}-configurator-0.4.1"
 DESCRIPTION="Murrine GTK+2 Cairo Engine"
 HOMEPAGE="http://cimi.netsons.org/pages/murrine.php"
 SRC_URI="
 	http://cimi.netsons.org/media/download_gallery/${MY_PN}/${MY_P}.tar.bz2
 	http://cimi.netsons.org/media/download_gallery/MurrineThemePack.tar.bz2
 	gnome? (
-		http://cimi.netsons.org/media/download_gallery/${CFGRATOR}.tar.bz2
+		http://cimi.netsons.org/media/download_gallery/${MY_PN}/${CFGRATOR}.tar.bz2
 	)
 "
 RESTRICT="primaryuri"
