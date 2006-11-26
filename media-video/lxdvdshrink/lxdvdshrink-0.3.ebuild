@@ -4,7 +4,7 @@
 
 inherit eutils
 
-MY_P="${P/dvd/DVD}-${PR/r/}"
+MY_P="${P/dvd/DVD}"
 DESCRIPTION=""
 HOMEPAGE="http://gdvdshrink.sourceforge.net"
 SRC_URI="mirror://sourceforge/gdvdshrink/${MY_P}.tgz"

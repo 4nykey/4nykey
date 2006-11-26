@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/dvdstyler/dvdstyler-1.4.ebuild,v 1.4 2005/12/29 01:23:41 halcy0n Exp $
 
-MY_P=DVDStyler-${PV/_beta/b}_1
+MY_P="DVDStyler-${PV/_beta/b}"
 
 DESCRIPTION="DVD filesystem Builder"
 HOMEPAGE="http://dvdstyler.sourceforge.net"
@@ -13,26 +13,27 @@ SLOT="0"
 KEYWORDS="~amd64 ~ppc x86"
 IUSE="gnome"
 
-RDEPEND="
-	app-cdr/dvd+rw-tools
+DEPEND="
 	dev-libs/expat
 	dev-libs/glib
 	media-libs/tiff
 	media-libs/libpng
 	media-libs/jpeg
 	media-libs/netpbm
-	>=media-video/dvdauthor-0.6.10
-	media-video/mpgtx
-	>=media-video/mjpegtools-1.6.2
 	sys-libs/zlib
-	x11-libs/gtk+
 	>=x11-libs/wxGTK-2.4.2
-	virtual/cdrtools
 	gnome? ( >=gnome-base/libgnomeui-2.0 )
 	media-libs/wxsvg
 "
+RDEPEND="
+	${DEPEND}
+	app-cdr/dvd+rw-tools
+	>=media-video/dvdauthor-0.6.10
+	media-video/mpgtx
+	>=media-video/mjpegtools-1.6.2
+"
 DEPEND="
-	${RDEPEND}
+	${DEPEND}
 	dev-util/pkgconfig
 "
 

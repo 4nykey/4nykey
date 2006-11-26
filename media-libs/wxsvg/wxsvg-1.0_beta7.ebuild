@@ -21,7 +21,6 @@ RDEPEND="
 	cairo? ( x11-libs/cairo )
 	media-libs/fontconfig
 "
-
 DEPEND="
 	${RDEPEND}
 	dev-util/pkgconfig

@@ -2,11 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-MY_P="${P}-src"
 DESCRIPTION="SubLib is a library for managing movie subtitles, written in C#"
 HOMEPAGE="http://sublib.sf.net"
-SRC_URI="mirror://sourceforge/${PN}/${MY_P}.zip"
-S="${WORKDIR}/${MY_P}"
+SRC_URI="mirror://sourceforge/${PN}/${P}.zip"
 
 LICENSE="GPL-2"
 SLOT="0"
