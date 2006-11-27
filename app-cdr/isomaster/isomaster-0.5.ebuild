@@ -24,13 +24,15 @@ src_unpack() {
 	sed -i \
 		-e 's:\<cc\>:$(CC) $(CFLAGS):' \
 		-e 's:\([^)$]*\)\(\$(GTKLIBS)\)\(.*\): ${LDFLAGS}\3\1\2:' \
-		-e 's:/usr/local:$(DESTDIR)/usr:' \
 		Makefile bk/Makefile
 	sed -i "/^CFLAGS/d" iniparser-2.15/Makefile
-	sed -i "s:/usr/local:/usr:" isomaster.c
+}
+
+src_compile() {
+	emake PREFIX=/usr || die
 }
 
 src_install() {
-	make DESTDIR="${D}" install || die
+	make PREFIX=/usr DESTDIR="${D}" install || die
 	dodoc {CHANGELOG,CREDITS,README}.TXT
 }

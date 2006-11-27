@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit wxwidgets
+inherit wxwidgets autotools
 
 DESCRIPTION="C++ library to create, manipulate and render SVG files"
 HOMEPAGE="http://wxsvg.sourceforge.net/"
@@ -37,7 +37,7 @@ src_unpack() {
 		need-wxwidgets gtk2
 	fi
 	cd "${S}"
-	libtoolize --copy --force
+	eautoreconf
 }
 
 src_compile() {

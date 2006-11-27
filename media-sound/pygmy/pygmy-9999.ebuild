@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit subversion
+inherit subversion distutils
 
 DESCRIPTION="Pygmy stands for PYthon Gtk+ Mpd plaYer"
 HOMEPAGE="http://pygmy.berlios.de"
