@@ -36,7 +36,7 @@ dvdread dvdnav enca encode esd external-faad external-ffmpeg fbcon fontconfig
 gif ggi gtk ipv6 jack joystick jpeg ladspa libcaca lirc live livecd lzo mad
 matrox mmx mmxext musepack nas openal opengl oss png real rtc samba sdl speex
 sse sse2 svga tga theora tremor truetype v4l v4l2 vorbis win32codecs X x264
-xanim xinerama xv xvid xvmc twolame
+xanim xinerama xv xvid xvmc twolame color radio
 "
 
 # 'encode' in USE for MEncoder.
@@ -281,8 +281,18 @@ src_compile() {
 	teh_conf bitmap-fonts bitmap-font
 	teh_conf truetype freetype
 	teh_conf fontconfig
-	teh_conf v4l tv-v4l1
-	teh_conf v4l2 tv-v4l2
+	myconf="${myconf} $(use_enable color color-console)"
+	if use !v4l && use !v4l2; then
+		myconf="${myconf} --disable-tv"
+	else
+		teh_conf v4l tv-v4l1
+		teh_conf v4l2 tv-v4l2
+	fi
+	myconf="${myconf} $(use_enable radio)"
+	if use radio; then
+		teh_conf v4l radio-v4l
+		teh_conf v4l2 radio-v4l2
+	fi
 
 	#######
 	# Codecs #
@@ -383,8 +393,6 @@ src_compile() {
 	then
 		myconf="${myconf} --enable-linux-devfs"
 	fi
-
-	use live && myconf="${myconf} --with-livelibdir=/usr/$(get_libdir)/live"
 
 	# support for blinkenlights
 	use bl && myconf="${myconf} --enable-bl"
