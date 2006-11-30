@@ -40,7 +40,7 @@ RDEPEND="
 	aalib? ( media-libs/aalib )
 	directfb? ( >=dev-libs/DirectFB-0.9.9 )
 	gnome? ( >=gnome-base/gnome-vfs-2.0 )
-	flac? ( ~media-libs/flac-1.1.2 )
+	flac? ( >=media-libs/flac-1.1.2 )
 	sdl? ( >=media-libs/libsdl-1.1.5 )
 	dxr3? ( >=media-libs/libfame-0.9.0 )
 	vorbis? ( media-libs/libogg media-libs/libvorbis )
