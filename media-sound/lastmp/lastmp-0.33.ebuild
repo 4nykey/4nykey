@@ -9,10 +9,12 @@ DESCRIPTION="LastMP is a Last.fm plugin client for MPD, implemented in Python"
 HOMEPAGE="http://www.red-bean.com/~decklin/software/lastfmsubmitd/"
 SRC_URI="http://www.red-bean.com/~decklin/software/lastfmsubmitd/${MY_P}.tar.bz2"
 RESTRICT="primaryuri"
+S="${WORKDIR}/${MY_P}"
+
 LICENSE="as-is"
+SLOT="0"
 KEYWORDS="~x86"
 IUSE=""
-S="${WORKDIR}/${MY_P}"
 
 RDEPEND="media-libs/py-libmpdclient"
 

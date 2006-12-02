@@ -10,6 +10,7 @@ ESVN_REPO_URI="svn://svn.berlios.de/pygmy/trunk"
 
 LICENSE="GPL-2"
 KEYWORDS="~x86"
+SLOT="0"
 IUSE="gnome"
 
 DEPEND="
