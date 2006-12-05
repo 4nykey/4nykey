@@ -7,6 +7,7 @@ inherit subversion autotools
 DESCRIPTION="A development version of Music Player Daemon (mpd)"
 HOMEPAGE="http://www.musicpd.org"
 ESVN_REPO_URI="https://svn.musicpd.org/${PN}/trunk"
+AT_M4DIR="m4"
 ESVN_BOOTSTRAP="eautoreconf"
 
 LICENSE="GPL-2"

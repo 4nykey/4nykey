@@ -63,7 +63,7 @@ DEPEND="
 src_unpack() {
 	cvs_src_unpack
 	cd ${WORKDIR}
-	unpack ${A}
+	use amr && unpack ${A}
 	cd ${S}
 	chmod 755 configure
 

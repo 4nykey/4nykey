@@ -28,13 +28,15 @@ DEPEND="
 		app-text/docbook-sgml-utils
 	)
 	dev-util/pkgconfig
+	sys-devel/gettext
 "
 
 src_unpack() {
 	cvs_src_unpack
 	cd "${S}"
 	epatch "${FILESDIR}"/${PN}-*.diff
-	WANT_AUTOMAKE="1.9" AT_M4DIR="m4" eautoreconf
+	install /usr/share/gettext/config.rpath .
+	AT_M4DIR="m4" eautoreconf
 }
 
 src_compile() {
