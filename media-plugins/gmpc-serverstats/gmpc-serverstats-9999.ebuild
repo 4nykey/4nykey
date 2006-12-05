@@ -4,4 +4,4 @@
 
 inherit gmpc-plugin
 
-ESVN_REPO_URI="https://svn.musicpd.org/gmpc/plugins/gmpc-last.fm/trunk"
+DOCS="TODO"
