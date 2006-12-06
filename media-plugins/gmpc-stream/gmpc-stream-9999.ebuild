@@ -4,7 +4,13 @@
 
 inherit gmpc-plugin
 
+DESCRIPTION="${PN/gmpc-/} plugin for GMPC"
 ESVN_REPO_URI="https://svn.qballcow.nl/${PN}/trunk"
+
+KEYWORDS="~x86"
+LICENSE="GPL-2"
+SLOT="0"
+IUSE=""
 
 RDEPEND="
 	${RDEPEND}

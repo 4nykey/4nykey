@@ -3,3 +3,10 @@
 # $Header: $
 
 inherit gmpc-plugin
+
+DESCRIPTION="${PN/gmpc-/} plugin for GMPC"
+
+KEYWORDS="~x86"
+LICENSE="GPL-2"
+SLOT="0"
+IUSE=""
