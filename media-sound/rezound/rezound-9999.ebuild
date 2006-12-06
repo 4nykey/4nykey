@@ -6,6 +6,7 @@ inherit cvs autotools
 
 DESCRIPTION="Sound editor and recorder"
 HOMEPAGE="http://rezound.sourceforge.net"
+SRC_URI="mirror://gentoo/${PN}-0.12.2_beta-patches.tar.bz2"
 ECVS_SERVER="rezound.cvs.sourceforge.net:/cvsroot/rezound"
 ECVS_MODULE="rezound"
 S="${WORKDIR}/${ECVS_MODULE}"
@@ -13,13 +14,15 @@ S="${WORKDIR}/${ECVS_MODULE}"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="16bittmp alsa flac jack nls oss portaudio soundtouch vorbis ladspa lame
-cdr"
+IUSE="
+16bittmp alsa flac jack nls oss portaudio soundtouch vorbis ladspa lame cdr
+audiofile fftw
+"
 
-COMMON_DEPS="
-	=sci-libs/fftw-2*
+DEPEND="
+	fftw? ( =sci-libs/fftw-2* )
 	>=x11-libs/fox-1.2.4
-	>=media-libs/audiofile-0.2.3
+	audiofile? ( >=media-libs/audiofile-0.2.3 )
 	ladspa? ( >=media-libs/ladspa-sdk-1.12
 		>=media-libs/ladspa-cmt-1.15 )
 	alsa? ( >=media-libs/alsa-lib-1.0 )
@@ -27,16 +30,15 @@ COMMON_DEPS="
 	jack? ( media-sound/jack-audio-connection-kit )
 	portaudio? ( >=media-libs/portaudio-18 )
 	soundtouch? ( >=media-libs/libsoundtouch-1.2.1 )
-	vorbis? ( media-libs/libvorbis media-libs/libogg )
+	vorbis? ( media-libs/libvorbis )
 "
-# optional packages (don't need to be installed during emerge):
 RDEPEND="
-	${COMMON_DEPS}
+	${DEPEND}
 	lame? ( >=media-sound/lame-3.92 )
 	cdr? ( app-cdr/cdrdao )
 "
 DEPEND="
-	${COMMON_DEPS}
+	${DEPEND}
 	oss? ( virtual/os-headers )
 	sys-devel/bison
 	sys-devel/flex
@@ -44,11 +46,14 @@ DEPEND="
 "
 
 src_unpack() {
+	unpack ${A}
 	cvs_src_unpack
-	cd ${S}
+	cd "${S}"
 
-	epatch "${FILESDIR}"/fox-1.6.diff
-	epatch "${FILESDIR}"/gcc41*.patch
+	cp "${FILESDIR}"/gcc41.patch "${WORKDIR}"/20_rezound-0.12.2_beta-gcc4.patch
+	epatch "${WORKDIR}"/[1267]0_*.patch
+
+	epatch "${FILESDIR}"/${PN}-*.diff
 	sed -i "/^CXXFLAGS/d" configure.ac
 
 	autopoint --force || die
@@ -56,20 +61,28 @@ src_unpack() {
 }
 
 src_compile() {
-	# following features can't be disabled if already installed:
-	# -> flac, oggvorbis, soundtouch
-	local sampletype=""
-	use 16bittmp && sampletype="--enable-internal-sample-type=int16"
-	use 16bittmp || sampletype="--enable-internal-sample-type=float"
+	use 16bittmp && local sampletype="int16"
 
 	econf \
-		$(use_enable alsa) \
-		$(use_enable jack) \
-		$(use_enable nls) \
 		$(use_enable oss) \
+		$(use_enable alsa) \
+		$(use_enable alsa alsatest) \
 		$(use_enable portaudio) \
-		${sampletype} \
+		$(use_enable jack) \
+		$(use_enable audiofile) \
+		$(use_enable audiofile audiofiletest) \
+		$(use_enable vorbis) \
+		$(use_enable vorbis oggtest) \
+		$(use_enable vorbis vorbistest) \
+		$(use_enable flac) \
+		$(use_enable flac libFLACtest) \
+		$(use_enable flac libFLACPPtest) \
+		$(use_enable fftw) \
 		$(use_enable ladspa) \
+		$(use_enable soundtouch) \
+		$(use_enable soundtouch soundtouch-check) \
+		$(use_enable nls) \
+		--enable-internal-sample-type=${sampletype:-float} \
 		--enable-largefile \
 		|| die "configure failed"
 

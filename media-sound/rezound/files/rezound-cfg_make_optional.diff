@@ -1,0 +1,121 @@
+--- configure.ac.orig	2006-12-04 20:39:30.000000000 +0200
++++ configure.ac	2006-12-05 17:25:26.000000000 +0200
+@@ -493,15 +492,34 @@
+ 
+ ### Audiofile ##############################################################
+ 
++AH_TEMPLATE(ENABLE_AUDIOFILE)
++AC_ARG_ENABLE(
++	audiofile,
++	AC_HELP_STRING([--enable/disable-audiofile],[enable/disable ReZound to use AUDIOFILE]),
++	[ # action if either enable or disable flag is given
++		if [[ "$enableval" = "yes" ]]
++		then 
+ # used to conditionally activate code in ClibaudiofileSoundTranslator.*
+ AH_TEMPLATE(HAVE_LIBAUDIOFILE)
+ # this macro detects libaudiofile and does an AC_SUBST on AUDIOFILE_CFLAGS and AUDIOFILE_LIBS, so I put these variables in src/backend/Makefile.am for substitution (also audiofile comes with with a pkg-config file, I could use that)
+ AM_PATH_AUDIOFILE(0.2.2,AC_DEFINE(HAVE_LIBAUDIOFILE),AC_MSG_NOTICE([audiofile website: http://oss.sgi.com/projects/audiofile]))
++		else
++			AC_MSG_RESULT([*** disabling AUDIOFILE support])
++		fi
++	],
++)
+ 
+ 
+ 
+ ### Ogg Vorbis Libraries ##################################################
+ 
++AH_TEMPLATE(ENABLE_VORBIS)
++AC_ARG_ENABLE(
++	vorbis,
++	AC_HELP_STRING([--enable/disable-vorbis],[enable/disable ReZound to use VORBIS]),
++	[ # action if either enable or disable flag is given
++		if [[ "$enableval" = "yes" ]]
++		then 
+ AC_LANG_PUSH(C) # xiph needs to include vorbisenc.h as well if C++ is going to compile the code
+ 
+ AH_TEMPLATE(HAVE_LIBOGG)
+@@ -513,6 +531,11 @@
+ XIPH_PATH_VORBIS(AC_DEFINE(HAVE_LIBVORBIS),AC_MSG_NOTICE([Ogg Vorbis website: http://www.xiph.org]))
+ 
+ AC_LANG_POP(C)
++		else
++			AC_MSG_RESULT([*** disabling VORBIS support])
++		fi
++	],
++)
+ 
+ 
+ 
+@@ -520,6 +543,13 @@
+ 
+ ### FLAC Library ##########################################################
+ 
++AH_TEMPLATE(ENABLE_FLAC)
++AC_ARG_ENABLE(
++	flac,
++	AC_HELP_STRING([--enable/disable-flac],[enable/disable ReZound to use FLAC]),
++	[ # action if either enable or disable flag is given
++		if [[ "$enableval" = "yes" ]]
++		then 
+ # used to conditionally activate code in CFLACSoundTranslator.*
+ AH_TEMPLATE(HAVE_LIBFLACPP)
+ AH_TEMPLATE(HAVE_LIBFLAC)
+@@ -532,6 +562,11 @@
+ 	],
+ 	AC_MSG_NOTICE([FLAC website: http://flac.sourceforge.net])
+ )
++		else
++			AC_MSG_RESULT([*** disabling FLAC support])
++		fi
++	],
++)
+ 
+ 
+ 
+@@ -542,6 +577,13 @@
+ # Handle the flags for the FFTW library                                    #
+ ############################################################################
+ 
++AH_TEMPLATE(ENABLE_FFTW)
++AC_ARG_ENABLE(
++	fftw,
++	AC_HELP_STRING([--enable/disable-fftw],[enable/disable ReZound to use FFTW]),
++	[ # action if either enable or disable flag is given
++		if [[ "$enableval" = "yes" ]]
++		then 
+ # check for the rfftw library installed.  Eventually this macro call
+ # should define HAVE_FFTW and enable or disable the FFT based actions
+ # if it's not found, then I should print a noticable warning that FFT
+@@ -559,6 +601,11 @@
+ 	AC_CHECK_LIB(rfftw, rfftw_create_plan, , AC_MSG_WARN([***** librfftw.a (version 2) not found -- any FFT based actions will be disabled (http://www.fftw.org) *****]),-lrfftw),
+ 	AC_MSG_WARN([***** rfftw.h (version 2) header file not found -- any FFT based actions will be disabled (http://www.fftw.org) *****])
+ )
++		else
++			AC_MSG_RESULT([*** disabling FFTW support])
++		fi
++	],
++)
+ 
+ 
+ 
+@@ -603,7 +650,19 @@
+ dnl ############################################################################
+ dnl # Handle the flags for a library to to tempo/pitch changing independantly  *
+ dnl ############################################################################
++AH_TEMPLATE(ENABLE_SOUNDTOUCH)
++AC_ARG_ENABLE(
++	soundtouch,
++	AC_HELP_STRING([--enable/disable-soundtouch],[enable/disable ReZound to use SOUNDTOUCH]),
++	[ # action if either enable or disable flag is given
++		if [[ "$enableval" = "yes" ]]
++		then 
+ AM_PATH_SOUNDTOUCH([],[],AC_MSG_WARN([***** libSoundTouch not found -- tempo and pitch changing will be disabled (http://www.iki.fi/oparviai/soundtouch) *****]))
++		else
++			AC_MSG_RESULT([*** disabling SOUNDTOUCH support])
++		fi
++	],
++)
+ 
+ 
+ 

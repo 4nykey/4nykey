@@ -14,16 +14,6 @@
 # version.
 # --- T2-COPYRIGHT-NOTE-END ---
 
---- rezound-0.12.2beta/src/misc/CNestedDataFile/anytype.h.vanilla	2006-03-04 19:55:28.559323250 +0100
-+++ rezound-0.12.2beta/src/misc/CNestedDataFile/anytype.h	2006-03-04 20:08:36.228549500 +0100
-@@ -93,6 +93,7 @@
- // I really wished that I didn't have to explicitly use 'vector' in the definition; I'd have like to use any container with an iterator interface
- #include <CMutex.h>
- #include <CNestedDataFile/CNestedDataFile.h>
-+extern int cfg_parse();
- template<class Type> static const vector<Type> &string_to_anytype(const string &str,vector<Type> &ret)
- {
- 	// This function has to parse '{' ..., ... '}' where the ... can contain nested array
 --- rezound-0.12.2beta/src/frontend_fox/CMetersWindow.cpp.vanilla	2006-03-05 15:37:25.240988250 +0100
 +++ rezound-0.12.2beta/src/frontend_fox/CMetersWindow.cpp	2006-03-05 15:40:24.508191750 +0100
 @@ -82,7 +82,7 @@
