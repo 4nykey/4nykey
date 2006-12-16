@@ -41,11 +41,10 @@ pkg_setup() {
 
 src_unpack() {
 	cvs_src_unpack
-	cd ${S}
-	cd build/linux
+	cd ${S}/build/linux
 	tar -xjf ../circular_buffer_v3.7.tar.bz2
 	mv circular_buffer boost
-	AT_M4DIR="m4" eautoreconf || die
+	AT_M4DIR="m4" eautoreconf
 }
 
 src_compile() {
@@ -61,7 +60,7 @@ src_compile() {
 }
 
 src_install() {
-	make -C build/linux DEST_DIR=${D} install || die
+	make -C build/linux DESTDIR=${D} install || die
 	dodoc *.txt TODO docs/README
 	dohtml docs/html/*.html
 }

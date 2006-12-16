@@ -288,7 +288,7 @@ src_compile() {
 		teh_conf v4l tv-v4l1
 		teh_conf v4l2 tv-v4l2
 	fi
-	myconf="${myconf} $(use_enable radio)"
+	myconf="${myconf} $(use_enable radio) $(use_enable radio radio-capture)"
 	if use radio; then
 		teh_conf v4l radio-v4l
 		teh_conf v4l2 radio-v4l2

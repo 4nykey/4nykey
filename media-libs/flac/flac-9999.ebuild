@@ -4,16 +4,16 @@
 
 inherit cvs autotools toolchain-funcs
 
-DESCRIPTION="free lossless audio encoder which includes an XMMS plugin"
+DESCRIPTION="Free Lossless Audio Encoder"
 HOMEPAGE="http://flac.sourceforge.net/"
 ECVS_SERVER="flac.cvs.sourceforge.net:/cvsroot/flac"
 ECVS_MODULE="flac"
 S="${WORKDIR}/${ECVS_MODULE}"
-#RESTRICT="test" # see #59482
+RESTRICT="test" # see #59482
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
-KEYWORDS="-*"
+KEYWORDS="~x86"
 IUSE="3dnow debug doc ogg sse pic"
 
 RDEPEND="
