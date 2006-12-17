@@ -11,22 +11,30 @@ SRC_URI="http://www.metadecks.org/software/sweep/download/${P}.tar.bz2"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="alpha amd64 ppc sparc x86"
-IUSE="alsa nls vorbis mad speex libsamplerate"
+IUSE="alsa nls vorbis mad speex libsamplerate ladspa"
 
-DEPEND="dev-libs/tdb
+DEPEND="
 	libsamplerate? ( media-libs/libsamplerate )
 	>=media-libs/libsndfile-1.0
-	speex? ( media-libs/speex )
+	speex? ( media-libs/libogg media-libs/speex )
 	mad? ( >=media-sound/madplay-0.14.2b )
 	>=x11-libs/gtk+-2.2.0
 	alsa? ( >=media-libs/alsa-lib-1.0.0 )
+	vorbis? ( media-libs/libvorbis )
+"
+RDEPEND="
+	${DEPEND}
+	ladspa? ( media-libs/ladspa-cmt )
+"
+DEPEND="
+	${DEPEND}
 	nls? ( sys-devel/gettext )
-	vorbis? ( media-libs/libogg media-libs/libvorbis )"
+"
 
 src_unpack() {
 	unpack ${A}
 	cd ${S}
-#	epatch ${FILESDIR}/${P}-alsa.patch
+	epatch "${FILESDIR}"/${PN}-cfg.diff
 }
 
 src_compile() {
@@ -44,12 +52,6 @@ src_compile() {
 }
 
 src_install() {
-	einstall || die "make install failed"
-}
-
-pkg_postinst() {
-	einfo
-	einfo "Sweep can use ladspa plugins,"
-	einfo "emerge ladspa-sdk and ladspa-cmt if you want them."
-	einfo
+	emake DESTDIR="${D}" install || die "make install failed"
+	dodoc AUTHORS ChangeLog NEWS README* TODO
 }
