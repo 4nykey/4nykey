@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS="~x86"
 IUSE="
 vorbis flac sid python ruby alsa curl aac gnome jack mad oss samba modplug
-speex sdl musepack encode ape mms wma java boost ecore avahi fam fftw
+speex musepack encode ape mms wma boost ecore avahi fam fftw
 libsamplerate
 "
 
@@ -37,10 +37,8 @@ RDEPEND="
 	ape? ( media-sound/mac )
 	mms? ( media-libs/libmms )
 	wma? ( media-video/ffmpeg )
-	sdl? ( media-libs/sdl-ttf )
 	python? ( dev-lang/python )
 	ruby? ( >=dev-lang/ruby-1.8 )
-	java? ( virtual/jre )
 	boost? ( dev-libs/boost )
 	ecore? ( x11-libs/ecore )
 	avahi? ( net-dns/avahi )
@@ -52,19 +50,18 @@ DEPEND="
 	${RDEPEND}
 	oss? ( virtual/os-headers )
 	python? ( dev-python/pyrex )
-	java? ( >=dev-lang/swig-1.3.25 virtual/jdk )
-	dev-util/scons
+	dev-lang/python
 	dev-util/pkgconfig
 "
 
 pick_plug() {
-	use $1 || myconf="${myconf} ${2:-$1}"
+	use $1 || myconf="${myconf} --without-plugins=${2:-$1}"
 }
 
 src_compile() {
 	local myconf
 	pick_plug alsa
-	pick_plug curl curl_http
+	pick_plug curl
 	pick_plug curl lastfm
 	pick_plug aac faad
 	pick_plug flac
@@ -73,45 +70,31 @@ src_compile() {
 	pick_plug mad
 	pick_plug modplug
 	pick_plug oss
-	pick_plug samba smb
+	pick_plug samba
 	pick_plug sid
-	pick_plug sdl sdl-vis
 	pick_plug speex
-	pick_plug vorbis vorbisfile
+	pick_plug vorbis
 	pick_plug musepack
 	pick_plug encode diskwrite
 	pick_plug encode ices
 	pick_plug ape mac
 	pick_plug mms
 	pick_plug wma
-	pick_plug java
-	pick_plug boost xmmsclient++
-	pick_plug ecore xmmsclient-ecore
-	pick_plug avahi xmms2-mdns-avahi
-	pick_plug fam xmms2-mlib-updater
 	if ! use fftw && ! use libsamplerate; then
-		myconf="${myconf} vocoder"
+		myconf="${myconf} --without-plugins=vocoder"
 	fi
 
-	scons \
-		INSTALLDIR=${D} \
-		PREFIX="/usr" \
-		SYSCONFDIR="/etc" \
-		EXCLUDE="${myconf}" \
-		CCFLAGS="${CFLAGS}" \
-		CXXFLAGS="${CXXFLAGS}" \
-		LDFLAGS="${LDFLAGS}" \
-		${MAKEOPTS} || die
+	export GIT_DIR="${EGIT_STORE_DIR}/${EGIT_PROJECT}/${EGIT_REPO_URI##*/}"
+
+	WAF="./waf ${MAKEOPTS} --prefix=/usr --destdir=${D} ${myconf}"
+
+	sed -i s:-O0:-O2: wscript
+	${WAF} -j1 configure || die
+	${WAF} build || die
 }
 
 src_install() {
-	scons \
-		CONFIG=0 \
-		INSTALLDIR=${D} \
-		PREFIX="/usr" \
-		SYSCONFDIR="/etc" \
-		${MAKEOPTS} \
-		install || die
+	${WAF} install || die
 
-	dodoc AUTHORS ChangeLog README TODO
+	dodoc AUTHORS README TODO
 }
