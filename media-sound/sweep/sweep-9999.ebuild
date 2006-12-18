@@ -2,11 +2,13 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/sweep/sweep-0.8.3.ebuild,v 1.9 2005/12/26 14:16:50 lu_zero Exp $
 
-inherit eutils
+inherit subversion autotools
 
 DESCRIPTION="audio editor and live playback tool"
 HOMEPAGE="http://www.metadecks.org/software/sweep/"
-SRC_URI="http://www.metadecks.org/software/sweep/download/${P}.tar.bz2"
+ESVN_REPO_URI="http://svn.metadecks.org/sweep/trunk"
+ESVN_PATCHES="${P}-*.diff"
+ESVN_BOOTSTRAP="eautoreconf"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -31,12 +33,6 @@ DEPEND="
 	nls? ( sys-devel/gettext )
 "
 
-src_unpack() {
-	unpack ${A}
-	cd ${S}
-	epatch "${FILESDIR}"/${PN}-cfg.diff
-}
-
 src_compile() {
 	econf \
 		--enable-experimental \
@@ -52,6 +48,7 @@ src_compile() {
 }
 
 src_install() {
-	emake DESTDIR="${D}" install || die "make install failed"
+	emake DESTDIR="${D}" MKINSTALLDIRS="${S}"/mkinstalldirs install \
+	|| die "make install failed"
 	dodoc AUTHORS ChangeLog NEWS README* TODO
 }
