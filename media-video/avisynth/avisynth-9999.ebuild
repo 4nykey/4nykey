@@ -61,6 +61,5 @@ src_compile() {
 
 src_install() {
 	make -C build/linux DESTDIR=${D} install || die
-	dodoc *.txt TODO docs/README
-	dohtml docs/html/*.html
+	dodoc *.txt TODO
 }
