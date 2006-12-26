@@ -25,6 +25,7 @@ SRC_URI="
 	gtk? ( mirror://mplayer/Skin/Blue-${BLUV}.tar.bz2 )
 "
 ESVN_REPO_URI="svn://svn.mplayerhq.hu/mplayer/trunk"
+ESVN_PATCHES="${PN}-*.diff"
 
 SLOT="0"
 LICENSE="GPL-2"
@@ -189,17 +190,11 @@ src_unpack() {
 
 	cd ${S}
 
-	EPATCH_SUFFIX="diff" epatch "${FILESDIR}"
-	sed -i "s:\(EXTRA_INC = .*\):\1 $_inc_libavformat:" configure
-
 	# skip make distclean/depend
 	touch .developer
 	sed -i '/\$(MAKE) depend/d' Makefile
 	# skip stripping
 	sed -i 's:\(_stripbinaries=\).*:\1no:' configure
-
-	has_version '>=media-sound/twolame-0.3.4' && \
-		sed -i 's:twolame_set_VBR_q:twolame_set_VBR_level:' libmpcodecs/ae_twolame.c
 }
 
 src_compile() {

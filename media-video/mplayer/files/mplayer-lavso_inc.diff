@@ -1,0 +1,46 @@
+--- configure.orig	2006-12-16 17:44:39.000000000 +0200
++++ configure	2006-12-21 12:12:54.000000000 +0200
+@@ -6208,6 +6208,7 @@
+     _inc_libavformat=`$_pkg_config --cflags libavformat`
+     _ld_tmp=`$_pkg_config --libs libavformat`
+     cc_check $_inc_libavformat $_ld_tmp && _ld_extra="$_ld_extra $_ld_tmp" \
++    && _inc_extra="$_inc_extra $_inc_libavformat" \
+       && _libavformat_so=yes
+   elif cc_check $_ld_lm -lavformat ; then
+     _ld_extra="$_ld_extra -lavformat"
+--- libmpcodecs/vd_xanim.c.orig	2006-11-12 20:00:37.000000000 +0200
++++ libmpcodecs/vd_xanim.c	2006-12-21 13:39:00.000000000 +0200
+@@ -37,7 +37,9 @@
+ #include <errno.h> /* strerror, errno */
+ 
+ #include "mp_msg.h"
++#ifndef USE_LIBAVUTIL_SO
+ #include "bswap.h"
++#endif
+ 
+ #include "osdep/timer.h"
+ #include "libvo/fastmemcpy.h"
+--- libmpcodecs/ad_qtaudio.c.orig	2006-11-27 20:58:40.000000000 +0200
++++ libmpcodecs/ad_qtaudio.c	2006-12-21 21:44:30.000000000 +0200
+@@ -14,7 +14,9 @@
+ #include "wine/windef.h"
+ 
+ #include "ad_internal.h"
++#ifndef USE_LIBAVUTIL_SO
+ #include "bswap.h"
++#endif
+ 
+ #ifdef WIN32_LOADER
+ #include "ldt_keeper.h"
+--- libmpcodecs/vd_qtvideo.c.orig	2006-11-27 20:58:40.000000000 +0200
++++ libmpcodecs/vd_qtvideo.c	2006-12-21 22:07:56.000000000 +0200
+@@ -28,7 +28,9 @@
+ 
+ LIBVD_EXTERN(qtvideo)
+ 
++#ifndef USE_LIBAVUTIL_SO
+ #include "bswap.h"
++#endif
+ 
+ #ifndef MACOSX
+ #include "qtx/qtxsdk/components.h"
