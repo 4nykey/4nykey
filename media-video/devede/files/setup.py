@@ -7,6 +7,7 @@ data_files=[
 	('lib/devede',			glob.glob('devede_*.py')),
     ('share/devede',        ['devede.glade']),
 	('share/devede',		glob.glob('pixmaps/*.png')),
+    ('share/devede',        ['devedesans.ttf']),
     ('share/applications',  ['devede.desktop']),
     ('share/pixmaps',       ['devede.png']),
     ('share/doc/@PF@/html', glob.glob('docs/*'))
