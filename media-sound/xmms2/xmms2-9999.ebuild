@@ -7,15 +7,15 @@ inherit git
 DESCRIPTION="XMMS2 is a redesign of the XMMS music player"
 HOMEPAGE="http://xmms2.xmms.org/"
 SRC_URI=""
-EGIT_REPO_URI="git://git.xmms.se/xmms2/xmms2-devel.git/"
+EGIT_REPO_URI="git://git.xmms.se/xmms2/xmms2-devel.git"
+EGIT_PATCHES="${PN}-*.diff"
 
-LICENSE="LGPL-2.1"
+LICENSE="LGPL-2.1 GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
 IUSE="
 vorbis flac sid python ruby alsa curl aac gnome jack mad oss samba modplug
-speex musepack encode ape mms wma boost ecore avahi fam fftw
-libsamplerate
+speex musepack encode ape mms wma boost avahi fam fftw libsamplerate perl
 "
 
 RDEPEND="
@@ -40,11 +40,12 @@ RDEPEND="
 	python? ( dev-lang/python )
 	ruby? ( >=dev-lang/ruby-1.8 )
 	boost? ( dev-libs/boost )
-	ecore? ( x11-libs/ecore )
 	avahi? ( net-dns/avahi )
 	fam? ( app-admin/gamin )
 	fftw? ( >=sci-libs/fftw-3 )
 	libsamplerate? ( media-libs/libsamplerate )
+	perl? ( dev-lang/perl )
+	avahi? ( net-dns/avahi )
 "
 DEPEND="
 	${RDEPEND}
@@ -55,7 +56,11 @@ DEPEND="
 "
 
 pick_plug() {
-	use $1 || myconf="${myconf} --without-plugins=${2:-$1}"
+	if [[ $1 == "-o" ]]; then
+		pickwhat="optional"
+		shift
+	fi
+	use $1 || myconf="${myconf} --without-${pickwhat:-plugin}s=${2:-$1}"
 }
 
 src_compile() {
@@ -80,15 +85,20 @@ src_compile() {
 	pick_plug ape mac
 	pick_plug mms
 	pick_plug wma
+	pick_plug -o boost xmmsclient++
+	pick_plug -o python
+	pick_plug -o perl
+	pick_plug -o ruby
+	pick_plug -o avahi
+	pick_plug -o fam medialib-updater
 	if ! use fftw && ! use libsamplerate; then
 		myconf="${myconf} --without-plugins=vocoder"
 	fi
 
-	export GIT_DIR="${EGIT_STORE_DIR}/${EGIT_PROJECT}/${EGIT_REPO_URI##*/}"
+	export GIT_DIR="${EGIT_STORE_DIR}/${EGIT_PROJECT}"
 
 	WAF="./waf ${MAKEOPTS} --prefix=/usr --destdir=${D} ${myconf}"
 
-	sed -i s:-O0:-O2: wscript
 	${WAF} -j1 configure || die
 	${WAF} build || die
 }
@@ -96,5 +106,5 @@ src_compile() {
 src_install() {
 	${WAF} install || die
 
-	dodoc AUTHORS README TODO
+	dodoc AUTHORS COPYING README TODO
 }

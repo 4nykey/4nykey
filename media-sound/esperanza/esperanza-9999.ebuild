@@ -20,17 +20,24 @@ DEPEND="
 	${RDEPEND}
 "
 
+pkg_setup() {
+	if ! built_with_use media-sound/xmms2 boost; then
+		eerror "Please remerge xmms2 with 'boost' in USE"
+		die "we need xmmsclient++"
+	fi
+}
+
 src_compile() {
 	qmake || die
 	sed -i "s:\(FLAGS[ ]*\)=:\1+=:" Makefile
 	emake \
 		CC="$(tc-getCC)" \
 		CXX="$(tc-getCXX)" \
-		LFLAGS="$LDFLAGS" \
+		LFLAGS="${LDFLAGS}" \
 		|| die
 }
 
 src_install() {
-	einstall || die
+	dobin esperanza
 	dodoc ChangeLog
 }
