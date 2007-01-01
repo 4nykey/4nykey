@@ -2,48 +2,51 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/xvid/xvid-1.0.1.ebuild,v 1.6 2004/07/29 03:34:28 tgall Exp $
 
-inherit eutils cvs
+inherit cvs autotools
 
-MY_P=${PN}core-${PV}
 DESCRIPTION="high performance/quality MPEG-4 video de-/encoding solution"
 HOMEPAGE="http://www.xvid.org/"
+#SRC_URI="mirror://gentoo/${PN}-1.1.0-noexec-stack.patch.bz2"
 ECVS_SERVER="cvs.xvid.org:/xvid"
 ECVS_MODULE="xvidcore"
+S="${WORKDIR}/${ECVS_MODULE}/build/generic"
 
 LICENSE="GPL-2"
 SLOT="1"
-KEYWORDS="~x86 ~ppc ~sparc ~alpha hppa ~amd64 ~ia64 ppc64"
-IUSE="doc"
+KEYWORDS="~x86"
+IUSE="doc examples"
 
 DEPEND="
-	x86? ( >=dev-lang/nasm-0.98.36 )
+	x86? ( || ( dev-lang/yasm >=dev-lang/nasm-0.98.39 ) )
 "
-
-S="${WORKDIR}/${ECVS_MODULE}/build/generic"
 
 src_unpack() {
 	cvs_src_unpack
+
+	cd "${S}"/../..
+#	epatch "${DISTDIR}"/${A}
+	epatch "${FILESDIR}"/${PN}-*.patch
+
 	cd ${S}
+	eautoreconf
+	# it doesn't use automake but needs few files from it to be installed
+	automake --add-missing --copy > /dev/null 2>&1
+}
 
-	sed -i 's:\<max\>:fmax:' ../../src/plugins/plugin_lumimasking.c
-
-	einfo "Running bootstrap.sh"
-	sed -i 's:head -1:head -n1:' bootstrap.sh
-	./bootstrap.sh > /dev/null || die
-
+src_compile() {
+	econf || die
+	emake || die
+	use examples && emake -C ../../examples
 }
 
 src_install() {
 	make install DESTDIR=${D} || die
 
-	cd ${S}/../../
+	cd ../..
+	use examples && dobin examples/xvid_{encraw,decraw,bench}
 	dodoc AUTHORS ChangeLog README TODO doc/*
 
-	local mylib="$(basename $(ls ${D}/usr/lib/libxvidcore.so*))"
-	dosym ${mylib} /usr/lib/libxvidcore.so
-	dosym ${mylib} /usr/lib/${mylib/%.[0-9]}
-
-	if useq doc ; then
+	if use doc; then
 		dodoc CodingStyle doc/README
 		insinto /usr/share/doc/${PF}/examples
 		doins examples/*

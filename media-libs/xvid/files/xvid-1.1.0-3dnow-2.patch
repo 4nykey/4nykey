@@ -1,0 +1,13 @@
+Index: xvidcore-1.1.0/src/xvid.c
+===================================================================
+--- xvidcore-1.1.0.orig/src/xvid.c
++++ xvidcore-1.1.0/src/xvid.c
+@@ -634,7 +634,7 @@ int xvid_gbl_init(xvid_gbl_init_t * init
+ 	 * disable asm usage the usual way. When Intel EMT64 cpus will
+ 	 * be out, maybe we'll have to check more precisely what cpu
+ 	 * features there really are. */
+-	if (cpu_flags & XVID_CPU_ASM) {
++	if (cpu_flags & XVID_CPU_3DNOW) {
+ 		/* SIMD state flusher */
+ 		emms = emms_3dn;
+ 

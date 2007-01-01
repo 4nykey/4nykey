@@ -1,0 +1,13 @@
+--- examples/Makefile.orig	2006-10-11 16:52:06.000000000 +0300
++++ examples/Makefile	2006-12-29 01:51:17.000000000 +0200
+@@ -9,8 +9,8 @@
+ include ../build/generic/platform.inc
+ 
+ HDIR    = -I../src
+-CFLAGS  = -g $(ARCHITECTURE) $(BUS) $(ENDIANNESS) $(FEATURES) $(SPECIFIC_CFLAGS)
+-LDFLAGS = -lc -lm ../build/generic/=build/$(STATIC_LIB) -lpthread
++CFLAGS  += -g $(ARCHITECTURE) $(BUS) $(ENDIANNESS) $(FEATURES) $(SPECIFIC_CFLAGS)
++LDFLAGS += ../build/generic/=build/$(STATIC_LIB) -lc -lm -lpthread
+ 
+ SOURCES= xvid_encraw.c xvid_decraw.c xvid_bench.c
+ OBJECTS=$(SOURCES:.c=.o)
