@@ -2,7 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit mono
+inherit mono gnome2
+
 MY_PN="DesktopDataManager"
 DESCRIPTION="A clipboard manager and screenshot taking application"
 HOMEPAGE="http://data-manager.sourceforge.net"
@@ -22,7 +23,4 @@ DEPEND="
 	${RDEPEND}
 "
 
-src_install() {
-	einstall || die
-	dodoc AUTHORS ChangeLog NEWS README
-}
+DOCS="AUTHORS ChangeLog"

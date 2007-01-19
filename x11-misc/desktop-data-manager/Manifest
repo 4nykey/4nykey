@@ -1,8 +1,8 @@
 DIST desktop-data-manager_0.8.5_src.tar.gz 165364 RMD160 bf90ed4fcc2a5df45bd7e94b20de350b688497b7 SHA1 c287d51dacf2d7b2dff8c394aacf8035dd0e931b SHA256 6e4149c87038f01e80616d3bd5932b74824d2a6f56c711605a37e467fb627123
-EBUILD desktop-data-manager-0.8.5.ebuild 589 RMD160 5425ae9c7388cb675101314fb0f680f0667b8e90 SHA1 6c4c8fe579a2cb09cbd9b6541a896abd3fec965a SHA256 9f91ce9e3d94f4b6722e5e0d336071948d02a3f7a812f20fe51f320c95fae4bf
-MD5 8e4a84e905f153c15cbda2f8bca238c8 desktop-data-manager-0.8.5.ebuild 589
-RMD160 5425ae9c7388cb675101314fb0f680f0667b8e90 desktop-data-manager-0.8.5.ebuild 589
-SHA256 9f91ce9e3d94f4b6722e5e0d336071948d02a3f7a812f20fe51f320c95fae4bf desktop-data-manager-0.8.5.ebuild 589
+EBUILD desktop-data-manager-0.8.5.ebuild 550 RMD160 314db3bd71c24dd3ec2e963f815ddf7d26080128 SHA1 3ef7dda89a194b3767e74893d617509263632e92 SHA256 abb8abccff72287e9f81e9e20642dfc7dea8f789c297ae1fc774a0bf94a02e2d
+MD5 4eb88075a34c34be5ae371a35846cc1d desktop-data-manager-0.8.5.ebuild 550
+RMD160 314db3bd71c24dd3ec2e963f815ddf7d26080128 desktop-data-manager-0.8.5.ebuild 550
+SHA256 abb8abccff72287e9f81e9e20642dfc7dea8f789c297ae1fc774a0bf94a02e2d desktop-data-manager-0.8.5.ebuild 550
 MD5 d2c924fff2b006632d6208ed27e3e00e files/digest-desktop-data-manager-0.8.5 292
 RMD160 21149b821a64c4ebc2fdea000a3cf581082f61d9 files/digest-desktop-data-manager-0.8.5 292
 SHA256 78cd9112d4767d137e4fa3a26a2d6858842f1430d143416f82e6df4fb9c39972 files/digest-desktop-data-manager-0.8.5 292
