@@ -15,7 +15,7 @@ IUSE="wxwindows flac bzip2 lzo unicode"
 
 RDEPEND="
 	>=dev-libs/libebml-0.7.7
-	>=media-libs/libmatroska-0.8.0
+	>=media-libs/libmatroska-0.8.1
 	media-libs/libogg
 	media-libs/libvorbis
 	dev-libs/expat
