@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+inherit mono
+
 MY_P="gnome-subtitles-${PV}"
 DESCRIPTION="Gnome Subtitles is a subtitle editor for the GNOME desktop"
 HOMEPAGE="http://gsubtitles.sf.net"
