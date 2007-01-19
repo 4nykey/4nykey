@@ -24,7 +24,7 @@ RDEPEND="media-libs/audiofile
 	fftw? ( sci-libs/fftw )
 	gsl? ( >=sci-libs/gsl-0.8 )
 	gtk? ( >=x11-libs/gtk+-2 )
-	guile? ( >=dev-util/guile-1.3.4 )
+	guile? ( >=dev-scheme/guile-1.3.4 )
 	jack? ( media-sound/jack-audio-connection-kit )
 	ladspa? ( media-libs/ladspa-sdk )
 	nls? ( sys-devel/gettext )
