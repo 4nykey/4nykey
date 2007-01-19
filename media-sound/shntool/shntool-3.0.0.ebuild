@@ -13,20 +13,18 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
 
-DEPEND=">=media-sound/shorten-3.5.1
+RDEPEND="
+	shorten? ( >=media-sound/shorten-3.5.1 )
 	flac? ( >=media-libs/flac-1.1.0 )
 	sox? ( >=media-sound/sox-12.17.4 )
-	wavpack? ( >=media-sound/wavpack-4.31 )
-	ape? ( media-sound/mac )"
-
-src_unpack() {
-	unpack ${A}
-	cd ${S}
-	epatch ${FILESDIR}/wv431.diff
-}
+	wavpack? ( media-sound/wavpack )
+	ape? ( media-sound/mac )
+	alac? ( media-sound/alac_decoder )
+	tta? ( media-sound/tta )
+"
 
 src_install () {
 	einstall || die
-	dodoc doc/*
+	dodoc AUTHORS ChangeLog doc/*
 }
 
