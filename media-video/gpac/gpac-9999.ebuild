@@ -144,9 +144,7 @@ src_compile() {
 src_install() {
 	make OPTFLAGS="${CFLAGS}" install || die
 
-	dodoc AUTHORS BUGS Changelog INSTALL README TODO
-	dodoc doc/*.{txt,bt} doc/CODING_STYLE doc/SceneGenerators
-	dohtml doc/*.html
+	dodoc AUTHORS BUGS Changelog README TODO
 	insinto /usr/include/gpac
 	doins include/gpac/*.h
 }
