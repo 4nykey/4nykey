@@ -34,12 +34,6 @@ src_unpack() {
 	# make it link with --as-needed
 	epatch ${FILESDIR}/${PN}-as_needed.diff
 
-	# If ccc (alpha compiler) is installed on the system, the default
-	# configure is broken, fix it to respect CC.  This is only
-	# directly broken for ARCH=alpha but would affect anybody with a
-	# ccc binary in their PATH.  Bug #41908  (26 Jul 2004 agriffis)
-	epatch ${FILESDIR}/${PN}-3.96-ccc.patch
-
 	epunt_cxx # embedded bug #74498
 
 	sed -i "s:-I\(\${SNDFILE_CFLAGS\):\1:" configure
@@ -52,7 +46,7 @@ src_compile() {
 	is-flag "-march=k6-2" && filter-flags "-fomit-frame-pointer"
 	is-flag "-march=k6" && filter-flags "-fomit-frame-pointer"
 
-	[ "`gcc-fullversion`" == "3.3.2" ] && replace-flags -march=2.0 -march=1.0
+	[[ "$(gcc-fullversion)" == "3.3.2" ]] && replace-flags -march=2.0 -march=1.0
 
 	local myconf=""
 	if use gtk; then

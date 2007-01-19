@@ -17,8 +17,8 @@
  @HAVE_NASM_TRUE@nasm_ldadd = $(top_builddir)/libmp3lame/@CPUTYPE@/liblameasmroutines.la
  @LIB_WITH_DECODER_FALSE@decoder_ldadd = 
  @LIB_WITH_DECODER_TRUE@decoder_ldadd = $(top_builddir)/mpglib/libmpgdecoder.la
--libmp3lame_la_LIBADD = $(nasm_ldadd) $(decoder_ldadd)
-+libmp3lame_la_LIBADD = $(nasm_ldadd) $(decoder_ldadd) $(LDADD)
+-libmp3lame_la_LIBADD = $(cpu_ldadd) $(vector_ldadd) $(decoder_ldadd)
++libmp3lame_la_LIBADD = $(cpu_ldadd) $(vector_ldadd) $(decoder_ldadd) $(LDADD)
  libmp3lame_la_LDFLAGS = -version-info @LIB_MAJOR_VERSION@:@LIB_MINOR_VERSION@ \
  			-no-undefined
  
