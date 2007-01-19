@@ -16,26 +16,25 @@ RESTRICT="test"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="X 3dnow a52 dv dvdread extrafilters mp3 fame truetype gtk imagemagick jpeg
-lzo mjpeg mmx network ogg vorbis quicktime sdl sse sse2 theora v4l2 xvid xml
-postproc x264"
+IUSE="
+	X 3dnow a52 dv dvdread extrafilters mp3 fame truetype gtk imagemagick jpeg
+	lzo mjpeg mmx network ogg vorbis quicktime sdl sse sse2 theora v4l2 xvid xml
+	postproc x264 aac
+"
 
-RDEPEND="a52? ( >=media-libs/a52dec-0.7.4 )
+RDEPEND="
+	a52? ( >=media-libs/a52dec-0.7.4 )
 	dv? ( >=media-libs/libdv-0.99 )
 	dvdread? ( >=media-libs/libdvdread-0.9.0 )
 	xvid? ( >=media-libs/xvid-1.0.2 )
-	x264? (
-		|| (
-			media-libs/x264
-			media-libs/x264-svn
-		)
-	)
+	x264? ( || ( media-libs/x264 media-libs/x264-svn ) )
 	mjpeg? ( >=media-video/mjpegtools-1.6.2-r3 )
 	lzo? ( >=dev-libs/lzo-2 )
 	fame? ( >=media-libs/libfame-0.9.1 )
 	imagemagick? ( >=media-gfx/imagemagick-5.5.6.0 )
 	media-libs/libexif
 	mp3? ( >=media-sound/lame-3.93 )
+	aac? ( media-libs/faac )
 	sdl? ( media-libs/libsdl )
 	quicktime? ( >=media-libs/libquicktime-0.9.3 )
 	vorbis? ( media-libs/libvorbis )
@@ -50,15 +49,13 @@ RDEPEND="a52? ( >=media-libs/a52dec-0.7.4 )
 	xml? ( dev-libs/libxml2 )
 	X? (
 		|| (
-			(
-				x11-libs/libXaw
-				x11-libs/libXv
-			)
+			( x11-libs/libXaw x11-libs/libXv )
 			virtual/x11
 		)
 	)
 "
-DEPEND="${RDEPEND}
+DEPEND="
+	${RDEPEND}
 	v4l2? ( >=virtual/os-headers-2.6.11 )
 "
 
@@ -97,6 +94,7 @@ src_compile() {
 		$(use_enable xvid) \
 		$(use_enable x264) \
 		$(use_enable mp3 lame) \
+		$(use_enable aac faac) \
 		$(use_enable ogg) \
 		$(use_enable vorbis) \
 		$(use_enable theora) \
