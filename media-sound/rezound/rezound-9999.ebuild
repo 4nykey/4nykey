@@ -50,8 +50,7 @@ src_unpack() {
 	cvs_src_unpack
 	cd "${S}"
 
-	cp "${FILESDIR}"/gcc41.patch "${WORKDIR}"/20_rezound-0.12.2_beta-gcc4.patch
-	epatch "${WORKDIR}"/[1267]0_*.patch
+	epatch "${WORKDIR}"/[17]0_*.patch
 
 	epatch "${FILESDIR}"/${PN}-*.diff
 	sed -i "/^CXXFLAGS/d" configure.ac
