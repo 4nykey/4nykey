@@ -1,9 +1,0 @@
-Index: CMakeLists.txt
-===================================================================
---- CMakeLists.txt	(revision 178)
-+++ CMakeLists.txt	(working copy)
-@@ -242,3 +242,4 @@
-         RUNTIME DESTINATION bin
-         LIBRARY DESTINATION lib
-         ARCHIVE DESTINATION lib)
-+INSTALL(FILES libaften/aften.h DESTINATION include/aften)
