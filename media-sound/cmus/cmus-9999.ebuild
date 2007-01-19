@@ -12,7 +12,8 @@ EGIT_PATCHES="${PN}-*.diff"
 LICENSE="GPL-2"
 KEYWORDS="~x86"
 SLOT="0"
-IUSE="alsa arts flac oss mad modplug vorbis musepack ao unicode aac mp4"
+IUSE="alsa arts flac oss mad modplug vorbis musepack ao unicode aac mp4
+zsh-completion"
 
 RDEPEND="
 	sys-libs/ncurses
@@ -42,7 +43,6 @@ pkg_setup() {
 		eerror "You need sys-libs/ncurses compiled with the unicode USE flag."
 		die "need sys-libs/ncurses with unicode support"
 	fi
-	has_version 'app-shells/zsh' && HAVE_ZSH=y
 }
 
 teh_conf() {
@@ -76,7 +76,7 @@ src_install() {
 	make DESTDIR=${D} install || die
 	rm -rf ${D}usr/share/doc
 	dodoc AUTHORS HACKING README cmus-status-display
-	if [[ -n ${HAVE_ZSH} ]]; then
+	if use zsh-completion; then
 		insinto /usr/share/zsh/site-functions
 		doins contrib/_cmus
 	fi
