@@ -1,0 +1,26 @@
+Index: avidemux/ADM_audiofilter/audioencoder_aften.cpp
+===================================================================
+--- avidemux/ADM_audiofilter/audioencoder_aften.cpp	(revision 2738)
++++ avidemux/ADM_audiofilter/audioencoder_aften.cpp	(working copy)
+@@ -33,7 +33,7 @@
+ //
+ extern "C"
+ {
+-#include "aften/aften.h"
++#include "aften.h"
+ };
+ #include "ADM_audiofilter/audioencoder_aften_param.h"
+ #include "ADM_audiofilter/audioencoder_aften.h"
+Index: configure.in.in
+===================================================================
+--- configure.in.in	(revision 2738)
++++ configure.in.in	(working copy)
+@@ -465,7 +465,7 @@
+ fi
+ if test "x$with_aften" != "xno"; then
+ AC_MSG_CHECKING(for aften codec )
+-AC_CHECK_HEADER(aften/aften.h,,have_aften=no)
++AC_CHECK_HEADER(aften.h,,have_aften=no)
+ if test "x$have_aften" = "xyes"; then
+  AC_CHECK_LIB(aften,aften_encode_init,,have_aften=no,-lm )
+ fi
