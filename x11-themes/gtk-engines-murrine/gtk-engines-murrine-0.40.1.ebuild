@@ -4,7 +4,7 @@
 
 MY_PN="${PN##*-}"
 MY_P="${MY_PN}-${PV}"
-CFGRATOR="${MY_PN}-configurator-0.4.1"
+CFGRATOR="${MY_PN}-configurator-0.5"
 DESCRIPTION="Murrine GTK+2 Cairo Engine"
 HOMEPAGE="http://cimi.netsons.org/pages/murrine.php"
 SRC_URI="
