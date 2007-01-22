@@ -1,0 +1,18 @@
+Index: mpcdec/CMakeLists.txt
+===================================================================
+--- mpcdec/CMakeLists.txt	(revision 199)
++++ mpcdec/CMakeLists.txt	(working copy)
+@@ -9,3 +9,4 @@
+ 
+ target_link_libraries(mpcdec wavformat_static)
+ target_link_libraries(mpcdec mpcdec_static)
++install(TARGETS mpcdec RUNTIME DESTINATION bin)
+Index: mpcgain/CMakeLists.txt
+===================================================================
+--- mpcgain/CMakeLists.txt	(revision 199)
++++ mpcgain/CMakeLists.txt	(working copy)
+@@ -15,3 +15,4 @@
+ target_link_libraries(mpcgain m)
+ endif(NOT MSVC)
+ 
++install(TARGETS mpcgain RUNTIME DESTINATION bin)

@@ -6,12 +6,12 @@ inherit flag-o-matic subversion toolchain-funcs
 
 DESCRIPTION="Musepack audio compression tools"
 HOMEPAGE="http://www.musepack.net"
-ESVN_REPO_URI="http://svn.musepack.net/mppenc/trunk"
-#ESVN_PATCHES="${FILESDIR}/${PN}-*.diff"
+ESVN_REPO_URI="http://svn.musepack.net/libmpc/branches/r2d"
+ESVN_PATCHES="${PN}-*.patch"
 
-SLOT="0"
+SLOT="8"
 LICENSE="LGPL-2.1"
-KEYWORDS="-*"
+KEYWORDS="~x86"
 IUSE=""
 
 RDEPEND=""
@@ -26,11 +26,6 @@ src_unpack() {
 }
 
 src_compile() {
-	filter-flags -fprefetch-loop-arrays
-	filter-flags -mfpmath=sse -mfpmath=sse,387
-	append-flags -fno-strict-aliasing -fno-gcse -fno-finite-math-only
-	append-flags -fno-unsafe-math-optimizations
-
 	cmake \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_C_COMPILER=$(which $(tc-getCC)) \
@@ -40,6 +35,5 @@ src_compile() {
 }
 
 src_install() {
-	dobin src/mppenc
-	dodoc Changelog
+	emake DESTDIR="${D}" install || die
 }
