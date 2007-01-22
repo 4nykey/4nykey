@@ -11,12 +11,14 @@ SLOT="0"
 KEYWORDS="~x86"
 IUSE="python pcre xml"
 
-RDEPEND=">=x11-libs/gtk+-2.6
+RDEPEND="
+	>=x11-libs/gtk+-2.6
 	python? ( dev-python/pygtk )
 	pcre? ( dev-libs/libpcre )
 	xml? ( dev-libs/libxml2 )
 "
-DEPEND="${RDEPEND}
+DEPEND="
+	${RDEPEND}
 "
 
 src_compile() {
