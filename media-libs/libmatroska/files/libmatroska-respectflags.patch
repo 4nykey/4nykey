@@ -1,0 +1,13 @@
+Index: libmatroska-0.8.0/make/linux/Makefile
+===================================================================
+--- libmatroska-0.8.0.orig/make/linux/Makefile
++++ libmatroska-0.8.0/make/linux/Makefile
+@@ -102,7 +102,7 @@ $(LIBRARY): $(objects)
+ 	$(RANLIB) $@
+ 
+ $(LIBRARY_SO): $(objects_so)
+-	$(CXX) -shared -Wl,-soname,$(LIBRARY_SO_VER) -o $(LIBRARY_SO_VER) $(objects_so) -lebml
++	$(CXX) $(LINKFLAGS) -shared -Wl,-soname,$(LIBRARY_SO_VER) -o $(LIBRARY_SO_VER) $(objects_so) -lebml
+ 	rm -f $(LIBRARY_SO)
+ 	ln -s $(LIBRARY_SO_VER) $(LIBRARY_SO)
+ 

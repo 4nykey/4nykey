@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/mkvtoolnix/mkvtoolnix-1.6.5.ebuild,v 1.4 2006/03/14 21:46:21 flameeyes Exp $
 
-inherit subversion autotools wxwidgets
+inherit subversion autotools wxwidgets qt4 flag-o-matic
 
 DESCRIPTION="Tools to create, alter, and inspect Matroska files"
 HOMEPAGE="http://www.bunkus.org/videotools/mkvtoolnix"
@@ -11,7 +11,7 @@ ESVN_REPO_URI="http://svn.bunkus.org/mosu/trunk/prog/video/mkvtoolnix"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="wxwindows flac bzip2 lzo unicode"
+IUSE="wxwindows flac bzip2 lzo unicode qt4"
 
 RDEPEND="
 	>=dev-libs/libebml-0.7.7
@@ -20,12 +20,13 @@ RDEPEND="
 	media-libs/libvorbis
 	dev-libs/expat
 	sys-libs/zlib
-	wxwindows? ( =x11-libs/wxGTK-2.6* )
+	wxwindows? ( >=x11-libs/wxGTK-2.6 )
 	flac? ( >=media-libs/flac-1.1.0 )
 	bzip2? ( app-arch/bzip2 )
 	lzo? ( dev-libs/lzo )
 	sys-apps/file
 	dev-libs/pcre++
+	qt4? ( $(qt4_min_version 4.0) )
 "
 DEPEND="
 	${RDEPEND}
@@ -48,6 +49,7 @@ src_unpack() {
 	subversion_src_unpack
 	cd ${S}
 	eautoreconf || die
+	append-flags -fno-strict-aliasing
 }
 
 src_compile() {
@@ -55,6 +57,10 @@ src_compile() {
 		$(use_enable lzo) \
 		$(use_enable bzip2 bz2) \
 		$(use_enable wxwindows gui) \
+		$(use_with wxwindows wx-config ${WX_CONFIG}) \
+		$(use_enable qt4 qt) \
+		$(use_with qt4 moc /usr/bin/moc) \
+		$(use_with qt4 uic /usr/bin/uic) \
 		$(use_with flac) \
 		|| die "./configure died"
 
