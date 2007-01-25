@@ -21,6 +21,6 @@ DEPEND="
 "
 
 gmpc-plugin_src_install() {
-	emake DESTDIR="${D}" || die "einstall failed"
+	emake DESTDIR="${D}" install || die "einstall failed"
 	[ -n ${DOCS} ] && dodoc ${DOCS}
 }
