@@ -4,7 +4,7 @@
 
 inherit gmpc-plugin
 
-DESCRIPTION="${PN/gmpc-/} plugin for GMPC"
+DESCRIPTION="Last FM Artist Image Fetcher plugin for GMPC"
 ESVN_REPO_URI="https://svn.musicpd.org/gmpc/plugins/gmpc-last.fm/trunk"
 
 KEYWORDS="~x86"

@@ -4,7 +4,7 @@
 
 inherit gmpc-plugin
 
-DESCRIPTION="${PN/gmpc-/} plugin for GMPC"
+DESCRIPTION="Lyrics fetcher plugin for GMPC"
 
 KEYWORDS="~x86"
 LICENSE="GPL-2"

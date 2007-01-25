@@ -4,7 +4,7 @@
 
 inherit gmpc-plugin
 
-DESCRIPTION="${PN/gmpc-/} plugin for GMPC"
+DESCRIPTION="Online Stream Browser plugin for GMPC"
 ESVN_REPO_URI="https://svn.qballcow.nl/${PN}/trunk"
 
 KEYWORDS="~x86"

@@ -4,7 +4,7 @@
 
 inherit gmpc-plugin
 
-DESCRIPTION="${PN/gmpc-/} plugin for GMPC"
+DESCRIPTION="Magnatune Stream Browser plugin for GMPC"
 
 KEYWORDS="~x86"
 LICENSE="GPL-2"
