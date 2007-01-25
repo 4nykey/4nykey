@@ -2,10 +2,6 @@ EBUILD gmpc-coveramazon-9999.ebuild 235 RMD160 9202d4c0fe4ed4b089a97ffa72e578473
 MD5 fababffbe2bdd41e0ee9b382283986c6 gmpc-coveramazon-9999.ebuild 235
 RMD160 9202d4c0fe4ed4b089a97ffa72e57847366e8311 gmpc-coveramazon-9999.ebuild 235
 SHA256 5a603c5cd0fc849e3c3d8bab7722c561e0f864d86901a901dedb02a3a5158c68 gmpc-coveramazon-9999.ebuild 235
-MISC .gmpc-coveramazon-9999.ebuild.swp 12288 RMD160 9d6da3c140200742eb1474b51ecd190d464871e9 SHA1 5d4b30c504578cc892c77472faaa8c3d3c8b9cfd SHA256 0353b7a2b6de61b212197d0fd180f1dc2d0131a7e8c602bd5945ebae3c3ee836
-MD5 d2585cbc47733ff2877320deb9d1c068 .gmpc-coveramazon-9999.ebuild.swp 12288
-RMD160 9d6da3c140200742eb1474b51ecd190d464871e9 .gmpc-coveramazon-9999.ebuild.swp 12288
-SHA256 0353b7a2b6de61b212197d0fd180f1dc2d0131a7e8c602bd5945ebae3c3ee836 .gmpc-coveramazon-9999.ebuild.swp 12288
 MD5 d41d8cd98f00b204e9800998ecf8427e files/digest-gmpc-coveramazon-9999 0
 RMD160 9c1185a5c5e9fc54612808977ee8f548b2258d31 files/digest-gmpc-coveramazon-9999 0
 SHA256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 files/digest-gmpc-coveramazon-9999 0
