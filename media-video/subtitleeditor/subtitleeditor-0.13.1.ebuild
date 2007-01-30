@@ -24,7 +24,8 @@ RDEPEND="
 	cairo? ( x11-libs/cairo )
 	xml? ( dev-cpp/libxmlpp )
 "
-DEPEND="${RDEPEND}
+DEPEND="
+	${RDEPEND}
 "
 
 src_unpack() {
