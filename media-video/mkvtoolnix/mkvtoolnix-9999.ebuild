@@ -25,7 +25,7 @@ RDEPEND="
 	bzip2? ( app-arch/bzip2 )
 	lzo? ( dev-libs/lzo )
 	sys-apps/file
-	dev-libs/pcre++
+	dev-libs/libpcre
 	qt4? ( $(qt4_min_version 4.0) )
 "
 DEPEND="
