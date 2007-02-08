@@ -21,10 +21,10 @@ SLOT="0"
 KEYWORDS="~x86"
 IUSE="
 a52 3dfx nls unicode debug altivec httpd vlm gnutls live v4l cdda ogg matroska
-dvb dvd vcd ffmpeg aac dts flac mpeg vorbis theora X opengl truetype svg fbcon svga
-oss aalib ggi libcaca esd arts alsa wxwindows ncurses xosd lirc joystick hal stream
-mp3 xv bidi sdl png xml samba daap corba screen mod speex nsplugin x264
-dirac gnome musepack qt4 portaudio
+dvb dvd vcd ffmpeg aac dts flac mpeg vorbis theora X opengl truetype svg fbcon
+svga oss aalib ggi libcaca esd arts alsa wxwindows ncurses xosd lirc joystick
+hal stream mp3 xv bidi sdl png xml samba daap corba screen mod speex nsplugin
+x264 dirac gnome musepack qt4 portaudio skins firefox xulrunner
 "
 
 RDEPEND="
@@ -100,7 +100,13 @@ RDEPEND="
 	dirac? ( media-video/dirac )
 	musepack? ( media-libs/libmpcdec )
 	gnome? ( =gnome-base/gnome-vfs-2* )
-	nsplugin? ( >=net-libs/gecko-sdk-1.7.8 )
+	nsplugin? (
+		firefox? ( www-client/mozilla-firefox )
+		!firefox? (
+			xulrunner? ( net-libs/xulrunner )
+			!xulrunner? ( www-client/seamonkey )
+		)
+	)
 	portaudio? ( >=media-libs/portaudio-0.19 )
 	qt4? ( $(qt4_min_version 4) )
 "
@@ -160,8 +166,18 @@ src_unpack() {
 src_compile () {
 	local myconf="${myconf} --with-tuning=no"
 
-	use nsplugin && \
-		myconf="${myconf} --with-mozilla-sdk-path=/usr/$(get_libdir)/gecko-sdk"
+	# configure will pick firefox by pkg-config and use it by default
+	# if we have firefox installed, but want plugin built against xulrunner
+	# or seamonkey, `sdk-path' is the only way to override
+	if use nsplugin && use !firefox; then
+		CPPFLAGS="${CPPFLAGS} $(nspr-config --cflags)"
+		if use xulrunner; then
+			myconf="${myconf} --with-mozilla-sdk-path=/usr/$(get_libdir)/xulrunner"
+		else
+			myconf="${myconf} --with-mozilla-sdk-path=/usr/$(get_libdir)/seamonkey"
+		fi
+	fi
+
 
 	use wxwindows && \
 		myconf="${myconf} --with-wx-config=$(basename ${WX_CONFIG})"
