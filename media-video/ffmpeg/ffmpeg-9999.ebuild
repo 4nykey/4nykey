@@ -9,24 +9,26 @@ HOMEPAGE="http://ffmpeg.sourceforge.net/"
 NBV="610"
 WBV="600"
 SRC_URI="
-	amr? ( 
+	amr? (
 		http://www.3gpp.org/ftp/Specs/archive/26_series/26.204/26204-${WBV}.zip
 		http://www.3gpp.org/ftp/Specs/archive/26_series/26.104/26104-${NBV}.zip
 	)
 "
 ESVN_REPO_URI="svn://svn.mplayerhq.hu/ffmpeg/trunk"
-#ESVN_PATCHES="${PN}-*.diff"
+ESVN_PATCHES="${PN}-*.diff"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="aac debug doc ieee1394 a52 encode imlib mmx ogg vorbis oss threads
-truetype v4l xvid dts network zlib X amr x264 static mp3"
+IUSE="
+aac debug doc ieee1394 a52 encode imlib mmx ogg vorbis oss threads truetype
+v4l xvid dts network zlib X amr x264 static mp3 swscaler sdl
+"
 
 RDEPEND="
 	imlib? ( media-libs/imlib2 )
 	truetype? ( >=media-libs/freetype-2 )
-	X? ( >=media-libs/libsdl-1.2.10 )
+	sdl? ( >=media-libs/libsdl-1.2.10 )
 	mp3? ( encode? ( media-sound/lame ) )
 	ogg? ( media-libs/libogg )
 	vorbis? ( media-libs/libvorbis )
@@ -48,6 +50,7 @@ RDEPEND="
 		xvid? ( >=media-libs/xvid-1.1.0 )
 		x264? ( media-libs/x264 )
 	)
+	X? ( x11-libs/libXext )
 "
 DEPEND="
 	${RDEPEND}
@@ -56,7 +59,27 @@ DEPEND="
 	dev-util/pkgconfig
 	doc? ( app-text/texi2html )
 	test? ( net-misc/wget )
+	X? ( x11-proto/xextproto )
 "
+
+pkg_setup() {
+	# guessing our target
+	for x in arch tune cpu; do
+		if [[ -z ${_cpu} ]]; then _cpu="$(get-flag -m$x | cut -d= -f2)"
+		else break
+		fi
+	done
+	if [[ -z ${_cpu} ]]; then
+		_chost="${CTARGET:-${CHOST}}"
+		_cpu="${_chost%%-*}"
+	fi
+
+	#Append -fomit-frame-pointer to avoid some common issues
+	use debug || append-flags "-fomit-frame-pointer"
+	#Note; library makefiles don't propogate flags from config.mak so
+	#use specified CFLAGS are only used in executables
+	replace-flags -O0 -O2
+}
 
 src_unpack() {
 	subversion_src_unpack
@@ -74,10 +97,7 @@ src_unpack() {
 		${ESVN_STORE_DIR}/${ESVN_PROJECT}/${ESVN_REPO_URI##*/})"
 	sed -i "s:\(svn_revision=\)UNKNOWN:\1${REVISION}:" version.sh
 
-	#Append -fomit-frame-pointer to avoid some common issues
-	use debug || append-flags "-fomit-frame-pointer"
-
-	#ffmpeg doesn'g use libtool, so the condition for PIC code
+	#ffmpeg doesn't use libtool, so the condition for PIC code
 	#is __PIC__, not PIC.
 	sed -i -e 's/#\(\(.*def *\)\|\(.*defined *\)\|\(.*defined(*\)\)PIC/#\1__PIC__/' \
 		libavcodec/i386/dsputil_mmx{.c,_rnd.h,_avg.h} \
@@ -90,8 +110,6 @@ src_unpack() {
 	sed -i -e "s:LIBOBJFLAGS=\"\":LIBOBJFLAGS=\'\$\(PIC\)\':" configure
 
 	sed -i 's:\(logfile="config\)\.err:\1.log:' configure
-	# fix lame with --as-needed
-#	sed -i 's:\( -lmp3lame\):\1 -lm:' configure
 	has_version '>=media-libs/faad2-2.1' && \
 		sed -i 's:faac\(DecOpen\):NeAAC\1:' configure
 
@@ -104,28 +122,22 @@ src_unpack() {
 
 teh_conf() {
 	# configure will boil out on 'unsupported' options, so...
-	ACTION="--$1able"
-	if [ "$1" == "en" ]; then
-		use $2 &&
-			myconf="${myconf} ${ACTION}-$( [ -n "$3" ] && echo $3 || echo $2)"
+	ACTION="--${1}able"
+	if [[ $1 == "en" ]]; then
+		use $2 && myconf="${myconf} ${ACTION}-${3:-${2}}"
 	else
-		use $2 ||
-			myconf="${myconf} ${ACTION}-$( [ -n "$3" ] && echo $3 || echo $2)"
+		use $2 || myconf="${myconf} ${ACTION}-${3:-${2}}"
 	fi
 }
 
 src_compile() {
-	#Note; library makefiles don't propogate flags from config.mak so
-	#use specified CFLAGS are only used in executables
-	replace-flags -O0 -O2
-
 	local myconf="--log --enable-shared --enable-gpl --enable-pp --disable-opts --disable-strip"
 
 	teh_conf dis debug
 	if use encode; then
 		teh_conf en mp3 mp3lame
 		teh_conf en xvid
-		teh_conf en x264 x264
+		teh_conf en x264
 		teh_conf en aac faac
 	fi
 	teh_conf en a52
@@ -139,16 +151,19 @@ src_compile() {
 	teh_conf en dts
 	teh_conf dis network
 	teh_conf dis zlib
-	teh_conf dis X ffplay
 	teh_conf en amr amr_nb
 	teh_conf en amr amr_wb
 	teh_conf en amr amr_if2
 	teh_conf en aac faad
+	teh_conf en swscaler
+	teh_conf en X x11grab
+	use sdl && teh_conf dis X ffplay
 
 	use encode || myconf="${myconf} --disable-encoders --disable-muxers"
 
 	./configure \
 		--prefix=/usr \
+		--cpu="${_cpu:-generic}" \
 		$(use_enable static) \
 		${myconf} || die "Configure failed"
 	emake CC="$(tc-getCC)" || die "emake failed"
