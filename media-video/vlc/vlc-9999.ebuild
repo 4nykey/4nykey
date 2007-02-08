@@ -6,7 +6,7 @@
 # media-vidoe/vlc:tremor - Enables Tremor decoder support
 # media-video/vlc:tarkin - Enables experimental tarkin codec
 
-inherit wxwidgets flag-o-matic nsplugins multilib subversion autotools qt4
+inherit wxwidgets-nu flag-o-matic nsplugins multilib subversion autotools qt4
 
 PATCHLEVEL="7"
 DESCRIPTION="VLC media player - Video player and streamer"
@@ -73,7 +73,8 @@ RDEPEND="
 	libcaca? ( media-libs/libcaca )
 	arts? ( kde-base/arts )
 	alsa? ( virtual/alsa )
-	wxwindows? ( =x11-libs/wxGTK-2.6* )
+	wxwindows? ( >=x11-libs/wxGTK-2.6 )
+	skins? ( >=x11-libs/wxGTK-2.6 )
 	ncurses? ( sys-libs/ncurses )
 	xosd? ( x11-libs/xosd )
 	lirc? ( app-misc/lirc )
@@ -121,7 +122,7 @@ DEPEND="
 "
 
 pkg_setup() {
-	if use wxwindows; then
+	if use wxwindows || use skins; then
 		WX_GTK_VER="2.6"
 		if use unicode; then
 			need-wxwidgets unicode
@@ -179,9 +180,10 @@ src_compile () {
 	fi
 
 
-	use wxwindows && \
-		myconf="${myconf} --with-wx-config=$(basename ${WX_CONFIG})"
-		myconf="${myconf} --with-wx-config-path=$(dirname ${WX_CONFIG})"
+	if use wxwindows || use skins; then
+		myconf="${myconf} --with-wx-config=${WX_CONFIG_NAME}"
+		myconf="${myconf} --with-wx-config-path=${WX_CONFIG_PREFIX}"
+	fi
 
 	ac_cv_c_unroll_loops="no" \
 	econf \
@@ -255,7 +257,7 @@ src_compile () {
 }
 
 src_install() {
-	make \
+	emake \
 		DESTDIR="${D}" \
 		plugindir="/usr/$(get_libdir)/${PLUGINS_DIR}" \
 		install \

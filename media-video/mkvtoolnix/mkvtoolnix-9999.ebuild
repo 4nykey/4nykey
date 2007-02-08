@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/mkvtoolnix/mkvtoolnix-1.6.5.ebuild,v 1.4 2006/03/14 21:46:21 flameeyes Exp $
 
-inherit subversion autotools wxwidgets qt4 flag-o-matic
+inherit subversion autotools wxwidgets-nu qt4 flag-o-matic
 
 DESCRIPTION="Tools to create, alter, and inspect Matroska files"
 HOMEPAGE="http://www.bunkus.org/videotools/mkvtoolnix"
@@ -33,7 +33,6 @@ DEPEND="
 "
 
 pkg_setup() {
-	WX_GTK_VER="2.6"
 	if use wxwindows; then
 		built_with_use x11-libs/wxGTK X ||
 			die "You must compile wxGTK with X useflag."

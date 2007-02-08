@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit wxwidgets cvs flag-o-matic nsplugins
+inherit wxwidgets-nu cvs flag-o-matic nsplugins
 
 DESCRIPTION="GPAC is an implementation of the MPEG-4 Systems standard developed from scratch in ANSI C."
 HOMEPAGE="http://gpac.sourceforge.net/"
