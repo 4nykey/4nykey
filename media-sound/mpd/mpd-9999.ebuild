@@ -14,7 +14,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
 IUSE="aac alsa ao audiofile flac icecast ipv6 mad mikmod musepack vorbis oss
-unicode ogg pulseaudio jack"
+unicode ogg pulseaudio jack libsamplerate"
 
 RDEPEND="
 	!media-sound/mpd-svn
@@ -34,6 +34,7 @@ RDEPEND="
 	pulseaudio? ( media-sound/pulseaudio )
 	vorbis? ( media-libs/libvorbis )
 	jack? ( media-sound/jack-audio-connection-kit )
+	libsamplerate? ( media-libs/libsamplerate )
 "
 DEPEND="
 	${RDEPEND}
@@ -72,6 +73,7 @@ src_compile() {
 		$(use_enable pulseaudio pulse) \
 		$(use_enable vorbis oggvorbis) \
 		$(use_enable vorbis vorbistest) \
+		$(use_enable libsamplerate lsr) \
 		${myconf} || die "could not configure"
 
 	emake || die "emake failed"
