@@ -5,15 +5,11 @@ retrieving revision 1.27
 diff -u -r1.27 Makefile
 --- libdha/Makefile	27 Jan 2006 00:06:38 -0000	1.27
 +++ libdha/Makefile	1 Feb 2006 12:02:29 -0000
-@@ -86,11 +86,6 @@
+@@ -86,7 +86,6 @@
  	install -m 755 $(INSTALLSTRIP) -p $(LIBNAME) $(LIBDIR)/$(LIBNAME)
  	rm -f $(LIBDIR)/libdha.so
  	ln -sf $(LIBNAME) $(LIBDIR)/$(SHORTNAME)
--ifeq ($(TARGET_OS),OpenBSD)
--	-ldconfig -R
--else
--	-ldconfig
--endif
+-	-$(LDCONFIG)
  
  uninstall:
  	rm -f $(LIBDIR)/libdha.so $(LIBDIR)/$(SHORTNAME) $(LIBDIR)/$(LIBNAME)
