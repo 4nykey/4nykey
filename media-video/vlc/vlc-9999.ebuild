@@ -31,7 +31,7 @@ RDEPEND="
 	hal? ( >=sys-apps/hal-0.5.0 )
 	cdda? ( >=dev-libs/libcdio-0.71
 		>=media-libs/libcddb-0.9.5 )
-	live? ( >=media-plugins/live-2005.01.29 )
+	live? ( >=media-plugins/live-2007.01.17 )
 	dvd? (  media-libs/libdvdread
 		media-libs/libdvdcss
 		>=media-libs/libdvdnav-0.1.9
@@ -210,7 +210,6 @@ src_compile () {
 		$(use_enable lirc) \
 		$(use_enable joystick) \
 		$(use_enable live live555) \
-		$(use_with live live555-tree /usr/lib/live) \
 		$(use_enable mp3 mad) \
 		$(use_enable aac faad) \
 		$(use_enable a52) \

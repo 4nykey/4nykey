@@ -1,0 +1,28 @@
+Index: configure.ac
+===================================================================
+--- configure.ac	(revision 18685)
++++ configure.ac	(working copy)
+@@ -1607,19 +1607,14 @@
+       CPPFLAGS_live555="${CPPFLAGS_live555} -DSOLARIS"
+     fi
+     CPPFLAGS="${CPPFLAGS} ${CPPFLAGS_live555}"
++    LDADD_live555="-lgroupsock -lBasicUsageEnvironment -lUsageEnvironment"
+     AC_CHECK_HEADERS(liveMedia.hh, [
+       VLC_ADD_CXXFLAGS([live555], [${CPPFLAGS_live555}])
+-      AC_CHECK_LIB(liveMedia_pic, main, [
++      AC_CHECK_LIB(liveMedia, main, [
+         # We have -lliveMedia_pic, build plugins
+         VLC_ADD_PLUGINS([live555])
+-        VLC_ADD_LDFLAGS([live555], [-lliveMedia_pic -lgroupsock_pic -lBasicUsageEnvironment_pic -lUsageEnvironment_pic])
+-      ], [
+-        AC_CHECK_LIB(liveMedia, main, [
+-          # We only have -lliveMedia, do builtins
+-          VLC_ADD_BUILTINS([live555])
+-          VLC_ADD_LDFLAGS([live555], [-lliveMedia -lgroupsock -lBasicUsageEnvironment -lUsageEnvironment])
+-        ])
+-      ])
++        VLC_ADD_LDFLAGS([live555], [-lliveMedia ${LDADD_live555}])
++      ], , [${LDADD_live555}])
+       if test "${SYS}" = "mingw32"; then
+         # add ws2_32 for closesocket, select, recv
+         VLC_ADD_LDFLAGS([live555],[-lws2_32])
