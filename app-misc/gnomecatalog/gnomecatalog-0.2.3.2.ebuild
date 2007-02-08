@@ -1,12 +1,12 @@
 # Copyright 1999-2005 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-inherit distutils
+inherit distutils versionator
 
+MY_P="${PN}_$(replace_version_separator 3 -)"
 DESCRIPTION="Cataloging software for CDs and DVDs"
 HOMEPAGE="http://gnomecatalog.sourceforge.net/"
-#SRC_URI="mirror://sourceforge/${P}/${P}-1.tar.gz"
-SRC_URI="http://www.josesanch.com/debian/${PN}_${PV/_/-}-1.tar.gz"
+SRC_URI="http://www.josesanch.com/debian/${MY_P}.tar.gz"
 S="${WORKDIR}/${PN}"
 
 KEYWORDS="~x86"
@@ -15,10 +15,9 @@ SLOT="0"
 IUSE="nls"
 
 RDEPEND="
-	virtual/python
-	>=dev-python/pygtk-2.3.96
-	dev-python/pyvorbis
+	dev-python/gnome-python
 	>=dev-python/pysqlite-2
+	!dev-python/mmpython
 "
 DEPEND="
 	${RDEPEND}
@@ -26,6 +25,7 @@ DEPEND="
 "
 
 PYTHON_MODNAME="${PN} mmpython"
+DOCS="AUTHORS todo"
 
 src_unpack() {
 	unpack ${A}
@@ -35,4 +35,9 @@ src_unpack() {
 src_compile() {
 	distutils_src_compile
 	use nls && emake -C po
+}
+
+src_install() {
+	distutils_src_install
+	dosym /usr/bin/${PN} /usr/bin/gcatalog
 }
