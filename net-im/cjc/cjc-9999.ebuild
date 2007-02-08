@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit subversion distutils
+inherit subversion python
 
 DESCRIPTION="The Console Jabber Client - Jabber client with text-based user interface"
 HOMEPAGE="http://jabberstudio.org/projects/cjc/project/view.php/"
@@ -23,12 +23,21 @@ RDEPEND="
 "
 
 src_compile() {
-	mkdir .svn
+	mkdir -p .svn
 	emake || die
+	use doc && emake -C doc
 }
 
 src_install() {
 	emake DESTDIR="${D}" install || die
 	dodoc README TODO
 	use doc && dohtml doc/manual.html
+}
+
+pkg_postinst() {
+	python_mod_optimize ${ROOT}usr/lib/cjc
+}
+
+pkg_postrm() {
+	python_mod_cleanup ${ROOT}usr/lib/cjc
 }

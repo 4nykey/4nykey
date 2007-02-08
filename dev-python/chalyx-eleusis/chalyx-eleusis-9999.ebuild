@@ -14,5 +14,13 @@ KEYWORDS="~x86"
 IUSE=""
 
 DEPEND=""
-RDEPEND=""
+RDEPEND="media-sound/xmms2"
 
+PYTHON_MODNAME="Chalyx"
+
+pkg_setup() {
+	if ! built_with_use 'media-sound/xmms2' 'python'; then
+		eerror "No go, need xmms2 python bindings"
+		die "remerge xmms2 with 'python' in USE"
+	fi
+}

@@ -22,3 +22,4 @@ RDEPEND="
 	media-sound/xmms2
 "
 
+PYTHON_MODNAME="Insanity"

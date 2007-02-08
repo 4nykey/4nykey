@@ -25,19 +25,15 @@ DEPEND="
 	sys-devel/gettext
 "
 
+PYTHON_MODNAME="DeVeDe"
+
 src_unpack() {
 	unpack ${A}
 	cd ${S}
 	mv devede.py devede
-	cp "${FILESDIR}"/setup.py .
+	mkdir -p DeVeDe
+	mv devede_*.py DeVeDe
+	touch DeVeDe/__init__.py
+	epatch "${FILESDIR}"/${PN}-*.diff
 	sed -i "s:@PV@:${PV}:; s:@PF@:${PF}:" setup.py
 }
-
-pkg_postinst() {
-	python_mod_optimize ${ROOT}usr/lib/devede
-}
-
-pkg_postrm() {
-	python_mod_cleanup ${ROOT}usr/lib/devede
-}
-

@@ -24,3 +24,5 @@ RDEPEND="
 	${DEPEND}
 	media-sound/mpd
 "
+
+PYTHON_MODNAME="."

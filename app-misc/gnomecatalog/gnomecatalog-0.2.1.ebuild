@@ -12,17 +12,27 @@ S="${WORKDIR}/${PN}"
 KEYWORDS="~x86"
 LICENSE="GPL-2"
 SLOT="0"
+IUSE="nls"
 
-DEPEND="virtual/python
+RDEPEND="
+	virtual/python
 	>=dev-python/pygtk-2.3.96
 	dev-python/pyvorbis
-	>=dev-python/pysqlite-2"
+	>=dev-python/pysqlite-2
+"
+DEPEND="
+	${RDEPEND}
+	nls? ( sys-devel/gettext )
+"
+
+PYTHON_MODNAME="${PN} mmpython"
+
+src_unpack() {
+	unpack ${A}
+	use nls || sed -i /LC_MESSAGES/d ${S}/setup.py
+}
 
 src_compile() {
 	distutils_src_compile
-	make -C po
-}
-
-src_install() {
-	distutils_src_install
+	use nls && emake -C po
 }

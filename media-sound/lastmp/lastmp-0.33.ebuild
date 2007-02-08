@@ -19,6 +19,7 @@ IUSE=""
 RDEPEND="media-libs/py-libmpdclient"
 
 DOCS="INSTALL NEWS"
+PYTHON_MODNAME="lastfm"
 
 CFG="/etc/lastfmsubmitd.conf"
 GROUP="lastfm"

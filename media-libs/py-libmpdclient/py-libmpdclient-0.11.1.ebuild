@@ -14,3 +14,5 @@ KEYWORDS="~x86"
 
 IUSE=""
 RDEPEND="media-sound/mpd"
+
+PYTHON_MODNAME="."
