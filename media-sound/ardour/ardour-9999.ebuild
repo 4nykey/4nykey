@@ -13,7 +13,7 @@ ESVN_PATCHES="${PN}-*.diff"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="nls debug sse fftw osc vst ladspa external-libs"
+IUSE="nls debug sse fftw osc vst ladspa external-libs doc"
 
 RDEPEND="
 	>=media-libs/liblrdf-0.3.6
@@ -38,6 +38,7 @@ DEPEND="
 	dev-util/pkgconfig
 	>=dev-util/scons-0.96.1
 	nls? ( sys-devel/gettext )
+	doc? ( app-text/xmlto )
 "
 
 src_unpack() {
@@ -71,21 +72,13 @@ src_compile() {
 	cd ${S}
 	scons \
 		${myconf} || die "make failed"
+	use doc && make -C manual html
 }
 
 src_install() {
 	scons install || die "make install failed"
 
-	dodoc DOCUMENTATION/*
-}
-
-pkg_postinst() {
-	if use sse
-	then
-		einfo ""
-		einfo "Start ardour with the -o argument to use the optimized SSE functions:"
-		einfo ""
-		einfo "	  ardour -o"
-		einfo ""
-	fi
+	dodoc DOCUMENTATION/{AUTHORS*,CONTRIBUTORS*,FAQ,README*,TODO,TRANSLATORS}
+	doman DOCUMENTATION/ardour.1
+	use doc && dohtml -r manual/html/
 }
