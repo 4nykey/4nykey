@@ -4,11 +4,9 @@
 
 inherit distutils
 
-MY_P="${P//[-.]/}"
 DESCRIPTION="DeVeDe is a program to create video DVDs, suitable for home players"
 HOMEPAGE="http://www.rastersoft.com/programas/devede.html"
-SRC_URI="http://www.rastersoft.com/descargas/${MY_P}.tar.bz2"
-S="${WORKDIR}/${MY_P}"
+SRC_URI="http://www.rastersoft.com/descargas/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -21,9 +19,6 @@ RDEPEND="
 	media-video/dvdauthor
 	app-cdr/cdrtools
 "
-DEPEND="
-	sys-devel/gettext
-"
 
 PYTHON_MODNAME="DeVeDe"
 
@@ -34,6 +29,8 @@ src_unpack() {
 	mkdir -p DeVeDe
 	mv devede_*.py DeVeDe
 	touch DeVeDe/__init__.py
-	epatch "${FILESDIR}"/${PN}-*.diff
-	sed -i "s:@PV@:${PV}:; s:@PF@:${PF}:" setup.py
+	sed -i \
+		-e "s:\(devede_.* import .*\):DeVeDe.\1:" \
+		-e "s:import \(devede_.*\):from DeVeDe import \1:" devede
+	sed "s:@PV@:${PV}:; s:@PF@:${PF}:" "${FILESDIR}"/setup.py > setup.py
 }
