@@ -14,7 +14,10 @@ KEYWORDS="~x86"
 IUSE=""
 
 DEPEND=""
-RDEPEND="media-sound/xmms2"
+RDEPEND="
+	media-sound/xmms2
+	dev-python/pyyaml
+"
 
 PYTHON_MODNAME="Chalyx"
 
