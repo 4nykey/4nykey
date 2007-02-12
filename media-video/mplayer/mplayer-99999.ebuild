@@ -228,13 +228,13 @@ src_compile() {
 		if ! use dvdnav; then
 			myconf="${myconf} --disable-dvdnav"
 			if use dvdread; then
-				myconf="${myconf} --disable-mpdvdkit"
+				myconf="${myconf} --disable-dvdread-internal --disable-libdvdcss-internal"
 			else
 				myconf="${myconf} --disable-dvdread"
 			fi
 		fi
 	else
-		myconf="${myconf} --disable-dvdread --disable-mpdvdkit --disable-dvdnav"
+		myconf="${myconf} --disable-dvdread --disable-dvdnav --disable-dvdread-internal --disable-libdvdcss-internal"
 	fi
 
 	if use encode ; then
@@ -243,8 +243,7 @@ src_compile() {
 		teh_conf twolame
 		teh_conf aac faac
 	else
-		myconf="${myconf} --disable-mencoder --disable-libdv --disable-x264"
-		myconf="${myconf} --disable-twolame --disable-faac"
+		myconf="${myconf} --disable-mencoder --disable-libdv --disable-x264 --disable-twolame --disable-faac"
 	fi
 
 	if use !X; then
