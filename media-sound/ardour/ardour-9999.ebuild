@@ -38,7 +38,7 @@ DEPEND="
 	dev-util/pkgconfig
 	>=dev-util/scons-0.96.1
 	nls? ( sys-devel/gettext )
-	doc? ( app-text/xmlto app-text/docbook-xsl-stylesheets )
+	doc? ( app-text/xmlto )
 "
 
 src_unpack() {
@@ -56,8 +56,9 @@ src_unpack() {
 	built_with_use dev-cpp/gtkmm accessibility || \
 		sed -i "s:atkmm-1.6:gtkmm-2.4:" SConstruct
 
-	XSLDIR="$(find /usr/share/sgml/docbook -name "xsl-stylesheets*" | head -n1)"
-	sed -i "s:/usr/share/.*/xsl-stylesheets/:${XSLDIR}/:" manual/xsl/html.xsl
+	sed -i \
+	"s,/usr/share/.*/xsl-stylesheets/,http://docbook.sourceforge.net/release/xsl/current/,"\
+	manual/xsl/html.xsl
 
 	# make bundled sndfile build w/ flac-1.1.3
 	if use !external-libs; then
@@ -88,5 +89,5 @@ src_install() {
 
 	dodoc DOCUMENTATION/{AUTHORS*,CONTRIBUTORS*,FAQ,README*,TODO,TRANSLATORS}
 	doman DOCUMENTATION/ardour.1
-	use doc && dohtml -r manual/tmp/
+	use doc && dohtml -r manual/tmp/*
 }

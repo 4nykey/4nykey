@@ -2,12 +2,19 @@ Index: doc/Makefile
 ===================================================================
 --- doc/Makefile	(revision 676)
 +++ doc/Makefile	(working copy)
-@@ -2,7 +2,7 @@
+@@ -2,14 +2,13 @@
  .SUFFIXES: .xml .fo .dvi .ps .pdf .html
  
  XSLTPROC=/usr/bin/xsltproc
 -XSL_DIR=/usr/share/sgml/docbook/xsl-stylesheets/
-+XSL_DIR=`find /usr/share/sgml/docbook -name "xsl-stylesheets*" | head -n1`
++XSL_DIR=http://docbook.sourceforge.net/release/xsl/current
  HTML_STYLESHEET=$(XSL_DIR)/xhtml/docbook.xsl
  FO_STYLESHEET=$(XSL_DIR)/fo/docbook.xsl
  
+ all: 
+ 	[ "x$(XSLTPROC)" != "x" ] \
+ 		&& [ -x "$(XSLTPROC)" ] \
+-		&& [ -f "$(HTML_STYLESHEET)" ] \
+ 		&& make manual.html || :
+ 
+ .fo.pdf:

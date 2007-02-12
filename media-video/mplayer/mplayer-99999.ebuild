@@ -37,7 +37,7 @@ dvdread dvdnav enca encode esd external-faad external-ffmpeg fbcon fontconfig
 gif ggi gtk ipv6 jack joystick jpeg ladspa libcaca lirc live livecd lzo mad
 matrox mmx mmxext musepack nas openal opengl oss png real rtc samba sdl speex
 sse sse2 svga tga theora tremor truetype v4l v4l2 vorbis win32codecs X x264
-xanim xinerama xv xvid xvmc twolame color radio
+xanim xinerama xv xvid xvmc twolame color radio examples
 "
 
 # 'encode' in USE for MEncoder.
@@ -123,7 +123,6 @@ DEPEND="
 	doc? (
 		dev-libs/libxslt
 		>=app-text/docbook-xml-dtd-4.1.2
-		>=app-text/docbook-xsl-stylesheets-1.62.4
 	)
 	amr? ( app-arch/unzip )
 	X? (
@@ -445,13 +444,15 @@ src_install() {
 	dodoc AUTHORS ChangeLog README
 	# Install the documentation; DOCS is all mixed up not just html
 	if use doc ; then
-		dohtml -r "${S}/DOCS/HTML/en/"
+		dohtml -r "${S}"/DOCS/HTML/en/*
+		cp -r "${S}/DOCS/tech" "${D}/usr/share/doc/${PF}/"
+	fi
+	if use examples ; then
 		# Copy misc tools to documentation path, as they're not installed directly
 		# and yes, we are nuking the +x bit.
 		find "${S}/TOOLS" -type d | xargs -- chmod 0755
 		find "${S}/TOOLS" -type f | xargs -- chmod 0644
 		cp -r "${S}/TOOLS" "${D}/usr/share/doc/${PF}/" || die
-		cp -r "${S}/DOCS/tech" "${D}/usr/share/doc/${PF}/"
 	fi
 
 	# Install the default Skin and Gnome menu entry
