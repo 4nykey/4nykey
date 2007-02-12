@@ -25,7 +25,7 @@ RDEPEND="
 	dev-libs/libxslt
 	media-libs/flac
 	osc? ( media-libs/liblo )
-	external-libs? ( 
+	external-libs? (
 		=dev-libs/libsigc++-2*
 		dev-cpp/libgnomecanvasmm
 		media-libs/libsoundtouch
@@ -38,18 +38,27 @@ DEPEND="
 	dev-util/pkgconfig
 	>=dev-util/scons-0.96.1
 	nls? ( sys-devel/gettext )
-	doc? ( app-text/xmlto )
+	doc? ( app-text/xmlto app-text/docbook-xsl-stylesheets )
 "
 
 src_unpack() {
 	subversion_src_unpack
+	cd ${S}
+
 	SVN_DIR="${ESVN_STORE_DIR}/${ESVN_PROJECT}/${ESVN_REPO_URI##*/}"
-	sed -i "s:svn info \":svn info ${SVN_DIR}/\":" ${S}/SConstruct
+	SVN_REV="$(svnversion ${SVN_DIR})"
+	sed -i "s:\(ardour_svn_revision[ =]*\"\)[0-9]*:\1${SVN_REV}:" svn_revision.h
+
 	# fix path in launcher
-	sed -i "s:%INSTALL_PREFIX%:/usr:" ${S}/gtk2_ardour/ardour.sh.in
+	sed -i "s:%INSTALL_PREFIX%:/usr:" gtk2_ardour/ardour.sh.in
+
 	# handle gtkmm accessibility flag
 	built_with_use dev-cpp/gtkmm accessibility || \
 		sed -i "s:atkmm-1.6:gtkmm-2.4:" SConstruct
+
+	XSLDIR="$(find /usr/share/sgml/docbook -name "xsl-stylesheets*" | head -n1)"
+	sed -i "s:/usr/share/.*/xsl-stylesheets/:${XSLDIR}/:" manual/xsl/html.xsl
+
 	# make bundled sndfile build w/ flac-1.1.3
 	if use !external-libs; then
 		cd libs/libsndfile
@@ -69,7 +78,6 @@ src_compile() {
 	! use osc; myconf="${myconf} LIBLO=$?" 
 	! use vst; myconf="${myconf} VST=$?" 
 
-	cd ${S}
 	scons \
 		${myconf} || die "make failed"
 	use doc && make -C manual html
@@ -80,5 +88,5 @@ src_install() {
 
 	dodoc DOCUMENTATION/{AUTHORS*,CONTRIBUTORS*,FAQ,README*,TODO,TRANSLATORS}
 	doman DOCUMENTATION/ardour.1
-	use doc && dohtml -r manual/html/
+	use doc && dohtml -r manual/tmp/
 }
