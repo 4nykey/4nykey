@@ -20,9 +20,9 @@ Index: configure.in.in
  AC_MSG_CHECKING(QT4.x lib)
  AC_ARG_WITH([qt-lib],
 @@ -322,6 +321,7 @@
- UIC="uic$QTPOSTFIX"
- AC_SUBST(MOC)
- AC_SUBST(UIC)
+ AC_MSG_RESULT(yes)
+ rm -f moc_myqt.cpp myqt.h myqt.cpp myqt.o myqt moc_myqt.o
+ 
 +fi
  echo " ------------------- End of UI probe ------------------"
      
