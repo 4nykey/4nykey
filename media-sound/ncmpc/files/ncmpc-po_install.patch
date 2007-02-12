@@ -1,0 +1,22 @@
+Index: po/Makefile.in
+===================================================================
+--- po/Makefile.in	(revision 5324)
++++ po/Makefile.in	(working copy)
+@@ -23,7 +23,7 @@
+ top_srcdir = ..
+ 
+ 
+-prefix = /usr/local
++prefix = /usr
+ exec_prefix = ${prefix}
+ datadir = ${prefix}/share
+ libdir = ${exec_prefix}/lib
+@@ -32,7 +32,7 @@
+ gettextsrcdir = $(datadir)/glib-2.0/gettext/po
+ subdir = po
+ 
+-INSTALL = /bin/install -c
++INSTALL = $(top_srcdir)/install-sh
+ INSTALL_DATA = ${INSTALL} -m 644
+ MKINSTALLDIRS = $(top_srcdir)/./mkinstalldirs
+ 

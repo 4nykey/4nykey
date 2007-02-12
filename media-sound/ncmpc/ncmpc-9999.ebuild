@@ -27,9 +27,12 @@ DEPEND="
 	)
 "
 RDEPEND="
-	media-sound/mpd
-	!media-sound/ncmpc-live
 	${DEPEND}
+	media-sound/mpd
+"
+DEPEND="
+	${DEPEND}
+	nls? ( sys-devel/gettext )
 "
 
 src_compile() {
