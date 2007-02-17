@@ -7,32 +7,17 @@ inherit subversion autotools bash-completion
 DESCRIPTION="A commandline client for Music Player Daemon (media-sound/mpd)"
 HOMEPAGE="http://www.musicpd.org"
 ESVN_REPO_URI="https://svn.musicpd.org/${PN}/trunk"
-IUSE="nls"
+ESVN_BOOTSTRAP="eautoreconf"
+IUSE="bash-completion"
 
 KEYWORDS="~x86"
 SLOT="0"
 LICENSE="GPL-2"
 
-DEPEND="
-	nls? ( virtual/libiconv )
-"
-
-src_unpack() {
-	subversion_src_unpack
-	cd ${S}
-	eautoreconf
-}
-
-src_compile() {
-	econf \
-		--disable-dependency-tracking \
-		$(use_enable nls iconv) \
-		|| die "econf failed"
-	emake || die "emake failed"
-}
+RDEPEND="virtual/libiconv"
+DEPEND="${RDEPEND}"
 
 src_install() {
-	emake install DESTDIR="${D}" || die
-	mv ${D}/usr/share/doc/mpc/ ${D}/usr/share/doc/${PF}
-	dobashcompletion doc/mpc-bashrc
+	einstall docdir=${D}/usr/share/doc/${PF} || die
+	use bash-completion && dobashcompletion doc/mpc-bashrc
 }
