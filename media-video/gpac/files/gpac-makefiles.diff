@@ -108,15 +108,6 @@ retrieving revision 1.4
 diff -u -r1.4 Makefile
 --- applications/osmozilla/Makefile	31 Jul 2005 18:49:45 -0000	1.4
 +++ applications/osmozilla/Makefile	4 Aug 2005 20:46:41 -0000
-@@ -14,7 +14,7 @@
- endif
- endif
- 
--CFLAGS= $(OPTFLAGS) -Wall -I$(SRC_PATH)/include \
-+CFLAGS= $(OPTFLAGS) -fPIC -Wall -I$(SRC_PATH)/include $(MOZILLA_INC) #\
-   -I$(GECKO_PATH) \
-   -I$(GECKO_PATH)/plugin/include  \
-   -I$(GECKO_PATH)/nspr/include \
 @@ -84,8 +84,8 @@
  	install -D -m 755 ../../bin/gcc/nposmozilla.xpt "$(HOME)/.mozilla/components/nposmozilla.xpt"
  endif
@@ -160,3 +151,18 @@ diff -u -r1.2 Makefile
  endif
  
  SRCS := $(OBJS:.o=.c) 
+--- configure.orig	2006-12-16 17:42:29.000000000 +0200
++++ configure	2007-02-14 16:19:26.000000000 +0200
+@@ -783,6 +783,12 @@
+   ;;
+   --use-png=*) has_png=${opt#--use-png=}
+   ;;
++  --use-sdl=*) has_sdl=${opt#--use-sdl=}
++  ;;
++  --use-vorbis=*) has_vorbis=${opt#--use-vorbis=}
++  ;;
++  --use-theora=*) has_theora=${opt#--use-theora=}
++  ;;
+   esac
+ done
+ 

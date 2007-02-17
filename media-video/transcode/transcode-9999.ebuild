@@ -47,25 +47,12 @@ RDEPEND="
 	>=media-libs/libmpeg2-0.4.0b
 	virtual/libiconv
 	xml? ( dev-libs/libxml2 )
-	X? (
-		|| (
-			( x11-libs/libXaw x11-libs/libXv )
-			virtual/x11
-		)
-	)
+	X? ( x11-libs/libXaw x11-libs/libXv )
 "
 DEPEND="
 	${RDEPEND}
 	v4l2? ( >=virtual/os-headers-2.6.11 )
 "
-
-pkg_setup() {
-	if has_version '<x11-base/xorg-x11-7.0' && ! built_with_use x11-base/xorg-x11 xv; then
-		die "You need xorg-x11 emerged with xv support to compile transcode."
-	fi
-
-	filter-flags -momit-leaf-frame-pointer
-}
 
 src_unpack() {
 	cvs_src_unpack
@@ -84,6 +71,7 @@ src_unpack() {
 
 src_compile() {
 	append-flags -DDCT_YUV_PRECISION=1
+	filter-flags -momit-leaf-frame-pointer
 	econf \
 		$(use_enable mmx) \
 		$(use_enable 3dnow) \

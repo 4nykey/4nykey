@@ -29,17 +29,23 @@ x264 dirac gnome musepack qt4 portaudio skins firefox xulrunner
 
 RDEPEND="
 	hal? ( >=sys-apps/hal-0.5.0 )
-	cdda? ( >=dev-libs/libcdio-0.71
-		>=media-libs/libcddb-0.9.5 )
+	cdda? (
+		>=dev-libs/libcdio-0.71
+		>=media-libs/libcddb-0.9.5
+	)
 	live? ( >=media-plugins/live-2007.01.17 )
-	dvd? (  media-libs/libdvdread
+	dvd? (
+		media-libs/libdvdread
 		media-libs/libdvdcss
 		>=media-libs/libdvdnav-0.1.9
-		media-libs/libdvdplay )
+		media-libs/libdvdplay
+	)
 	esd? ( media-sound/esound )
 	ogg? ( media-libs/libogg )
-	matroska? ( >=dev-libs/libebml-0.7.6
-		>=media-libs/libmatroska-0.7.5 )
+	matroska? (
+		>=dev-libs/libebml-0.7.6
+		>=media-libs/libmatroska-0.7.5
+	)
 	mp3? ( media-libs/libmad )
 	ffmpeg? ( media-video/ffmpeg )
 	a52? ( media-libs/a52dec )
@@ -54,19 +60,16 @@ RDEPEND="
 	vorbis? ( media-libs/libvorbis )
 	theora? ( media-libs/libtheora )
 	X? (
-		|| (
-			(
-				x11-libs/libX11
-				x11-libs/libXext
-				xv? ( x11-libs/libXv )
-				xinerama? ( x11-libs/libXinerama )
-			)
-			<virtual/x11-7
-		)
+		x11-libs/libX11
+		x11-libs/libXext
+		xv? ( x11-libs/libXv )
+		xinerama? ( x11-libs/libXinerama )
 		opengl? ( virtual/opengl )
 	)
-	truetype? ( media-libs/freetype
-		media-fonts/ttf-bitstream-vera )
+	truetype? (
+		media-libs/freetype
+		media-fonts/ttf-bitstream-vera
+	)
 	svga? ( media-libs/svgalib )
 	ggi? ( media-libs/libggi )
 	aalib? ( media-libs/aalib )
@@ -89,11 +92,15 @@ RDEPEND="
 	sdl? ( media-libs/sdl-image )
 	xml? ( dev-libs/libxml2 )
 	samba? ( net-fs/samba )
-	vcd? ( >=dev-libs/libcdio-0.72
-		>=media-video/vcdimager-0.7.21 )
+	vcd? (
+		>=dev-libs/libcdio-0.72
+		>=media-video/vcdimager-0.7.21
+	)
 	daap? ( >=media-libs/libopendaap-0.3.0 )
-	corba? ( >=gnome-base/orbit-2.8.0
-		>=dev-libs/glib-2.3.2 )
+	corba? (
+		>=gnome-base/orbit-2.8.0
+		>=dev-libs/glib-2.3.2
+	)
 	mod? ( media-libs/libmodplug )
 	speex? ( media-libs/speex )
 	svg? ( >=gnome-base/librsvg-2.5.0 )
@@ -173,9 +180,9 @@ src_compile () {
 	if use nsplugin && use !firefox; then
 		CPPFLAGS="${CPPFLAGS} $(nspr-config --cflags)"
 		if use xulrunner; then
-			myconf="${myconf} --with-mozilla-sdk-path=/usr/$(get_libdir)/xulrunner"
+			myconf="${myconf} --with-mozilla-sdk-path=/usr/lib/xulrunner"
 		else
-			myconf="${myconf} --with-mozilla-sdk-path=/usr/$(get_libdir)/seamonkey"
+			myconf="${myconf} --with-mozilla-sdk-path=/usr/lib/seamonkey"
 		fi
 	fi
 

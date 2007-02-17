@@ -39,15 +39,10 @@ RDEPEND="
 	esd? ( media-sound/esound )
 	dts? ( || ( media-libs/libdca media-libs/libdts ) )
 	sdl? ( media-libs/libsdl )
-	|| (
-		(
-			xv? ( x11-libs/libXv )
-			x11-libs/libX11
-			x11-libs/libXext
-			x11-libs/libXrender
-		)
-		virtual/x11
-	)
+	xv? ( x11-libs/libXv )
+	x11-libs/libX11
+	x11-libs/libXext
+	x11-libs/libXrender
 	qt4? ( $(qt4_min_version 4.2) )
 	fontconfig? ( media-libs/fontconfig )
 "

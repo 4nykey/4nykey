@@ -21,8 +21,10 @@ S="${WORKDIR}/${ECVS_MODULE}"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="aac amr debug ffmpeg jpeg mad javascript nsplugin vorbis oss png sdl
-theora truetype wxwindows xml xvid unicode X ssl gecko-sdk"
+IUSE="
+aac amr debug ffmpeg jpeg mad javascript nsplugin vorbis oss png sdl theora
+truetype wxwindows xml xvid unicode X ssl firefox xulrunner seamonkey opengl
+"
 
 RDEPEND="
 	jpeg? ( media-libs/jpeg )
@@ -40,24 +42,25 @@ RDEPEND="
 	xvid? ( >=media-libs/xvid-1.0.1 )
 	sdl? ( media-libs/libsdl )
 	X? (
-		|| (
-			(
-				x11-libs/libXt
-				x11-libs/libX11
-				x11-libs/libXext
+		x11-libs/libXt
+		x11-libs/libX11
+		x11-libs/libXext
+	)
+	nsplugin? (
+		firefox? ( www-client/mozilla-firefox )
+		!firefox? (
+			xulrunner? ( net-libs/xulrunner )
+			!xulrunner? (
+				seamonkey? ( www-client/seamonkey )
 			)
-			virtual/x11
 		)
 	)
+	opengl? ( virtual/opengl )
 "
 DEPEND="
 	${RDEPEND}
 	oss? ( virtual/os-headers )
 	amr? ( app-arch/unzip )
-	nsplugin? (
-		!gecko-sdk? ( www-client/mozilla-firefox )
-		gecko-sdk? ( net-libs/gecko-sdk )
-	)
 "
 
 src_unpack() {
@@ -65,7 +68,6 @@ src_unpack() {
 	cd ${WORKDIR}
 	use amr && unpack ${A}
 	cd ${S}
-	chmod 755 configure
 
 	if use wxwindows; then
 		WX_GTK_VER="2.6"
@@ -79,15 +81,16 @@ src_unpack() {
 
 	epatch "${FILESDIR}"/${PN}-*.diff
 
-	# make configure to pick theora, if presented
-	use theora && sed -i 's:ltheora 2:ltheora -logg 2:' configure
 	# skip stripping
 	sed -i 's:\$(STRIP):touch:; s:\(INSTFLAGS=\).*:\1:' Makefile
 
-	sed -i '/#include/s/\\/\//g' modules/svg_loader/svg_parser.c
-
-	use sdl || sed -i 's:^has_sdl=yes:has_sdl=no:' configure
-	use nsplugin || sed -i 's:osmozilla::' applications/Makefile
+	if use nsplugin; then
+		if use firefox || use xulrunner || use seamonkey; then
+			epatch "${FILESDIR}"/${PN}-ext_gecko.patch
+		fi
+	else
+		sed -i 's:osmozilla::' applications/Makefile
+	fi
 	use X || sed -i 's:PLUGDIRS+=x11_out:PLUGDIRS+=:' modules/Makefile
 
 	if use amr; then
@@ -97,20 +100,17 @@ src_unpack() {
 	fi
 }
 
+teh_conf() {
+	use $1 || myconf="${myconf} --use-${1}=no"
+}
+
 src_compile() {
 	append-flags -fno-strict-aliasing
 
-	local myconf
-	use javascript || myconf="${myconf} --use-js=no"
-	use truetype || myconf="${myconf} --use-ft=no"
-	use jpeg || myconf="${myconf} --use-jpeg=no"
-	use png || myconf="${myconf} --use-png=no"
-	use aac || myconf="${myconf} --use-faad=no"
-	use mad || myconf="${myconf} --use-mad=no"
-	use xvid || myconf="${myconf} --use-xvid=no"
-	use ffmpeg || myconf="${myconf} --use-ffmpeg=no"
-
-	./configure \
+	for x in javascript truetype jpeg png aac mad xvid ffmpeg sdl vorbis theora
+	do teh_conf $x
+	done
+	/bin/sh ./configure \
 		--prefix=/usr \
 		--mozdir=${D}usr/$(get_libdir)/${PLUGINS_DIR} \
 		$(use_enable amr) \
@@ -118,22 +118,26 @@ src_compile() {
 		$(use_enable ssl) \
 		$(use_enable debug) \
 		$(use_enable oss oss-audio) \
+		$(use_enable wxwindows wx) \
+		$(use_enable opengl) \
 		${myconf} || die
 
 	# install to image dir
 	sed -i "s:=/usr:=${D}usr:" config.mak
 	# skip building generators dir (ifeq-ed in applications/Makefile)
 	sed -i "/SRC_LOCAL_PATH/d" config.mak
-	# point to prefered gecko provider
-	if use nsplugin; then
-		local mozinc
-		if use gecko-sdk; then
-			mozinc="$(gecko-sdk-config --cflags)"
+	# set prefered gecko provider. gpac bundles one as well, and this will be
+	# used if none of firefox, xulrunner or seamonkey is requested
+	if use nsplugin && (use firefox || use xulrunner || use seamonkey); then
+		if use firefox; then
+			MOZCFG="/usr/lib/mozilla-firefox/firefox-config"
+		elif use xulrunner; then
+			MOZCFG="/usr/bin/xulrunner-config"
 		else
-			mozinc="$(pkg-config firefox-plugin --cflags)"
+			MOZCFG="/usr/lib/seamonkey/seamonkey-config"
 		fi
+		echo "MOZILLA_INC=$(${MOZCFG} --cflags plugin xpcom java)" >> config.mak
 	fi
-	echo "MOZILLA_INC=${mozinc}" >> config.mak
 
 	make OPTFLAGS="${CFLAGS} -fPIC -DPIC" lib mods || die
 	make \
