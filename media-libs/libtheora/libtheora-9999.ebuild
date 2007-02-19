@@ -13,27 +13,20 @@ ESVN_BOOTSTRAP="eautoreconf"
 LICENSE="xiph"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="encode mmx static player"
+IUSE="encode mmx doc"
 
 RDEPEND="
 	>=media-libs/libogg-1.1.0
 	>=media-libs/libvorbis-1.0.1
-	player? ( media-libs/libsdl )
 "
 DEPEND="
 	${RDEPEND}
-	player? ( virtual/os-headers )
+	doc? ( app-doc/doxygen )
 "
 
-src_unpack() {
-	subversion_src_unpack
-	cd ${S}
-#	AT_M4DIR="${S}/m4" eautoreconf || die
-}
-
 src_compile() {
+	use doc || export ac_cv_prog_HAVE_DOXYGEN="false"
 	econf \
-		$(use_enable static) \
 		$(use_enable mmx asm) \
 		$(use_enable encode) || die
 	emake || die

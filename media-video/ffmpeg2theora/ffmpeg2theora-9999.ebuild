@@ -7,6 +7,7 @@ inherit subversion autotools
 DESCRIPTION="ffmpeg2theora - simple OggTheora encoder, transcodes all codecs/formats supported by ffmpeg."
 HOMEPAGE="http://www.v2v.cc/~j/ffmpeg2theora"
 ESVN_REPO_URI="http://svn.xiph.org/trunk/ffmpeg2theora"
+ESVN_BOOTSTRAP="eautoreconf"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -23,14 +24,8 @@ DEPEND="
 	${RDEPEND}
 "
 
-src_unpack() {
-	subversion_src_unpack
-	cd ${S}
-	eautoreconf
-}
-
 src_install() {
-	dobin ffmpeg2theora
+	einstall || die
 	if has_version '>=media-video/kino-0.7.1'; then
 		exeinto /usr/share/kino/scripts/exports
 		doexe kino_export/ffmpeg2theora.sh
