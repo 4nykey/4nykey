@@ -26,7 +26,7 @@ Index: SConstruct
      
      if ((env['DIST_TARGET'] == 'i686') or (env['DIST_TARGET'] == 'x86_64')) and build_host_supports_sse:
          opt_flags.extend (["-msse", "-mfpmath=sse"])
-@@ -847,17 +847,23 @@
+@@ -847,18 +847,24 @@
  #
  
  opt_flags[:0] = [
@@ -34,7 +34,8 @@ Index: SConstruct
      "-fomit-frame-pointer",
 -    "-ffast-math",
 -    "-fstrength-reduce",
-     "-fno-strict-aliasing"
+     "-fno-strict-aliasing",
+     "-pipe"
      ]
  
 +if os.environ.has_key('CFLAGS'):

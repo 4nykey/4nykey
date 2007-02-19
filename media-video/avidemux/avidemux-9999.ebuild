@@ -23,7 +23,7 @@ RDEPEND="
 	>=x11-libs/gtk+-2.6.0
 	>=dev-lang/spidermonkey-1.5-r2
 	a52? ( >=media-libs/a52dec-0.7.4 )
-	aften? ( media-sound/aften )
+	aften? ( >=media-sound/aften-0.0.6 )
 	aac? ( >=media-libs/faad2-2.0-r2 )
 	faac? ( >=media-libs/faac-1.23.5 )
 	mad? ( media-libs/libmad )

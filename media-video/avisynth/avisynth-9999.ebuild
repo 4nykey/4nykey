@@ -16,19 +16,22 @@ SLOT="0"
 KEYWORDS="~x86"
 IUSE="debug doc gtk ffmpeg"
 
-RDEPEND="
+DEPEND="
 	dev-libs/STLport
 	>=dev-libs/boost-1.33
 	>=media-libs/freetype-2
 	media-libs/fontconfig
 	x86? ( dev-lang/nasm )
 	>=media-libs/gst-plugins-base-0.10.8
-	ffmpeg? ( >=media-plugins/gst-plugins-ffmpeg-0.10 )
 	gtk? ( >=x11-libs/gtk+-2.8 )
-	doc? ( app-doc/doxygen )
+"
+RDEPEND="
+	${DEPEND}
+	ffmpeg? ( >=media-plugins/gst-plugins-ffmpeg-0.10 )
 "
 DEPEND="
-	${RDEPEND}
+	${DEPEND}
+	doc? ( app-doc/doxygen )
 "
 
 pkg_setup() {

@@ -273,10 +273,7 @@ src_install() {
 	dodoc AUTHORS MAINTAINERS HACKING THANKS TODO NEWS README \
 		doc/{,subtitles}/*.txt
 
-	rm -r ${D}/usr/share/vlc/{,k,q,g,gnome-}vlc*.{png,xpm,ico} \
-		${D}/usr/share/doc/vlc
-
-	for res in 16 32 48; do
+	for res in 16 32 48 128; do
 		insinto /usr/share/icons/hicolor/${res}x${res}/apps/
 		newins ${S}/share/vlc${res}x${res}.png vlc.png
 	done

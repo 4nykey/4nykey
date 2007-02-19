@@ -18,7 +18,7 @@ RDEPEND=">=x11-libs/gtk+-2.8
 	=gnome-base/libglade-2*
 	dev-libs/libxml2
 	dev-perl/XML-Parser
-	media-libs/libmpd
+	~media-libs/libmpd-9999
 "
 DEPEND="
 	${RDEPEND}

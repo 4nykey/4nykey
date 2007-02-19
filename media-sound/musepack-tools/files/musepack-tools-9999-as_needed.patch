@@ -1,0 +1,10 @@
+Index: libmpcdec/CMakeLists.txt
+===================================================================
+--- libmpcdec/CMakeLists.txt	(revision 219)
++++ libmpcdec/CMakeLists.txt	(working copy)
+@@ -2,4 +2,4 @@
+ include_directories(${libmpc_SOURCE_DIR}/common)
+ link_directories(${libmpc_BINARY_DIR}/common)
+ add_library(mpcdec_static STATIC huffman mpc_decoder mpc_reader streaminfo mpc_bits_reader mpc_demux requant synth_filter)
+-target_link_libraries(mpcdec_static common_static)
++target_link_libraries(mpcdec_static common_static m)

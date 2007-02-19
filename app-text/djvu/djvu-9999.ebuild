@@ -30,12 +30,8 @@ src_unpack() {
 	# and respect our flagz
 	sed -i '/-O[*0-9]/d' config/acinclude.m4
 
-	# Replace autochecking acdesktop.m4 with a gentoo-specific one
-	cp "${FILESDIR}/gentoo-acdesktop.m4" gui/desktop/acdesktop.m4
-
-	AT_M4DIR="config gui/desktop"
 	rm -f aclocal.m4
-	eautoreconf
+	AT_M4DIR="config" eautoreconf
 }
 
 src_compile() {

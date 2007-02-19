@@ -7,7 +7,7 @@ inherit flag-o-matic subversion toolchain-funcs
 DESCRIPTION="Musepack audio compression tools"
 HOMEPAGE="http://www.musepack.net"
 ESVN_REPO_URI="http://svn.musepack.net/libmpc/branches/r2d"
-ESVN_PATCHES="${PN}-*.patch"
+ESVN_PATCHES="${P}-*.patch"
 
 SLOT="8"
 LICENSE="LGPL-2.1"

@@ -13,8 +13,10 @@ AT_M4DIR="m4"
 SLOT="0"
 LICENSE="GPL-2"
 KEYWORDS="~x86"
-IUSE="flac ffmpeg mad oss vorbis debug alsa speex libsamplerate curl sndfile
-musepack jack modplug"
+IUSE="
+flac ffmpeg mad oss vorbis debug alsa speex libsamplerate curl sndfile musepack
+jack modplug timidity
+"
 
 RDEPEND="
 	media-libs/libao
@@ -31,6 +33,7 @@ RDEPEND="
 	curl? ( >=net-misc/curl-7.12.2 )
 	jack? ( media-sound/jack-audio-connection-kit )
 	modplug? ( media-libs/libmodplug )
+	timidity? ( media-sound/timidity++ )
 "
 DEPEND="
 	${RDEPEND}
@@ -49,6 +52,7 @@ src_compile() {
 		$(use_enable debug) \
 		$(use_with jack) \
 		$(use_with modplug) \
+		$(use_with timidity) \
 		|| die "./configure failed"
 
 	emake || die "make failed"

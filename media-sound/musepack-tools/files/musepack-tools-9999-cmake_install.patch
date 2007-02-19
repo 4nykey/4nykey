@@ -16,3 +16,12 @@ Index: mpcgain/CMakeLists.txt
  endif(NOT MSVC)
  
 +install(TARGETS mpcgain RUNTIME DESTINATION bin)
+Index: mpc2sv8/CMakeLists.txt
+===================================================================
+--- mpc2sv8/CMakeLists.txt	(revision 219)
++++ mpc2sv8/CMakeLists.txt	(working copy)
+@@ -22,3 +22,4 @@
+ target_link_libraries(mpc2sv8 ossaudio)
+ endif(CMAKE_SYSTEM_NAME STREQUAL OpenBSD)
+ 
++install(TARGETS mpc2sv8 RUNTIME DESTINATION bin)

@@ -1,89 +1,24 @@
-Index: doc/ncmpc.1
-===================================================================
---- doc/ncmpc.1	(revision 4806)
-+++ doc/ncmpc.1	(working copy)
-@@ -165,6 +165,9 @@
- .B colordef COLOR = R, G, B
- Redefine any of the base colors. The RGB values must be an integer value between 0 and 1000. 
- \fBNote\fR: Only some terminals allow redefinitions of colors! 
-+.TP 
-+.B visible\-bitrate = yes|no
-+Display bitrate in status window
- .SH "KEYS"
- When ncmpc start it tries to read user key bindings from the ~/.ncmpc/keys file. If no user key bindings is found ncmpc tries to load global key bindings from $SYSCONFDIR/ncmpc/keys (the actual path is displayed on the help screen). 
- 
-Index: src/options.h
-===================================================================
---- src/options.h	(revision 4806)
-+++ src/options.h	(working copy)
-@@ -33,6 +33,7 @@
-   gboolean enable_xterm_title; 
-   gboolean enable_mouse;
-   gboolean show_splash;
-+  gboolean visible_bitrate;
- 
- } options_t;
- 
 Index: src/screen.c
 ===================================================================
---- src/screen.c	(revision 4806)
+--- src/screen.c	(revision 5350)
 +++ src/screen.c	(working copy)
-@@ -361,21 +361,34 @@
- 	/*checks the conf to see whether to display elapsed or remaining time */
- 	if(!strcmp(options.timedisplay_type,"elapsed"))
-           {
-+	  if ( options.visible_bitrate )
-+             timestr= " [%d kbps] [%i:%02i/%i:%02i]";	    
-+	  else
-              timestr= " [%i:%02i/%i:%02i]";	    
-              elapsedTime = c->status->elapsedTime;
-           }
-         else if(!strcmp(options.timedisplay_type,"remaining"))
-           {
-+	  if ( options.visible_bitrate )
-+             timestr= " [%d kbps] [-%i:%02i/%i:%02i]";	    
-+	  else
-             timestr= " [-%i:%02i/%i:%02i]";	    
-             elapsedTime = (c->status->totalTime - c->status->elapsedTime);
-           }  
- 	if( c->song && seek_id == c->song->id )
- 	    elapsedTime = seek_target_time;
- 	/*write out the time*/
-+	if ( options.visible_bitrate )
- 	  g_snprintf(screen->buf, screen->buf_size, 
- 		   timestr,
-+		   status->bitRate,
- 		   elapsedTime/60, elapsedTime%60,
- 		   status->totalTime/60,   status->totalTime%60 );
-+	else
-+	  g_snprintf(screen->buf, screen->buf_size, 
-+		   timestr,
-+		   elapsedTime/60, elapsedTime%60,
-+		   status->totalTime/60,   status->totalTime%60 );
+@@ -369,15 +369,15 @@
+ 	  if (c->status->totalTime > 3600)
+ 	    {
+ 	      g_snprintf(screen->buf, screen->buf_size, 
+-		      " [%i:%02i:%02i/%i:%02i:%02i]",
+-		      elapsedTime/3600, (elapsedTime%3600)/60, elapsedTime%60,
++		      " [%d kbps] [%i:%02i:%02i/%i:%02i:%02i]",
++		      status->bitRate, elapsedTime/3600, (elapsedTime%3600)/60, elapsedTime%60,
+ 		      status->totalTime/3600, (status->totalTime%3600)/60,  status->totalTime%60);
+ 	    }
+ 	  else
+ 	    {
+ 	      g_snprintf(screen->buf, screen->buf_size, 
+-		      " [%i:%02i/%i:%02i]",
+-		      elapsedTime/60, elapsedTime%60,
++		      " [%d kbps] [%i:%02i/%i:%02i]",
++		      status->bitRate, elapsedTime/60, elapsedTime%60,
+ 		      status->totalTime/60,   status->totalTime%60 );
+ 	    }
  	}
-       else
- 	{
-Index: src/conf.c
-===================================================================
---- src/conf.c	(revision 4806)
-+++ src/conf.c	(working copy)
-@@ -64,6 +64,7 @@
- #define CONF_HIDE_CURSOR             "hide-cursor"
- #define CONF_SEEK_TIME               "seek-time"
- #define CONF_SCREEN_LIST             "screen-list"
-+#define CONF_VISIBLE_BITRATE         "visible-bitrate"
- #define CONF_TIMEDISPLAY_TYPE        "timedisplay-type"
- #define CONF_HOST                    "host"
- #define CONF_PORT                    "port"
-@@ -484,6 +485,11 @@
- 		    D("deb");
- 		    D(options->timedisplay_type);
- 		}
-+	      /* visible bitrate */
-+	      else if( !strcasecmp(CONF_VISIBLE_BITRATE, name) )
-+		{
-+		  options->visible_bitrate = str2bool(value);
-+		}
- 	      /* color definition */
- 	      else if( !strcasecmp(CONF_COLOR_DEFINITION, name) )
- 		{

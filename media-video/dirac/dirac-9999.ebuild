@@ -1,11 +1,10 @@
 # Copyright 1999-2004 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-inherit cvs autotools
+inherit cvs autotools qt4
 
 DESCRIPTION="Dirac is a general-purpose wavelet video codec"
 HOMEPAGE="http://www.bbc.co.uk/rd/projects/dirac/overview.shtml"
-#SRC_URI="mirror://sourceforge/dirac/${P}.tar.gz"
 ECVS_SERVER="dirac.cvs.sourceforge.net:/cvsroot/dirac"
 ECVS_MODULE="compress"
 S="${WORKDIR}/${ECVS_MODULE}"
@@ -13,11 +12,17 @@ S="${WORKDIR}/${ECVS_MODULE}"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="debug mmx static pic doc"
+IUSE="debug mmx doc qt4"
 
-DEPEND="doc? ( app-doc/doxygen
-	app-text/dvipdfm
-	app-text/tetex )"
+RDEPEND="
+	qt4? ( $(qt4_min_version 4.0) )
+"
+DEPEND="
+	doc? (
+		app-doc/doxygen
+		virtual/tetex
+	)
+"
 
 src_unpack() {
 	cvs_src_unpack
@@ -28,23 +33,31 @@ src_unpack() {
 }
 
 src_compile() {
-	use doc || export ac_cv_prog_HAVE_DOXYGEN="no" ac_cv_prog_HAVE_LATEX="no"
+	if use !doc; then
+		export ac_cv_prog_HAVE_DOXYGEN="false" ac_cv_prog_HAVE_LATEX="false"
+	fi
 
 	econf \
-		`use_enable debug` \
-		`use_enable mmx` \
-		`use_enable static` \
-		`use_with pic` || die
+		$(use_enable debug) \
+		$(use_enable mmx) \
+		|| die
 
 	emake || die
+
+	if use qt4; then
+		cd util/encoder_gui
+		qmake -project || die
+		qmake || die
+		emake || die
+	fi
 }
 
 src_install() {
 	einstall || die
-	rm -rf ${D}/usr/share/doc/*
+	use qt4 && newbin util/encoder_gui/encoder_gui dirac_encoder_gui
 	if use doc; then
-		einstall GENERIC_LIBRARY_NAME="${PF}/html/" -C doc
-		rm -rf ${D}/usr/share/doc/${PF}/html/*.txt
+		mkdir -p "${D}"usr/share/doc/${PF}
+		mv "${D}"usr/share/doc/dirac "${D}"usr/share/doc/${PF}/html
 	fi
 	dodoc AUTHORS ChangeLog NEWS README TODO doc/*.txt
 }

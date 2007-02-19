@@ -22,7 +22,7 @@ SLOT="0"
 KEYWORDS="~x86"
 IUSE="
 aac debug doc ieee1394 a52 encode imlib mmx ogg vorbis oss threads truetype
-v4l xvid dts network zlib X amr x264 static mp3 swscaler sdl
+v4l v4l2 xvid dts network zlib X amr x264 static mp3 swscaler sdl
 "
 
 RDEPEND="
@@ -60,6 +60,8 @@ DEPEND="
 	doc? ( app-text/texi2html )
 	test? ( net-misc/wget )
 	X? ( x11-proto/xextproto )
+	v4l? ( virtual/os-headers )
+	v4l2? ( virtual/os-headers )
 "
 
 pkg_setup() {
@@ -75,7 +77,7 @@ pkg_setup() {
 	fi
 
 	#Append -fomit-frame-pointer to avoid some common issues
-	use debug || append-flags "-fomit-frame-pointer"
+	append-flags "-fomit-frame-pointer"
 	#Note; library makefiles don't propogate flags from config.mak so
 	#use specified CFLAGS are only used in executables
 	replace-flags -O0 -O2
@@ -121,7 +123,6 @@ src_unpack() {
 }
 
 teh_conf() {
-	# configure will boil out on 'unsupported' options, so...
 	ACTION="--${1}able"
 	if [[ $1 == "en" ]]; then
 		use $2 && myconf="${myconf} ${ACTION}-${3:-${2}}"
@@ -135,26 +136,27 @@ src_compile() {
 
 	teh_conf dis debug
 	if use encode; then
-		teh_conf en mp3 mp3lame
+		teh_conf en mp3 libmp3lame
 		teh_conf en xvid
 		teh_conf en x264
-		teh_conf en aac faac
+		teh_conf en aac libfaac
 	fi
-	teh_conf en a52
+	teh_conf en a52 liba52
 	teh_conf dis oss audio-oss
 	teh_conf dis v4l
+	teh_conf dis v4l2
 	teh_conf dis ieee1394 dv1394
 	teh_conf en ieee1394 dc1394
 	teh_conf en threads pthreads
 	teh_conf en ogg libogg
-	teh_conf en vorbis
-	teh_conf en dts
+	teh_conf en vorbis libvorbis
+	teh_conf en dts libdts
 	teh_conf dis network
 	teh_conf dis zlib
 	teh_conf en amr amr_nb
 	teh_conf en amr amr_wb
 	teh_conf en amr amr_if2
-	teh_conf en aac faad
+	teh_conf en aac libfaad
 	teh_conf en swscaler
 	teh_conf en X x11grab
 	use sdl && teh_conf dis X ffplay
