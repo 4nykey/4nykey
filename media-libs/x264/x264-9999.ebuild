@@ -7,12 +7,12 @@ inherit subversion toolchain-funcs
 DESCRIPTION="x264 is a free library for encoding H264/AVC video streams"
 HOMEPAGE="http://www.videolan.org/x264.html"
 ESVN_REPO_URI="svn://svn.videolan.org/${PN}/trunk"
+ESVN_PATCHES="${PN}-*.diff"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
 IUSE="X mp4 sdl threads gtk"
-RESTRICT="test"
 
 RDEPEND="
 	mp4? ( media-video/gpac )
@@ -25,45 +25,36 @@ DEPEND="
 	dev-lang/nasm
 "
 
-src_unpack() {
-	subversion_src_unpack
-	cd ${S}
-
-	REVISION="$(svnversion \
-		${ESVN_STORE_DIR}/${ESVN_PROJECT}/${ESVN_REPO_URI##*/})"
-	sed -i "s:^VER=.*:VER=${REVISION}:" version.sh
-
-	sed -i 's:gpac_static:gpac:; s:/local::' configure
-	sed -i 's:-lintl::; s,\(all:.*\)\$(TEST_BIN) \(.*\),\1\2,' gtk/Makefile
-}
-
 src_compile() {
+	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
+
 	local myconf
 	use X && myconf="--enable-visualize"
 
 	# w/o debug configure adds '-s' to {c,ld}flags
 	./configure\
+		--prefix=/usr \
 		--enable-pic \
 		--enable-shared \
 		--enable-debug \
 		--disable-avis-input \
-		`use_enable threads pthread` \
-		`use_enable mp4 mp4-output`\
+		$(use_enable threads pthread) \
+		$(use_enable mp4 mp4-output)\
 		--extra-cflags="${CFLAGS}"\
 		--extra-ldflags="$LDFLAGS" \
 		${myconf} || die
 
 	einfo "Make lib and CLI encoder"
-	make || die
+	emake || die
 	einfo "Make GTK+ frontend"
-	use gtk && make -C gtk || die
+	use gtk && emake -C gtk || die
 	einfo "Make avc2avi"
-	echo `tc-getCC` $CFLAGS $LDFLAGS -o avc2avi tools/avc2avi.c
-	`tc-getCC` $CFLAGS $LDFLAGS -o avc2avi tools/avc2avi.c
+	echo $(tc-getCC) $CFLAGS $LDFLAGS -o avc2avi tools/avc2avi.c
+	$(tc-getCC) $CFLAGS $LDFLAGS -o avc2avi tools/avc2avi.c
 	if use sdl; then
 		einfo "Make xyuv"
-		echo `tc-getCC` $CFLAGS $LDFLAGS -o xyuv tools/xyuv.c `sdl-config --libs`
-		`tc-getCC` $CFLAGS $LDFLAGS -o xyuv tools/xyuv.c `sdl-config --libs`
+		echo $(tc-getCC) $CFLAGS $LDFLAGS -o xyuv tools/xyuv.c $(sdl-config --libs)
+		$(tc-getCC) $CFLAGS $LDFLAGS -o xyuv tools/xyuv.c $(sdl-config --libs)
 	fi
 
 	use threads && sed -i 's:\(^Libs.*\) :\1 -lpthread :' x264.pc
@@ -71,7 +62,7 @@ src_compile() {
 }
 
 src_test() {
-	make checkasm || die
+	emake checkasm || die
 	./checkasm || die
 }
 

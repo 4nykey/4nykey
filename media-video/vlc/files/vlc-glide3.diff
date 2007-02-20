@@ -1,0 +1,19 @@
+Index: configure.ac
+===================================================================
+--- configure.ac	(revision 18869)
++++ configure.ac	(working copy)
+@@ -4263,11 +4263,11 @@
+         VLC_ADD_LDFLAGS([glide],[-L${with_glide}/lib])
+         CFLAGS="$CFLAGS -I${with_glide}/include"
+     fi ])
+-   CFLAGS="$CFLAGS -I/usr/include/glide"
++   CFLAGS="$CFLAGS -I/usr/include/glide3"
+    AC_CHECK_HEADER(glide.h,[   
+       VLC_ADD_PLUGINS([glide])
+-      VLC_ADD_LDFLAGS([glide],[-lglide2x -lm])
+-      VLC_ADD_CPPFLAGS([glide],[-I/usr/include/glide])
++      VLC_ADD_LDFLAGS([glide],[-lglide3 -lm])
++      VLC_ADD_CPPFLAGS([glide],[-I/usr/include/glide3])
+     ],[
+       AC_MSG_ERROR([You don't have libglide. Install it or do not use --enable-glide])
+      ])

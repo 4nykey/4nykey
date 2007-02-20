@@ -61,13 +61,9 @@ filter-flags "-fforce-addr"
 
 src_unpack() {
 	subversion_src_unpack
+	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
+
 	cd ${S}
-
-	REVISION="$(svnversion \
-		${ESVN_STORE_DIR}/${ESVN_PROJECT}/${ESVN_REPO_URI##*/})"
-	sed -i "s:if .*svn/entries[^;]*: if true:; s:rev=\`.*:rev=${REVISION}:" \
-		configure.in.in
-
 	make -f admin/Makefile.common configure.in
 	touch acinclude.m4
 	eautoreconf

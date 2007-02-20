@@ -1,0 +1,13 @@
+Index: modules/misc/freetype.c
+===================================================================
+--- modules/misc/freetype.c	(revision 18869)
++++ modules/misc/freetype.c	(working copy)
+@@ -55,7 +55,7 @@
+ #elif defined( WIN32 )
+ #define DEFAULT_FONT "" /* Default font found at run-time */
+ #else
+-#define DEFAULT_FONT "/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf"
++#define DEFAULT_FONT "/usr/share/fonts/ttf-bitstream-vera/VeraBd.ttf"
+ #endif
+ 
+ #if defined(HAVE_FRIBIDI)

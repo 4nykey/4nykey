@@ -146,29 +146,10 @@ pkg_setup() {
 src_unpack() {
 	export SKIP_AUTOTOOLS="indeed"
 	subversion_src_unpack
-
-	REVISION="$(svnversion \
-		${ESVN_STORE_DIR}/${ESVN_PROJECT}/${ESVN_REPO_URI##*/})"
-	sed -i "s:\(VLC_CHANGESET=\)'.*:\1${REVISION}:" ${S}/toolbox
-
+	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
 	cd ${S}
-
-	sed -i -e \
-		"s:/glide:/glide3:; s:glide2x:glide3:" configure.ac \
-		|| die "sed glide failed."
-
-	# Fix the default font
-	sed -i -e \
-		"s:/truetype/freefont/FreeSerifBold.ttf:/ttf-bitstream-vera/VeraBd.ttf:" \
-		modules/misc/freetype.c
-
-	# helps -Wl,--as-needed
-	sed -i "s:\(libvlc_la_LIBADD = .*\):\1 -ldl:" src/Makefile.am
-	sed -i "s:\(libmono_plugin_la_LIBADD =.*\):\1 -lm:"	\
-		modules/audio_filter/channel_mixer/Makefile.am
-
 	autopoint -f || die
-	AT_M4DIR="${S}/m4" eautoreconf
+	AT_M4DIR="m4" eautoreconf
 }
 
 src_compile () {

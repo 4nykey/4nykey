@@ -43,24 +43,17 @@ DEPEND="
 
 src_unpack() {
 	subversion_src_unpack
+	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
+
 	cd ${S}
-
-	SVN_DIR="${ESVN_STORE_DIR}/${ESVN_PROJECT}/${ESVN_REPO_URI##*/}"
-	SVN_REV="$(svnversion ${SVN_DIR})"
-	sed -i "s:\(ardour_svn_revision[ =]*\"\)[0-9]*:\1${SVN_REV}:" svn_revision.h
-
-	# fix path in launcher
-	sed -i "s:%INSTALL_PREFIX%:/usr:" gtk2_ardour/ardour.sh.in
+	sed -i svn_revision.h \
+		-e "s:\([ =]*\"\)[0-9]\+:\1${ESVN_WC_REVISION}:"
 
 	# handle gtkmm accessibility flag
 	built_with_use dev-cpp/gtkmm accessibility || \
 		sed -i "s:atkmm-1.6:gtkmm-2.4:" SConstruct
 
-	sed -i \
-	"s,/usr/share/.*/xsl-stylesheets/,http://docbook.sourceforge.net/release/xsl/current/,"\
-	manual/xsl/html.xsl
-
-	# make bundled sndfile build w/ flac-1.1.3
+	# make bundled sndfile build w/ flac-1.1.3+
 	if use !external-libs; then
 		cd libs/libsndfile
 		epatch "${DISTDIR}"/${A}

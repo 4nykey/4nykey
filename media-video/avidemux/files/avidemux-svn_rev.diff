@@ -1,0 +1,13 @@
+Index: configure.in.in
+===================================================================
+--- configure.in.in	(revision 2825)
++++ configure.in.in	(working copy)
+@@ -46,6 +46,8 @@
+ 		rev=`svnversion . | sed 's/^.*://g' | sed 's/M$//g'`
+ 		ADM_SUBVERSION="\"$rev\""
+ 	fi
++else
++	ADM_SUBVERSION="${ESVN_WC_REVISION}"
+ fi
+ dnl almost the same like KDE_SET_PEFIX but the path is /usr/local
+ dnl
