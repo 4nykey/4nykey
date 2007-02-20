@@ -1,0 +1,11 @@
+--- applications/osmozilla/Makefile.orig	2006-05-24 12:52:53.000000000 +0300
++++ applications/osmozilla/Makefile	2007-02-14 15:00:02.000000000 +0200
+@@ -14,7 +14,7 @@
+ endif
+ endif
+ 
+-CFLAGS= $(OPTFLAGS) -Wall -I$(SRC_PATH)/include \
++CFLAGS= $(OPTFLAGS) -fPIC -Wall -I$(SRC_PATH)/include $(MOZILLA_INC) #\
+   -I$(GECKO_PATH) \
+   -I$(GECKO_PATH)/plugin/include  \
+   -I$(GECKO_PATH)/nspr/include \
