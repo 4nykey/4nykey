@@ -1,0 +1,13 @@
+Index: Makefile.am
+===================================================================
+--- Makefile.am	(revision 592)
++++ Makefile.am	(working copy)
+@@ -6,7 +6,7 @@
+ 	if test -e version.h; then svn1="`cat version.h`"; else svn1=""; fi; \
+ 	if test -e ../.svn; then svn2="#define AQUALUNG_VERSION \"R-`cd ..; svn info | grep '^Revision' | awk '{print $$2}'`\""; else svn2=""; fi; \
+ 	if test "$$svn1" -a "$$svn2" -a "$$svn1" != "$$svn2" -o -z "$$svn1" -a "$$svn2"; then echo "$$svn2" > version.h; fi; \
+-	if test -z "$$svn1" -a -z "$$svn2"; then echo "#define AQUALUNG_VERSION \"R-???\"" > version.h; fi;
++	if test -z "$$svn1" -a -z "$$svn2"; then echo "#define AQUALUNG_VERSION \"R-$(ESVN_WC_REVISION)\"" > version.h; fi;
+ 
+ uninstall-local:
+ 	rm -rf $(pkgdatadir)
