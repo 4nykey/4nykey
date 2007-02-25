@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-python/wxpython/wxpython-2.6.3.3.ebuild,v 1.6 2007/01/16 06:16:12 josejx Exp $
 
-inherit distutils wxwidgets-nu eutils multilib
+inherit distutils wxwidgets-nu eutils multilib toolchain-funcs
 
 MY_P="${P/wxpython-/wxPython-src-}"
 DESCRIPTION="A blending of the wxWindows C++ class library with Python"
@@ -14,7 +14,8 @@ SLOT="2.8"
 KEYWORDS="~x86"
 IUSE="unicode opengl"
 
-RDEPEND=">=dev-lang/python-2.1
+RDEPEND="
+	>=dev-lang/python-2.1
 	>=x11-libs/wxGTK-${PV}
 	>=x11-libs/gtk+-2.0
 	>=x11-libs/pango-1.2
@@ -24,10 +25,12 @@ RDEPEND=">=dev-lang/python-2.1
 	media-libs/tiff
 	>=sys-libs/zlib-1.1.4
 	opengl? ( >=dev-python/pyopengl-2.0.0.44 )
-	!<dev-python/wxpython-2.4.2.4-r1"
-
-DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	!<dev-python/wxpython-2.4.2.4-r1
+"
+DEPEND="
+	${RDEPEND}
+	dev-util/pkgconfig
+"
 
 S="${WORKDIR}/${MY_P}/wxPython/"
 
@@ -49,14 +52,15 @@ pkg_setup() {
 src_unpack() {
 	unpack ${A}
 	cd "${S}" || die "failed to cd to ${S}"
-	sed -i "s:cflags.append('-O3'):pass:" config.py || die "sed failed"
-	# the following is to mimic "scripts-multiver-xxx.diff"
+	# gcc (at least 4.1.x) b0rks badly with -O2 and up
+	sed -i "s:-O3:-O:" config.py || die "sed failed"
+	# the following mimics "scripts-multiver-xxx.diff"
 	find scripts -mindepth 1 -type f -executable | xargs sed -i \
 		"s:\(^#!.*\):\1\n\nimport wxversion\nwxversion.select(\"${SLOT}\"):"
 }
 
 src_compile() {
-	distutils_src_compile ${mypyconf}
+	CC="$(tc-getCXX)" distutils_src_compile ${mypyconf}
 }
 
 src_install() {
@@ -75,12 +79,12 @@ src_install() {
 		die "Couldn't create wx.pth"
 	fi
 
-	newbin "${FILESDIR}"/wxpy-config.py wxpy-config
-
 	#Add ${PV} suffix to all /usr/bin/* programs to avoid clobbering SLOT'd
 	for filename in "${D}"/usr/bin/* ; do
 		mv ${filename} ${filename}-${SLOT}
 	done
+
+	newbin "${FILESDIR}"/wxpy-config.py wxpy-config
 }
 
 pkg_postinst() {
