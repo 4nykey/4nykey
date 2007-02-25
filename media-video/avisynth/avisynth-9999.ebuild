@@ -46,6 +46,7 @@ src_unpack() {
 	cvs_src_unpack
 	cd ${S}/build/linux
 	tar -xjf ../circular_buffer_v3.7.tar.bz2
+	epatch "${FILESDIR}"/${PN}-*.diff
 	mv circular_buffer boost
 	AT_M4DIR="m4" eautoreconf
 }
