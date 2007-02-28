@@ -1,24 +1,20 @@
 Index: SConstruct
 ===================================================================
---- SConstruct	(revision 1220)
+--- SConstruct	(revision 1525)
 +++ SConstruct	(working copy)
-@@ -805,13 +805,8 @@
-     libraries['libgnomecanvasmm'] = LibraryInfo()
-     libraries['libgnomecanvasmm'].ParseConfig ('pkg-config --cflags --libs libgnomecanvasmm-2.6')
- 
--#
--# cannot use system one for the time being
--#
--    
+@@ -837,9 +837,8 @@
+ # cannot use system one for the time being
+ #
+     
 -    libraries['sndfile-ardour'] = LibraryInfo(LIBS='libsndfile-ardour',
 -                                    LIBPATH='#libs/libsndfile',
--                                    CPPPATH=['#libs/libsndfile', '#libs/libsndfile/src'])
+-                                    CPPPATH=['#libs/libsndfile/src'])
 +    libraries['sndfile-ardour'] = LibraryInfo()
 +    libraries['sndfile-ardour'].ParseConfig ('pkg-config --cflags --libs sndfile')
  
  #    libraries['libglademm'] = LibraryInfo()
  #    libraries['libglademm'].ParseConfig ('pkg-config --cflags --libs libglademm-2.4')
-@@ -829,7 +824,6 @@
+@@ -859,7 +858,6 @@
      ]
      
      subdirs = [

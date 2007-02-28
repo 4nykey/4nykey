@@ -1,81 +1,8 @@
-Index: libs/pbd/SConscript
-===================================================================
---- libs/pbd/SConscript	(revision 816)
-+++ libs/pbd/SConscript	(working copy)
-@@ -45,7 +45,7 @@
- 
- conf = Configure(pbd)
- if conf.CheckFunc('getmntent'):
--    conf.env.Append(CCFLAGS="-DHAVE_GETMNTENT")
-+    conf.env.Append(CXXFLAGS="-DHAVE_GETMNTENT")
- if conf.CheckCHeader('execinfo.h'):
-     conf.env.Append(CXXFLAGS="-DHAVE_EXECINFO")
- pbd = conf.Finish()
-Index: SConstruct
-===================================================================
---- SConstruct	(revision 816)
-+++ SConstruct	(working copy)
-@@ -805,10 +805,6 @@
-             if "3dnow" in x86_flags:
-                 opt_flags.append ("-m3dnow")
-             
--            if config[config_cpu] == "i586":
--                opt_flags.append ("-march=i586")
--            elif config[config_cpu] == "i686":
--                opt_flags.append ("-march=i686")
-     
-     if ((env['DIST_TARGET'] == 'i686') or (env['DIST_TARGET'] == 'x86_64')) and build_host_supports_sse:
-         opt_flags.extend (["-msse", "-mfpmath=sse"])
-@@ -847,18 +847,24 @@
- #
- 
- opt_flags[:0] = [
--    "-O3",
-     "-fomit-frame-pointer",
--    "-ffast-math",
--    "-fstrength-reduce",
-     "-fno-strict-aliasing",
-     "-pipe"
-     ]
- 
-+if os.environ.has_key('CFLAGS'):
-+    env['CCFLAGS'] = os.environ['CFLAGS'].split()
-+if os.environ.has_key('CXXFLAGS'):
-+    env['CXXFLAGS'] = os.environ['CXXFLAGS'].split()
-+if os.environ.has_key('LDFLAGS'):
-+    env['LDFLAGS'] = os.environ['LDFLAGS'].split()
-+
- if env['DEBUG'] == 1:
--    env.Append(CCFLAGS=" ".join (debug_flags))
-+    env.Append(CCFLAGS=debug_flags)
-+    env.Append(CXXFLAGS=debug_flags)
- else:
--    env.Append(CCFLAGS=" ".join (opt_flags))
-+    env.Append(CCFLAGS=opt_flags)
-+    env.Append(CXXFLAGS=opt_flags)
- 
- #
- # warnings flags
-Index: libs/gtkmm2ext/SConscript
-===================================================================
---- libs/gtkmm2ext/SConscript	(revision 816)
-+++ libs/gtkmm2ext/SConscript	(working copy)
-@@ -57,8 +57,8 @@
- 
- gtkmm2ext.VersionBuild(['version.cc','gtkmm2ext/version.h'], 'SConscript')
- 
--gtkmm2ext.Append(CCFLAGS="-D_REENTRANT")
--gtkmm2ext.Append(CCFLAGS="-DLOCALEDIR=\\\""+final_prefix+"/share/locale\\\"")
-+gtkmm2ext.Append(CXXFLAGS="-D_REENTRANT")
-+gtkmm2ext.Append(CXXFLAGS="-DLOCALEDIR=\\\""+final_prefix+"/share/locale\\\"")
- 
- libgtkmm2ext = gtkmm2ext.SharedLibrary('gtkmm2ext', gtkmm2ext_files)
- 
 Index: gtk2_ardour/SConscript
 ===================================================================
---- gtk2_ardour/SConscript	(revision 816)
+--- gtk2_ardour/SConscript	(revision 1525)
 +++ gtk2_ardour/SConscript	(working copy)
-@@ -51,11 +51,11 @@
+@@ -66,11 +66,11 @@
  
  if gtkardour['DMALLOC']:
  	gtkardour.Merge([libraries['dmalloc']])
@@ -89,7 +16,7 @@ Index: gtk2_ardour/SConscript
  
  skipped_files=Split("""
  connection_editor.cc
-@@ -215,11 +215,11 @@
+@@ -241,7 +241,7 @@
  
  if env['VST']:
  	extra_sources += vst_files
@@ -98,12 +25,7 @@ Index: gtk2_ardour/SConscript
  
  if gtkardour['AUDIOUNITS']:
      extra_sources += audiounit_files
--    gtkardour.Append(CCFLAGS='-DHAVE_AUDIOUNITS')
-+    gtkardour.Append(CCFLAGS='-DHAVE_AUDIOUNITS')
-     gtkardour.Append(LINKFLAGS='-framework Carbon')
-     gtkardour.Merge([libraries['appleutility']])
-  
-@@ -228,7 +228,7 @@
+@@ -254,7 +254,7 @@
  
  intl_files += extra_sources
  
@@ -112,3 +34,49 @@ Index: gtk2_ardour/SConscript
  gtkardour.Append(CXXFLAGS="-DLOCALEDIR=\\\""+final_prefix+"/share/locale\\\"")
  
  versionflag = '-DVERSIONSTRING=\\\"' + env['VERSION'] + '\\\"'
+Index: libs/gtkmm2ext/SConscript
+===================================================================
+--- libs/gtkmm2ext/SConscript	(revision 1525)
++++ libs/gtkmm2ext/SConscript	(working copy)
+@@ -60,8 +60,8 @@
+ 
+ gtkmm2ext.VersionBuild(['version.cc','gtkmm2ext/version.h'], [])
+ 
+-gtkmm2ext.Append(CCFLAGS="-D_REENTRANT")
+-gtkmm2ext.Append(CCFLAGS="-DLOCALEDIR=\\\""+final_prefix+"/share/locale\\\"")
++gtkmm2ext.Append(CXXFLAGS="-D_REENTRANT")
++gtkmm2ext.Append(CXXFLAGS="-DLOCALEDIR=\\\""+final_prefix+"/share/locale\\\"")
+ 
+ libgtkmm2ext = gtkmm2ext.SharedLibrary('gtkmm2ext', gtkmm2ext_files)
+ 
+Index: libs/pbd/SConscript
+===================================================================
+--- libs/pbd/SConscript	(revision 1525)
++++ libs/pbd/SConscript	(working copy)
+@@ -48,7 +48,7 @@
+ 
+ conf = Configure(pbd)
+ if conf.CheckFunc('getmntent'):
+-    conf.env.Append(CCFLAGS="-DHAVE_GETMNTENT")
++    conf.env.Append(CXXFLAGS="-DHAVE_GETMNTENT")
+ if conf.CheckCHeader('execinfo.h'):
+     conf.env.Append(CXXFLAGS="-DHAVE_EXECINFO")
+ pbd = conf.Finish()
+Index: SConstruct
+===================================================================
+--- SConstruct	(revision 1525)
++++ SConstruct	(working copy)
+@@ -676,6 +676,13 @@
+     env.Append(CCFLAGS="-arch i386 -arch ppc")
+     env.Append(LINKFLAGS="-arch i386 -arch ppc")
+ 
++if os.environ.has_key('CFLAGS'):
++    env['CCFLAGS'] = os.environ['CFLAGS'].split()
++if os.environ.has_key('CXXFLAGS'):
++    env['CXXFLAGS'] = os.environ['CXXFLAGS'].split()
++if os.environ.has_key('LDFLAGS'):
++    env['LDFLAGS'] = os.environ['LDFLAGS'].split()
++
+ #
+ # warnings flags
+ #

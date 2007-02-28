@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/ardour/ardour-0.99.3.ebuild,v 1.1 2006/05/13 17:11:21 eldad Exp $
 
-inherit subversion
+inherit subversion flag-o-matic
 
 DESCRIPTION="multi-track hard disk recording software"
 HOMEPAGE="http://ardour.org/"
@@ -13,7 +13,7 @@ ESVN_PATCHES="${PN}-*.diff"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="nls debug sse fftw osc vst ladspa external-libs doc"
+IUSE="nls debug mmx 3dnow sse fftw osc vst ladspa external-libs doc"
 
 RDEPEND="
 	>=media-libs/liblrdf-0.3.6
@@ -61,16 +61,23 @@ src_unpack() {
 }
 
 src_compile() {
+	append-flags -fno-strict-aliasing
 	# Required for scons to "see" intermediate install location
 	mkdir -p ${D}
 
 	local myconf="PREFIX=/usr DESTDIR=${D}"
 	! use external-libs; myconf="${myconf} SYSLIBS=$?"
 	! use debug; myconf="${myconf} DEBUG=$?"
-	! use nls; myconf="${myconf} NLS=$?" 
-	! use fftw; myconf="${myconf} FFT_ANALYSIS=$?" 
-	! use osc; myconf="${myconf} LIBLO=$?" 
-	! use vst; myconf="${myconf} VST=$?" 
+	! use nls; myconf="${myconf} NLS=$?"
+	! use fftw; myconf="${myconf} FFT_ANALYSIS=$?"
+	! use osc; myconf="${myconf} LIBLO=$?"
+	! use vst; myconf="${myconf} VST=$?"
+	if use mmx || use 3dnow || use sse; then
+		use mmx && _mmx="-mmmx"
+		use 3dnow && _3dnow="-m3dnow"
+		use sse && _sse="-msse -DBUILD_SSE_OPTIMIZATIONS"
+		append-flags ${_mmx} ${_3dnow} ${_sse} -DARCH_X86
+	fi
 
 	scons \
 		${myconf} || die "make failed"
