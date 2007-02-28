@@ -1,16 +1,11 @@
 # Copyright 1999-2006 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/xine-lib/xine-lib-1.1.3_pre20060929.ebuild,v 1.5 2006/10/19 19:00:39 flameeyes Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/xine-lib/xine-lib-1.1.4-r1.ebuild,v 1.1 2007/02/09 04:46:07 flameeyes Exp $
 
 inherit cvs flag-o-matic toolchain-funcs libtool autotools
 
-PATCHLEVEL="61"
-
 DESCRIPTION="Core libraries for Xine movie player"
 HOMEPAGE="http://xine.sourceforge.net/"
-SRC_URI="
-	mirror://gentoo/${PN}-patches-${PATCHLEVEL}.tar.bz2
-"
 ECVS_SERVER="xine.cvs.sourceforge.net:/cvsroot/xine"
 ECVS_MODULE="${PN}"
 S="${WORKDIR}/${ECVS_MODULE}"
@@ -23,7 +18,7 @@ IUSE="
 aalib libcaca arts esd win32codecs nls dvd X directfb vorbis alsa gnome sdl
 speex theora ipv6 altivec opengl aac fbcon xv xvmc samba dxr3 vidix mng flac
 oss v4l xinerama vcd a52 mad imagemagick dts debug modplug gtk pulseaudio mmap
-doc
+doc truetype wavpack musepack xcb
 "
 
 RDEPEND="
@@ -44,7 +39,10 @@ RDEPEND="
 	sdl? ( >=media-libs/libsdl-1.1.5 )
 	dxr3? ( >=media-libs/libfame-0.9.0 )
 	vorbis? ( media-libs/libogg media-libs/libvorbis )
-	theora? ( media-libs/libogg media-libs/libvorbis media-libs/libtheora )
+	theora? (
+		media-libs/libogg media-libs/libvorbis
+		>=media-libs/libtheora-1.0_alpha6
+	)
 	speex? ( media-libs/libogg media-libs/libvorbis media-libs/speex )
 	libcaca? ( >=media-libs/libcaca-0.99_beta1 )
 	samba? ( net-fs/samba )
@@ -54,15 +52,18 @@ RDEPEND="
 	mad? ( media-libs/libmad )
 	imagemagick? ( media-gfx/imagemagick )
 	dts? ( || ( media-libs/libdca media-libs/libdts ) )
-	>=media-video/ffmpeg-0.4.9_p20060816
+	>=media-video/ffmpeg-0.4.9_p20070129
 	modplug? ( media-libs/libmodplug )
 	nls? ( virtual/libintl )
 	gtk? ( =x11-libs/gtk+-2* )
 	pulseaudio? ( media-sound/pulseaudio )
+	truetype? ( =media-libs/freetype-2* media-libs/fontconfig )
 	virtual/libiconv
+	wavpack? ( >=media-sound/wavpack-4.31 )
+	musepack? ( media-libs/libmpcdec )
+	xcb? ( >=x11-libs/libxcb-1.0 )
 	!=media-libs/xine-lib-0.9.13*
 "
-
 DEPEND="
 	${RDEPEND}
 	X? ( x11-libs/libXt
@@ -76,19 +77,13 @@ DEPEND="
 		media-gfx/transfig
 	)
 	dev-util/pkgconfig
+	sys-devel/libtool
+	nls? ( sys-devel/gettext )
 "
 
 src_unpack() {
-	unpack ${A}
 	cvs_src_unpack
 	cd "${S}"
-
-	# EPATCH_SUFFIX="patch" epatch "${WORKDIR}/patches"
-	epatch "${WORKDIR}/patches/120"*
-
-	epatch "${FILESDIR}"/${PN}-automess.diff
-
-#	autopoint --force || die
 	AT_M4DIR="m4" eautoreconf
 }
 
@@ -100,6 +95,7 @@ src_compile() {
 	if [[ $(tc-arch) == "x86" ]]; then
 		filter-flags -fforce-addr
 		filter-flags -momit-leaf-frame-pointer # break on gcc 3.4/4.x
+		filter-flags -fno-omit-frame-pointer #breaks per bug #149704
 		is-flag -O? || append-flags -O2
 	fi
 
@@ -136,16 +132,19 @@ src_compile() {
 		\
 		$(use_enable mng) \
 		$(use_with imagemagick) \
-		$(use_enable gtk gdkpxibuf) \
+		$(use_enable gtk gdkpixbuf) \
 		\
 		$(use_enable aac faad) \
-		$(use_enable flac) \
+		$(use_with flac libflac) \
 		$(use_with vorbis) \
 		$(use_with speex) \
 		$(use_with theora) \
+		$(use_with wavpack) \
+		$(use_enable modplug) \
 		$(use_enable a52) --with-external-a52dec \
 		$(use_enable mad) --with-external-libmad \
 		$(use_enable dts) --with-external-libdts \
+		$(use_enable musepack) --with-external-libmpcdec \
 		\
 		$(use_with X x) \
 		$(use_enable xinerama) \
@@ -158,6 +157,7 @@ src_compile() {
 		$(use_with libcaca caca) \
 		$(use_with sdl) \
 		$(use_enable xvmc) \
+		$(use_with xcb) \
 		\
 		$(use_enable oss) \
 		$(use_with alsa) \
@@ -167,16 +167,16 @@ src_compile() {
 		$(use_enable vcd) --without-internal-vcdlibs \
 		\
 		$(use_enable win32codecs w32dll) \
-		$(use_enable modplug) \
 		\
 		$(use_enable mmap) \
+		$(use_with truetype freetype) $(use_with truetype fontconfig) \
 		--enable-asf \
 		--with-external-ffmpeg \
 		--disable-optimizations \
-		--without-freetype \
+		--disable-syncfb \
 		${myconf} \
 		--with-xv-path=/usr/$(get_libdir) \
-		--with-w32-path=/usr/lib/win32 \
+		--with-w32-path=/usr/$(ABI=x86 get_libdir)/win32 \
 		--enable-fast-install \
 		--disable-dependency-tracking || die "econf failed"
 
@@ -184,10 +184,7 @@ src_compile() {
 }
 
 src_install() {
-	emake DESTDIR="${D}" install || die "Install failed"
-
-	dodoc AUTHORS ChangeLog README TODO doc/README* doc/faq/faq.txt
-	dohtml doc/faq/faq.html doc/hackersguide/*.html doc/hackersguide/*.png
-
-	rm -rf "${D}/usr/share/doc/xine"
+	emake -j1 DESTDIR="${D}" \
+		docdir="/usr/share/doc/${PF}" htmldir="/usr/share/doc/${PF}/html" \
+		install || die "Install failed"
 }
