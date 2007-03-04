@@ -6,7 +6,7 @@ inherit mono
 
 MY_P="gnome-subtitles-${PV}"
 DESCRIPTION="Gnome Subtitles is a subtitle editor for the GNOME desktop"
-HOMEPAGE="http://gsubtitles.sf.net"
+HOMEPAGE="http://gnome-subtitles.sf.net"
 SRC_URI="mirror://sourceforge/${PN}/${MY_P}.tar.gz"
 S="${WORKDIR}/${MY_P}"
 
