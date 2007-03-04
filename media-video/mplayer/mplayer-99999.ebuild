@@ -71,7 +71,7 @@ RDEPEND="
 		x264? ( >=media-libs/x264-45 )
 	)
 	esd? ( media-sound/esound )
-	external-ffmpeg? ( media-video/ffmpeg )
+	external-ffmpeg? ( ~media-video/ffmpeg-9999 )
 	enca? ( app-i18n/enca )
 	gif? ( media-libs/giflib )
 	ggi? ( media-libs/libggi )
@@ -217,8 +217,10 @@ src_compile() {
 		teh_conf cdparanoia
 	fi
 
-	if use external-ffmpeg; then # use shared ffmpeg libs
-		for lib in avutil avcodec avformat postproc; do
+	if use external-ffmpeg; then
+	# use shared ffmpeg libs (not supported),
+	# except for avutil (actively not supported)
+		for lib in avcodec avformat postproc; do
 			myconf="${myconf} --disable-lib$lib"
 		done
 	fi
