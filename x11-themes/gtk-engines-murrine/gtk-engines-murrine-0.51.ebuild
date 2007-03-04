@@ -7,11 +7,18 @@ MY_P="${MY_PN}-${PV}"
 CFGRATOR="${MY_PN}-configurator-0.5"
 DESCRIPTION="Murrine GTK+2 Cairo Engine"
 HOMEPAGE="http://cimi.netsons.org/pages/murrine.php"
+BASE_URI="http://cimi.netsons.org/media/download_gallery/"
 SRC_URI="
-	http://cimi.netsons.org/media/download_gallery/${MY_PN}/${MY_P}.tar.bz2
-	http://cimi.netsons.org/media/download_gallery/MurrineThemePack.tar.bz2
-	gnome? (
-		http://cimi.netsons.org/media/download_gallery/${MY_PN}/${CFGRATOR}.tar.bz2
+	${BASE_URI}${MY_PN}/${MY_P}.tar.bz2
+	${BASE_URI}MurrineThemePack.tar.bz2
+	${BASE_URI}MurrinaAquaIsh.tar.bz2
+	${BASE_URI}MurrinaFancyCandy.tar.bz2
+	${BASE_URI}MurrinaGilouche.tar.bz2
+	${BASE_URI}MurrinaGilouche.tar.bz2
+	${BASE_URI}MurrinaVerdeOlivo.tar.bz2
+	gnome? ( ${BASE_URI}${MY_PN}/${CFGRATOR}.tar.bz2 )
+	metacity? (
+		http://www.kernow-webhosting.com/~bvc/theme/mcity/Murrine.tar.gz
 	)
 "
 RESTRICT="primaryuri"
@@ -20,7 +27,7 @@ S="${WORKDIR}/${MY_P}"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="gnome"
+IUSE="gnome metacity"
 
 RDEPEND="
 	>=x11-libs/gtk+-2.8
@@ -40,8 +47,8 @@ src_compile() {
 
 src_install() {
 	einstall || die
-	dodir /usr/share/themes
-	cp -r ${WORKDIR}/Murrina* "${D}"usr/share/themes
+	insinto /usr/share/themes
+	doins -r ${WORKDIR}/Murrin*
 	if use gnome; then
 		cd ${WORKDIR}/${CFGRATOR}/files
 		exeinto /usr/bin

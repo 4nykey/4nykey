@@ -6,20 +6,26 @@ MY_PN="${PN##*-}-engine"
 MY_P="${MY_PN}-${PV}"
 DESCRIPTION="Candido is the Gtk2 cairo-based engine"
 HOMEPAGE="http://candido.berlios.de/"
+BASE_URI="http://candido.berlios.de/media/download_gallery/"
 SRC_URI="
 	mirror://berlios/candido/${MY_P}.tar.bz2
-	http://candido.berlios.de/media/download_gallery/Candido.tar.bz2
-	http://candido.berlios.de/media/download_gallery/Candido-Graphite.tar.bz2
-	http://candido.berlios.de/media/download_gallery/Candido-NeoGraphite.tar.bz2
-	gdm? ( http://candido.berlios.de/media/download_gallery/Candido-Gdm.tar.bz2 )
+	${BASE_URI}Candido.tar.bz2
+	${BASE_URI}Candido-Calm.tar.bz2
+	${BASE_URI}Candido-Candy.tar.bz2
+	${BASE_URI}Candido-DarkOrange.tar.bz2
+	${BASE_URI}Candido-Hybrid.tar.bz2
+	${BASE_URI}Candido-Graphite.tar.bz2
+	${BASE_URI}Candido-Redux.tar.bz2
+	${BASE_URI}Candido-NeoGraphite.tar.bz2
+	gdm? ( ${BASE_URI}Candido-Gdm.tar.bz2 )
 	metacity? (
 		mirror://berlios/candido/Candido-Engine-Metacity.tar.bz2
-		http://candido.berlios.de/media/download_gallery/Candido-Selected.tar.bz2
-		http://candido.berlios.de/media/download_gallery/Candido-Graphite-Metacity-Fat.tar.bz2
+		${BASE_URI}Candido-Selected.tar.bz2
+		${BASE_URI}Candido-Graphite-Metacity-Fat.tar.bz2
 	)
 	kde? (
-		http://candido.berlios.de/media/download_gallery/Candido-Kde.tar.bz2
-		http://candido.berlios.de/media/download_gallery/Candido-Graphite-Kde.tar.bz2
+		${BASE_URI}Candido-Kde.tar.bz2
+		${BASE_URI}Candido-Graphite-Kde.tar.bz2
 	)
 "
 RESTRICT="primaryuri"
@@ -35,9 +41,6 @@ DEPEND=">=x11-libs/gtk+-2.8
 S="${WORKDIR}/${MY_P}"
 
 pkg_setup() {
-	if has_version '>=x11-libs/gtk+-2.10'; then
-		GTK210=1
-	fi
 	if use kde; then
 		KDEDIR="$(kde-config --prefix)/share/apps/kdisplay/color-schemes"
 	fi
@@ -66,13 +69,6 @@ src_install() {
 	fi
 
 	# remaining: gtk+/metacity themes
-	dodir ${GTKDIR}
-	cp -r "${WORKDIR}"/Candido* "${D}"${GTKDIR}
-
-	if [[ -n "GTK210" ]]; then
-		find "${D}"usr/share/themes -type f -name gtkrc | \
-			xargs sed -i '/GTK_SHADOW_NONE/d'
-	fi
-
-	chmod -R a=rX "${D}"{${GTKDIR},${GDMDIR}}/
+	insinto ${GTKDIR}
+	doins -r "${WORKDIR}"/Candido* "${D}"${GTKDIR}
 }
