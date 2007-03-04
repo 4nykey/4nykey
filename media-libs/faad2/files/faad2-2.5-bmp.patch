@@ -1,21 +1,7 @@
-Index: configure.in
-===================================================================
-RCS file: /cvsroot/faac/faad2/configure.in,v
-retrieving revision 1.31
-diff -u -r1.31 configure.in
---- configure.in	13 Aug 2006 14:13:31 -0000	1.31
-+++ configure.in	13 Aug 2006 21:48:31 -0000
-@@ -29,9 +29,6 @@
- AC_ARG_WITH(xmms,[  --with-xmms             compile XMMS-1 plugin],
- 	     WITHXMMS=$withval, WITHXMMS=no)
- 
--AC_ARG_WITH(bmp,[  --with-bmp              compile beep media player plugin],
--	     [WITHBMP=$withval;WITHXMMS=$withval], [WITHBMP=no])
--
- AC_ARG_WITH(drm,[  --with-drm              compile libfaad with DRM support],
- 	     WITHDRM=$withval, WITHDRM=no)
- 
-@@ -114,12 +111,6 @@
+diff -ru faad2/configure.in faad2_nu/configure.in
+--- faad2/configure.in	2006-08-13 17:13:31.000000000 +0300
++++ faad2_nu/configure.in	2007-03-04 14:33:17.000000000 +0200
+@@ -114,12 +114,6 @@
   AM_CONDITIONAL(HAVE_XMMS, false)
  fi
  
@@ -28,41 +14,23 @@ diff -u -r1.31 configure.in
  if test x$WITHDRM = xyes; then
    AC_DEFINE(DRM, 1, [Define if you want to use libfaad together with Digital Radio Mondiale (DRM)])
    AC_DEFINE(DRM_PS, 1, [Define if you want support for Digital Radio Mondiale (DRM) parametric stereo])
-Index: plugins/Makefile.am
-===================================================================
-RCS file: /cvsroot/faac/faad2/plugins/Makefile.am,v
-retrieving revision 1.10
-diff -u -r1.10 Makefile.am
---- plugins/Makefile.am	7 Aug 2006 18:47:45 -0000	1.10
-+++ plugins/Makefile.am	13 Aug 2006 21:48:31 -0000
-@@ -8,10 +8,6 @@
- if HAVE_XMMS
- SUBDIRS = xmms
- else
--if HAVE_BMP
--SUBDIRS = bmp
--else
- SUBDIRS =
--endif #HAVE_BMP
- endif #HAVE_XMMS
- endif #HAVE_MPEG4IP_PLUG
-Index: plugins/xmms/src/Makefile.am
-===================================================================
-RCS file: /cvsroot/faac/faad2/plugins/xmms/src/Makefile.am,v
-retrieving revision 1.11
-diff -u -r1.11 Makefile.am
---- plugins/xmms/src/Makefile.am	7 Aug 2006 18:47:45 -0000	1.11
-+++ plugins/xmms/src/Makefile.am	13 Aug 2006 21:48:31 -0000
-@@ -1,12 +1,6 @@
--if HAVE_BMP
--libdir=$(shell pkg-config --variable=input-plugin-dir bmp)
--local_CFLAGS=$(shell pkg-config --cflags bmp)
--local_LDFLAGS=$(shell pkg-config --libs bmp)
--else
- local_CFLAGS=`$(XMMS_CONFIG) --cflags` -Wall
- local_LDFLAGS=`$(XMMS_CONFIG) --libs`
- libdir = `$(XMMS_CONFIG) --input-plugin-dir`
--endif #HAVE_BMP
- lib_LTLIBRARIES = libmp4.la
+@@ -128,10 +122,6 @@
+ AC_CONFIG_FILES(libfaad/Makefile)
+ AC_CONFIG_FILES(common/Makefile)
+ AC_CONFIG_FILES(common/mp4ff/Makefile)
+-AC_CONFIG_FILES(plugins/Makefile)
+-AC_CONFIG_FILES(plugins/xmms/Makefile)
+-AC_CONFIG_FILES(plugins/xmms/src/Makefile)
+-AC_CONFIG_FILES(plugins/mpeg4ip/Makefile)
+ AC_CONFIG_FILES(faad2.spec)
+ AC_CONFIG_FILES(frontend/Makefile)
+ AC_CONFIG_FILES(Makefile)
+diff -ru faad2/Makefile.am faad2_nu/Makefile.am
+--- faad2/Makefile.am	2004-07-27 11:52:20.000000000 +0300
++++ faad2_nu/Makefile.am	2007-03-04 14:33:28.000000000 +0200
+@@ -1,4 +1,4 @@
+-SUBDIRS = libfaad common frontend plugins
++SUBDIRS = libfaad common frontend
  
- libmp4_la_CFLAGS = $(local_CFLAGS) -Wall \
+ EXTRA_DIST = faad2.spec
+ 

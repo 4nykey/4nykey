@@ -2,50 +2,38 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/faad2/faad2-2.0-r13.ebuild,v 1.1 2006/06/17 16:26:47 flameeyes Exp $
 
-inherit eutils flag-o-matic autotools
+inherit flag-o-matic autotools
 
 DESCRIPTION="AAC audio decoding library"
 HOMEPAGE="http://www.audiocoding.com/"
 SRC_URI="mirror://sourceforge/faac/${PN}-${PV/_/-}.tar.gz"
+S="${WORKDIR}/${PN}"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
 IUSE="mp4"
 
-RDEPEND="
-	mp4? ( media-video/mpeg4ip )
-"
+RDEPEND=""
 DEPEND="
 	${RDEPEND}
-	app-text/dos2unix
 "
-
-S="${WORKDIR}/${PN}"
 
 src_unpack() {
 	unpack ${A}
 	cd ${S}
-
-	find ${S} -type f -print0 | xargs -0 dos2unix -q
-#	EPATCH_SUFFIX="patch" epatch "${WORKDIR}/patches"
-	epatch ${FILESDIR}/${PN}-*.patch
+	epatch "${FILESDIR}"/${PN}-*.patch
 	eautoreconf
 }
 
 src_compile() {
-	# see #34392
-	filter-flags -mfpmath=sse
-
+	filter-flags -mfpmath=sse # see #34392
 	append-flags -fno-strict-aliasing
 
 	# drm needed for nothing but doesn't hurt
 	#  but breakes decoding of he-aac 5.1 streams
 	econf \
 		--without-drm \
-		--without-bmp \
-		--without-xmms \
-		$(use_with mp4 mpeg4ip) \
 		|| die
 
 	emake || die
