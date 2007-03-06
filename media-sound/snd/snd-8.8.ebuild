@@ -2,21 +2,23 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/snd/snd-7.15.ebuild,v 1.7 2006/01/27 22:10:38 ticho Exp $
 
-IUSE="alsa esd fam fftw gsl gtk guile jack ladspa motif nls opengl ruby vorbis
-mp3 speex flac timidity shorten wavpack"
+inherit multilib eutils
 
-inherit multilib
-
-S="${WORKDIR}/${P/\.*//}"
 DESCRIPTION="Snd is a sound editor"
 HOMEPAGE="http://ccrma.stanford.edu/software/snd/"
-SRC_URI="ftp://ccrma-ftp.stanford.edu/pub/Lisp/${P}.tar.gz"
+SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
+S="${WORKDIR}/${P%%.*}"
 
 SLOT="0"
 LICENSE="as-is"
 KEYWORDS="~x86"
+IUSE="
+alsa esd fam fftw gsl gtk guile jack ladspa motif nls opengl ruby vorbis mp3
+speex flac timidity shorten wavpack
+"
 
-RDEPEND="media-libs/audiofile
+DEPEND="
+	media-libs/audiofile
 	motif? ( x11-libs/openmotif )
 	alsa? ( media-libs/alsa-lib )
 	esd? ( media-sound/esound )
@@ -30,16 +32,20 @@ RDEPEND="media-libs/audiofile
 	nls? ( sys-devel/gettext )
 	opengl? ( virtual/opengl )
 	ruby? ( virtual/ruby )
+"
+RDEPEND="
+	${DEPEND}
 	vorbis? ( media-sound/vorbis-tools )
 	mp3? ( virtual/mpg123 )
 	speex? ( media-libs/speex )
 	flac? ( media-libs/flac )
 	timidity? ( media-sound/timidity++ )
 	shorten? ( media-sound/shorten )
-	wavpack? ( media-sound/wavpack )"
+	wavpack? ( media-sound/wavpack )
+"
 
 pkg_setup() {
-	# some quotes from configure
+	# few quotes from configure
 	if ! use motif && ! use gtk && ! use guile && ! use ruby; then
 		ewarn "snd needs either an extension language (Guile or Ruby),"
 		ewarn "or a graphics toolkit (GTK or Motif), or preferably both."
@@ -57,9 +63,14 @@ pkg_setup() {
 	fi
 }
 
+src_unpack() {
+	unpack ${A}
+	cd ${S}
+	epatch "${FILESDIR}"/${PN}-*.diff
+}
+
 src_compile() {
 	local myconf
-
 	if use opengl; then
 		if use guile; then
 			myconf="${myconf} --with-gl"
@@ -84,39 +95,14 @@ src_compile() {
 		$(use_enable nls) \
 		$(use_with ruby) \
 		--without-builtin-gtkrc \
-		--with-float-samples \
-		--with-sample-width=16 \
-		--with-modules \
-		--with-midi \
-		--with-shared-sndlib \
-		--disable-deprecated \
+		--with-doc-dir=/usr/share/doc/${PF}/html \
 		${myconf} || die
 
 	emake || die
 }
 
 src_install () {
-	dobin snd
+	emake DESTDIR="${D}" install || die
 	dodoc README.Snd HISTORY.Snd TODO.Snd Snd.ad
 	dohtml -r *.html *.png tutorial
-
-	insinto /etc
-
-	if use guile; then
-		echo \
-			"(set! %load-path (cons \"/usr/$(get_libdir)/snd/guile\" %load-path))">\
-			${T}/snd_guile.conf
-		echo "(set! (html-dir) \"/usr/share/doc/${P}/html\")" >> ${T}/snd_guile.conf
-		doins ${T}/snd_guile.conf
-		insinto /usr/$(get_libdir)/snd/guile
-		doins *.scm
-	fi
-
-	if use ruby; then
-		echo "$:.push(\"/usr/$(get_libdir)/snd/ruby\")" > ${T}/snd_ruby.conf
-		echo "set_html_dir(\"/usr/share/doc/${P}/html\")" >> ${T}/snd_ruby.conf
-		doins ${T}/snd_ruby.conf
-		insinto /usr/$(get_libdir)/snd/ruby
-		doins *.rb
-	fi
 }
