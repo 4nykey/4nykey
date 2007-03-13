@@ -12,7 +12,7 @@ S="${WORKDIR}/${PN}"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="mp4"
+IUSE=""
 
 RDEPEND=""
 DEPEND="
@@ -41,12 +41,5 @@ src_compile() {
 
 src_install() {
 	make DESTDIR=${D} install || die
-
 	dodoc AUTHORS ChangeLog NEWS README README.linux TODO
-
-	# unneeded include, <systems.h> breaks building of apps, but
-	# it is necessary because includes <sys/types.h>,
-	# which is needed by /usr/include/mp4.h... so we just
-	# include <sys/types.h> instead.  See bug #55767
-	dosed "s:\"mp4ff_int_types.h\":<stdint.h>:" /usr/include/mp4ff.h
 }
