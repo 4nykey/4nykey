@@ -112,14 +112,9 @@ src_unpack() {
 	sed -i -e "s:LIBOBJFLAGS=\"\":LIBOBJFLAGS=\'\$\(PIC\)\':" configure
 
 	sed -i 's:\(logfile="config\)\.err:\1.log:' configure
-	has_version '>=media-libs/faad2-2.1' && \
-		sed -i 's:faac\(DecOpen\):NeAAC\1:' configure
 
 	# To make sure the ffserver test will work 
 	sed -i -e "s:-e debug=off::" tests/server-regression.sh
-
-	# skip running ldconfig on make install
-	sed -i /LDCONFIG/d Makefile
 }
 
 teh_conf() {
@@ -173,7 +168,7 @@ src_compile() {
 
 src_install() {
 	use doc && make documentation
-	make DESTDIR=${D} install || die "Install Failed"
+	make DESTDIR=${D} LDCONFIG=/bin/true install || die "Install Failed"
 
 	dodoc Changelog CREDITS README MAINTAINERS doc/*.txt
 }

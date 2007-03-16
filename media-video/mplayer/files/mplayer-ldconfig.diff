@@ -1,0 +1,39 @@
+Index: libdha/Makefile
+===================================================================
+--- libdha/Makefile	(revision 22614)
++++ libdha/Makefile	(working copy)
+@@ -2,7 +2,7 @@
+ 
+ MAJOR_VERSION = 1
+ MINOR_VERSION = 0
+-VERSION = $(MAJOR_VERSION).$(MINOR_VERSION)
++VERSION = $(MAJOR_VERSION).$(MINOR_VERSION).0
+ 
+ LIBNAME = libdha.so
+ ifeq ($(TARGET_WIN32),yes)
+@@ -37,9 +37,9 @@
+ ifeq ($(TARGET_WIN32),yes)
+ 	$(AR) r $@ $^
+ else
+-	$(CC) -shared -Wl,-soname -Wl,$@ -o $@ $^ $(EXTRALIBS)
+-	ln -sf $@ $@.$(VERSION)
+-	ln -sf $@ $@.$(MAJOR_VERSION)
++	$(CC) -shared -Wl,-soname -Wl,$@.$(MAJOR_VERSION) -o $@.$(VERSION) $^ $(EXTRALIBS)
++	ln -sf $@.$(VERSION) $@
++	ln -sf $@.$(VERSION) $@.$(MAJOR_VERSION)
+ endif
+ 
+ pci_names.c:	oth/pci.db
+@@ -58,9 +58,9 @@
+ 
+ install:
+ 	-mkdir -p $(LIBDIR)
+-	$(INSTALL) -m 755 $(INSTALLSTRIP) -p $(LIBNAME) $(LIBDIR)/$(LIBNAME)
+-	ln -sf $(LIBNAME) $(LIBDIR)/$(LIBNAME).$(MAJOR_VERSION)
+-	-$(LDCONFIG)
++	$(INSTALL) -m 755 $(INSTALLSTRIP) -p $(LIBNAME).$(VERSION) $(LIBDIR)
++	ln -sf $(LIBNAME).$(VERSION) $(LIBDIR)/$(LIBNAME).$(MAJOR_VERSION)
++	ln -sf $(LIBNAME).$(VERSION) $(LIBDIR)/$(LIBNAME)
+ 
+ uninstall:
+ 	rm -f $(LIBDIR)/$(LIBNAME) $(LIBDIR)/$(LIBNAME).$(MAJOR_VERSION) $(LIBDIR)/$(LIBNAME).$(VERSION)

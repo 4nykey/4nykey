@@ -43,6 +43,7 @@ src_compile() {
 		--extra-cflags="${CFLAGS}"\
 		--extra-ldflags="$LDFLAGS" \
 		${myconf} || die
+	touch .depend
 
 	einfo "Make lib and CLI encoder"
 	emake || die

@@ -171,6 +171,9 @@ src_compile () {
 	if use wxwindows || use skins; then
 		myconf="${myconf} --with-wx-config=${WX_CONFIG_NAME}"
 		myconf="${myconf} --with-wx-config-path=${WX_CONFIG_PREFIX}"
+		# quoting configure
+		elog "wxWidgets support is deprecated and will be removed"
+		elog "Consider using Qt4 instead"
 	fi
 
 	ac_cv_c_unroll_loops="no" \

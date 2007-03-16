@@ -192,8 +192,6 @@ src_unpack() {
 	# skip make distclean/depend
 	touch .developer
 	sed -i '/\$(MAKE) depend/d' Makefile
-	# skip stripping
-	sed -i 's:\(_stripbinaries=\).*:\1no:' configure
 }
 
 src_compile() {
@@ -435,12 +433,14 @@ src_install() {
 
 	einfo "Make install"
 	make prefix=${D}/usr \
-	     BINDIR=${D}/usr/bin \
-		 LIBDIR=${D}/usr/$(get_libdir) \
-	     CONFDIR=${D}/usr/share/mplayer \
-	     DATADIR=${D}/usr/share/mplayer \
-	     MANDIR=${D}/usr/share/man \
-	     install || die "Failed to install MPlayer!"
+		BINDIR=${D}/usr/bin \
+		LIBDIR=${D}/usr/$(get_libdir) \
+		CONFDIR=${D}/usr/share/mplayer \
+		DATADIR=${D}/usr/share/mplayer \
+		MANDIR=${D}/usr/share/man \
+		INSTALLSTRIP='' \
+		LDCONFIG=/bin/true \
+		install || die "Failed to install MPlayer!"
 	einfo "Make install completed"
 
 	dodoc AUTHORS ChangeLog README
