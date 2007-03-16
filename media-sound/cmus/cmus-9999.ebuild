@@ -12,8 +12,10 @@ EGIT_PATCHES="${PN}-*.diff"
 LICENSE="GPL-2"
 KEYWORDS="~x86"
 SLOT="0"
-IUSE="alsa arts flac oss mad modplug vorbis musepack ao unicode aac mp4
-zsh-completion"
+IUSE="
+alsa arts flac oss mad modplug vorbis musepack ao unicode aac mp4
+zsh-completion ffmpeg
+"
 
 RDEPEND="
 	sys-libs/ncurses
@@ -29,6 +31,7 @@ RDEPEND="
 		media-libs/faad2
 		mp4? ( media-libs/libmp4v2 )
 	)
+	ffmpeg? ( media-video/ffmpeg )
 "
 DEPEND="
 	${RDEPEND}
@@ -63,6 +66,7 @@ src_compile() {
 	teh_conf oss
 	teh_conf aac
 	teh_conf mp4
+	teh_conf ffmpeg
 
 	./configure \
 		prefix=/usr \
