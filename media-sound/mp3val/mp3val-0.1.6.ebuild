@@ -6,7 +6,7 @@ inherit toolchain-funcs
 
 DESCRIPTION="MP3val is a tool for MPEG audio files validation"
 HOMEPAGE="http://mp3val.sourceforge.net/"
-SRC_URI="mirror://sourceforge/${PN}/${P}-src.tar.bz2"
+SRC_URI="mirror://sourceforge/${PN}/${P}-src.tar.gz"
 S="${WORKDIR}"
 
 LICENSE="GPL-2"
@@ -21,6 +21,7 @@ src_compile() {
 
 src_install() {
 	dobin mp3val
+	dodoc changelog.txt
 	dohtml manual.html
 }
 
