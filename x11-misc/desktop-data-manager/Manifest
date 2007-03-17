@@ -1,8 +1,2 @@
 DIST desktop-data-manager_0.8.10_src.tar.gz 805127 RMD160 6251bfd581e4b3677a732104ff8a82c790939b8f SHA1 b23bad24c41bf300035c67ca63a15bdd79bb7ae2 SHA256 9e20168046820c87cbc8bde41d41a72f82946a497da13478b898e8a7876c34b1
 EBUILD desktop-data-manager-0.8.10.ebuild 550 RMD160 314db3bd71c24dd3ec2e963f815ddf7d26080128 SHA1 3ef7dda89a194b3767e74893d617509263632e92 SHA256 abb8abccff72287e9f81e9e20642dfc7dea8f789c297ae1fc774a0bf94a02e2d
-MD5 4eb88075a34c34be5ae371a35846cc1d desktop-data-manager-0.8.10.ebuild 550
-RMD160 314db3bd71c24dd3ec2e963f815ddf7d26080128 desktop-data-manager-0.8.10.ebuild 550
-SHA256 abb8abccff72287e9f81e9e20642dfc7dea8f789c297ae1fc774a0bf94a02e2d desktop-data-manager-0.8.10.ebuild 550
-MD5 6139f6524cca4b9fc50b2422a4c7d18f files/digest-desktop-data-manager-0.8.10 295
-RMD160 f632b76d5ad649a8a1672d51636503b7d9962bf0 files/digest-desktop-data-manager-0.8.10 295
-SHA256 42adb60e2e8b8cf0a436264c1e31680341e1a2ff04594f28ce9b9630851d1c4f files/digest-desktop-data-manager-0.8.10 295
