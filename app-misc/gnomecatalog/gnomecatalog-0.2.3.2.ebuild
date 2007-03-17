@@ -16,7 +16,10 @@ IUSE="nls"
 
 RDEPEND="
 	dev-python/gnome-python
-	>=dev-python/pysqlite-2
+	|| (
+		>=dev-lang/python-2.5
+		( <virtual/python-2.5 >=dev-python/pysqlite-2 )
+	)
 	!dev-python/mmpython
 "
 DEPEND="

@@ -1,8 +1,2 @@
 DIST gnomecatalog_0.2.3-2.tar.gz 360092 RMD160 2ccbb316e2cf272a07f6df305cafc7071ef7f95f SHA1 e353c6ea6587a8abba4d5ecd75f0dda5f86f7c02 SHA256 18f39ed555368078144fbb4dc67b06de4154bcd29bb7df84da905b7e44555c02
-EBUILD gnomecatalog-0.2.3.2.ebuild 831 RMD160 beb906aacdc144119db54ac7cff8aff35c32317c SHA1 5ecd642b446d112f4d833e5942501704957658fe SHA256 d4fb0c7c44bf69cdb2e6f773bd3d4a17dd3b6545669cdea9d8bafc3d207ab157
-MD5 09315d064c3b2b3c766791a8dc06f04f gnomecatalog-0.2.3.2.ebuild 831
-RMD160 beb906aacdc144119db54ac7cff8aff35c32317c gnomecatalog-0.2.3.2.ebuild 831
-SHA256 d4fb0c7c44bf69cdb2e6f773bd3d4a17dd3b6545669cdea9d8bafc3d207ab157 gnomecatalog-0.2.3.2.ebuild 831
-MD5 1b49b2f3c7265bf6df6ad5e56ef66506 files/digest-gnomecatalog-0.2.3.2 262
-RMD160 165466a03b0ec5ad955cd49b3475d52a41abf284 files/digest-gnomecatalog-0.2.3.2 262
-SHA256 7e5daf1dd10af9c35739bcae5179d76bf4ebc98f9f7124862a645091bc82e71a files/digest-gnomecatalog-0.2.3.2 262
+EBUILD gnomecatalog-0.2.3.2.ebuild 889 RMD160 28237b8c5d61cf60c2727f2e346928c5c43840eb SHA1 aaa46ccf379bd7cf77c6d360f577ac2f841cf191 SHA256 ab588a492e90e0d02f1bab58661644f396413db36b0d9e64db0f90de2265a02e
