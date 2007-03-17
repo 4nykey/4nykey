@@ -71,7 +71,10 @@ src_compile() {
 	./configure \
 		prefix=/usr \
 		${myconf} || die
-	emake || die
+
+	# breaks tags reading for mpcs
+	sed -i Makefile -e /_FILE_OFFSET_BITS/d
+	emake V=2 || die
 }
 
 src_install() {
