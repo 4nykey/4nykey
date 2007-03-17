@@ -14,17 +14,17 @@ AT_M4DIR="m4"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="dbus nls spell xscreensaver trayicon ssl gnome avahi srv libnotify"
+IUSE="dbus nls spell idle trayicon ssl gnome avahi srv libnotify"
 
 DEPEND="
 	>=virtual/python-2.4
 	|| (
-		( <virtual/python-2.5 >=dev-python/pysqlite-2.0.4 )
 		>=dev-lang/python-2.5
+		( <virtual/python-2.5 >=dev-python/pysqlite-2.0.4 )
 	)
 	>=dev-python/pygtk-2.6
 	!gnome? ( spell? ( >=app-text/gtkspell-2.0.4 ) )
-	xscreensaver? ( x11-libs/libXScrnSaver )
+	idle? ( x11-libs/libXScrnSaver )
 "
 RDEPEND="
 	${DEPEND}
@@ -56,13 +56,21 @@ DEPEND="
 "
 
 src_compile() {
+	local myconf
+	# gnome-python-extras already provides those
+	if ! use gnome; then
+		myconf="$(use_enable trayicon)"
+		myconf="${myconf} $(use_enable spell gtkspell)"
+	else
+		myconf="--disable-gtkspell --disable-trayicon"
+	fi
+
 	econf \
 		$(use_enable nls) \
 		$(use_enable dbus remote) \
-		$(use_enable spell gtkspell) \
-		$(use_enable xscreensaver idle) \
-		$(use_enable trayicon) \
-	|| die
+		$(use_enable idle) \
+		${myconf} \
+		|| die
 	emake || die
 }
 
