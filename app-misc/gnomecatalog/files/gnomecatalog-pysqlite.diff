@@ -1,0 +1,13 @@
+--- src/lib/gnomecatalog/storage.py.orig	2005-08-15 13:27:29.000000000 +0300
++++ src/lib/gnomecatalog/storage.py	2007-03-20 00:10:40.000000000 +0200
+@@ -1,6 +1,8 @@
+ # -*- coding: UTF-8 -*-
+-from pysqlite2 import dbapi2 as pysqlite
+-import pysqlite2
++try:
++    import sqlite3 as pysqlite
++except ImportError:
++    from pysqlite2 import dbapi2 as pysqlite
+ 
+ #import sqlite
+ import string, os, pprint

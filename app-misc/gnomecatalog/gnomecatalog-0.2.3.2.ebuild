@@ -12,14 +12,17 @@ S="${WORKDIR}/${PN}"
 KEYWORDS="~x86"
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="nls"
+IUSE="nls pysqlite"
 
 RDEPEND="
 	dev-python/gnome-python
-	|| (
-		>=dev-lang/python-2.5
-		( <virtual/python-2.5 >=dev-python/pysqlite-2 )
+	!pysqlite? (
+		|| (
+			>=dev-lang/python-2.5
+			( >=dev-python/pysqlite-2 )
+		)
 	)
+	pysqlite? ( >=dev-python/pysqlite-2 )
 	!dev-python/mmpython
 "
 DEPEND="
@@ -30,9 +33,21 @@ DEPEND="
 PYTHON_MODNAME="${PN} mmpython"
 DOCS="AUTHORS todo"
 
+pkg_setup() {
+	python_version
+	if test ${PYVER_MAJOR}${PYVER_MINOR} -ge 25 && use !pysqlite && \
+	! built_with_use 'dev-lang/python' 'sqlite'; then
+		eerror "This package requires sqlite bindings for Python."
+		eerror "Either remerge dev-lang/python with USE=sqlite,"
+		eerror "or remerge this package with USE=pysqlite"
+	fi
+}
+
 src_unpack() {
 	unpack ${A}
-	use nls || sed -i /LC_MESSAGES/d ${S}/setup.py
+	cd ${S}
+	use nls || sed -i /LC_MESSAGES/d setup.py
+	epatch "${FILESDIR}"/${PN}-pysqlite.diff
 }
 
 src_compile() {

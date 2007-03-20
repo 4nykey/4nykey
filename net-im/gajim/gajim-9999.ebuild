@@ -1,8 +1,8 @@
 # Copyright 1999-2005 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-im/gajim/gajim-0.9.1.ebuild,v 1.1 2005/12/27 17:46:46 svyatogor Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-im/gajim/gajim-0.11.1.ebuild,v 1.1 2007/03/03 15:05:55 welp Exp $
 
-inherit subversion autotools
+inherit subversion autotools python
 
 DESCRIPTION="Jabber client written in PyGTK"
 HOMEPAGE="http://www.gajim.org/"
@@ -14,14 +14,17 @@ AT_M4DIR="m4"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="dbus nls spell idle trayicon ssl gnome avahi srv libnotify"
+IUSE="dbus nls spell idle trayicon ssl gnome avahi srv libnotify pysqlite"
 
 DEPEND="
 	>=virtual/python-2.4
-	|| (
-		>=dev-lang/python-2.5
-		( <virtual/python-2.5 >=dev-python/pysqlite-2.0.4 )
+	!pysqlite? (
+		|| (
+			>=dev-lang/python-2.5
+			( >=dev-python/pysqlite-2 )
+		)
 	)
+	pysqlite? ( >=dev-python/pysqlite-2 )
 	>=dev-python/pygtk-2.6
 	!gnome? ( spell? ( >=app-text/gtkspell-2.0.4 ) )
 	idle? ( x11-libs/libXScrnSaver )
@@ -55,6 +58,23 @@ DEPEND="
 	dev-util/pkgconfig
 "
 
+pkg_setup() {
+	python_version
+	if test ${PYVER_MAJOR}${PYVER_MINOR} -ge 25 && use !pysqlite && \
+	! built_with_use 'dev-lang/python' 'sqlite'; then
+		eerror "This package requires sqlite bindings for Python."
+		eerror "Either remerge dev-lang/python with USE=sqlite,"
+		eerror "or remerge this package with USE=pysqlite"
+	fi
+	if use avahi; then
+		if ! built_with_use net-dns/avahi dbus gtk python; then
+			eerror "The following USE flags are required for correct avahi"
+			eerror "support: dbus gtk python"
+			die "Please rebuild avahi with these use flags enabled."
+		fi
+	fi
+}
+
 src_compile() {
 	local myconf
 	# gnome-python-extras already provides those
@@ -69,6 +89,7 @@ src_compile() {
 		$(use_enable nls) \
 		$(use_enable dbus remote) \
 		$(use_enable idle) \
+		--docdir="${D}usr/share/doc/${PF}" \
 		${myconf} \
 		|| die
 	emake || die
@@ -76,7 +97,12 @@ src_compile() {
 
 src_install() {
 	einstall || die
-	rm -rf ${D}usr/share/doc
-	dodoc README AUTHORS COPYING ChangeLog
-	dohtml README.html
+}
+
+pkg_postinst() {
+	python_mod_optimize /usr/share/gajim/
+}
+
+pkg_postrm() {
+	python_mod_cleanup /usr/share/gajim/
 }
