@@ -312,7 +312,7 @@ src_compile() {
 	teh_conf xvid
 	use x86 && teh_conf real
 	! use livecd && ! use bindist && \
-		teh_conf win32codecs win32
+		teh_conf win32codecs win32dll
 	teh_conf amr amr_nb
 	teh_conf amr amr_wb
 	myconf="${myconf} --disable-amr_nb-fixed"
