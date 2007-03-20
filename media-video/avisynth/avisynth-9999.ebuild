@@ -9,7 +9,7 @@ HOMEPAGE="http://avisynth2.sourceforge.net"
 ECVS_SERVER="avisynth2.cvs.sourceforge.net:/cvsroot/avisynth2"
 ECVS_MODULE="${PN}"
 ECVS_BRANCH="avisynth_3_0"
-S="${WORKDIR}/${ECVS_MODULE}"
+S="${WORKDIR}/${ECVS_MODULE}/build/linux"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -44,15 +44,15 @@ pkg_setup() {
 
 src_unpack() {
 	cvs_src_unpack
-	cd ${S}/build/linux
+	cd ${S}
 	tar -xjf ../circular_buffer_v3.7.tar.bz2
 	epatch "${FILESDIR}"/${PN}-*.diff
+	epatch "${S}"/gentoo/files/*.patch
 	mv circular_buffer boost
 	AT_M4DIR="m4" eautoreconf
 }
 
 src_compile() {
-	cd build/linux
 	CPPFLAGS="${CPPFLAGS} -I." \
 	econf \
 		$(use_enable debug core-debug) \
@@ -64,6 +64,6 @@ src_compile() {
 }
 
 src_install() {
-	make -C build/linux DESTDIR=${D} install || die
-	dodoc *.txt TODO
+	make DESTDIR=${D} install || die
+	dodoc ../../*.txt ../../TODO
 }
