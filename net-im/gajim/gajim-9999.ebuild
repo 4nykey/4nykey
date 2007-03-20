@@ -18,13 +18,6 @@ IUSE="dbus nls spell idle trayicon ssl gnome avahi srv libnotify pysqlite"
 
 DEPEND="
 	>=virtual/python-2.4
-	!pysqlite? (
-		|| (
-			>=dev-lang/python-2.5
-			( >=dev-python/pysqlite-2 )
-		)
-	)
-	pysqlite? ( >=dev-python/pysqlite-2 )
 	>=dev-python/pygtk-2.6
 	!gnome? ( spell? ( >=app-text/gtkspell-2.0.4 ) )
 	idle? ( x11-libs/libXScrnSaver )
@@ -51,6 +44,13 @@ RDEPEND="
 			x11-misc/notification-daemon
 		)
 	)
+	!pysqlite? (
+		|| (
+			>=dev-lang/python-2.5
+			( >=dev-python/pysqlite-2 )
+		)
+	)
+	pysqlite? ( >=dev-python/pysqlite-2 )
 "
 DEPEND="
 	${DEPEND}

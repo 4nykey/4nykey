@@ -1,4 +1,5 @@
 app-misc/emelfm2:inotify - File-alteration monitoring using Linux kernel inotify API
+app-misc/gnomecatalog:pysqlite - Prefer dev-python/pysqlite to bundled sqlite module in Python-2.5
 media-libs/a52dec:djbfft - Prefer D.J. Bernstein's library for Fourier transforms
 media-libs/libvorbis:aotuv - Allow users to enable aoTuV encoder enhancements
 media-libs/x264:mp4 - Adds support for mp4 container via gpac
@@ -100,9 +101,10 @@ media-video/vlc:skins - Enables support for the skins2 interface.
 media-video/vlc:stream - Enables vlc to stream video.
 media-video/vlc:vlm - vlm allows to manage multiple streams from within one instance of VLC
 media-video/vlc:xulrunner - Use xulrunner for building mozilla plugin
+net-im/gajim:idle - Enable idle module
+net-im/gajim:pysqlite - Prefer dev-python/pysqlite to bundled sqlite module in Python-2.5
 net-im/gajim:srv - SRV capabilities
 net-im/gajim:trayicon - Enable the trayicon module
-net-im/gajim:xscreensaver - Support for XScreenSaver extension
 x11-themes/gtk-engines-candido:gdm - Install GDM theme
 x11-themes/gtk-engines-candido:metacity - Install Metacity theme
 x11-themes/gtk-engines-murrine:metacity - Install Metacity theme
