@@ -80,23 +80,3 @@ Index: SConstruct
  #
  # warnings flags
  #
-Index: libs/ardour/SConscript
-===================================================================
---- libs/ardour/SConscript	(revision 1594)
-+++ libs/ardour/SConscript	(working copy)
-@@ -285,12 +285,10 @@
- 					      single_source = 1)
- 
- if env['FPU_OPTIMIZATION']:
--	if env['DIST_TARGET'] == "i386":
-+	if env['DIST_TARGET'] in ["i386", "i686"]:
- 		arch_specific_objects = env.SharedAsmObject('sse_functions.os', 'sse_functions.s')
--		ardour_files += ['sse_functions_xmm.cc']
--	if env['DIST_TARGET'] == "i686":
--		arch_specific_objects = env.SharedAsmObject('sse_functions.os', 'sse_functions.s')
--		ardour_files += ['sse_functions_xmm.cc']
-+		ardour_files += ardour.SharedObject('sse_functions_xmm.cc',
-+			CXXFLAGS = ' '.join(ardour['CXXFLAGS']) + ' -msse')
- 	if env['DIST_TARGET'] == "x86_64":
- 		arch_specific_objects = env.SharedAsmObject('sse_functions_64bit.os', 'sse_functions_64bit.s')
- 		ardour_files += ['sse_functions_xmm.cc']
