@@ -11,15 +11,13 @@ ECVS_MODULE="transcode"
 ECVS_USER="cvs"
 #ECVS_BRANCH="new-module-system"
 S="${WORKDIR}/${ECVS_MODULE}"
-RESTRICT="test"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
 IUSE="
-	X 3dnow a52 dv dvdread extrafilters mp3 fame truetype gtk imagemagick jpeg
-	lzo mjpeg mmx network ogg vorbis quicktime sdl sse sse2 theora v4l2 xvid xml
-	postproc x264 aac
+X 3dnow a52 aac dv dvdread mp3 fame truetype gtk imagemagick jpeg lzo mjpeg mmx
+network ogg vorbis quicktime sdl sse sse2 theora v4l2 xvid xml postproc x264
 "
 
 RDEPEND="
@@ -57,15 +55,7 @@ DEPEND="
 src_unpack() {
 	cvs_src_unpack
 	cd ${S}
-
-	sed -i "s:\$(datadir)/doc/transcode:\$(datadir)/doc/${PF}:" \
-		${S}/Makefile.am ${S}/docs/Makefile.am ${S}/docs/html/Makefile.am
-
-	# don't use aux dir for autoconf junk
-	sed -i '/AC_CONFIG_AUX_DIR/d' configure.in
-
-	:> testsuite/Makefile.am
-
+	epatch "${FILESDIR}"/${PN}-*.diff
 	eautoreconf || die
 }
 
@@ -101,19 +91,15 @@ src_compile() {
 		$(use_with X x) \
 		$(use_enable postproc libpostproc) \
 		--with-mod-path=/usr/$(get_libdir)/transcode \
-		--with-lzo-includes=/usr/include/lzo || die
+		--with-lzo-includes=/usr/include/lzo \
+		--docdir=/usr/share/doc/${PF} \
+		|| die
 
 	emake all || die
 }
 
 src_install () {
-	make DESTDIR=${D} install || die
-
-	#do not install the filters that make dvdrip hang unless we ask for them
-	if ! use extrafilters ; then
-	rm ${D}/usr/$(get_libdir)/transcode/filter_logo.*
-	rm ${D}/usr/$(get_libdir)/transcode/filter_compare.*
-	fi
-
-	dodoc AUTHORS ChangeLog README TODO
+	emake DESTDIR="${D}" install || die
+	prepalldocs
+	dodoc AUTHORS README TODO
 }
