@@ -1,5 +1,9 @@
 app-misc/emelfm2:inotify - File-alteration monitoring using Linux kernel inotify API
 app-misc/gnomecatalog:pysqlite - Prefer dev-python/pysqlite to bundled sqlite module in Python-2.5
+media-fonts/cm-unicode:gs - Ghostscript support
+media-fonts/cm-unicode:opentype - Install OpenType fonts
+media-fonts/ttf-gandhari-unicode:opentype - Install OpenType fonts
+media-fonts/ttf-linuxlibertine:opentype - Install OpenType fonts
 media-libs/a52dec:djbfft - Prefer D.J. Bernstein's library for Fourier transforms
 media-libs/libvorbis:aotuv - Allow users to enable aoTuV encoder enhancements
 media-libs/x264:mp4 - Adds support for mp4 container via gpac
@@ -82,7 +86,6 @@ media-video/mplayer:v4l2 - Enables video4linux2 support
 media-video/mplayer:xanim - Enables support for xanim based codecs
 media-video/mplayer:xvmc - Enables X-Video Motion Compensation support
 media-video/pgcedit:wine - Install a preview app that requires Wine on runtime
-media-video/transcode:extrafilters - Install some filters only if we ask for them
 media-video/transcode:fame - Enables libfame support
 media-video/transcode:lzo - Enables LZO compression support
 media-video/transcode:mjpeg - Enables mjpegtools support
