@@ -13,7 +13,7 @@ S="${WORKDIR}/${ECVS_MODULE}"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="oss static djbfft"
+IUSE="oss djbfft"
 
 DEPEND="
 	djbfft? ( sci-libs/djbfft )
@@ -26,29 +26,21 @@ RDEPEND="
 src_unpack() {
 	cvs_src_unpack
 	cd ${S}
-
-	append-flags -fPIC
-	filter-flags -fprefetch-loop-arrays
-
-	sed -i 's:AC_CONFIG_HEADERS:AM_CONFIG_HEADER:' configure.in
-	sed -i 's:\(Libs.*\):\1 @LIBA52_LIBS@:' liba52/liba52.pc.in
-
 	epatch "${FILESDIR}"/${PN}-*.diff
-
 	eautoreconf
 }
 
 src_compile() {
+	filter-flags -fprefetch-loop-arrays
 	econf \
 		--enable-shared \
 		$(use_enable djbfft) \
 		$(use_enable oss) \
 		|| die "configure failed"
-
-	emake || die "emake failed"
+	emake CFLAGS="${CFLAGS}" || die "emake failed"
 }
 
 src_install() {
-	einstall docdir=${D}/usr/share/doc/${PF}/html || die
+	einstall || die
 	dodoc AUTHORS ChangeLog HISTORY NEWS README TODO doc/liba52.txt
 }

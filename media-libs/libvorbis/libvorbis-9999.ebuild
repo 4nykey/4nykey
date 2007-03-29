@@ -6,6 +6,7 @@ inherit subversion autotools flag-o-matic toolchain-funcs
 
 DESCRIPTION="the Ogg Vorbis sound file format library"
 HOMEPAGE="http://xiph.org/vorbis/ http://www.geocities.jp/aoyoume/aotuv"
+ESVN_PATCHES="${PN}-*.diff"
 ESVN_BOOTSTRAP="eautoreconf"
 
 LICENSE="BSD"
@@ -19,7 +20,6 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	doc? ( dev-libs/libxslt )
-	sys-apps/sed
 "
 
 S="${WORKDIR}/${P/_*/}"
@@ -54,8 +54,6 @@ src_compile() {
 
 	# gcc on hppa causes issues when assembling
 	use hppa && replace-flags -march=2.0 -march=1.0
-
-	sed -i -e 's/examples//' Makefile.in
 
 	econf \
 		$(use_enable doc docs)\

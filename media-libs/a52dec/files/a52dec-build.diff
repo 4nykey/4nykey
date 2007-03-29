@@ -1,0 +1,34 @@
+--- configure.in.orig	2004-01-02 01:52:27.000000000 +0200
++++ configure.in	2007-03-24 01:41:37.000000000 +0200
+@@ -7,7 +7,7 @@
+     doc/Makefile src/Makefile liba52/Makefile libao/Makefile vc++/Makefile
+     liba52/liba52.pc])
+ AM_INIT_AUTOMAKE([a52dec],[0.7.5-cvs])
+-AC_CONFIG_HEADERS([include/config.h])
++AM_CONFIG_HEADER([include/config.h])
+ AM_MAINTAINER_MODE
+ AC_CANONICAL_HOST
+ 
+--- liba52/liba52.pc.in.orig	2002-11-13 12:40:20.000000000 +0200
++++ liba52/liba52.pc.in	2007-03-24 01:43:41.000000000 +0200
+@@ -6,5 +6,5 @@
+ Name: liba52
+ Description: A decoding library for ATSC A/52 streams.
+ Version: @VERSION@
+-Libs: -L${libdir} -la52
++Libs: -L${libdir} -la52 @LIBA52_LIBS@
+ Cflags: -I${includedir}/@PACKAGE@
+--- liba52/Makefile.am.orig	2003-02-08 09:52:54.000000000 +0200
++++ liba52/Makefile.am	2007-03-24 01:54:25.000000000 +0200
+@@ -1,4 +1,3 @@
+-AM_CFLAGS = $(OPT_CFLAGS) $(LIBA52_CFLAGS)
+ 
+ lib_LTLIBRARIES = liba52.la
+ 
+--- src/Makefile.am.orig	2003-02-08 09:52:55.000000000 +0200
++++ src/Makefile.am	2007-03-24 01:52:10.000000000 +0200
+@@ -1,4 +1,3 @@
+-AM_CFLAGS = $(A52DEC_CFLAGS)
+ 
+ bin_PROGRAMS = a52dec extract_a52
+ a52dec_SOURCES = a52dec.c getopt.c gettimeofday.c

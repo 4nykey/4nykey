@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit subversion toolchain-funcs
+inherit subversion
 
 DESCRIPTION="Aften is an open-source A/52 (AC-3) audio encoder"
 HOMEPAGE="http://aften.sourceforge.net/"
@@ -25,7 +25,6 @@ src_compile() {
 	cd build
 	cmake \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_C_COMPILER=$(which $(tc-getCC)) \
 		-DCMAKE_C_FLAGS_RELEASE="" \
 		-DCMAKE_ASM_COMPILER=/usr/bin/nasm \
 		-DSHARED=y \

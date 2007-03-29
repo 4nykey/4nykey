@@ -58,7 +58,6 @@ src_compile() {
 		$(tc-getCC) $CFLAGS $LDFLAGS -o xyuv tools/xyuv.c $(sdl-config --libs)
 	fi
 
-	use threads && sed -i 's:\(^Libs.*\) :\1 -lpthread :' x264.pc
 	use X && echo "Requires: x11" >> x264.pc
 }
 
