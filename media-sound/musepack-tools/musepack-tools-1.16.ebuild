@@ -58,7 +58,6 @@ src_compile() {
 
 	cmake \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_C_COMPILER=$(which $(tc-getCC)) \
 		-DCMAKE_C_FLAGS="${CFLAGS}" \
 		${myconf} . || die
 

@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit flag-o-matic subversion toolchain-funcs
+inherit subversion
 
 DESCRIPTION="Musepack audio compression tools"
 HOMEPAGE="http://www.musepack.net"
@@ -20,17 +20,11 @@ DEPEND="
 	>=dev-util/cmake-2.4
 "
 
-src_unpack() {
-	subversion_src_unpack
-	sed -i "/CMAKE_C_FLAGS/d" ${S}/CMakeLists.txt
-}
-
 src_compile() {
-	cmake \
+	cmake . \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_C_COMPILER=$(which $(tc-getCC)) \
 		-DCMAKE_C_FLAGS="${CFLAGS}" \
-		. || die
+		|| die
 	emake || die
 }
 
