@@ -7,7 +7,7 @@ inherit latex-package
 SUPPLIER="public"
 DESCRIPTION="LaTeX package for the Arev Sans font family"
 HOMEPAGE="http://www.ctan.org/tex-archive/fonts/arev/"
-SRC_URI="http://www.ctan.org/tex-archive/fonts/arev/${PN}.zip"
+SRC_URI="ftp://tug.ctan.org/pub/tex-archive/fonts/${PN}.zip"
 S=${WORKDIR}/${PN}
 
 LICENSE="BitstreamVera LPPL-1.3 GPL-2"
