@@ -14,7 +14,7 @@ AT_M4DIR="m4"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="dbus nls spell idle trayicon ssl gnome avahi srv libnotify pysqlite"
+IUSE="dbus nls spell idle trayicon ssl gnome avahi srv libnotify"
 
 DEPEND="
 	>=virtual/python-2.4
@@ -44,13 +44,10 @@ RDEPEND="
 			x11-misc/notification-daemon
 		)
 	)
-	!pysqlite? (
-		|| (
-			>=dev-lang/python-2.5
-			( >=dev-python/pysqlite-2 )
-		)
+	|| (
+		>=dev-lang/python-2.5
+		( >=dev-python/pysqlite-2 )
 	)
-	pysqlite? ( >=dev-python/pysqlite-2 )
 "
 DEPEND="
 	${DEPEND}
@@ -60,11 +57,10 @@ DEPEND="
 
 pkg_setup() {
 	python_version
-	if test ${PYVER_MAJOR}${PYVER_MINOR} -ge 25 && use !pysqlite && \
+	if test ${PYVER_MAJOR}${PYVER_MINOR} -ge 25 && \
 	! built_with_use 'dev-lang/python' 'sqlite'; then
-		eerror "This package requires sqlite bindings for Python."
-		eerror "Either remerge dev-lang/python with USE=sqlite,"
-		eerror "or remerge this package with USE=pysqlite"
+		eerror "Please remerge dev-lang/python with USE=sqlite."
+		die "no sqlite module"
 	fi
 	if use avahi; then
 		if ! built_with_use net-dns/avahi dbus gtk python; then

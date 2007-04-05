@@ -12,17 +12,14 @@ S="${WORKDIR}/${PN}"
 KEYWORDS="~x86"
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="nls pysqlite"
+IUSE="nls"
 
 RDEPEND="
 	dev-python/gnome-python
-	!pysqlite? (
-		|| (
-			>=dev-lang/python-2.5
-			( >=dev-python/pysqlite-2 )
-		)
+	|| (
+		>=dev-lang/python-2.5
+		( >=dev-python/pysqlite-2 )
 	)
-	pysqlite? ( >=dev-python/pysqlite-2 )
 	!dev-python/mmpython
 "
 DEPEND="
@@ -35,11 +32,10 @@ DOCS="AUTHORS todo"
 
 pkg_setup() {
 	python_version
-	if test ${PYVER_MAJOR}${PYVER_MINOR} -ge 25 && use !pysqlite && \
+	if test ${PYVER_MAJOR}${PYVER_MINOR} -ge 25 && \
 	! built_with_use 'dev-lang/python' 'sqlite'; then
-		eerror "This package requires sqlite bindings for Python."
-		eerror "Either remerge dev-lang/python with USE=sqlite,"
-		eerror "or remerge this package with USE=pysqlite"
+		eerror "Please remerge dev-lang/python with USE=sqlite."
+		die "no sqlite module"
 	fi
 }
 
