@@ -1,0 +1,42 @@
+Index: Makefile.am
+===================================================================
+--- Makefile.am	(revision 5834)
++++ Makefile.am	(working copy)
+@@ -1,6 +1,7 @@
+ SUBDIRS = \
+   src\
+   doc\
++  plugins\
+   po
+ 
+ AUTOMAKE_OPTIONS =   gnu 1.6
+Index: plugins/leoslyrics/Makefile.am
+===================================================================
+--- plugins/leoslyrics/Makefile.am	(revision 5834)
++++ plugins/leoslyrics/Makefile.am	(working copy)
+@@ -33,10 +33,6 @@
+ 			  lyrics_leoslyrics.c\
+ 			  $(libleoslyrics_la_headers)
+ 
+-install:
+-	@$(MAKE)
+-	mkdir -p ${DESTDIR}${libdir}
+-	if test -f .libs/libleoslyrics.so; then cp .libs/libleoslyrics.so ${ncmpc_modulesdir}/lyrics_leoslyrics.so; fi
+ 
+ uninstall:
+ 	@$(MAKE)
+Index: plugins/hd/Makefile.am
+===================================================================
+--- plugins/hd/Makefile.am	(revision 5834)
++++ plugins/hd/Makefile.am	(working copy)
+@@ -30,10 +30,6 @@
+ libhd_la_SOURCES =\
+ 			  lyrics_hd.c\
+ 			  $(libhd_la_headers)
+-install:
+-	@$(MAKE)
+-	mkdir -p ${ncmpc_modulesdir}
+-	if test -f .libs/libhd.so; then cp .libs/libhd.so ${ncmpc_modulesdir}/lyrics_hd.so; fi
+ 
+ uninstall:
+ 	@$(MAKE)

@@ -48,13 +48,14 @@ src_compile() {
 		--enable-search-screen \
 		--enable-key-screen \
 		--enable-clock-screen \
+		--docdir=/usr/share/doc/${PF} \
 		|| die "econf failed"
 
 	emake || die "make failed"
 }
 
 src_install() {
-	make install DESTDIR=${D} docdir=/usr/share/doc/${PF} || die
-	dodoc AUTHORS ChangeLog NEWS README TODO doc/*.sample doc/ncmpc.lirc
-	doman doc/ncmpc.1
+	make install DESTDIR=${D} || die
+	prepalldocs
+	dodoc ChangeLog TODO
 }
