@@ -47,7 +47,7 @@ RDEPEND="
 	libsamplerate? ( media-libs/libsamplerate )
 	perl? ( dev-lang/perl )
 	avahi? ( net-dns/avahi )
-	cdda? ( dev-libs/libcdio )
+	cdda? ( dev-libs/libcdio media-libs/libdiscid )
 	xml? ( dev-libs/libxml2 )
 	ofa? ( media-libs/libofa )
 "
