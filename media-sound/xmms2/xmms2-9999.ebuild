@@ -14,8 +14,9 @@ LICENSE="LGPL-2.1 GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
 IUSE="
-vorbis flac sid python ruby alsa curl aac gnome jack mad oss samba modplug
-speex musepack encode ape mms wma boost avahi fam fftw libsamplerate perl
+vorbis flac sid python ruby alsa curl aac gnome jack mad oss samba modplug speex
+musepack encode ape mms ffmpeg boost avahi fam fftw libsamplerate perl cdda xml
+ofa
 "
 
 RDEPEND="
@@ -36,7 +37,7 @@ RDEPEND="
 	musepack? ( media-libs/libmpcdec )
 	ape? ( media-sound/mac )
 	mms? ( media-libs/libmms )
-	wma? ( media-video/ffmpeg )
+	ffmpeg? ( media-video/ffmpeg )
 	python? ( dev-lang/python )
 	ruby? ( >=dev-lang/ruby-1.8 )
 	boost? ( dev-libs/boost )
@@ -46,6 +47,9 @@ RDEPEND="
 	libsamplerate? ( media-libs/libsamplerate )
 	perl? ( dev-lang/perl )
 	avahi? ( net-dns/avahi )
+	cdda? ( dev-libs/libcdio )
+	xml? ( dev-libs/libxml2 )
+	ofa? ( media-libs/libofa )
 "
 DEPEND="
 	${RDEPEND}
@@ -68,6 +72,8 @@ src_compile() {
 	pick_plug alsa
 	pick_plug curl
 	pick_plug curl lastfm
+	pick_plug curl lastfmeta
+	use curl && pick_plug avahi daap
 	pick_plug aac faad
 	pick_plug flac
 	pick_plug gnome gnomevfs
@@ -84,16 +90,20 @@ src_compile() {
 	pick_plug encode ices
 	pick_plug ape mac
 	pick_plug mms
-	pick_plug wma
+	pick_plug ffmpeg avformat
+	pick_plug ffmpeg avcodec
+	use fftw && pick_plug libsamplerate vocoder
+	pick_plug cdda
+	pick_plug xml
+	pick_plug xml rss
+	pick_plug xml xspf
+	pick_plug ofa
 	pick_plug -o boost xmmsclient++
 	pick_plug -o python
 	pick_plug -o perl
 	pick_plug -o ruby
 	pick_plug -o avahi
 	pick_plug -o fam medialib-updater
-	if ! use fftw && ! use libsamplerate; then
-		myconf="${myconf} --without-plugins=vocoder"
-	fi
 
 	export GIT_DIR="${EGIT_STORE_DIR}/${EGIT_PROJECT}"
 
