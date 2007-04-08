@@ -14,8 +14,8 @@ RESTRICT="test confcache"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-# static: use sources bundled with audacity instead of system libs,
-#	for wx - run `wx-config --static=yes';
+# static: uses sources bundled with audacity instead of system libs,
+# also runs `wx-config --static=yes'
 IUSE="lame flac mad vorbis libsamplerate alsa jack oss ladspa soundtouch
 static unicode twolame"
 
