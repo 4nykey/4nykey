@@ -91,6 +91,7 @@ src_unpack() {
 	cd ${S}
 
 	has_version 'media-libs/libdca' && epatch "${FILESDIR}"/${PN}-dca.patch
+	use mmx || epatch "${FILESDIR}"/${PN}-pic.patch
 
 	if use amr; then
 		unpack ${A}
