@@ -1,0 +1,26 @@
+Index: configure
+===================================================================
+--- configure	(revision 22932)
++++ configure	(working copy)
+@@ -5850,16 +5850,18 @@
+ echocheck "libdts support"
+ if test "$_libdts" = auto ; then
+   _libdts=no
++  _dca=dts
++  $_pkg_config --exists libdca && _dca=dca
+   cat > $TMPC << EOF
+ #include <inttypes.h>
+-#include <dts.h>
++#include <${_dca}.h>
+ int main(void) { dts_init (0); return 0; }
+ EOF
+-  cc_check -ldts $_ld_lm && _libdts=yes
++  cc_check -l${_dca} $_ld_lm && _libdts=yes
+ fi
+ if test "$_libdts" = yes ; then
+   _def_libdts='#define CONFIG_LIBDTS 1'
+-  _ld_extra="$_ld_extra -ldts"
++  _ld_extra="$_ld_extra -l${_dca}"
+   _codecmodules="libdts $_codecmodules"
+ else
+   _def_libdts='#undef CONFIG_LIBDTS'

@@ -171,7 +171,6 @@ src_unpack() {
 			font-arial-cp1250.tar.bz2
 	fi
 
-
 	use X && use gtk && unpack Blue-${BLUV}.tar.bz2
 
 	if use svga

@@ -90,6 +90,8 @@ src_unpack() {
 
 	cd ${S}
 
+	has_version 'media-libs/libdca' && epatch "${FILESDIR}"/${PN}-dca.patch
+
 	if use amr; then
 		unpack ${A}
 		unzip -jaq 26204-${WBV}_ANSI-C_source_code.zip -d libavcodec/amrwb_float
