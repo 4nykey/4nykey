@@ -151,18 +151,14 @@ pkg_setup() {
 
 src_unpack() {
 	subversion_src_unpack
-
-	# get svn revision for version.h
-	REVISION="$(svnversion \
-		${ESVN_STORE_DIR}/${ESVN_PROJECT}/${ESVN_REPO_URI##*/})"
-	sed -i "s:UNKNOWN:${REVISION}:" ${S}/version.sh
+	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
 
 	cd ${WORKDIR}
 
 	if use amr; then
 		unpack 26104-${NBV}.zip 26204-${WBV}.zip
-		unzip -jaq 26204-${WBV}_ANSI-C_source_code.zip -d ${S}/libavcodec/amrwb_float
-		unzip -jaq 26104-${NBV}_ANSI_C_source_code.zip -d ${S}/libavcodec/amr_float
+		unzip -jaq 26204-${WBV}_ANSI-C_source_code.zip -d libavcodec/amrwb_float
+		unzip -jaq 26104-${NBV}_ANSI_C_source_code.zip -d libavcodec/amr_float
 	fi
 
 	if use bitmap-fonts; then
@@ -183,7 +179,7 @@ src_unpack() {
 		einfo " to actually use this)"
 		echo
 
-		mv ${WORKDIR}/svgalib_helper ${S}/libdha
+		mv ${WORKDIR}/svgalib_helper libdha
 	fi
 
 	cd ${S}
