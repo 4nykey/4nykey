@@ -37,7 +37,11 @@ src_compile() {
 		$(use_enable djbfft) \
 		$(use_enable oss) \
 		|| die "configure failed"
-	emake CFLAGS="${CFLAGS}" || die "emake failed"
+	emake \
+		OPT_CFLAGS="${CFLAGS}" \
+		A52DEC_CFLAGS="${CFLAGS}" \
+		LIBA52_CFLAGS= \
+		|| die "emake failed"
 }
 
 src_install() {

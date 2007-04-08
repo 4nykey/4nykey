@@ -7,7 +7,6 @@ inherit subversion autotools
 DESCRIPTION="library for decoding DTS Coherent Acoustics streams used in DVD"
 HOMEPAGE="http://developers.videolan.org/libdca.html"
 ESVN_REPO_URI="svn://svn.videolan.org/${PN}/trunk"
-ESVN_PATCHES="${FILESDIR}/${PN}-*.patch"
 ESVN_BOOTSTRAP="eautoreconf"
 
 LICENSE="GPL-2"
@@ -29,11 +28,10 @@ src_compile() {
 		$(use_enable oss) \
 		$(use_enable debug) \
 		|| die
-	emake || die "emake failed"
+	emake OPT_CFLAGS="${CFLAGS}" LIBDCA_CFLAGS= || die "emake failed"
 }
 
 src_install() {
-	einstall docdir=${D}/usr/share/doc/${PF}/html || die
-	insinto /usr/include
-	dodoc AUTHORS ChangeLog NEWS README TODO doc/libdts.txt
+	einstall || die
+	dodoc AUTHORS ChangeLog NEWS README TODO doc/*.txt
 }
