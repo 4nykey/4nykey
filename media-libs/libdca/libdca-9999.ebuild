@@ -15,6 +15,9 @@ SLOT="0"
 KEYWORDS="~x86"
 IUSE="oss debug"
 
+RDEPEND="
+	!media-libs/libdts
+"
 DEPEND="
 	oss? ( virtual/os-headers )
 "
@@ -35,8 +38,4 @@ src_compile() {
 src_install() {
 	einstall || die
 	dodoc AUTHORS ChangeLog NEWS README TODO doc/*.txt
-	if has_version 'media-libs/libdts'; then
-		rm -f ${D}usr/include/dts.h ${D}usr/lib/pkgconfig/libdts.pc \
-			${D}usr/bin/dtsdec ${D}usr/share/man/man1/*dts*.1
-	fi
 }
