@@ -1,0 +1,23 @@
+Index: libdca/libdca.pc.in
+===================================================================
+--- libdca/libdca.pc.in	(revision 57)
++++ libdca/libdca.pc.in	(working copy)
+@@ -6,5 +6,5 @@
+ Name: libdca
+ Description: A decoding library for DTS Coherent Acoustics streams.
+ Version: @VERSION@
+-Libs: -L${libdir} -ldca
++Libs: -L${libdir} -ldca @LIBDCA_LIBS@
+ Cflags: -I${includedir}/@PACKAGE@
+Index: libdca/Makefile.am
+===================================================================
+--- libdca/Makefile.am	(revision 57)
++++ libdca/Makefile.am	(working copy)
+@@ -6,6 +6,7 @@
+ 		    tables_huffman.h tables_fir.h tables_adpcm.h tables_vq.h \
+ 		    bitstream.h bitstream.c parse.c downmix.c
+ libdca_la_LDFLAGS = -no-undefined -version 0:0:0 -export-symbol-regex dts_.*
++libdca_la_LIBADD = $(LIBDCA_LIBS)
+ 
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = libdca.pc libdts.pc
