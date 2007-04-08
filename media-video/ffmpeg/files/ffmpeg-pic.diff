@@ -1,0 +1,13 @@
+Make it use pic always since we don't need textrels
+Index: configure
+===================================================================
+--- configure	(revision 8645)
++++ configure	(working copy)
+@@ -1144,6 +1144,7 @@
+     ;;
+   linux)
+     LDLATEFLAGS="-Wl,--as-needed $LDLATEFLAGS"
++    LIBOBJFLAGS="\$(PIC)"
+     ;;
+   irix*)
+     targetos=irix

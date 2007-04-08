@@ -78,6 +78,7 @@ pkg_setup() {
 
 	#Append -fomit-frame-pointer to avoid some common issues
 	append-flags "-fomit-frame-pointer"
+	append-flags -fno-strict-aliasing
 	#Note; library makefiles don't propogate flags from config.mak so
 	#use specified CFLAGS are only used in executables
 	replace-flags -O0 -O2
@@ -85,36 +86,15 @@ pkg_setup() {
 
 src_unpack() {
 	subversion_src_unpack
-
-	cd ${WORKDIR}
-	if use amr; then
-		unpack ${A}
-		unzip -jaq 26204-${WBV}_ANSI-C_source_code.zip -d ${S}/libavcodec/amrwb_float
-		unzip -jaq 26104-${NBV}_ANSI_C_source_code.zip -d ${S}/libavcodec/amr_float
-	fi
+	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
 
 	cd ${S}
 
-	REVISION="$(svnversion \
-		${ESVN_STORE_DIR}/${ESVN_PROJECT}/${ESVN_REPO_URI##*/})"
-	sed -i "s:\(svn_revision=\)UNKNOWN:\1${REVISION}:" version.sh
-
-	#ffmpeg doesn't use libtool, so the condition for PIC code
-	#is __PIC__, not PIC.
-	sed -i -e 's/#\(\(.*def *\)\|\(.*defined *\)\|\(.*defined(*\)\)PIC/#\1__PIC__/' \
-		libavcodec/i386/dsputil_mmx{.c,_rnd.h,_avg.h} \
-		libavcodec/msmpeg4.c \
-		libavutil/common.h \
-		|| die "sed failed (__PIC__)"
-
-	# Make it use pic always since we don't need textrels
-	use mmx ||
-	sed -i -e "s:LIBOBJFLAGS=\"\":LIBOBJFLAGS=\'\$\(PIC\)\':" configure
-
-	sed -i 's:\(logfile="config\)\.err:\1.log:' configure
-
-	# To make sure the ffserver test will work 
-	sed -i -e "s:-e debug=off::" tests/server-regression.sh
+	if use amr; then
+		unpack ${A}
+		unzip -jaq 26204-${WBV}_ANSI-C_source_code.zip -d libavcodec/amrwb_float
+		unzip -jaq 26104-${NBV}_ANSI_C_source_code.zip -d libavcodec/amr_float
+	fi
 }
 
 teh_conf() {
@@ -127,7 +107,7 @@ teh_conf() {
 }
 
 src_compile() {
-	local myconf="--log --enable-shared --enable-gpl --enable-pp --disable-opts --disable-strip"
+	local myconf="--log=config.log --enable-shared --enable-gpl --enable-pp --disable-opts --disable-strip"
 
 	teh_conf dis debug
 	if use encode; then
