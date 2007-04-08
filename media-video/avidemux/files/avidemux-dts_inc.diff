@@ -1,25 +1,8 @@
-Index: configure.in.in
-===================================================================
---- configure.in.in	(revision 2080)
-+++ configure.in.in	(working copy)
-@@ -547,12 +547,7 @@
-     have_libdca=yes
-     AC_CHECK_HEADERS([dts.h], , have_libdca=no)
-     if test "x$have_libdca" = "xyes"; then
--    	AC_CHECK_HEADERS([dts_internal.h], , have_libdca=no)
--    	if test "x$have_libdca" = "xyes"; then
-             AC_CHECK_LIB( dts, dts_init, , have_libdca=no )
--	else
--    	AC_MSG_WARN(dts.h is there but i also need dts_internal.h to compile libdca/libdts. Please copy dts_internal.h where dts.h is)
--    	fi
-     fi
-     if test "x$have_libdca" = "xyes"; then
-             AC_DEFINE(USE_LIBDCA, 1, "[libDCA]")
 Index: avidemux/ADM_audiocodec/ADM_dca.cpp
 ===================================================================
---- avidemux/ADM_audiocodec/ADM_dca.cpp	(revision 2080)
+--- avidemux/ADM_audiocodec/ADM_dca.cpp	(revision 2926)
 +++ avidemux/ADM_audiocodec/ADM_dca.cpp	(working copy)
-@@ -31,7 +31,6 @@
+@@ -32,7 +32,6 @@
  extern "C"
  {
  #include "dts.h"
@@ -27,3 +10,24 @@ Index: avidemux/ADM_audiocodec/ADM_dca.cpp
  
  }
  #include "ADM_audio/ADM_dcainfo.h"
+Index: configure.in.in
+===================================================================
+--- configure.in.in	(revision 2926)
++++ configure.in.in	(working copy)
+@@ -852,14 +852,9 @@
+ 
+ if test "x$with_libdca" != "xno"; then
+     have_libdca=yes
+-    AC_CHECK_HEADERS([dts.h], , have_libdca=no)
++    AC_CHECK_HEADERS([dca.h], , [AC_CHECK_HEADERS([dts.h], , have_libdca=no)])
+     if test "x$have_libdca" = "xyes"; then
+-    	AC_CHECK_HEADERS([dts_internal.h], , have_libdca=no)
+-    	if test "x$have_libdca" = "xyes"; then
+-            AC_CHECK_LIB( dts, dts_init, , have_libdca=no )
+-	else
+-    	AC_MSG_WARN(dts.h is there but i also need dts_internal.h to compile libdca/libdts. Please copy dts_internal.h where dts.h is)
+-    	fi
++            AC_CHECK_LIB( dca, dts_init, , [AC_CHECK_LIB( dts, dts_init, , have_libdca=no )])
+     fi
+     if test "x$have_libdca" = "xyes"; then
+             AC_DEFINE(USE_LIBDCA, 1, "[libDCA]")
