@@ -1,0 +1,46 @@
+diff -ru tesseract-1.03~/ccutil/getopt.h tesseract-1.03/ccutil/getopt.h
+--- tesseract-1.03~/ccutil/getopt.h	2007-02-24 00:24:36.000000000 +0100
++++ tesseract-1.03/ccutil/getopt.h	2007-02-24 00:24:42.000000000 +0100
+@@ -20,9 +20,6 @@
+ #include          "host.h"
+ #include          "notdll.h"     //must be last include
+ 
+-extern int optind;
+-extern char *optarg;
+-
+ int getopt (                     //parse args
+ INT32 argc,                      //arg count
+ char *argv[],                    //args
+diff -ru tesseract-1.03~/ccmain/tfacep.h tesseract-1.03/ccmain/tfacep.h
+--- tesseract-1.03~/ccmain/tfacep.h	2006-06-17 00:17:03.000000000 +0200
++++ tesseract-1.03/ccmain/tfacep.h	2007-02-24 00:12:20.000000000 +0100
+@@ -103,7 +103,6 @@
+   //extern int                                    enable_assoc;
+   //extern int                                    chop_enable;
+   //extern int                                    permute_only_top;
+-  extern int display_ratings;
+ 
+ };
+ 
+diff -ru tesseract-1.03~/training/cnTraining.cpp tesseract-1.03/training/cnTraining.cpp
+--- tesseract-1.03~/training/cnTraining.cpp	2006-10-20 00:25:38.000000000 +0200
++++ tesseract-1.03/training/cnTraining.cpp	2007-02-24 00:17:46.000000000 +0100
+@@ -29,6 +29,7 @@
+ #include "emalloc.h"
+ #include "featdefs.h"
+ #include "getopt.h"
++#include "globals.h"
+ #include "ocrfeatures.h"
+ #include "general.h"
+ #include "clusttool.h"
+diff -ru tesseract-1.03~/training/mfTraining.cpp tesseract-1.03/training/mfTraining.cpp
+--- tesseract-1.03~/training/mfTraining.cpp	2007-02-01 04:09:21.000000000 +0100
++++ tesseract-1.03/training/mfTraining.cpp	2007-02-24 00:18:18.000000000 +0100
+@@ -31,6 +31,7 @@
+ #include "emalloc.h"
+ #include "featdefs.h"
+ #include "getopt.h"
++#include "globals.h"
+ #include "ocrfeatures.h"
+ #include "general.h"
+ #include "clusttool.h"
