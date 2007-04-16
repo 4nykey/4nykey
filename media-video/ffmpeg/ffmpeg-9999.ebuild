@@ -35,12 +35,7 @@ RDEPEND="
 	aac? ( media-libs/faad2 )
 	a52? ( >=media-libs/a52dec-0.7.4-r4 )
 	zlib? ( sys-libs/zlib )
-	dts? (
-		|| (
-			media-libs/libdca
-			media-libs/libdts
-		)
-	)
+	dts? ( media-libs/libdts )
 	ieee1394? (
 		=media-libs/libdc1394-1*
 		sys-libs/libraw1394
@@ -90,7 +85,6 @@ src_unpack() {
 
 	cd ${S}
 
-	has_version 'media-libs/libdca' && epatch "${FILESDIR}"/${PN}-dca.patch
 	use mmx || epatch "${FILESDIR}"/${PN}-pic.patch
 
 	if use amr; then

@@ -49,12 +49,7 @@ RDEPEND="
 	mp3? ( media-libs/libmad )
 	ffmpeg? ( media-video/ffmpeg )
 	a52? ( media-libs/a52dec )
-	dts? (
-		|| (
-			media-libs/libdca
-			media-libs/libdts
-		)
-	)
+	dts? ( media-libs/libdca )
 	flac? ( media-libs/flac )
 	mpeg? ( >=media-libs/libmpeg2-0.3.2 )
 	vorbis? ( media-libs/libvorbis )
@@ -222,7 +217,7 @@ src_compile () {
 		$(use_enable mp3 mad) \
 		$(use_enable aac faad) \
 		$(use_enable a52) \
-		$(use_enable dts) \
+		$(use_enable dts dca) \
 		$(use_enable mpeg libmpeg2) \
 		$(use_enable ggi) \
 		$(use_enable 3dfx glide) \

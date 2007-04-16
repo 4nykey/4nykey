@@ -15,9 +15,7 @@ SLOT="0"
 KEYWORDS="~x86"
 IUSE="oss debug"
 
-RDEPEND="
-	!media-libs/libdts
-"
+RDEPEND=""
 DEPEND="
 	oss? ( virtual/os-headers )
 "
@@ -38,4 +36,5 @@ src_compile() {
 src_install() {
 	einstall || die
 	dodoc AUTHORS ChangeLog NEWS README TODO doc/*.txt
+	find ${D}usr -name '*dts*' | xargs rm -f
 }

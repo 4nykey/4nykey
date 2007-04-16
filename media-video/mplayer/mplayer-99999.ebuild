@@ -55,12 +55,7 @@ RDEPEND="
 	cdio? ( dev-libs/libcdio )
 	cdparanoia? ( media-sound/cdparanoia )
 	directfb? ( dev-libs/DirectFB )
-	dts? (
-		|| (
-			media-libs/libdca
-			media-libs/libdts
-		)
-	)
+	dts? ( media-libs/libdts )
 	dvb? ( media-tv/linuxtv-dvb-headers )
 	dvd? ( dvdread? ( media-libs/libdvdread ) )
 	encode? (
@@ -166,6 +161,7 @@ src_unpack() {
 			font-arial-iso-8859-1.tar.bz2 font-arial-iso-8859-2.tar.bz2 \
 			font-arial-cp1250.tar.bz2
 	fi
+
 
 	use X && use gtk && unpack Blue-${BLUV}.tar.bz2
 
