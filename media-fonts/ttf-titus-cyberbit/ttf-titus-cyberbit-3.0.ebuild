@@ -5,25 +5,24 @@
 inherit font
 
 DESCRIPTION="Unicode 4.0 compliant TrueType font"
-HOMEPAGE="http://titus.fkidg1.uni-frankfurt.de/index.html"
-SRC_URI="tu22134.zip"
+HOMEPAGE="http://titus.uni-frankfurt.de/unicode/unitest2.htm#TITUUT"
+SRC_URI="TITUSCBZ.TTF"
 RESTRICT="fetch"
 S="${WORKDIR}"
 
 LICENSE="as-is"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE=""
 
-DEPEND="app-arch/unzip"
-RDEPEND=""
-
-DOCS="Diauni.txt"
 FONT_SUFFIX="TTF"
 FONT_S="${S}"
 
 pkg_nofetch() {
-	einfo "Please download ${A} from:"
-	einfo http://foo.bar
-	einfo "and move it to ${DISTDIR}"
+	einfo "Please download the font from:"
+	einfo "http://titus.fkidg1.uni-frankfurt.de/unicode/tituut.asp"
+	einfo "unzip it and move ${A} to ${DISTDIR}"
+}
+
+src_unpack() {
+	cp ${DISTDIR}/${A} ${S}
 }
