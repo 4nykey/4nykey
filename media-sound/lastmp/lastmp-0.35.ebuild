@@ -14,9 +14,12 @@ S="${WORKDIR}/${MY_P}"
 LICENSE="as-is"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE=""
+IUSE="musicbrainz"
 
-RDEPEND="media-libs/py-libmpdclient"
+RDEPEND="
+	media-libs/py-libmpdclient
+	musicbrainz? ( dev-python/python-musicbrainz )
+"
 
 DOCS="INSTALL NEWS"
 PYTHON_MODNAME="lastfm"
@@ -32,18 +35,20 @@ pkg_setup() {
 
 src_unpack() {
 	unpack ${A}
-	# make it use spool dir from conf file
-	sed -i 's:\(lastfm.submit(\[sub\]\)):\1, conf.spool_path):g' ${S}/lastmp
+	cd ${S}
+	use musicbrainz || sed -i /mb/d setup.py
+	epatch "${FILESDIR}"/${PN}-*.diff
 }
 
 src_install() {
 	distutils_src_install
-		
+	:> ${T}/lastmp.log
+	insopts -m0644 -o ${USER} -g ${GROUP}
+	insinto /var/log
+	doins ${T}/lastmp.log
 	diropts -m0755 -o ${USER} -g ${GROUP}
 	dodir /var/run/lastmp
 	keepdir /var/run/lastmp
-	dodir /var/log/lastmp
-	keepdir /var/log/lastmp
 	dodir /var/spool/lastmp
 	keepdir /var/spool/lastmp
 

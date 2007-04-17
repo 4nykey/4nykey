@@ -4,19 +4,19 @@
 
 inherit eutils toolchain-funcs
 
-DESCRIPTION="A file manager that implements the popular two-pane design based on gtk+-2"
+DESCRIPTION="A gtk+ file manager that implements popular two-pane design"
 HOMEPAGE="http://emelfm2.net/"
 SRC_URI="http://emelfm2.net/rel/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="nls fam debug inotify unicode"
+IUSE="nls fam debug inotify unicode kernel_linux"
 RESTRICT="test" # requires splint
 
 RDEPEND="
 	>=x11-libs/gtk+-2.4
-	virtual/fam
+	fam? ( virtual/fam )
 "
 DEPEND="
 	${RDEPEND}

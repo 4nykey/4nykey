@@ -5,9 +5,11 @@ depend() {
 	need net
 }
 
+CFG=/etc/scmpc.conf
+PID=/var/run/scmpc/scmpc.pid
+
 checkconfig() {
-	CFG=/etc/scmpc.conf
-	if [ "$(grep 'password = ""' ${CFG})" ]; then
+	if grep 'password = ""' ${CFG}; then
 		eerror "You are trying to run scmpc system-wide, but"
 		eerror "no password stored in scmpc configuration file ${CFG},"
 		eerror "run \"emerge --config media-sound/scmpc\""
@@ -15,16 +17,16 @@ checkconfig() {
 	fi
 }
 
-start () {
+start() {
 	checkconfig || return 1
 
 	ebegin "Starting MPD last.fm client: scmpc"
-	start-stop-daemon --start -c scmpc:lastfm -p /var/run/scmpc/scmpc.pid --exec /usr/bin/scmpc -- -f /etc/scmpc.conf>& /dev/null
+	start-stop-daemon --start -c scmpc:lastfm --exec /usr/bin/scmpc -- -f "${CFG}" -i "${PID}"
 	eend $?
 }
 
-stop () {
+stop() {
 	ebegin "Stopping MPD last.fm client: scmpc"
-	start-stop-daemon --stop --quiet -p /var/run/scmpc/scmpc.pid --exec /usr/bin/scmpc
+	start-stop-daemon --stop --quiet -p ${PID}
 	eend $?
 }

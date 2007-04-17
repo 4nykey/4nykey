@@ -16,7 +16,7 @@ KEYWORDS="~x86"
 IUSE=""
 
 RDEPEND="
-	>=net-misc/curl-7.10.0
+	>=net-misc/curl-7.10
 	dev-libs/libdaemon
 	dev-libs/confuse
 	dev-libs/argtable
@@ -33,7 +33,7 @@ pkg_setup() {
 }
 
 pkg_config() {
-	einfo "This will create system-wide configure file for scmpc,"
+	einfo "This will create system-wide config file for scmpc,"
 	einfo "if you rather run it as a user, refer to scmpc(1)."
 	
 	einfo "Please enter your last.fm username: "
@@ -51,8 +51,8 @@ pkg_config() {
 
 src_unpack() {
 	unpack ${A}
-	# make it '-Wl,--as-needed' friendly
-	sed -i 's:\($(LDLIBS)\) \($(OBJS) -o $@\):\2 \1:' ${S}/src/Rules.mk
+	# make it --as-needed friendly
+	sed -i 's:\($(LDLIBS)\) \(-o .*\):\2 \1:' ${S}/src/Rules.mk
 }
 
 src_install() {
