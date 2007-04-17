@@ -18,10 +18,6 @@ SRC_URI="
 		mirror://mplayer/releases/fonts/font-arial-cp1250.tar.bz2
 	)
 	svga? ( http://mplayerhq.hu/~alex/svgalib_helper-${SVGV}-mplayer.tar.bz2 )
-	amr? (
-		http://www.3gpp.org/ftp/Specs/archive/26_series/26.204/26204-${WBV}.zip
-		http://www.3gpp.org/ftp/Specs/archive/26_series/26.104/26104-${NBV}.zip
-	)
 	gtk? ( mirror://mplayer/Skin/Blue-${BLUV}.tar.bz2 )
 "
 ESVN_REPO_URI="svn://svn.mplayerhq.hu/mplayer/trunk"
@@ -111,6 +107,7 @@ RDEPEND="
 			=dev-libs/glib-2*
 		)
 	)
+	amr? ( media-libs/amrnb media-libs/amrwb )
 "
 DEPEND="
 	${RDEPEND}
@@ -119,7 +116,6 @@ DEPEND="
 		dev-libs/libxslt
 		>=app-text/docbook-xml-dtd-4.1.2
 	)
-	amr? ( app-arch/unzip )
 	X? (
 		x11-proto/xextproto
 		x11-proto/xf86vidmodeproto
@@ -149,12 +145,6 @@ src_unpack() {
 	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
 
 	cd ${WORKDIR}
-
-	if use amr; then
-		unpack 26104-${NBV}.zip 26204-${WBV}.zip
-		unzip -jaq 26204-${WBV}_ANSI-C_source_code.zip -d libavcodec/amrwb_float
-		unzip -jaq 26104-${NBV}_ANSI_C_source_code.zip -d libavcodec/amr_float
-	fi
 
 	if use bitmap-fonts; then
 		unpack \

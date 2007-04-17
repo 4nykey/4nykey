@@ -8,12 +8,6 @@ DESCRIPTION="Complete solution to record, convert and stream audio and video. In
 HOMEPAGE="http://ffmpeg.sourceforge.net/"
 NBV="610"
 WBV="600"
-SRC_URI="
-	amr? (
-		http://www.3gpp.org/ftp/Specs/archive/26_series/26.204/26204-${WBV}.zip
-		http://www.3gpp.org/ftp/Specs/archive/26_series/26.104/26104-${NBV}.zip
-	)
-"
 ESVN_REPO_URI="svn://svn.mplayerhq.hu/ffmpeg/trunk"
 ESVN_PATCHES="${PN}-*.diff"
 
@@ -46,11 +40,11 @@ RDEPEND="
 		x264? ( media-libs/x264 )
 	)
 	X? ( x11-libs/libXext )
+	amr? ( media-libs/amrnb media-libs/amrwb )
 "
 DEPEND="
 	${RDEPEND}
 	oss? ( virtual/os-headers )
-	amr? ( app-arch/unzip )
 	dev-util/pkgconfig
 	doc? ( app-text/texi2html )
 	test? ( net-misc/wget )
@@ -86,12 +80,6 @@ src_unpack() {
 	cd ${S}
 
 	use mmx || epatch "${FILESDIR}"/${PN}-pic.patch
-
-	if use amr; then
-		unpack ${A}
-		unzip -jaq 26204-${WBV}_ANSI-C_source_code.zip -d libavcodec/amrwb_float
-		unzip -jaq 26104-${NBV}_ANSI_C_source_code.zip -d libavcodec/amr_float
-	fi
 }
 
 teh_conf() {
@@ -125,9 +113,8 @@ src_compile() {
 	teh_conf en dts libdts
 	teh_conf dis network
 	teh_conf dis zlib
-	teh_conf en amr amr_nb
-	teh_conf en amr amr_wb
-	teh_conf en amr amr_if2
+	teh_conf en amr amr-nb
+	teh_conf en amr amr-wb
 	teh_conf en aac libfaad
 	teh_conf en swscaler
 	teh_conf en X x11grab
