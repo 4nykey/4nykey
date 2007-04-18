@@ -1,12 +1,12 @@
---- mpc.c.orig	2006-12-22 00:32:39.000000000 +0200
-+++ mpc.c	2006-12-22 00:33:42.000000000 +0200
-@@ -263,6 +263,9 @@
- 			 */
- 			free(key);
- 			key = xstrdup("discnumber");
-+		} else if (!strcasecmp(key, "year")) {
-+			free(key);
-+			key = xstrdup("date");
- 		}
+diff --git a/comment.c b/comment.c
+index 9e88fd8..2521b14 100644
+--- a/comment.c
++++ b/comment.c
+@@ -114,6 +114,7 @@ static struct {
+ 	{ "album_artist", "albumartist" },
+ 	{ "disc", "discnumber" },
+ 	{ "track", "tracknumber" },
++	{ "year", "date" },
+ 	{ NULL, NULL }
+ };
  
- 		if (!is_interesting_key(key)) {
