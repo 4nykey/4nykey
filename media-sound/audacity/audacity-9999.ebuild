@@ -7,7 +7,7 @@ inherit cvs autotools flag-o-matic
 DESCRIPTION="Free crossplatform audio editor"
 HOMEPAGE="http://audacity.sourceforge.net/"
 ECVS_SERVER="audacity.cvs.sourceforge.net:/cvsroot/audacity"
-ECVS_MODULE="audacity"
+ECVS_MODULE="audacity-src"
 S="${WORKDIR}/${ECVS_MODULE}"
 RESTRICT="test confcache"
 
@@ -43,14 +43,16 @@ DEPEND="
 
 src_unpack() {
 	cvs_src_unpack
+	ECVS_MODULE="lib-src" cvs_src_unpack
+	mv lib-src ${S}
 	cd ${S}
 	epatch "${FILESDIR}"/${PN}-*.diff
 	sed -i 's: Win32/Makefile\.mingw::' lib-src/libsamplerate/configure
 	AT_NO_RECURSIVE="yes" eautoreconf
-	append-flags -fno-strict-aliasing
 }
 
 src_compile() {
+	append-flags -fno-strict-aliasing
 	use static && LIBPREF="local" || LIBPREF="system"
 
 	if use alsa || use jack; then

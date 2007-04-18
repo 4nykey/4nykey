@@ -2,13 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/xine-lib/xine-lib-1.1.4-r1.ebuild,v 1.1 2007/02/09 04:46:07 flameeyes Exp $
 
-inherit cvs flag-o-matic toolchain-funcs libtool autotools
+inherit mercurial flag-o-matic toolchain-funcs libtool autotools
 
 DESCRIPTION="Core libraries for Xine movie player"
 HOMEPAGE="http://xine.sourceforge.net/"
-ECVS_SERVER="xine.cvs.sourceforge.net:/cvsroot/xine"
-ECVS_MODULE="${PN}"
-S="${WORKDIR}/${ECVS_MODULE}"
+EHG_REPO_URI="http://hg.debian.org/hg/xine-lib/xine-lib"
+S="${WORKDIR}/${PN}"
 
 LICENSE="GPL-2"
 SLOT="1"
@@ -51,7 +50,7 @@ RDEPEND="
 	a52? ( >=media-libs/a52dec-0.7.4-r5 )
 	mad? ( media-libs/libmad )
 	imagemagick? ( media-gfx/imagemagick )
-	dts? ( || ( media-libs/libdca media-libs/libdts ) )
+	dts? ( media-libs/libdts )
 	>=media-video/ffmpeg-0.4.9_p20070129
 	modplug? ( media-libs/libmodplug )
 	nls? ( virtual/libintl )
@@ -82,7 +81,7 @@ DEPEND="
 "
 
 src_unpack() {
-	cvs_src_unpack
+	mercurial_src_unpack
 	cd "${S}"
 	AT_M4DIR="m4" eautoreconf
 }
@@ -178,13 +177,13 @@ src_compile() {
 		--with-xv-path=/usr/$(get_libdir) \
 		--with-w32-path=/usr/$(ABI=x86 get_libdir)/win32 \
 		--enable-fast-install \
+		--docdir="/usr/share/doc/${PF}" --htmldir="/usr/share/doc/${PF}/html" \
 		--disable-dependency-tracking || die "econf failed"
 
 	emake || die "emake failed"
 }
 
 src_install() {
-	emake -j1 DESTDIR="${D}" \
-		docdir="/usr/share/doc/${PF}" htmldir="/usr/share/doc/${PF}/html" \
-		install || die "Install failed"
+	emake -j1 DESTDIR="${D}" install || die "Install failed"
+	prepalldocs
 }
