@@ -5,20 +5,20 @@ Index: configure.in.in
 @@ -192,7 +192,6 @@
  echo " ------------------- Probing for QT 4.x ------------------"
  QTDIR=xxx
- dnl
+ 
 -QTPOSTFIX="-qt4"
  QTEXTRAINC="/usr/include/qt4"
  QTEXTRALIB="/usr/lib/qt4"
- dnl
+ 
 @@ -215,7 +214,7 @@
  if test $QTDIR = xxx ; then
     AC_MSG_WARN(Could not locate QT 4.x)
     adm_qt4_enabled="no"
 -fi
 +else
+ 
  AC_MSG_RESULT($QTDIR)
  AC_MSG_CHECKING(QT4.x lib)
- AC_ARG_WITH([qt-lib],
 @@ -322,6 +321,7 @@
  AC_MSG_RESULT(yes)
  rm -f moc_myqt.cpp myqt.h myqt.cpp myqt.o myqt moc_myqt.o
@@ -26,4 +26,4 @@ Index: configure.in.in
 +fi
  echo " ------------------- End of UI probe ------------------"
      
- dnl 
+ AC_SUBST(ADM_QTLIBS)

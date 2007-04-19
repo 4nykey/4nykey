@@ -4,7 +4,7 @@
 
 inherit subversion flag-o-matic autotools qt4
 
-PATCHLEVEL=7
+WANT_AUTOMAKE="1.9"
 DESCRIPTION="Great Video editing/encoding tool"
 HOMEPAGE="http://fixounet.free.fr/avidemux/"
 ESVN_REPO_URI="svn://svn.berlios.de/avidemux/branches/avidemux_2.4_branch"
@@ -14,7 +14,7 @@ LICENSE="GPL-2"
 SLOT="2"
 KEYWORDS="~x86"
 IUSE="
-	a52 aac alsa altivec arts encode esd mad mmx nls png vorbis sdl truetype
+	a52 aac alsa altivec arts esd mad mmx nls png vorbis sdl truetype
 	xvid xv oss x264 dts qt4 fontconfig lame faac aften
 "
 
