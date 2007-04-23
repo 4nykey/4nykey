@@ -6,6 +6,7 @@ inherit subversion
 DESCRIPTION="OCRopus is a state-of-the-art document analysis and OCR system"
 HOMEPAGE="http://www.ocropus.org"
 ESVN_REPO_URI="http://ocropus.googlecode.com/svn/trunk"
+ESVN_PATCHES="${PN}-*.diff"
 
 LICENSE="Apache-2.0"
 SLOT="0"

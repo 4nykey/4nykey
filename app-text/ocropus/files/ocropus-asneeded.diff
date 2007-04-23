@@ -1,0 +1,16 @@
+Index: Jamrules.in
+===================================================================
+--- Jamrules.in	(revision 78)
++++ Jamrules.in	(working copy)
+@@ -11,9 +11,9 @@
+ } else {
+ OPTIM = -g -O3 -DUNSAFE ;
+ }
+-ldflags = @LDFLAGS@ @LIBS@ ;
++ldflags = @LDFLAGS@ ;
+ LINK = @CXX@ $(ldflags) ;
+-LINKLIBS = -lpng -ltiff -laspell ;
++LINKLIBS = -lpng -ltiff -laspell @LIBS@ ;
+ 
+ TESSHEADERS = @tessheaders@ ;
+ TESSLIBS = @tesslibs@ ;
