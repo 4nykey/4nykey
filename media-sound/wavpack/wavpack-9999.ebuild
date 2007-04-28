@@ -12,7 +12,7 @@ LICENSE="BSD"
 
 SLOT="0"
 KEYWORDS="~x86"
-IUSE=""
+IUSE="mmx"
 
 RDEPEND="
 	virtual/libiconv
@@ -20,6 +20,12 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 "
+src_compile() {
+	econf \
+		$(use_enable mmx) \
+		|| die
+	emake || die
+}
 
 src_install() {
 	einstall || die
