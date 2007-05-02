@@ -6,7 +6,7 @@ inherit subversion
 
 DESCRIPTION="Musepack audio compression tools"
 HOMEPAGE="http://www.musepack.net"
-ESVN_REPO_URI="http://svn.musepack.net/libmpc/branches/r2d"
+ESVN_REPO_URI="http://svn.musepack.net/libmpc/trunk"
 ESVN_PATCHES="${P}-*.patch"
 
 SLOT="8"
