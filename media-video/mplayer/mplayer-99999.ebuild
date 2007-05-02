@@ -296,7 +296,6 @@ src_compile() {
 		teh_conf win32codecs win32dll
 	teh_conf amr amr_nb
 	teh_conf amr amr_wb
-	myconf="${myconf} --disable-amr_nb-fixed"
 
 	#############
 	# Video Output #
