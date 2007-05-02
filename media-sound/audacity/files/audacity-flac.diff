@@ -25,9 +25,9 @@
     encoder->set_sample_rate(int(rate + 0.5));
  
 @@ -72,7 +81,11 @@
-     	format=int16Sample;
-    	encoder->set_bits_per_sample(16);
-    }
+    encoder->set_rice_parameter_search_dist(flacLevels[levelPref].rice_parameter_search_dist);
+    encoder->set_max_lpc_order(flacLevels[levelPref].max_lpc_order);
+ 
 -   encoder->init();
 +#ifdef LEGACY_FLAC
 +   encoder->init(); // really should check the return value here...
