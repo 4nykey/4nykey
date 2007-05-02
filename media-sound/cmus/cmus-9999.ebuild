@@ -7,7 +7,6 @@ inherit git
 DESCRIPTION="CMus - ncurses based music player."
 HOMEPAGE="http://onion.dynserv.net/~timo/cmus.html"
 EGIT_REPO_URI="git://onion.dynserv.net/git/cmus.git"
-EGIT_PATCHES="${PN}-*.diff"
 
 LICENSE="GPL-2"
 KEYWORDS="~x86"
@@ -72,8 +71,6 @@ src_compile() {
 		prefix=/usr \
 		${myconf} || die
 
-	# breaks tags reading for mpcs
-	sed -i Makefile -e /_FILE_OFFSET_BITS/d
 	emake V=2 || die
 }
 
