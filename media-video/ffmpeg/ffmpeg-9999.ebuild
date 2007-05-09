@@ -113,8 +113,8 @@ src_compile() {
 	teh_conf en dts libdts
 	teh_conf dis network
 	teh_conf dis zlib
-	teh_conf en amr amr-nb
-	teh_conf en amr amr-wb
+	teh_conf en amr libamr-nb
+	teh_conf en amr libamr-wb
 	teh_conf en aac libfaad
 	teh_conf en swscaler
 	teh_conf en X x11grab

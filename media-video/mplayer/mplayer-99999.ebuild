@@ -200,7 +200,7 @@ src_compile() {
 	# use shared ffmpeg libs (not supported),
 	# except for avutil (actively not supported)
 		for lib in avcodec avformat postproc; do
-			myconf="${myconf} --disable-lib$lib"
+			myconf="${myconf} --disable-lib${lib}_a"
 		done
 	fi
 
