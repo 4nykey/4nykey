@@ -1,0 +1,21 @@
+diff --git a/Makefile b/Makefile
+index a2b7028..ebec12f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,6 +1,5 @@
+-CC=/usr/bin/gcc
+-CFLAGS=`pkg-config --cflags xmms2-client xmms2-client-glib gnt` -g -O0 -Wall -I/usr/include/ncursesw/
+-LDFLAGS=`pkg-config --libs xmms2-client xmms2-client-glib gnt` -lncursesw -lpanelw
++CFLAGS+=`pkg-config --cflags xmms2-client xmms2-client-glib gnt` -g -Wall
++LDADD=`pkg-config --libs xmms2-client xmms2-client-glib gnt` -lncursesw -lpanelw
+ 
+ sources=gx.c gxcoll.c gxconfigs.c gxmlib.c gxplaylist.c utils.c
+ headers=gntxmms.h gxcoll.h gxconfigs.h gxmlib.h gxplaylist.h utils.h
+@@ -11,6 +10,7 @@ clean:
+ 	rm -f *.o gx
+ 
+ gx: gx.o utils.o gxcoll.o gxconfigs.o gxmlib.o gxplaylist.o
++	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LDADD)
+ 
+ gx.o: gx.c $(headers)
+ 
