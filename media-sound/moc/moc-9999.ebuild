@@ -15,7 +15,7 @@ LICENSE="GPL-2"
 KEYWORDS="~x86"
 IUSE="
 flac ffmpeg mad oss vorbis debug alsa speex libsamplerate curl sndfile musepack
-jack modplug timidity
+jack modplug timidity wavpack
 "
 
 RDEPEND="
@@ -34,6 +34,7 @@ RDEPEND="
 	jack? ( media-sound/jack-audio-connection-kit )
 	modplug? ( media-libs/libmodplug )
 	timidity? ( media-sound/timidity++ )
+	wavpack? ( media-sound/wavpack )
 "
 DEPEND="
 	${RDEPEND}
@@ -53,6 +54,7 @@ src_compile() {
 		$(use_with jack) \
 		$(use_with modplug) \
 		$(use_with timidity) \
+		$(use_with wavpack) \
 		|| die "./configure failed"
 
 	emake || die "make failed"
