@@ -6,8 +6,9 @@ inherit mercurial flag-o-matic toolchain-funcs libtool autotools
 
 DESCRIPTION="Core libraries for Xine movie player"
 HOMEPAGE="http://xine.sourceforge.net/"
-EHG_REPO_URI="http://hg.debian.org/hg/xine-lib/xine-lib"
-S="${WORKDIR}/${PN}"
+BRANCH="xine-lib-1.2"
+EHG_REPO_URI="http://hg.debian.org/hg/xine-lib/${BRANCH}"
+S="${WORKDIR}/${BRANCH}"
 
 LICENSE="GPL-2"
 SLOT="1"
@@ -17,7 +18,7 @@ IUSE="
 aalib libcaca arts esd win32codecs nls dvd X directfb vorbis alsa gnome sdl
 speex theora ipv6 altivec opengl aac fbcon xv xvmc samba dxr3 vidix mng flac
 oss v4l xinerama vcd a52 mad imagemagick dts debug modplug gtk pulseaudio mmap
-doc truetype wavpack musepack xcb
+doc truetype wavpack musepack xcb dvdnav
 "
 
 RDEPEND="
@@ -47,6 +48,7 @@ RDEPEND="
 	samba? ( net-fs/samba )
 	mng? ( media-libs/libmng )
 	vcd? ( media-video/vcdimager )
+	dvdnav? ( media-libs/libdvdnav )
 	a52? ( >=media-libs/a52dec-0.7.4-r5 )
 	mad? ( media-libs/libmad )
 	imagemagick? ( media-gfx/imagemagick )
@@ -83,6 +85,7 @@ DEPEND="
 src_unpack() {
 	mercurial_src_unpack
 	cd "${S}"
+	epatch "${FILESDIR}"/${PN}-*.diff
 	AT_M4DIR="m4" eautoreconf
 }
 
@@ -163,6 +166,7 @@ src_compile() {
 		$(use_with arts) \
 		$(use_with esd esound) \
 		$(use_with pulseaudio) \
+		$(use_with dvdnav external-dvdnav) \
 		$(use_enable vcd) --without-internal-vcdlibs \
 		\
 		$(use_enable win32codecs w32dll) \

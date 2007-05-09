@@ -1,0 +1,12 @@
+diff -r 15b76566a8d2 configure.ac
+--- a/configure.ac	Fri May 04 16:53:47 2007 +0200
++++ b/configure.ac	Sat May 05 00:07:09 2007 +0300
+@@ -1264,7 +1264,7 @@ if test "x$enable_a52dec" = "xno"; then
+   AC_MSG_RESULT([a52dec support disabled])
+ elif test "x$external_a52dec" = "xyes"; then
+   have_a52="yes"
+-  AC_CHECK_HEADERS([a52dec/a52.h a52dec/a52_internal.h],, have_a52="no",
++  AC_CHECK_HEADERS([a52dec/a52.h],, have_a52="no",
+ [
+   #ifdef HAVE_SYS_TYPES_H
+   # include <sys/types.h>
