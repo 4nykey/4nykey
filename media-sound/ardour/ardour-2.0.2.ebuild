@@ -2,25 +2,26 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/ardour/ardour-0.99.3.ebuild,v 1.1 2006/05/13 17:11:21 eldad Exp $
 
-inherit subversion flag-o-matic
+inherit flag-o-matic
 
 DESCRIPTION="multi-track hard disk recording software"
 HOMEPAGE="http://ardour.org/"
-SRC_URI="mirror://gentoo/libsndfile-1.0.17+flac-1.1.3.patch.bz2"
-ESVN_REPO_URI="http://subversion.ardour.org/svn/ardour2/trunk"
-ESVN_PATCHES="${PN}-*.diff"
+SRC_URI="
+	http://ardour.org/files/releases/${P}.tar.bz2
+	mirror://gentoo/libsndfile-1.0.17+flac-1.1.3.patch.bz2
+"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="-*"
-IUSE="nls debug mmx 3dnow sse fftw osc vst ladspa external-libs doc"
+KEYWORDS="~x86"
+IUSE="nls debug mmx 3dnow sse fftw osc vst ladspa external-libs"
 
 RDEPEND="
 	>=media-libs/liblrdf-0.3.6
 	>=media-libs/raptor-1.2.0
 	>=media-libs/libsamplerate-0.0.14
 	fftw? ( =sci-libs/fftw-3* )
-	>=media-sound/jack-audio-connection-kit-0.105.0
+	>=media-sound/jack-audio-connection-kit-0.100.0
 	>=dev-libs/libxml2-2.5.7
 	dev-libs/libxslt
 	media-libs/flac
@@ -38,16 +39,13 @@ DEPEND="
 	dev-util/pkgconfig
 	>=dev-util/scons-0.96.1
 	nls? ( sys-devel/gettext )
-	doc? ( app-text/xmlto )
 "
 
 src_unpack() {
-	subversion_src_unpack
-	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
-
+	unpack ${A}
 	cd ${S}
-	sed -i svn_revision.h \
-		-e "s:\([ =]*\"\)[0-9]\+:\1${ESVN_WC_REVISION}:"
+
+	epatch "${FILESDIR}"/${PN}-[c-p]*.diff
 
 	# handle gtkmm accessibility flag
 	built_with_use dev-cpp/gtkmm accessibility || \
@@ -56,7 +54,7 @@ src_unpack() {
 	# make bundled sndfile build w/ flac-1.1.3+
 	if use !external-libs; then
 		cd libs/libsndfile
-		epatch "${DISTDIR}"/${A}
+		epatch "${WORKDIR}"/libsndfile-1.0.17+flac-1.1.3.patch
 	fi
 }
 
@@ -81,7 +79,6 @@ src_compile() {
 
 	scons \
 		${myconf} || die "make failed"
-	use doc && make -C manual html
 }
 
 src_install() {
@@ -89,5 +86,4 @@ src_install() {
 
 	dodoc DOCUMENTATION/{AUTHORS*,CONTRIBUTORS*,FAQ,README*,TODO,TRANSLATORS}
 	doman DOCUMENTATION/ardour.1
-	use doc && dohtml -r manual/tmp/*
 }
