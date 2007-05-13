@@ -25,3 +25,12 @@ Index: mpc2sv8/CMakeLists.txt
  endif(CMAKE_SYSTEM_NAME STREQUAL OpenBSD)
  
 +install(TARGETS mpc2sv8 RUNTIME DESTINATION bin)
+Index: mpccut/CMakeLists.txt
+===================================================================
+--- mpccut/CMakeLists.txt	(revision 322)
++++ mpccut/CMakeLists.txt	(working copy)
+@@ -19,3 +19,4 @@
+ target_link_libraries(mpccut m)
+ endif(NOT MSVC)
+ 
++install(TARGETS mpccut RUNTIME DESTINATION bin)

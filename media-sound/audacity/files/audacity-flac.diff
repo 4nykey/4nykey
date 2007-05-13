@@ -11,9 +11,9 @@
 +#undef LEGACY_FLAC
 +#endif
 +
- bool ExportFLAC(AudacityProject *project,
-                 int numChannels, wxString fName,
-                 bool selectionOnly, double t0, double t1, MixerSpec *mixerSpec)
+ static struct
+ {
+    bool        do_exhaustive_model_search;
 @@ -58,7 +65,9 @@
        gPrefs->Read(wxT("/FileFormats/FLACBitDepth"), wxT("16"));
     
@@ -34,7 +34,7 @@
 +#else
 +   encoder->init(OSFILENAME(fName)); // really should check the return value here...
 +#endif
-    
+ 
     int numWaveTracks;
     WaveTrack **waveTracks;
 @@ -129,7 +142,7 @@
