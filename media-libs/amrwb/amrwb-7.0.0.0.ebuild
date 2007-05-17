@@ -6,7 +6,7 @@ inherit eutils
 
 MAJ=26
 MIN=204
-PAT=600
+PAT=700
 WBV="${MAJ}${MIN}-${PAT}"
 DESCRIPTION="AMR WideBand codec wrapper library"
 HOMEPAGE="http://www.3gpp.org http://www.penguin.cz/~utx/amr"

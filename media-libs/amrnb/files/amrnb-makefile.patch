@@ -1,11 +1,11 @@
 --- Makefile.in.orig	2007-04-13 23:42:34.000000000 +0300
 +++ Makefile.in	2007-04-17 13:44:03.000000000 +0300
-@@ -945,8 +945,6 @@
- 	uninstall-libamrnbHEADERS
+@@ -913,8 +913,6 @@
+ # One target prevents concurrent unpacking processes during parallel build.
+ $(top_srcdir)/decoder.c $(top_srcdir)/encoder.c $(top_srcdir)/interf_dec.c $(top_srcdir)/interf_dec.h $(top_srcdir)/interf_enc.c $(top_srcdir)/interf_enc.h $(top_srcdir)/interf_rom.h $(top_srcdir)/rom_dec.h $(top_srcdir)/rom_enc.h $(top_srcdir)/sp_dec.c $(top_srcdir)/sp_dec.h $(top_srcdir)/sp_enc.c $(top_srcdir)/sp_enc.h $(top_srcdir)/typedef.h: $(top_srcdir)/readme.txt
  
- 
--$(top_srcdir)/decoder.c $(top_srcdir)/encoder.c $(top_srcdir)/interf_dec.c $(top_srcdir)/interf_dec.h $(top_srcdir)/interf_enc.c $(top_srcdir)/interf_enc.h $(top_srcdir)/interf_rom.h $(top_srcdir)/readme.txt $(top_srcdir)/rom_dec.h $(top_srcdir)/rom_enc.h $(top_srcdir)/sp_dec.c $(top_srcdir)/sp_dec.h $(top_srcdir)/sp_enc.c $(top_srcdir)/sp_enc.h $(top_srcdir)/typedef.h: $(top_srcdir)/prepare_sources.sh $(top_srcdir)/amrnb-any-cflags.patch $(top_srcdir)/amrnb-intsizes.patch $(top_srcdir)/amrnb-strict-aliasing.patch | $(top_srcdir)/26104-610_ANSI_C_source_code.zip
+-$(top_srcdir)/readme.txt: $(top_srcdir)/prepare_sources.sh $(top_srcdir)/amrnb-any-cflags.patch $(top_srcdir)/amrnb-intsizes.patch $(top_srcdir)/amrnb-strict-aliasing.patch $(top_srcdir)/26104-610_ANSI_C_source_code.zip
 -	$(top_srcdir)/prepare_sources.sh
  
- 26104-610_ANSI_C_source_code.zip 26104-610.doc: | 26104-610.zip
+ 26104-610_ANSI_C_source_code.zip 26104-610.doc: 26104-610.zip
  	rm -f 26104-610_ANSI_C_source_code.zip 26104-610.doc

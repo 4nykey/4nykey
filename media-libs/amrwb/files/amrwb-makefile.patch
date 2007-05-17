@@ -1,11 +1,11 @@
 --- Makefile.in.orig	2007-04-13 14:55:17.000000000 +0300
 +++ Makefile.in	2007-04-17 14:02:56.000000000 +0300
-@@ -810,8 +810,6 @@
- 	uninstall-libamrwbHEADERS
+@@ -798,8 +798,6 @@
+ # One target prevents concurrent unpacking processes during parallel build.
+ $(top_srcdir)/dec_acelp.c $(top_srcdir)/dec_acelp.h $(top_srcdir)/dec_dtx.c $(top_srcdir)/dec_dtx.h $(top_srcdir)/dec_gain.c $(top_srcdir)/dec_gain.h $(top_srcdir)/dec.h $(top_srcdir)/dec_if.c $(top_srcdir)/dec_if.h $(top_srcdir)/dec_lpc.c $(top_srcdir)/dec_lpc.h $(top_srcdir)/dec_main.c $(top_srcdir)/dec_main.h $(top_srcdir)/decoder.c $(top_srcdir)/dec_rom.c $(top_srcdir)/dec_util.c $(top_srcdir)/dec_util.h $(top_srcdir)/enc_acelp.c $(top_srcdir)/enc_acelp.h $(top_srcdir)/enc_dtx.c $(top_srcdir)/enc_dtx.h $(top_srcdir)/enc_gain.c $(top_srcdir)/enc_gain.h $(top_srcdir)/enc.h $(top_srcdir)/enc_if.c $(top_srcdir)/enc_if.h $(top_srcdir)/enc_lpc.c $(top_srcdir)/enc_lpc.h $(top_srcdir)/enc_main.c $(top_srcdir)/enc_main.h $(top_srcdir)/encoder.c $(top_srcdir)/enc_rom.c $(top_srcdir)/enc_util.c $(top_srcdir)/enc_util.h $(top_srcdir)/if_rom.c $(top_srcdir)/if_rom.h $(top_srcdir)/typedef.h: $(top_srcdir)/readme.txt
  
- 
--$(top_srcdir)/dec_acelp.c $(top_srcdir)/dec_acelp.h $(top_srcdir)/dec_dtx.c $(top_srcdir)/dec_dtx.h $(top_srcdir)/dec_gain.c $(top_srcdir)/dec_gain.h $(top_srcdir)/dec.h $(top_srcdir)/dec_if.c $(top_srcdir)/dec_if.h $(top_srcdir)/dec_lpc.c $(top_srcdir)/dec_lpc.h $(top_srcdir)/dec_main.c $(top_srcdir)/dec_main.h $(top_srcdir)/decoder.c $(top_srcdir)/dec_rom.c $(top_srcdir)/dec_util.c $(top_srcdir)/dec_util.h $(top_srcdir)/enc_acelp.c $(top_srcdir)/enc_acelp.h $(top_srcdir)/enc_dtx.c $(top_srcdir)/enc_dtx.h $(top_srcdir)/enc_gain.c $(top_srcdir)/enc_gain.h $(top_srcdir)/enc.h $(top_srcdir)/enc_if.c $(top_srcdir)/enc_if.h $(top_srcdir)/enc_lpc.c $(top_srcdir)/enc_lpc.h $(top_srcdir)/enc_main.c $(top_srcdir)/enc_main.h $(top_srcdir)/encoder.c $(top_srcdir)/enc_rom.c $(top_srcdir)/enc_util.c $(top_srcdir)/enc_util.h $(top_srcdir)/if_rom.c $(top_srcdir)/if_rom.h $(top_srcdir)/readme.txt $(top_srcdir)/typedef.h: $(top_srcdir)/prepare_sources.sh $(top_srcdir)/amrwb-any-cflags.patch $(top_srcdir)/amrwb-intsizes.patch | $(top_srcdir)/26204-600_ANSI-C_source_code.zip
+-$(top_srcdir)/readme.txt: $(top_srcdir)/prepare_sources.sh $(top_srcdir)/amrwb-any-cflags.patch $(top_srcdir)/amrwb-intsizes.patch $(top_srcdir)/26204-700_ANSI-C_source_code.zip
 -	$(top_srcdir)/prepare_sources.sh
  
- 26204-600_ANSI-C_source_code.zip 26204-600.doc: | 26204-600.zip
- 	rm -f 26204-600_ANSI-C_source_code.zip 26204-600.doc
+ 26204-700_ANSI-C_source_code.zip 26204-700.doc: 26204-700.zip
+ 	rm -f 26204-700_ANSI-C_source_code.zip 26204-700.doc
