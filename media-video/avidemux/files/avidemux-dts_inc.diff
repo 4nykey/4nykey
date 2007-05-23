@@ -1,15 +1,3 @@
-Index: avidemux/ADM_audiocodec/ADM_dca.cpp
-===================================================================
---- avidemux/ADM_audiocodec/ADM_dca.cpp	(revision 2926)
-+++ avidemux/ADM_audiocodec/ADM_dca.cpp	(working copy)
-@@ -32,7 +32,6 @@
- extern "C"
- {
- #include "dts.h"
--#include "dts_internal.h"
- 
- }
- #include "ADM_audio/ADM_dcainfo.h"
 Index: configure.in.in
 ===================================================================
 --- configure.in.in	(revision 2937)
@@ -22,3 +10,15 @@ Index: configure.in.in
      	
      	if test "x$have_libdca" = "xyes"; then
              AC_CHECK_LIB(dts, dts_init, , have_libdca=no)
+Index: avidemux/ADM_libraries/ADM_libwrapper/libwrapper_dca.h
+===================================================================
+--- avidemux/ADM_libraries/ADM_libwrapper/libwrapper_dca.h	(revision 3123)
++++ avidemux/ADM_libraries/ADM_libwrapper/libwrapper_dca.h	(working copy)
+@@ -7,7 +7,6 @@
+ extern "C"
+ {
+ #include "dts.h"
+-#include "dts_internal.h"
+ }
+ 
+ class ADM_LibWrapperDca : public ADM_LibWrapper
