@@ -6,8 +6,6 @@ inherit subversion flag-o-matic toolchain-funcs
 
 DESCRIPTION="Complete solution to record, convert and stream audio and video. Includes libavcodec."
 HOMEPAGE="http://ffmpeg.sourceforge.net/"
-NBV="610"
-WBV="600"
 ESVN_REPO_URI="svn://svn.mplayerhq.hu/ffmpeg/trunk"
 ESVN_PATCHES="${PN}-*.diff"
 
@@ -16,7 +14,7 @@ SLOT="0"
 KEYWORDS="~x86"
 IUSE="
 aac debug doc ieee1394 a52 encode imlib mmx ogg vorbis oss threads truetype
-v4l v4l2 xvid dts network zlib X amr x264 static mp3 swscaler sdl
+v4l v4l2 xvid network zlib X amr x264 static mp3 swscaler sdl
 "
 
 RDEPEND="
@@ -29,7 +27,6 @@ RDEPEND="
 	aac? ( media-libs/faad2 )
 	a52? ( >=media-libs/a52dec-0.7.4-r4 )
 	zlib? ( sys-libs/zlib )
-	dts? ( media-libs/libdts )
 	ieee1394? (
 		=media-libs/libdc1394-1*
 		sys-libs/libraw1394
@@ -110,7 +107,6 @@ src_compile() {
 	teh_conf en threads pthreads
 	teh_conf en ogg libogg
 	teh_conf en vorbis libvorbis
-	teh_conf en dts libdts
 	teh_conf dis network
 	teh_conf dis zlib
 	teh_conf en amr libamr-nb
