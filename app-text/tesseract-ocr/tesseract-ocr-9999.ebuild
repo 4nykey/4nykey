@@ -7,7 +7,7 @@ inherit subversion autotools
 DESCRIPTION="A commercial quality OCR engine developed at HP in the 80's and early 90's."
 HOMEPAGE="http://sourceforge.net/projects/tesseract-ocr/"
 ESVN_REPO_URI="http://tesseract-ocr.googlecode.com/svn/trunk"
-ESVN_PATCHES="tesseract-*.patch"
+ESVN_PATCHES="${PN%%-*}*.patch"
 ESVN_BOOTSTRAP="eautoreconf"
 
 LICENSE="Apache-2.0"
