@@ -1,4 +1,5 @@
 app-misc/emelfm2:inotify - File-alteration monitoring using Linux kernel inotify API
+app-misc/emelfm2:kernel_linux - KERNEL setting for systems using the Linux kernel
 media-fonts/cm-unicode:gs - Ghostscript support
 media-fonts/cm-unicode:opentype - Install OpenType fonts
 media-fonts/ttf-gandhari-unicode:opentype - Install OpenType fonts
@@ -6,6 +7,7 @@ media-fonts/ttf-linuxlibertine:opentype - Install OpenType fonts
 media-libs/a52dec:djbfft - Prefer D.J. Bernstein's library for Fourier transforms
 media-libs/libvorbis:aotuv - Allow users to enable aoTuV encoder enhancements
 media-libs/x264:mp4 - Adds support for mp4 container via gpac
+media-libs/xine-lib:dvdnav - Prefer system libdvdnav to bundled one
 media-libs/xine-lib:dxr3 - Support for DXR3 mpeg acceleration cards
 media-libs/xine-lib:modplug - Build with modplug support
 media-libs/xine-lib:vidix - Support for vidix video output
@@ -29,6 +31,7 @@ media-sound/cmus:mp4 - enable mp4 decoding
 media-sound/cmus:zsh-completion - Install zsh command completion
 media-sound/moc:modplug - Build with modplug support
 media-sound/moc:timidity - Build with Timidity++ (MIDI sequencer) support
+media-sound/moc:wavpack - Build with WavPack support
 media-sound/mpd:icecast - Enable support for Icecast2
 media-sound/ncmpc:lyrics - Support for fetching lyrics from Internet
 media-sound/ncmpc:mouse - Enable curses getmouse support
