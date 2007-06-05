@@ -9,13 +9,14 @@ SRC_URI="mirror://sourceforge/mooedit/${P}.tar.bz2"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="python pcre xml"
+IUSE="python pcre xml debug fam"
 
 RDEPEND="
 	>=x11-libs/gtk+-2.6
 	python? ( dev-python/pygtk )
 	pcre? ( dev-libs/libpcre )
 	xml? ( dev-libs/libxml2 )
+	fam? ( virtual/fam )
 "
 DEPEND="
 	${RDEPEND}
@@ -23,12 +24,17 @@ DEPEND="
 
 src_compile() {
 	econf \
+		--enable-libmoo \
+		--enable-libmoo-headers \
+		$(use_enable debug) \
 		$(use_with python) \
-		$(use_with python pygtk) \
+		$(use_with python mooterm) \
+		$(use_enable python moo-module) \
 		$(use_with pcre system-pcre) \
-		$(use_with xml xml) || die
-#		--without-custom-codegen \
-	
+		$(use_with xml) \
+		$(use_with fam) \
+		|| die
+
 	emake || die
 }
 
