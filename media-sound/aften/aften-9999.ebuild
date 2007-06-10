@@ -7,12 +7,11 @@ inherit subversion
 DESCRIPTION="Aften is an open-source A/52 (AC-3) audio encoder"
 HOMEPAGE="http://aften.sourceforge.net/"
 ESVN_REPO_URI="https://svn.sourceforge.net/svnroot/aften"
-#ESVN_PATCHES="${FILESDIR}/${PN}-*.diff"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="debug"
+IUSE="debug nocxx"
 
 DEPEND="
 	>=dev-util/cmake-2.4
@@ -21,6 +20,7 @@ DEPEND="
 RDEPEND=""
 
 src_compile() {
+	use nocxx || local myconf="-DBINDINGS_CXX=1"
 	mkdir -p build
 	cd build
 	cmake \
@@ -28,7 +28,8 @@ src_compile() {
 		-DCMAKE_C_FLAGS_RELEASE="" \
 		-DCMAKE_ASM_COMPILER=/usr/bin/nasm \
 		-DSHARED=y \
-		 .. || die
+		${myconf} .. \
+		|| die
 	emake || die
 }
 
