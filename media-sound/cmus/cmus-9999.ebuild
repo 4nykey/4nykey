@@ -76,8 +76,8 @@ src_compile() {
 
 src_install() {
 	make DESTDIR=${D} install || die
-	rm -rf ${D}usr/share/doc
-	dodoc AUTHORS HACKING README cmus-status-display
+	mv ${D}usr/share/doc/{${PN},${PF}}
+	dodoc AUTHORS HACKING README
 	if use zsh-completion; then
 		insinto /usr/share/zsh/site-functions
 		doins contrib/_cmus
