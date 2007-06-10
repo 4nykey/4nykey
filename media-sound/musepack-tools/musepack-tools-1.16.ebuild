@@ -21,6 +21,7 @@ IUSE="esd encode oss"
 
 RDEPEND="
 	esd? ( media-sound/esound )
+	!media-sound/mppenc
 "
 DEPEND="
 	${RDEPEND}
@@ -28,7 +29,6 @@ DEPEND="
 	app-arch/unzip
 	oss? ( virtual/os-headers )
 	x86? ( dev-lang/nasm )
-	amd64? ( dev-lang/nasm )
 "
 
 src_unpack() {
