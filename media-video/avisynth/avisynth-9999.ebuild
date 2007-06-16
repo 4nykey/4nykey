@@ -18,7 +18,7 @@ IUSE="debug doc gtk ffmpeg"
 
 DEPEND="
 	dev-libs/STLport
-	>=dev-libs/boost-1.33
+	>=dev-libs/boost-1.34
 	>=media-libs/freetype-2
 	media-libs/fontconfig
 	x86? ( dev-lang/nasm )
@@ -33,14 +33,6 @@ DEPEND="
 	${DEPEND}
 	doc? ( app-doc/doxygen )
 "
-
-pkg_setup() {
-	if ! built_with_use -o dev-libs/boost threads threadsonly; then
-		eerror "Please emerge dev-libs/boost with either 'threads' or"
-		eerror "'threadsonly' USE-flags"
-		die "This package needs multi-threaded dev-libs/boost"
-	fi
-}
 
 src_unpack() {
 	cvs_src_unpack
