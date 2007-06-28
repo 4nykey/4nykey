@@ -39,5 +39,6 @@ src_compile() {
 src_install() {
 	einstall || die
 	emake datadir="${D}"/usr/share -C src install-plugins || die
+	fperms -x /usr/share/makedict-codecs/mdparser.py
 	dodoc AUTHORS ChangeLog README TODO
 }
