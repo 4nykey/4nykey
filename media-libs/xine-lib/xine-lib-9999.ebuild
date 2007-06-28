@@ -85,7 +85,6 @@ DEPEND="
 src_unpack() {
 	mercurial_src_unpack
 	cd "${S}"
-	epatch "${FILESDIR}"/${PN}-*.diff
 	AT_M4DIR="m4" eautoreconf
 }
 
