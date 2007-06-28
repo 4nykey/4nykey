@@ -2,14 +2,14 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit cvs autotools
+inherit subversion autotools
 
+AT_M4DIR="m4"
 DESCRIPTION="Frame Server for Linux and Windows"
 HOMEPAGE="http://avisynth2.sourceforge.net"
-ECVS_SERVER="avisynth2.cvs.sourceforge.net:/cvsroot/avisynth2"
-ECVS_MODULE="${PN}"
-ECVS_BRANCH="avisynth_3_0"
-S="${WORKDIR}/${ECVS_MODULE}/build/linux"
+ESVN_REPO_URI="https://avisynth2.svn.sourceforge.net/svnroot/avisynth2/branches/avisynth_3_0"
+ESVN_PATCHES="${PN}-*.diff ${S}/build/linux/gentoo/files/*.patch"
+ESVN_BOOTSTRAP="cd build/linux && eautoreconf"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -35,16 +35,14 @@ DEPEND="
 "
 
 src_unpack() {
-	cvs_src_unpack
-	cd ${S}
-	tar -xjf ../circular_buffer_v3.7.tar.bz2
-	epatch "${FILESDIR}"/${PN}-*.diff
-	epatch "${S}"/gentoo/files/*.patch
+	subversion_src_unpack
+	tar -xjf ${S}/build/circular_buffer_v3.7.tar.bz2
 	mv circular_buffer boost
-	AT_M4DIR="m4" eautoreconf
 }
 
 src_compile() {
+	cd build/linux
+
 	CPPFLAGS="${CPPFLAGS} -I." \
 	econf \
 		$(use_enable debug core-debug) \
@@ -52,10 +50,11 @@ src_compile() {
 		$(use_enable doc) \
 		--with-boost-lib-name=boost_thread-mt \
 		|| die
+
 	make || die
 }
 
 src_install() {
-	make DESTDIR=${D} install || die
-	dodoc ../../*.txt ../../TODO
+	make DESTDIR=${D} -C build/linux install || die
+	dodoc Changelog.txt TODO
 }
