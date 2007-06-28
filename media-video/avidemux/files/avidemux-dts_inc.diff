@@ -10,15 +10,3 @@ Index: configure.in.in
      	
      	if test "x$have_libdca" = "xyes"; then
              AC_CHECK_LIB(dts, dts_init, , have_libdca=no)
-Index: avidemux/ADM_libraries/ADM_libwrapper/libwrapper_dca.h
-===================================================================
---- avidemux/ADM_libraries/ADM_libwrapper/libwrapper_dca.h	(revision 3123)
-+++ avidemux/ADM_libraries/ADM_libwrapper/libwrapper_dca.h	(working copy)
-@@ -7,7 +7,6 @@
- extern "C"
- {
- #include "dts.h"
--#include "dts_internal.h"
- }
- 
- class ADM_LibWrapperDca : public ADM_LibWrapper
