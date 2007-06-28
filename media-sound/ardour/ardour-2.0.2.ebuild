@@ -45,7 +45,7 @@ src_unpack() {
 	unpack ${A}
 	cd ${S}
 
-	epatch "${FILESDIR}"/${PN}-[c-p]*.diff
+	epatch "${FILESDIR}"/${PN}-{cflags,ext_sndfile,prefix}.diff
 
 	# handle gtkmm accessibility flag
 	built_with_use dev-cpp/gtkmm accessibility || \
