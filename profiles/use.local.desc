@@ -23,9 +23,6 @@ media-sound/aqualung:taglib - Enable support for metadata editing through taglib
 media-sound/aqualung:wavpack - Build with WavPack support
 media-sound/ardour:external-libs - Use system libraries instead of bundled (not supported by upstream)
 media-sound/ardour:vst - Enable VST support
-media-sound/audacity:lame - Enable MP3 encoding through LAME
-media-sound/audacity:soundtouch - Support for time-stretch/pitch-shift through libsoundtouch
-media-sound/audacity:twolame - Enable MP2 encoding through twolame
 media-sound/cmus:modplug - Build with modplug support
 media-sound/cmus:mp4 - enable mp4 decoding
 media-sound/cmus:zsh-completion - Install zsh command completion
@@ -39,18 +36,10 @@ media-sound/ncmpc:raw-mode - raw terminal mode
 media-sound/rezound:16bittmp - Use 16bit temporary files (default 32bit float), usefull for slower computers
 media-sound/rezound:lame - Enable MP3 encoding through LAME
 media-sound/rezound:soundtouch - compile with support for soundtouch
-media-sound/snd:gsl - Use the GNU scientific library for calculations
 media-sound/snd:timidity - Build with Timidity++ (MIDI sequencer) support
 media-sound/snd:wavpack - Build with WavPack support
 media-sound/sonata:taglib - Enable support for metadata editing through taglib
 media-sound/vorbis-tools:ogg123 - Build ogg123 player
-media-sound/xmms2:ape - Add support for decoding of Monkey's Audio
-media-sound/xmms2:boost - Build CXX libraries dependant on boost
-media-sound/xmms2:cdda - Support for Audio CD playback via libcdio
-media-sound/xmms2:mms - Support for MMS media streaming protocol via libmms
-media-sound/xmms2:modplug - Build with modplug support
-media-sound/xmms2:ofa - Support for Open Fingerprint Architecture
-media-sound/xmms2:sid - Build with SID (Commodore 64 Audio) support
 media-video/avidemux:aften - Enable A/52 encoding support via aften
 media-video/avidemux:faac - Enable AAC encoding through FAAC
 media-video/avidemux:fontconfig - Support for mananging custom fonts via fontconfig
@@ -59,8 +48,6 @@ media-video/ffmpeg:amr - Enables Adaptive Multi-Rate Audio support
 media-video/ffmpeg:network - Enables network streaming support
 media-video/ffmpeg:swscaler - Adds support for software scaler
 media-video/ffmpeg:v4l2 - Enables video4linux2 support
-media-video/gpac:amr - Adaptive Multi-Rate Audio support (commonly used in telephony)
-media-video/gpac:xulrunner - Use xulrunner for building mozilla plugin
 media-video/mkvtoolnix:lzo - Enables support for lzo compression
 media-video/mplayer:3dnowext - Enables 3dnow extensions in mplayer
 media-video/mplayer:amr - Enables Adaptive Multi-Rate Audio support
@@ -88,6 +75,8 @@ media-video/mplayer:v4l2 - Enables video4linux2 support
 media-video/mplayer:xanim - Enables support for xanim based codecs
 media-video/mplayer:xvmc - Enables X-Video Motion Compensation support
 media-video/pgcedit:wine - Install a preview app that requires Wine on runtime
+media-video/smplayer:themes - Install additional themes
+media-video/subtitleeditor:iso-codes - Enables iso-codes support
 media-video/transcode:fame - Enables libfame support
 media-video/transcode:lzo - Enables LZO compression support
 media-video/transcode:mjpeg - Enables mjpegtools support
@@ -105,7 +94,6 @@ media-video/vlc:screen - Enable screen capture support
 media-video/vlc:skins - Enables support for the skins2 interface.
 media-video/vlc:stream - Enables vlc to stream video.
 media-video/vlc:vlm - vlm allows to manage multiple streams from within one instance of VLC
-media-video/vlc:xulrunner - Use xulrunner for building mozilla plugin
 net-im/gajim:idle - Enable idle module
 net-im/gajim:srv - SRV capabilities
 net-im/gajim:trayicon - Enable the trayicon module
