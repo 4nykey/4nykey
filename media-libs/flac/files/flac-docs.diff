@@ -22,8 +22,8 @@
  
  AUTOMAKE_OPTIONS = foreign 1.7
  
--SUBDIRS = doc include man src test build flac.pbproj obj
-+SUBDIRS = include src test build flac.pbproj obj
+-SUBDIRS = doc include man src test build obj
++SUBDIRS = include src test build obj
 +
 +if FLaC__BUILD_DOCS
 +SUBDIRS += doc man
