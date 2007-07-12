@@ -1,0 +1,208 @@
+origin: http://tkhtml.tcl.tk/hv3_polipo.patch
+diff -ru polipo-1.0.1/client.c polipo-1.0.1_nu/client.c
+--- polipo-1.0.1/client.c	2007-06-25 17:20:37.000000000 +0300
++++ polipo-1.0.1_nu/client.c	2007-07-09 16:55:58.000000000 +0300
+@@ -22,6 +22,32 @@
+ 
+ #include "polipo.h"
+ 
++#ifdef HV3_BUILD
++/*
++ * Magic first socket connection that controls the lifetime of this process.
++ */
++static int magic_fd = -1;
++static int
++magic_handler(int status, FdEventHandlerPtr event)
++{
++    int rc;
++    char zBuf[256];
++
++    errno = 0;
++    printf("magic_handler\n");
++    rc = READ(magic_fd, zBuf, 255);
++    printf("rc = %d errno = %d\n", rc, errno);
++    if (rc == 0 || (rc < 0 && errno != EAGAIN)) {
++        polipoExit();
++        return 1;
++    } else if (rc > 0) {
++        WRITE(magic_fd, zBuf, rc);
++    }
++
++    return 0;
++}
++#endif
++
+ static int 
+ httpAcceptAgain(TimeEventHandlerPtr event)
+ {
+@@ -69,7 +95,9 @@
+             }
+             return 1;
+         } else {
++#ifndef HV3_BUILD
+             polipoExit();
++#endif
+             return 1;
+         }
+     }
+@@ -92,6 +120,15 @@
+     if(rc < 0) 
+         do_log_error(L_WARN, errno, "Couldn't disable Nagle's algorithm");
+ 
++#ifdef HV3_BUILD
++    if(magic_fd < 0) {
++        do_log(D_CLIENT_CONN, "Accepted magic tcp/ip connection: %d\n", fd);
++        magic_fd = fd;
++        registerFdEvent(magic_fd, POLLIN|POLLERR, magic_handler, 0, 0);
++        return 0;
++    }
++#endif
++
+     connection = httpMakeConnection();
+ 
+     timeout = scheduleTimeEvent(clientTimeout, httpTimeoutHandler,
+@@ -1089,6 +1126,13 @@
+     int local, haveData;
+     int rc;
+ 
++    int relax = relaxTransparency;
++#ifdef HV3_BUILD
++    if (request->cache_control.flags & CACHE_RELAX_TRANSPARENCY) {
++        relax = 2;
++    }
++#endif
++
+     assert(!request->chandler);
+ 
+     if(request->error_code) {
+@@ -1096,7 +1140,7 @@
+            request->object == NULL ||
+            (request->object->flags & OBJECT_LOCAL) ||
+            (request->object->flags & OBJECT_ABORTED) ||
+-           (relaxTransparency < 1 && !proxyOffline)) {
++           (relax < 1 && !proxyOffline)) {
+             if(serveNow) {
+                 connection->flags |= CONN_WRITER;
+                 return httpClientRawErrorHeaders(connection,
+@@ -1173,13 +1217,13 @@
+         validate = 0;
+     else if((request->object->flags & OBJECT_FAILED) &&
+             !(object->flags & OBJECT_INPROGRESS) &&
+-            !relaxTransparency)
++            !relax)
+         validate = 1;
+     else if(request->method != METHOD_HEAD &&
+             !objectHasData(object, request->from, request->to) &&
+             !(object->flags & OBJECT_INPROGRESS))
+         validate = 1;
+-    else if(objectMustRevalidate((relaxTransparency <= 1 ? 
++    else if(objectMustRevalidate((relax <= 1 ? 
+                                   request->object : NULL),
+                                  &request->cache_control))
+         validate = 1;
+diff -ru polipo-1.0.1/http_parse.c polipo-1.0.1_nu/http_parse.c
+--- polipo-1.0.1/http_parse.c	2007-06-25 17:20:37.000000000 +0300
++++ polipo-1.0.1_nu/http_parse.c	2007-07-09 16:51:32.000000000 +0300
+@@ -1127,6 +1127,11 @@
+                     }
+                     a = atoi(buf + v_start);
+                     cache_control.max_stale = a;
++#ifdef HV3_BUILD
++                } else if(token_compare(buf, token_start, token_end,
++                                        "relax-transparency")) {
++                    cache_control.flags |= CACHE_RELAX_TRANSPARENCY;
++#endif
+                 } else {
+                     do_log(L_WARN, "Unsupported Cache-Control directive ");
+                     do_log_n(L_WARN, buf + token_start, 
+diff -ru polipo-1.0.1/io.c polipo-1.0.1_nu/io.c
+--- polipo-1.0.1/io.c	2007-06-25 17:20:37.000000000 +0300
++++ polipo-1.0.1_nu/io.c	2007-07-09 16:51:32.000000000 +0300
+@@ -724,7 +724,9 @@
+         return NULL;
+     }
+ 
++#ifndef HV3_BUILD
+     rc = setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *)&one, sizeof(one));
++#endif
+     if(rc < 0) do_log_error(L_WARN, errno, "Couldn't set SO_REUSEADDR");
+ 
+     if(inet6) {
+diff -ru polipo-1.0.1/main.c polipo-1.0.1_nu/main.c
+--- polipo-1.0.1/main.c	2007-06-25 17:20:37.000000000 +0300
++++ polipo-1.0.1_nu/main.c	2007-07-09 16:51:32.000000000 +0300
+@@ -38,10 +38,16 @@
+     fprintf(stderr, "  -c: specify the configuration file to use.\n");
+ }
+ 
++static void print_port_msg(int port)
++{
++    fprintf(stdout, "polipo port is %d\n", port);
++    fflush(stdout);
++}
++
+ int
+ main(int argc, char **argv)
+ {
+-    FdEventHandlerPtr listener;
++    FdEventHandlerPtr listener = 0;
+     int i;
+     int rc;
+     int expire = 0, printConfig = 0;
+@@ -155,8 +161,23 @@
+     if(pidFile)
+         writePid(pidFile->string);
+ 
++#ifdef HV3_BUILD
++    do {
++        int p;
++        for(p = proxyPort; listener == 0 && p < (proxyPort + 50); p++) {
++            const char *zAddr = proxyAddress->string;
++            listener = create_listener((char *)zAddr, p, httpAccept, NULL);
++        }
++        if (listener) {
++            proxyPort = p - 1;
++            print_port_msg(proxyPort);
++        }
++    } while (0);
++#else
+     listener = create_listener(proxyAddress->string, 
+                                proxyPort, httpAccept, NULL);
++#endif
++
+     if(!listener) {
+         if(pidFile) unlink(pidFile->string);
+         exit(1);
+diff -ru polipo-1.0.1/object.h polipo-1.0.1_nu/object.h
+--- polipo-1.0.1/object.h	2007-06-25 17:20:37.000000000 +0300
++++ polipo-1.0.1_nu/object.h	2007-07-09 16:51:32.000000000 +0300
+@@ -159,6 +159,16 @@
+ /* set if this object should never be combined with another resource */
+ #define CACHE_MISMATCH 4096
+ 
++/* The following flag is set in the CacheControlRec.flags bitmask if
++ * the custom "relax-transparency" directive was seen in a Cache-Control
++ * header received from a client. It is never forwarded to a parent
++ * cache or origin server.
++ *
++ * Note: The code that uses this symbol is only active if HV3_BUILD is
++ * defined at compile-time.
++ */
++#define CACHE_RELAX_TRANSPARENCY 4096
++
+ struct _HTTPRequest;
+ 
+ void preinitObject(void);
+diff -ru polipo-1.0.1/polipo.h polipo-1.0.1_nu/polipo.h
+--- polipo-1.0.1/polipo.h	2007-06-25 17:20:37.000000000 +0300
++++ polipo-1.0.1_nu/polipo.h	2007-07-09 16:51:32.000000000 +0300
+@@ -24,6 +24,9 @@
+ #define _GNU_SOURCE
+ #endif
+ 
++/* Build me the version with ad-hoc hv3 hooks */
++#define HV3_BUILD
++
+ #include <sys/param.h>
+ 
+ #ifdef __MINGW32_VERSION
