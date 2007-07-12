@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit subversion distutils
+inherit distutils subversion
 
 DESCRIPTION="An elegant GTK+ client for the Music Player Daemon"
 HOMEPAGE="http://sonata.berlios.de"
