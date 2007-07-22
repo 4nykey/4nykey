@@ -4,12 +4,13 @@
 
 inherit eutils qt3 qt4
 
-THV="0.1.1"
+THV="0.1.3"
 DESCRIPTION="A Qt based frontend for mplayer"
 HOMEPAGE="http://smplayer.sf.net"
+BASEURI="http://smplayer.sf.net/linux/download"
 SRC_URI="
-	mirror://sourceforge/${PN}/${P}.tar.gz
-	themes? ( mirror://sourceforge/${PN}/${PN}-themes-${THV}.tar.gz )
+	${BASEURI}/${P}.tar.gz
+	themes? ( ${BASEURI}/${PN}-themes-${THV}.tar.gz )
 "
 
 LICENSE="GPL-2"
