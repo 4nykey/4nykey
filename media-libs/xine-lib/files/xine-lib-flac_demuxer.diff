@@ -1,0 +1,11 @@
+diff -r dd89cd84287d src/combined/flac_demuxer.c
+--- a/src/combined/flac_demuxer.c	Sat Jul 14 14:52:25 2007 +0200
++++ b/src/combined/flac_demuxer.c	Fri Jul 20 23:28:45 2007 +0300
+@@ -55,7 +55,6 @@
+ #include "xineutils.h"
+ #include "../demuxers/demux.h"
+ 
+-#include "demux_flac.h"
+ 
+ #ifndef LEGACY_FLAC
+ # define FLAC__SeekableStreamDecoder FLAC__StreamDecoder
