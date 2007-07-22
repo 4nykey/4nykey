@@ -29,8 +29,7 @@ src_compile() {
 }
 
 src_install() {
-#	emake DESTDIR=${D} install || die
 	einstall || die
-#	dodoc ANNOUNCE ChangeLog changes README
-#	dohtml doc/html/*
+	dodoc ANNOUNCE ChangeLog changes README
+	dohtml doc/html/*
 }

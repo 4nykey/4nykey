@@ -21,7 +21,7 @@ DEPEND=""
 RDEPEND="
 	dev-tcltk/tkhtml
 	dev-tcltk/tkimg
-	sqlite3? ( dev-db/sqlite:3 )
+	sqlite3? ( >=dev-db/sqlite-3 )
 "
 
 src_unpack() {
@@ -41,6 +41,4 @@ src_install() {
 	insinto /usr/share/hv3
 	doins *.tcl index.html
 	newbin ${WORKDIR}/${PLP}/polipo hv3_polipo
-#	diropts -m1777
-#	keepdir /var/cache/polipo
 }
