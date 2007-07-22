@@ -1,13 +1,24 @@
-Index: configure.in.in
+Index: CMakeLists.txt
 ===================================================================
---- configure.in.in	(revision 2825)
-+++ configure.in.in	(working copy)
-@@ -46,6 +46,8 @@
- 		rev=`svnversion . | sed 's/^.*://g' | sed 's/M$//g'`
- 		ADM_SUBVERSION="\"$rev\""
- 	fi
-+else
-+	ADM_SUBVERSION="${ESVN_WC_REVISION}"
- fi
- dnl almost the same like KDE_SET_PEFIX but the path is /usr/local
- dnl
+--- CMakeLists.txt	(revision 3412)
++++ CMakeLists.txt	(working copy)
+@@ -41,19 +41,10 @@
+ 	MESSAGE(STATUS "<***********************>")
+ 	include(FindSubversion)
+ 
+-	FIND_PACKAGE(Subversion)
+-	IF(Subversion_FOUND)
+-		Subversion_WC_INFO(${PROJECT_SOURCE_DIR} Project)
+ 		MESSAGE(STATUS "Current revision is ${Project_WC_REVISION}")
+ 		SET(ADM_SUBVERSION ${Project_WC_REVISION})
+-	ELSE(Subversion_FOUND)
+-		MESSAGE(STATUS "Could not find Subversion")
+-	ENDIF(Subversion_FOUND)
+ ENDIF(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
+ 
+-IF(NOT Subversion_FOUND)
+-	SET(ADM_SUBVERSION 0)
+-ENDIF(NOT Subversion_FOUND)
+ 
+ #**************************************************
+ # libxml2

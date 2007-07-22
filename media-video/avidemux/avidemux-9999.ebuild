@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/avidemux/avidemux-2.0.38_rc2-r1.ebuild,v 1.1 2005/04/18 15:44:32 flameeyes Exp $
 
-inherit subversion flag-o-matic autotools qt4
+inherit subversion flag-o-matic qt4
 
 WANT_AUTOMAKE="1.9"
 DESCRIPTION="Great Video editing/encoding tool"
@@ -14,13 +14,13 @@ LICENSE="GPL-2"
 SLOT="2"
 KEYWORDS="~x86"
 IUSE="
-	a52 aac alsa altivec arts esd mad mmx nls png vorbis sdl truetype
-	xvid xv oss x264 dts qt4 fontconfig lame faac aften
+	a52 aac alsa arts esd mmx nls png vorbis sdl truetype xvid xv oss x264
+	dts qt4 fontconfig lame faac aften gtk jack debug libsamplerate amrnb
 "
 
 RDEPEND="
 	>=dev-libs/libxml2-2.6.7
-	>=x11-libs/gtk+-2.6.0
+	gtk? ( >=x11-libs/gtk+-2.6.0 )
 	>=dev-lang/spidermonkey-1.5-r2
 	a52? ( >=media-libs/a52dec-0.7.4 )
 	aften? ( >=media-sound/aften-0.0.6 )
@@ -45,6 +45,9 @@ RDEPEND="
 	x11-libs/libXrender
 	qt4? ( $(qt4_min_version 4.2) )
 	fontconfig? ( media-libs/fontconfig )
+	jack? ( media-sound/jack-audio-connection-kit )
+	libsamplerate? ( media-libs/libsamplerate )
+	amrnb? ( media-libs/amrnb )
 "
 DEPEND="
 	$RDEPEND
@@ -52,6 +55,7 @@ DEPEND="
 	x86? ( dev-lang/nasm )
 	dev-util/pkgconfig
 	nls? ( sys-devel/gettext )
+	dev-util/cmake
 "
 
 filter-flags "-fno-default-inline"
@@ -59,51 +63,41 @@ filter-flags "-funroll-loops"
 filter-flags "-funroll-all-loops"
 filter-flags "-fforce-addr"
 
+pick() {
+	if ! use $1; then
+		CMAKE_VAR="$(echo ${2:-${1}} | tr [:lower:] [:upper:])"
+		CMAKE_VAR="-DNO_${CMAKE_VAR}=1"
+		myconf="${CMAKE_VAR} ${myconf}"
+	fi
+}
+
 src_unpack() {
 	subversion_src_unpack
 	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
-
-	cd ${S}
-	make -f admin/Makefile.common configure.in
-	touch acinclude.m4
-	eautoreconf
 }
 
 src_compile() {
-	local myconf
-	use mmx || myconf="--disable-mmx"
-	use x264 || export ac_cv_header_x264_h="no"
-	use qt4 && QT4="/usr" || QT4="xxx"
-	has_version '>=media-libs/faad2-2.1' || myconf="${myconf} --with-newfaad"
+	local myconf="-DCMAKE_INSTALL_PREFIX=/usr"
+	myconf="${myconf} -DProject_WC_REVISION=${ESVN_WC_REVISION}"
+	use debug && myconf="${myconf} -DCMAKE_BUILD_TYPE=Debug"
+	for x in \
+	gtk qt4 nls sdl arts alsa esd jack oss libsamplerate lame faac aften amrnb \
+	vorbis xvid x264 fontconfig
+	do
+		pick $x
+	done
+	pick dts libdca
+	pick aac faad
+	pick xv xvideo
+	pick png libpng
+	pick truetype freetype
+	cmake ${myconf} || die
 
-	econf \
-		$(use_enable nls) \
-		$(use_enable altivec) \
-		$(use_enable xv) \
-		$(use_enable mp3 mad) \
-		$(use_with arts) \
-		$(use_with alsa) \
-		$(use_with oss) \
-		$(use_with vorbis) \
-		$(use_with a52 a52dec) \
-		$(use_with sdl libsdl) \
-		$(use_with truetype freetype2) \
-		$(use_with fontconfig) \
-		$(use_with aac faad2) \
-		$(use_with xvid) \
-		$(use_with esd) \
-		$(use_with dts libdca) \
-		$(use_with lame) \
-		$(use_with faac) \
-		$(use_with aften) \
-		--with-jsapi-include=/usr/include/js \
-		--with-qt-dir=${QT4} --with-qt-lib=/usr/lib/qt4\
-		--disable-warnings --disable-dependency-tracking \
-		${myconf} || die "configure failed"
-	make || die "make failed"
+	use debug && VERB_MODE="VERBOSE=y"
+	emake ${VERB_MODE} || die "make failed"
 }
 
 src_install() {
-	einstall || die
-	dodoc AUTHORS ChangeLog History
+	emake DESTDIR="${D}" install || die
+#	dodoc AUTHORS ChangeLog History
 }

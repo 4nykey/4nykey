@@ -1,0 +1,177 @@
+Index: cmake/FindArts.cmake
+===================================================================
+--- cmake/FindArts.cmake	(revision 3412)
++++ cmake/FindArts.cmake	(working copy)
+@@ -2,6 +2,9 @@
+ 
+ MESSAGE(STATUS "<** ARTS **>")
+ MESSAGE(STATUS "<---------->")
++if(NO_ARTS)
++message(status "<disabled per request>")
++else(NO_ARTS)
+ FIND_PROGRAM(ARTS_CONFIG_EXECUTABLE artsc-config)
+ MARK_AS_ADVANCED(ARTS_CONFIG_EXECUTABLE)
+ 
+@@ -18,6 +21,7 @@
+ ELSE(ARTS_CONFIG_EXECUTABLE)
+ MESSAGE(STATUS "Not found")
+ ENDIF(ARTS_CONFIG_EXECUTABLE)
++endif(NO_ARTS)
+ 
+ 
+ # FindSubversion.cmake ends here.
+Index: cmake/adm_checkHeaderLib.cmake
+===================================================================
+--- cmake/adm_checkHeaderLib.cmake	(revision 3412)
++++ cmake/adm_checkHeaderLib.cmake	(working copy)
+@@ -3,6 +3,9 @@
+ MACRO (ADM_CHECK_HL _banner _includeName _libName _libFunc _varToSet)
+ MESSAGE(STATUS "<Checking for ${_banner}>")
+ MESSAGE(STATUS "<******************************>")
++if(NO_${_banner})
++message(status "<disabled per request>")
++else(NO_${_banner})
+  SET(_oldCRF ${CMAKE_REQUIRED_FLAGS})
+  SET(CMAKE_REQUIRED_FLAGS "$ENV{CFLAGS} ${_oldCRF}")
+ #MESSAGE(STATUS "CMAKE_REQUIRED_FLAGS:${CMAKE_REQUIRED_FLAGS}")
+@@ -29,6 +32,7 @@
+      MESSAGE(STATUS "${_banner} support off")
+ endif(${_varToSet})
+ SET(CMAKE_REQUIRED_FLAGS "${_oldCRF}")
++endif(NO_${_banner})
+ ENDMACRO (ADM_CHECK_HL _includeName _libName _libFunc _varToSet)
+ 
+ 
+Index: ConfigureChecks.cmake
+===================================================================
+--- ConfigureChecks.cmake	(revision 3412)
++++ ConfigureChecks.cmake	(working copy)
+@@ -64,6 +64,9 @@
+ if(HAVE_LIBINTL_H)
+   MESSAGE(STATUS "<Checking gettext >")
+   MESSAGE(STATUS "<**************** >")
++if(NO_NLS)
++message(status "<disabled per request>")
++else(NO_NLS)
+ # Try linking without -lintl
+   ADM_COMPILE( gettext.cpp "" "" WITHOUT_LIBINTL outputWithoutLibintl)
+   if(WITHOUT_LIBINTL)
+@@ -81,6 +84,7 @@
+       endif(WITH_LIBINTL)
+   endif(WITHOUT_LIBINTL)
+ endif(HAVE_LIBINTL_H)
++endif(NO_NLS)
+ ########################################
+ # Locale
+ ########################################
+@@ -107,6 +111,9 @@
+ if(NOT WIN32 AND NOT CMAKE_OSX_SYSROOT)
+   MESSAGE(STATUS "<Checking for ALSA>")
+   MESSAGE(STATUS "<*****************>")
++if(NO_ALSA)
++message(status "<disabled per request>")
++else(NO_ALSA)
+   include(FindAlsa)
+   if(ALSA_FOUND)
+     ALSA_VERSION_STRING(alsaVersion)
+@@ -115,6 +122,7 @@
+     SET(ALSA_SUPPORT 1)
+     SET(ALSA_1_0_SUPPORT 1)
+   endif(ALSA_FOUND)
++endif(NO_ALSA)
+ endif(NOT WIN32 AND NOT CMAKE_OSX_SYSROOT)
+ ########################################
+ # SDL
+@@ -123,6 +131,9 @@
+ MESSAGE(STATUS "<*****************>")
+ #include(FindSDL)
+ include(admSDL)
++if(NO_SDL)
++message(status "<disabled per request>")
++else(NO_SDL)
+ ADM_FIND_SDL()
+ if(SDL_FOUND)
+  SET(USE_SDL 1)
+@@ -130,6 +141,7 @@
+ else(SDL_FOUND)
+   MESSAGE(STATUS "Not Found")
+ endif(SDL_FOUND)
++endif(NO_SDL)
+ ########################################
+ # FONTCONFIG
+ ########################################
+@@ -163,12 +175,16 @@
+ if(NOT WIN32)
+ MESSAGE(STATUS "<Checking for OSS>")
+ MESSAGE(STATUS "<*****************>")
++if(NO_OSS)
++message(status "<disabled per request>")
++else(NO_OSS)
+ CHECK_INCLUDE_FILES(sys/soundcard.h      OSS_SUPPORT)
+ if(OSS_SUPPORT)
+ MESSAGE(STATUS "Found")
+ else(OSS_SUPPORT)
+ MESSAGE(STATUS "Not found")
+ endif(OSS_SUPPORT)
++endif(NO_OSS)
+ 
+ endif(NOT WIN32)
+ ########################################
+Index: CMakeLists.txt
+===================================================================
+--- CMakeLists.txt	(revision 3412)
++++ CMakeLists.txt	(working copy)
+@@ -81,6 +81,9 @@
+ #**************************************************
+ MESSAGE(STATUS "<Checking for FreeType through PKG-CONFIG>")
+ MESSAGE(STATUS "<****************************************>")
++if(NO_FREETYPE)
++message(status "<disabled per request>")
++else(NO_FREETYPE)
+ PKGCONFIG(freetype2 FT_INCLUDE FT_LIB FT_LDFLAGS FT_CFLAGS)
+ 
+ IF(NOT FT_INCLUDE)
+@@ -96,6 +99,7 @@
+     MESSAGE(STATUS "FreeType Found ("${FT_CFLAGS} ${FT_INCLUDE}")")
+     
+ ENDIF(NOT FT_INCLUDE)
++endif(NO_FREETYPE)
+ #**************************************************
+ # Search for  X11 (not on windows)
+ #**************************************************
+@@ -131,6 +135,9 @@
+ #**************************************************
+ MESSAGE(STATUS "<Checking for GTK>")
+ MESSAGE(STATUS "<******************************>")
++if(NO_GTK)
++message(status "<disabled per request>")
++else(NO_GTK)
+ PKGCONFIG(gtk+-2.0 GTK_INCLUDE GTK_LIB GTK_LDFLAGS GTK_CFLAGS)
+ 
+ IF(NOT GTK_CFLAGS)
+@@ -142,6 +149,7 @@
+     SET(GTK_LIB,${GTK_LIB})
+     MESSAGE(STATUS OK)
+ ENDIF(NOT GTK_CFLAGS)
++endif(NO_GTK)
+ #**************************************************
+ # Search for Gthread through PKG-Config
+ #**************************************************
+@@ -161,6 +169,9 @@
+ #**************************************************
+ MESSAGE(STATUS "<Checking for QT4>")
+ MESSAGE(STATUS "<******************************>")
++if(NO_QT4)
++message(status "<disabled per request>")
++else(NO_QT4)
+ include(FindQt4)
+ if(QT4_FOUND AND MINGW)
+ if(XMINGW) # Cross compile ?
+@@ -185,6 +196,7 @@
+ 	SET(QT_RCC_EXECUTABLE rcc)
+ endif(XMINGW)
+ endif(QT4_FOUND AND MINGW)
++endif(NO_QT4)
+ 
+ # do config checks
+ include(ConfigureChecks.cmake)
