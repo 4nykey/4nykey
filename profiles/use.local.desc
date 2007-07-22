@@ -4,11 +4,11 @@ media-fonts/cm-unicode:gs - Ghostscript support
 media-fonts/cm-unicode:opentype - Install OpenType fonts
 media-fonts/ttf-gandhari-unicode:opentype - Install OpenType fonts
 media-fonts/ttf-linuxlibertine:opentype - Install OpenType fonts
-media-libs/a52dec:djbfft - Prefer D.J. Bernstein's library for Fourier transforms
+media-libs/a52dec:djbfft - Prefer D.J. Bernstein's library for fourier transforms
 media-libs/libvorbis:aotuv - Allow users to enable aoTuV encoder enhancements
 media-libs/x264:mp4 - Adds support for mp4 container via gpac
 media-libs/xine-lib:dvdnav - Prefer system libdvdnav to bundled one
-media-libs/xine-lib:dxr3 - Support for DXR3 mpeg acceleration cards
+media-libs/xine-lib:dxr3 - Support for DXR3 mpeg accelleration cards
 media-libs/xine-lib:modplug - Build with modplug support
 media-libs/xine-lib:vidix - Support for vidix video output
 media-libs/xine-lib:wavpack - Build with WavPack support
@@ -22,7 +22,6 @@ media-sound/aqualung:systray - Builds systray (reqires more recent version of GT
 media-sound/aqualung:taglib - Enable support for metadata editing through taglib
 media-sound/aqualung:wavpack - Build with WavPack support
 media-sound/ardour:external-libs - Use system libraries instead of bundled (not supported by upstream)
-media-sound/ardour:vst - Enable VST support
 media-sound/cmus:modplug - Build with modplug support
 media-sound/cmus:mp4 - enable mp4 decoding
 media-sound/cmus:zsh-completion - Install zsh command completion
@@ -38,7 +37,7 @@ media-sound/rezound:lame - Enable MP3 encoding through LAME
 media-sound/rezound:soundtouch - compile with support for soundtouch
 media-sound/snd:timidity - Build with Timidity++ (MIDI sequencer) support
 media-sound/snd:wavpack - Build with WavPack support
-media-sound/sonata:taglib - Enable support for metadata editing through taglib
+media-sound/sonata:taglib - Enable tagging support with taglib
 media-sound/vorbis-tools:ogg123 - Build ogg123 player
 media-video/avidemux:aften - Enable A/52 encoding support via aften
 media-video/avidemux:faac - Enable AAC encoding through FAAC
@@ -57,18 +56,18 @@ media-video/mplayer:cdio - Use cdio where applicable
 media-video/mplayer:color - Enable color console output (not supported)
 media-video/mplayer:cpudetection - Enables runtime cpudetection
 media-video/mplayer:custom-cflags - Enables custom cflags (not supported)
-media-video/mplayer:dvdnav - Support for DVD menus via dvdnav
+media-video/mplayer:dvdnav - DVD menu navigation support (not supported)
 media-video/mplayer:enca - Enables support for charset discovery and conversion
 media-video/mplayer:external-faad - Use system faad2 library instead of bundled one
 media-video/mplayer:external-ffmpeg - Use system libavcodec instead of bundled one
 media-video/mplayer:fontconfig - Support for mananging custom fonts via fontconfig
 media-video/mplayer:live - Enables live.com streaming media support
 media-video/mplayer:lzo - Enables support for lzo compression
-media-video/mplayer:mmxext - enables mmx2 support
-media-video/mplayer:radio - Support for listening radio
+media-video/mplayer:mmxext - Enables mmx2 support
+media-video/mplayer:radio - Enable V4L2 radio interface and support
 media-video/mplayer:real - Adds real video support
 media-video/mplayer:rtc - Enables usage of the linux real time clock.  The alternative is software emulation of rtc
-media-video/mplayer:tga - Enables tga output support
+media-video/mplayer:tga - Enables Targa video output
 media-video/mplayer:tremor - Use tremor for decoding vorbis audio
 media-video/mplayer:twolame - Enable MP2 encoding through twolame
 media-video/mplayer:v4l2 - Enables video4linux2 support
@@ -78,10 +77,10 @@ media-video/pgcedit:wine - Install a preview app that requires Wine on runtime
 media-video/smplayer:themes - Install additional themes
 media-video/subtitleeditor:iso-codes - Enables iso-codes support
 media-video/transcode:fame - Enables libfame support
-media-video/transcode:lzo - Enables LZO compression support
+media-video/transcode:lzo - Enables support for lzo compression
 media-video/transcode:mjpeg - Enables mjpegtools support
 media-video/transcode:network - Enables network streaming support
-media-video/transcode:postproc - Enable libpostproc support
+media-video/transcode:postproc - Build with ffmpeg libpostproc support
 media-video/transcode:v4l2 - Enable video4linux2 support
 media-video/vlc:cdda - Enables libcdda cd audio playback support.
 media-video/vlc:corba - Enables corba interface support.
@@ -97,6 +96,7 @@ media-video/vlc:vlm - vlm allows to manage multiple streams from within one inst
 net-im/gajim:idle - Enable idle module
 net-im/gajim:srv - SRV capabilities
 net-im/gajim:trayicon - Enable the trayicon module
+net-im/tkabber:plugins - Enables installation of extra plugins
 x11-themes/gtk-engines-candido:gdm - Install GDM theme
 x11-themes/gtk-engines-candido:metacity - Install Metacity theme
 x11-themes/gtk-engines-murrine:metacity - Install Metacity theme
