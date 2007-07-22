@@ -17,8 +17,5 @@ IUSE="opentype"
 
 DOCS="Bugs ChangeLog.txt LICENCE.txt Readme"
 FONT_SUFFIX="ttf"
+use opentype && FONT_SUFFIX="${FONT_SUFFIX} otf"
 FONT_S="${S}"
-
-pkg_setup() {
-	use opentype && FONT_SUFFIX="${FONT_SUFFIX} otf"
-}

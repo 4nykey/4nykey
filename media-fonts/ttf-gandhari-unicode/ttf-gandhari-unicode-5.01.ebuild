@@ -23,9 +23,5 @@ DEPEND="app-arch/unzip"
 RDEPEND=""
 
 FONT_SUFFIX="ttf"
+use opentype && FONT_SUFFIX="otf"
 FONT_S="${S}"
-
-pkg_setup() {
-	font_pkg_setup
-	use opentype && FONT_SUFFIX="otf" || FONT_SUFFIX="ttf"
-}
