@@ -7,7 +7,7 @@ inherit subversion autotools
 AT_M4DIR="m4"
 DESCRIPTION="Frame Server for Linux and Windows"
 HOMEPAGE="http://avisynth2.sourceforge.net"
-ESVN_REPO_URI="https://avisynth2.svn.sourceforge.net/svnroot/avisynth2/branches/avisynth_3_0"
+ESVN_REPO_URI="https://avisynth2.svn.sourceforge.net/svnroot/avisynth2/Avisynth3/trunk/avisynth"
 ESVN_PATCHES="${PN}-*.diff ${S}/build/linux/gentoo/files/*.patch"
 ESVN_BOOTSTRAP="cd build/linux && eautoreconf"
 
