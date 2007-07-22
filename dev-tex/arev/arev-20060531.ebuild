@@ -36,5 +36,6 @@ pkg_postinst() {
 
 pkg_postrm() {
 	updmap-sys --disable ${PN}.map
+	latex-package_rehash
 }
 
