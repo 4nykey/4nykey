@@ -12,7 +12,8 @@ ESVN_PATCHES="${PN}-*.diff"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="-*"
-IUSE="nls debug mmx 3dnow sse fftw osc ladspa external-libs doc"
+IUSE="nls debug mmx 3dnow sse fftw osc ladspa external-libs doc usb"
+# usb is for tranzport (req libusb) and powermate (req linux/input.h)
 
 RDEPEND="
 	>=media-libs/liblrdf-0.3.6
@@ -31,6 +32,7 @@ RDEPEND="
 		media-libs/libsndfile
 	)
 	ladspa? ( >=media-libs/ladspa-sdk-1.12 )
+	usb? ( dev-libs/libusb )
 "
 DEPEND="
 	${RDEPEND}
@@ -39,6 +41,7 @@ DEPEND="
 	>=dev-util/scons-0.96.1
 	nls? ( sys-devel/gettext )
 	doc? ( app-text/xmlto )
+	usb? ( virtual/os-headers )
 "
 
 src_unpack() {
@@ -59,12 +62,14 @@ src_unpack() {
 }
 
 src_compile() {
-	local myconf="PREFIX=/usr DESTDIR=${D} VST=0"
+	# CMT is for anicomp support (animix.sf.net)
+	local myconf="PREFIX=/usr DESTDIR=${D} VST=0 CMT=0"
 	use !external-libs; myconf="${myconf} SYSLIBS=$?"
 	use !debug; myconf="${myconf} DEBUG=$?"
 	use !nls; myconf="${myconf} NLS=$?"
 	use !fftw; myconf="${myconf} FFT_ANALYSIS=$?"
 	use !osc; myconf="${myconf} LIBLO=$?"
+	use !usb; myconf="${myconf} SURFACES=$?"
 	if use mmx || use 3dnow || use sse; then
 		use mmx && _mmx="-mmmx"
 		use 3dnow && _3dnow="-m3dnow"
