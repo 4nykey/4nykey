@@ -8,13 +8,12 @@
 
 inherit wxwidgets-nu flag-o-matic nsplugins multilib subversion autotools qt4
 
-PATCHLEVEL="7"
+AT_M4DIR="m4"
 DESCRIPTION="VLC media player - Video player and streamer"
 HOMEPAGE="http://www.videolan.org/vlc/"
-SRC_URI="http://digilander.libero.it/dgp85/gentoo/vlc-patches-${PATCHLEVEL}.tar.bz2"
 ESVN_REPO_URI="svn://svn.videolan.org/vlc/trunk"
 ESVN_PATCHES="${FILESDIR}/${PN}-*.diff"
-ESVN_BOOTSTRAP="bootstrap"
+ESVN_BOOTSTRAP="./bootstrap && eautoreconf"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -23,9 +22,12 @@ IUSE="
 a52 3dfx nls unicode debug altivec httpd vlm gnutls live v4l cdda ogg matroska
 dvb dvd vcd ffmpeg aac dts flac mpeg vorbis theora X opengl truetype svg fbcon
 svga oss aalib ggi libcaca esd arts alsa wxwindows ncurses xosd lirc joystick
-hal stream mp3 xv bidi sdl png xml samba daap corba screen mod speex nsplugin
-x264 dirac gnome musepack qt4 portaudio skins firefox xulrunner
+hal stream mp3 xv bidi sdl png xml samba daap corba mod speex nsplugin x264
+dirac gnome musepack qt4 portaudio skins firefox xulrunner shout lua libnotify
+musicbrainz taglib ieee1394 dv twolame real rtsp teletext zvbi upnp
 "
+#	upnp? ( net-misc/clinkcc )
+#		$(use_enable upnp cyberlink) \
 
 RDEPEND="
 	hal? ( >=sys-apps/hal-0.5.0 )
@@ -82,7 +84,7 @@ RDEPEND="
 	opengl? ( virtual/opengl )
 	sys-libs/zlib
 	png? ( media-libs/libpng )
-	media-libs/libdvbpsi
+	dvb? ( media-libs/libdvbpsi )
 	aac? ( >=media-libs/faad2-2.0-r2 )
 	sdl? ( media-libs/sdl-image )
 	xml? ( dev-libs/libxml2 )
@@ -112,6 +114,19 @@ RDEPEND="
 	)
 	portaudio? ( >=media-libs/portaudio-0.19 )
 	qt4? ( $(qt4_min_version 4) )
+	lua? ( >=dev-lang/lua-5.1 )
+	shout? ( >=media-libs/libshout-2.1 )
+	libnotify? ( x11-libs/libnotify )
+	musicbrainz? ( media-libs/musicbrainz )
+	taglib? ( media-libs/taglib )
+	ieee1394? (
+		media-libs/libdc1394
+		sys-libs/libraw1394
+		dv? ( libavc1394 )
+	)
+	twolame? ( media-sound/twolame )
+	zvbi? ( >=media-libs/zvbi-0.2.25 )
+	upnp? ( net-libs/libupnp )
 "
 DEPEND="
 	${RDEPEND}
@@ -138,15 +153,6 @@ pkg_setup() {
 	fi
 }
 
-src_unpack() {
-	export SKIP_AUTOTOOLS="indeed"
-	subversion_src_unpack
-	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
-	cd ${S}
-	autopoint -f || die
-	AT_M4DIR="m4" eautoreconf
-}
-
 src_compile () {
 	local myconf="${myconf} --with-tuning=no"
 
@@ -171,7 +177,15 @@ src_compile () {
 		elog "Consider using Qt4 instead"
 	fi
 
-	ac_cv_c_unroll_loops="no" \
+	if use dv; then
+		myconf="${myconf} --enable-dv $(use_with ieee1394 dv-raw1394) \
+		$(use_with ieee1394 dv-avc1394)"
+	fi
+
+	if use teletext; then
+		myconf="${myconf} $(use_enable zvbi) $(use_enable !zvbi telx)"
+	fi
+
 	econf \
 		$(use_enable ffmpeg) \
 		$(use_enable altivec) \
@@ -185,12 +199,14 @@ src_compile () {
 		$(use_enable vcd) \
 		$(use_enable dvb) \
 		$(use_enable dvb pvr) \
+		$(use_enable dvb dvbpsi) \
 		$(use_enable ogg) \
 		$(use_enable matroska mkv) \
 		$(use_enable flac) \
 		$(use_enable vorbis) \
 		$(use_enable theora) \
 		$(use_enable X x11) \
+		$(use_enable X screen) \
 		$(use_enable xv xvideo) \
 		$(use_enable opengl glx) \
 		$(use_enable opengl) \
@@ -237,6 +253,16 @@ src_compile () {
 		$(use_enable portaudio) \
 		$(use_enable qt4) \
 		$(use_enable skins skins2) \
+		$(use_enable shout) \
+		$(use_enable lua) \
+		$(use_enable libnotify notify) \
+		$(use_enable musicbrainz) \
+		$(use_enable taglib) \
+		$(use_enable ieee1394 dc1394) \
+		$(use_enable twolame) \
+		$(use_enable real) \
+		$(use_enable rtsp realrtsp) \
+		$(use_enable upnp) \
 		${myconf} || die "configuration failed"
 
 	emake || die "make of VLC failed"
