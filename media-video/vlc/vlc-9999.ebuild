@@ -122,7 +122,7 @@ RDEPEND="
 	ieee1394? (
 		media-libs/libdc1394
 		sys-libs/libraw1394
-		dv? ( libavc1394 )
+		dv? ( sys-libs/libavc1394 )
 	)
 	twolame? ( media-sound/twolame )
 	zvbi? ( >=media-libs/zvbi-0.2.25 )
@@ -177,9 +177,9 @@ src_compile () {
 		elog "Consider using Qt4 instead"
 	fi
 
-	if use dv; then
-		myconf="${myconf} --enable-dv $(use_with ieee1394 dv-raw1394) \
-		$(use_with ieee1394 dv-avc1394)"
+	if use ieee1394; then
+		myconf="${myconf} $(use_enable dv) $(use_with dv dv-raw1394) \
+		$(use_with dv dv-avc1394)"
 	fi
 
 	if use teletext; then
