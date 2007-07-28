@@ -16,7 +16,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
 IUSE="
-X 3dnow a52 aac dv dvdread mp3 fame truetype gtk imagemagick jpeg lzo mjpeg mmx
+X 3dnow a52 aac dv dvdread mp3 fame truetype imagemagick jpeg lzo mjpeg mmx
 network ogg vorbis quicktime sdl sse sse2 theora v4l2 xvid xml postproc x264
 "
 
@@ -39,7 +39,6 @@ RDEPEND="
 	ogg? ( media-libs/libogg )
 	theora? ( media-libs/libtheora )
 	jpeg? ( media-libs/jpeg )
-	gtk? ( =x11-libs/gtk+-1.2* )
 	truetype? ( >=media-libs/freetype-2 )
 	>=media-video/ffmpeg-0.4.9_p20050226-r3
 	>=media-libs/libmpeg2-0.4.0b
@@ -84,7 +83,6 @@ src_compile() {
 		$(use_enable xml libxml2) \
 		$(use_enable mjpeg mjpegtools) \
 		$(use_enable sdl) \
-		$(use_enable gtk) \
 		$(use_enable fame libfame) \
 		$(use_enable imagemagick) \
 		$(use_enable jpeg libjpeg) \
