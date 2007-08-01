@@ -6,7 +6,7 @@ inherit subversion
 
 DESCRIPTION="Flake is an open-source FLAC audio encoder"
 HOMEPAGE="http://flake-enc.sf.net"
-ESVN_REPO_URI="https://svn.sourceforge.net/svnroot/flake-enc"
+ESVN_REPO_URI="https://flake-enc.svn.sourceforge.net/svnroot/flake-enc"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
