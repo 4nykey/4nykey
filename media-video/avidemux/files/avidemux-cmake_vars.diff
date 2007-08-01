@@ -78,13 +78,14 @@ Index: ConfigureChecks.cmake
  endif(USE_LATE_BINDING)
  
  SET(CMAKE_REQUIRED_LIBRARIES)
-@@ -284,12 +284,12 @@
- # X264
- ########################################
- SET(CMAKE_REQUIRED_FLAGS "-include stdint.h")
+@@ -284,13 +284,13 @@
+ SET(CMAKE_REQUIRED_LIBRARIES "-lm -lpthread")
+ endif(WIN32)
+ 
 -ADM_CHECK_HL(x264 x264.h x264 x264_encoder_open USE_X264)
 +ADM_CHECK_HL(X264 x264.h x264 x264_encoder_open USE_X264)
  SET(CMAKE_REQUIRED_FLAGS)
+ SET(CMAKE_REQUIRED_LIBRARIES)
  ########################################
  # PNG
  ########################################
