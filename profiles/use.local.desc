@@ -1,5 +1,3 @@
-app-misc/emelfm2:inotify - File-alteration monitoring using Linux kernel inotify API
-app-misc/emelfm2:kernel_linux - KERNEL setting for systems using the Linux kernel
 media-fonts/cm-unicode:gs - Ghostscript support
 media-fonts/cm-unicode:opentype - Install OpenType fonts
 media-fonts/ttf-gandhari-unicode:opentype - Install OpenType fonts
@@ -40,6 +38,7 @@ media-sound/snd:wavpack - Build with WavPack support
 media-sound/sonata:taglib - Enable tagging support with taglib
 media-sound/vorbis-tools:ogg123 - Build ogg123 player
 media-video/avidemux:aften - Enable A/52 encoding support via aften
+media-video/avidemux:amrnb - Enables Adaptive Multi-Rate Audio support (Narrow Band)
 media-video/avidemux:faac - Enable AAC encoding through FAAC
 media-video/avidemux:fontconfig - Support for mananging custom fonts via fontconfig
 media-video/avidemux:lame - Enable MP3 encoding through LAME
@@ -89,14 +88,23 @@ media-video/vlc:dirac - Enable support for Dirac wavelet video codec
 media-video/vlc:httpd - Enables a web based interface for vlc.
 media-video/vlc:live - Enables LIVE555.com support.
 media-video/vlc:mod - Enables Mod demux support.
-media-video/vlc:screen - Enable screen capture support
+media-video/vlc:real - Adds real video support
+media-video/vlc:rtsp - Enables real audio and RTSP modules.
+media-video/vlc:shout - Enables libshout output.
 media-video/vlc:skins - Enables support for the skins2 interface.
 media-video/vlc:stream - Enables vlc to stream video.
+media-video/vlc:taglib - Enable tagging support with taglib
+media-video/vlc:teletext - Enable teletext support
+media-video/vlc:twolame - Enable MP2 encoding through twolame
+media-video/vlc:upnp - Enables support for Intel UPnP stack.
 media-video/vlc:vlm - vlm allows to manage multiple streams from within one instance of VLC
+media-video/vlc:zvbi - Enable VBI Decoding Library
 net-im/gajim:idle - Enable idle module
+net-im/gajim:networkmanager - Enable networkmanager support
 net-im/gajim:srv - SRV capabilities
 net-im/gajim:trayicon - Enable the trayicon module
 net-im/tkabber:plugins - Enables installation of extra plugins
+net-p2p/rtorrent:openssl - Use OpenSSL's SHA1 implementation
 x11-themes/gtk-engines-candido:gdm - Install GDM theme
 x11-themes/gtk-engines-candido:metacity - Install Metacity theme
 x11-themes/gtk-engines-murrine:metacity - Install Metacity theme
