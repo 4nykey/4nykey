@@ -1,17 +1,8 @@
 --- configure.in.orig	2006-11-21 15:37:30.000000000 +0200
 +++ configure.in	2006-11-25 10:17:42.000000000 +0200
-@@ -269,7 +269,7 @@
- else
- 	OUR_CFLAGS_HEAD="$OUR_CFLAGS_HEAD -DNDEBUG"
- 	if test "x$GCC" = xyes; then
--		OUR_CFLAGS_HEAD="$OUR_CFLAGS_HEAD -O3 -funroll-loops -finline-functions -Wall -W -Winline -DFLaC__INLINE=__inline__"
-+		OUR_CFLAGS_HEAD="$OUR_CFLAGS_HEAD -Wall -W -Winline -DFLaC__INLINE=__inline__"
- 	fi
- fi
- CFLAGS="$OUR_CFLAGS_HEAD $CFLAGS"
 @@ -327,7 +327,6 @@
- 	doc/html/Makefile \
  	doc/html/images/Makefile \
+ 	doc/html/images/hw/Makefile \
  	doc/html/ru/Makefile \
 -	m4/Makefile \
  	man/Makefile \
