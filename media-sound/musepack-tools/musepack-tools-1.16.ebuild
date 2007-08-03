@@ -35,16 +35,10 @@ src_unpack() {
 	unpack ${A}
 	cd ${S}
 
-	sed -i "/CMAKE_C_FLAGS/d" CMakeLists.txt
-	use encode || sed -i "/add_subdirectory/d" CMakeLists.txt
-
 	mv ../${MPPDEC} mppdec
-	epatch "${FILESDIR}"/mppdec-*.diff
-	echo "add_subdirectory(mppdec)" >> CMakeLists.txt
 	cp "${FILESDIR}"/CMakeLists.txt mppdec/
-	sed -i \
-		'/USE_IRIX_AUDIO/d; /USE_ESD_AUDIO/d; /USE_OSS_AUDIO/d; /USE_ASM/d' \
-		mppdec/mpp.h
+	epatch "${FILESDIR}"/mpp{de,en}c-*.diff
+	use encode || sed -i "/add_subdirectory(src)/d" CMakeLists.txt
 }
 
 src_compile() {

@@ -1,0 +1,7 @@
+--- ./CMakeLists.txt.orig	2006-11-11 00:29:23.000000000 +0200
++++ ./CMakeLists.txt	2007-08-03 13:26:31.000000000 +0300
+@@ -7,3 +7,4 @@
+ endif(NOT MSVC)
+ 
+ add_subdirectory(src)
++add_subdirectory(mppdec)

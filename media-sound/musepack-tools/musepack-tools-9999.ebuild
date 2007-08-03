@@ -14,7 +14,9 @@ LICENSE="LGPL-2.1"
 KEYWORDS="~x86"
 IUSE=""
 
-RDEPEND=""
+RDEPEND="
+	media-libs/libreplaygain
+"
 DEPEND="
 	${RDEPEND}
 	>=dev-util/cmake-2.4
