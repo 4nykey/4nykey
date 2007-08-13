@@ -11,7 +11,7 @@ SRC_URI="http://ardour.org/files/releases/${P}.tar.bz2"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="nls debug mmx 3dnow sse fftw osc ladspa external-libs"
+IUSE="nls debug mmx 3dnow sse fftw ladspa external-libs"
 
 RDEPEND="
 	>=media-libs/liblrdf-0.3.6
@@ -22,7 +22,7 @@ RDEPEND="
 	>=dev-libs/libxml2-2.5.7
 	dev-libs/libxslt
 	media-libs/flac
-	osc? ( media-libs/liblo )
+	media-libs/liblo
 	external-libs? (
 		=dev-libs/libsigc++-2*
 		dev-cpp/libgnomecanvasmm
@@ -61,7 +61,6 @@ src_compile() {
 	use !debug; myconf="${myconf} DEBUG=$?"
 	use !nls; myconf="${myconf} NLS=$?"
 	use !fftw; myconf="${myconf} FFT_ANALYSIS=$?"
-	use !osc; myconf="${myconf} LIBLO=$?"
 	if use mmx || use 3dnow || use sse; then
 		use mmx && _mmx="-mmmx"
 		use 3dnow && _3dnow="-m3dnow"
