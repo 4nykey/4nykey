@@ -4,21 +4,18 @@
 
 MY_PN="${PN##*-}"
 MY_P="${MY_PN}-${PV}"
-CFGRATOR="${MY_PN}-configurator-0.5"
 DESCRIPTION="Murrine GTK+2 Cairo Engine"
-HOMEPAGE="http://cimi.netsons.org/pages/murrine.php"
-BASE_URI="http://cimi.netsons.org/media/download_gallery/"
+HOMEPAGE="http://murrine.netsons.org/"
+BASE_URI="${HOMEPAGE}files/"
 SRC_URI="
-	${BASE_URI}${MY_PN}/${MY_P}.tar.bz2
-	${BASE_URI}MurrineThemePack.tar.bz2
-	${BASE_URI}MurrinaAquaIsh.tar.bz2
-	${BASE_URI}MurrinaFancyCandy.tar.bz2
-	${BASE_URI}MurrinaGilouche.tar.bz2
-	${BASE_URI}MurrinaGilouche.tar.bz2
+	${BASE_URI}${MY_P}.tar.bz2 ${BASE_URI}MurrineThemePack.tar.bz2
+	${BASE_URI}MurrinaAquaIsh.tar.bz2 ${BASE_URI}MurrinaFancyCandy.tar.bz2
+	${BASE_URI}MurrinaLoveGray.tar.bz2 ${BASE_URI}MurrinaGilouche.tar.bz2
 	${BASE_URI}MurrinaVerdeOlivo.tar.bz2
-	gnome? ( ${BASE_URI}${MY_PN}/${CFGRATOR}.tar.bz2 )
+	gnome? ( ${BASE_URI}nmc.tar_3.bz2 )
 	metacity? (
-		http://www.kernow-webhosting.com/~bvc/theme/mcity/Murrine.tar.gz
+		http://www.gnome-look.org/CONTENT/content-files/57999-Murrine.tar.gz
+		${BASE_URI}MurrineRounded.tar.bz2
 	)
 "
 RESTRICT="primaryuri"
@@ -31,11 +28,17 @@ IUSE="gnome metacity"
 
 RDEPEND="
 	>=x11-libs/gtk+-2.8
-	gnome? ( gnome-extra/zenity )
+	gnome? ( dev-python/pygtk )
 "
 DEPEND="
 	${RDEPEND}
 "
+
+src_unpack() {
+	unpack ${A}
+	cd ${WORKDIR}
+	tar -xf nmc.tar_3
+}
 
 src_compile() {
 	econf \
@@ -50,12 +53,13 @@ src_install() {
 	insinto /usr/share/themes
 	doins -r ${WORKDIR}/Murrin*
 	if use gnome; then
-		cd ${WORKDIR}/${CFGRATOR}/files
-		exeinto /usr/bin
-		doexe murrine-configurator
+		cd ${WORKDIR}/newmurrineconfigurator/src
 		insinto /usr/share/applications
 		doins murrine-configurator.desktop
 		insinto /usr/share/pixmaps
 		doins murrine-configurator.png
+		insinto /usr/share/nmc
+		doins *.{glade,py}
+		fperms 0755 /usr/share/nmc/newmurrineconfigurator.py
 	fi
 }
