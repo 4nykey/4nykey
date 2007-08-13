@@ -15,7 +15,7 @@ IUSE="spell"
 RESTRICT="primaryuri"
 
 RDEPEND="
-	>=dev-lang/python-2.5
+	>=dev-lang/python-2.5.1
 	>=dev-python/pygtk-2.10
 	dev-python/chardet
 	spell? (
