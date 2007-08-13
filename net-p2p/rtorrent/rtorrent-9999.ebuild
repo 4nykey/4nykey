@@ -33,9 +33,7 @@ src_unpack() {
 	mv ${S} ${WORKDIR}/libtorrent
 	subversion_fetch
 	mv ${WORKDIR}/libtorrent ${S}
-	#sed -i ${S}/configure.ac -e 's:libtorrent\([ >=]*\):libcurl\1:'
-	#sed -i ${S}/src/Makefile.am -e \
-	#'s:\(rtorrent_LDADD = \\\):\1\n\t$(top_srcdir)/libtorrent/src/libtorrent.la \\:'
+	sed -i ${S}/configure.ac -e 's:libtorrent >= [0-9.]*::'
 	subversion_bootstrap
 }
 
