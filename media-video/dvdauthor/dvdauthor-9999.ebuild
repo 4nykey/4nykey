@@ -8,17 +8,20 @@ DESCRIPTION="Tools for generating DVD files to be played on standalone DVD playe
 HOMEPAGE="http://dvdauthor.sourceforge.net/"
 EDARCS_REPOSITORY="http://dvdauthor.sourceforge.net/darcs"
 EDARCS_LOCALREPO="${PN}"
+WANT_AUTOMAKE="1.9"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="doc"
+IUSE="doc truetype bidi"
 
 RDEPEND="
 	media-libs/libdvdread
-	>=media-gfx/imagemagick-5.5.7.14
-	>=dev-libs/libxml2-2.5.0
+	>=media-gfx/imagemagick-5.5.7
+	>=dev-libs/libxml2-2.6
 	media-libs/libpng
+	truetype? ( >=media-libs/freetype-2 )
+	bidi? ( dev-libs/fribidi )
 "
 DEPEND="
 	${RDEPEND}
@@ -29,11 +32,8 @@ DEPEND="
 src_unpack() {
 	darcs_src_unpack
 	cd ${S}
-	sed -i '/AC_CONFIG_AUX_DIR/d' configure.ac
-	use doc || sed -i 's:\<doc\>::' Makefile.am
+	use doc || sed -i Makefile.am -e 's:\(SUBDIRS.*\)doc :\1:'
 	epatch ${FILESDIR}/${PN}-*.diff
-	# make automake-1.10 happy
-	cp /usr/share/gettext/config.rpath .
 	eautoreconf
 }
 
