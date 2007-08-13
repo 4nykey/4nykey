@@ -1,0 +1,46 @@
+--- ./util/Makefile.am.orig	2004-11-22 15:50:08.000000000 +0200
++++ ./util/Makefile.am	2007-08-10 23:41:52.000000000 +0300
+@@ -1,4 +1,4 @@
+ # $Id: Makefile.am,v 1.3 2004/11/22 13:50:08 asuraparaju Exp $
+ #
+ 
+-SUBDIRS = instrumentation conversion
++SUBDIRS = 
+--- ./configure.ac.orig	2007-05-04 17:35:55.000000000 +0300
++++ ./configure.ac	2007-08-10 23:41:24.000000000 +0300
+@@ -218,7 +218,7 @@
+ AC_LANG_PUSH(C++)
+ OPT_CFLAGS=""
+ case "$CXX" in
+-   g++*)
++   *g++*)
+ 		TRY_CFLAGS="$OPT_CFLAGS -g"
+ 		AC_TRY_CXXFLAGS([],[], [$TRY_CFLAGS $CXXFLAGS],[OPT_CFLAGS="$TRY_CFLAGS"])
+ 		TRY_CFLAGS="$OPT_CFLAGS -pedantic"
+@@ -250,7 +250,7 @@
+ if test x"${enableval}" = x"yes" ; then
+ 	AC_MSG_RESULT(yes)
+ 	case "$CXX" in
+-	    g++*)
++	    *g++*)
+ 			CXXFLAGS=`echo $CXXFLAGS | sed 's/-O[[0-9]]*//g'`
+ 			OPT_CFLAGS=""
+ 			TRY_CFLAGS="-O0"
+@@ -305,7 +305,7 @@
+ 
+     #Try more optimising flags if supported
+ 	case "$CXX" in
+-	    g++*)
++	    *g++*)
+ 			dnl TRY_CFLAGS="$OPT_CFLAGS -fprefetch-loop-arrays"
+ 			dnl AC_TRY_CXXFLAGS([],[], [$TRY_CFLAGS $CXXFLAGS],[OPT_CFLAGS="$TRY_CFLAGS"])
+ 			TRY_CFLAGS="$OPT_CFLAGS -fexpensive-optimizations"
+@@ -347,7 +347,7 @@
+ 
+ if test x"${enable_mmx}" = x"yes" ; then
+ 	case "$CXX" in
+-	    g++*)
++	    *g++*)
+ 			AC_LANG_PUSH(C++)
+ 			TRY_CFLAGS="-mmmx"
+ 			AC_TRY_CXXFLAGS([#include <mmintrin.h>],[], [$TRY_CFLAGS $CXXFLAGS],[CXXFLAGS="$CXXFLAGS $TRY_CFLAGS -DHAVE_MMX"])

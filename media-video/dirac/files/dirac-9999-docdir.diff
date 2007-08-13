@@ -1,0 +1,100 @@
+--- ./doc/documentation/code/api/Makefile.am.orig	2007-08-10 23:59:32.000000000 +0300
++++ ./doc/documentation/code/api/Makefile.am	2007-08-11 00:45:49.000000000 +0300
+@@ -7,7 +7,7 @@
+ 
+ CLEANFILES = html/*
+ 
+-htmldir = $(datadir)/doc/$(GENERIC_LIBRARY_NAME)/documentation/code/api/api_html
++htmldir = $(docdir)/html/documentation/code/api/api_html
+ 
+ html_DATA = html/index.html
+ 
+--- ./doc/documentation/code/programmers_guide/Makefile.am.orig	2007-08-10 23:43:55.000000000 +0300
++++ ./doc/documentation/code/programmers_guide/Makefile.am	2007-08-11 00:35:07.000000000 +0300
+@@ -3,7 +3,7 @@
+ 
+ # dirac_api.doxygen.in is not yet in use
+ 
+-progdir = $(datadir)/doc/$(GENERIC_LIBRARY_NAME)/documentation/code/programmers_guide
++progdir = $(htmldir)/documentation/code/programmers_guide
+ 
+ prog_DATA = index.htm
+ 
+--- ./doc/documentation/tools/diagnostics/Makefile.am.orig	2005-08-15 19:18:34.000000000 +0300
++++ ./doc/documentation/tools/diagnostics/Makefile.am	2007-08-11 00:35:07.000000000 +0300
+@@ -3,7 +3,7 @@
+ 
+ # dirac_api.doxygen.in is not yet in use
+ 
+-diagdir = $(datadir)/doc/$(GENERIC_LIBRARY_NAME)/documentation/tools/diagnostics
++diagdir = $(htmldir)/documentation/tools/diagnostics
+ 
+ diag_DATA = index.htm
+ 
+--- ./doc/documentation/algorithm/global_motion/Makefile.am.orig	2007-08-10 23:43:55.000000000 +0300
++++ ./doc/documentation/algorithm/global_motion/Makefile.am	2007-08-11 00:35:07.000000000 +0300
+@@ -3,7 +3,7 @@
+ 
+ # dirac_api.doxygen.in is not yet in use
+ 
+-gmdir = $(datadir)/doc/$(GENERIC_LIBRARY_NAME)/documentation/algorithm/global_motion
++gmdir = $(htmldir)/documentation/algorithm/global_motion
+ 
+ gm_DATA = index.htm
+ 
+--- ./doc/documentation/algorithm/algorithm/Makefile.am.orig	2007-08-10 23:43:54.000000000 +0300
++++ ./doc/documentation/algorithm/algorithm/Makefile.am	2007-08-11 00:35:07.000000000 +0300
+@@ -3,7 +3,7 @@
+ 
+ # dirac_api.doxygen.in is not yet in use
+ 
+-algodir = $(datadir)/doc/$(GENERIC_LIBRARY_NAME)/documentation/algorithm/algorithm
++algodir = $(htmldir)/documentation/algorithm/algorithm
+ 
+ algo_DATA = index.htm
+ 
+--- ./doc/documentation/algorithm/enhancements/Makefile.am.orig	2005-08-15 19:11:05.000000000 +0300
++++ ./doc/documentation/algorithm/enhancements/Makefile.am	2007-08-11 00:37:48.000000000 +0300
+@@ -3,7 +3,7 @@
+ 
+ # dirac_api.doxygen.in is not yet in use
+ 
+-enhancedir = $(datadir)/doc/$(GENERIC_LIBRARY_NAME)/documentation/algorithm/enhancements
++enhancedir = $(htmldir)/documentation/algorithm/enhancements
+ 
+ enhance_DATA = index.htm
+ 
+--- ./doc/documentation/algorithm/upconversion/Makefile.am.orig	2007-08-10 23:43:55.000000000 +0300
++++ ./doc/documentation/algorithm/upconversion/Makefile.am	2007-08-11 00:35:07.000000000 +0300
+@@ -3,7 +3,7 @@
+ 
+ # dirac_api.doxygen.in is not yet in use
+ 
+-upcvdir = $(datadir)/doc/$(GENERIC_LIBRARY_NAME)/documentation/algorithm/upconversion
++upcvdir = $(htmldir)/documentation/algorithm/upconversion
+ 
+ upcv_DATA = index.htm
+ 
+--- ./doc/Makefile.am.orig	2005-11-15 17:33:44.000000000 +0200
++++ ./doc/Makefile.am	2007-08-11 00:35:07.000000000 +0300
+@@ -4,9 +4,8 @@
+ # dirac_api.doxygen.in is not yet in use
+ EXTRA_DIST = $(faq_DATA)
+ 
+-docdir= $(datadir)/doc/$(GENERIC_LIBRARY_NAME)/documentation
+-faqdir= $(datadir)/doc/$(GENERIC_LIBRARY_NAME)
+-maindocdir = $(datadir)/doc/$(GENERIC_LIBRARY_NAME)
++faqdir= $(htmldir)
++maindocdir = $(htmldir)
+ 
+ if HAVE_ALGO
+ maindoc_DATA = $(srcdir)/index.html
+@@ -18,7 +17,7 @@
+ 	rm -f $(DESTDIR)$(maindocdir)/*.css
+ 	rm -fr $(DESTDIR)$(maindocdir)/images
+ 
+-faq_DATA = faq.html todo.html dirac_bitstream.txt
++faq_DATA = faq.html todo.html
+ 
+ if HAVE_ALGO
+ install-data-hook:

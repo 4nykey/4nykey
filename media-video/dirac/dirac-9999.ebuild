@@ -27,8 +27,7 @@ DEPEND="
 src_unpack() {
 	cvs_src_unpack
 	cd ${S}
-	sed -i 's:g++\*):*g++*):g' configure.ac
-	sed -i 's:SUBDIRS = .*:SUBDIRS = :' util/Makefile.am
+	epatch "${FILESDIR}"/${P}-*.diff
 	eautoreconf || die
 }
 
@@ -40,6 +39,8 @@ src_compile() {
 	econf \
 		$(use_enable debug) \
 		$(use_enable mmx) \
+		--docdir=/usr/share/doc/${PF} \
+		--htmldir=/usr/share/doc/${PF}/html \
 		|| die
 
 	emake || die
@@ -53,11 +54,12 @@ src_compile() {
 }
 
 src_install() {
-	einstall || die
-	use qt4 && newbin util/encoder_gui/encoder_gui dirac_encoder_gui
-	if use doc; then
-		mkdir -p "${D}"usr/share/doc/${PF}
-		mv "${D}"usr/share/doc/dirac "${D}"usr/share/doc/${PF}/html
+	emake DESTDIR="${D}" install || die
+	DOCDIR=${D}usr/share/doc/${PF}
+	if [[ -d ${DOCDIR} ]]; then
+		find ${DOCDIR} -type d -name CVS | xargs --no-run-if-empty rm -r
+		find ${DOCDIR} -type f | xargs --no-run-if-empty chmod 644
 	fi
+	use qt4 && newbin util/encoder_gui/encoder_gui dirac_encoder_gui
 	dodoc AUTHORS ChangeLog NEWS README TODO doc/*.txt
 }
