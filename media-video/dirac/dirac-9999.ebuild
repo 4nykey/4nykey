@@ -42,24 +42,20 @@ src_compile() {
 		--docdir=/usr/share/doc/${PF} \
 		--htmldir=/usr/share/doc/${PF}/html \
 		|| die
+	sed -i 's,^\(install:\).*,\1,' doc/Makefile
 
 	emake || die
 
 	if use qt4; then
 		cd util/encoder_gui
-		qmake -project || die
-		qmake || die
+		qmake -project && qmake || die
 		emake || die
 	fi
 }
 
 src_install() {
 	emake DESTDIR="${D}" install || die
-	DOCDIR=${D}usr/share/doc/${PF}
-	if [[ -d ${DOCDIR} ]]; then
-		find ${DOCDIR} -type d -name CVS | xargs --no-run-if-empty rm -r
-		find ${DOCDIR} -type f | xargs --no-run-if-empty chmod 644
-	fi
+	use doc && dohtml -A svg -A xht -r doc/
 	use qt4 && newbin util/encoder_gui/encoder_gui dirac_encoder_gui
 	dodoc AUTHORS ChangeLog NEWS README TODO doc/*.txt
 }
