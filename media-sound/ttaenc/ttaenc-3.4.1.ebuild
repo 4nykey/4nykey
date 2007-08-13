@@ -4,12 +4,12 @@
 
 inherit eutils
 
-MY_P="${PN}enc-${PV}-src"
+MY_P="${P}-src"
 DESCRIPTION="TTA lossless audio encoder/decoder"
 HOMEPAGE="http://tta.sf.net"
 SRC_URI="
-	mirror://sourceforge/${PN}/${MY_P}.tgz
-	http://etree.org/shnutils/shntool/support/formats/${PN}/${MY_P}-shntool.patch
+	mirror://sourceforge/tta/${MY_P}.tgz
+	http://etree.org/shnutils/shntool/support/formats/tta/${MY_P}-shntool.patch
 "
 S="${WORKDIR}/${MY_P}"
 
