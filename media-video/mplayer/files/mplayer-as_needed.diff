@@ -6,11 +6,11 @@ Index: configure
    echo >> "$TMPLOG"
    cat "$1" >> "$TMPLOG"
    echo >> "$TMPLOG"
--  echo "$_cc $CFLAGS $_inc_extra $_ld_static $_ld_extra $_libs_mplayer $_libs_mencoder -o $TMPO $@" >> "$TMPLOG"
-+  echo "$_cc $CFLAGS $_inc_extra -o $TMPO $@" $_ld_static $_ld_extra $_libs_mplayer $_libs_mencoder >> "$TMPLOG"
-   rm -f "$TMPO"
--  $_cc $CFLAGS $_inc_extra $_ld_static $_ld_extra $_libs_mplayer $_libs_mencoder -o "$TMPO" "$@" >> "$TMPLOG" 2>&1
-+  $_cc $CFLAGS $_inc_extra -o "$TMPO" "$@" $_ld_static $_ld_extra $_libs_mplayer $_libs_mencoder >> "$TMPLOG" 2>&1
+-  echo "$_cc $CFLAGS $_inc_extra $_ld_static $_ld_extra $_libs_mplayer $_libs_mencoder -o $TMPEXE $@" >> "$TMPLOG"
++  echo "$_cc $CFLAGS $_inc_extra -o $TMPEXE $@" $_ld_static $_ld_extra $_libs_mplayer $_libs_mencoder >> "$TMPLOG"
+   rm -f "$TMPEXE"
+-  $_cc $CFLAGS $_inc_extra $_ld_static $_ld_extra $_libs_mplayer $_libs_mencoder -o "$TMPEXE" "$@" >> "$TMPLOG" 2>&1
++  $_cc $CFLAGS $_inc_extra -o "$TMPEXE" "$@" $_ld_static $_ld_extra $_libs_mplayer $_libs_mencoder >> "$TMPLOG" 2>&1
    TMP="$?"
    echo >> "$TMPLOG"
-   echo "ldd $TMPO" >> "$TMPLOG"
+   echo >> "$TMPLOG"
