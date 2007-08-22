@@ -11,7 +11,7 @@ SRC_URI="http://ardour.org/files/releases/${P}.tar.bz2"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="nls debug mmx 3dnow sse fftw ladspa external-libs"
+IUSE="nls debug mmx 3dnow sse fftw osc ladspa external-libs usb"
 
 RDEPEND="
 	>=media-libs/liblrdf-0.3.6
@@ -30,6 +30,7 @@ RDEPEND="
 		media-libs/libsndfile
 	)
 	ladspa? ( >=media-libs/ladspa-sdk-1.12 )
+	usb? ( dev-libs/libusb )
 "
 DEPEND="
 	${RDEPEND}
@@ -37,13 +38,14 @@ DEPEND="
 	dev-util/pkgconfig
 	>=dev-util/scons-0.96.1
 	nls? ( sys-devel/gettext )
+	usb? ( virtual/os-headers )
 "
 
 src_unpack() {
 	unpack ${A}
 	cd ${S}
 
-	epatch "${FILESDIR}"/${PN}-{cflags,ext_sndfile,prefix}.diff
+	epatch "${FILESDIR}"/${PN}-{cflags,ext_sndfile,modir}.diff
 
 	# handle gtkmm accessibility flag
 	built_with_use dev-cpp/gtkmm accessibility || \
@@ -55,25 +57,30 @@ src_unpack() {
 	append-flags -fno-strict-aliasing
 }
 
+teh_conf() {
+	use !${1}; myconf="${myconf} ${2}=$?"
+}
+
 src_compile() {
-	local myconf="PREFIX=/usr DESTDIR=${D} VST=0"
-	use !external-libs; myconf="${myconf} SYSLIBS=$?"
-	use !debug; myconf="${myconf} DEBUG=$?"
-	use !nls; myconf="${myconf} NLS=$?"
-	use !fftw; myconf="${myconf} FFT_ANALYSIS=$?"
-	if use mmx || use 3dnow || use sse; then
-		use mmx && _mmx="-mmmx"
-		use 3dnow && _3dnow="-m3dnow"
-		use sse && _sse="-msse -DBUILD_SSE_OPTIMIZATIONS"
-		append-flags ${_mmx} ${_3dnow} ${_sse} -DARCH_X86
-	fi
+	local myconf="PREFIX=/usr VST=0 CMT=0"
+	teh_conf external-libs SYSLIBS
+	teh_conf debug DEBUG
+	teh_conf nls NLS
+	teh_conf fftw FFT_ANALYSIS
+	teh_conf osc LIBLO
+	teh_conf usb SURFACES
+	teh_conf sse FPU_OPTIMIZATION
+	use mmx && _mmx="-mmmx"
+	use 3dnow && _3dnow="-m3dnow"
+	use sse && _sse="-msse -mfpmath=sse -DUSE_XMMINTRIN"
+	append-flags ${_mmx} ${_3dnow} ${_sse} -DARCH_X86
 
 	scons \
 		${myconf} || die "make failed"
 }
 
 src_install() {
-	scons install || die "make install failed"
+	scons DESTDIR=${D} install || die "make install failed"
 
 	dodoc DOCUMENTATION/{AUTHORS*,CONTRIBUTORS*,FAQ,README*,TODO,TRANSLATORS}
 	doman DOCUMENTATION/ardour.1

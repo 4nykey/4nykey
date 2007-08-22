@@ -61,29 +61,32 @@ src_unpack() {
 	mkdir -p ${D}
 }
 
+teh_conf() {
+	use !${1}; myconf="${myconf} ${2}=$?"
+}
+
 src_compile() {
 	# CMT is for anicomp support (animix.sf.net)
-	local myconf="PREFIX=/usr DESTDIR=${D} VST=0 CMT=0"
-	use !external-libs; myconf="${myconf} SYSLIBS=$?"
-	use !debug; myconf="${myconf} DEBUG=$?"
-	use !nls; myconf="${myconf} NLS=$?"
-	use !fftw; myconf="${myconf} FFT_ANALYSIS=$?"
-	use !osc; myconf="${myconf} LIBLO=$?"
-	use !usb; myconf="${myconf} SURFACES=$?"
-	if use mmx || use 3dnow || use sse; then
-		use mmx && _mmx="-mmmx"
-		use 3dnow && _3dnow="-m3dnow"
-		use sse && _sse="-msse -DBUILD_SSE_OPTIMIZATIONS"
-		append-flags ${_mmx} ${_3dnow} ${_sse} -DARCH_X86
-	fi
+	local myconf="PREFIX=/usr VST=0 CMT=0"
+	teh_conf external-libs SYSLIBS
+	teh_conf debug DEBUG
+	teh_conf nls NLS
+	teh_conf fftw FFT_ANALYSIS
+	teh_conf osc LIBLO
+	teh_conf usb SURFACES
+	teh_conf sse FPU_OPTIMIZATION
+	use mmx && _mmx="-mmmx"
+	use 3dnow && _3dnow="-m3dnow"
+	use sse && _sse="-msse -mfpmath=sse -DUSE_XMMINTRIN"
+	append-flags ${_mmx} ${_3dnow} ${_sse} -DARCH_X86
 
 	scons \
 		${myconf} || die "make failed"
-	use doc && make -C manual html
+	use doc && make -C manual html || die "make manual failed"
 }
 
 src_install() {
-	scons install || die "make install failed"
+	scons DESTDIR=${D} install || die "make install failed"
 
 	dodoc DOCUMENTATION/{AUTHORS*,CONTRIBUTORS*,FAQ,README*,TODO,TRANSLATORS}
 	doman DOCUMENTATION/ardour.1

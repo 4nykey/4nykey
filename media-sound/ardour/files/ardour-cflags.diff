@@ -1,81 +1,13 @@
-Index: gtk2_ardour/SConscript
-===================================================================
---- gtk2_ardour/SConscript	(revision 1525)
-+++ gtk2_ardour/SConscript	(working copy)
-@@ -66,11 +66,11 @@
- 
- if gtkardour['DMALLOC']:
- 	gtkardour.Merge([libraries['dmalloc']])
--	gtkardour.Append(CCFLAGS='-DUSE_DMALLOC')
-+	gtkardour.Append(CXXFLAGS='-DUSE_DMALLOC')
- 
- if gtkardour['FFT_ANALYSIS']:
- 	gtkardour.Merge ([libraries['fftw3f']])
--	gtkardour.Append(CCFLAGS='-DFFT_ANALYSIS')
-+	gtkardour.Append(CXXFLAGS='-DFFT_ANALYSIS')
- 
- skipped_files=Split("""
- connection_editor.cc
-@@ -241,7 +241,7 @@
- 
- if env['VST']:
- 	extra_sources += vst_files
--	gtkardour.Append (CCFLAGS="-DVST_SUPPORT", CPPPATH="#libs/fst")
-+	gtkardour.Append (CXXFLAGS="-DVST_SUPPORT", CPPPATH="#libs/fst")
- 
- if gtkardour['AUDIOUNITS']:
-     extra_sources += audiounit_files
-@@ -254,7 +254,7 @@
- 
- intl_files += extra_sources
- 
--gtkardour.Append(CCFLAGS="-D_REENTRANT -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE")
-+gtkardour.Append(CXXFLAGS="-D_REENTRANT -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE")
- gtkardour.Append(CXXFLAGS="-DLOCALEDIR=\\\""+final_prefix+"/share/locale\\\"")
- 
- versionflag = '-DVERSIONSTRING=\\\"' + env['VERSION'] + '\\\"'
-Index: libs/gtkmm2ext/SConscript
-===================================================================
---- libs/gtkmm2ext/SConscript	(revision 1525)
-+++ libs/gtkmm2ext/SConscript	(working copy)
-@@ -60,8 +60,8 @@
- 
- gtkmm2ext.VersionBuild(['version.cc','gtkmm2ext/version.h'], [])
- 
--gtkmm2ext.Append(CCFLAGS="-D_REENTRANT")
--gtkmm2ext.Append(CCFLAGS="-DLOCALEDIR=\\\""+final_prefix+"/share/locale\\\"")
-+gtkmm2ext.Append(CXXFLAGS="-D_REENTRANT")
-+gtkmm2ext.Append(CXXFLAGS="-DLOCALEDIR=\\\""+final_prefix+"/share/locale\\\"")
- 
- libgtkmm2ext = gtkmm2ext.SharedLibrary('gtkmm2ext', gtkmm2ext_files)
- 
-Index: libs/pbd/SConscript
-===================================================================
---- libs/pbd/SConscript	(revision 1525)
-+++ libs/pbd/SConscript	(working copy)
-@@ -48,7 +48,7 @@
- 
- conf = Configure(pbd)
- if conf.CheckFunc('getmntent'):
--    conf.env.Append(CCFLAGS="-DHAVE_GETMNTENT")
-+    conf.env.Append(CXXFLAGS="-DHAVE_GETMNTENT")
- if conf.CheckCHeader('execinfo.h'):
-     conf.env.Append(CXXFLAGS="-DHAVE_EXECINFO")
- pbd = conf.Finish()
 Index: SConstruct
 ===================================================================
 --- SConstruct	(revision 1525)
 +++ SConstruct	(working copy)
-@@ -676,6 +676,13 @@
+@@ -676,6 +676,9 @@
      env.Append(CCFLAGS="-arch i386 -arch ppc")
      env.Append(LINKFLAGS="-arch i386 -arch ppc")
  
 +if os.environ.has_key('CFLAGS'):
 +    env['CCFLAGS'] = os.environ['CFLAGS'].split()
-+if os.environ.has_key('CXXFLAGS'):
-+    env['CXXFLAGS'] = os.environ['CXXFLAGS'].split()
-+if os.environ.has_key('LDFLAGS'):
-+    env['LDFLAGS'] = os.environ['LDFLAGS'].split()
 +
  #
  # warnings flags
