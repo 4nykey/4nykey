@@ -13,8 +13,10 @@ ESVN_BOOTSTRAP="eautoreconf"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="aac alsa ao audiofile flac icecast ipv6 mad mikmod musepack vorbis oss
-unicode ogg pulseaudio jack libsamplerate"
+IUSE="
+aac alsa ao audiofile flac icecast ipv6 mad mikmod musepack vorbis oss unicode
+ogg pulseaudio jack libsamplerate wavpack zeroconf avahi
+"
 
 RDEPEND="
 	!media-sound/mpd-svn
@@ -35,6 +37,11 @@ RDEPEND="
 	vorbis? ( media-libs/libvorbis )
 	jack? ( media-sound/jack-audio-connection-kit )
 	libsamplerate? ( media-libs/libsamplerate )
+	wavpack? ( media-sound/wavpack )
+	zeroconf? (
+		avahi? ( net-dns/avahi )
+		!avahi? ( net-misc/mDNSResponder )
+	)
 "
 DEPEND="
 	${RDEPEND}
@@ -51,6 +58,7 @@ pkg_setup() {
 src_compile() {
 	local myconf
 	use ogg && myconf="${myconf} $(use_enable flac oggflac)"
+	use avahi && ZERO="avahi" || ZERO="bonjour"
 	econf \
 		$(use_enable alsa) \
 		$(use_enable alsa alsatest) \
@@ -63,6 +71,7 @@ src_compile() {
 		$(use_enable audiofile audiofiletest) \
 		$(use_enable flac libFLACtest) \
 		$(use_enable flac) \
+		$(use_enable wavpack) \
 		$(use_enable icecast shout) \
 		$(use_enable ipv6) \
 		$(use_enable mad mp3) \
@@ -74,6 +83,7 @@ src_compile() {
 		$(use_enable vorbis oggvorbis) \
 		$(use_enable vorbis vorbistest) \
 		$(use_enable libsamplerate lsr) \
+		$(use_with zeroconf zeroconf ${ZERO}) \
 		${myconf} || die "could not configure"
 
 	emake || die "emake failed"

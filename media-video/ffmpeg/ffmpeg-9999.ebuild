@@ -102,7 +102,6 @@ src_compile() {
 	teh_conf dis oss audio-oss
 	teh_conf dis v4l
 	teh_conf dis v4l2
-	teh_conf dis ieee1394 dv1394
 	teh_conf en ieee1394 dc1394
 	teh_conf en threads pthreads
 	teh_conf en ogg libogg

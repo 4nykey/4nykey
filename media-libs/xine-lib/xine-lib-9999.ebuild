@@ -18,7 +18,7 @@ IUSE="
 aalib libcaca arts esd win32codecs nls dvd X directfb vorbis alsa gnome sdl
 speex theora ipv6 altivec opengl aac fbcon xv xvmc samba dxr3 vidix mng flac
 oss v4l xinerama vcd a52 mad imagemagick dts debug modplug gtk pulseaudio mmap
-doc truetype wavpack musepack xcb dvdnav
+doc truetype wavpack musepack xcb dvdnav jack real
 "
 
 RDEPEND="
@@ -28,6 +28,7 @@ RDEPEND="
 	xvmc? ( x11-libs/libXvMC )
 	xinerama? ( x11-libs/libXinerama )
 	win32codecs? ( >=media-libs/win32codecs-0.50 )
+	real? ( media-libs/win32codecs )
 	esd? ( media-sound/esound )
 	dvd? ( >=media-libs/libdvdcss-1.2.7 )
 	arts? ( kde-base/arts )
@@ -64,6 +65,7 @@ RDEPEND="
 	musepack? ( media-libs/libmpcdec )
 	xcb? ( >=x11-libs/libxcb-1.0 )
 	!=media-libs/xine-lib-0.9.13*
+	jack? ( media-sound/jack-audio-connection-kit )
 "
 DEPEND="
 	${RDEPEND}
@@ -166,10 +168,12 @@ src_compile() {
 		$(use_with arts) \
 		$(use_with esd esound) \
 		$(use_with pulseaudio) \
+		$(use_with jack) \
 		$(use_with dvdnav external-dvdnav) \
 		$(use_enable vcd) --without-internal-vcdlibs \
 		\
 		$(use_enable win32codecs w32dll) \
+		$(use_enable real real-codecs) \
 		\
 		$(use_enable mmap) \
 		$(use_with truetype freetype) $(use_with truetype fontconfig) \

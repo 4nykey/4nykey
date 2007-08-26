@@ -24,7 +24,8 @@ dvb dvd vcd ffmpeg aac dts flac mpeg vorbis theora X opengl truetype svg fbcon
 svga oss aalib ggi libcaca esd arts alsa wxwindows ncurses xosd lirc joystick
 hal stream mp3 xv bidi sdl png xml samba daap corba mod speex nsplugin x264
 dirac gnome musepack qt4 portaudio skins firefox xulrunner shout lua libnotify
-musicbrainz taglib ieee1394 dv twolame real rtsp teletext zvbi upnp
+musicbrainz taglib ieee1394 dv twolame real rtsp teletext zvbi upnp win32codecs
+cddb directfb jack avahi optimisememory xinerama
 "
 #	upnp? ( net-misc/clinkcc )
 #		$(use_enable upnp cyberlink) \
@@ -33,7 +34,7 @@ RDEPEND="
 	hal? ( >=sys-apps/hal-0.5.0 )
 	cdda? (
 		>=dev-libs/libcdio-0.71
-		>=media-libs/libcddb-0.9.5
+		cddb? ( >=media-libs/libcddb-0.9.5 )
 	)
 	live? ( >=media-plugins/live-2007.01.17 )
 	dvd? (
@@ -127,6 +128,10 @@ RDEPEND="
 	twolame? ( media-sound/twolame )
 	zvbi? ( >=media-libs/zvbi-0.2.25 )
 	upnp? ( net-libs/libupnp )
+	win32codecs? ( media-libs/win32codecs )
+	directfb? ( dev-libs/DirectFB )
+	jack? ( >=media-sound/jack-audio-connection-kit-0.99.0-r1 )
+	avahi? ( >=net-dns/avahi-0.6 )
 "
 DEPEND="
 	${RDEPEND}
@@ -134,6 +139,7 @@ DEPEND="
 	v4l? ( virtual/os-headers )
 	dvb? ( virtual/os-headers )
 	joystick? ( virtual/os-headers )
+	X? ( xinerama? ( x11-proto/xineramaproto ) )
 	sys-devel/gettext
 	dev-util/pkgconfig
 "
@@ -184,6 +190,17 @@ src_compile () {
 
 	if use teletext; then
 		myconf="${myconf} $(use_enable zvbi) $(use_enable !zvbi telx)"
+	fi
+
+	if use cdda; then
+		myconf="${myconf} $(use_enable cddb libcddb)"
+	fi
+
+	if use directfb; then
+		myconf="${myconf} --enable-directfb --with-directfb=/usr"
+		append-cppflags "-I/usr/include/directfb"
+	else
+		myconf="${myconf} --disable-directfb"
 	fi
 
 	econf \
@@ -263,6 +280,11 @@ src_compile () {
 		$(use_enable real) \
 		$(use_enable rtsp realrtsp) \
 		$(use_enable upnp) \
+		$(use_enable win32codecs loader) \
+		$(use_enable jack) \
+		$(use_enable avahi bonjour) \
+		$(use_enable optimisememory optimize-memory) \
+		$(use_enable xinerama) \
 		${myconf} || die "configuration failed"
 
 	emake || die "make of VLC failed"
