@@ -1,0 +1,24 @@
+--- ./snd-help.c.orig	2007-07-12 02:04:02.000000000 +0300
++++ ./snd-help.c	2007-09-04 03:10:55.000000000 +0300
+@@ -3511,6 +3511,10 @@
+ static char *html_directory(void)
+ {
+   int i;
++#ifdef MUS_DEFAULT_DOC_DIR
++  if (mus_file_probe(MUS_DEFAULT_DOC_DIR "/snd.html"))
++    return(MUS_DEFAULT_DOC_DIR);
++#endif
+   if (mus_file_probe("snd.html"))
+     return(mus_getcwd());
+   if (html_dir(ss))
+@@ -3523,10 +3527,6 @@
+       FREE(hd);
+       if (happy) return(copy_string(html_dir(ss)));
+     }
+-#ifdef MUS_DEFAULT_DOC_DIR
+-  if (mus_file_probe(MUS_DEFAULT_DOC_DIR "/snd.html"))
+-    return(copy_string(MUS_DEFAULT_DOC_DIR "/snd.html"));
+-#endif
+   for (i = 0; i < DOC_DIRECTORIES; i++)
+     if (mus_file_probe(doc_files[i])) return(copy_string(doc_directories[i]));
+   return(NULL);

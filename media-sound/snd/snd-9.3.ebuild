@@ -7,14 +7,13 @@ inherit multilib eutils
 DESCRIPTION="Snd is a sound editor"
 HOMEPAGE="http://ccrma.stanford.edu/software/snd/"
 SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
-S="${WORKDIR}/${P%%.*}"
 
 SLOT="0"
 LICENSE="as-is"
 KEYWORDS="~x86"
 IUSE="
 alsa esd fam fftw gsl gtk guile jack ladspa motif nls opengl ruby vorbis mp3
-speex flac timidity shorten wavpack
+speex flac timidity shorten wavpack cairo postscript
 "
 
 DEPEND="
@@ -32,6 +31,7 @@ DEPEND="
 	nls? ( sys-devel/gettext )
 	opengl? ( virtual/opengl )
 	ruby? ( virtual/ruby )
+	cairo? ( x11-libs/cairo )
 "
 RDEPEND="
 	${DEPEND}
@@ -77,6 +77,7 @@ src_compile() {
 		else
 			myconf="${myconf} --with-just-gl"
 		fi
+		myconf="${myconf} $(use_with postscript gl2ps)"
 	else
 		myconf="${myconf} --without-gl"
 	fi
@@ -84,17 +85,22 @@ src_compile() {
 	econf \
 		$(use_with alsa) \
 		$(use_with esd) \
+		$(use_with jack) \
+		$(use_with guile) \
+		$(use_with ruby) \
+		$(use_with ladspa) \
+		$(use_with gtk) \
+		$(use_with gtk static-xg) \
+		$(use_with cairo) \
+		$(use_with motif) \
+		$(use_with motif static-xm) \
+		$(use_with motif editres) \
 		$(use_with fam) \
 		$(use_with fftw) \
 		$(use_with gsl) \
-		$(use_with gtk) \
-		$(use_with guile) \
-		$(use_with jack) \
-		$(use_with ladspa) \
-		$(use_with motif) \
 		$(use_enable nls) \
-		$(use_with ruby) \
 		--without-builtin-gtkrc \
+		--disable-deprecated \
 		--with-doc-dir=/usr/share/doc/${PF}/html \
 		${myconf} || die
 
@@ -104,5 +110,5 @@ src_compile() {
 src_install () {
 	emake DESTDIR="${D}" install || die
 	dodoc README.Snd HISTORY.Snd TODO.Snd Snd.ad
-	dohtml -r *.html *.png tutorial
+	dohtml -r .
 }

@@ -36,6 +36,7 @@ media-sound/ncmpc:raw-mode - raw terminal mode
 media-sound/rezound:16bittmp - Use 16bit temporary files (default 32bit float), usefull for slower computers
 media-sound/rezound:lame - Enable MP3 encoding through LAME
 media-sound/rezound:soundtouch - compile with support for soundtouch
+media-sound/snd:postscript - Enable postscript output from OpenGL graphics
 media-sound/snd:timidity - Build with Timidity++ (MIDI sequencer) support
 media-sound/snd:wavpack - Build with WavPack support
 media-sound/sonata:taglib - Enable tagging support with taglib
