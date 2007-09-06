@@ -12,7 +12,7 @@ S="${WORKDIR}/${BRANCH}"
 
 LICENSE="GPL-2"
 SLOT="1"
-KEYWORDS="~x86"
+KEYWORDS="-*"
 
 IUSE="
 aalib libcaca arts esd win32codecs nls dvd X directfb vorbis alsa gnome sdl
