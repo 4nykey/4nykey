@@ -17,8 +17,9 @@ DEPEND=""
 RDEPEND=""
 
 MODULE_NAMES="btrfs(fs:)"
-BUILD_PARAMS="-C ${KV_DIR} M=${S}"
-BUILD_TARGETS="modules"
+BUILD_PARAMS="KERNELDIR=${KV_DIR}"
+BUILD_TARGETS="all"
+MODULESD_BTRFS_DOCS="INSTALL TODO"
 
 pkg_setup() {
 	linux-mod_pkg_setup
