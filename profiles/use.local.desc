@@ -108,6 +108,7 @@ net-im/gajim:networkmanager - Enable networkmanager support
 net-im/gajim:srv - SRV capabilities
 net-im/gajim:trayicon - Enable the trayicon module
 net-im/tkabber:plugins - Enables installation of extra plugins
+net-p2p/bitswash:libtorrent - Use system rb_libtorrent (may require the version, that isn't yet in portage)
 net-p2p/rtorrent:openssl - Use OpenSSL's SHA1 implementation
 x11-themes/gtk-engines-candido:gdm - Install GDM theme
 x11-themes/gtk-engines-candido:metacity - Install Metacity theme
