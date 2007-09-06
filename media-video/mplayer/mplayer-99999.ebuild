@@ -236,10 +236,9 @@ src_compile() {
 	fi
 
 	if use X; then
-		teh_conf dga
-		teh_conf 3dfx dga
+		teh_conf dga dga2
 	else
-		myconf="${myconf} --disable-dga"
+		myconf="${myconf} --disable-dga2"
 	fi
 
 	# disable png *only* if gtk && png aren't on
