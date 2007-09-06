@@ -17,7 +17,7 @@ ESVN_BOOTSTRAP="./bootstrap && eautoreconf"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="-*"
 IUSE="
 a52 3dfx nls unicode debug altivec httpd vlm gnutls live v4l cdda ogg matroska
 dvb dvd vcd ffmpeg aac dts flac mpeg vorbis theora X opengl truetype svg fbcon
@@ -121,7 +121,7 @@ RDEPEND="
 	musicbrainz? ( media-libs/musicbrainz )
 	taglib? ( media-libs/taglib )
 	ieee1394? (
-		media-libs/libdc1394
+		=media-libs/libdc1394-1*
 		sys-libs/libraw1394
 		dv? ( sys-libs/libavc1394 )
 	)
