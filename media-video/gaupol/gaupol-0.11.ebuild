@@ -4,15 +4,15 @@
 
 inherit distutils versionator
 
+MAJMIN="$(get_version_component_range 1-2)"
 DESCRIPTION="Gaupol is a subtitle editor for text-based subtitles"
 HOMEPAGE="http://home.gna.org/gaupol/"
-SRC_URI="http://download.gna.org/gaupol/$(get_version_component_range 1-2)/${P}.tar.gz"
+SRC_URI="http://download.gna.org/gaupol/${MAJMIN}/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
 IUSE="spell"
-RESTRICT="primaryuri"
 
 RDEPEND="
 	>=dev-lang/python-2.5.1
