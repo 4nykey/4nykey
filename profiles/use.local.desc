@@ -40,6 +40,8 @@ media-sound/snd:postscript - Enable postscript output from OpenGL graphics
 media-sound/snd:timidity - Build with Timidity++ (MIDI sequencer) support
 media-sound/snd:wavpack - Build with WavPack support
 media-sound/sonata:taglib - Enable tagging support with taglib
+media-sound/traverso:lv2 - Add support for Ladspa V2
+media-sound/traverso:wavpack - Build with WavPack support
 media-sound/vorbis-tools:ogg123 - Build ogg123 player
 media-video/avidemux:aften - Enable A/52 encoding support via aften
 media-video/avidemux:amrnb - Enables Adaptive Multi-Rate Audio support (Narrow Band)
