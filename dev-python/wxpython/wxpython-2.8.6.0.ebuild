@@ -2,12 +2,13 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-python/wxpython/wxpython-2.6.3.3.ebuild,v 1.6 2007/01/16 06:16:12 josejx Exp $
 
-inherit distutils wxwidgets-nu eutils multilib toolchain-funcs
+inherit distutils wxwidgets-nu
 
 MY_P="${P/wxpython-/wxPython-src-}"
 DESCRIPTION="A blending of the wxWindows C++ class library with Python"
 HOMEPAGE="http://www.wxpython.org/"
 SRC_URI="mirror://sourceforge/wxpython/${MY_P}.tar.bz2"
+S="${WORKDIR}/${MY_P}/wxPython/"
 
 LICENSE="wxWinLL-3"
 SLOT="2.8"
@@ -32,21 +33,20 @@ DEPEND="
 	dev-util/pkgconfig
 "
 
-S="${WORKDIR}/${MY_P}/wxPython/"
+WX_GTK_VER="${SLOT}"
+PYTHON_MODNAME="."
 
 pkg_setup() {
-	WX_GTK_VER="${SLOT}"
 	if use unicode; then
 		need-wxwidgets unicode
 	else
 		need-wxwidgets gtk2
 	fi
-
+	use opengl && check_wxuse opengl
+	use unicode && check_wxuse unicode
 	mypyconf="WX_CONFIG=${WX_CONFIG} WXPORT=gtk2"
 	use !opengl; mypyconf="${mypyconf} BUILD_GLCANVAS=$?"
 	use !unicode; mypyconf="${mypyconf} UNICODE=$?"
-
-	PYTHON_MODNAME="."
 }
 
 src_unpack() {
@@ -55,35 +55,21 @@ src_unpack() {
 	sed -i "s:cflags.append('-O3'):pass:" config.py
 	# the following mimics "scripts-multiver-xxx.diff"
 	find scripts -mindepth 1 -type f -executable | xargs sed -i \
-		"/^#\!/a import wxversion\nwxversion.select(\"${SLOT}\"):"
+		"/^#\!/a import wxversion\nwxversion.select(\"${SLOT}\")"
 }
 
 src_compile() {
-	CC="$(tc-getCXX)" distutils_src_compile ${mypyconf}
+	distutils_src_compile ${mypyconf}
 }
 
 src_install() {
 	distutils_src_install ${mypyconf}
-
-	site_pkgs="$(${python} -c 'from distutils.sysconfig import get_python_lib;print get_python_lib()')"
-	use unicode && wxau="unicode" || wxau="ansi"
-	wx_name="wx-${SLOT}-gtk2-${wxau}"
-	wx_pth="${site_pkgs}/wx.pth"
-	if [[ -e "${wx_pth}" && $(grep -o 2.4 ${wx_pth}) == "2.4" ]]; then
-		rm "${D}"/${site_pkgs}/wx.pth
-		elog "Keeping 2.4 as system default wxPython"
-	else
-		elog "Setting ${wx_name} as system default wxPython"
-		echo ${wx_name} > ${D}/${site_pkgs}/wx.pth ||
-		die "Couldn't create wx.pth"
-	fi
+	newbin "${FILESDIR}"/wxpy-config.py wxpy-config
 
 	#Add ${PV} suffix to all /usr/bin/* programs to avoid clobbering SLOT'd
 	for filename in "${D}"/usr/bin/* ; do
 		mv ${filename} ${filename}-${SLOT}
 	done
-
-	newbin "${FILESDIR}"/wxpy-config.py wxpy-config
 }
 
 pkg_postinst() {

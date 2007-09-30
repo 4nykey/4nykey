@@ -13,10 +13,14 @@
 #     2.4: !!! 2.4 is being removed from the tree !!!
 #     2.6+: gtk2 unicode base base-unicode mac mac-unicode
 #
-#
 # set-wxconfig
 #   Arguments: gtk-ansi gtk2-ansi unicode base-ansi base-unicode mac-ansi mac-unicode
 #   Note: Don't call this function directly from ebuilds
+#
+# check_wxuse
+#   Check if wxGTK was built with the specified USE flag.
+#   Usage:  check_wxuse <USE flag>
+#	Note: for now, requires WX_GTK_VER to be set.
 
 inherit multilib
 
@@ -89,5 +93,26 @@ set-wxconfig() {
 		exit 1
 	fi
 	export WX_CONFIG WX_CONFIG_NAME WX_CONFIG_PREFIX WXBASE_CONFIG_NAME
+}
+
+check_wxuse() {
+	if [[ -z ${WX_GTK_VER} ]]; then
+		echo
+		eerror "You need to set WX_GTK_VER before calling ${FUNCNAME}."
+		die "Missing WX_GTK_VER."
+	fi
+
+	ebegin "Checking wxGTK-${WX_GTK_VER} for ${1} support"
+	if $(built_with_use =x11-libs/wxGTK-${WX_GTK_VER}* ${1}); then
+		eend 0
+	else
+		eend 1
+		echo
+		eerror "${FUNCNAME} - You have requested functionality that requires ${1} support to"
+		eerror "have been built into x11-libs/wxGTK."
+		eerror
+		eerror "Please re-merge =x11-libs/wxGTK-${WX_GTK_VER}* with the ${1} USE flag enabled."
+		die "Missing USE flags."
+	fi
 }
 
