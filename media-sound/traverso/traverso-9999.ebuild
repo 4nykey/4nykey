@@ -10,7 +10,7 @@ ECVS_SERVER="cvs.savannah.nongnu.org:/sources/traverso"
 ECVS_MODULE="${PN}"
 S="${WORKDIR}/${ECVS_MODULE}"
 
-IUSE="alsa jack lv2 opengl sse mad vorbis flac wavpack"
+IUSE="alsa jack lv2 opengl sse mad vorbis flac wavpack lame"
 SLOT="0"
 LICENSE="GPL-2"
 KEYWORDS="~x86"
@@ -28,6 +28,7 @@ DEPEND="
 	vorbis? ( media-libs/libvorbis )
 	flac? ( media-libs/flac )
 	wavpack? ( media-sound/wavpack )
+	lame? ( media-sound/lame )
 "
 RDEPEND="
 	${DEPEND}

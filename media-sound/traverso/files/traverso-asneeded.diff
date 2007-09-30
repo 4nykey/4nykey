@@ -23,7 +23,7 @@
  !contains(DEFINES, ALSA_SUPPORT){
 --- ./src/audiofileio/audiofileio.pro.orig	2007-09-22 01:52:47.000000000 +0300
 +++ ./src/audiofileio/audiofileio.pro	2007-09-22 13:42:07.000000000 +0300
-@@ -7,6 +7,12 @@
+@@ -7,6 +7,13 @@
  QMAKE_LIBDIR = ../../lib 
  TARGET = traversoaudiofileio 
  DESTDIR = ../../lib 
@@ -31,6 +31,7 @@
 +    -lsndfile \
 +    -lvorbisfile \
 +    -lmad \
++    -lmp3lame \
 +    -lFLAC \
 +    -lwavpack
  
