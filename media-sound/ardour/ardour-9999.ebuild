@@ -6,7 +6,7 @@ inherit subversion flag-o-matic
 
 DESCRIPTION="multi-track hard disk recording software"
 HOMEPAGE="http://ardour.org/"
-ESVN_REPO_URI="http://subversion.ardour.org/svn/ardour2/trunk"
+ESVN_REPO_URI="http://subversion.ardour.org/svn/ardour2/branches/2.0-ongoing"
 ESVN_PATCHES="${PN}-*.diff"
 
 LICENSE="GPL-2"
@@ -16,15 +16,16 @@ IUSE="nls debug mmx 3dnow sse fftw osc ladspa external-libs doc usb"
 # usb is for tranzport (req libusb) and powermate (req linux/input.h)
 
 RDEPEND="
-	>=media-libs/liblrdf-0.3.6
-	>=media-libs/raptor-1.2.0
-	>=media-libs/libsamplerate-0.0.14
+	>=media-libs/liblrdf-0.4
+	>=media-libs/raptor-1.4.2
+	>=media-libs/libsamplerate-0.1
 	fftw? ( =sci-libs/fftw-3* )
-	>=media-sound/jack-audio-connection-kit-0.105.0
-	>=dev-libs/libxml2-2.5.7
+	>=media-sound/jack-audio-connection-kit-0.101.1
+	>=dev-libs/libxml2-2.6.0
 	dev-libs/libxslt
-	media-libs/flac
 	osc? ( media-libs/liblo )
+	>=x11-libs/gtk+-2.10.1
+	gnome-base/libgnomecanvas
 	external-libs? (
 		=dev-libs/libsigc++-2*
 		dev-cpp/libgnomecanvasmm
@@ -75,6 +76,7 @@ src_compile() {
 	teh_conf osc LIBLO
 	teh_conf usb SURFACES
 	teh_conf sse FPU_OPTIMIZATION
+	local _mmx _3dnow _sse
 	use mmx && _mmx="-mmmx"
 	use 3dnow && _3dnow="-m3dnow"
 	use sse && _sse="-msse -mfpmath=sse -DUSE_XMMINTRIN"
@@ -87,8 +89,9 @@ src_compile() {
 
 src_install() {
 	scons DESTDIR=${D} install || die "make install failed"
-
 	dodoc DOCUMENTATION/{AUTHORS*,CONTRIBUTORS*,FAQ,README*,TODO,TRANSLATORS}
 	doman DOCUMENTATION/ardour.1
 	use doc && dohtml -r manual/tmp/*
+	newicon icons/icon/ardour_icon_mac.png ${PN}.png
+	make_desktop_entry ardour2 Ardour '' AudioVideo
 }

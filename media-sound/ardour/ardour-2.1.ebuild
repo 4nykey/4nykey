@@ -14,15 +14,15 @@ KEYWORDS="~x86"
 IUSE="nls debug mmx 3dnow sse fftw osc ladspa external-libs usb"
 
 RDEPEND="
-	>=media-libs/liblrdf-0.3.6
-	>=media-libs/raptor-1.2.0
-	>=media-libs/libsamplerate-0.0.14
+	>=media-libs/liblrdf-0.4.0
+	>=media-libs/raptor-1.4.2
+	>=media-libs/libsamplerate-0.1.0
 	fftw? ( =sci-libs/fftw-3* )
-	>=media-sound/jack-audio-connection-kit-0.100.0
-	>=dev-libs/libxml2-2.5.7
+	>=media-sound/jack-audio-connection-kit-0.101.1
+	>=dev-libs/libxml2-2.6.0
 	dev-libs/libxslt
-	media-libs/flac
 	media-libs/liblo
+	>=x11-libs/gtk+-2.8.1
 	external-libs? (
 		=dev-libs/libsigc++-2*
 		dev-cpp/libgnomecanvasmm
