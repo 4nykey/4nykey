@@ -1,0 +1,13 @@
+Index: doc/Makefile.am
+===================================================================
+--- doc/Makefile.am	(revision 102)
++++ doc/Makefile.am	(working copy)
+@@ -8,7 +8,7 @@
+ man1_MANS = fim.man
+ 
+ # html stuff is installed in the documentation directories, too
+-htmldir = $(docdir)
++htmldir = $(docdir)/html
+ html_DATA = fim.man.html FIM.html
+ doc_DATA = FIM.TXT
+ 
