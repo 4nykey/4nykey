@@ -18,6 +18,7 @@ IUSE=""
 MODULE_NAMES="aufs(fs:)"
 BUILD_PARAMS="KDIR=${KV_DIR} -f local.mk"
 BUILD_TARGETS="all"
+MAKEOPTS="-j1"
 
 src_install() {
 	exeinto /sbin
