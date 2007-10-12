@@ -65,9 +65,8 @@ filter-flags "-fforce-addr"
 
 pick() {
 	if ! use $1; then
-		CMAKE_VAR="$(echo ${2:-${1}} | tr [:lower:] [:upper:])"
-		CMAKE_VAR="-DNO_${CMAKE_VAR}=1"
-		myconf="${CMAKE_VAR} ${myconf}"
+		local CMAKE_VAR="$(echo ${2:-${1}} | tr [:lower:] [:upper:])"
+		myconf="-DNO_${CMAKE_VAR}=1 ${myconf}"
 	fi
 }
 
@@ -81,8 +80,8 @@ src_compile() {
 	myconf="${myconf} -DProject_WC_REVISION=${ESVN_WC_REVISION}"
 	use debug && myconf="${myconf} -DCMAKE_BUILD_TYPE=Debug"
 	for x in \
-	gtk qt4 nls sdl arts alsa esd jack oss libsamplerate lame faac aften amrnb \
-	vorbis xvid x264 fontconfig
+		gtk qt4 nls sdl arts alsa esd jack oss libsamplerate lame faac aften \
+		amrnb vorbis xvid x264 fontconfig
 	do
 		pick $x
 	done
@@ -99,5 +98,5 @@ src_compile() {
 
 src_install() {
 	emake DESTDIR="${D}" install || die
-#	dodoc AUTHORS ChangeLog History
+	dodoc AUTHORS
 }

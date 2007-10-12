@@ -1,107 +1,110 @@
 Index: ConfigureChecks.cmake
 ===================================================================
---- ConfigureChecks.cmake	(revision 3412)
+--- ConfigureChecks.cmake	(revision 3623)
 +++ ConfigureChecks.cmake	(working copy)
-@@ -133,7 +133,7 @@
+@@ -222,7 +222,7 @@
  ########################################
  # FONTCONFIG
  ########################################
 -ADM_CHECK_HL(FontConfig fontconfig/fontconfig.h fontconfig FcStrSetCreate USE_FONTCONFIG)
 +ADM_CHECK_HL(FONTCONFIG fontconfig/fontconfig.h fontconfig FcStrSetCreate USE_FONTCONFIG)
- if(USE_FONTCONFIG)
- SET(HAVE_FONTCONFIG 1)
- endif(USE_FONTCONFIG)
-@@ -146,7 +146,7 @@
- SET(CMAKE_REQUIRED_LIBRARIES "${X11_LIBRARIES}")
- SET(CMAKE_REQUIRED_INCLUDE "${X11_INCLUDE_DIR}")
  
--ADM_CHECK_HL(Xvideo X11/extensions/Xvlib.h Xv XvShmPutImage USE_XV)
-+ADM_CHECK_HL(XVIDEO X11/extensions/Xvlib.h Xv XvShmPutImage USE_XV)
- MESSAGE(STATUS "(i used ${CMAKE_REQUIRED_FLAGS}**${X11_INCLUDE_DIR})")
- MESSAGE(STATUS "(and ${CMAKE_REQUIRED_LIBRARIES}**${X11_LIBRARIES})")
+ IF (USE_FONTCONFIG)
+ 	SET(HAVE_FONTCONFIG 1)
+@@ -236,7 +236,7 @@
+ 	SET(CMAKE_REQUIRED_LIBRARIES "${X11_LIBRARIES}")
+ 	SET(CMAKE_REQUIRED_INCLUDE "${X11_INCLUDE_DIR}")
  
-@@ -182,13 +182,13 @@
+-	ADM_CHECK_HL(Xvideo X11/extensions/Xvlib.h Xv XvShmPutImage USE_XV)
++	ADM_CHECK_HL(XVIDEO X11/extensions/Xvlib.h Xv XvShmPutImage USE_XV)
+ 	
+ 	MESSAGE(STATUS "(X11 Flags: ${CMAKE_REQUIRED_FLAGS} ${X11_INCLUDE_DIR})")
+ 	MESSAGE(STATUS "(X11 Libraries: ${X11_LIBRARIES})")
+@@ -278,14 +278,14 @@
  # ESD
  ########################################
- if(NOT WIN32)
--ADM_CHECK_HL(Esd esd.h  esd esd_close USE_ESD)
-+ADM_CHECK_HL(ESD esd.h  esd esd_close USE_ESD)
- endif(NOT WIN32)
+ IF (NOT ADM_OS_WINDOWS)
+-	ADM_CHECK_HL(Esd esd.h  esd esd_close USE_ESD)
++	ADM_CHECK_HL(ESD esd.h  esd esd_close USE_ESD)
+ ENDIF (NOT ADM_OS_WINDOWS)
+ 
  ########################################
  # JACK
  ########################################
- if(NOT WIN32)
--ADM_CHECK_HL(Jack jack/jack.h  jack jack_client_close USE_JACK)
-+ADM_CHECK_HL(JACK jack/jack.h  jack jack_client_close USE_JACK)
- endif(NOT WIN32)
- ########################################
- # Aften
-@@ -199,7 +199,7 @@
- SET(CMAKE_REQUIRED_FLAGS "-lm -lpthread")
- endif(WIN32)
+ IF (NOT ADM_OS_WINDOWS)
+-	ADM_CHECK_HL(Jack jack/jack.h  jack jack_client_close USE_JACK)
++	ADM_CHECK_HL(JACK jack/jack.h  jack jack_client_close USE_JACK)
+ ENDIF (NOT ADM_OS_WINDOWS)
  
--ADM_CHECK_HL(Aften aften/aften.h  aften aften_encode_init USE_AFTEN)
-+ADM_CHECK_HL(AFTEN aften/aften.h  aften aften_encode_init USE_AFTEN)
- if(USE_AFTEN)
- # TODO! Check aften version 5/6/7!
- SET(USE_AFTEN_07 1)
-@@ -208,7 +208,7 @@
  ########################################
- # SRC
+@@ -297,7 +297,7 @@
+ 	SET(CMAKE_REQUIRED_FLAGS "-lm -lpthread")
+ ENDIF (ADM_OS_WINDOWS)
+ 
+-ADM_CHECK_HL(Aften aften/aften.h aften aften_encode_init USE_AFTEN)
++ADM_CHECK_HL(AFTEN aften/aften.h aften aften_encode_init USE_AFTEN)
+ 
+ IF (USE_AFTEN)
+ 	FIND_LIBRARY(AFTEN_LIB_PATH NAMES aften)
+@@ -324,7 +324,7 @@
+ ########################################
+ # Secret Rabbit Code
  ########################################
 -ADM_CHECK_HL(libsamplerate samplerate.h samplerate src_get_version USE_SRC)
 +ADM_CHECK_HL(LIBSAMPLERATE samplerate.h samplerate src_get_version USE_SRC)
+ 
  ########################################
  # ICONV
- ########################################
-@@ -248,12 +248,12 @@
+@@ -367,13 +367,13 @@
  # LAME
  ########################################
  SET(CMAKE_REQUIRED_LIBRARIES "-lm")
 -ADM_CHECK_HL(Lame lame/lame.h mp3lame lame_init HAVE_LIBMP3LAME)
 +ADM_CHECK_HL(LAME lame/lame.h mp3lame lame_init HAVE_LIBMP3LAME)
- SET(CMAKE_REQUIRED_LIBRARIES )
+ SET(CMAKE_REQUIRED_LIBRARIES)
+ 
  ########################################
  # Xvid
  ########################################
 -ADM_CHECK_HL(Xvid xvid.h xvidcore xvid_plugin_single USE_XVID_4)
 +ADM_CHECK_HL(XVID xvid.h xvidcore xvid_plugin_single USE_XVID_4)
+ 
  ########################################
  # AMR_NB
- ########################################
-@@ -275,7 +275,7 @@
- if(USE_LATE_BINDING)
+@@ -397,7 +397,7 @@
+ IF (USE_LATE_BINDING)
  	CHECK_INCLUDE_FILES(dts.h USE_LIBDCA)
- else(USE_LATE_BINDING)
+ ELSE (USE_LATE_BINDING)
 -	ADM_CHECK_HL(libdca dts.h dts dts_init USE_LIBDCA)
 +	ADM_CHECK_HL(LIBDCA dts.h dts dts_init USE_LIBDCA)
- endif(USE_LATE_BINDING)
+ ENDIF (USE_LATE_BINDING)
  
  SET(CMAKE_REQUIRED_LIBRARIES)
-@@ -284,13 +284,13 @@
- SET(CMAKE_REQUIRED_LIBRARIES "-lm -lpthread")
- endif(WIN32)
+@@ -414,14 +414,14 @@
+ 	SET(CMAKE_REQUIRED_LIBRARIES "-lm -lpthread")
+ ENDIF (ADM_OS_WINDOWS)
  
 -ADM_CHECK_HL(x264 x264.h x264 x264_encoder_open USE_X264)
 +ADM_CHECK_HL(X264 x264.h x264 x264_encoder_open USE_X264)
  SET(CMAKE_REQUIRED_FLAGS)
  SET(CMAKE_REQUIRED_LIBRARIES)
+ 
  ########################################
  # PNG
  ########################################
 -ADM_CHECK_HL(libPNG png.h png png_malloc USE_PNG)
 +ADM_CHECK_HL(LIBPNG png.h png png_malloc USE_PNG)
  
- 
  ########################################
-@@ -331,8 +331,8 @@
+ # FAAD
+@@ -470,8 +470,8 @@
+ ########################################
  # Vorbis
  ########################################
+-ADM_CHECK_HL(Vorbis vorbis/vorbisenc.h vorbis vorbis_info_init USE_VORBIS1)
+-ADM_CHECK_HL(Vorbis vorbis/vorbisenc.h vorbisenc vorbis_encode_init USE_VORBIS2)
++ADM_CHECK_HL(VORBIS vorbis/vorbisenc.h vorbis vorbis_info_init USE_VORBIS1)
++ADM_CHECK_HL(VORBIS vorbis/vorbisenc.h vorbisenc vorbis_encode_init USE_VORBIS2)
  
-- ADM_CHECK_HL(Vorbis vorbis/vorbisenc.h vorbis vorbis_info_init USE_VORBIS1)
-- ADM_CHECK_HL(Vorbis vorbis/vorbisenc.h vorbisenc vorbis_encode_init USE_VORBIS2)
-+ ADM_CHECK_HL(VORBIS vorbis/vorbisenc.h vorbis vorbis_info_init USE_VORBIS1)
-+ ADM_CHECK_HL(VORBIS vorbis/vorbisenc.h vorbisenc vorbis_encode_init USE_VORBIS2)
-  if(USE_VORBIS1 AND USE_VORBIS2)
-    SET(USE_VORBIS 1)
-  endif(USE_VORBIS1 AND USE_VORBIS2)
+ IF (USE_VORBIS1 AND USE_VORBIS2)
+ 	SET(USE_VORBIS 1)
