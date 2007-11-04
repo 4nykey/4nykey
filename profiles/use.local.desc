@@ -2,6 +2,8 @@ media-fonts/cm-unicode:gs - Ghostscript support
 media-fonts/cm-unicode:opentype - Install OpenType fonts
 media-fonts/ttf-gandhari-unicode:opentype - Install OpenType fonts
 media-fonts/ttf-linuxlibertine:opentype - Install OpenType fonts
+media-gfx/fim:postscript - Install a postscript wrapper script
+media-gfx/fim:screen - Add (experimental!) support for running under screen
 media-libs/a52dec:djbfft - Prefer D.J. Bernstein's library for fourier transforms
 media-libs/libvorbis:aotuv - Allow users to enable aoTuV encoder enhancements
 media-libs/x264:mp4 - Adds support for mp4 container via gpac
@@ -34,7 +36,6 @@ media-sound/ncmpc:lyrics - Support for fetching lyrics from Internet
 media-sound/ncmpc:mouse - Enable curses getmouse support
 media-sound/ncmpc:raw-mode - raw terminal mode
 media-sound/rezound:16bittmp - Use 16bit temporary files (default 32bit float), usefull for slower computers
-media-sound/rezound:lame - Enable MP3 encoding through LAME
 media-sound/rezound:soundtouch - compile with support for soundtouch
 media-sound/snd:postscript - Enable postscript output from OpenGL graphics
 media-sound/snd:timidity - Build with Timidity++ (MIDI sequencer) support
@@ -47,7 +48,6 @@ media-video/avidemux:aften - Enable A/52 encoding support via aften
 media-video/avidemux:amrnb - Enables Adaptive Multi-Rate Audio support (Narrow Band)
 media-video/avidemux:faac - Enable AAC encoding through FAAC
 media-video/avidemux:fontconfig - Support for mananging custom fonts via fontconfig
-media-video/avidemux:lame - Enable MP3 encoding through LAME
 media-video/ffmpeg:amr - Enables Adaptive Multi-Rate Audio support
 media-video/ffmpeg:network - Enables network streaming support
 media-video/ffmpeg:swscaler - Adds support for software scaler
