@@ -77,8 +77,12 @@ src_unpack() {
 
 src_compile() {
 	local myconf="-DCMAKE_INSTALL_PREFIX=/usr"
-	myconf="${myconf} -DProject_WC_REVISION=${ESVN_WC_REVISION}"
+
+	# provide svn revision
+	myconf="${myconf} -DNO_SVN=1 -DSubversion_FOUND=1 -DProject_WC_REVISION=${ESVN_WC_REVISION}"
+
 	use debug && myconf="${myconf} -DCMAKE_BUILD_TYPE=Debug"
+
 	for x in \
 		gtk qt4 nls sdl arts alsa esd jack oss libsamplerate lame faac aften \
 		amrnb vorbis xvid x264 fontconfig
@@ -90,10 +94,11 @@ src_compile() {
 	pick xv xvideo
 	pick png libpng
 	pick truetype freetype
+
 	cmake ${myconf} || die
 
-	use debug && VERB_MODE="VERBOSE=y"
-	emake ${VERB_MODE} || die "make failed"
+	use debug && local verb_mode="VERBOSE=y"
+	emake ${verb_mode} || die "make failed"
 }
 
 src_install() {
