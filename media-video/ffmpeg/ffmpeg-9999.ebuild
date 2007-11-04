@@ -70,15 +70,6 @@ pkg_setup() {
 	replace-flags -O0 -O2
 }
 
-src_unpack() {
-	subversion_src_unpack
-	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
-
-	cd ${S}
-
-	use mmx || epatch "${FILESDIR}"/${PN}-pic.patch
-}
-
 teh_conf() {
 	ACTION="--${1}able"
 	if [[ $1 == "en" ]]; then
@@ -89,7 +80,9 @@ teh_conf() {
 }
 
 src_compile() {
-	local myconf="--log=config.log --enable-shared --enable-gpl --enable-pp --disable-opts --disable-strip"
+	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
+	local myconf="--log=config.log --enable-shared --enable-gpl --enable-pp"
+	myconf="${myconf} --disable-optimizations --disable-strip"
 
 	teh_conf dis debug
 	if use encode; then
