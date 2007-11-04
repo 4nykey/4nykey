@@ -10,7 +10,7 @@ ECVS_SERVER="cvs.savannah.nongnu.org:/sources/traverso"
 ECVS_MODULE="${PN}"
 S="${WORKDIR}/${ECVS_MODULE}"
 
-IUSE="alsa jack lv2 opengl sse mad vorbis flac wavpack lame"
+IUSE="alsa jack lv2 opengl sse mad vorbis flac wavpack lame portaudio"
 SLOT="0"
 LICENSE="GPL-2"
 KEYWORDS="~x86"
@@ -29,6 +29,7 @@ DEPEND="
 	flac? ( media-libs/flac )
 	wavpack? ( media-sound/wavpack )
 	lame? ( media-sound/lame )
+	portaudio? ( media-libs/portaudio )
 "
 RDEPEND="
 	${DEPEND}
@@ -58,6 +59,7 @@ src_compile() {
 	echo "DEFINES += STATIC_BUILD" >> src/base.pri
 	use jack || echo "DEFINES -= JACK_SUPPORT" >> src/base.pri
 	use alsa || echo "DEFINES -= ALSA_SUPPORT" >> src/base.pri
+	use portaudio || echo "DEFINES -= PORTAUDIO_SUPPORT" >> src/base.pri
 	use sse || echo "DEFINES -= SSE_OPTIMIZATIONS" >> src/base.pri
 	use lv2 || echo "DEFINES -= LV2_SUPPORT" >> src/base.pri
 	use opengl || echo "DEFINES -= QT_OPENGL_SUPPORT" >> src/base.pri
