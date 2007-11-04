@@ -1,0 +1,16 @@
+Index: CMakeLists.txt
+===================================================================
+--- CMakeLists.txt	(revision 202)
++++ CMakeLists.txt	(working copy)
+@@ -169,10 +169,7 @@
+ ENDIF(WIN32)
+ TARGET_LINK_LIBRARIES(flake_exe pcm_io flake_static)
+ 
+-ADD_EXECUTABLE(wavinfo util/wavinfo.c)
+-TARGET_LINK_LIBRARIES(wavinfo pcm_io)
+-
+-INSTALL(TARGETS ${INSTALL_TARGETS} flake_exe wavinfo
++INSTALL(TARGETS ${INSTALL_TARGETS} flake_exe
+         RUNTIME DESTINATION bin
+         LIBRARY DESTINATION lib
+         ARCHIVE DESTINATION lib)

@@ -23,16 +23,17 @@ src_compile() {
 	use nocxx || local myconf="-DBINDINGS_CXX=1"
 	mkdir -p build
 	cd build
-	cmake \
+	cmake .. \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_C_FLAGS_RELEASE="" \
 		-DSHARED=y \
-		${myconf} .. \
-		|| die
-	emake || die
+		-DSVN_VERSION=${ESVN_WC_REVISION} \
+		${myconf} \
+		|| die "cmake failed"
+	emake || die "emake failed"
 }
 
 src_install() {
-	make -C build DESTDIR="${D}" install || die
+	make -C build DESTDIR="${D}" install || die "install failed"
 	dodoc Changelog README
 }
