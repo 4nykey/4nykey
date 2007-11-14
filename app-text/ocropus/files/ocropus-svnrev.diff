@@ -1,0 +1,22 @@
+Index: generate_version_cc.sh
+===================================================================
+--- generate_version_cc.sh	(revision 624)
++++ generate_version_cc.sh	(working copy)
+@@ -5,6 +5,7 @@
+     exit
+ fi
+ 
++if [[ -d .svn ]]; then
+ svn info > svn_info
+ if [ $? = 0 ]; then
+     VERSION_STAMP=`grep Revision: svn_info`
+@@ -15,6 +16,9 @@
+     fi
+     VERSION_STAMP="(revision n/a)"
+ fi
++else
++    VERSION_STAMP="Revision: ${ESVN_WC_REVISION}"
++fi
+ 
+ VERSION_STAMP="$VERSION_STAMP; `date`; `uname -a`"
+ 

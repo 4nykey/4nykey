@@ -3,6 +3,7 @@
 # $Header: $
 
 inherit subversion
+
 DESCRIPTION="OCRopus is a state-of-the-art document analysis and OCR system"
 HOMEPAGE="http://www.ocropus.org"
 ESVN_REPO_URI="http://ocropus.googlecode.com/svn/trunk"
@@ -28,13 +29,17 @@ DEPEND="
 src_compile() {
 	econf \
 		--with-tesseract=/usr \
-		|| die
+		|| die "econf failed"
 	jam ${MAKEOPTS} \
+		-q -dx \
 		-sopt="$CXXFLAGS" \
-		|| die
+		|| die "jam build failed"
 }
 
 src_install() {
-	dobin ocropus-cmd/{ocropus,ocr-distance}
-	dodoc ocropus-cmd/*.sh README
+	jam -q -dx \
+		-sDESTDIR="${D}" \
+		install \
+		|| die "jam install failed"
+	dodoc CHANGES README
 }
