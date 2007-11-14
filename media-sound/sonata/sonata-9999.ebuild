@@ -8,7 +8,7 @@ DESCRIPTION="An elegant GTK+ client for the Music Player Daemon"
 HOMEPAGE="http://sonata.berlios.de"
 ESVN_REPO_URI="http://svn.berlios.de/svnroot/repos/sonata/trunk"
 
-LICENSE="GPL-2"
+LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~x86"
 IUSE="gnome soap taglib"
@@ -19,7 +19,7 @@ DEPEND="
 "
 RDEPEND="
 	${DEPEND}
-	soap? ( dev-python/soappy )
+	soap? ( dev-python/ZSI )
 	taglib? ( dev-python/tagpy )
 "
 
