@@ -11,7 +11,7 @@ ESVN_REPO_URI="http://svn.berlios.de/svnroot/repos/sonata/trunk"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="gnome soap taglib"
+IUSE="gnome lyrics taglib"
 
 DEPEND="
 	>=dev-python/pygtk-2.6
@@ -19,7 +19,7 @@ DEPEND="
 "
 RDEPEND="
 	${DEPEND}
-	soap? ( dev-python/ZSI )
+	lyrics? ( dev-python/ZSI )
 	taglib? ( dev-python/tagpy )
 "
 

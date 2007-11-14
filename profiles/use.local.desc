@@ -37,6 +37,7 @@ media-sound/rezound:soundtouch - compile with support for soundtouch
 media-sound/snd:postscript - Enable postscript output from OpenGL graphics
 media-sound/snd:timidity - Build with Timidity++ (MIDI sequencer) support
 media-sound/snd:wavpack - Build with WavPack support
+media-sound/sonata:lyrics - Support for lyrics fetching
 media-sound/sonata:taglib - Enable tagging support with taglib
 media-sound/traverso:lv2 - Add support for Ladspa V2
 media-sound/traverso:wavpack - Build with WavPack support
