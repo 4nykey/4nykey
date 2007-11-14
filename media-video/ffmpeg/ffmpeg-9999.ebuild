@@ -13,7 +13,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
 IUSE="
-aac debug doc ieee1394 a52 encode imlib mmx ogg vorbis oss threads truetype
+aac debug doc ieee1394 a52 encode imlib mmx vorbis oss threads truetype
 v4l v4l2 xvid network zlib X amr x264 static mp3 swscaler sdl
 "
 
@@ -22,7 +22,6 @@ RDEPEND="
 	truetype? ( >=media-libs/freetype-2 )
 	sdl? ( >=media-libs/libsdl-1.2.10 )
 	mp3? ( encode? ( media-sound/lame ) )
-	ogg? ( media-libs/libogg )
 	vorbis? ( media-libs/libvorbis )
 	aac? ( media-libs/faad2 )
 	a52? ( >=media-libs/a52dec-0.7.4-r4 )
@@ -97,7 +96,6 @@ src_compile() {
 	teh_conf dis v4l2
 	teh_conf en ieee1394 dc1394
 	teh_conf en threads pthreads
-	teh_conf en ogg libogg
 	teh_conf en vorbis libvorbis
 	teh_conf dis network
 	teh_conf dis zlib
