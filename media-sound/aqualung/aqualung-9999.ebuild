@@ -53,8 +53,6 @@ DEPEND="
 "
 
 src_compile() {
-	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
-
 	local myconf
 	if use encode; then
 		myconf="${myconf} $(use_with vorbis vorbisenc)"

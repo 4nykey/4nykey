@@ -79,7 +79,6 @@ teh_conf() {
 }
 
 src_compile() {
-	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
 	local myconf="--log=config.log --enable-shared --enable-gpl --enable-pp"
 	myconf="${myconf} --disable-optimizations --disable-strip"
 

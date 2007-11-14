@@ -47,7 +47,6 @@ DEPEND="
 
 src_unpack() {
 	subversion_src_unpack
-	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
 
 	cd ${S}
 	sed -i svn_revision.h \

@@ -70,11 +70,6 @@ pick() {
 	fi
 }
 
-src_unpack() {
-	subversion_src_unpack
-	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
-}
-
 src_compile() {
 	local myconf="-DCMAKE_INSTALL_PREFIX=/usr"
 

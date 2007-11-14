@@ -20,7 +20,6 @@ DEPEND="
 RDEPEND=""
 
 src_compile() {
-	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
 	mkdir -p build
 	cd build
 	cmake .. \

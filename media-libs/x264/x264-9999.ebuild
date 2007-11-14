@@ -26,8 +26,6 @@ DEPEND="
 "
 
 src_compile() {
-	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
-
 	local myconf
 	use X && myconf="--enable-visualize"
 
