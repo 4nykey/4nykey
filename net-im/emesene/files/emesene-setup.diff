@@ -1,0 +1,13 @@
+Index: setup.py
+===================================================================
+--- setup.py	(revision 988)
++++ setup.py	(working copy)
+@@ -16,7 +16,7 @@
+       package_data = {'emesene': ['conversation_themes/*/*', 'po/*/LC_MESSAGES/*.mo',
+                                   'smilies/*/*', 'sound_themes/*/*', 'themes/*/*',
+                                   'emesene.bat', 'hotmlog.htm', 'setup']},
+-      #scripts      = ['emesene'],
++      scripts      = ['emesene/emesene'],
+       data_files   = [('share/pixmaps', ['misc/emesene.png']),
+                       ('share/icons/hicolor/scalable/apps', ['misc/emesene.svg']),
+                       ('share/man/man1', ['misc/emesene.1']),
