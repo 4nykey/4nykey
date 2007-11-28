@@ -7,6 +7,7 @@ inherit subversion autotools wxwidgets-nu qt4 flag-o-matic
 DESCRIPTION="Tools to create, alter, and inspect Matroska files"
 HOMEPAGE="http://www.bunkus.org/videotools/mkvtoolnix"
 ESVN_REPO_URI="http://svn.bunkus.org/mosu/trunk/prog/video/mkvtoolnix"
+ESVN_BOOTSTRAP="eautoreconf"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -42,12 +43,13 @@ pkg_setup() {
 			need-wxwidgets gtk2
 		fi
 	fi
-}
 
-src_unpack() {
-	subversion_src_unpack
-	cd ${S}
-	eautoreconf || die
+	if ! built_with_use --missing true dev-libs/libpcre cxx; then
+		eerror "To build ${PN} you need the C++ bindings for pcre."
+		eerror "Please enable the cxx USE flag for dev-libs/libpcre"
+		die "Missing PCRE C++ bindings."
+	fi
+
 	append-flags -fno-strict-aliasing
 }
 

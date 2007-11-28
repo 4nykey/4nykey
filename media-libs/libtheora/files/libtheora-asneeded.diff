@@ -1,0 +1,12 @@
+Index: lib/Makefile.am
+===================================================================
+--- lib/Makefile.am	(revision 14226)
++++ lib/Makefile.am	(working copy)
+@@ -152,6 +152,7 @@
+ libtheora_la_LDFLAGS = \
+   -version-info @TH_LIB_CURRENT@:@TH_LIB_REVISION@:@TH_LIB_AGE@ \
+   @THEORA_LDFLAGS@
++libtheora_la_LIBADD = $(OGG_LIBS)
+ 
+ debug:
+ 	$(MAKE) all CFLAGS="@DEBUG@" 

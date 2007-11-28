@@ -5,14 +5,15 @@
 inherit subversion autotools flag-o-matic toolchain-funcs
 
 DESCRIPTION="the Ogg Vorbis sound file format library"
-HOMEPAGE="http://xiph.org/vorbis/ http://www.geocities.jp/aoyoume/aotuv"
-ESVN_PATCHES="${PN}-*.diff"
+HOMEPAGE="http://xiph.org/vorbis"
+AT_M4DIR="m4"
+ESVN_REPO_URI="http://svn.xiph.org/trunk/vorbis"
 ESVN_BOOTSTRAP="eautoreconf"
 
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="aotuv doc"
+IUSE="doc"
 
 RDEPEND="
 	>=media-libs/libogg-1.0
@@ -23,14 +24,6 @@ DEPEND="
 "
 
 S="${WORKDIR}/${P/_*/}"
-
-pkg_setup() {
-	if use aotuv; then
-		ESVN_REPO_URI="http://svn.xiph.org/branches/vorbis-aotuv"
-	else
-		ESVN_REPO_URI="http://svn.xiph.org/trunk/vorbis"
-	fi
-}
 
 src_compile() {
 	# Cannot compile with sse2 support it would seem #36104
@@ -66,7 +59,6 @@ src_install() {
 
 	rm -rf ${D}/usr/share/doc
 	dodoc AUTHORS README todo.txt
-	use aotuv && dodoc aoTuV*.txt
 	if use doc; then
 		docinto txt
 		dodoc doc/*.txt

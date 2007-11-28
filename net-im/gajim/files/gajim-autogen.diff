@@ -1,23 +1,15 @@
 Index: autogen.sh
 ===================================================================
---- autogen.sh	(revision 7998)
+--- autogen.sh	(revision 9048)
 +++ autogen.sh	(working copy)
-@@ -1,4 +1,4 @@
--#!/usr/bin/env bash
-+#!/bin/sh
-   echo "[encoding: UTF-8]" > po/POTFILES.in \
-   && ls -1 -U data/gajim.desktop.in.in data/glade/*.glade \
-   src/*py src/common/*py src/common/zeroconf/*.py >> \
-@@ -8,11 +8,4 @@
- 	echo "See README.html for build requirements."
- 	exit 1
+@@ -18,9 +18,4 @@
    fi
--  set -x
--  intltoolize --force --automake \
+ 
+   intltoolize --force --automake \
 -  && aclocal -I ./m4 \
 -  && libtoolize --copy --force --automake \
 -  && autoheader \
 -  && autoconf  \
--  && automake --add-missing --gnu --copy \
--  && ./configure $@
-+  intltoolize --force --automake
+-  && automake ${AM_ARGS} \
+-  && ./configure ${CONF_ARGS} $@
++  

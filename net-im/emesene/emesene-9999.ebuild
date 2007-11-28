@@ -19,3 +19,8 @@ RDEPEND="
 	dev-python/pygtk
 "
 
+src_unpack() {
+	subversion_src_unpack
+	mv emesene/setup.py .
+}
+

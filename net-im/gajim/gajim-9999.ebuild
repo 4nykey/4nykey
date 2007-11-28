@@ -14,7 +14,7 @@ AT_M4DIR="m4"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="dbus nls spell idle trayicon ssl gnome avahi srv libnotify networkmanager"
+IUSE="dbus nls spell idle trayicon gnome avahi srv libnotify networkmanager"
 
 DEPEND="
 	>=virtual/python-2.4
@@ -28,7 +28,6 @@ RDEPEND="
 		dev-libs/dbus-glib
 		dev-python/dbus-python
 	)
-	ssl? ( dev-python/pyopenssl )
 	gnome? (
 		dev-python/gnome-python-extras
 		dev-python/gnome-python-desktop

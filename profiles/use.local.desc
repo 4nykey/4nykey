@@ -6,7 +6,6 @@ media-fonts/ttf-linuxlibertine:opentype - Install OpenType fonts
 media-gfx/fim:postscript - Install a postscript wrapper script
 media-gfx/fim:screen - Add (experimental!) support for running under screen
 media-libs/a52dec:djbfft - Prefer D.J. Bernstein's library for fourier transforms
-media-libs/libvorbis:aotuv - Allow users to enable aoTuV encoder enhancements
 media-libs/x264:mp4 - Adds support for mp4 container via gpac
 media-libs/xine-lib:dvdnav - Prefer system libdvdnav to bundled one
 media-libs/xine-lib:dxr3 - Support for DXR3 mpeg accelleration cards

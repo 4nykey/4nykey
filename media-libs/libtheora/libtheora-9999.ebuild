@@ -8,6 +8,7 @@ AT_M4DIR="m4"
 DESCRIPTION="The Theora Video Compression Codec"
 HOMEPAGE="http://www.theora.org/"
 ESVN_REPO_URI="http://svn.xiph.org/trunk/theora"
+ESVN_PATCHES="${PN}-*.diff"
 ESVN_BOOTSTRAP="eautoreconf"
 
 LICENSE="xiph"

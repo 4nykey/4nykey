@@ -1,7 +1,7 @@
 # Copyright 1999-2004 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-inherit cvs autotools qt4
+inherit cvs autotools qt4 flag-o-matic
 
 DESCRIPTION="Dirac is a general-purpose wavelet video codec"
 HOMEPAGE="http://www.bbc.co.uk/rd/projects/dirac/overview.shtml"
@@ -32,6 +32,7 @@ src_unpack() {
 }
 
 src_compile() {
+	append-flags -Wno-error
 	if use !doc; then
 		export ac_cv_prog_HAVE_DOXYGEN="false" ac_cv_prog_HAVE_LATEX="false"
 	fi
