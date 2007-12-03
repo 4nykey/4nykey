@@ -2,13 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/net-im/tkabber/tkabber-0.9.9.ebuild,v 1.6 2007/05/18 22:10:55 welp Exp $
 
-inherit eutils
+inherit subversion
 
 DESCRIPTION="Tkabber is a Free and Open Source client for the Jabber instant messaging system, written in Tcl/Tk."
 HOMEPAGE="http://tkabber.jabber.ru/"
-SRC_URI="http://files.jabber.ru/${PN}/${P}.tar.gz
-	plugins? ( http://files.jabber.ru/${PN}/${PN}-plugins-${PV}.tar.gz )"
 IUSE="crypt plugins ssl examples"
+ESVN_REPO_URI="http://svn.xmpp.ru/repos/tkabber/trunk/tkabber"
 
 DEPEND="
 	>=dev-lang/tcl-8.3.3
@@ -23,7 +22,7 @@ DEPEND="
 "
 
 LICENSE="GPL-2"
-KEYWORDS="alpha amd64 sparc x86"
+KEYWORDS="~x86"
 SLOT="0"
 
 pkg_setup() {
@@ -35,23 +34,38 @@ pkg_setup() {
 	fi
 }
 
+src_unpack() {
+	subversion_src_unpack
+	if use plugins; then
+		subversion_fetch \
+			http://svn.xmpp.ru/repos/tkabber/trunk/tkabber-plugins \
+			tkabber-plugins
+	fi
+}
+
 src_compile() {
 	return 0
 }
 
 src_install() {
-	use examples && _xtra="install-examples"
-	emake PREFIX=/usr DESTDIR=${D} install-bin ${_xtra} || die
+	local myconf="PREFIX=/usr DESTDIR=${D}"
+	emake ${myconf} install-bin || die
 	dosed \
 		's:exec:TKABBER_SITE_PLUGINS=/usr/share/tkabber-plugins exec:' \
 		/usr/bin/tkabber
-	dodoc AUTHORS ChangeLog README
-	dohtml doc/tkabber.html
+
 	if use plugins; then
-		cd ${WORKDIR}/${PN}-plugins-${PV}
-		emake PREFIX=/usr DESTDIR=${D} install-bin || die
+		emake -C tkabber-plugins ${myconf} install-bin || die
 		for x in ChangeLog README; do
-			newdoc ${x} plugins-${x}
+			newdoc tkabber-plugins/${x} plugins-${x}
 		done
 	fi
+
+	if use examples; then
+		insinto "${ROOT}/usr/share/${PN}"
+		doins -r examples
+	fi
+
+	dodoc AUTHORS ChangeLog README
+	dohtml doc/tkabber.html
 }
