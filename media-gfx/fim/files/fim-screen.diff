@@ -1,0 +1,16 @@
+Index: configure.ac
+===================================================================
+--- configure.ac	(revision 110)
++++ configure.ac	(working copy)
+@@ -469,9 +469,9 @@
+ 
+ dnl ==================
+ 
+-fim_cv_warnings=no
++fim_cv_screen=no
+ AC_ARG_ENABLE(screen, AC_HELP_STRING([--enable-screen], [Fim will work under screen (EXPERIMENTAL!)]),
+-[if test x$enableval = yes; then
++[if test x$enableval = xyes; then
+         fim_cv_screen=yes
+ fi])
+ 
