@@ -4,18 +4,19 @@
 
 inherit cvs autotools
 
-S2=${WORKDIR}/dillo-gentoo-extras-patch4
-DILLO_I18N_P="${PN}-0.8.6-i18n-misc-20060709"
+DILLO_I18N_P="dillo-0.8.6-i18n-misc-20070916.diff"
+DILLO_GENTOO_P="dillo-gentoo-extras-patch4"
 
 DESCRIPTION="Lean GTK+-based web browser"
 HOMEPAGE="http://www.dillo.org/"
 SRC_URI="
-	mirror://gentoo/dillo-gentoo-extras-patch4.tar.bz2
-	http://teki.jpn.ph/pc/software/${DILLO_I18N_P}.diff.bz2
+	mirror://gentoo/${DILLO_GENTOO_P}.tar.bz2
+	http://teki.jpn.ph/pc/software/${DILLO_I18N_P}.bz2
 "
 ECVS_SERVER="auriga.wearlab.de:/sfhome/cvs/dillo"
 ECVS_MODULE="dillo"
 S="${WORKDIR}/${ECVS_MODULE}"
+S2="${WORKDIR}/${DILLO_GENTOO_P}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -38,14 +39,13 @@ src_unpack() {
 	unpack ${A}
 	cvs_src_unpack
 	cd ${S}
-	patch ${EPATCH_OPTS} -p1 -f -s < "${WORKDIR}"/${DILLO_I18N_P}.diff > \
-		"${T}"/${DILLO_I18N_P}.diff.out 2>&1
 
-	# -Wl,--as-needed
-	sed -i "s:\<LDFLAGS\>:LIBS:g; s:\<LDSAVEFLAGS\>:LIBSSAVE:g" configure.in
-
-	sed -i "s:fltk-config:fltk2-config:" configure.in
-	eautoreconf
+	einfo "Applying ${DILLO_I18N_P} ..."
+	patch ${EPATCH_OPTS} -p1 -f -s < "${WORKDIR}"/${DILLO_I18N_P} > \
+		"${T}"/${DILLO_I18N_P}.out 2>&1
+	eend 0
+	epatch "${FILESDIR}"/${PN}-*.diff
+	AT_M4DIR=m4 eautoreconf
 
 	if [ "${DILLO_ICONSET}" = "kde" ]
 	then
@@ -81,28 +81,23 @@ src_unpack() {
 }
 
 src_compile() {
-	local myconf
-
-	# misc features
-	myconf="$(use_enable nls)
-		$(use_enable truetype anti-alias)
-		--disable-gtktest
-		$(use_enable fltk dlgui)
-		--enable-tabs
-		--enable-meta-refresh"
-
-	myconf="${myconf}
-		$(use_enable ipv6)
-		$(use_enable ssl)"
-
-	econf ${myconf} || die
+	econf \
+		--disable-gtktest \
+		--enable-tabs \
+		--enable-meta-refresh \
+		$(use_enable nls) \
+		$(use_enable truetype anti-alias) \
+		$(use_enable fltk dlgui) \
+		$(use_enable ipv6) \
+		$(use_enable ssl) \
+		|| die
 	emake -j1 || die
 }
 
 src_install() {
-	make DESTDIR=${D} MKINSTALLDIRS=${S}/mkinstalldirs install || die
+	einstall MKINSTALLDIRS=${S}/mkinstalldirs || die
 
-	dodoc AUTHORS COPYING ChangeLog* README NEWS
+	dodoc AUTHORS ChangeLog* README NEWS
 	docinto doc
 	dodoc doc/*.txt doc/README
 
@@ -111,32 +106,5 @@ src_install() {
 }
 
 pkg_postinst() {
-	einfo "This ebuild for dillo comes with different toolbar icons"
-	einfo "If you want mozilla style icons then try"
-	einfo "	DILLO_ICONSET=\"mozilla\" emerge dillo"
-	einfo
-	einfo "If you prefer konqueror style icons then try"
-	einfo "	DILLO_ICONSET=\"kde\" emerge dillo"
-	einfo
-	einfo "If you prefer ximian gnome style icons then try"
-	einfo "	DILLO_ICONSET=\"gnome\" emerge dillo"
-	einfo
-	einfo "If you prefer cobalt style icons then try"
-	einfo "	DILLO_ICONSET=\"cobalt\" emerge dillo"
-	einfo
-	einfo "If you prefer bold style icons then try"
-	einfo "	DILLO_ICONSET=\"bold\" emerge dillo"
-	einfo
-	einfo "If you prefer transparent style icons then try"
-	einfo "	DILLO_ICONSET=\"trans\" emerge dillo"
-	einfo
-	einfo "If you prefer the traditional icons then try"
-	einfo "	DILLO_ICONSET=\"trad\" emerge dillo"
-	einfo
-	einfo "If the DILLO_ICONSET variable is not set, you will get the"
-	einfo "default iconset"
-	einfo
-	einfo "To see what the icons look like, please point your browser to:"
-	einfo "http://dillo.auriga.wearlab.de/Icons/"
-	einfo
+	cat "${FILESDIR}"/iconset_msg | while read m; do elog ${m}; done
 }
