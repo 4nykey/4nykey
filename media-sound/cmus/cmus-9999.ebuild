@@ -5,8 +5,8 @@
 inherit git
 
 DESCRIPTION="CMus - ncurses based music player."
-HOMEPAGE="http://onion.dynserv.net/~timo/cmus.html"
-EGIT_REPO_URI="git://onion.dynserv.net/git/cmus.git"
+HOMEPAGE="http://cmus.sourceforge.net"
+EGIT_REPO_URI="git://repo.or.cz/cmus.git"
 
 LICENSE="GPL-2"
 KEYWORDS="~x86"
