@@ -2,10 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+inherit git autotools
+
 DESCRIPTION="Midori is a lightweight web browser"
 HOMEPAGE="http://software.twotoasts.de/?page=midori"
-SRC_URI="http://software.twotoasts.de/media/${PN}/${P}.tar.gz"
-RESTRICT="primaryuri"
+EGIT_REPO_URI="http://software.twotoasts.de/media/midori.git"
+EGIT_BOOTSTRAP="eautoreconf"
 
 LICENSE=""
 SLOT="0"
@@ -13,7 +15,7 @@ KEYWORDS="~x86"
 IUSE=""
 
 DEPEND="
-	>=net-libs/webkit-28300
+	net-libs/webkit
 	x11-libs/libsexy
 "
 RDEPEND="
