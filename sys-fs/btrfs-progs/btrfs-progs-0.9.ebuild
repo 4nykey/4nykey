@@ -5,6 +5,7 @@
 DESCRIPTION="Btrfs utility programs"
 HOMEPAGE="http://oss.oracle.com/projects/btrfs/"
 SRC_URI="http://oss.oracle.com/projects/btrfs/dist/files/${P}.tar.bz2"
+RESTRICT="primaryuri"
 
 LICENSE="GPL-2"
 SLOT="0"

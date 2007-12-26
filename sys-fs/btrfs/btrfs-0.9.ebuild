@@ -7,6 +7,7 @@ inherit linux-mod
 DESCRIPTION="Btrfs kernel module"
 HOMEPAGE="http://oss.oracle.com/projects/btrfs/"
 SRC_URI="http://oss.oracle.com/projects/btrfs/dist/files/${P}.tar.bz2"
+RESTRICT="primaryuri"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -17,7 +18,6 @@ DEPEND=""
 RDEPEND=""
 
 MODULE_NAMES="btrfs(fs:)"
-BUILD_PARAMS="KERNELDIR=${KV_DIR}"
 BUILD_TARGETS="all"
 MODULESD_BTRFS_DOCS="INSTALL TODO"
 
@@ -29,4 +29,5 @@ pkg_setup() {
 		eerror "	CRC32c (Castagnoli, et al) Cyclic Redundancy-Check"
 		die "libcrc32c support not detected."
 	fi
+	BUILD_PARAMS="KERNELDIR=${KV_DIR}"
 }
