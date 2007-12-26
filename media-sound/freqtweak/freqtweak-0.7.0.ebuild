@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/freqtweak/freqtweak-0.6.0-r1.ebuild,v 1.1 2005/04/25 16:50:52 luckyduck Exp $
 
-inherit wxwidgets-nu flag-o-matic
+inherit wxwidgets flag-o-matic
 
 MY_P="${P}dev"
 DESCRIPTION="FFT-based realtime audio spectral manipulation and display"
@@ -32,7 +32,7 @@ src_unpack() {
 	if use unicode; then
 		need-wxwidgets unicode
 	else
-		need-wxwidgets gtk2
+		need-wxwidgets ansi
 	fi
 	unpack ${A}
 	sed -i 's:\(EXTRA_OPT_CFLAGS="\).*:\1":' ${S}/configure

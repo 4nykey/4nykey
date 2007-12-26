@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/mkvtoolnix/mkvtoolnix-1.6.5.ebuild,v 1.4 2006/03/14 21:46:21 flameeyes Exp $
 
-inherit subversion autotools wxwidgets-nu qt4 flag-o-matic
+inherit subversion autotools wxwidgets qt4 flag-o-matic
 
 DESCRIPTION="Tools to create, alter, and inspect Matroska files"
 HOMEPAGE="http://www.bunkus.org/videotools/mkvtoolnix"
@@ -12,7 +12,7 @@ ESVN_BOOTSTRAP="eautoreconf"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="wxwindows flac bzip2 lzo unicode qt4"
+IUSE="wxwindows flac bzip2 lzo qt4"
 
 RDEPEND="
 	>=dev-libs/libebml-0.7.7
@@ -21,7 +21,7 @@ RDEPEND="
 	media-libs/libvorbis
 	dev-libs/expat
 	sys-libs/zlib
-	wxwindows? ( >=x11-libs/wxGTK-2.6 )
+	wxwindows? ( >=x11-libs/wxGTK-2.8 )
 	flac? ( >=media-libs/flac-1.1.0 )
 	bzip2? ( app-arch/bzip2 )
 	lzo? ( dev-libs/lzo )
@@ -34,26 +34,21 @@ DEPEND="
 "
 
 pkg_setup() {
-	if use wxwindows; then
-		built_with_use x11-libs/wxGTK X ||
-			die "You must compile wxGTK with X useflag."
-		if use unicode; then
-			need-wxwidgets unicode
-		else
-			need-wxwidgets gtk2
-		fi
-	fi
-
 	if ! built_with_use --missing true dev-libs/libpcre cxx; then
 		eerror "To build ${PN} you need the C++ bindings for pcre."
 		eerror "Please enable the cxx USE flag for dev-libs/libpcre"
 		die "Missing PCRE C++ bindings."
 	fi
-
-	append-flags -fno-strict-aliasing
 }
 
 src_compile() {
+	WX_GTK_VER=2.8
+	if use wxwindows; then
+		need-wxwidgets unicode
+	fi
+
+	append-flags -fno-strict-aliasing
+
 	econf \
 		$(use_enable lzo) \
 		$(use_enable bzip2 bz2) \

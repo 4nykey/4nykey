@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit wxwidgets-nu subversion autotools flag-o-matic
+inherit wxwidgets subversion autotools flag-o-matic
 
 AT_M4DIR="m4"
 DESCRIPTION="A crossplatform BitTorrent client"
@@ -14,10 +14,10 @@ ESVN_BOOTSTRAP="eautoreconf"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="unicode libtorrent"
+IUSE="libtorrent"
 
 RDEPEND="
-	>=x11-libs/wxGTK-2.6
+	>=x11-libs/wxGTK-2.8
 	dev-libs/boost
 	dev-libs/openssl
 	libtorrent? ( >=net-libs/rb_libtorrent-0.13 )
@@ -28,13 +28,14 @@ DEPEND="
 "
 
 src_compile() {
-	local _wx=gtk2 _rb=shipped
-	use unicode && _wx=unicode
-	need-wxwidgets ${_wx}
+	local _rb=shipped
 	if use libtorrent; then
 		append-cppflags $(pkg-config --silence-errors libtorrent --cflags)
 		_rb=system
 	fi
+
+	WX_GTK_VER=2.8
+	need-wxwidgets unicode
 
 	econf \
 		--with-wx-config=${WX_CONFIG} \
