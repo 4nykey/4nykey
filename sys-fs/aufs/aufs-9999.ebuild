@@ -16,15 +16,19 @@ KEYWORDS="~x86"
 IUSE=""
 
 MODULE_NAMES="aufs(fs:)"
-BUILD_PARAMS="KDIR=${KV_DIR} -f local.mk"
 BUILD_TARGETS="all"
 MAKEOPTS="-j1"
 
+pkg_setup() {
+	linux-mod_pkg_setup
+	BUILD_PARAMS="KDIR=${KV_DIR} -f local.mk"
+}
+
 src_install() {
+	linux-mod_src_install
 	exeinto /sbin
 	exeopts -m0500
 	doexe mount.aufs umount.aufs auplink aulchown 
 	newexe util/unionctl aunionctl
 	doman aufs.5
-	linux-mod_src_install
 }
