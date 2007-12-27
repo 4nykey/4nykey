@@ -12,7 +12,7 @@ ESVN_PATCHES="${PN}-*.diff"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="debug"
+IUSE="debug verbose-build"
 
 DEPEND="
 	>=dev-util/cmake-2.4
@@ -28,7 +28,10 @@ src_compile() {
 		-DSHARED=y \
 		-DSVN_VERSION=${ESVN_WC_REVISION} \
 		|| die "cmake failed"
-	emake || die "emake failed"
+
+	local myconf
+	use verbose-build && myconf="VERBOSE=y"
+	emake ${myconf} || die
 }
 
 src_install() {

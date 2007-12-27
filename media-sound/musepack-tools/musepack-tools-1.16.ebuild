@@ -56,7 +56,8 @@ src_compile() {
 		${myconf} . || die
 
 	make cfg || die
-	emake || die
+	use verbose-build && myconf="VERBOSE=y" || myconf=
+	emake ${myconf} || die
 }
 
 src_install() {

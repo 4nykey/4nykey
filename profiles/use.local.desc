@@ -1,3 +1,4 @@
+app-text/fbreader:verbose-build - Build in verbose mode (silent oterwise)
 dev-python/ZSI:twisted - Builds ZSI.twisted package
 media-fonts/cm-unicode:gs - Ghostscript support
 media-fonts/cm-unicode:opentype - Install OpenType fonts
@@ -12,6 +13,7 @@ media-libs/xine-lib:dxr3 - Support for DXR3 mpeg accelleration cards
 media-libs/xine-lib:real - Adds real video support
 media-libs/xine-lib:vidix - Support for vidix video output
 media-libs/xine-lib:xvmc - Support for XVideo Motion Compensation (accelerated mpeg playback)
+media-sound/aften:verbose-build - Build in verbose mode (silent oterwise)
 media-sound/aqualung:ape - Add support for decoding of Monkey's Audio
 media-sound/aqualung:cdda - Enables support for audio cd playback through libcdio
 media-sound/aqualung:ifp - Enable support for iRiver devices access through libifp
@@ -19,7 +21,9 @@ media-sound/aqualung:systray - Builds systray (reqires more recent version of GT
 media-sound/ardour:external-libs - Use system libraries instead of bundled (not supported by upstream)
 media-sound/cmus:mp4 - enable mp4 decoding
 media-sound/cmus:zsh-completion - Install zsh command completion
+media-sound/flake:verbose-build - Build in verbose mode (silent oterwise)
 media-sound/mpd:icecast - Enable support for Icecast2
+media-sound/musepack-tools:verbose-build - Build in verbose mode (silent oterwise)
 media-sound/ncmpc:lyrics - Support for fetching lyrics from Internet
 media-sound/ncmpc:mouse - Enable curses getmouse support
 media-sound/ncmpc:raw-mode - raw terminal mode
@@ -33,6 +37,7 @@ media-video/avidemux:aften - Enable A/52 encoding support via aften
 media-video/avidemux:amrnb - Enables Adaptive Multi-Rate Audio support (Narrow Band)
 media-video/avidemux:faac - Enable AAC encoding through FAAC
 media-video/avidemux:fontconfig - Support for mananging custom fonts via fontconfig
+media-video/avidemux:verbose-build - Build in verbose mode (silent oterwise)
 media-video/ffmpeg:amr - Enables Adaptive Multi-Rate Audio support
 media-video/ffmpeg:network - Enables network streaming support
 media-video/ffmpeg:swscaler - Adds support for software scaler
@@ -74,6 +79,7 @@ net-im/tkabber:plugins - Enables installation of extra plugins
 net-p2p/bitswash:libtorrent - Use system rb_libtorrent (may require the version, that isn't yet in portage)
 net-p2p/rtorrent:openssl - Use OpenSSL's SHA1 implementation
 x11-libs/fltk:noxft - Disables fltk; use for non-english characters
+x11-libs/fltk:verbose-build - Build in verbose mode (silent oterwise)
 x11-themes/gtk-engines-candido:gdm - Install GDM theme
 x11-themes/gtk-engines-candido:metacity - Install Metacity theme
 x11-themes/gtk-engines-murrine:metacity - Install Metacity theme

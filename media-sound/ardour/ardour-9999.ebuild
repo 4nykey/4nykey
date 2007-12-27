@@ -12,7 +12,7 @@ ESVN_PATCHES="${PN}-*.diff"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="-*"
-IUSE="nls debug mmx 3dnow sse fftw osc ladspa external-libs doc usb"
+IUSE="nls debug mmx 3dnow sse fftw ladspa external-libs doc usb"
 # usb is for tranzport (req libusb) and powermate (req linux/input.h)
 
 RDEPEND="
@@ -23,7 +23,7 @@ RDEPEND="
 	>=media-sound/jack-audio-connection-kit-0.101.1
 	>=dev-libs/libxml2-2.6.0
 	dev-libs/libxslt
-	osc? ( media-libs/liblo )
+	media-libs/liblo
 	>=x11-libs/gtk+-2.10.1
 	gnome-base/libgnomecanvas
 	external-libs? (
@@ -72,7 +72,6 @@ src_compile() {
 	teh_conf debug DEBUG
 	teh_conf nls NLS
 	teh_conf fftw FFT_ANALYSIS
-	teh_conf osc LIBLO
 	teh_conf usb SURFACES
 	teh_conf sse FPU_OPTIMIZATION
 	local _mmx _3dnow _sse

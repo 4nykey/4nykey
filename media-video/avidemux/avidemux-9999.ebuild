@@ -16,6 +16,7 @@ KEYWORDS="~x86"
 IUSE="
 	a52 aac alsa arts esd mmx nls png vorbis sdl truetype xvid xv oss x264
 	dts qt4 fontconfig lame faac aften gtk jack debug libsamplerate amrnb
+	verbose-build
 "
 
 RDEPEND="
@@ -90,10 +91,10 @@ src_compile() {
 	pick png libpng
 	pick truetype freetype
 
-	cmake ${myconf} || die
+	cmake ${myconf} || die "cmake failed"
 
-	use debug && local verb_mode="VERBOSE=y"
-	emake ${verb_mode} || die "make failed"
+	use verbose-build && myconf="VERBOSE=y" || myconf=
+	emake ${myconf} || die "make failed"
 }
 
 src_install() {

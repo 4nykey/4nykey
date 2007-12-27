@@ -12,7 +12,7 @@ ESVN_PATCHES="${P}-*.patch"
 SLOT="8"
 LICENSE="LGPL-2.1"
 KEYWORDS="~x86"
-IUSE=""
+IUSE="verbose-build"
 
 RDEPEND="
 	media-libs/libreplaygain
@@ -27,7 +27,9 @@ src_compile() {
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_C_FLAGS="${CFLAGS}" \
 		|| die
-	emake || die
+
+	use verbose-build && local myconf="VERBOSE=y"
+	emake ${myconf} || die
 }
 
 src_install() {

@@ -12,7 +12,7 @@ ESVN_PATCHES="${PN}-*.diff"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="debug nocxx"
+IUSE="nocxx verbose-build"
 
 DEPEND="
 	>=dev-util/cmake-2.4
@@ -20,7 +20,8 @@ DEPEND="
 RDEPEND=""
 
 src_compile() {
-	use nocxx || local myconf="-DBINDINGS_CXX=1"
+	local myconf
+	use nocxx || myconf="-DBINDINGS_CXX=1"
 	mkdir -p build
 	cd build
 	cmake .. \
@@ -30,7 +31,9 @@ src_compile() {
 		-DSVN_VERSION=${ESVN_WC_REVISION} \
 		${myconf} \
 		|| die "cmake failed"
-	emake || die "emake failed"
+
+	use verbose-build && myconf="VERBOSE=y" || myconf=
+	emake ${myconf} || die
 }
 
 src_install() {
