@@ -11,35 +11,23 @@ media-libs/xine-lib:dvdnav - Prefer system libdvdnav to bundled one
 media-libs/xine-lib:dxr3 - Support for DXR3 mpeg accelleration cards
 media-libs/xine-lib:real - Adds real video support
 media-libs/xine-lib:vidix - Support for vidix video output
-media-libs/xine-lib:wavpack - Build with WavPack support
-media-libs/xine-lib:xcb - Support the X C-language Binding, a replacement for Xlib
 media-libs/xine-lib:xvmc - Support for XVideo Motion Compensation (accelerated mpeg playback)
 media-sound/aqualung:ape - Add support for decoding of Monkey's Audio
 media-sound/aqualung:cdda - Enables support for audio cd playback through libcdio
 media-sound/aqualung:ifp - Enable support for iRiver devices access through libifp
 media-sound/aqualung:systray - Builds systray (reqires more recent version of GTK+)
-media-sound/aqualung:taglib - Enable support for metadata editing through taglib
-media-sound/aqualung:wavpack - Build with WavPack support
 media-sound/ardour:external-libs - Use system libraries instead of bundled (not supported by upstream)
 media-sound/cmus:mp4 - enable mp4 decoding
 media-sound/cmus:zsh-completion - Install zsh command completion
-media-sound/moc:timidity - Build with Timidity++ (MIDI sequencer) support
-media-sound/moc:wavpack - Build with WavPack support
 media-sound/mpd:icecast - Enable support for Icecast2
-media-sound/mpd:wavpack - Build with WavPack support
-media-sound/mpd:zeroconf - Add support for multicast dns
 media-sound/ncmpc:lyrics - Support for fetching lyrics from Internet
 media-sound/ncmpc:mouse - Enable curses getmouse support
 media-sound/ncmpc:raw-mode - raw terminal mode
 media-sound/rezound:16bittmp - Use 16bit temporary files (default 32bit float), usefull for slower computers
 media-sound/rezound:soundtouch - compile with support for soundtouch
 media-sound/snd:postscript - Enable postscript output from OpenGL graphics
-media-sound/snd:timidity - Build with Timidity++ (MIDI sequencer) support
-media-sound/snd:wavpack - Build with WavPack support
 media-sound/sonata:lyrics - Support for lyrics fetching
-media-sound/sonata:taglib - Enable tagging support with taglib
 media-sound/traverso:lv2 - Add support for Ladspa V2
-media-sound/traverso:wavpack - Build with WavPack support
 media-sound/vorbis-tools:ogg123 - Build ogg123 player
 media-video/avidemux:aften - Enable A/52 encoding support via aften
 media-video/avidemux:amrnb - Enables Adaptive Multi-Rate Audio support (Narrow Band)
@@ -48,8 +36,6 @@ media-video/avidemux:fontconfig - Support for mananging custom fonts via fontcon
 media-video/ffmpeg:amr - Enables Adaptive Multi-Rate Audio support
 media-video/ffmpeg:network - Enables network streaming support
 media-video/ffmpeg:swscaler - Adds support for software scaler
-media-video/ffmpeg:v4l2 - Enables video4linux2 support
-media-video/mkvtoolnix:lzo - Enables support for lzo compression
 media-video/mplayer:3dnowext - Enables 3dnow extensions in mplayer
 media-video/mplayer:amr - Enables Adaptive Multi-Rate Audio support
 media-video/mplayer:bitmap-fonts - Enable bitmap font support
@@ -64,7 +50,6 @@ media-video/mplayer:external-faad - Use system faad2 library instead of bundled 
 media-video/mplayer:external-ffmpeg - Use system libavcodec instead of bundled one
 media-video/mplayer:fontconfig - Support for mananging custom fonts via fontconfig
 media-video/mplayer:live - Enables live.com streaming media support
-media-video/mplayer:lzo - Enables support for lzo compression
 media-video/mplayer:mmxext - Enables mmx2 support
 media-video/mplayer:radio - Enable V4L2 radio interface and support
 media-video/mplayer:real - Adds real video support
@@ -72,7 +57,6 @@ media-video/mplayer:rtc - Enables usage of the linux real time clock.  The alter
 media-video/mplayer:tga - Enables Targa video output
 media-video/mplayer:tremor - Use tremor for decoding vorbis audio
 media-video/mplayer:twolame - Enable MP2 encoding through twolame
-media-video/mplayer:v4l2 - Enables video4linux2 support
 media-video/mplayer:xanim - Enables support for xanim based codecs
 media-video/mplayer:xvmc - Enables X-Video Motion Compensation support
 media-video/pgcedit:wine - Install a preview app that requires Wine on runtime
@@ -80,37 +64,16 @@ media-video/smplayer:themes - Install additional themes
 media-video/subtitleeditor:iso-codes - Enables iso-codes support
 media-video/subtitleeditor:ttxt - Support for subtitles in TTXT format
 media-video/transcode:fame - Enables libfame support
-media-video/transcode:lzo - Enables support for lzo compression
 media-video/transcode:mjpeg - Enables mjpegtools support
 media-video/transcode:network - Enables network streaming support
 media-video/transcode:postproc - Build with ffmpeg libpostproc support
-media-video/transcode:v4l2 - Enable video4linux2 support
-media-video/vlc:cdda - Enables libcdda cd audio playback support.
-media-video/vlc:corba - Enables corba interface support.
-media-video/vlc:daap - Enables DAAP shares services discovery support.
-media-video/vlc:dirac - Enable support for Dirac wavelet video codec
-media-video/vlc:httpd - Enables a web based interface for vlc.
-media-video/vlc:live - Enables LIVE555.com support.
-media-video/vlc:mod - Enables Mod demux support.
-media-video/vlc:optimisememory - Enable optimisation for memory rather than performance.
-media-video/vlc:real - Adds real video support
-media-video/vlc:rtsp - Enables real audio and RTSP modules.
-media-video/vlc:shout - Enables libshout output.
-media-video/vlc:skins - Enables support for the skins2 interface.
-media-video/vlc:stream - Enables vlc to stream video.
-media-video/vlc:taglib - Enable tagging support with taglib
-media-video/vlc:teletext - Enable teletext support
-media-video/vlc:twolame - Enable MP2 encoding through twolame
-media-video/vlc:upnp - Enables support for Intel UPnP stack.
-media-video/vlc:vlm - vlm allows to manage multiple streams from within one instance of VLC
-media-video/vlc:zvbi - Enable VBI Decoding Library
 net-im/gajim:idle - Enable idle module
-net-im/gajim:networkmanager - Enable networkmanager support
 net-im/gajim:srv - SRV capabilities
 net-im/gajim:trayicon - Enable the trayicon module
 net-im/tkabber:plugins - Enables installation of extra plugins
 net-p2p/bitswash:libtorrent - Use system rb_libtorrent (may require the version, that isn't yet in portage)
 net-p2p/rtorrent:openssl - Use OpenSSL's SHA1 implementation
+x11-libs/fltk:noxft - Disables fltk; use for non-english characters
 x11-themes/gtk-engines-candido:gdm - Install GDM theme
 x11-themes/gtk-engines-candido:metacity - Install Metacity theme
 x11-themes/gtk-engines-murrine:metacity - Install Metacity theme
