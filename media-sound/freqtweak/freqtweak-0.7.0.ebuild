@@ -18,7 +18,7 @@ IUSE="unicode fftw"
 
 DEPEND="
 	fftw? ( >=sci-libs/fftw-3.0 )
-	>=x11-libs/wxGTK-2.6
+	=x11-libs/wxGTK-2.6*
 	=dev-libs/libsigc++-1.2*
 	dev-libs/libxml2
 	media-sound/jack-audio-connection-kit
