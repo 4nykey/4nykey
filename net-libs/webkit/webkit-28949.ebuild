@@ -32,6 +32,7 @@ DEPEND="
 	sys-devel/bison
 	dev-lang/perl
 	>=x11-libs/qt-4
+	dev-util/gperf
 "
 
 src_compile() {
