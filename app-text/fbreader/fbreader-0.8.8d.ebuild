@@ -11,7 +11,7 @@ SRC_URI="http://www.fbreader.org/${PN}-sources-${PV}.tgz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="qt3 qt4 debug"
+IUSE="qt3 qt4 debug verbose-build"
 
 DEPEND="
 	dev-libs/expat
@@ -25,6 +25,12 @@ DEPEND="
 RDEPEND="
 	${DEPEND}
 "
+
+src_unpack() {
+	unpack ${A}
+	cd ${S}
+	use verbose-build && epatch ${FILESDIR}/${PN}-verbose-build.diff
+}
 
 src_compile() {
 	myconf="UI_TYPE=gtk"
