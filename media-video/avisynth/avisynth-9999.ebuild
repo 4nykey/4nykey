@@ -13,7 +13,7 @@ ESVN_BOOTSTRAP="cd build/linux && eautoreconf"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="-*"
 IUSE="debug doc gtk ffmpeg"
 
 DEPEND="
@@ -49,12 +49,12 @@ src_compile() {
 		$(use_enable gtk gui) \
 		$(use_enable doc) \
 		--with-boost-lib-name=boost_thread-mt \
-		|| die
+		|| die "econf failed"
 
-	make || die
+	emake || die "emake failed"
 }
 
 src_install() {
-	make DESTDIR=${D} -C build/linux install || die
+	emake DESTDIR=${D} -C build/linux install || die "emake install failed"
 	dodoc Changelog.txt TODO
 }
