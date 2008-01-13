@@ -10,4 +10,4 @@
 +    from pysqlite2 import dbapi2 as pysqlite
  
  #import sqlite
- import string, os, pprint
+ import string, os, pprint, tempfile, shutil
