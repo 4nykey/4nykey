@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit eutils flag-o-matic
+inherit eutils flag-o-matic cmake-utils
 
 MY_P="mppenc-${PV}"
 MPPDEC="mppdec-1.95e"
@@ -17,7 +17,7 @@ S="${WORKDIR}/${MY_P}"
 SLOT="0"
 LICENSE="LGPL-2.1"
 KEYWORDS="~x86"
-IUSE="esd encode oss"
+IUSE="esd encode oss verbose-build"
 
 RDEPEND="
 	esd? ( media-sound/esound )
@@ -25,12 +25,10 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	>=dev-util/cmake-2.4
 	app-arch/unzip
 	oss? ( virtual/os-headers )
 	x86? ( dev-lang/nasm )
 "
-
 src_unpack() {
 	unpack ${A}
 	cd ${S}
@@ -38,26 +36,24 @@ src_unpack() {
 	mv ../${MPPDEC} mppdec
 	cp "${FILESDIR}"/CMakeLists.txt mppdec/
 	epatch "${FILESDIR}"/mpp{de,en}c-*.diff
-	use encode || sed -i "/add_subdirectory(src)/d" CMakeLists.txt
+	sed -i CMakeLists.txt -e '/CMAKE_C_FLAGS/d'
+	use encode || sed -i CMakeLists.txt -e "/add_subdirectory(src)/d"
 }
 
 src_compile() {
 	filter-flags -fprefetch-loop-arrays -ffast-math
 	filter-flags -mfpmath=sse -mfpmath=sse,387
 
-	local myconf
-	use esd && myconf="${myconf} -DUSE_ESD=y"
-	use oss && myconf="${myconf} -DUSE_OSS=y"
-	use x86 && myconf="${myconf} -DUSE_ASM=y"
+	use verbose-build && CMAKE_COMPILER_VERBOSE=y
 
-	cmake \
-		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_C_FLAGS="${CFLAGS}" \
-		${myconf} . || die
-
-	make cfg || die
-	use verbose-build && myconf="VERBOSE=y" || myconf=
-	emake ${myconf} || die
+	local mycmakeargs="
+		$(cmake-utils_use_enable esd ESD) \
+		$(cmake-utils_use_enable oss OSS) \
+		$(cmake-utils_use_enable x86 ASM)
+	"
+	cmake-utils_src_configurein
+	cmake-utils_src_make cfg
+	cmake-utils_src_make
 }
 
 src_install() {

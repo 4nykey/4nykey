@@ -4,15 +4,15 @@
 
 inherit subversion cmake-utils
 
-DESCRIPTION="Flake is an open-source FLAC audio encoder"
-HOMEPAGE="http://flake-enc.sf.net"
-ESVN_REPO_URI="https://flake-enc.svn.sourceforge.net/svnroot/flake-enc"
+DESCRIPTION="Aften is an open-source A/52 (AC-3) audio encoder"
+HOMEPAGE="http://aften.sourceforge.net/"
+ESVN_REPO_URI="https://aften.svn.sourceforge.net/svnroot/aften"
 ESVN_PATCHES="${PN}-*.diff"
 
-LICENSE="LGPL-2.1"
+LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86"
-IUSE="debug verbose-build"
+KEYWORDS="-*"
+IUSE="nocxx verbose-build"
 
 DEPEND=""
 RDEPEND=""
@@ -27,6 +27,7 @@ src_compile() {
 		-DSHARED=ON \
 		-DSVN_VERSION=${ESVN_WC_REVISION}
 	"
+	use nocxx || mycmakeargs="${mycmakeargs} -DBINDINGS_CXX=1"
 
 	cmake-utils_src_compile
 }

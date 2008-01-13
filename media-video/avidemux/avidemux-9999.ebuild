@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/avidemux/avidemux-2.0.38_rc2-r1.ebuild,v 1.1 2005/04/18 15:44:32 flameeyes Exp $
 
-inherit subversion flag-o-matic qt4
+inherit subversion flag-o-matic qt4 cmake-utils
 
 WANT_AUTOMAKE="1.9"
 DESCRIPTION="Great Video editing/encoding tool"
@@ -24,7 +24,7 @@ RDEPEND="
 	gtk? ( >=x11-libs/gtk+-2.6.0 )
 	>=dev-lang/spidermonkey-1.5-r2
 	a52? ( >=media-libs/a52dec-0.7.4 )
-	aften? ( >=media-sound/aften-0.0.6 )
+	aften? ( >=media-libs/aften-0.0.7 )
 	aac? ( >=media-libs/faad2-2.0-r2 )
 	faac? ( >=media-libs/faac-1.23.5 )
 	mad? ( media-libs/libmad )
@@ -56,28 +56,28 @@ DEPEND="
 	x86? ( dev-lang/nasm )
 	dev-util/pkgconfig
 	nls? ( sys-devel/gettext )
-	dev-util/cmake
 "
-
-filter-flags "-fno-default-inline"
-filter-flags "-funroll-loops"
-filter-flags "-funroll-all-loops"
-filter-flags "-fforce-addr"
 
 pick() {
 	if ! use $1; then
 		local CMAKE_VAR="$(echo ${2:-${1}} | tr [:lower:] [:upper:])"
-		myconf="-DNO_${CMAKE_VAR}=1 ${myconf}"
+		mycmakeargs="-DNO_${CMAKE_VAR}=1 ${mycmakeargs}"
 	fi
 }
 
+pkg_setup() {
+	filter-flags \
+		-fno-default-inline -funroll-loops -funroll-all-loops -fforce-addr
+	use verbose-build && CMAKE_COMPILER_VERBOSE=y
+}
+
 src_compile() {
-	local myconf="-DCMAKE_INSTALL_PREFIX=/usr"
-
 	# provide svn revision
-	myconf="${myconf} -DNO_SVN=1 -DSubversion_FOUND=1 -DProject_WC_REVISION=${ESVN_WC_REVISION}"
-
-	use debug && myconf="${myconf} -DCMAKE_BUILD_TYPE=Debug"
+	local mycmakeargs="
+		-DNO_SVN=1 \
+		-DSubversion_FOUND=1 \
+		-DProject_WC_REVISION=${ESVN_WC_REVISION}
+	"
 
 	for x in \
 		gtk qt4 nls sdl arts alsa esd jack oss libsamplerate lame faac aften \
@@ -91,13 +91,10 @@ src_compile() {
 	pick png libpng
 	pick truetype freetype
 
-	cmake ${myconf} || die "cmake failed"
-
-	use verbose-build && myconf="VERBOSE=y" || myconf=
-	emake ${myconf} || die "make failed"
+	cmake-utils_src_compile
 }
 
 src_install() {
-	emake DESTDIR="${D}" install || die
+	cmake-utils_src_install
 	dodoc AUTHORS
 }

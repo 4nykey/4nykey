@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit subversion
+inherit subversion cmake-utils
 
 DESCRIPTION="Musepack audio compression tools"
 HOMEPAGE="http://www.musepack.net"
@@ -19,19 +19,8 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	>=dev-util/cmake-2.4
 "
 
-src_compile() {
-	cmake . \
-		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_C_FLAGS="${CFLAGS}" \
-		|| die
-
-	use verbose-build && local myconf="VERBOSE=y"
-	emake ${myconf} || die
-}
-
-src_install() {
-	emake DESTDIR="${D}" install || die
+pkg_setup() {
+	use verbose-build && CMAKE_COMPILER_VERBOSE=y
 }
