@@ -21,7 +21,7 @@ RDEPEND="
 
 src_unpack() {
 	unpack ${A}
-	sed -i ${S}/Makefile -e 's:^CFLAGS = :CFLAGS += :'
+	sed -i ${S}/Makefile -e 's:^CFLAGS :&+:; s: -Werror::'
 }
 
 src_install() {
