@@ -5,7 +5,7 @@
 #inherit subversion
 #ESVN_REPO_URI="http://svn.webkit.org/repository/webkit/trunk"
 
-inherit qt4
+inherit autotools
 
 MY_P="WebKit-r${PV}"
 DESCRIPTION="WebKit is an open source web browser engine"
@@ -17,42 +17,49 @@ S="${WORKDIR}/${MY_P}"
 LICENSE="BSD LGPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="debug"
+IUSE="debug sqlite xslt gstreamer svg"
 
 RDEPEND="
 	x11-libs/gtk+
-	dev-libs/libxslt
 	net-misc/curl
 	media-libs/jpeg
 	media-libs/libpng
 	dev-libs/icu
+	sqlite? ( >=dev-db/sqlite-3 )
+	xslt? ( dev-libs/libxslt )
+	gstreamer? (
+		media-libs/gst-plugins-base
+		gnome-base/gnome-vfs
+	)
 "
 DEPEND="
 	${RDEPEND}
-	sys-devel/bison
 	dev-lang/perl
-	>=x11-libs/qt-4
+	sys-devel/bison
+	sys-devel/flex
 	dev-util/gperf
 "
 
-src_compile() {
-	local myconf="CONFIG+=gtk-port CONFIG-=qt-port"
-	if use debug; then
-		myconf="${myconf} CONFIG+=debug CONFIG-=release"
-	else
-		myconf="${myconf} CONFIG+=release CONFIG-=debug"
-	fi
+src_unpack() {
+	unpack ${A}
+	cd ${S}
+	epatch "${FILESDIR}"/${PN}-*.diff
+	cp GNUmakefile.am Makefile.am
+	eautoreconf
+}
 
-	eqmake4 WebKit.pro -recursive \
-		OUTPUT_DIR=${S} \
-		WEBKIT_INC_DIR=/usr/include/WebKit \
-		WEBKIT_LIB_DIR=/usr/lib \
-		${myconf} \
-		|| die "eqmake4 failed"
+src_compile() {
+	econf \
+		$(use_enable debug) \
+		$(use_enable sqlite database) $(use_enable sqlite icon-database) \
+		$(use_enable xslt) \
+		$(use_enable gstreamer video) \
+		$(use_enable svg) \
+		|| die
 
 	emake || die "emake failed"
 }
 
 src_install() {
-	emake INSTALL_ROOT="${D}" install || die "install failed"
+	einstall || die "install failed"
 }
