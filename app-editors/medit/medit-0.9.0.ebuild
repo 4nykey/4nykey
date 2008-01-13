@@ -9,7 +9,7 @@ SRC_URI="mirror://sourceforge/mooedit/${P}.tar.bz2"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="python pcre xml debug fam"
+IUSE="python pcre xml debug fam doc"
 
 RDEPEND="
 	>=x11-libs/gtk+-2.6
@@ -20,13 +20,20 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
+	dev-util/intltool
+	doc? (
+		dev-libs/libxslt
+		=app-text/docbook-xml-dtd-4.4*
+	)
 "
 
 src_compile() {
 	econf \
+		--htmldir="${ROOT}"/usr/share/doc/${PF}/html \
 		--enable-libmoo \
 		--enable-libmoo-headers \
 		$(use_enable debug) \
+		$(use_enable doc help) \
 		$(use_with python) \
 		$(use_with python mooterm) \
 		$(use_enable python moo-module) \
