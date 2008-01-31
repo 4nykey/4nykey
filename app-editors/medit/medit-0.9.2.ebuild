@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+inherit python fdo-mime gnome2-utils
+
 DESCRIPTION="Multiplatform GTK text editor"
 HOMEPAGE="http://mooedit.sourceforge.net"
 SRC_URI="mirror://sourceforge/mooedit/${P}.tar.bz2"
@@ -46,6 +48,20 @@ src_compile() {
 }
 
 src_install() {
-	make DESTDIR=${D} install || die
+	emake DESTDIR=${D} update_icon_cache=true update_mime=true install || die
 	dodoc AUTHORS NEWS README THANKS TODO
+}
+
+pkg_postinst() {
+	fdo-mime_desktop_database_update
+	fdo-mime_mime_database_update
+	gnome2_icon_cache_update
+	use python && python_mod_optimize "${ROOT}"usr/lib/moo/plugins
+}
+
+pkg_postrm() {
+	fdo-mime_desktop_database_update
+	fdo-mime_mime_database_update
+	gnome2_icon_cache_update
+	use python && python_mod_cleanup "${ROOT}"usr/lib/moo/plugins
 }
