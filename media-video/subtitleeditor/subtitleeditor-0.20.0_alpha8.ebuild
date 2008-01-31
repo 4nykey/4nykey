@@ -41,8 +41,6 @@ src_compile() {
 }
 
 src_install() {
-	einstall || die
+	emake DESTDIR="${D}" install || die
 	dodoc AUTHORS ChangeLog NEWS README TODO
-	insinto /usr/share/pixmaps
-	doins share/subtitleeditor-icon.png
 }
