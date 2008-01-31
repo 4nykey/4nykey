@@ -8,6 +8,7 @@ DESCRIPTION="Widget to render html documents"
 HOMEPAGE="http://tkhtml.tcl.tk"
 ECVS_SERVER="tkhtml.tcl.tk:/tkhtml"
 ECVS_MODULE="htmlwidget"
+ECVS_PASS="anonymous"
 S="${WORKDIR}/${ECVS_MODULE}"
 
 LICENSE="BSD"

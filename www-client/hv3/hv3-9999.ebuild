@@ -10,6 +10,7 @@ HOMEPAGE="http://tkhtml.tcl.tk/hv3.html"
 SRC_URI="http://www.pps.jussieu.fr/~jch/software/files/polipo/${PLP}.tar.gz"
 ECVS_SERVER="tkhtml.tcl.tk:/tkhtml"
 ECVS_MODULE="htmlwidget/hv"
+ECVS_PASS="anonymous"
 S="${WORKDIR}/${ECVS_MODULE}"
 
 LICENSE="BSD"
@@ -25,9 +26,9 @@ RDEPEND="
 "
 
 src_unpack() {
-	cvs_src_unpack
 	unpack ${A}
-	cd ${PLP}
+	cvs_src_unpack
+	cd ${WORKDIR}/${PLP}
 	epatch ${FILESDIR}/hv3_polipo.patch
 }
 
