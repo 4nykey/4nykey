@@ -43,15 +43,14 @@ DEPEND="
 src_unpack() {
 	unpack ${A}
 	cd ${S}
-	epatch "${FILESDIR}"/${PN}-*.diff
-	cp GNUmakefile.am Makefile.am
 	eautoreconf
 }
 
 src_compile() {
 	econf \
 		$(use_enable debug) \
-		$(use_enable sqlite database) $(use_enable sqlite icon-database) \
+		$(use_enable sqlite database) \
+		$(use_enable sqlite icon-database) \
 		$(use_enable xslt) \
 		$(use_enable gstreamer video) \
 		$(use_enable svg) \
