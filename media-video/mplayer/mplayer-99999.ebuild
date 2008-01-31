@@ -176,13 +176,13 @@ src_unpack() {
 
 src_compile() {
 
-	local myconf="${myconf} --disable-tv-bsdbt848 --disable-vidix-external"
+	local my_conf="${my_conf} --disable-tv-bsdbt848 --disable-vidix-external"
 	################
 	#Optional features#
 	###############
 	if use cpudetection || use livecd || use bindist
 	then
-	myconf="${myconf} --enable-runtime-cpudetection"
+	my_conf="${my_conf} --enable-runtime-cpudetection"
 	fi
 
 	enable_extension_disable fribidi bidi
@@ -190,7 +190,7 @@ src_compile() {
 	enable_extension_disable enca enca
 
 	if use cdio; then
-		myconf="${myconf} --disable-cdparanoia"
+		my_conf="${my_conf} --disable-cdparanoia"
 	else
 		enable_extension_disable cdparanoia cdparanoia
 	fi
@@ -199,21 +199,21 @@ src_compile() {
 	# use shared ffmpeg libs (not supported),
 	# except for avutil (actively not supported)
 		for lib in avcodec avformat postproc; do
-			myconf="${myconf} --disable-lib${lib}_a"
+			my_conf="${my_conf} --disable-lib${lib}_a"
 		done
 	fi
 
 	if use dvd; then
 		if ! use dvdnav; then
-			myconf="${myconf} --disable-dvdnav"
+			my_conf="${my_conf} --disable-dvdnav"
 			if use dvdread; then
-				myconf="${myconf} --disable-dvdread-internal --disable-libdvdcss-internal"
+				my_conf="${my_conf} --disable-dvdread-internal --disable-libdvdcss-internal"
 			else
-				myconf="${myconf} --disable-dvdread"
+				my_conf="${my_conf} --disable-dvdread"
 			fi
 		fi
 	else
-		myconf="${myconf} --disable-dvdread --disable-dvdnav --disable-dvdread-internal --disable-libdvdcss-internal"
+		my_conf="${my_conf} --disable-dvdread --disable-dvdnav --disable-dvdread-internal --disable-libdvdcss-internal"
 	fi
 
 	if use encode ; then
@@ -222,14 +222,14 @@ src_compile() {
 		enable_extension_disable twolame twolame
 		enable_extension_disable faac aac
 	else
-		myconf="${myconf} --disable-mencoder --disable-libdv --disable-x264 --disable-twolame --disable-faac"
+		my_conf="${my_conf} --disable-mencoder --disable-libdv --disable-x264 --disable-twolame --disable-faac"
 	fi
 
 	if use !X; then
-		myconf="${myconf} --disable-gui --disable-x11 --disable-xv --disable-xmga --disable-xinerama --disable-vm --disable-xvmc"
+		my_conf="${my_conf} --disable-gui --disable-x11 --disable-xv --disable-xmga --disable-xinerama --disable-vm --disable-xvmc"
 	else
 		#note we ain't touching --enable-vm.  That should be locked down in the future.
-		myconf="${myconf} $(use_enable gtk gui)"
+		my_conf="${my_conf} $(use_enable gtk gui)"
 		enable_extension_disable xinerama xinerama
 		enable_extension_disable xv xv
 	fi
@@ -237,15 +237,15 @@ src_compile() {
 	if use X; then
 		enable_extension_disable dga2 dga
 	else
-		myconf="${myconf} --disable-dga2"
+		my_conf="${my_conf} --disable-dga2"
 	fi
 
 	# disable png *only* if gtk && png aren't on
 	if ! use png || ! use gtk; then
-		myconf="${myconf} --disable-png"
+		my_conf="${my_conf} --disable-png"
 	fi
 	enable_extension_disable inet6 ipv6
-	myconf="${myconf} $(use_enable joystick)"
+	my_conf="${my_conf} $(use_enable joystick)"
 	enable_extension_disable lirc lirc
 	enable_extension_disable live live
 	enable_extension_disable rtc rtc
@@ -253,14 +253,14 @@ src_compile() {
 	enable_extension_disable bitmap-font bitmap-fonts
 	enable_extension_disable freetype truetype
 	enable_extension_disable fontconfig fontconfig
-	myconf="${myconf} $(use_enable color color-console)"
+	my_conf="${my_conf} $(use_enable color color-console)"
 	if use !v4l && use !v4l2; then
-		myconf="${myconf} --disable-tv"
+		my_conf="${my_conf} --disable-tv"
 	else
 		enable_extension_disable tv-v4l1 v4l
 		enable_extension_disable tv-v4l2 v4l2
 	fi
-	myconf="${myconf} $(use_enable radio) $(use_enable radio radio-capture)"
+	my_conf="${my_conf} $(use_enable radio) $(use_enable radio radio-capture)"
 	if use radio; then
 		enable_extension_disable radio-v4l v4l
 		enable_extension_disable radio-v4l2 v4l2
@@ -276,15 +276,15 @@ src_compile() {
 	enable_extension_disable liblzo lzo
 	enable_extension_disable musepack musepack
 	if use aac; then
-		use external-faad && myconf="${myconf} --disable-faad-internal"
+		use external-faad && my_conf="${my_conf} --disable-faad-internal"
 	else
-		myconf="${myconf} --disable-faad-internal --disable-faad-external"
+		my_conf="${my_conf} --disable-faad-internal --disable-faad-external"
 	fi
 	if use vorbis; then
 		enable_extension_disable tremor-internal tremor
 		enable_extension_disable tremor-external tremor
 	else
-		myconf="${myconf} --disable-vorbis"
+		my_conf="${my_conf} --disable-vorbis"
 	fi
 	enable_extension_disable theora theora
 	enable_extension_disable speex speex
@@ -299,7 +299,7 @@ src_compile() {
 	# Video Output #
 	#############
 	enable_extension_disable dvbhead dvb
-	use dvb && myconf="${myconf} --with-dvbincdir=/usr/include"
+	use dvb && my_conf="${my_conf} --with-dvbincdir=/usr/include"
 
 	enable_extension_disable aa aalib
 	enable_extension_disable directfb directfb
@@ -321,23 +321,23 @@ src_compile() {
 
 	if use xv; then
 		if use xvmc; then
-			myconf="${myconf} --enable-xvmc --with-xvmclib=XvMCW"
+			my_conf="${my_conf} --enable-xvmc --with-xvmclib=XvMCW"
 		else
-			myconf="${myconf} --disable-xvmc"
+			my_conf="${my_conf} --disable-xvmc"
 		fi
 	else
-		myconf="${myconf} --disable-xv --disable-xvmc"
+		my_conf="${my_conf} --disable-xv --disable-xvmc"
 	fi
 
 	if ! use kernel_linux && ! use video_cards_mga; then
-		 myconf="${myconf} --disable-mga --disable-xmga"
+		 my_conf="${my_conf} --disable-mga --disable-xmga"
 	fi
 
 	if use video_cards_tdfx; then
-		myconf="${myconf} $(use_enable video_cards_tdfx tdfxvid) \
+		my_conf="${my_conf} $(use_enable video_cards_tdfx tdfxvid) \
 			$(use_enable fbcon tdfxfb)"
 	else
-		myconf="${myconf} --disable-3dfx --disable-tdfxvid --disable-tdfxfb"
+		my_conf="${my_conf} --disable-3dfx --disable-tdfxvid --disable-tdfxfb"
 	fi
 
 	#############
@@ -363,30 +363,27 @@ src_compile() {
 		enable_extension_disable mmx mmx
 		enable_extension_disable mmxext mmxext
 	fi
-	use debug && myconf="${myconf} --enable-debug=3"
+	use debug && my_conf="${my_conf} --enable-debug=3"
 
 	if use xanim
 	then
-		myconf="${myconf} --with-xanimlibdir=/usr/lib/xanim/mods"
+		my_conf="${my_conf} --with-xanimlibdir=/usr/lib/xanim/mods"
 	fi
 
 	if [ -e /dev/.devfsd ]
 	then
-		myconf="${myconf} --enable-linux-devfs"
+		my_conf="${my_conf} --enable-linux-devfs"
 	fi
 
 	# support for blinkenlights
-	use bl && myconf="${myconf} --enable-bl"
+	use bl && my_conf="${my_conf} --enable-bl"
 
 	#leave this in place till the configure/compilation borkage is completely corrected back to pre4-r4 levels.
 	# it's intended for debugging so we can get the options we configure mplayer w/, rather then hunt about.
 	# it *will* be removed asap; in the meantime, doesn't hurt anything.
-	echo "${myconf}" > ${T}/configure-options
+	echo "${my_conf}" > ${T}/configure-options
 
-	if use custom-cflags
-	then
-	# let's play the filtration game!  MPlayer hates on all!
-	#strip-flags
+	if use custom-cflags; then
 	# ugly optimizations cause MPlayer to cry on x86 systems!
 		if use x86 ; then
 			replace-flags -O0 -O2
@@ -394,10 +391,10 @@ src_compile() {
 			filter-flags -fPIC -fPIE
 		fi
 	else
-	unset CFLAGS CXXFLAGS
+		unset CFLAGS CXXFLAGS
 	fi
 
-	CFLAGS="$CFLAGS" ./configure \
+	./configure \
 		--prefix=/usr \
 		--confdir=/usr/share/mplayer \
 		--datadir=/usr/share/mplayer \
@@ -405,14 +402,12 @@ src_compile() {
 		--enable-menu \
 		--enable-network --enable-ftp \
 		--realcodecsdir=${REALLIBDIR} \
-		${myconf} || die
+		${my_conf} || die
 
-	# we run into problems if -jN > -j1
-	# see #86245
-	MAKEOPTS="${MAKEOPTS} -j1"
 
 	einfo "Make"
-	emake || die "Failed to build MPlayer!"
+	# we run into problems if -jN > -j1, see #86245
+	emake -j1 || die "Failed to build MPlayer!"
 	use doc && make -C ${S}/DOCS/xml html-chunked-en
 	einfo "Make completed"
 }

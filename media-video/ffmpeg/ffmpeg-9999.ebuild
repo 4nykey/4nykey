@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-0.4.9_p20060517.ebuild,v 1.1 2006/05/17 09:52:14 lu_zero Exp $
 
-inherit subversion flag-o-matic toolchain-funcs
+inherit subversion flag-o-matic toolchain-funcs confutils
 
 DESCRIPTION="Complete solution to record, convert and stream audio and video. Includes libavcodec."
 HOMEPAGE="http://ffmpeg.sourceforge.net/"
@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS="~x86"
 IUSE="
 aac debug doc ieee1394 a52 encode imlib mmx vorbis oss threads truetype
-v4l v4l2 xvid network zlib X amr x264 static mp3 swscaler sdl
+v4l v4l2 xvid network zlib X amr x264 static mp3 swscaler sdl bindist
 "
 
 RDEPEND="
@@ -69,49 +69,43 @@ pkg_setup() {
 	replace-flags -O0 -O2
 }
 
-teh_conf() {
-	ACTION="--${1}able"
-	if [[ $1 == "en" ]]; then
-		use $2 && myconf="${myconf} ${ACTION}-${3:-${2}}"
-	else
-		use $2 || myconf="${myconf} ${ACTION}-${3:-${2}}"
-	fi
-}
-
 src_compile() {
-	local myconf="--log=config.log --enable-shared --enable-gpl --enable-pp"
-	myconf="${myconf} --disable-optimizations --disable-strip"
+	local my_conf="--log=config.log --enable-shared --enable-gpl --enable-pp"
+	my_conf="${my_conf} --disable-optimizations --disable-strip"
 
-	teh_conf dis debug
+	enable_extension_disable debug debug
 	if use encode; then
-		teh_conf en mp3 libmp3lame
-		teh_conf en xvid
-		teh_conf en x264
-		teh_conf en aac libfaac
+		enable_extension_enableonly libmp3lame mp3
+		enable_extension_enableonly libxvid xvid
+		enable_extension_enableonly libx264 x264
+		enable_extension_enableonly libfaac aac
 	fi
-	teh_conf en a52 liba52
-	use oss || myconf="${myconf} --disable-demuxer=oss --disable-muxer=oss"
-	use v4l || myconf="${myconf} --disable-demuxer=v4l"
-	use v4l2 || myconf="${myconf} --disable-demuxer=v4l2"
-	teh_conf en ieee1394 libdc1394
-	teh_conf en threads pthreads
-	teh_conf en vorbis libvorbis
-	teh_conf dis network
-	teh_conf dis zlib
-	use amr && myconf="${myconf} --enable-nonfree"
-	teh_conf en amr libamr-nb
-	teh_conf en amr libamr-wb
-	teh_conf en aac libfaad
-	teh_conf en swscaler
-	teh_conf en X x11grab
-	use sdl && teh_conf dis X ffplay
-	use encode || myconf="${myconf} --disable-encoders --disable-muxers"
+	enable_extension_enableonly liba52 a52
+	enable_extension_disable demuxer=oss oss
+	enable_extension_disable muxer=oss oss
+	enable_extension_disable demuxer=v4l v4l
+	enable_extension_disable demuxer=v4l2 v4l2
+	enable_extension_enableonly libdc1394 ieee1394
+	enable_extension_enableonly pthreads threads
+	enable_extension_enableonly libvorbis vorbis
+	enable_extension_disable network network
+	enable_extension_disable zlib zlib
+	if use !bindist; then
+		use amr && my_conf="${my_conf} --enable-nonfree"
+		enable_extension_enableonly libamr-nb amr
+		enable_extension_enableonly libamr-wb amr
+	fi
+	enable_extension_enableonly libfaad aac
+	enable_extension_enableonly swscaler swscaler
+	enable_extension_enableonly x11grab X
+	use sdl && enable_extension_disable ffplay X
+	use encode || my_conf="${my_conf} --disable-encoders --disable-muxers"
 
 	./configure \
 		--prefix=/usr \
 		--cpu="${_cpu:-generic}" \
 		$(use_enable static) \
-		${myconf} || die "Configure failed"
+		${my_conf} || die "Configure failed"
 
 	emake CC="$(tc-getCC)" || die "emake failed"
 }
