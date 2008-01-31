@@ -6,7 +6,10 @@ inherit flag-o-matic
 
 DESCRIPTION="multi-track hard disk recording software"
 HOMEPAGE="http://ardour.org/"
-SRC_URI="http://ardour.org/files/releases/${P}.tar.bz2"
+SRC_URI="
+	http://ardour.org/files/releases/${P}.tar.bz2
+	!external-libs? ( mirror://gentoo/libsndfile-1.0.17+flac-1.1.3.patch.bz2 )
+"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -21,16 +24,18 @@ RDEPEND="
 	>=media-sound/jack-audio-connection-kit-0.101.1
 	>=dev-libs/libxml2-2.6.0
 	dev-libs/libxslt
-	media-libs/liblo
+	osc? ( media-libs/liblo )
 	>=x11-libs/gtk+-2.8.1
 	external-libs? (
 		=dev-libs/libsigc++-2*
 		dev-cpp/libgnomecanvasmm
 		media-libs/libsoundtouch
 		media-libs/libsndfile
+		media-libs/vamp-plugin-sdk
 	)
 	ladspa? ( >=media-libs/ladspa-sdk-1.12 )
 	usb? ( dev-libs/libusb )
+	flac? ( media-libs/flac )
 "
 DEPEND="
 	${RDEPEND}
@@ -45,16 +50,21 @@ src_unpack() {
 	unpack ${A}
 	cd ${S}
 
-	epatch "${FILESDIR}"/${PN}-{cflags,ext_sndfile,modir}.diff
-
 	# handle gtkmm accessibility flag
 	built_with_use dev-cpp/gtkmm accessibility || \
-		sed -i "s:atkmm-1.6:gtkmm-2.4:" SConstruct
+		sed -i SConstruct -e "s:atkmm-1.6:gtkmm-2.4:"
+
+	sed -i SConstruct -e 's:libSoundTouch:soundtouch-1.0:'
 
 	# Required for scons to "see" intermediate install location
 	mkdir -p ${D}
 
-	append-flags -fno-strict-aliasing
+	epatch "${FILESDIR}"/${PN}-*.diff
+	if use !external-libs; then
+		cd libs/libsndfile
+		cp "${FILESDIR}"/configure.ac .
+		epatch "${WORKDIR}"/libsndfile-1.0.17+flac-1.1.3.patch
+	fi
 }
 
 teh_conf() {
@@ -62,6 +72,8 @@ teh_conf() {
 }
 
 src_compile() {
+	append-flags -fno-strict-aliasing
+
 	local myconf="PREFIX=/usr VST=0 CMT=0"
 	teh_conf external-libs SYSLIBS
 	teh_conf debug DEBUG
@@ -70,6 +82,8 @@ src_compile() {
 	teh_conf osc LIBLO
 	teh_conf usb SURFACES
 	teh_conf sse FPU_OPTIMIZATION
+
+	local _mmx _3dnow _sse
 	use mmx && _mmx="-mmmx"
 	use 3dnow && _3dnow="-m3dnow"
 	use sse && _sse="-msse -mfpmath=sse -DUSE_XMMINTRIN"
