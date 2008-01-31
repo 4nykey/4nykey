@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/mplayer/mplayer-1.0_pre8-r1.ebuild,v 1.12 2006/10/06 12:43:24 blubb Exp $
 
-inherit flag-o-matic linux-mod subversion
+inherit flag-o-matic linux-mod subversion confutils
 
 BLUV=1.6
 SVGV=1.9.17
@@ -26,15 +26,21 @@ ESVN_PATCHES="${PN}-*.diff"
 SLOT="0"
 LICENSE="GPL-2"
 KEYWORDS="~x86"
+
 IUSE="
-3dfx 3dnow 3dnowext aac aalib alsa amr arts bindist bitmap-fonts bidi bl cdio
+3dnow 3dnowext aac aalib alsa amr arts bindist bitmap-fonts bidi bl cdio
 cpudetection custom-cflags debug dga doc dts dvb cdparanoia directfb dv dvd
 dvdread dvdnav enca encode esd external-faad external-ffmpeg fbcon fontconfig
 gif ggi gtk ipv6 jack joystick jpeg ladspa libcaca lirc live livecd lzo mad
 matrox mmx mmxext musepack nas openal opengl oss png real rtc samba sdl speex
 sse sse2 svga tga theora tremor truetype v4l v4l2 vorbis win32codecs X x264
-xanim xinerama xv xvid xvmc twolame color radio examples
+xanim xinerama xv xvid xvmc twolame color radio examples kernel_linux zoran
 "
+
+VIDEO_CARDS="s3virge mga tdfx vesa"
+for x in ${VIDEO_CARDS}; do
+	IUSE="${IUSE} video_cards_${x}"
+done
 
 # 'encode' in USE for MEncoder.
 RDEPEND="
@@ -127,12 +133,6 @@ DEPEND="
 	)
 "
 
-teh_conf() {
-	# avoid using --enable-xxx options,
-	# except gui, debug and those, disabled by default
-	use $1 || myconf="${myconf} --disable-${2:-$1}"
-}
-
 pkg_setup() {
 	if use real && use x86; then
 		REALLIBDIR="/opt/RealPlayer/codecs"
@@ -185,14 +185,14 @@ src_compile() {
 	myconf="${myconf} --enable-runtime-cpudetection"
 	fi
 
-	teh_conf bidi fribidi
+	enable_extension_disable fribidi bidi
 
-	teh_conf enca
+	enable_extension_disable enca enca
 
 	if use cdio; then
 		myconf="${myconf} --disable-cdparanoia"
 	else
-		teh_conf cdparanoia
+		enable_extension_disable cdparanoia cdparanoia
 	fi
 
 	if use external-ffmpeg; then
@@ -217,10 +217,10 @@ src_compile() {
 	fi
 
 	if use encode ; then
-		teh_conf dv libdv
-		teh_conf x264
-		teh_conf twolame
-		teh_conf aac faac
+		enable_extension_disable libdv dv
+		enable_extension_disable x264 x264
+		enable_extension_disable twolame twolame
+		enable_extension_disable faac aac
 	else
 		myconf="${myconf} --disable-mencoder --disable-libdv --disable-x264 --disable-twolame --disable-faac"
 	fi
@@ -230,12 +230,12 @@ src_compile() {
 	else
 		#note we ain't touching --enable-vm.  That should be locked down in the future.
 		myconf="${myconf} $(use_enable gtk gui)"
-		teh_conf xinerama
-		teh_conf xv
+		enable_extension_disable xinerama xinerama
+		enable_extension_disable xv xv
 	fi
 
 	if use X; then
-		teh_conf dga dga2
+		enable_extension_disable dga2 dga
 	else
 		myconf="${myconf} --disable-dga2"
 	fi
@@ -244,114 +244,124 @@ src_compile() {
 	if ! use png || ! use gtk; then
 		myconf="${myconf} --disable-png"
 	fi
-	teh_conf ipv6 inet6
+	enable_extension_disable inet6 ipv6
 	myconf="${myconf} $(use_enable joystick)"
-	teh_conf lirc
-	teh_conf live
-	teh_conf rtc
-	teh_conf samba smb
-	teh_conf bitmap-fonts bitmap-font
-	teh_conf truetype freetype
-	teh_conf fontconfig
+	enable_extension_disable lirc lirc
+	enable_extension_disable live live
+	enable_extension_disable rtc rtc
+	enable_extension_disable smb samba
+	enable_extension_disable bitmap-font bitmap-fonts
+	enable_extension_disable freetype truetype
+	enable_extension_disable fontconfig fontconfig
 	myconf="${myconf} $(use_enable color color-console)"
 	if use !v4l && use !v4l2; then
 		myconf="${myconf} --disable-tv"
 	else
-		teh_conf v4l tv-v4l1
-		teh_conf v4l2 tv-v4l2
+		enable_extension_disable tv-v4l1 v4l
+		enable_extension_disable tv-v4l2 v4l2
 	fi
 	myconf="${myconf} $(use_enable radio) $(use_enable radio radio-capture)"
 	if use radio; then
-		teh_conf v4l radio-v4l
-		teh_conf v4l2 radio-v4l2
+		enable_extension_disable radio-v4l v4l
+		enable_extension_disable radio-v4l2 v4l2
 	fi
 
 	#######
 	# Codecs #
 	#######
-	teh_conf gif
-	teh_conf jpeg
-	teh_conf ladspa
-	teh_conf dts libdts
-	teh_conf lzo liblzo
-	teh_conf musepack
+	enable_extension_disable gif gif
+	enable_extension_disable jpeg jpeg
+	enable_extension_disable ladspa ladspa
+	enable_extension_disable libdts dts
+	enable_extension_disable liblzo lzo
+	enable_extension_disable musepack musepack
 	if use aac; then
 		use external-faad && myconf="${myconf} --disable-faad-internal"
 	else
 		myconf="${myconf} --disable-faad-internal --disable-faad-external"
 	fi
 	if use vorbis; then
-		teh_conf tremor tremor-internal
-		teh_conf tremor tremor-external
+		enable_extension_disable tremor-internal tremor
+		enable_extension_disable tremor-external tremor
 	else
 		myconf="${myconf} --disable-vorbis"
 	fi
-	teh_conf theora
-	teh_conf speex
-	teh_conf xvid
-	use x86 && teh_conf real
+	enable_extension_disable theora theora
+	enable_extension_disable speex speex
+	enable_extension_disable xvid xvid
+	use x86 && enable_extension_disable real real
 	! use livecd && ! use bindist && \
-		teh_conf win32codecs win32dll
-	teh_conf amr amr_nb
-	teh_conf amr amr_wb
+		enable_extension_disable win32dll win32codecs
+	enable_extension_disable amr_nb amr
+	enable_extension_disable amr_wb amr
 
 	#############
 	# Video Output #
 	#############
-	if use 3dfx; then
-		myconf="${myconf} --enable-3dfx --enable-tdfxvid"
-		use fbcon && myconf="${myconf} --enable-tdfxfb"
-	else
-		myconf="${myconf} --disable-tdfxvid"
-	fi
-
-	teh_conf dvb dvbhead
+	enable_extension_disable dvbhead dvb
 	use dvb && myconf="${myconf} --with-dvbincdir=/usr/include"
 
-	teh_conf aalib aa
-	teh_conf directfb
-	teh_conf fbcon fbdev
-	teh_conf ggi
-	teh_conf libcaca caca
-	use X && teh_conf matrox xmga
-	teh_conf matrox mga
-	teh_conf opengl gl
-	teh_conf sdl
+	enable_extension_disable aa aalib
+	enable_extension_disable directfb directfb
+	enable_extension_disable fbdev fbcon
+	use fbcon && enable_extension_disable s3fb video_cards_s3virge
+	enable_extension_disable ggi ggi
+	enable_extension_disable caca libcaca
+	use X && enable_extension_disable xmga matrox
+	enable_extension_disable mga matrox
+	enable_extension_disable gl opengl
+	enable_extension_disable vesa video_cards_vesa
+	enable_extension_disable sdl sdl
 
-	teh_conf svga
-	teh_conf svga vidix-internal
+	enable_extension_disable svga svga
+	enable_extension_disable vidix-internal svga
+	enable_extension_disable zr zoran
 
-	teh_conf tga
+	enable_extension_disable tga tga
 
-	if use X && use xv && use xvmc
-	then
-		myconf="${myconf} --enable-xvmc --with-xvmclib=XvMCW"
+	if use xv; then
+		if use xvmc; then
+			myconf="${myconf} --enable-xvmc --with-xvmclib=XvMCW"
+		else
+			myconf="${myconf} --disable-xvmc"
+		fi
 	else
-		myconf="${myconf} --disable-xvmc"
+		myconf="${myconf} --disable-xv --disable-xvmc"
+	fi
+
+	if ! use kernel_linux && ! use video_cards_mga; then
+		 myconf="${myconf} --disable-mga --disable-xmga"
+	fi
+
+	if use video_cards_tdfx; then
+		myconf="${myconf} $(use_enable video_cards_tdfx tdfxvid) \
+			$(use_enable fbcon tdfxfb)"
+	else
+		myconf="${myconf} --disable-3dfx --disable-tdfxvid --disable-tdfxfb"
 	fi
 
 	#############
 	# Audio Output #
 	#############
-	teh_conf alsa
-	teh_conf jack
-	teh_conf arts
-	teh_conf esd
-	teh_conf mad
-	teh_conf nas
-	teh_conf openal
-	teh_conf oss ossaudio
+	enable_extension_disable alsa alsa
+	enable_extension_disable jack jack
+	enable_extension_disable arts arts
+	enable_extension_disable esd esd
+	enable_extension_disable mad mad
+	enable_extension_disable nas nas
+	enable_extension_disable openal openal
+	enable_extension_disable ossaudio oss
 
 	#################
 	# Advanced Options #
 	#################
 	if use x86; then
-		teh_conf 3dnow
-		teh_conf 3dnowext
-		teh_conf sse
-		teh_conf sse2
-		teh_conf mmx
-		teh_conf mmxext
+		enable_extension_disable 3dnow 3dnow
+		enable_extension_disable 3dnowext 3dnowext
+		enable_extension_disable sse sse
+		enable_extension_disable sse2 sse2
+		enable_extension_disable mmx mmx
+		enable_extension_disable mmxext mmxext
 	fi
 	use debug && myconf="${myconf} --enable-debug=3"
 
