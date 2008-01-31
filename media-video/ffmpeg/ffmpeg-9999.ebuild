@@ -90,21 +90,21 @@ src_compile() {
 		teh_conf en aac libfaac
 	fi
 	teh_conf en a52 liba52
-	teh_conf dis oss audio-oss
-	teh_conf dis v4l
-	teh_conf dis v4l2
-	teh_conf en ieee1394 dc1394
+	use oss || myconf="${myconf} --disable-demuxer=oss --disable-muxer=oss"
+	use v4l || myconf="${myconf} --disable-demuxer=v4l"
+	use v4l2 || myconf="${myconf} --disable-demuxer=v4l2"
+	teh_conf en ieee1394 libdc1394
 	teh_conf en threads pthreads
 	teh_conf en vorbis libvorbis
 	teh_conf dis network
 	teh_conf dis zlib
+	use amr && myconf="${myconf} --enable-nonfree"
 	teh_conf en amr libamr-nb
 	teh_conf en amr libamr-wb
 	teh_conf en aac libfaad
 	teh_conf en swscaler
 	teh_conf en X x11grab
 	use sdl && teh_conf dis X ffplay
-
 	use encode || myconf="${myconf} --disable-encoders --disable-muxers"
 
 	./configure \
@@ -112,6 +112,7 @@ src_compile() {
 		--cpu="${_cpu:-generic}" \
 		$(use_enable static) \
 		${myconf} || die "Configure failed"
+
 	emake CC="$(tc-getCC)" || die "emake failed"
 }
 
