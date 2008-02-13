@@ -2,11 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit subversion
+inherit git
 
 DESCRIPTION="A collection of unix tools that nobody thought to write 30 years ago"
 HOMEPAGE="http://www.kitenet.net/~joey/code/moreutils.html"
-ESVN_REPO_URI="svn://svn.debian.org/moreutils/trunk"
+EGIT_REPO_URI="git://git.kitenet.net/moreutils"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -25,7 +25,7 @@ DEPEND="
 "
 
 src_unpack() {
-	subversion_src_unpack
+	git_src_unpack
 	sed -i *.docbook \
 		-e 's#file://.*4\.4#file:///usr/share/sgml/docbook/xml-dtd-4.4#'
 	use doc || sed -i Makefile -e '/man1/d; s:$(MANS)::'
