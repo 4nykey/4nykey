@@ -2,42 +2,50 @@ Index: SConstruct
 ===================================================================
 --- SConstruct	(revision 2952)
 +++ SConstruct	(working copy)
-@@ -782,10 +782,6 @@
- prep_libcheck(env, env)
- 
- 
+@@ -782,12 +782,6 @@
+ # these are part of the Ardour source tree because they are C++
+ # 
+
 -libraries['vamp'] = LibraryInfo (LIBS='vampsdk',
 -                                 LIBPATH='#libs/vamp-sdk',
--                                 CPPPATH='#libs/vamp-sdk/vamp')
--
+-                                 CPPPATH='#libs/vamp-sdk')
+-libraries['vamphost'] = LibraryInfo (LIBS='vamphostsdk',
+-                                 LIBPATH='#libs/vamp-sdk',
+-                                 CPPPATH='#libs/vamp-sdk')
+ 
  env['RUBBERBAND'] = False
  
- conf = Configure (env)
-@@ -984,6 +980,9 @@
+@@ -984,6 +980,11 @@
                                              LIBPATH='#libs/appleutility',
                                              CPPPATH='#libs/appleutility')
      
 +    libraries['vamp'] = LibraryInfo ()
-+    libraries['vamp'].ParseConfig ('pkg-config --cflags --libs vamp-sdk vamp-hostsdk')
++    libraries['vamp'].ParseConfig ('pkg-config --cflags --libs vamp-sdk')
++    libraries['vamphost'] = LibraryInfo ()
++    libraries['vamphost'].ParseConfig ('pkg-config --cflags --libs vamp-hostsdk')
 +
      coredirs = [
          'templates'
      ]
-@@ -993,7 +992,6 @@
+@@ -993,8 +992,6 @@
          'libs/pbd',
          'libs/midi++2',
          'libs/ardour',
 -        'libs/vamp-sdk',
+-        'libs/vamp-plugins/',
      # these are unconditionally included but have
      # tests internally to avoid compilation etc
      # if VST is not set
-@@ -1048,6 +1046,10 @@
+@@ -1048,6 +1046,13 @@
                                              LIBPATH='#libs/appleutility',
                                              CPPPATH='#libs/appleutility')
  
 +    libraries['vamp'] = LibraryInfo (LIBS='vampsdk',
 +                                     LIBPATH='#libs/vamp-sdk',
-+                                     CPPPATH='#libs/vamp-sdk/vamp')
++                                     CPPPATH='#libs/vamp-sdk')
++    libraries['vamphost'] = LibraryInfo (LIBS='vamphostsdk',
++                                     LIBPATH='#libs/vamp-sdk',
++                                     CPPPATH='#libs/vamp-sdk')
 +
      coredirs = [
          'templates'

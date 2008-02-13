@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/ardour/ardour-0.99.3.ebuild,v 1.1 2006/05/13 17:11:21 eldad Exp $
 
-inherit flag-o-matic
+inherit flag-o-matic versionator
 
 DESCRIPTION="multi-track hard disk recording software"
 HOMEPAGE="http://ardour.org/"
@@ -10,6 +10,7 @@ SRC_URI="
 	http://ardour.org/files/releases/${P}.tar.bz2
 	!external-libs? ( mirror://gentoo/libsndfile-1.0.17+flac-1.1.3.patch.bz2 )
 "
+S="${WORKDIR}/${PN}-$(get_version_component_range 1-2)"
 
 LICENSE="GPL-2"
 SLOT="0"
