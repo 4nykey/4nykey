@@ -2,12 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit linux-mod
+inherit mercurial linux-mod
 
 DESCRIPTION="Btrfs kernel module"
 HOMEPAGE="http://oss.oracle.com/projects/btrfs/"
-SRC_URI="http://oss.oracle.com/projects/btrfs/dist/files/${P}.tar.bz2"
-RESTRICT="primaryuri"
+EHG_REPO_URI="http://oss.oracle.com/mercurial/mason/${PN}"
+S="${WORKDIR}/${EHG_REPO_URI##*/}"
 
 LICENSE="GPL-2"
 SLOT="0"

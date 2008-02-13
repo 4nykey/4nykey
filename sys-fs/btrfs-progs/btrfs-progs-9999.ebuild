@@ -2,10 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+inherit mercurial
+
 DESCRIPTION="Btrfs utility programs"
 HOMEPAGE="http://oss.oracle.com/projects/btrfs/"
-SRC_URI="http://oss.oracle.com/projects/btrfs/dist/files/${P}.tar.bz2"
-RESTRICT="primaryuri"
+EHG_REPO_URI="http://oss.oracle.com/mercurial/mason/${PN}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -20,8 +21,9 @@ RDEPEND="
 "
 
 src_unpack() {
-	unpack ${A}
-	sed -i ${S}/Makefile -e 's:^CFLAGS :&+:; s: -Werror::'
+	mercurial_fetch ${EHG_REPO_URI} ${PF}
+	cd ${S}
+	epatch "${FILESDIR}"/${PN}*.diff
 }
 
 src_install() {
