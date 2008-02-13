@@ -1,0 +1,11 @@
+--- ./pixmaps/Makefile.in.orig	2007-10-11 20:49:56.000000000 +0300
++++ ./pixmaps/Makefile.in	2008-02-11 20:47:49.000000000 +0200
+@@ -309,7 +309,7 @@
+ xdg_appsdir = @xdg_appsdir@
+ xdg_directorydir = @xdg_directorydir@
+ xdg_menudir = @xdg_menudir@
+-pixmapsdir = $(datadir)/pixmaps
++pixmapsdir = $(kde_datadir)/pixmaps
+ pixmaps_DATA = Russian.png Ukrainian.png English.png French.png Romanian.png \
+ 		Belarusian.png German.png Kazakh.png
+ 

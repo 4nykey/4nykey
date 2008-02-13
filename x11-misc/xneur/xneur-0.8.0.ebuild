@@ -2,17 +2,13 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit subversion autotools
-
 DESCRIPTION="X Neural Switcher is an automatic keyboard layout switcher"
 HOMEPAGE="http://xneur.ru"
-ESVN_REPO_URI="svn://xneur.ru:3690/xneur/xneur"
-#ESVN_PATCHES="${PN}*.diff"
-ESVN_BOOTSTRAP="eautoreconf"
+SRC_URI="http://dists.xneur.ru/release-${PV}/tgz/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="-*"
+KEYWORDS="~x86"
 IUSE="gstreamer openal alsa debug pcre spell"
 
 DEPEND="
