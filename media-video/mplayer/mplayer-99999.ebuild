@@ -138,6 +138,9 @@ pkg_setup() {
 		REALLIBDIR="/opt/RealPlayer/codecs"
 	fi
 	LINGUAS="en"
+	confutils_use_depend_all gtk X
+	confutils_use_depend_any gtk bitmap-fonts truetype
+	confutils_use_depend_any radio v4l v4l2
 }
 
 src_unpack() {
@@ -152,7 +155,7 @@ src_unpack() {
 	fi
 
 
-	use X && use gtk && unpack Blue-${BLUV}.tar.bz2
+	use gtk && unpack Blue-${BLUV}.tar.bz2
 
 	if use svga
 	then
@@ -441,7 +444,7 @@ src_install() {
 	fi
 
 	# Install the default Skin and Gnome menu entry
-	if use X && use gtk; then
+	if use gtk; then
 		if [ -d "${ROOT}${SKINDIR}default" ]; then dodir ${SKINDIR}; fi
 		cp -r ${WORKDIR}/Blue ${D}${SKINDIR}default || die
 
