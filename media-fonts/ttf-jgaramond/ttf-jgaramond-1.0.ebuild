@@ -5,8 +5,8 @@
 inherit font
 
 DESCRIPTION="TrueType font similar to Garamond with additional Unicode chars"
-HOMEPAGE="http://www.janthor.de/jGaramond"
-SRC_URI="http://www.janthor.de/jGaramond/jGara.zip"
+HOMEPAGE="http://www.janthor.com/jGaramond"
+SRC_URI="http://www.janthor.com/jGaramond/jGara.zip"
 S="${WORKDIR}"
 
 LICENSE="as-is"

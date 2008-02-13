@@ -5,9 +5,8 @@
 inherit font
 
 DESCRIPTION="Chrysanthi and Roman unicode TrueType fonts"
-HOMEPAGE="http://everywitchway.net"
-BASE_URI="http://everywitchway.net/linguistics/fonts/"
-SRC_URI="${BASEURI}/chrysuni.zip ${BASEURI}/roman.zip"
+HOMEPAGE="http://everywitchway.net/linguistics/fonts"
+SRC_URI="${HOMEPAGE}/chrysuni.zip ${HOMEPAGE}/roman.zip"
 S="${WORKDIR}"
 
 LICENSE="free-noncomm"
