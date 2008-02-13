@@ -38,7 +38,7 @@ RDEPEND="
 	x264? ( media-libs/x264 )
 	png? ( media-libs/libpng )
 	esd? ( media-sound/esound )
-	dts? ( media-libs/libdts )
+	dts? ( media-libs/libdca )
 	sdl? ( media-libs/libsdl )
 	xv? ( x11-libs/libXv )
 	x11-libs/libX11

@@ -57,7 +57,7 @@ RDEPEND="
 	cdio? ( dev-libs/libcdio )
 	cdparanoia? ( media-sound/cdparanoia )
 	directfb? ( dev-libs/DirectFB )
-	dts? ( media-libs/libdts )
+	dts? ( media-libs/libdca )
 	dvb? ( media-tv/linuxtv-dvb-headers )
 	dvd? ( dvdread? ( media-libs/libdvdread ) )
 	encode? (
@@ -275,7 +275,7 @@ src_compile() {
 	enable_extension_disable gif gif
 	enable_extension_disable jpeg jpeg
 	enable_extension_disable ladspa ladspa
-	enable_extension_disable libdts dts
+	enable_extension_disable libdca dts
 	enable_extension_disable liblzo lzo
 	enable_extension_disable musepack musepack
 	if use aac; then
