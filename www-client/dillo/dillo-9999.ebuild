@@ -95,7 +95,9 @@ src_compile() {
 }
 
 src_install() {
-	einstall MKINSTALLDIRS=${S}/mkinstalldirs || die
+	# not using einstall as it overrides $libdir (used for generating
+	# /etc/dpidrc)
+	emake DESTDIR="${D}" MKINSTALLDIRS=${S}/mkinstalldirs install || die
 
 	dodoc AUTHORS ChangeLog* README NEWS
 	docinto doc
