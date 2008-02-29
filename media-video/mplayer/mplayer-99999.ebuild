@@ -2,12 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/mplayer/mplayer-1.0_pre8-r1.ebuild,v 1.12 2006/10/06 12:43:24 blubb Exp $
 
-inherit flag-o-matic linux-mod subversion confutils
+inherit flag-o-matic subversion confutils
 
 BLUV=1.6
 SVGV=1.9.17
-NBV=610
-WBV=600
 SKINDIR="/usr/share/mplayer/skins/"
 DESCRIPTION="Media Player for Linux"
 HOMEPAGE="http://www.mplayerhq.hu/"
@@ -35,6 +33,7 @@ gif ggi gtk ipv6 jack joystick jpeg ladspa libcaca lirc live livecd lzo mad
 matrox mmx mmxext musepack nas openal opengl oss png real rtc samba sdl speex
 sse sse2 svga tga theora tremor truetype v4l v4l2 vorbis win32codecs X x264
 xanim xinerama xv xvid xvmc twolame color radio examples kernel_linux zoran
+pulseaudio cddb
 "
 
 VIDEO_CARDS="s3virge mga tdfx vesa"
@@ -114,6 +113,8 @@ RDEPEND="
 		)
 	)
 	amr? ( media-libs/amrnb media-libs/amrwb )
+	vorbis? ( media-libs/libvorbis )
+	pulseaudio? ( media-sound/pulseaudio )
 "
 DEPEND="
 	${RDEPEND}
@@ -138,9 +139,21 @@ pkg_setup() {
 		REALLIBDIR="/opt/RealPlayer/codecs"
 	fi
 	LINGUAS="en"
-	confutils_use_depend_all gtk X
+	confutils_use_conflict win32codecs livecd bindist
+	confutils_use_depend_all gtk X png
 	confutils_use_depend_any gtk bitmap-fonts truetype
+	confutils_use_depend_all dga X
+	confutils_use_depend_all xv X
+	confutils_use_depend_all xvmc X
+	confutils_use_depend_all xinerama X
+	confutils_use_depend_all dv encode
+	confutils_use_depend_all x264 encode
+	confutils_use_depend_all twolame encode
+	confutils_use_depend_all aac encode
 	confutils_use_depend_any radio v4l v4l2
+	confutils_use_conflict cdparanoia cdio
+	confutils_use_depend_any cddb cdparanoia cdio
+	confutils_use_depend_all real x86
 }
 
 src_unpack() {
@@ -179,24 +192,23 @@ src_unpack() {
 
 src_compile() {
 
-	local my_conf="${my_conf} --disable-tv-bsdbt848 --disable-vidix-external"
+	local my_conf="
+		--disable-tv-bsdbt848 --disable-vidix-external --disable-tremor-external
+	"
 	################
 	#Optional features#
 	###############
-	if use cpudetection || use livecd || use bindist
-	then
-	my_conf="${my_conf} --enable-runtime-cpudetection"
+	if use cpudetection || use livecd || use bindist; then
+		my_conf="${my_conf} --enable-runtime-cpudetection"
 	fi
 
 	enable_extension_disable fribidi bidi
 
 	enable_extension_disable enca enca
 
-	if use cdio; then
-		my_conf="${my_conf} --disable-cdparanoia"
-	else
-		enable_extension_disable cdparanoia cdparanoia
-	fi
+	enable_extension_disable cdparanoia cdparanoia
+	enable_extension_disable libcdio cdio
+	enable_extension_disable cddb cddb
 
 	if use external-ffmpeg; then
 	# use shared ffmpeg libs (not supported),
@@ -219,36 +231,23 @@ src_compile() {
 		my_conf="${my_conf} --disable-dvdread --disable-dvdnav --disable-dvdread-internal --disable-libdvdcss-internal"
 	fi
 
-	if use encode ; then
-		enable_extension_disable libdv dv
-		enable_extension_disable x264 x264
-		enable_extension_disable twolame twolame
-		enable_extension_disable faac aac
-	else
-		my_conf="${my_conf} --disable-mencoder --disable-libdv --disable-x264 --disable-twolame --disable-faac"
-	fi
+	enable_extension_disable mencoder encode
+	enable_extension_disable libdv dv
+	enable_extension_disable x264 x264
+	enable_extension_disable twolame twolame
+	enable_extension_disable faac aac
 
-	if use !X; then
-		my_conf="${my_conf} --disable-gui --disable-x11 --disable-xv --disable-xmga --disable-xinerama --disable-vm --disable-xvmc"
-	else
-		#note we ain't touching --enable-vm.  That should be locked down in the future.
-		my_conf="${my_conf} $(use_enable gtk gui)"
-		enable_extension_disable xinerama xinerama
-		enable_extension_disable xv xv
-	fi
+	enable_extension_disable x11 X
+	enable_extension_disable vm X
+	enable_extension_enable gui gtk
+	enable_extension_disable xinerama xinerama
+	enable_extension_disable xv xv
 
-	if use X; then
-		enable_extension_disable dga2 dga
-	else
-		my_conf="${my_conf} --disable-dga2"
-	fi
+	enable_extension_disable dga2 dga
 
-	# disable png *only* if gtk && png aren't on
-	if ! use png || ! use gtk; then
-		my_conf="${my_conf} --disable-png"
-	fi
+	enable_extension_disable png png
 	enable_extension_disable inet6 ipv6
-	my_conf="${my_conf} $(use_enable joystick)"
+	enable_extension_enable joystick joystick
 	enable_extension_disable lirc lirc
 	enable_extension_disable live live
 	enable_extension_disable rtc rtc
@@ -256,18 +255,17 @@ src_compile() {
 	enable_extension_disable bitmap-font bitmap-fonts
 	enable_extension_disable freetype truetype
 	enable_extension_disable fontconfig fontconfig
-	my_conf="${my_conf} $(use_enable color color-console)"
+	enable_extension_enable color-console color
 	if use !v4l && use !v4l2; then
 		my_conf="${my_conf} --disable-tv"
 	else
 		enable_extension_disable tv-v4l1 v4l
 		enable_extension_disable tv-v4l2 v4l2
 	fi
-	my_conf="${my_conf} $(use_enable radio) $(use_enable radio radio-capture)"
-	if use radio; then
-		enable_extension_disable radio-v4l v4l
-		enable_extension_disable radio-v4l2 v4l2
-	fi
+	enable_extension_enable radio radio
+	enable_extension_enable radio-capture radio
+	enable_extension_disable radio-v4l v4l
+	enable_extension_disable radio-v4l2 v4l2
 
 	#######
 	# Codecs #
@@ -283,20 +281,14 @@ src_compile() {
 	else
 		my_conf="${my_conf} --disable-faad-internal --disable-faad-external"
 	fi
-	if use vorbis; then
-		enable_extension_disable tremor-internal tremor
-		enable_extension_disable tremor-external tremor
-	else
-		my_conf="${my_conf} --disable-vorbis"
-	fi
+	enable_extension_disable libvorbis vorbis
 	enable_extension_disable theora theora
 	enable_extension_disable speex speex
 	enable_extension_disable xvid xvid
-	use x86 && enable_extension_disable real real
-	! use livecd && ! use bindist && \
-		enable_extension_disable win32dll win32codecs
-	enable_extension_disable amr_nb amr
-	enable_extension_disable amr_wb amr
+	enable_extension_disable real real
+	enable_extension_disable win32dll win32codecs
+	enable_extension_disable libamr_nb amr
+	enable_extension_disable libamr_wb amr
 
 	#############
 	# Video Output #
@@ -310,8 +302,6 @@ src_compile() {
 	use fbcon && enable_extension_disable s3fb video_cards_s3virge
 	enable_extension_disable ggi ggi
 	enable_extension_disable caca libcaca
-	use X && enable_extension_disable xmga matrox
-	enable_extension_disable mga matrox
 	enable_extension_disable gl opengl
 	enable_extension_disable vesa video_cards_vesa
 	enable_extension_disable sdl sdl
@@ -332,16 +322,12 @@ src_compile() {
 		my_conf="${my_conf} --disable-xv --disable-xvmc"
 	fi
 
-	if ! use kernel_linux && ! use video_cards_mga; then
-		 my_conf="${my_conf} --disable-mga --disable-xmga"
-	fi
+	enable_extension_disable mga video_cards_mga
+	use X && enable_extension_disable xmga video_cards_mga
 
-	if use video_cards_tdfx; then
-		my_conf="${my_conf} $(use_enable video_cards_tdfx tdfxvid) \
-			$(use_enable fbcon tdfxfb)"
-	else
-		my_conf="${my_conf} --disable-3dfx --disable-tdfxvid --disable-tdfxfb"
-	fi
+	enable_extension_enable tdfxvid video_cards_tdfx
+	enable_extension_enable 3dfx video_cards_tdfx
+	use fbcon && enable_extension_enable tdfxfb video_cards_tdfx
 
 	#############
 	# Audio Output #
@@ -354,6 +340,7 @@ src_compile() {
 	enable_extension_disable nas nas
 	enable_extension_disable openal openal
 	enable_extension_disable ossaudio oss
+	enable_extension_disable pulse pulseaudio
 
 	#################
 	# Advanced Options #
@@ -373,13 +360,7 @@ src_compile() {
 		my_conf="${my_conf} --with-xanimlibdir=/usr/lib/xanim/mods"
 	fi
 
-	if [ -e /dev/.devfsd ]
-	then
-		my_conf="${my_conf} --enable-linux-devfs"
-	fi
-
-	# support for blinkenlights
-	use bl && my_conf="${my_conf} --enable-bl"
+	enable_extension_enable bl bl
 
 	#leave this in place till the configure/compilation borkage is completely corrected back to pre4-r4 levels.
 	# it's intended for debugging so we can get the options we configure mplayer w/, rather then hunt about.
@@ -408,17 +389,13 @@ src_compile() {
 		${my_conf} || die
 
 
-	einfo "Make"
-	# we run into problems if -jN > -j1, see #86245
-	emake -j1 || die "Failed to build MPlayer!"
+	emake || die "Failed to build MPlayer!"
 	use doc && make -C ${S}/DOCS/xml html-chunked-en
-	einfo "Make completed"
 }
 
 src_install() {
 
-	einfo "Make install"
-	make prefix=${D}/usr \
+	emake prefix=${D}/usr \
 		BINDIR=${D}/usr/bin \
 		LIBDIR=${D}/usr/$(get_libdir) \
 		CONFDIR=${D}/usr/share/mplayer \
@@ -427,7 +404,6 @@ src_install() {
 		INSTALLSTRIP='' \
 		LDCONFIG=/bin/true \
 		install || die "Failed to install MPlayer!"
-	einfo "Make install completed"
 
 	dodoc AUTHORS ChangeLog README
 	# Install the documentation; DOCS is all mixed up not just html
@@ -485,16 +461,8 @@ src_install() {
 
 pkg_preinst() {
 
-	if [ -d "${ROOT}${SKINDIR}default" ]
-	then
+	if [[ -d ${ROOT}${SKINDIR}default ]]; then
 		rm -rf ${ROOT}${SKINDIR}default
-	fi
-}
-
-pkg_postinst() {
-
-	if use matrox; then
-		depmod -a &>/dev/null || :
 	fi
 }
 
