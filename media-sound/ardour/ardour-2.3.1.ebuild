@@ -32,7 +32,6 @@ RDEPEND="
 		dev-cpp/libgnomecanvasmm
 		media-libs/libsoundtouch
 		media-libs/libsndfile
-		media-libs/vamp-plugin-sdk
 	)
 	ladspa? ( >=media-libs/ladspa-sdk-1.12 )
 	usb? ( dev-libs/libusb )
