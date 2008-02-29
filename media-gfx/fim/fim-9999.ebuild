@@ -14,9 +14,9 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
 
-IUSE="debug gif jpeg png tiff postscript screen"
+IUSE="debug gif jpeg png tiff postscript screen imagemagick xcf svg xfig dia"
 
-RDEPEND="
+DEPEND="
 	gif? ( media-libs/giflib )
 	jpeg? ( >=media-libs/jpeg-6b )
 	png? ( media-libs/libpng )
@@ -25,9 +25,16 @@ RDEPEND="
 	screen? ( app-misc/screen )
 	sys-libs/readline
 "
-
+RDEPEND="
+	${DEPEND}
+	imagemagick? ( media-gfx/imagemagick )
+	xcf? ( dev-perl/gimp-perl )
+	svg? ( media-gfx/inkscape )
+	xfig? ( media-gfx/xfig )
+	dia? ( app-office/dia )
+"
 DEPEND="
-	${RDEPEND}
+	${DEPEND}
 	sys-devel/flex
 	sys-devel/bison
 "
@@ -40,14 +47,22 @@ src_compile() {
 		$(use_enable png) \
 		$(use_enable tiff) \
 		$(use_enable screen) \
+		$(use_enable imagemagick convert) \
+		$(use_enable xcf xcftopnm) \
+		$(use_enable svg inkscape) \
+		$(use_enable xfig) \
+		$(use_enable dia) \
 		--enable-fimrc \
-		--with-docdir=/usr/share/doc/${PF}
+		--enable-read-dirs \
+		--enable-recursive-dirs \
+		--with-docdir=/usr/share/doc/${PF} \
+		|| die "econf failed"
 
 	# parallel make fails
-	emake -j1 || die "emake failed for ${P}"
+	emake -j1 || die "emake failed"
 }
 
 src_install() {
-	emake DESTDIR="${D}" prefix=/usr install || die "make install failed"
+	emake DESTDIR="${D}" prefix=/usr install || die "emake install failed"
 	use postscript || rm -f "${D}"usr/bin/fimgs
 }
