@@ -14,12 +14,12 @@ ESVN_BOOTSTRAP="eautoreconf"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="libtorrent"
+IUSE="libtorrent examples dht ssl debug"
 
 RDEPEND="
 	>=x11-libs/wxGTK-2.8
 	dev-libs/boost
-	dev-libs/openssl
+	ssl? ( dev-libs/openssl )
 	libtorrent? ( >=net-libs/rb_libtorrent-0.13 )
 "
 DEPEND="
@@ -28,11 +28,13 @@ DEPEND="
 "
 
 src_compile() {
-	local _rb=shipped
+	local _rb=shipped _ssl=on _dht=on
 	if use libtorrent; then
 		append-cppflags $(pkg-config --silence-errors libtorrent --cflags)
 		_rb=system
 	fi
+	use dht || _dht=off
+	use ssl || _ssl=off
 
 	WX_GTK_VER=2.8
 	need-wxwidgets unicode
@@ -40,6 +42,10 @@ src_compile() {
 	econf \
 		--with-wx-config=${WX_CONFIG} \
 		--with-libtorrent=${_rb} \
+		--with-dht=${_dht} \
+		--with-encryption=${_ssl} \
+		$(use_enable examples) \
+		$(use_enable debug) \
 		|| die
 
 	emake || die
