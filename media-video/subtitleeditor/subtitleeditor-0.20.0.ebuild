@@ -6,8 +6,8 @@ inherit eutils versionator
 
 MY_P="${PN}-$(delete_version_separator '_')"
 DESCRIPTION="Subtitle Editor is a GTK+2 tool to edit subtitles for GNU/Linux"
-HOMEPAGE="http://kitone.free.fr/subtitleeditor/"
-SRC_URI="http://kitone.free.fr/subtitleeditor/files/${MY_P}.tar.gz"
+HOMEPAGE="http://home.gna.org/subtitleeditor"
+SRC_URI="http://download.gna.org/subtitleeditor/$(get_version_component_range -2)/${MY_P}.tar.gz"
 S="${WORKDIR}/${MY_P}"
 
 LICENSE="GPL-2"
