@@ -12,8 +12,8 @@ LICENSE="GPL-2"
 KEYWORDS="~x86"
 SLOT="0"
 IUSE="
-alsa arts flac oss mad modplug vorbis musepack ao unicode aac mp4
-zsh-completion ffmpeg
+alsa arts flac oss mad modplug vorbis musepack ao aac mp4
+zsh-completion ffmpeg verbose-build
 "
 
 RDEPEND="
@@ -37,15 +37,8 @@ DEPEND="
 	oss? ( virtual/os-headers )
 "
 
-pkg_setup() {
-	if use unicode && ! built_with_use sys-libs/ncurses unicode
-	then
-		eerror "You need sys-libs/ncurses compiled with the unicode USE flag."
-		die "need sys-libs/ncurses with unicode support"
-	fi
-}
-
 teh_conf() {
+	[[ $1 = *-* ]] && return
 	local arg="${2:-$1}"
 	arg=$(echo config_${arg} | tr [:lower:] [:upper:])
 	use $1 && arg="${arg}=y" || arg="${arg}=n"
@@ -54,30 +47,21 @@ teh_conf() {
 
 src_compile() {
 	local myconf
-	teh_conf flac
-	teh_conf mad
-	teh_conf modplug
+	for x in ${IUSE}; do teh_conf ${x}; done
 	teh_conf musepack mpc
-	teh_conf vorbis
-	teh_conf alsa
-	teh_conf ao
-	teh_conf arts
-	teh_conf oss
-	teh_conf aac
-	teh_conf mp4
-	teh_conf ffmpeg
 
 	./configure \
 		prefix=/usr \
 		${myconf} || die
 
-	emake V=2 || die
+	use verbose-build && local _args="V=2"
+	emake ${_args} || die
 }
 
 src_install() {
 	make DESTDIR=${D} install || die
 	mv ${D}usr/share/doc/{${PN},${PF}}
-	dodoc AUTHORS HACKING README
+	dodoc AUTHORS README
 	if use zsh-completion; then
 		insinto /usr/share/zsh/site-functions
 		doins contrib/_cmus
