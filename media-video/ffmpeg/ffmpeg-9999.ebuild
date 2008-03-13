@@ -13,8 +13,8 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
 IUSE="
-aac debug doc ieee1394 a52 encode imlib mmx vorbis oss threads truetype
-v4l v4l2 xvid network zlib X amr x264 static mp3 swscaler sdl bindist
+aac debug doc ieee1394 a52 encode imlib mmx vorbis oss threads truetype v4l
+v4l2 xvid network zlib X amr x264 static mp3 swscaler sdl bindist postproc
 "
 
 RDEPEND="
@@ -67,10 +67,12 @@ pkg_setup() {
 	#Note; library makefiles don't propogate flags from config.mak so
 	#use specified CFLAGS are only used in executables
 	replace-flags -O0 -O2
+
+	confutils_use_conflict amr bindist
 }
 
 src_compile() {
-	local my_conf="--log=config.log --enable-shared --enable-gpl --enable-pp"
+	local my_conf="--log=config.log --enable-shared --enable-gpl"
 	my_conf="${my_conf} --disable-optimizations --disable-strip"
 
 	enable_extension_disable debug debug
@@ -79,6 +81,8 @@ src_compile() {
 		enable_extension_enableonly libxvid xvid
 		enable_extension_enableonly libx264 x264
 		enable_extension_enableonly libfaac aac
+	else
+		my_conf="${my_conf} --disable-encoders --disable-muxers"
 	fi
 	enable_extension_enableonly liba52 a52
 	enable_extension_disable demuxer=oss oss
@@ -90,16 +94,14 @@ src_compile() {
 	enable_extension_enableonly libvorbis vorbis
 	enable_extension_disable network network
 	enable_extension_disable zlib zlib
-	if use !bindist; then
-		use amr && my_conf="${my_conf} --enable-nonfree"
-		enable_extension_enableonly libamr-nb amr
-		enable_extension_enableonly libamr-wb amr
-	fi
+	use amr && my_conf="${my_conf} --enable-nonfree"
+	enable_extension_enableonly libamr-nb amr
+	enable_extension_enableonly libamr-wb amr
 	enable_extension_enableonly libfaad aac
-	enable_extension_enableonly swscaler swscaler
+	enable_extension_enableonly postproc postproc
+	enable_extension_enableonly swscale swscaler
 	enable_extension_enableonly x11grab X
 	use sdl && enable_extension_disable ffplay X
-	use encode || my_conf="${my_conf} --disable-encoders --disable-muxers"
 
 	./configure \
 		--prefix=/usr \
@@ -111,8 +113,8 @@ src_compile() {
 }
 
 src_install() {
-	use doc && make documentation
-	make DESTDIR=${D} LDCONFIG=/bin/true install || die "Install Failed"
+	use doc && emake documentation
+	emake DESTDIR=${D} LDCONFIG=/bin/true install || die "Install Failed"
 
 	dodoc Changelog CREDITS README MAINTAINERS doc/*.txt
 }
@@ -122,7 +124,7 @@ src_test() {
 
 	cd ${S}/tests
 	for t in "codectest libavtest test-server" ; do
-		make ${t} || ewarn "Some tests in ${t} failed"
+		emake ${t} || ewarn "Some tests in ${t} failed"
 	done
 }
 

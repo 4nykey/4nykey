@@ -1,0 +1,22 @@
+Index: configure
+===================================================================
+--- configure	(revision 12382)
++++ configure	(working copy)
+@@ -2137,7 +2137,7 @@
+ Requires: $requires
+ Conflicts:
+ Libs: -L\${libdir} $libs
+-Cflags: -I\${includedir}
++Cflags: -I\${includedir}/${name}
+ EOF
+ }
+ 
+@@ -2160,7 +2160,7 @@
+ Requires: $requires
+ Conflicts:
+ Libs: \${libdir}/${LIBPREF}${shortname}${LIBSUF} $libs
+-Cflags: -I\${includedir}
++Cflags: -I\${includedir}/${name}
+ EOF
+ }
+ 

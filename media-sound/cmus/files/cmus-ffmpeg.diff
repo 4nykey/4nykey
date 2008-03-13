@@ -1,0 +1,17 @@
+diff --git a/ffmpeg.c b/ffmpeg.c
+index 9302461..72cb892 100644
+--- a/ffmpeg.c
++++ b/ffmpeg.c
+@@ -18,9 +18,9 @@
+  */
+ 
+ #include <stdio.h>
+-#include <ffmpeg/avcodec.h>
+-#include <ffmpeg/avformat.h>
+-#include <ffmpeg/avio.h>
++#include <avcodec.h>
++#include <avformat.h>
++#include <avio.h>
+ 
+ #include "ip.h"
+ #include "xmalloc.h"
