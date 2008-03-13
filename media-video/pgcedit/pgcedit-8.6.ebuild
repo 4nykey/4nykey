@@ -22,25 +22,27 @@ RDEPEND="
 	wine? ( app-emulation/wine )
 "
 
+mklauncher() {
+cat << EOF > ${T}/${PN}
+#!/bin/sh
+/usr/bin/wish ${instdir}/PgcEdit_main.tcl
+EOF
+}
+
 src_install() {
 	local instdir="/opt/${PN}"
 
-	cat << EOF > ${T}/${PN}
-#!/bin/sh
-/usr/bin/wish ${instdir}/PgcEdit.tcl
-EOF
-	dobin ${T}/${PN}
-
-	exeinto ${instdir}
-	doexe PgcEdit.tcl
-
-	dodir ${instdir}/plugins
-	keepdir ${instdir}/plugins
 	insinto ${instdir}
+	doins *.tcl
 	doins -r lib
 	insinto ${instdir}/bin
 	doins bin/*.tcl
 	use wine && doins bin/PgcEditPreview.exe
+	dodir ${instdir}/plugins
+	keepdir ${instdir}/plugins
+
+	mklauncher
+	dobin ${T}/${PN}
 
 	dodoc HISTORY.txt TODO.txt
 	use doc && dohtml -r doc/*
