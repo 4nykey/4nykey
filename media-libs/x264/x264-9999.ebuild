@@ -2,12 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit subversion toolchain-funcs
+inherit git toolchain-funcs
 
 DESCRIPTION="x264 is a free library for encoding H264/AVC video streams"
 HOMEPAGE="http://www.videolan.org/x264.html"
-ESVN_REPO_URI="svn://svn.videolan.org/${PN}/trunk"
-ESVN_PATCHES="${PN}-*.diff"
+EGIT_REPO_URI="git://git.videolan.org/x264.git"
+EGIT_PATCHES="${PN}-*.diff"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -30,6 +30,7 @@ src_compile() {
 	use X && myconf="--enable-visualize"
 
 	# w/o debug configure adds '-s' to {c,ld}flags
+	GIT_DIR="${EGIT_STORE_DIR}/${GIT_DIR}" \
 	./configure\
 		--prefix=/usr \
 		--enable-pic \
@@ -43,15 +44,13 @@ src_compile() {
 		${myconf} || die
 	touch .depend
 
-	einfo "Make lib and CLI encoder"
 	emake || die
-	einfo "Make GTK+ frontend"
-	use gtk && emake -C gtk || die
-	einfo "Make avc2avi"
 	echo $(tc-getCC) $CFLAGS $LDFLAGS -o avc2avi tools/avc2avi.c
 	$(tc-getCC) $CFLAGS $LDFLAGS -o avc2avi tools/avc2avi.c
+
+	use gtk && emake -C gtk || die
+
 	if use sdl; then
-		einfo "Make xyuv"
 		echo $(tc-getCC) $CFLAGS $LDFLAGS -o xyuv tools/xyuv.c $(sdl-config --libs)
 		$(tc-getCC) $CFLAGS $LDFLAGS -o xyuv tools/xyuv.c $(sdl-config --libs)
 	fi
@@ -65,8 +64,8 @@ src_test() {
 }
 
 src_install() {
-	make DESTDIR=${D} install || die
-	use gtk && make DESTDIR=${D} -C gtk install || die
+	emake DESTDIR=${D} install || die
+	use gtk && emake DESTDIR=${D} -C gtk install || die
 	dobin x264 avc2avi
 	use sdl && dobin xyuv
 	dodoc AUTHORS doc/*.txt tools/*.{pl,sh}
