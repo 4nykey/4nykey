@@ -1,0 +1,112 @@
+--- ./MediaInfo/Project/GNU/CLI/configure.ac.orig	2008-03-13 23:12:16.000000000 +0200
++++ ./MediaInfo/Project/GNU/CLI/configure.ac	2008-03-20 14:25:59.000000000 +0200
+@@ -24,8 +24,11 @@
+ AC_PROG_CXX
+ AC_PROG_LIBTOOL
+ AC_PROG_INSTALL
+-CFLAGS=""
+-CXXFLAGS=""
++
++AC_CONFIG_SUBDIRS([
++../../../../ZenLib/Project/GNU/Library
++../../../../MediaInfoLib/Project/GNU/Library
++])
+ 
+ dnl #########################################################################
+ dnl ### Options
+@@ -58,8 +61,6 @@
+ dnl
+ if test -e ../../../../ZenLib/Project/GNU/Library/ZenLib-config; then
+ 	enable_unicode="$(../../../../ZenLib/Project/GNU/Library/ZenLib-config Unicode)"
+-else
+-	AC_MSG_ERROR([Compiled ZenLib is not found])
+ fi
+ 
+ dnl #########################################################################
+@@ -210,9 +211,6 @@
+ dnl MediaInfoLib
+ dnl
+ if test "$with_dll" != "yes"; then
+-	if test ! -e ../../../../MediaInfoLib/Project/GNU/Library/libmediainfo.la; then
+-		AC_MSG_ERROR([MediaInfoLib is not found])
+-	fi
+ 	CXXFLAGS="$CXXFLAGS $(../../../../MediaInfoLib/Project/GNU/Library/MediaInfoLib-config CXXFLAGS)"
+ 	LIBS="$LIBS $(../../../../MediaInfoLib/Project/GNU/Library/MediaInfoLib-config LIBS)"
+ fi
+--- ./MediaInfo/Project/GNU/CLI/Makefile.am.orig	2008-03-13 23:12:16.000000000 +0200
++++ ./MediaInfo/Project/GNU/CLI/Makefile.am	2008-03-20 13:38:46.000000000 +0200
+@@ -1,5 +1,7 @@
+ AUTOMAKE_OPTIONS = foreign
+ 
++SUBDIRS = ../../../../MediaInfoLib/Project/GNU/Library
++
+ bin_PROGRAMS = mediainfo
+ mediainfo_SOURCES = \
+     ../../../Source/CLI/CLI_Main.cpp \
+@@ -7,6 +9,9 @@
+     ../../../Source/CLI/Help.cpp \
+     ../../../Source/Common/Core.cpp
+ 
++mediainfo_LDADD = \
++    ../../../../MediaInfoLib/Project/GNU/Library/libmediainfo.la
++
+ #mediainfo_LDFLAGS     = -no-undefined -version-info 0:0:0
+ 
+ INCLUDES = -I../../../Source -I../../../../MediaInfoLib/Source -I../../../../ZenLib/Source
+--- ./ZenLib/Project/GNU/Library/configure.ac.orig	2008-03-13 23:12:45.000000000 +0200
++++ ./ZenLib/Project/GNU/Library/configure.ac	2008-03-20 14:25:12.000000000 +0200
+@@ -26,8 +26,6 @@
+ AC_LIBTOOL_WIN32_DLL
+ AC_PROG_LIBTOOL
+ AC_PROG_INSTALL
+-CFLAGS=""
+-CXXFLAGS=""
+ 
+ dnl #########################################################################
+ dnl Configure
+--- ./MediaInfoLib/Project/GNU/Library/configure.ac.orig	2008-03-13 23:12:28.000000000 +0200
++++ ./MediaInfoLib/Project/GNU/Library/configure.ac	2008-03-20 14:24:04.000000000 +0200
+@@ -26,8 +26,6 @@
+ AC_LIBTOOL_WIN32_DLL
+ AC_PROG_LIBTOOL
+ AC_PROG_INSTALL
+-CFLAGS=""
+-CXXFLAGS=""
+ 
+ dnl #########################################################################
+ dnl Configure
+@@ -175,8 +173,6 @@
+ dnl
+ if test -e ../../../../ZenLib/Project/GNU/Library/ZenLib-config; then
+ 	enable_unicode="$(../../../../ZenLib/Project/GNU/Library/ZenLib-config Unicode)"
+-else
+-	AC_MSG_ERROR([Compiled ZenLib is not found])
+ fi
+ 
+ dnl #########################################################################
+@@ -232,8 +228,6 @@
+ dnl
+ if test -e ../../../../ZenLib/Project/GNU/Library/libzen.la; then
+ 	with_zenlib="builtin"
+-else
+-	AC_MSG_ERROR([ZenLib is not found])
+ fi
+ CXXFLAGS="$CXXFLAGS $(../../../../ZenLib/Project/GNU/Library/ZenLib-config CXXFLAGS)"
+ MediaInfoLib_CXXFLAGS="$MediaInfoLib_CXXFLAGS $(../../../../ZenLib/Project/GNU/Library/ZenLib-config CXXFLAGS)"
+--- ./MediaInfoLib/Project/GNU/Library/Makefile.am.orig	2008-03-13 23:12:28.000000000 +0200
++++ ./MediaInfoLib/Project/GNU/Library/Makefile.am	2008-03-20 13:39:14.000000000 +0200
+@@ -1,5 +1,7 @@
+ AUTOMAKE_OPTIONS = foreign
+ 
++SUBDIRS = ../../../../ZenLib/Project/GNU/Library
++
+ lib_LTLIBRARIES = libmediainfo.la
+ libmediainfo_la_SOURCES = \
+                        ../../../Source/MediaInfo/File__Analyze.cpp \
+@@ -97,4 +99,6 @@
+ 
+ libmediainfo_la_LDFLAGS     = -no-undefined -version-info 0:0:0
+ 
++libmediainfo_la_LIBADD = ../../../../ZenLib/Project/GNU/Library/libzen.la
++
+ INCLUDES = -I../../../Source -I../../../../ZenLib/Source
