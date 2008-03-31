@@ -7,7 +7,7 @@ inherit git autotools
 DESCRIPTION="Midori is a lightweight web browser"
 HOMEPAGE="http://software.twotoasts.de/?page=midori"
 EGIT_REPO_URI="http://software.twotoasts.de/media/midori.git"
-EGIT_BOOTSTRAP="eautoreconf"
+EGIT_BOOTSTRAP="intltoolize --automake --copy && eautoreconf"
 
 LICENSE=""
 SLOT="0"
