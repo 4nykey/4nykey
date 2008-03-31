@@ -1,6 +1,6 @@
 --- ./snd-file.c.orig	2007-06-11 14:33:09.000000000 +0300
 +++ ./snd-file.c	2007-09-04 00:13:26.000000000 +0300
-@@ -2328,27 +2328,27 @@
+@@ -2328,31 +2328,31 @@
      {
  #if HAVE_OGG
      case MUS_OGG:
@@ -8,31 +8,35 @@
 +      command = mus_format("%s \"%s\" -o \"%s\"", PATH_OGGENC, input_filename, output_filename);
        break;
  #endif
+ 
  #if HAVE_FLAC
      case MUS_FLAC: 
 -      command = mus_format("%s %s -o %s", PATH_FLAC, input_filename, output_filename);
 +      command = mus_format("%s \"%s\" -o \"%s\"", PATH_FLAC, input_filename, output_filename);
        break;
  #endif
+
  #if HAVE_SPEEX
      case MUS_SPEEX:
 -      command = mus_format("%s %s %s", PATH_SPEEXENC, input_filename, output_filename);
 +      command = mus_format("%s \"%s\" \"%s\"", PATH_SPEEXENC, input_filename, output_filename);
        break;
  #endif
+
  #if HAVE_TTA
      case MUS_TTA:
 -      command = mus_format("%s -e %s -o %s", PATH_TTA, input_filename, output_filename);
 +      command = mus_format("%s -e \"%s\" -o \"%s\"", PATH_TTA, input_filename, output_filename);
        break;
  #endif
+
  #if HAVE_WAVPACK
      case MUS_WAVPACK:
 -      command = mus_format("%s %s -o %s", PATH_WAVPACK, input_filename, output_filename);
 +      command = mus_format("%s \"%s\" -o \"%s\"", PATH_WAVPACK, input_filename, output_filename);
        break;
  #endif
-     default: 
+
 @@ -2376,46 +2376,46 @@
      {
  #if HAVE_OGG
