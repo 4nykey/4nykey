@@ -7,11 +7,13 @@ inherit distutils
 DESCRIPTION="An application for creating personalised icon themes"
 HOMEPAGE="http://mejogid.ohallwebservices.com/site/index.php?q=node/1"
 SRC_URI="
-	http://mejogid.ohallwebservices.com/packages/${PV}/${P}.tar.gz
+	http://mejogid.ohallwebservices.com/packages/${PV}/${PN}_${PV}.tar.gz
 	examples? (
 		http://mejogid.ohallwebservices.com/site/files/configurations.tar.gz
 	)
 "
+RESTRICT="primaryuri"
+S="${WORKDIR}/${PN}"
 
 LICENSE="GPL-2"
 SLOT="0"
