@@ -1,36 +1,45 @@
 Index: mpcdec/CMakeLists.txt
 ===================================================================
---- mpcdec/CMakeLists.txt	(revision 199)
+--- mpcdec/CMakeLists.txt	(revision 386)
 +++ mpcdec/CMakeLists.txt	(working copy)
-@@ -9,3 +9,4 @@
+@@ -18,3 +18,4 @@
  
  target_link_libraries(mpcdec wavformat_static)
  target_link_libraries(mpcdec mpcdec_static)
 +install(TARGETS mpcdec RUNTIME DESTINATION bin)
-Index: mpcgain/CMakeLists.txt
-===================================================================
---- mpcgain/CMakeLists.txt	(revision 199)
-+++ mpcgain/CMakeLists.txt	(working copy)
-@@ -15,3 +15,4 @@
- target_link_libraries(mpcgain m)
- endif(NOT MSVC)
- 
-+install(TARGETS mpcgain RUNTIME DESTINATION bin)
-Index: mpc2sv8/CMakeLists.txt
-===================================================================
---- mpc2sv8/CMakeLists.txt	(revision 219)
-+++ mpc2sv8/CMakeLists.txt	(working copy)
-@@ -22,3 +22,4 @@
- target_link_libraries(mpc2sv8 ossaudio)
- endif(CMAKE_SYSTEM_NAME STREQUAL OpenBSD)
- 
-+install(TARGETS mpc2sv8 RUNTIME DESTINATION bin)
 Index: mpccut/CMakeLists.txt
 ===================================================================
---- mpccut/CMakeLists.txt	(revision 322)
+--- mpccut/CMakeLists.txt	(revision 386)
 +++ mpccut/CMakeLists.txt	(working copy)
 @@ -19,3 +19,4 @@
  target_link_libraries(mpccut m)
  endif(NOT MSVC)
  
 +install(TARGETS mpccut RUNTIME DESTINATION bin)
+Index: mpc2sv8/CMakeLists.txt
+===================================================================
+--- mpc2sv8/CMakeLists.txt	(revision 386)
++++ mpc2sv8/CMakeLists.txt	(working copy)
+@@ -27,3 +27,4 @@
+ target_link_libraries(mpc2sv8 ossaudio)
+ endif(CMAKE_SYSTEM_NAME STREQUAL OpenBSD)
+ 
++install(TARGETS mpc2sv8 RUNTIME DESTINATION bin)
+Index: mpcchap/CMakeLists.txt
+===================================================================
+--- mpcchap/CMakeLists.txt	(revision 386)
++++ mpcchap/CMakeLists.txt	(working copy)
+@@ -12,3 +12,4 @@
+ target_link_libraries(mpcchap m)
+ endif(NOT MSVC)
+ 
++install(TARGETS mpcchap RUNTIME DESTINATION bin)
+Index: mpcgain/CMakeLists.txt
+===================================================================
+--- mpcgain/CMakeLists.txt	(revision 386)
++++ mpcgain/CMakeLists.txt	(working copy)
+@@ -24,3 +24,4 @@
+ target_link_libraries(mpcgain m)
+ endif(NOT MSVC)
+ 
++install(TARGETS mpcgain RUNTIME DESTINATION bin)
