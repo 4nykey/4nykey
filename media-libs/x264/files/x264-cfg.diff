@@ -1,0 +1,13 @@
+diff --git a/configure b/configure
+index d1fa222..2a74a23 100755
+--- a/configure
++++ b/configure
+@@ -465,7 +465,7 @@ if [ "$shared" = "yes" ]; then
+         echo 'SOFLAGS=-Wl,--out-implib,$(IMPLIBNAME) -Wl,--enable-auto-image-base' >> config.mak
+     else
+         echo "SONAME=libx264.so.$API" >> config.mak
+-        echo 'SOFLAGS=-Wl,soname,$(SONAME)' >> config.mak
++        echo 'SOFLAGS=-Wl,--soname,$(SONAME)' >> config.mak
+     fi
+     echo 'default: $(SONAME)' >> config.mak
+     if [ "$gtk" = "yes" ]; then
