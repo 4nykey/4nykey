@@ -72,8 +72,8 @@ pkg_setup() {
 }
 
 src_compile() {
-	local my_conf="--log=config.log --enable-shared --enable-gpl"
-	my_conf="${my_conf} --disable-optimizations --disable-strip"
+	local my_conf="--logfile=config.log --enable-shared --enable-gpl"
+	my_conf="${my_conf} --disable-optimizations --disable-stripping"
 
 	enable_extension_disable debug debug
 	if use encode; then
@@ -115,8 +115,12 @@ src_compile() {
 src_install() {
 	use doc && emake documentation
 	emake DESTDIR=${D} LDCONFIG=/bin/true install || die "Install Failed"
-
 	dodoc Changelog CREDITS README MAINTAINERS doc/*.txt
+
+	dodir /usr/include/{ffmpeg,postproc}
+	cd "${D}"usr/include/ffmpeg
+	find .. -type f -name \*.h | while read h; do ln -s ${h}; done
+	mv postprocess.h ../postproc
 }
 
 # Never die for now...
