@@ -2,13 +2,21 @@ Index: SConstruct
 ===================================================================
 --- SConstruct	(revision 1525)
 +++ SConstruct	(working copy)
-@@ -676,6 +676,9 @@
-     env.Append(CCFLAGS="-arch i386 -arch ppc")
-     env.Append(LINKFLAGS="-arch i386 -arch ppc")
+@@ -771,13 +771,16 @@
+ # prepend boiler plate optimization flags
+ #
  
-+if os.environ.has_key('CFLAGS'):
-+    env['CCFLAGS'] = os.environ['CFLAGS'].split()
-+
- #
- # warnings flags
- #
+-opt_flags[:0] = [
++if 0:
++    opt_flags[:0] = [
+     "-O3",
+     "-fomit-frame-pointer",
+     "-ffast-math",
+     "-fstrength-reduce",
+     "-pipe"
+     ]
++else:
++    opt_flags[:0] = os.environ['CFLAGS'].split()
+ 
+ if env['DEBUG'] == 1:
+     env.Append(CCFLAGS=" ".join (debug_flags))

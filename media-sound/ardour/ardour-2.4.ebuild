@@ -15,7 +15,7 @@ S="${WORKDIR}/${PN}-$(get_version_component_range 1-2)"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="nls debug mmx 3dnow sse fftw osc ladspa external-libs usb"
+IUSE="nls debug sse fftw osc ladspa external-libs usb curl lv2"
 
 RDEPEND="
 	>=media-libs/liblrdf-0.4.0
@@ -36,6 +36,8 @@ RDEPEND="
 	ladspa? ( >=media-libs/ladspa-sdk-1.12 )
 	usb? ( dev-libs/libusb )
 	flac? ( media-libs/flac )
+	curl? ( net-misc/curl )
+	lv2? ( >=media-libs/slv2-0.6 )
 "
 DEPEND="
 	${RDEPEND}
@@ -68,29 +70,26 @@ src_unpack() {
 }
 
 teh_conf() {
-	use !${1}; myconf="${myconf} ${2}=$?"
+	use !${1}; echo ${2}=$?
 }
 
 src_compile() {
 	append-flags -fno-strict-aliasing
 
-	local myconf="PREFIX=/usr VST=0 CMT=0"
-	teh_conf external-libs SYSLIBS
-	teh_conf debug DEBUG
-	teh_conf nls NLS
-	teh_conf fftw FFT_ANALYSIS
-	teh_conf osc LIBLO
-	teh_conf usb SURFACES
-	teh_conf sse FPU_OPTIMIZATION
-
-	local _mmx _3dnow _sse
-	use mmx && _mmx="-mmmx"
-	use 3dnow && _3dnow="-m3dnow"
-	use sse && _sse="-msse -mfpmath=sse -DUSE_XMMINTRIN"
-	append-flags ${_mmx} ${_3dnow} ${_sse} -DARCH_X86
-
 	scons \
-		${myconf} || die "make failed"
+		PREFIX=/usr \
+		VST=0 \
+		CMT=0 \
+		$(teh_conf external-libs SYSLIBS) \
+		$(teh_conf debug DEBUG) \
+		$(teh_conf nls NLS) \
+		$(teh_conf fftw FFT_ANALYSIS) \
+		$(teh_conf osc LIBLO) \
+		$(teh_conf usb SURFACES) \
+		$(teh_conf sse FPU_OPTIMIZATION) \
+		$(teh_conf curl FREESOUND) \
+		$(teh_conf lv2 LV2) \
+		|| die "make failed"
 }
 
 src_install() {
