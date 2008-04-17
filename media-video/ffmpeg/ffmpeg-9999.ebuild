@@ -105,6 +105,10 @@ src_compile() {
 
 	./configure \
 		--prefix=/usr \
+		--libdir=/usr/$(get_libdir) \
+		--shlibdir=/usr/$(get_libdir) \
+		--incdir=/usr/include \
+		--mandir=/usr/share/man \
 		--cpu="${_cpu:-generic}" \
 		$(use_enable static) \
 		${my_conf} || die "Configure failed"
