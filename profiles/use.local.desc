@@ -22,7 +22,9 @@ media-sound/aqualung:cdda - Enables support for audio cd playback through libcdi
 media-sound/aqualung:ifp - Enable support for iRiver devices access through libifp
 media-sound/aqualung:systray - Builds systray (reqires more recent version of GTK+)
 media-sound/ardour:external-libs - Use system libraries instead of bundled (not supported by upstream)
+media-sound/ardour:lv2 - Add support for Ladspa V2
 media-sound/cmus:mp4 - enable mp4 decoding
+media-sound/cmus:verbose-build - Build in verbose mode (silent oterwise)
 media-sound/cmus:zsh-completion - Install zsh command completion
 media-sound/flake:verbose-build - Build in verbose mode (silent oterwise)
 media-sound/mpd:icecast - Enable support for Icecast2
@@ -37,20 +39,21 @@ media-sound/sonata:lyrics - Support for lyrics fetching
 media-sound/traverso:lv2 - Add support for Ladspa V2
 media-sound/traverso:pch - Enable precompiled header support (gcc >3.4 only)
 media-sound/traverso:verbose-build - Build in verbose mode (silent oterwise)
-media-sound/vorbis-tools:ogg123 - Build ogg123 player
 media-video/avidemux:aften - Enable A/52 encoding support via aften
 media-video/avidemux:amrnb - Enables Adaptive Multi-Rate Audio support (Narrow Band)
 media-video/avidemux:faac - Enable AAC encoding through FAAC
 media-video/avidemux:verbose-build - Build in verbose mode (silent oterwise)
 media-video/ffmpeg:amr - Enables Adaptive Multi-Rate Audio support
+media-video/ffmpeg:avfilter - Enables video filter support (replaces vhook)
 media-video/ffmpeg:network - Enables network streaming support
+media-video/ffmpeg:postproc - Enables GPLed postprocessing support
 media-video/ffmpeg:swscaler - Adds support for software scaler
+media-video/ffmpeg:vhook - Enables video hooking support
 media-video/mplayer:3dnowext - Enables 3dnow extensions in mplayer
 media-video/mplayer:amr - Enables Adaptive Multi-Rate Audio support
 media-video/mplayer:bitmap-fonts - Enable bitmap font support
 media-video/mplayer:bl - Enables Blinkenlights support in mplayer
 media-video/mplayer:cdio - Use cdio where applicable
-media-video/mplayer:color - Enable color console output (not supported)
 media-video/mplayer:cpudetection - Enables runtime cpudetection
 media-video/mplayer:custom-cflags - Enables custom cflags (not supported)
 media-video/mplayer:dvdnav - DVD menu navigation support (not supported)
