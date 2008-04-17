@@ -32,7 +32,7 @@ dvdread dvdnav enca encode esd external-faad external-ffmpeg fbcon fontconfig
 gif ggi gtk ipv6 jack joystick jpeg ladspa libcaca lirc live livecd lzo mad
 matrox mmx mmxext musepack nas openal opengl oss png real rtc samba sdl speex
 sse sse2 svga tga theora tremor truetype v4l v4l2 vorbis win32codecs X x264
-xanim xinerama xv xvid xvmc twolame color radio examples kernel_linux zoran
+xanim xinerama xv xvid xvmc twolame radio examples kernel_linux zoran
 pulseaudio cddb
 "
 
@@ -255,7 +255,6 @@ src_compile() {
 	enable_extension_disable bitmap-font bitmap-fonts
 	enable_extension_disable freetype truetype
 	enable_extension_disable fontconfig fontconfig
-	enable_extension_enable color-console color
 	if use !v4l && use !v4l2; then
 		my_conf="${my_conf} --disable-tv"
 	else
