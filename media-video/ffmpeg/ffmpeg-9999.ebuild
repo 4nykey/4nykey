@@ -49,18 +49,21 @@ DEPEND="
 	v4l2? ( virtual/os-headers )
 "
 
-pkg_setup() {
-	# guessing our target
+get_cpu() {
+	local _cpu
 	for x in arch tune cpu; do
-		if [[ -z ${_cpu} ]]; then _cpu="$(get-flag -m$x | cut -d= -f2)"
+		if [[ -z ${_cpu} ]]; then _cpu="$(get-flag -m${x} | cut -d= -f2)"
 		else break
 		fi
 	done
 	if [[ -z ${_cpu} ]]; then
-		_chost="${CTARGET:-${CHOST}}"
+		_cpu="${CTARGET:-${CHOST}}"
 		_cpu="${_chost%%-*}"
 	fi
+	echo "${_cpu:-generic}"
+}
 
+pkg_setup() {
 	#Append -fomit-frame-pointer to avoid some common issues
 	append-flags "-fomit-frame-pointer"
 	append-flags -fno-strict-aliasing
@@ -109,7 +112,7 @@ src_compile() {
 		--shlibdir=/usr/$(get_libdir) \
 		--incdir=/usr/include \
 		--mandir=/usr/share/man \
-		--cpu="${_cpu:-generic}" \
+		--cpu="$(get_cpu)" \
 		$(use_enable static) \
 		${my_conf} || die "Configure failed"
 
@@ -129,7 +132,6 @@ src_install() {
 
 # Never die for now...
 src_test() {
-
 	cd ${S}/tests
 	for t in "codectest libavtest test-server" ; do
 		emake ${t} || ewarn "Some tests in ${t} failed"
@@ -137,9 +139,7 @@ src_test() {
 }
 
 pkg_postinst() {
-
 	ewarn "ffmpeg may had ABI changes, if ffmpeg based programs"
 	ewarn "like xine-lib or vlc stop working as expected please"
 	ewarn "rebuild them."
-
 }
