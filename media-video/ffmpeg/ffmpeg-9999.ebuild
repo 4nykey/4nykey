@@ -14,7 +14,8 @@ SLOT="0"
 KEYWORDS="~x86"
 IUSE="
 aac debug doc ieee1394 a52 encode imlib mmx vorbis oss threads truetype v4l
-v4l2 xvid network zlib X amr x264 static mp3 swscaler sdl bindist postproc
+v4l2 xvid network zlib X amr x264 mp3 swscaler sdl bindist postproc ipv6 vhook
+avfilter
 "
 
 RDEPEND="
@@ -65,18 +66,21 @@ get_cpu() {
 
 pkg_setup() {
 	#Append -fomit-frame-pointer to avoid some common issues
-	append-flags "-fomit-frame-pointer"
+	append-flags -fomit-frame-pointer
 	append-flags -fno-strict-aliasing
 	#Note; library makefiles don't propogate flags from config.mak so
 	#use specified CFLAGS are only used in executables
 	replace-flags -O0 -O2
 
 	confutils_use_conflict amr bindist
+	confutils_use_conflict vhook avfilter
+	confutils_use_depend_all imlib vhook
+	confutils_use_depend_all truetype vhook
 }
 
 src_compile() {
-	local my_conf="--logfile=config.log --enable-shared --enable-gpl"
-	my_conf="${my_conf} --disable-optimizations --disable-stripping"
+	local my_conf="--logfile=config.log --enable-static --enable-shared"
+	my_conf="${my_conf} --enable-gpl --disable-optimizations --disable-stripping"
 
 	enable_extension_disable debug debug
 	if use encode; then
@@ -95,7 +99,8 @@ src_compile() {
 	enable_extension_enableonly libdc1394 ieee1394
 	enable_extension_enableonly pthreads threads
 	enable_extension_enableonly libvorbis vorbis
-	enable_extension_disable network network
+	enable_extension_enableonly network network
+	use network && enable_extension_enableonly ipv6 ipv6
 	enable_extension_disable zlib zlib
 	use amr && my_conf="${my_conf} --enable-nonfree"
 	enable_extension_enableonly libamr-nb amr
@@ -105,6 +110,9 @@ src_compile() {
 	enable_extension_enableonly swscale swscaler
 	enable_extension_enableonly x11grab X
 	use sdl && enable_extension_disable ffplay X
+	enable_extension_disable vhook vhook
+	enable_extension_enableonly avfilter avfilter
+	enable_extension_enableonly avfilter-lavf avfilter
 
 	./configure \
 		--prefix=/usr \
@@ -113,15 +121,16 @@ src_compile() {
 		--incdir=/usr/include \
 		--mandir=/usr/share/man \
 		--cpu="$(get_cpu)" \
-		$(use_enable static) \
-		${my_conf} || die "Configure failed"
+		"--cc=$(tc-getCC)" \
+		${my_conf} \
+		|| die "configure failed"
 
 	emake CC="$(tc-getCC)" || die "emake failed"
 }
 
 src_install() {
 	use doc && emake documentation
-	emake DESTDIR=${D} LDCONFIG=/bin/true install || die "Install Failed"
+	emake DESTDIR="${D}" LDCONFIG=true install || die "emake install failed"
 	dodoc Changelog CREDITS README MAINTAINERS doc/*.txt
 
 	dodir /usr/include/{ffmpeg,postproc}
