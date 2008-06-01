@@ -10,7 +10,7 @@ SRC_URI="
 	http://ardour.org/files/releases/${P}.tar.bz2
 	!external-libs? ( mirror://gentoo/libsndfile-1.0.17+flac-1.1.3.patch.bz2 )
 "
-S="${WORKDIR}/${PN}-$(get_version_component_range 1-2)"
+#S="${WORKDIR}/${PN}-$(get_version_component_range 1-2)"
 
 LICENSE="GPL-2"
 SLOT="0"
