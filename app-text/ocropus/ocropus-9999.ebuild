@@ -23,7 +23,7 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	dev-util/jam
+	dev-util/ftjam
 "
 
 src_compile() {
