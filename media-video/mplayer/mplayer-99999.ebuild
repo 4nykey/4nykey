@@ -36,7 +36,7 @@ xanim xinerama xv xvid xvmc twolame radio examples kernel_linux zoran
 pulseaudio cddb
 "
 
-VIDEO_CARDS="s3virge mga tdfx vesa"
+VIDEO_CARDS="s3virge mga tdfx vesa via"
 for x in ${VIDEO_CARDS}; do
 	IUSE="${IUSE} video_cards_${x}"
 done
@@ -157,6 +157,7 @@ pkg_setup() {
 }
 
 src_unpack() {
+	use xvmc && use video_cards_via && ESVN_PATCHES+=" ${PN}-xvmc_vld.patch"
 	subversion_src_unpack
 
 	cd ${WORKDIR}
@@ -311,14 +312,11 @@ src_compile() {
 
 	enable_extension_disable tga tga
 
-	if use xv; then
-		if use xvmc; then
-			my_conf="${my_conf} --enable-xvmc --with-xvmclib=XvMCW"
-		else
-			my_conf="${my_conf} --disable-xvmc"
-		fi
+	enable_extension_disable xv xv
+	if use xvmc; then
+		my_conf="${my_conf} --enable-xvmc --with-xvmclib=XvMCW"
 	else
-		my_conf="${my_conf} --disable-xv --disable-xvmc"
+		my_conf="${my_conf} --disable-xvmc"
 	fi
 
 	enable_extension_disable mga video_cards_mga
