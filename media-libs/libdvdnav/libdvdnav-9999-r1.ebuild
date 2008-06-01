@@ -7,6 +7,7 @@ inherit subversion
 DESCRIPTION="Library for DVD navigation tools"
 HOMEPAGE="http://sourceforge.net/projects/dvd/"
 ESVN_REPO_URI="svn://svn.mplayerhq.hu/dvdnav/trunk/libdvdnav"
+ESVN_PATCHES="${PN}-*.diff"
 
 LICENSE="GPL-2"
 SLOT="0"
