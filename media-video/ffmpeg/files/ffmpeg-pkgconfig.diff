@@ -3,14 +3,14 @@ Index: configure
 --- configure	(revision 12382)
 +++ configure	(working copy)
 @@ -2137,7 +2137,7 @@
- Requires: $requires
  Conflicts:
- Libs: -L\${libdir} $libs
+ Libs: -L\${libdir} -l${shortname} $(disabled shared && echo $libs)
+ Libs.private: $(enabled shared && echo $libs)
 -Cflags: -I\${includedir}
 +Cflags: -I\${includedir}/${name}
  EOF
- }
- 
+ cat <<EOF > $name-uninstalled.pc
+ prefix=
 @@ -2160,7 +2160,7 @@
  Requires: $requires
  Conflicts:
