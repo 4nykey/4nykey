@@ -7,7 +7,7 @@ inherit subversion autotools
 DESCRIPTION="Music On Console - ncurses interface for playing audio files"
 HOMEPAGE="http://moc.daper.net/"
 ESVN_REPO_URI="svn://daper.net/moc/trunk"
-ESVN_BOOTSTRAP="eautoreconf"
+ESVN_BOOTSTRAP="autopoint && eautoreconf"
 AT_M4DIR="m4"
 
 SLOT="0"
@@ -15,12 +15,13 @@ LICENSE="GPL-2"
 KEYWORDS="~x86"
 IUSE="
 flac ffmpeg mad oss vorbis debug alsa speex libsamplerate curl sndfile musepack
-jack modplug timidity wavpack
+jack modplug timidity wavpack nls
 "
 
 RDEPEND="
 	media-libs/libao
 	sys-libs/ncurses
+	sys-libs/db
 	alsa? ( >=media-libs/alsa-lib-0.9 )
 	sndfile? ( >=media-libs/libsndfile-1.0.0 )
 	flac? ( media-libs/flac )
@@ -38,6 +39,7 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
+	sys-devel/gettext
 "
 
 src_compile() {
@@ -55,6 +57,7 @@ src_compile() {
 		$(use_with modplug) \
 		$(use_with timidity) \
 		$(use_with wavpack) \
+		$(use_with nls) \
 		|| die "./configure failed"
 
 	emake || die "make failed"
