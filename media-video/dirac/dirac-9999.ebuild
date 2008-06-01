@@ -28,6 +28,7 @@ src_unpack() {
 	cvs_src_unpack
 	cd ${S}
 	epatch "${FILESDIR}"/${P}-*.diff
+	AT_M4DIR="m4"
 	eautoreconf || die
 }
 
