@@ -12,11 +12,6 @@ media-gfx/fim:xfig - Support for xfig files via media-gfx/xfig
 media-libs/a52dec:djbfft - Prefer D.J. Bernstein's library for fourier transforms
 media-libs/aften:verbose-build - Build in verbose mode (silent oterwise)
 media-libs/x264:mp4 - Adds support for mp4 container via gpac
-media-libs/xine-lib:dvdnav - Prefer system libdvdnav to bundled one
-media-libs/xine-lib:dxr3 - Support for DXR3 mpeg accelleration cards
-media-libs/xine-lib:real - Adds real video support
-media-libs/xine-lib:vidix - Support for vidix video output
-media-libs/xine-lib:xvmc - Support for XVideo Motion Compensation (accelerated mpeg playback)
 media-sound/aqualung:ape - Add support for decoding of Monkey's Audio
 media-sound/aqualung:cdda - Enables support for audio cd playback through libcdio
 media-sound/aqualung:ifp - Enable support for iRiver devices access through libifp
@@ -28,6 +23,7 @@ media-sound/cmus:verbose-build - Build in verbose mode (silent oterwise)
 media-sound/cmus:zsh-completion - Install zsh command completion
 media-sound/flake:verbose-build - Build in verbose mode (silent oterwise)
 media-sound/mpd:icecast - Enable support for Icecast2
+media-sound/musepack-tools:cuetools - Enable support for parsing cue sheets via cuetools
 media-sound/musepack-tools:verbose-build - Build in verbose mode (silent oterwise)
 media-sound/ncmpc:lyrics - Support for fetching lyrics from Internet
 media-sound/ncmpc:mouse - Enable curses getmouse support
@@ -37,11 +33,9 @@ media-sound/rezound:soundtouch - compile with support for soundtouch
 media-sound/snd:postscript - Enable postscript output from OpenGL graphics
 media-sound/sonata:lyrics - Support for lyrics fetching
 media-sound/traverso:lv2 - Add support for Ladspa V2
-media-sound/traverso:pch - Enable precompiled header support (gcc >3.4 only)
 media-sound/traverso:verbose-build - Build in verbose mode (silent oterwise)
 media-video/avidemux:aften - Enable A/52 encoding support via aften
 media-video/avidemux:amrnb - Enables Adaptive Multi-Rate Audio support (Narrow Band)
-media-video/avidemux:faac - Enable AAC encoding through FAAC
 media-video/avidemux:verbose-build - Build in verbose mode (silent oterwise)
 media-video/ffmpeg:amr - Enables Adaptive Multi-Rate Audio support
 media-video/ffmpeg:avfilter - Enables video filter support (replaces vhook)
