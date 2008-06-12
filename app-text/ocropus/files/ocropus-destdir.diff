@@ -1,12 +1,43 @@
 Index: Jamfile
 ===================================================================
---- Jamfile	(revision 624)
+--- Jamfile	(revision 912)
 +++ Jamfile	(working copy)
-@@ -1,6 +1,6 @@
- SubDir TOP ;
- 
--INSTALL_DIR = /usr/local/bin ;
-+INSTALL_DIR = $(DESTDIR)/usr/bin ;
- 
+@@ -3,16 +3,20 @@
  actions Install {
      mkdir -p $(INSTALL_DIR)
+     install $(TOP)/ocrocmd/ocrocmd $(INSTALL_DIR)/ocrocmd
++if [[ $(nolua) != "1" ]]; then
+     install $(TOP)/ocroscript/ocroscript $(INSTALL_DIR)/ocroscript
+-    test -d $(OCRODATA) || mkdir $(OCRODATA)
+-    test -d $(OCRODATA)/words || mkdir $(OCRODATA)/words
++fi
++    test -d $(OCRODATA) || mkdir -p $(OCRODATA)
++    test -d $(OCRODATA)/words || mkdir -p $(OCRODATA)/words
+     cp -v $(TOP)/data/words/* $(OCRODATA)/words
+-    test -d $(OCRODATA)/models || mkdir $(OCRODATA)/models
++    test -d $(OCRODATA)/models || mkdir -p $(OCRODATA)/models
+     cp -v $(TOP)/data/models/* $(OCRODATA)/models
+-    test -d $(OCROSCRIPTS) || mkdir $(OCROSCRIPTS)
++if [[ $(nolua) != "1" ]]; then
++    test -d $(OCROSCRIPTS) || mkdir -p $(OCROSCRIPTS)
+     cp -v $(TOP)/ocroscript/scripts/*.lua $(OCROSCRIPTS)
+-    test -d $(OCROSCRIPTS)/lib || mkdir $(OCROSCRIPTS)/lib
++    test -d $(OCROSCRIPTS)/lib || mkdir -p $(OCROSCRIPTS)/lib
+     cp -v $(TOP)/ocroscript/scripts/lib/*.lua $(OCROSCRIPTS)/lib
++fi
+ }
+ 
+ ALWAYS install ;
+Index: Jamrules.in
+===================================================================
+--- Jamrules.in	(revision 912)
++++ Jamrules.in	(working copy)
+@@ -14,7 +14,7 @@
+ nofst = @nofst@ ;
+ noposix = @noposix@ ;
+ 
+-prefix = @prefix@ ;
++prefix = $(DESTDIR)@prefix@ ;
+ # autoconf incorrectly uses ${...} syntax, which Jam doesn't understand
+ # this is a temporary workaround until we have figured out a better way
+ # to fix this

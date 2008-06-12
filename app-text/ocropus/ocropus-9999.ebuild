@@ -12,14 +12,23 @@ ESVN_PATCHES="${PN}-*.diff"
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE=""
+IUSE="spell lua readline sdl verbose-build"
 
 RDEPEND="
 	app-text/tesseract-ocr
-	app-text/aspell
 	media-libs/libpng
 	media-libs/jpeg
 	media-libs/tiff
+	spell? (
+		app-text/aspell
+		app-dicts/aspell-en
+	)
+	lua? ( dev-lang/lua )
+	readline? ( sys-libs/readline )
+	sdl? (
+		media-libs/sdl-gfx
+		media-libs/sdl-image
+	)
 "
 DEPEND="
 	${RDEPEND}
@@ -29,17 +38,21 @@ DEPEND="
 src_compile() {
 	econf \
 		--with-tesseract=/usr \
+		$(use_with spell aspell) \
+		$(use_with lua ocroscript) \
+		$(use_with sdl SDL) \
 		|| die "econf failed"
-	jam ${MAKEOPTS} \
-		-q -dx \
+
+	use verbose-build && MAKEOPTS+=" -dx"
+	jam -q ${MAKEOPTS} \
 		-sopt="$CXXFLAGS" \
 		|| die "jam build failed"
 }
 
 src_install() {
-	jam -q -dx \
+	jam -q ${MAKEOPTS} \
 		-sDESTDIR="${D}" \
 		install \
 		|| die "jam install failed"
-	dodoc CHANGES README
+	dodoc CHANGES INSTALL README
 }
