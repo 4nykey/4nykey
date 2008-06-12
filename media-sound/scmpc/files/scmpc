@@ -9,7 +9,7 @@ CFG=/etc/scmpc.conf
 PID=/var/run/scmpc/scmpc.pid
 
 checkconfig() {
-	if grep 'password = ""' ${CFG}; then
+	if grep -q 'password = ""' ${CFG}; then
 		eerror "You are trying to run scmpc system-wide, but"
 		eerror "no password stored in scmpc configuration file ${CFG},"
 		eerror "run \"emerge --config media-sound/scmpc\""

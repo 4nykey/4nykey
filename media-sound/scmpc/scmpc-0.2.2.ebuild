@@ -61,7 +61,7 @@ src_install() {
 	doinitd ${FILESDIR}/scmpc
 
 	insinto /etc
-	insopts -m0600
+	insopts -m0600 -oscmpc
 	doins examples/scmpc.conf
 
 	touch ${T}/foo
