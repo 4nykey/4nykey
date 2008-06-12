@@ -1,0 +1,17 @@
+Index: ocroscript/ocrotoplevel.cc
+===================================================================
+--- ocroscript/ocrotoplevel.cc	(revision 912)
++++ ocroscript/ocrotoplevel.cc	(working copy)
+@@ -64,10 +64,10 @@
+ 
+ // FIXME the Jamfile isn't passing this flag, so for now, this is a workaround
+ #ifndef OCROSCRIPTS
+-#define OCROSCRIPTS "/usr/local/share/ocropus/scripts/"
++#define OCROSCRIPTS "/usr/share/ocropus/scripts/"
+ #endif
+ #ifndef OCRODATA
+-#define OCRODATA "/usr/local/share/ocropus/"
++#define OCRODATA "/usr/share/ocropus/"
+ #endif
+ 
+ char *ocroscripts = OCROSCRIPTS;
