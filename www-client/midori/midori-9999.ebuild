@@ -23,5 +23,5 @@ RDEPEND="
 "
 
 src_install() {
-	einstall || die
+	emake DESTDIR="${D}" install || die
 }
