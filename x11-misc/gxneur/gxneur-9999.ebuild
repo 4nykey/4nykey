@@ -12,7 +12,7 @@ ESVN_BOOTSTRAP="autopoint --force && eautoreconf"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="-*"
-IUSE=""
+IUSE="nls"
 
 RDEPEND="
 	>=x11-libs/gtk+-2
@@ -24,8 +24,10 @@ DEPEND="
 "
 
 src_compile() {
-	econf || die
-	emake CFLAGS="${CFLAGS} -std=gnu99" || die
+	econf \
+		$(use_enable nls) \
+		|| die
+	emake || die
 }
 
 src_install () {
