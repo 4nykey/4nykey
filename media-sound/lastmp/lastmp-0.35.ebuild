@@ -17,7 +17,7 @@ KEYWORDS="~x86"
 IUSE="musicbrainz"
 
 RDEPEND="
-	media-libs/py-libmpdclient
+	dev-python/py-libmpdclient
 	musicbrainz? ( dev-python/python-musicbrainz )
 "
 
