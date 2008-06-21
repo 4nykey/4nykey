@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit qt3 qt4
+inherit qt3 qt4 confutils
 
 DESCRIPTION="FBReader is an e-book reader for various platforms"
 HOMEPAGE="http://www.fbreader.org/"
@@ -11,20 +11,26 @@ SRC_URI="http://www.fbreader.org/${PN}-sources-${PV}.tgz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="qt3 qt4 debug verbose-build"
+IUSE="gtk qt3 qt4 debug verbose-build"
 
 DEPEND="
 	dev-libs/expat
 	app-i18n/enca
 	sys-libs/zlib
 	app-arch/bzip2
-	!qt3? ( !qt4? ( >=x11-libs/gtk+-2.4 ) )
+	dev-libs/liblinebreak
+	gtk? ( >=x11-libs/gtk+-2.4 )
 	qt3? ( $(qt_min_version 3) )
 	qt4? ( $(qt4_min_version 4) )
 "
 RDEPEND="
 	${DEPEND}
 "
+
+pkg_setup() {
+	confutils_use_conflict gtk qt3 qt4
+	confutils_use_conflict qt3 qt4
+}
 
 src_unpack() {
 	unpack ${A}
@@ -33,11 +39,12 @@ src_unpack() {
 }
 
 src_compile() {
-	myconf="UI_TYPE=gtk"
+	local myconf="UI_TYPE=gtk"
 	if use qt3; then
 		myconf="UI_TYPE=qt QTINCLUDE=-I${QTDIR}/include MOC=${QTDIR}/bin/moc"
 		LDFLAGS="${LDFLAGS} -L${QTDIR}/lib"
-	elif use qt4; then
+	fi
+	if use qt4; then
 		myconf="UI_TYPE=qt4 MOC=/usr/bin/moc"
 		LDFLAGS="${LDFLAGS} -L/usr/lib/qt4"
 	fi
