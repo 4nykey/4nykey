@@ -27,7 +27,7 @@ KEYWORDS="~x86"
 
 IUSE="
 3dnow 3dnowext aac aalib alsa amr arts bindist bitmap-fonts bidi bl cdio
-cpudetection custom-cflags debug dga doc dts dvb cdparanoia directfb dv dvd
+cpudetection custom-cflags debug dga doc dts dvb cdparanoia directfb dv
 dvdread dvdnav enca encode esd external-faad external-ffmpeg fbcon fontconfig
 gif ggi gtk ipv6 jack joystick jpeg ladspa libcaca lirc live livecd lzo mad
 matrox mmx mmxext musepack nas openal opengl oss png real rtc samba sdl speex
@@ -58,7 +58,7 @@ RDEPEND="
 	directfb? ( dev-libs/DirectFB )
 	dts? ( media-libs/libdca )
 	dvb? ( media-tv/linuxtv-dvb-headers )
-	dvd? ( dvdread? ( media-libs/libdvdread ) )
+	dvdread? ( media-libs/libdvdread )
 	encode? (
 		media-sound/lame
 		media-sound/twolame
@@ -183,18 +183,12 @@ src_unpack() {
 
 		mv ${WORKDIR}/svgalib_helper libdha
 	fi
-
-	cd ${S}
-
-	# skip make distclean/depend
-	touch .developer
-	sed -i '/\$(MAKE) depend/d' Makefile
 }
 
 src_compile() {
 
 	local my_conf="
-		--disable-tv-bsdbt848 --disable-vidix-external --disable-tremor-external
+		--disable-tv-bsdbt848 --disable-tremor-external
 	"
 	################
 	#Optional features#
@@ -219,17 +213,10 @@ src_compile() {
 		done
 	fi
 
-	if use dvd; then
-		if ! use dvdnav; then
-			my_conf="${my_conf} --disable-dvdnav"
-			if use dvdread; then
-				my_conf="${my_conf} --disable-dvdread-internal --disable-libdvdcss-internal"
-			else
-				my_conf="${my_conf} --disable-dvdread"
-			fi
-		fi
-	else
-		my_conf="${my_conf} --disable-dvdread --disable-dvdnav --disable-dvdread-internal --disable-libdvdcss-internal"
+	enable_extension_disable dvdnav dvdnav
+	enable_extension_disable dvdread dvdread
+	if use dvdread; then
+		my_conf="${my_conf} --disable-dvdread-internal --disable-libdvdcss-internal"
 	fi
 
 	enable_extension_disable mencoder encode
@@ -386,13 +373,15 @@ src_compile() {
 		${my_conf} || die
 
 
-	emake || die "Failed to build MPlayer!"
+	emake DEPS='' codecs.conf.h version.h || die "Failed to build MPlayer!"
+	emake DEPS='' || die "Failed to build MPlayer!!"
 	use doc && make -C ${S}/DOCS/xml html-chunked-en
 }
 
 src_install() {
 
-	emake prefix=${D}/usr \
+	emake DEPS='' \
+		prefix=${D}/usr \
 		BINDIR=${D}/usr/bin \
 		LIBDIR=${D}/usr/$(get_libdir) \
 		CONFDIR=${D}/usr/share/mplayer \
