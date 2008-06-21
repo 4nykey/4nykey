@@ -12,7 +12,7 @@ EGIT_PATCHES="${PN}-*.diff"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="X mp4 sdl threads gtk"
+IUSE="X mp4 sdl threads gtk static"
 
 RDEPEND="
 	mp4? ( media-video/gpac )
@@ -34,9 +34,9 @@ src_compile() {
 	./configure\
 		--prefix=/usr \
 		--enable-pic \
-		--enable-shared \
 		--enable-debug \
 		--disable-avis-input \
+		$(use_enable !static shared) \
 		$(use_enable threads pthread) \
 		$(use_enable mp4 mp4-output)\
 		--extra-cflags="${CFLAGS}"\
