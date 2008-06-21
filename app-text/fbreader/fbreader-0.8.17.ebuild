@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit qt3 qt4 confutils
+inherit qt3 qt4 confutils toolchain-funcs
 
 DESCRIPTION="FBReader is an e-book reader for various platforms"
 HOMEPAGE="http://www.fbreader.org/"
@@ -30,6 +30,19 @@ RDEPEND="
 pkg_setup() {
 	confutils_use_conflict gtk qt3 qt4
 	confutils_use_conflict qt3 qt4
+
+	myconf="UI_TYPE=gtk"
+	if use qt3; then
+		myconf="UI_TYPE=qt QTINCLUDE=-I${QTDIR}/include MOC=${QTDIR}/bin/moc"
+		LDFLAGS="${LDFLAGS} -L${QTDIR}/lib"
+	fi
+	if use qt4; then
+		myconf="UI_TYPE=qt4 MOC=/usr/bin/moc"
+		LDFLAGS="${LDFLAGS} -L/usr/lib/qt4"
+	fi
+	# TARGET_STATUS=release adds "-O3 -s" to flags
+	use debug && myconf+=" TARGET_STATUS=debug" || myconf+=" TARGET_STATUS="
+	myconf+=" TARGET_ARCH=desktop INSTALLDIR=/usr"
 }
 
 src_unpack() {
@@ -39,36 +52,18 @@ src_unpack() {
 }
 
 src_compile() {
-	local myconf="UI_TYPE=gtk"
-	if use qt3; then
-		myconf="UI_TYPE=qt QTINCLUDE=-I${QTDIR}/include MOC=${QTDIR}/bin/moc"
-		LDFLAGS="${LDFLAGS} -L${QTDIR}/lib"
-	fi
-	if use qt4; then
-		myconf="UI_TYPE=qt4 MOC=/usr/bin/moc"
-		LDFLAGS="${LDFLAGS} -L/usr/lib/qt4"
-	fi
-	use debug && myconf="${myconf} TARGET_STATUS=debug"
-
-	# TARGET_STATUS=release (default) adds "-O3 -s" to flags
 	emake \
-		INSTALLDIR=/usr \
-		CC="g++ ${CXXFLAGS}" \
+		CC="$(tc-getCXX) ${CXXFLAGS}" \
 		LDFLAGS="${LDFLAGS}" \
-		TARGET_ARCH=desktop \
-		TARGET_STATUS= \
 		${myconf} \
 		|| die
 }
 
 src_install() {
-	emake \
+	emake install \
 		DESTDIR=${D} \
-		INSTALLDIR=/usr \
-		CC="g++ ${CXXFLAGS}" \
+		CC="$(tc-getCXX) ${CXXFLAGS}" \
 		LDFLAGS="${LDFLAGS}" \
-		TARGET_ARCH=desktop \
-		TARGET_STATUS= \
-		${myconf} install \
+		${myconf} \
 		|| die
 }
