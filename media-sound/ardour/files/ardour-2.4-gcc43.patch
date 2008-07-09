@@ -1,0 +1,355 @@
+diff -up ardour-2.4/gtk2_ardour/actions.cc.gcc43 ardour-2.4/gtk2_ardour/actions.cc
+--- ardour-2.4/gtk2_ardour/actions.cc.gcc43	2008-03-31 08:07:53.000000000 -0400
++++ ardour-2.4/gtk2_ardour/actions.cc	2008-04-05 15:29:00.000000000 -0400
+@@ -17,6 +17,7 @@
+ 
+ */
+ 
++#include <cstring>
+ #include <vector>
+ #include <string>
+ #include <list>
+diff -up ardour-2.4/gtk2_ardour/editing.cc.gcc43 ardour-2.4/gtk2_ardour/editing.cc
+--- ardour-2.4/gtk2_ardour/editing.cc.gcc43	2008-04-05 15:34:10.000000000 -0400
++++ ardour-2.4/gtk2_ardour/editing.cc	2008-04-05 15:34:21.000000000 -0400
+@@ -17,7 +17,7 @@
+ 
+ */
+ 
+-#include <string>
++#include <cstring>
+ 
+ #include "editing.h"
+ 
+diff -up ardour-2.4/gtk2_ardour/editing_syms.h.gcc43 ardour-2.4/gtk2_ardour/editing_syms.h
+diff -up ardour-2.4/gtk2_ardour/fft_result.cc.gcc43 ardour-2.4/gtk2_ardour/fft_result.cc
+--- ardour-2.4/gtk2_ardour/fft_result.cc.gcc43	2008-04-05 16:47:41.000000000 -0400
++++ ardour-2.4/gtk2_ardour/fft_result.cc	2008-04-05 16:53:14.000000000 -0400
+@@ -21,6 +21,7 @@
+ #include <fft_result.h>
+ #include <fft_graph.h>
+ #include <cstdlib>
++#include <cstring>
+ #include <string>
+ #include <cmath>
+ 
+diff -up ardour-2.4/libs/ardour/ardour/buffer.h.gcc43 ardour-2.4/libs/ardour/ardour/buffer.h
+--- ardour-2.4/libs/ardour/ardour/buffer.h.gcc43	2007-05-10 07:30:33.000000000 -0400
++++ ardour-2.4/libs/ardour/ardour/buffer.h	2008-04-05 15:29:00.000000000 -0400
+@@ -22,6 +22,7 @@
+ #define _XOPEN_SOURCE 600
+ #include <cstdlib> // for posix_memalign
+ #include <cassert>
++#include <cstring>
+ #include <ardour/types.h>
+ #include <ardour/data_type.h>
+ 
+diff -up ardour-2.4/libs/ardour/ardour/port.h.gcc43 ardour-2.4/libs/ardour/ardour/port.h
+--- ardour-2.4/libs/ardour/ardour/port.h.gcc43	2007-05-10 07:30:33.000000000 -0400
++++ ardour-2.4/libs/ardour/ardour/port.h	2008-04-05 15:29:00.000000000 -0400
+@@ -20,6 +20,7 @@
+ #ifndef __ardour_port_h__
+ #define __ardour_port_h__
+ 
++#include <cstring>
+ #include <sigc++/signal.h>
+ #include <pbd/failed_constructor.h>
+ #include <ardour/ardour.h>
+diff -up ardour-2.4/libs/ardour/ardour/silentfilesource.h.gcc43 ardour-2.4/libs/ardour/ardour/silentfilesource.h
+--- ardour-2.4/libs/ardour/ardour/silentfilesource.h.gcc43	2008-01-30 15:29:38.000000000 -0500
++++ ardour-2.4/libs/ardour/ardour/silentfilesource.h	2008-04-05 15:29:00.000000000 -0400
+@@ -20,6 +20,7 @@
+ #ifndef __ardour_silentfilesource_h__ 
+ #define __ardour_silentfilesource_h__
+ 
++#include <cstring>
+ #include <ardour/audiofilesource.h>
+ 
+ namespace ARDOUR {
+diff -up ardour-2.4/libs/ardour/audioanalyser.cc.gcc43 ardour-2.4/libs/ardour/audioanalyser.cc
+--- ardour-2.4/libs/ardour/audioanalyser.cc.gcc43	2008-02-16 16:52:28.000000000 -0500
++++ ardour-2.4/libs/ardour/audioanalyser.cc	2008-04-05 15:29:00.000000000 -0400
+@@ -9,6 +9,8 @@
+ #include <ardour/readable.h>
+ #include <ardour/readable.h>
+ 
++#include <cstring>
++
+ #include "i18n.h"
+ 
+ using namespace std;
+diff -up ardour-2.4/libs/ardour/recent_sessions.cc.gcc43 ardour-2.4/libs/ardour/recent_sessions.cc
+--- ardour-2.4/libs/ardour/recent_sessions.cc.gcc43	2008-01-29 13:21:54.000000000 -0500
++++ ardour-2.4/libs/ardour/recent_sessions.cc	2008-04-05 15:29:00.000000000 -0400
+@@ -18,6 +18,7 @@
+ */
+ 
+ #include <cerrno>
++#include <cstring>
+ #include <unistd.h>
+ #include <fstream>
+ #include <algorithm>
+diff -up ardour-2.4/libs/ardour/sndfilesource.cc.gcc43 ardour-2.4/libs/ardour/sndfilesource.cc
+--- ardour-2.4/libs/ardour/sndfilesource.cc.gcc43	2008-02-27 10:21:21.000000000 -0500
++++ ardour-2.4/libs/ardour/sndfilesource.cc	2008-04-05 15:29:00.000000000 -0400
+@@ -19,6 +19,7 @@
+ 
+ #include <cerrno>
+ #include <climits>
++#include <cstring>
+ 
+ #include <pwd.h>
+ #include <sys/utsname.h>
+diff -up ardour-2.4/libs/ardour/utils.cc.gcc43 ardour-2.4/libs/ardour/utils.cc
+--- ardour-2.4/libs/ardour/utils.cc.gcc43	2008-03-26 21:21:32.000000000 -0400
++++ ardour-2.4/libs/ardour/utils.cc	2008-04-05 15:29:00.000000000 -0400
+@@ -20,7 +20,7 @@
+ #include <cstdio> /* for sprintf */
+ #include <cmath>
+ #include <cctype>
+-#include <string>
++#include <cstring>
+ #include <cerrno>
+ #include <iostream>
+ #include <sys/types.h>
+diff -up ardour-2.4/libs/midi++2/fd_midiport.cc.gcc43 ardour-2.4/libs/midi++2/fd_midiport.cc
+--- ardour-2.4/libs/midi++2/fd_midiport.cc.gcc43	2007-09-27 00:20:36.000000000 -0400
++++ ardour-2.4/libs/midi++2/fd_midiport.cc	2008-04-05 15:29:00.000000000 -0400
+@@ -20,6 +20,7 @@
+ 
+ #include <fcntl.h>
+ #include <cerrno>
++#include <cstring>
+ 
+ #include <pbd/error.h>
+ #include <pbd/pathscanner.h>
+diff -up ardour-2.4/libs/midi++2/midi.cc.gcc43 ardour-2.4/libs/midi++2/midi.cc
+--- ardour-2.4/libs/midi++2/midi.cc.gcc43	2007-05-10 07:30:30.000000000 -0400
++++ ardour-2.4/libs/midi++2/midi.cc	2008-04-05 15:29:00.000000000 -0400
+@@ -18,7 +18,7 @@
+     $Id: midi.cc 4 2005-05-13 20:47:18Z taybin $
+ */
+ 
+-#include <string>
++#include <cstring>
+ #include <cstdlib>
+ #include <midi++/types.h>
+ 
+diff -up ardour-2.4/libs/midi++2/midichannel.cc.gcc43 ardour-2.4/libs/midi++2/midichannel.cc
+--- ardour-2.4/libs/midi++2/midichannel.cc.gcc43	2007-05-10 07:30:30.000000000 -0400
++++ ardour-2.4/libs/midi++2/midichannel.cc	2008-04-05 15:29:00.000000000 -0400
+@@ -18,6 +18,8 @@
+     $Id: midichannel.cc 4 2005-05-13 20:47:18Z taybin $
+ */
+ 
++#include <cstring>
++
+ #include <midi++/types.h>
+ #include <midi++/port.h>
+ #include <midi++/channel.h>
+diff -up ardour-2.4/libs/midi++2/midiparser.cc.gcc43 ardour-2.4/libs/midi++2/midiparser.cc
+--- ardour-2.4/libs/midi++2/midiparser.cc.gcc43	2007-05-10 07:30:30.000000000 -0400
++++ ardour-2.4/libs/midi++2/midiparser.cc	2008-04-05 15:29:00.000000000 -0400
+@@ -23,7 +23,7 @@
+ 
+ #include <cstdlib>
+ #include <unistd.h>
+-#include <string>
++#include <cstring>
+ #include <iostream>
+ #include <iterator>
+ 
+diff -up ardour-2.4/libs/midi++2/mtc.cc.gcc43 ardour-2.4/libs/midi++2/mtc.cc
+--- ardour-2.4/libs/midi++2/mtc.cc.gcc43	2007-05-10 07:30:30.000000000 -0400
++++ ardour-2.4/libs/midi++2/mtc.cc	2008-04-05 15:29:00.000000000 -0400
+@@ -20,7 +20,7 @@
+ 
+ #include <cstdlib>
+ #include <unistd.h>
+-#include <string>
++#include <cstring>
+ #include <iostream>
+ 
+ #include <midi++/types.h>
+diff -up ardour-2.4/libs/pbd/base_ui.cc.gcc43 ardour-2.4/libs/pbd/base_ui.cc
+--- ardour-2.4/libs/pbd/base_ui.cc.gcc43	2007-05-10 07:30:44.000000000 -0400
++++ ardour-2.4/libs/pbd/base_ui.cc	2008-04-05 15:29:00.000000000 -0400
+@@ -20,7 +20,8 @@
+ #include <stdint.h>
+ #include <unistd.h>
+ #include <fcntl.h>
+-#include <errno.h>
++#include <cerrno>
++#include <cstring>
+ 
+ #include <pbd/base_ui.h>
+ #include <pbd/error.h>
+diff -up ardour-2.4/libs/pbd/mountpoint.cc.gcc43 ardour-2.4/libs/pbd/mountpoint.cc
+--- ardour-2.4/libs/pbd/mountpoint.cc.gcc43	2007-09-24 11:42:04.000000000 -0400
++++ ardour-2.4/libs/pbd/mountpoint.cc	2008-04-05 15:29:00.000000000 -0400
+@@ -19,6 +19,7 @@
+ */
+ 
+ #include <cstdio>
++#include <cstring>
+ #include <string>
+ #include <limits.h>
+ 
+diff -up ardour-2.4/libs/pbd/pathscanner.cc.gcc43 ardour-2.4/libs/pbd/pathscanner.cc
+--- ardour-2.4/libs/pbd/pathscanner.cc.gcc43	2007-05-10 07:30:44.000000000 -0400
++++ ardour-2.4/libs/pbd/pathscanner.cc	2008-04-05 15:29:00.000000000 -0400
+@@ -20,6 +20,7 @@
+ 
+ #include <cstdlib>
+ #include <cstdio>
++#include <cstring>
+ #include <vector>
+ #include <dirent.h>
+ 
+diff -up ardour-2.4/libs/pbd/pbd/ringbuffer.h.gcc43 ardour-2.4/libs/pbd/pbd/ringbuffer.h
+--- ardour-2.4/libs/pbd/pbd/ringbuffer.h.gcc43	2007-05-10 07:30:44.000000000 -0400
++++ ardour-2.4/libs/pbd/pbd/ringbuffer.h	2008-04-05 15:29:00.000000000 -0400
+@@ -20,6 +20,7 @@
+ #ifndef ringbuffer_h
+ #define ringbuffer_h
+ 
++#include <cstring>
+ #include <glib.h>
+ 
+ template<class T>
+diff -up ardour-2.4/libs/pbd/pool.cc.gcc43 ardour-2.4/libs/pbd/pool.cc
+--- ardour-2.4/libs/pbd/pool.cc.gcc43	2007-07-05 23:11:52.000000000 -0400
++++ ardour-2.4/libs/pbd/pool.cc	2008-04-05 15:29:00.000000000 -0400
+@@ -18,6 +18,7 @@
+     $Id: pool.cc 2117 2007-07-06 03:11:52Z paul $
+ */
+ 
++#include <cstdlib>
+ #include <iostream>
+ #include <vector>
+ 
+diff -up ardour-2.4/libs/rubberband/src/FFT.cpp.gcc43 ardour-2.4/libs/rubberband/src/FFT.cpp
+--- ardour-2.4/libs/rubberband/src/FFT.cpp.gcc43	2007-12-11 10:30:32.000000000 -0500
++++ ardour-2.4/libs/rubberband/src/FFT.cpp	2008-04-05 15:29:00.000000000 -0400
+@@ -18,6 +18,7 @@
+ 
+ #include <fftw3.h>
+ 
++#include <cstdlib>
+ #include <cmath>
+ #include <iostream>
+ #include <map>
+diff -up ardour-2.4/libs/rubberband/src/main.cpp.gcc43 ardour-2.4/libs/rubberband/src/main.cpp
+--- ardour-2.4/libs/rubberband/src/main.cpp.gcc43	2007-12-11 10:27:07.000000000 -0500
++++ ardour-2.4/libs/rubberband/src/main.cpp	2008-04-05 15:29:00.000000000 -0400
+@@ -14,6 +14,8 @@
+ 
+ #include "RubberBandStretcher.h"
+ 
++#include <cstdlib>
++#include <cstring>
+ #include <iostream>
+ #include <sndfile.h>
+ #include <cmath>
+diff -up ardour-2.4/libs/rubberband/src/RingBuffer.h.gcc43 ardour-2.4/libs/rubberband/src/RingBuffer.h
+--- ardour-2.4/libs/rubberband/src/RingBuffer.h.gcc43	2007-12-11 10:27:07.000000000 -0500
++++ ardour-2.4/libs/rubberband/src/RingBuffer.h	2008-04-05 15:29:00.000000000 -0400
+@@ -15,6 +15,7 @@
+ #ifndef _RUBBERBAND_RINGBUFFER_H_
+ #define _RUBBERBAND_RINGBUFFER_H_
+ 
++#include <cstring>
+ #include <sys/types.h>
+ 
+ #ifndef _WIN32
+diff -up ardour-2.4/libs/rubberband/src/StretchCalculator.cpp.gcc43 ardour-2.4/libs/rubberband/src/StretchCalculator.cpp
+--- ardour-2.4/libs/rubberband/src/StretchCalculator.cpp.gcc43	2007-12-11 10:27:07.000000000 -0500
++++ ardour-2.4/libs/rubberband/src/StretchCalculator.cpp	2008-04-05 15:29:00.000000000 -0400
+@@ -14,6 +14,7 @@
+ 
+ #include "StretchCalculator.h"
+ 
++#include <algorithm>
+ #include <math.h>
+ #include <iostream>
+ #include <deque>
+diff -up ardour-2.4/libs/rubberband/src/StretcherProcess.cpp.gcc43 ardour-2.4/libs/rubberband/src/StretcherProcess.cpp
+--- ardour-2.4/libs/rubberband/src/StretcherProcess.cpp.gcc43	2008-01-09 10:19:25.000000000 -0500
++++ ardour-2.4/libs/rubberband/src/StretcherProcess.cpp	2008-04-05 15:29:00.000000000 -0400
+@@ -20,6 +20,7 @@
+ #include "StretcherChannelData.h"
+ #include "Resampler.h"
+ 
++#include <cstring>
+ #include <cassert>
+ #include <cmath>
+ #include <set>
+diff -up ardour-2.4/libs/rubberband/src/Thread.cpp.gcc43 ardour-2.4/libs/rubberband/src/Thread.cpp
+--- ardour-2.4/libs/rubberband/src/Thread.cpp.gcc43	2007-12-11 10:27:07.000000000 -0500
++++ ardour-2.4/libs/rubberband/src/Thread.cpp	2008-04-05 15:29:00.000000000 -0400
+@@ -16,6 +16,7 @@
+ 
+ #include <iostream>
+ 
++#include <cstdlib>
+ #include <sys/time.h>
+ #include <time.h>
+ 
+diff -up ardour-2.4/libs/rubberband/src/Window.h.gcc43 ardour-2.4/libs/rubberband/src/Window.h
+--- ardour-2.4/libs/rubberband/src/Window.h.gcc43	2007-12-11 10:27:07.000000000 -0500
++++ ardour-2.4/libs/rubberband/src/Window.h	2008-04-05 15:29:00.000000000 -0400
+@@ -15,6 +15,7 @@
+ #ifndef _RUBBERBAND_WINDOW_H_
+ #define _RUBBERBAND_WINDOW_H_
+ 
++#include <cstdlib>
+ #include <cmath>
+ #include <iostream>
+ #include <map>
+diff -up ardour-2.4/libs/surfaces/tranzport/screen.cc.gcc43 ardour-2.4/libs/surfaces/tranzport/screen.cc
+--- ardour-2.4/libs/surfaces/tranzport/screen.cc.gcc43	2008-04-05 16:55:26.000000000 -0400
++++ ardour-2.4/libs/surfaces/tranzport/screen.cc	2008-04-05 16:55:39.000000000 -0400
+@@ -19,6 +19,7 @@
+  *   */
+ 
+ #include <tranzport_control_protocol.h>
++#include <cstring>
+ 
+ void
+ TranzportControlProtocol::screen_clear ()
+diff -up ardour-2.4/libs/vamp-sdk/vamp-sdk/hostext/PluginLoader.cpp.gcc43 ardour-2.4/libs/vamp-sdk/vamp-sdk/hostext/PluginLoader.cpp
+--- ardour-2.4/libs/vamp-sdk/vamp-sdk/hostext/PluginLoader.cpp.gcc43	2008-01-25 11:05:47.000000000 -0500
++++ ardour-2.4/libs/vamp-sdk/vamp-sdk/hostext/PluginLoader.cpp	2008-04-05 15:29:00.000000000 -0400
+@@ -42,6 +42,7 @@
+ 
+ #include <fstream>
+ #include <cctype> // tolower
++#include <cstring>
+ 
+ #ifdef _WIN32
+ 
+diff -up ardour-2.4/libs/vamp-sdk/vamp-sdk/PluginAdapter.cpp.gcc43 ardour-2.4/libs/vamp-sdk/vamp-sdk/PluginAdapter.cpp
+--- ardour-2.4/libs/vamp-sdk/vamp-sdk/PluginAdapter.cpp.gcc43	2008-01-10 08:48:10.000000000 -0500
++++ ardour-2.4/libs/vamp-sdk/vamp-sdk/PluginAdapter.cpp	2008-04-05 15:29:00.000000000 -0400
+@@ -36,6 +36,9 @@
+ 
+ #include "PluginAdapter.h"
+ 
++#include <cstdlib>
++#include <cstring>
++
+ //#define DEBUG_PLUGIN_ADAPTER 1
+ 
+ 
+diff -up ardour-2.4/libs/vamp-sdk/vamp-sdk/PluginHostAdapter.cpp.gcc43 ardour-2.4/libs/vamp-sdk/vamp-sdk/PluginHostAdapter.cpp
+--- ardour-2.4/libs/vamp-sdk/vamp-sdk/PluginHostAdapter.cpp.gcc43	2008-01-10 08:48:10.000000000 -0500
++++ ardour-2.4/libs/vamp-sdk/vamp-sdk/PluginHostAdapter.cpp	2008-04-05 15:29:00.000000000 -0400
+@@ -36,6 +36,8 @@
+ 
+ #include "PluginHostAdapter.h"
+ 
++#include <cstdlib>
++
+ namespace Vamp
+ {
+ 

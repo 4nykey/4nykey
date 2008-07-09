@@ -9,7 +9,7 @@ HOMEPAGE="http://cmus.sourceforge.net"
 EGIT_REPO_URI="git://repo.or.cz/cmus.git"
 
 LICENSE="GPL-2"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 SLOT="0"
 IUSE="
 alsa arts flac oss mad modplug vorbis musepack ao aac mp4
@@ -49,6 +49,8 @@ src_compile() {
 	local myconf
 	for x in ${IUSE}; do teh_conf ${x}; done
 	teh_conf musepack mpc
+
+	tc-export CC
 
 	./configure \
 		prefix=/usr \

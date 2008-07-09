@@ -13,7 +13,7 @@ ESVN_BOOTSTRAP="eautoreconf"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="
 oss alsa jack libsamplerate sndfile flac vorbis speex mp3 modplug musepack ape
 taglib ladspa cdda cddb ifp systray encode ffmpeg wavpack
@@ -30,7 +30,6 @@ RDEPEND="
 	vorbis? ( media-libs/libvorbis )
 	speex? ( media-libs/speex media-libs/liboggz )
 	mp3? (
-		media-libs/id3lib
 		media-libs/libmad
 		encode? ( media-sound/lame )
 	)
@@ -39,7 +38,6 @@ RDEPEND="
 	ape? ( media-sound/mac )
 	ffmpeg? ( media-video/ffmpeg )
 	wavpack? ( >=media-sound/wavpack-4.40 )
-	taglib? ( >=media-libs/taglib-1.4 )
 	ladspa? ( >=media-libs/liblrdf-0.4.0 )
 	cdda? ( >=dev-libs/libcdio-0.76 )
 	cddb? ( >=media-libs/libcddb-1.2.1 )
@@ -63,21 +61,17 @@ src_compile() {
 		$(use_with oss) \
 		$(use_with alsa) \
 		$(use_with jack) \
-		$(use_with sndfile) \
 		$(use_with libsamplerate src) \
+		$(use_with sndfile) \
 		$(use_with flac) \
 		$(use_with vorbis ogg) \
 		$(use_with speex) \
 		$(use_with mp3 mpeg) \
-		$(use_with mp3 id3) \
-		$(use_with mp3 mpegstatrec) \
 		$(use_with modplug mod) \
 		$(use_with musepack mpc) \
 		$(use_with ape mac) \
 		$(use_with ffmpeg lavc) \
 		$(use_with wavpack) \
-		$(use_with taglib metadata) \
-		$(use_with taglib metaedit) \
 		$(use_with ladspa) \
 		$(use_with cdda) \
 		$(use_with cddb) \
@@ -91,4 +85,6 @@ src_compile() {
 src_install() {
 	einstall || die "einstall failed"
 	dodoc AUTHORS ChangeLog README
+	newicon src/img/icon_64.png aqualung.png
+	make_desktop_entry aqualung Aqualung
 }
