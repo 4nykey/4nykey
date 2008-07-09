@@ -10,13 +10,13 @@ DESCRIPTION="Musepack audio compression tools"
 HOMEPAGE="http://www.musepack.net"
 SRC_URI="
 	http://files.musepack.net/source/${MY_P}.tar.bz2
-	http://xmixahlx.dyndns.org/gnu-linux/files/audio/musepack/source/${MPPDEC}.zip
+	http://4nykey.googlecode.com/files/${MPPDEC}.zip
 "
 S="${WORKDIR}/${MY_P}"
 
 SLOT="0"
 LICENSE="LGPL-2.1"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="esd encode oss verbose-build"
 
 RDEPEND="

@@ -12,7 +12,7 @@ ESVN_PATCHES="${P}-*.patch"
 
 SLOT="8"
 LICENSE="LGPL-2.1"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="verbose-build cuetools"
 
 RDEPEND="
