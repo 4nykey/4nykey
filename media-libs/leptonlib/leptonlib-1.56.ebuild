@@ -8,7 +8,7 @@ SRC_URI="http://www.leptonica.com/source/${P}.tar.gz"
 
 LICENSE="CCPL-Attribution-2.0"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="png jpeg gif tiff"
 
 DEPEND="

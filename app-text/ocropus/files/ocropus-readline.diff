@@ -1,43 +1,13 @@
-Index: configure
+Index: SConstruct
 ===================================================================
---- configure	(revision 912)
-+++ configure	(working copy)
-@@ -5390,13 +5390,13 @@
- 
- # --- libedit (optional for ocroscript interactive mode) ---
- 
--{ echo "$as_me:$LINENO: checking for readline in -ledit" >&5
--echo $ECHO_N "checking for readline in -ledit... $ECHO_C" >&6; }
-+{ echo "$as_me:$LINENO: checking for readline in -lreadline" >&5
-+echo $ECHO_N "checking for readline in -lreadline... $ECHO_C" >&6; }
- if test "${ac_cv_lib_edit_readline+set}" = set; then
-   echo $ECHO_N "(cached) $ECHO_C" >&6
- else
-   ac_check_lib_save_LIBS=$LIBS
--LIBS="-ledit  $LIBS"
-+LIBS="-lreadline  $LIBS"
- cat >conftest.$ac_ext <<_ACEOF
- /* confdefs.h.  */
- _ACEOF
-@@ -5456,7 +5456,7 @@
- #define HAVE_LIBEDIT 1
- _ACEOF
- 
--  LIBS="-ledit $LIBS"
-+  LIBS="-lreadline $LIBS"
- 
- else
-   noeditline=1
-Index: ocroscript/Jamfile
-===================================================================
---- ocroscript/Jamfile	(revision 912)
-+++ ocroscript/Jamfile	(working copy)
-@@ -90,7 +90,7 @@
- }
- 
- if $(noeditline) = "" {
--    LINKLIBS += -ledit ;
-+    LINKLIBS += -lreadline ;
-     SUBDIRC++FLAGS += -DLUA_USE_EDITLINE ;
- }
- 
+--- SConstruct	(revision 962)
++++ SConstruct	(working copy)
+@@ -127,7 +127,7 @@
+ env.Append(LIBPATH=[iulibprefix+"/lib"])
+ if not noeditline:
+     env.Append(CXXFLAGS=" -DLUA_USE_EDITLINE ")
+-    libs += ["editline"]
++    libs += ["readline"]
+ if not notesseract:
+     env.Append(CPPPATH=[tessprefix+"/include/tesseract"])
+     env.Append(LIBPATH=[tessprefix+"/lib"])

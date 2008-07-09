@@ -11,11 +11,12 @@ ESVN_PATCHES="${PN}-*.diff"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="fst spell readline sdl leptonica verbose-build"
 
 RDEPEND="
-	app-text/tesseract-ocr
+	|| ( app-text/tesseract-ocr app-text/tesseract )
+	media-libs/iulib
 	media-libs/libpng
 	media-libs/jpeg
 	media-libs/tiff
@@ -33,34 +34,38 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	dev-util/ftjam
+	dev-util/scons
 "
 
 src_compile() {
-	if use leptonica && built_with_use 'media-libs/leptonlib' gif; then
-		local _libs="-lgif"
-	fi
+	myconf="notesseract=0"
+	use fst			|| myconf+=" no-fst=1"
+	use spell		|| myconf+=" no-aspell=1"
+	use readline	|| myconf+=" no-editline=1"
+	use sdl			|| myconf+=" no-sdl=1"
+	use leptonica	&& myconf+=" leptonica=1"
 
-	LIBS="${_libs}" \
-	econf \
-		--with-tesseract=/usr \
-		--with-ocroscript \
-		$(use_with fst) \
-		$(use_with spell aspell) \
-		$(use_with sdl SDL) \
-		$(use_with leptonica) \
-		|| die "econf failed"
-
-	use verbose-build && MAKEOPTS+=" -dx"
-	jam -q ${MAKEOPTS} \
-		-sopt="$CXXFLAGS" \
-		|| die "jam build failed"
+	scons \
+		${MAKEOPTS} \
+		prefix="/usr" \
+		opt="${CXXFLAGS}" \
+		with-iulib="/usr" \
+		with-tesseract="/usr" \
+		${myconf} \
+		|| die
 }
 
 src_install() {
-	jam -q ${MAKEOPTS} \
-		-sDESTDIR="${D}" \
-		install \
-		|| die "jam install failed"
+	scons \
+		${MAKEOPTS} \
+		prefix="${D}/usr" \
+		opt="${CXXFLAGS}" \
+		with-iulib="/usr" \
+		with-tesseract="/usr" \
+		${myconf} \
+		install || die
 	dodoc CHANGES INSTALL README
+
+	insinto /usr/share/ocropus
+	doins -r ocroscript/scripts data/{models,words}
 }

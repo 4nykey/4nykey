@@ -20,3 +20,16 @@ Index: generate_version_cc.sh
  
  VERSION_STAMP="$VERSION_STAMP; `date`; `uname -a`"
  
+Index: SConstruct
+===================================================================
+--- SConstruct	(revision 962)
++++ SConstruct	(working copy)
+@@ -112,7 +112,7 @@
+     Builder(action = TOLUA+" -L ocroscript/hook_exceptions.lua -o $TARGET $SOURCE",
+             suffix=".cc",src_suffix=".pkg")
+ 
+-os.system("generate_version_cc.sh ./version.cc")
++os.system("./generate_version_cc.sh ./version.cc")
+ 
+ ### compilation options depending on configuration
+ 

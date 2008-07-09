@@ -10,7 +10,7 @@ S="${WORKDIR}/${MY_PN}/fst/lib"
 
 LICENSE=""
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE=""
 
 DEPEND=""
