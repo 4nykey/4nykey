@@ -6,13 +6,13 @@ inherit subversion autotools
 
 DESCRIPTION="Provides a simple foundation for reading DVD-Video images"
 HOMEPAGE="http://www.dtek.chalmers.se/groups/dvd/"
-ESVN_REPO_URI="svn://svn.mplayerhq.hu/dvdnav/trunk/${PN}"
+ESVN_REPO_URI="svn://svn.mplayerhq.hu/dvdnav/trunk/libdvdread"
 ESVN_BOOTSTRAP="eautoreconf"
 ESVN_PATCHES="${PN}-*.diff"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="x86"
+KEYWORDS="x86 ~amd64"
 IUSE=""
 
 DEPEND="
@@ -24,6 +24,5 @@ RDEPEND="
 
 src_install() {
 	einstall || die
-	dosym libdvdread /usr/include/dvdread
 	dodoc AUTHORS ChangeLog NEWS README TODO
 }

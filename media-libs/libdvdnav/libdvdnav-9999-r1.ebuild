@@ -12,11 +12,11 @@ ESVN_BOOTSTRAP="eautoreconf"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE=""
 
 DEPEND="
-	>=media-libs/libdvdread-9999
+	>=media-libs/libdvdread-mplayer-9999
 "
 RDEPEND="
 	${DEPEND}
