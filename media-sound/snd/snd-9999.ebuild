@@ -12,7 +12,7 @@ S="${WORKDIR}/${ECVS_MODULE}"
 
 SLOT="0"
 LICENSE="as-is"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="
 alsa esd fam fftw gsl gtk guile jack ladspa motif nls opengl ruby vorbis mp3
 speex flac timidity shorten wavpack cairo postscript
