@@ -12,7 +12,7 @@ ESVN_PATCHES="${PN}-*.diff"
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="fst spell readline sdl leptonica verbose-build"
+IUSE="spell readline sdl verbose-build"
 
 RDEPEND="
 	|| ( app-text/tesseract-ocr app-text/tesseract )
@@ -20,7 +20,6 @@ RDEPEND="
 	media-libs/libpng
 	media-libs/jpeg
 	media-libs/tiff
-	fst? ( dev-libs/libfst )
 	spell? (
 		app-text/aspell
 		app-dicts/aspell-en
@@ -30,7 +29,6 @@ RDEPEND="
 		media-libs/sdl-gfx
 		media-libs/sdl-image
 	)
-	leptonica? ( media-libs/leptonlib )
 "
 DEPEND="
 	${RDEPEND}
@@ -38,12 +36,10 @@ DEPEND="
 "
 
 src_compile() {
-	myconf="notesseract=0"
-	use fst			|| myconf+=" no-fst=1"
-	use spell		|| myconf+=" no-aspell=1"
-	use readline	|| myconf+=" no-editline=1"
-	use sdl			|| myconf+=" no-sdl=1"
-	use leptonica	&& myconf+=" leptonica=1"
+	myconf="no-fst"
+	use spell		|| myconf+=" no-aspell"
+	use readline	|| myconf+=" no-editline"
+	use sdl			|| myconf+=" no-sdl"
 
 	scons \
 		${MAKEOPTS} \
