@@ -25,7 +25,7 @@
  TARGET := mpc123
 @@ -50,7 +47,7 @@
  
- $(TARGET): $(DEPS) $(TARGET).c
+ $(TARGET): $(DEPS) $(TARGET).c $(MOS)
  	@echo Building mpc123 version $(MAJOR).$(MINOR) ...
 -	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o $@ $(DEPS) $(TARGET).c
 +	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o $@ $(DEPS) $(TARGET).c $(LDADD)
