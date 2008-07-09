@@ -11,12 +11,13 @@ ESVN_BOOTSTRAP="autopoint --force && eautoreconf"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="-*"
+KEYWORDS="~x86 ~amd64"
 IUSE="nls"
 
 RDEPEND="
 	>=x11-libs/gtk+-2
 	=x11-misc/xneur-${PV}*
+	gnome-base/libglade
 "
 DEPEND="
 	${RDEPEND}

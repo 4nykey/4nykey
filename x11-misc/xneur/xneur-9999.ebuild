@@ -7,12 +7,11 @@ inherit subversion autotools
 DESCRIPTION="X Neural Switcher is an automatic keyboard layout switcher"
 HOMEPAGE="http://xneur.ru"
 ESVN_REPO_URI="svn://xneur.ru:3690/xneur/xneur"
-#ESVN_PATCHES="${PN}*.diff"
 ESVN_BOOTSTRAP="eautoreconf"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="-*"
+KEYWORDS="~x86 ~amd64"
 IUSE="gstreamer openal alsa debug pcre spell xpm"
 
 DEPEND="
