@@ -12,7 +12,7 @@ S="${WORKDIR}/${MY_PN}"
 
 LICENSE="GPL-2 OFL"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="opentype"
 
 DOCS="Bugs ChangeLog.txt LICENCE.txt Readme"
