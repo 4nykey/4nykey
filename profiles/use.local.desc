@@ -1,5 +1,5 @@
 app-text/fbreader:verbose-build - Build in verbose mode (silent oterwise)
-dev-python/ZSI:twisted - Builds ZSI.twisted package
+app-text/ocropus:verbose-build - Build in verbose mode (silent oterwise)
 media-fonts/cm-unicode:gs - Ghostscript support
 media-fonts/cm-unicode:opentype - Install OpenType fonts
 media-fonts/ttf-gandhari-unicode:opentype - Install OpenType fonts
@@ -10,7 +10,6 @@ media-gfx/fim:screen - Add (experimental!) support for running under screen
 media-gfx/fim:xcf - Support for xcf files via dev-perl/gimp-perl
 media-gfx/fim:xfig - Support for xfig files via media-gfx/xfig
 media-libs/a52dec:djbfft - Prefer D.J. Bernstein's library for fourier transforms
-media-libs/aften:verbose-build - Build in verbose mode (silent oterwise)
 media-libs/x264:mp4 - Adds support for mp4 container via gpac
 media-sound/aqualung:ape - Add support for decoding of Monkey's Audio
 media-sound/aqualung:cdda - Enables support for audio cd playback through libcdio
@@ -28,12 +27,7 @@ media-sound/musepack-tools:verbose-build - Build in verbose mode (silent oterwis
 media-sound/ncmpc:lyrics - Support for fetching lyrics from Internet
 media-sound/ncmpc:mouse - Enable curses getmouse support
 media-sound/ncmpc:raw-mode - raw terminal mode
-media-sound/rezound:16bittmp - Use 16bit temporary files (default 32bit float), usefull for slower computers
-media-sound/rezound:soundtouch - compile with support for soundtouch
 media-sound/snd:postscript - Enable postscript output from OpenGL graphics
-media-sound/sonata:lyrics - Support for lyrics fetching
-media-sound/traverso:lv2 - Add support for Ladspa V2
-media-sound/traverso:verbose-build - Build in verbose mode (silent oterwise)
 media-video/avidemux:aften - Enable A/52 encoding support via aften
 media-video/avidemux:amrnb - Enables Adaptive Multi-Rate Audio support (Narrow Band)
 media-video/avidemux:verbose-build - Build in verbose mode (silent oterwise)
@@ -54,32 +48,27 @@ media-video/mplayer:dvdnav - DVD menu navigation support (not supported)
 media-video/mplayer:enca - Enables support for charset discovery and conversion
 media-video/mplayer:external-faad - Use system faad2 library instead of bundled one
 media-video/mplayer:external-ffmpeg - Use system libavcodec instead of bundled one
-media-video/mplayer:kernel_linux - KERNEL setting for systems using the Linux kernel
 media-video/mplayer:live - Enables live.com streaming media support
 media-video/mplayer:mmxext - Enables mmx2 support
 media-video/mplayer:radio - Enable V4L2 radio interface and support
 media-video/mplayer:real - Adds real video support
 media-video/mplayer:rtc - Enables usage of the linux real time clock.  The alternative is software emulation of rtc
+media-video/mplayer:ssse3 - faster floating point optimization for SSSE3 capable chips (Intel Core 2 and later chips)
 media-video/mplayer:tga - Enables Targa video output
 media-video/mplayer:tremor - Use tremor for decoding vorbis audio
 media-video/mplayer:twolame - Enable MP2 encoding through twolame
+media-video/mplayer:vidix - Support for vidix video output
 media-video/mplayer:xanim - Enables support for xanim based codecs
 media-video/mplayer:xvmc - Enables X-Video Motion Compensation support
 media-video/mplayer:zoran - Enables ZR360[56]7/ZR36060 video output
 media-video/pgcedit:wine - Install a preview app that requires Wine on runtime
 media-video/subtitleeditor:iso-codes - Enables iso-codes support
 media-video/subtitleeditor:ttxt - Support for subtitles in TTXT format
-media-video/transcode:fame - Enables libfame support
 media-video/transcode:mjpeg - Enables mjpegtools support
 media-video/transcode:network - Enables network streaming support
 media-video/transcode:postproc - Build with ffmpeg libpostproc support
 net-im/tkabber:plugins - Enables installation of extra plugins
-net-libs/webkit:xslt - Enables xslt support
-net-p2p/bitswash:dht - Enable DHT support
-net-p2p/bitswash:libtorrent - Use system rb_libtorrent (may require the version, that isn't yet in portage)
 net-p2p/rtorrent:openssl - Use OpenSSL's SHA1 implementation
 x11-libs/fltk:noxft - Disables fltk; use for non-english characters
 x11-libs/fltk:verbose-build - Build in verbose mode (silent oterwise)
-x11-themes/gtk-engines-candido:gdm - Install GDM theme
-x11-themes/gtk-engines-candido:metacity - Install Metacity theme
-x11-themes/gtk-engines-murrine:metacity - Install Metacity theme
+x11-misc/barpanel:battery - Support battery status plugin
