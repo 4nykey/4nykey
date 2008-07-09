@@ -13,7 +13,7 @@ ESVN_PATCHES="${PN}-*.diff"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="-*"
+KEYWORDS="~x86 ~amd64"
 IUSE="debug ipv6 openssl"
 
 RDEPEND="
@@ -28,12 +28,9 @@ DEPEND="
 "
 
 src_unpack() {
-	ESVN_REPO_URI="svn://rakshasa.no/libtorrent/trunk/libtorrent" \
-		subversion_fetch
-	mv ${S} ${WORKDIR}/libtorrent
 	subversion_fetch
-	mv ${WORKDIR}/libtorrent ${S}
-	sed -i ${S}/configure.ac -e 's:libtorrent >= [0-9.]*::'
+	subversion_fetch svn://rakshasa.no/libtorrent/trunk/libtorrent libtorrent
+	sed -i ${S}/configure.ac -e 's:libtorrent >= [0-9.]\+::'
 	subversion_bootstrap
 }
 
