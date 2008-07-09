@@ -10,14 +10,14 @@ ESVN_REPO_URI="svn://svn.rockbox.org/rockbox/trunk/apps/codecs/demac"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE=""
 
 DEPEND=""
 RDEPEND=""
 
 src_compile() {
-	emake CFLAGS="${CFLAGS} -Ilibdemac" || die
+	emake CC="$(tc-getCC)" CFLAGS="${CFLAGS} -Ilibdemac" || die
 }
 
 src_install() {

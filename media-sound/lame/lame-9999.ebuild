@@ -6,14 +6,13 @@ inherit flag-o-matic toolchain-funcs eutils cvs
 
 DESCRIPTION="LAME Ain't an MP3 Encoder"
 HOMEPAGE="http://lame.sourceforge.net"
-#SRC_URI="mirror://sourceforge/lame/${P}.tar.gz"
 ECVS_SERVER="lame.cvs.sourceforge.net:/cvsroot/lame"
 ECVS_MODULE="${PN}"
 S=${WORKDIR}/${PN}
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="gtk debug static pic sndfile"
 
 RDEPEND=">=sys-libs/ncurses-5.2
@@ -30,9 +29,6 @@ src_unpack() {
 
 	# The frontened tries to link staticly, but we prefer shared libs
 	epatch ${FILESDIR}/${PN}-3.98-shared-frontend.patch
-
-	# make it link with --as-needed
-	epatch ${FILESDIR}/${PN}-as_needed.diff
 
 	epunt_cxx # embedded bug #74498
 

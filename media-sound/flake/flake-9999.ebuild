@@ -11,7 +11,7 @@ ESVN_PATCHES="${PN}-*.diff"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="debug verbose-build"
 
 DEPEND=""
@@ -27,7 +27,6 @@ src_compile() {
 		-DSHARED=ON \
 		-DSVN_VERSION=${ESVN_WC_REVISION}
 	"
-
 	cmake-utils_src_compile
 }
 
