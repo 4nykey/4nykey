@@ -1,0 +1,12 @@
+Index: src/CommandConsole.cpp
+===================================================================
+--- src/CommandConsole.cpp	(revision 139)
++++ src/CommandConsole.cpp	(working copy)
+@@ -42,6 +42,7 @@
+ #include <linux/kd.h>
+ #include <fstream>
+ 
++#include <limits.h>
+ 
+ extern int yyparse();
+ 

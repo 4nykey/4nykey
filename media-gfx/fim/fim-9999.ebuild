@@ -12,7 +12,7 @@ ESVN_BOOTSTRAP="eautoreconf"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 
 IUSE="debug gif jpeg png tiff postscript screen imagemagick xcf svg xfig dia"
 
