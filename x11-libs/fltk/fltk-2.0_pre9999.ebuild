@@ -10,7 +10,7 @@ ESVN_REPO_URI="http://svn.easysw.com/public/fltk/fltk/trunk"
 ESVN_PATCHES="fltk2-*.diff"
 ESVN_BOOTSTRAP="eautoreconf"
 
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 LICENSE="FLTK LGPL-2"
 SLOT="2"
 IUSE="noxft opengl debug cairo threads jpeg zlib png xinerama doc verbose-build"
