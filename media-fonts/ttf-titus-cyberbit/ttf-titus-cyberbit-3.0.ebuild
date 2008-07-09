@@ -12,7 +12,7 @@ S="${WORKDIR}"
 
 LICENSE="as-is"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 
 FONT_SUFFIX="TTF"
 FONT_S="${S}"
