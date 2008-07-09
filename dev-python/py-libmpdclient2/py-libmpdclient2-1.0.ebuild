@@ -5,12 +5,13 @@
 inherit distutils
 
 DESCRIPTION="A python MPD interface from Nick Welch"
-HOMEPAGE="http://pygmy.berlios.de"
-SRC_URI="http://pygmy.berlios.de/files/${P}.tar.bz2"
+HOMEPAGE="http://incise.org/py-libmpdclient2.html"
+SRC_URI="http://incise.org/files/dev/${P}.tgz"
+S="${WORKDIR}/${PN}"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 
 IUSE=""
 RDEPEND="media-sound/mpd"

@@ -13,11 +13,11 @@ S="${WORKDIR}/${MY_P}"
 
 LICENSE="as-is"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="musicbrainz"
 
 RDEPEND="
-	dev-python/py-libmpdclient
+	dev-python/py-libmpdclient2
 	musicbrainz? ( dev-python/python-musicbrainz )
 "
 
@@ -35,9 +35,7 @@ pkg_setup() {
 
 src_unpack() {
 	unpack ${A}
-	cd ${S}
-	use musicbrainz || sed -i /mb/d setup.py
-	epatch "${FILESDIR}"/${PN}-*.diff
+	use musicbrainz || sed -i /mb/d "${S}"/setup.py
 }
 
 src_install() {
