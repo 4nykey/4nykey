@@ -10,7 +10,7 @@ S="${WORKDIR}/${MY_PV}"
 
 LICENSE="BWidget"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="threads debug"
 
 DEPEND="
@@ -22,8 +22,6 @@ RDEPEND="
 "
 
 src_compile() {
-	source /usr/lib/tclConfig.sh
-	CPPFLAGS="-I${TCL_SRC_DIR}/generic ${CPPFLAGS}" \
 	econf \
 		$(use_enable debug symbols) \
 		$(use_enable threads) \

@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/net-im/tkabber/tkabber-0.9.9.ebuild,v 1.6 2007/05/18 22:10:55 welp Exp $
 
-inherit subversion
+inherit subversion confutils
 
 DESCRIPTION="Tkabber is a Free and Open Source client for the Jabber instant messaging system, written in Tcl/Tk."
 HOMEPAGE="http://tkabber.jabber.ru/"
@@ -22,16 +22,12 @@ DEPEND="
 "
 
 LICENSE="GPL-2"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 SLOT="0"
 
 pkg_setup() {
-	if has_version '>=dev-tcltk/tclxml-3.0' \
-		&& ! built_with_use dev-tcltk/tclxml expat ; then
-		eerror "tclxml is missing expat support."
-		eerror "Please add 'expat' to your USE flags, and re-emerge tclxml."
-		die "tclxml needs expat support"
-	fi
+	has_version '>=dev-tcltk/tclxml-3.0' && \
+		confutils_require_built_with_all dev-tcltk/tclxml expat
 }
 
 src_unpack() {
