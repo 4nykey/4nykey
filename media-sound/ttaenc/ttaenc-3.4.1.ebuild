@@ -9,21 +9,22 @@ DESCRIPTION="TTA lossless audio encoder/decoder"
 HOMEPAGE="http://tta.sf.net"
 SRC_URI="
 	mirror://sourceforge/tta/${MY_P}.tgz
-	http://etree.org/shnutils/shntool/support/formats/tta/${MY_P}-shntool.patch
+	http://etree.org/shnutils/shntool/support/formats/tta/unix/${PV}/${MY_P}-shntool.patch
 "
 S="${WORKDIR}/${MY_P}"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE=""
 
 DEPEND=""
 RDEPEND=""
 
 src_unpack() {
-	unpack ${A}
+	unpack ${MY_P}.tgz
 	cd ${S}
+	sed -i -e "s:gcc:$(tc-getCC):g" Makefile
 	epatch ${DISTDIR}/${MY_P}-shntool.patch
 }
 

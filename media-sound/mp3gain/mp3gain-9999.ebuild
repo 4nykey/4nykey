@@ -16,7 +16,7 @@ S="${WORKDIR}/${ECVS_MODULE}"
 
 SLOT="0"
 LICENSE="LGPL-2.1"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 
 src_unpack() {
 	cvs_src_unpack
