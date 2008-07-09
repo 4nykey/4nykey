@@ -2,16 +2,17 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-MY_PV="${PN}${PV}"
+inherit subversion autotools
+
 DESCRIPTION="Tcl/Tk Image formats"
 HOMEPAGE="http://tkimg.sf.net"
-SRC_URI="mirror://sourceforge/${PN}/${MY_PV}.tar.bz2"
-S="${WORKDIR}/${MY_PV}"
+ESVN_REPO_URI="https://tkimg.svn.sourceforge.net/svnroot/tkimg/trunk"
+ESVN_BOOTSTRAP="eautoreconf"
 
 LICENSE="BWidget"
 SLOT="0"
 KEYWORDS="~x86"
-IUSE="threads debug"
+IUSE=""
 
 DEPEND="
 	dev-lang/tk
@@ -21,10 +22,7 @@ RDEPEND="
 "
 
 src_compile() {
-	econf \
-		$(use_enable debug symbols) \
-		$(use_enable threads) \
-		|| die
+	econf || die
 	emake CFLAGS_OPTIMIZE= || die
 }
 

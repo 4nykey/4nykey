@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit cvs
+inherit cvs confutils
 
 PLP="polipo-1.0.1"
 DESCRIPTION="Html Viewer 3 - the minimalist browser designed to test Tkhtml3"
@@ -15,16 +15,18 @@ S="${WORKDIR}/${ECVS_MODULE}"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="sqlite3"
 
 DEPEND=""
 RDEPEND="
 	dev-tcltk/tkhtml
 	dev-tcltk/tkimg
-	sqlite3? ( >=dev-db/sqlite-3 )
+	>=dev-db/sqlite-3
 "
-
+pkg_setup() {
+	confutils_require_built_with_all dev-db/sqlite tcl
+}
 src_unpack() {
 	unpack ${A}
 	cvs_src_unpack
