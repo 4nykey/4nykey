@@ -12,7 +12,7 @@ ESVN_BOOTSTRAP="eautoreconf"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="
 aac alsa ao audiofile flac icecast ipv6 mad mikmod musepack vorbis oss unicode
 ogg pulseaudio jack libsamplerate wavpack zeroconf avahi

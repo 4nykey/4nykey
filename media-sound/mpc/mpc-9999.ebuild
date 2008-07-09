@@ -10,7 +10,7 @@ ESVN_REPO_URI="https://svn.musicpd.org/${PN}/trunk"
 ESVN_BOOTSTRAP="eautoreconf"
 IUSE="bash-completion"
 
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 SLOT="0"
 LICENSE="GPL-2"
 

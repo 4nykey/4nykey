@@ -13,7 +13,7 @@ AT_M4DIR="m4"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="nls unicode lyrics raw-mode mouse debug"
 
 DEPEND="
