@@ -1,0 +1,14 @@
+diff --git a/configure b/configure
+index 29e1b25..6d2b95a 100755
+--- a/configure
++++ b/configure
+@@ -396,8 +396,7 @@ if [ "$pic" = "yes" ] ; then
+ fi
+ 
+ if [ "$debug" != "yes" -a "$gprof" != "yes" ]; then
+-    CFLAGS="$CFLAGS -s -fomit-frame-pointer"
+-    LDFLAGS="$LDFLAGS -s"
++    CFLAGS="$CFLAGS -fomit-frame-pointer"
+ fi
+ 
+ if [ "$debug" = "yes" ]; then

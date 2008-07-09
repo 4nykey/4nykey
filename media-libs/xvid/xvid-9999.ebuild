@@ -6,25 +6,23 @@ inherit cvs autotools
 
 DESCRIPTION="high performance/quality MPEG-4 video de-/encoding solution"
 HOMEPAGE="http://www.xvid.org/"
-#SRC_URI="mirror://gentoo/${PN}-1.1.0-noexec-stack.patch.bz2"
 ECVS_SERVER="cvs.xvid.org:/xvid"
 ECVS_MODULE="xvidcore"
 S="${WORKDIR}/${ECVS_MODULE}/build/generic"
 
 LICENSE="GPL-2"
 SLOT="1"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="doc examples"
 
 DEPEND="
-	x86? ( || ( dev-lang/yasm >=dev-lang/nasm-0.98.39 ) )
+	dev-lang/yasm
 "
 
 src_unpack() {
 	cvs_src_unpack
 
 	cd "${S}"/../..
-#	epatch "${DISTDIR}"/${A}
 	epatch "${FILESDIR}"/${PN}-*.patch
 
 	cd ${S}

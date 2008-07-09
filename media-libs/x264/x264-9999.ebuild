@@ -11,8 +11,8 @@ EGIT_PATCHES="${PN}-*.diff"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86"
-IUSE="X mp4 sdl threads gtk static"
+KEYWORDS="~x86 ~amd64"
+IUSE="X mp4 sdl threads gtk static debug"
 
 RDEPEND="
 	mp4? ( media-video/gpac )
@@ -22,31 +22,29 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	dev-lang/nasm
+	>=dev-lang/yasm-0.6.2
 "
 
 src_compile() {
 	local myconf
 	use X && myconf="--enable-visualize"
+	use debug && myconf="${myconf} --enable-debug"
 
-	# w/o debug configure adds '-s' to {c,ld}flags
-	GIT_DIR="${EGIT_STORE_DIR}/${GIT_DIR}" \
+	GIT_DIR="${EGIT_STORE_DIR}/${EGIT_PROJECT}" \
 	./configure\
 		--prefix=/usr \
-		--enable-pic \
-		--enable-debug \
 		--disable-avis-input \
+		--enable-pic \
 		$(use_enable !static shared) \
 		$(use_enable threads pthread) \
 		$(use_enable mp4 mp4-output)\
 		--extra-cflags="${CFLAGS}"\
 		--extra-ldflags="$LDFLAGS" \
+		--extra-asflags="${ASFLAGS}" \
 		${myconf} || die
 	touch .depend
 
-	emake || die
-	echo $(tc-getCC) $CFLAGS $LDFLAGS -o avc2avi tools/avc2avi.c
-	$(tc-getCC) $CFLAGS $LDFLAGS -o avc2avi tools/avc2avi.c
+	emake CC="$(tc-getCC)" || die
 
 	use gtk && emake -C gtk || die
 
@@ -66,7 +64,7 @@ src_test() {
 src_install() {
 	emake DESTDIR=${D} install || die
 	use gtk && emake DESTDIR=${D} -C gtk install || die
-	dobin x264 avc2avi
+	dobin x264
 	use sdl && dobin xyuv
 	dodoc AUTHORS doc/*.txt tools/*.{pl,sh}
 }
