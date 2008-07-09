@@ -12,7 +12,7 @@ S="${WORKDIR}/${ECVS_MODULE}"
 
 LICENSE="as-is"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="debug"
 
 DEPEND=""
@@ -22,8 +22,9 @@ src_compile() {
 	local myconf="release"
 	use debug && myconf="debug"
 	emake \
+		CC=$(tc-getCC) CXX=$(tc-getCXX) AR=$(tc-getAR) \
+		RELFLAGS="${CFLAGS} -fPIC -DPIC -DNDEBUG" \
 		DEBUG="${S}" RELEASE="${S}" \
-		RELFLAGS="${CFLAGS}" \
 		${myconf} \
 		|| die
 }

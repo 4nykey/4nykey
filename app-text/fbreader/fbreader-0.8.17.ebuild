@@ -10,7 +10,7 @@ SRC_URI="http://www.fbreader.org/${PN}-sources-${PV}.tgz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="gtk qt3 qt4 debug verbose-build"
 
 DEPEND="
