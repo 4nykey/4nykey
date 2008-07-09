@@ -11,7 +11,7 @@ ESVN_PATCHES="${PN}-*.diff"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="
 aac debug doc ieee1394 a52 encode imlib mmx vorbis oss threads truetype v4l
 v4l2 xvid network zlib X amr x264 mp3 swscaler sdl bindist postproc ipv6 vhook
@@ -57,6 +57,7 @@ get_cpu() {
 		else break
 		fi
 	done
+	_cpu=${_cpu/-sse3}
 	if [[ -z ${_cpu} ]]; then
 		_cpu="${CTARGET:-${CHOST}}"
 		_cpu="${_chost%%-*}"
@@ -125,12 +126,14 @@ src_compile() {
 		${my_conf} \
 		|| die "configure failed"
 
-	emake CC="$(tc-getCC)" || die "emake failed"
+	emake CC="$(tc-getCC)" DEPS= VHOOK_DEPS= version.h || die "emake failed"
+	emake CC="$(tc-getCC)" DEPS= VHOOK_DEPS= || die "emake failed"
 }
 
 src_install() {
 	use doc && emake documentation
-	emake DESTDIR="${D}" LDCONFIG=true install || die "emake install failed"
+	emake DESTDIR="${D}" LDCONFIG=true DEPS= VHOOK_DEPS= install ||
+		die "emake install failed"
 	dodoc Changelog CREDITS README MAINTAINERS doc/*.txt
 
 	dodir /usr/include/{ffmpeg,postproc}

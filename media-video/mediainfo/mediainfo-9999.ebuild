@@ -8,14 +8,15 @@ inherit subversion autotools wxwidgets confutils
 DESCRIPTION="MediaInfo supplies technical and tag information about media files"
 HOMEPAGE="http://mediainfo.sourceforge.net"
 ESVN_REPO_URI="https://mediainfo.svn.sourceforge.net/svnroot/mediainfo/MediaInfo/trunk"
-ESVN_PATCHES="${PN}-*.diff"
 S="${WORKDIR}"
-S1="${WORKDIR}/MediaInfo/Project/GNU/CLI"
-S2="${WORKDIR}/MediaInfo/Project/GNU/GUI"
+S0="${S}/ZenLib/Project/GNU/Library"
+S1="${S}/MediaInfoLib/Project/GNU/Library"
+S2="${S}/MediaInfo/Project/GNU/CLI"
+S3="${S}/MediaInfo/Project/GNU/GUI"
 
 LICENSE="GPL-3 LGPL-3 ZLIB"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="debug unicode wxwindows X"
 
 DEPEND="
@@ -34,7 +35,6 @@ pkg_setup() {
 }
 
 src_unpack() {
-	mkdir -p ${S}/{MediaInfo,MediaInfoLib,ZenLib}
 	subversion_fetch ${ESVN_REPO_URI} MediaInfo
 	ESVN_PROJECT="mediainfolib" subversion_fetch\
 		https://mediainfo.svn.sourceforge.net/svnroot/mediainfo/MediaInfoLib/trunk\
@@ -42,43 +42,50 @@ src_unpack() {
 	ESVN_PROJECT="zenlib" subversion_fetch\
 		https://zenlib.svn.sourceforge.net/svnroot/zenlib/ZenLib/trunk\
 		ZenLib
-	subversion_bootstrap
-	cd ${S1}
-	eautoreconf
+	for d in ${S0} ${S1} ${S2}; do
+		cd ${d} && eautoreconf
+	done
 
 	if use X; then
-		cd ${S2}
+		cd ${S3}
 		eautoreconf
 	fi
 }
 
 src_compile() {
-	cd ${S1}
-	econf \
-		--enable-shared \
-		$(use_enable debug) \
-		$(use_enable unicode) \
-		$(use_with wxwindows wxwidgets) \
-		$(use_with X wx-gui) \
-		$(use_with wxwindows wx-config ${WX_CONFIG}) \
-		|| die
-	emake || die
-
-	if use X; then
-		cd ${S2}
-		econf \
+	local myconf="
+			--disable-static \
 			--enable-shared \
+			--disable-option-checking \
+			--disable-dependency-tracking \
 			$(use_enable debug) \
 			$(use_enable unicode) \
 			$(use_with wxwindows wxwidgets) \
-			|| die
-		emake || die
+	"
+	for d in ${S0} ${S1} ${S2}; do
+		cd ${d}
+		econf \
+			${myconf} \
+			$(use_with X wx-gui) \
+			$(use_with wxwindows wx-config ${WX_CONFIG}) \
+			|| die "econf failed in ${d}"
+		emake || die "emake failed in ${d}"
+	done
+
+	if use X; then
+		cd ${S3}
+		econf \
+			${myconf} \
+			|| die "econf failed in ${S3}"
+		emake || die "emake failed in ${S3}"
 	fi
 }
 
 src_install() {
-	emake DESTDIR="${D}" -C ${S1} install || die
-	use X && emake DESTDIR="${D}" -C ${S2} install || die
+	for d in ${S0} ${S1} ${S2}; do
+		emake DESTDIR="${D}" -C ${d} install || die
+	done
+	use X && emake DESTDIR="${D}" -C ${S3} install || die
 	dodoc MediaInfo/History*.txt MediaInfoLib/*.txt MediaInfoLib/Release/ReadMe.Linux.txt
 	newdoc MediaInfo/Release/ReadMe.Linux.txt ReadMe.CLI.txt
 }

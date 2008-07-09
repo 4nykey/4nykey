@@ -12,7 +12,7 @@ S="${WORKDIR}/${MY_P}"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="spell cairo debug ttxt nls iso-codes"
 
 RDEPEND="

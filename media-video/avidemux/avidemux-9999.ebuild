@@ -12,7 +12,7 @@ ESVN_PATCHES="${PN}-*.diff"
 
 LICENSE="GPL-2"
 SLOT="2"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="
 	a52 aac alsa arts esd mmx nls vorbis sdl truetype xvid xv oss x264
 	dts qt4 fontconfig lame aften gtk jack debug libsamplerate amrnb
@@ -52,7 +52,6 @@ RDEPEND="
 DEPEND="
 	$RDEPEND
 	oss? ( virtual/os-headers )
-	x86? ( dev-lang/nasm )
 	dev-util/pkgconfig
 	nls? ( sys-devel/gettext )
 "

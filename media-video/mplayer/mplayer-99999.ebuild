@@ -23,16 +23,16 @@ ESVN_PATCHES="${PN}-*.diff"
 
 SLOT="0"
 LICENSE="GPL-2"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 
 IUSE="
 3dnow 3dnowext aac aalib alsa amr arts bindist bitmap-fonts bidi bl cdio
 cpudetection custom-cflags debug dga doc dts dvb cdparanoia directfb dv
 dvdread dvdnav enca encode esd external-faad external-ffmpeg fbcon fontconfig
-gif ggi gtk ipv6 jack joystick jpeg ladspa libcaca lirc live livecd lzo mad
-matrox mmx mmxext musepack nas openal opengl oss png real rtc samba sdl speex
-sse sse2 svga tga theora tremor truetype v4l v4l2 vorbis win32codecs X x264
-xanim xinerama xv xvid xvmc twolame radio examples kernel_linux zoran
+gif ggi gtk ipv6 jack joystick jpeg ladspa libcaca lirc live lzo mad
+mmx mmxext musepack nas openal opengl oss png real rtc samba sdl speex
+sse sse2 ssse3 svga tga theora tremor truetype v4l v4l2 vidix vorbis
+win32codecs X x264 xanim xinerama xv xvid xvmc twolame radio examples zoran
 pulseaudio cddb
 "
 
@@ -44,10 +44,14 @@ done
 # 'encode' in USE for MEncoder.
 RDEPEND="
 	xvid? ( >=media-libs/xvid-0.9.0 )
-	win32codecs? (
-		!livecd? (
-			!bindist? ( >=media-libs/win32codecs-20040916 ) ) )
-	x86? ( real? ( >=media-video/realplayer-10.0.3 ) )
+	!bindist? (
+		x86? (
+			win32codecs? ( media-libs/win32codecs )
+			real? ( media-libs/win32codecs
+				media-video/realplayer )
+			)
+		amd64? ( real? ( media-libs/amd64codecs ) )
+	)
 	aalib? ( media-libs/aalib )
 	alsa? ( media-libs/alsa-lib )
 	arts? ( kde-base/arts )
@@ -111,6 +115,7 @@ RDEPEND="
 			=x11-libs/gtk+-2*
 			=dev-libs/glib-2*
 		)
+		vidix? ( x11-libs/libXxf86vm x11-libs/libXext )
 	)
 	amr? ( media-libs/amrnb media-libs/amrwb )
 	vorbis? ( media-libs/libvorbis )
@@ -139,7 +144,7 @@ pkg_setup() {
 		REALLIBDIR="/opt/RealPlayer/codecs"
 	fi
 	LINGUAS="en"
-	confutils_use_conflict win32codecs livecd bindist
+	confutils_use_conflict win32codecs real bindist
 	confutils_use_depend_all gtk X png
 	confutils_use_depend_any gtk bitmap-fonts truetype
 	confutils_use_depend_all dga X
@@ -153,7 +158,6 @@ pkg_setup() {
 	confutils_use_depend_any radio v4l v4l2
 	confutils_use_conflict cdparanoia cdio
 	confutils_use_depend_any cddb cdparanoia cdio
-	confutils_use_depend_all real x86
 }
 
 src_unpack() {
@@ -188,12 +192,21 @@ src_unpack() {
 src_compile() {
 
 	local my_conf="
-		--disable-tv-bsdbt848 --disable-tremor-external
+		--cc=$(tc-getCC) \
+		--host-cc=$(tc-getBUILD_CC) \
+		--prefix=/usr \
+		--confdir=/etc/mplayer \
+		--datadir=/usr/share/mplayer \
+		--libdir=/usr/$(get_libdir) \
+		--enable-menu \
+		--enable-network \
+		--disable-tv-bsdbt848 \
+		--disable-tremor-external \
 	"
 	################
 	#Optional features#
 	###############
-	if use cpudetection || use livecd || use bindist; then
+	if use cpudetection || use bindist; then
 		my_conf="${my_conf} --enable-runtime-cpudetection"
 	fi
 
@@ -273,6 +286,11 @@ src_compile() {
 	enable_extension_disable speex speex
 	enable_extension_disable xvid xvid
 	enable_extension_disable real real
+	if use real && use x86; then
+		my_conf="${my_conf} --realcodecsdir=/opt/RealPlayer/codecs"
+	elif use real && use amd64; then
+		my_conf="${my_conf} --realcodecsdir=/usr/$(get_libdir)/codecs"
+	fi
 	enable_extension_disable win32dll win32codecs
 	enable_extension_disable libamr_nb amr
 	enable_extension_disable libamr_wb amr
@@ -294,7 +312,9 @@ src_compile() {
 	enable_extension_disable sdl sdl
 
 	enable_extension_disable svga svga
-	enable_extension_disable vidix-internal svga
+	enable_extension_disable svgalib_helper svga
+	enable_extension_disable vidix vidix
+	enable_extension_disable vidix-pcidb vidix
 	enable_extension_disable zr zoran
 
 	enable_extension_disable tga tga
@@ -329,14 +349,13 @@ src_compile() {
 	#################
 	# Advanced Options #
 	#################
-	if use x86; then
-		enable_extension_disable 3dnow 3dnow
-		enable_extension_disable 3dnowext 3dnowext
-		enable_extension_disable sse sse
-		enable_extension_disable sse2 sse2
-		enable_extension_disable mmx mmx
-		enable_extension_disable mmxext mmxext
-	fi
+	enable_extension_disable 3dnow 3dnow
+	enable_extension_disable 3dnowext 3dnowext
+	enable_extension_disable sse sse
+	enable_extension_disable sse2 sse2
+	enable_extension_disable ssse3 ssse3
+	enable_extension_disable mmx mmx
+	enable_extension_disable mmxext mmxext
 	use debug && my_conf="${my_conf} --enable-debug=3"
 
 	if use xanim
@@ -346,31 +365,19 @@ src_compile() {
 
 	enable_extension_enable bl bl
 
-	#leave this in place till the configure/compilation borkage is completely corrected back to pre4-r4 levels.
-	# it's intended for debugging so we can get the options we configure mplayer w/, rather then hunt about.
-	# it *will* be removed asap; in the meantime, doesn't hurt anything.
-	echo "${my_conf}" > ${T}/configure-options
-
 	if use custom-cflags; then
 	# ugly optimizations cause MPlayer to cry on x86 systems!
 		if use x86 ; then
-			replace-flags -O0 -O2
-			replace-flags -O3 -O2
+			replace-flags -O* -O2
 			filter-flags -fPIC -fPIE
+			use debug || append-flags -fomit-frame-pointer
 		fi
+		append-flags -D__STDC_LIMIT_MACROS
 	else
 		unset CFLAGS CXXFLAGS
 	fi
 
-	./configure \
-		--prefix=/usr \
-		--confdir=/usr/share/mplayer \
-		--datadir=/usr/share/mplayer \
-		--enable-largefiles \
-		--enable-menu \
-		--enable-network --enable-ftp \
-		--realcodecsdir=${REALLIBDIR} \
-		${my_conf} || die
+	./configure ${my_conf} || die
 
 
 	emake DEPS='' codecs.conf.h version.h || die "Failed to build MPlayer!"

@@ -11,7 +11,7 @@ S="${WORKDIR}/${ECVS_MODULE}"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="debug mmx doc qt4"
 
 RDEPEND="
