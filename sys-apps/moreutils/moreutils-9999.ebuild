@@ -10,7 +10,7 @@ EGIT_REPO_URI="git://git.kitenet.net/moreutils"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="doc"
 
 RDEPEND="
@@ -32,10 +32,17 @@ src_unpack() {
 }
 
 src_compile() {
-	emake CFLAGS="${CFLAGS}" || die "emake failed"
+	emake \
+		CC="$(tc-getCC)" \
+		CFLAGS="${CFLAGS}" \
+		DOCBOOK2XMAN="docbook2man.pl" \
+		|| die "emake failed"
 }
 
 src_install() {
-	emake PREFIX="${D}" INSTALL_BIN=install install || die "emake install failed"
+	emake \
+		DESTDIR="${D}" \
+		INSTALL_BIN="install" \
+		install || die "emake install failed"
 	dodoc README
 }
