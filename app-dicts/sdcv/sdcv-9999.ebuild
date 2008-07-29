@@ -2,13 +2,17 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+inherit subversion autotools
+
 DESCRIPTION="sdcv - console version of StarDict program"
 HOMEPAGE="http://sdcv.sourceforge.net"
-SRC_URI="mirror://sourceforge/${PN}/${P}.tar.bz2"
+ESVN_REPO_URI="https://sdcv.svn.sourceforge.net/svnroot/sdcv/trunk"
+ESVN_PATCHES="${PN}-*.diff"
+ESVN_BOOTSTRAP="eautoreconf"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="readline nls"
 
 RDEPEND="
