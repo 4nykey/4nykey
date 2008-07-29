@@ -1034,9 +1034,9 @@ Index: libavcodec/allcodecs.c
 --- libavcodec/allcodecs.c	(revision 13244)
 +++ libavcodec/allcodecs.c	(working copy)
 @@ -109,6 +109,7 @@
-     REGISTER_ENCDEC  (MJPEG, mjpeg);
      REGISTER_DECODER (MJPEGB, mjpegb);
      REGISTER_DECODER (MMVIDEO, mmvideo);
+     REGISTER_DECODER (MOTIONPIXELS, motionpixels);
 +    REGISTER_DECODER (MPEG_XVMC_VLD, mpeg_xvmc_vld);
      REGISTER_DECODER (MPEG_XVMC, mpeg_xvmc);
      REGISTER_ENCDEC  (MPEG1VIDEO, mpeg1video);
