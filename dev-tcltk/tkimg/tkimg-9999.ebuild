@@ -11,7 +11,7 @@ ESVN_BOOTSTRAP="eautoreconf"
 
 LICENSE="BWidget"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE=""
 
 DEPEND="
@@ -27,7 +27,7 @@ src_compile() {
 }
 
 src_install() {
-	einstall || die
+	emake INSTALL_ROOT="${D}" install || die
 	dodoc ANNOUNCE ChangeLog changes README
 	dohtml doc/html/*
 }
