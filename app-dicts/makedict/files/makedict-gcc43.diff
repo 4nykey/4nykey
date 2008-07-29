@@ -1,0 +1,39 @@
+--- ./src/xdxf_parser.cpp.orig	2008-07-18 17:49:50.000000000 +0300
++++ ./src/xdxf_parser.cpp	2008-07-18 18:10:35.000000000 +0300
+@@ -27,6 +27,7 @@
+ #include <stack>
+ #include <map>
+ #include <string>
++#include <cstring>
+ 
+ #include "xml.hpp"
+ #include "file.hpp"
+--- ./src/parser.hpp.orig	2008-07-18 17:49:50.000000000 +0300
++++ ./src/parser.hpp	2008-07-18 18:01:30.000000000 +0300
+@@ -30,6 +30,7 @@
+ #include <vector>
+ #include <set>
+ #include <list>
++#include <memory>
+ #include <glib.h>
+ 
+ #include "file.hpp"
+--- ./src/normalize_tags.hpp.orig	2008-07-18 17:49:50.000000000 +0300
++++ ./src/normalize_tags.hpp	2008-07-18 18:05:42.000000000 +0300
+@@ -4,6 +4,7 @@
+ #include <functional>
+ #include <glib.h>
+ #include <string>
++#include <cstring>
+ #include <vector>
+ 
+ struct TagInfo {
+--- ./src/langs_2to3.hpp.orig	2008-07-18 17:49:50.000000000 +0300
++++ ./src/langs_2to3.hpp	2008-07-18 18:08:04.000000000 +0300
+@@ -1,5 +1,6 @@
+ #ifndef _LANGS_2TO3_HPP_
+ #define _LANGS_2TO3_HPP_
++#include <string>
+ 
+ const int langs_2to3_count=185;
+ extern std::pair<std::string, std::string> langs_2to3[langs_2to3_count];

@@ -7,11 +7,13 @@ inherit subversion cmake-utils
 DESCRIPTION="A converter between many dictionary formats (dictd, dsl, sdict, stardict, xdxf)"
 HOMEPAGE="http://xdxf.sf.net"
 ESVN_REPO_URI="https://xdxf.svn.sourceforge.net/svnroot/xdxf/trunk"
+ESVN_PATCHES="${PN}-*.diff"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86"
-IUSE="doc"
+KEYWORDS="~x86 ~amd64"
+IUSE="verbose-build"
+DOCS="AUTHORS ChangeLog README TODO"
 
 DEPEND="
 	sys-libs/zlib
@@ -23,7 +25,6 @@ RDEPEND="
 	virtual/python
 "
 
-src_install() {
-	cmake-utils_src_install
-	dodoc AUTHORS ChangeLog README TODO
+pkg_setup() {
+	use verbose-build && CMAKE_COMPILER_VERBOSE=y
 }
