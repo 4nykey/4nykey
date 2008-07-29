@@ -17,6 +17,7 @@ KEYWORDS="~x86 ~amd64"
 IUSE="nls debug sse fftw osc ladspa external-libs usb curl lv2 gnome"
 
 RDEPEND="
+	media-libs/aubio
 	>=media-libs/liblrdf-0.4.0
 	>=media-libs/raptor-1.4.2
 	>=media-libs/libsamplerate-0.1.0
@@ -61,7 +62,6 @@ src_unpack() {
 	mkdir -p ${D}
 
 	epatch "${FILESDIR}"/${PN}-*.diff
-	epatch "${FILESDIR}"/ardour-2.4-gcc43.patch
 	if use !external-libs; then
 		cd libs/libsndfile
 		cp "${FILESDIR}"/configure.ac .
