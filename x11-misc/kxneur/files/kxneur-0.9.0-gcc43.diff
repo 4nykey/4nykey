@@ -1,0 +1,20 @@
+--- ./src/kxnlistbox.cpp.orig	2008-06-11 09:31:31.000000000 +0300
++++ ./src/kxnlistbox.cpp	2008-06-11 09:31:31.000000000 +0300
+@@ -22,6 +22,7 @@
+ #include <klocale.h>
+ #include "kxnlistbox.h"
+ 
++#include <cstdlib>
+ 
+ KXNListBox::KXNListBox(QWidget * parent, const char * name, WFlags f)
+  : QListBox(parent, name, f)
+--- ./src/kxneurconf.cpp.orig	2008-06-11 09:31:32.000000000 +0300
++++ ./src/kxneurconf.cpp	2008-06-11 09:31:32.000000000 +0300
+@@ -17,6 +17,7 @@
+  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA    *
+  **********************************************************************************/
+ 
++#include <cstdlib>
+ //#include <stdlib.h>
+ #include <qwidget.h>
+ #include <kuniqueapplication.h>
