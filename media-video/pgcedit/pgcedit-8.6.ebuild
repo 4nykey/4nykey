@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+inherit eutils
+
 DESCRIPTION="The Swiss Army knife of DVD editing"
 HOMEPAGE="http://www.videohelp.com/~r0lZ/pgcedit/"
 SRC_URI="
@@ -22,13 +24,6 @@ RDEPEND="
 	wine? ( app-emulation/wine )
 "
 
-mklauncher() {
-cat << EOF > ${T}/${PN}
-#!/bin/sh
-/usr/bin/wish ${instdir}/PgcEdit_main.tcl
-EOF
-}
-
 src_install() {
 	local instdir="/opt/${PN}"
 
@@ -41,8 +36,7 @@ src_install() {
 	dodir ${instdir}/plugins
 	keepdir ${instdir}/plugins
 
-	mklauncher
-	dobin ${T}/${PN}
+	make_wrapper ${PN} "/usr/bin/wish ${instdir}/PgcEdit_main.tcl"
 
 	dodoc HISTORY.txt TODO.txt
 	use doc && dohtml -r doc/*
