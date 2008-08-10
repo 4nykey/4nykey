@@ -1,0 +1,26 @@
+Index: ConfigureChecks.cmake
+===================================================================
+--- ConfigureChecks.cmake	(revision 4297)
++++ ConfigureChecks.cmake	(working copy)
+@@ -475,7 +475,7 @@
+ IF (USE_LATE_BINDING)
+ 	CHECK_INCLUDE_FILES(dts.h USE_LIBDCA)
+ ELSE (USE_LATE_BINDING)
+-	ADM_CHECK_HL(LIBDCA dts.h dts dts_init USE_LIBDCA)
++	ADM_CHECK_HL(libdca dts.h dca dca_init USE_LIBDCA)
+ ENDIF (USE_LATE_BINDING)
+ 
+ SET(CMAKE_REQUIRED_LIBRARIES)
+Index: avidemux/CMakeLists.txt
+===================================================================
+--- avidemux/CMakeLists.txt	(revision 4297)
++++ avidemux/CMakeLists.txt	(working copy)
+@@ -331,7 +331,7 @@
+ 
+ #libdts
+ if(USE_LIBDCA AND NOT USE_LATE_BINDING)
+-	add_libs_all_targets(dts)
++	add_libs_all_targets(dca)
+ endif(USE_LIBDCA AND NOT USE_LATE_BINDING)
+ 
+ # Lame

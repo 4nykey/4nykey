@@ -4,13 +4,12 @@
 
 EAPI="1"
 
-inherit subversion flag-o-matic qt4 cmake-utils
+inherit git flag-o-matic qt4 cmake-utils
 
-WANT_AUTOMAKE="1.9"
 DESCRIPTION="Great Video editing/encoding tool"
 HOMEPAGE="http://fixounet.free.fr/avidemux/"
-ESVN_REPO_URI="svn://svn.berlios.de/avidemux/branches/avidemux_2.5_branch_gruntster"
-ESVN_PATCHES="${PN}-*.diff"
+EGIT_REPO_URI="git://git.berlios.de/avidemux"
+EGIT_PATCHES="${P}-*.diff"
 
 LICENSE="GPL-2"
 SLOT="2"
@@ -70,12 +69,7 @@ pkg_setup() {
 }
 
 src_compile() {
-	# provide svn revision
-	local mycmakeargs="
-		-DSVN=OFF \
-		-DSubversion_FOUND=ON \
-		-DADM_SUBVERSION=${ESVN_WC_REVISION}
-	"
+	local mycmakeargs
 
 	for x in \
 		gtk qt4 x264 xvid aften amrnb lame vorbis alsa arts esd jack oss \

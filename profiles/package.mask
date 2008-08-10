@@ -1,3 +1,4 @@
 =x11-misc/xneur-9999
 =x11-misc/gxneur-9999
 =x11-misc/kxneur-9999
+=media-video/avidemux-2.5.9999
