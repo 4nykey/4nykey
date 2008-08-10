@@ -4,7 +4,7 @@
 
 inherit flag-o-matic subversion confutils
 
-BLUV=1.6
+BLUV=1.7
 SVGV=1.9.17
 SKINDIR="/usr/share/mplayer/skins/"
 DESCRIPTION="Media Player for Linux"
@@ -16,7 +16,7 @@ SRC_URI="
 		mirror://mplayer/releases/fonts/font-arial-cp1250.tar.bz2
 	)
 	svga? ( http://mplayerhq.hu/~alex/svgalib_helper-${SVGV}-mplayer.tar.bz2 )
-	gtk? ( mirror://mplayer/Skin/Blue-${BLUV}.tar.bz2 )
+	gtk? ( mirror://mplayer/skins/Blue-${BLUV}.tar.bz2 )
 "
 ESVN_REPO_URI="svn://svn.mplayerhq.hu/mplayer/trunk"
 ESVN_PATCHES="${PN}-*.diff"
