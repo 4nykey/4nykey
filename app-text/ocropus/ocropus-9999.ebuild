@@ -35,29 +35,36 @@ DEPEND="
 	dev-util/scons
 "
 
+my_use() {
+	use $1 && echo yes || echo no
+}
+
 src_compile() {
-	myconf="no-fst"
-	use spell		|| myconf+=" no-aspell"
-	use readline	|| myconf+=" no-editline"
-	use sdl			|| myconf+=" no-sdl"
+	myconf=" tess=yes"
+	myconf+=" openfst=no"
+	myconf+=" leptonica=no"
+	myconf+=" aspell=$(my_use spell)"
+	myconf+=" editline=$(my_use readline)"
+	myconf+=" sdl=$(my_use sdl)"
 
 	scons \
 		${MAKEOPTS} \
 		prefix="/usr" \
 		opt="${CXXFLAGS}" \
-		with-iulib="/usr" \
-		with-tesseract="/usr" \
+		iulib="/usr" \
+		tesseract="/usr" \
 		${myconf} \
 		|| die
 }
 
 src_install() {
+	mkdir -p "${D}"usr
 	scons \
 		${MAKEOPTS} \
-		prefix="${D}/usr" \
+		prefix="${D}usr" \
 		opt="${CXXFLAGS}" \
-		with-iulib="/usr" \
-		with-tesseract="/usr" \
+		iulib="/usr" \
+		tesseract="/usr" \
 		${myconf} \
 		install || die
 	dodoc CHANGES INSTALL README
