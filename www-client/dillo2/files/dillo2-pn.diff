@@ -140,12 +140,3 @@ diff -ru dillo2/src/IO/dpi.c dillo2_nu/src/IO/dpi.c
        _MSG("dpid_uds_name = [%s]\n", dpid_uds_name);
        strncpy(dpid.sun_path, dpid_uds_name, sizeof(dpid.sun_path));
  
-diff -ru dillo2/src/Makefile.am dillo2_nu/src/Makefile.am
---- dillo2/src/Makefile.am	2007-10-07 01:36:34.000000000 +0300
-+++ dillo2_nu/src/Makefile.am	2007-10-23 01:38:07.000000000 +0300
-@@ -1,4 +1,4 @@
--AM_CPPFLAGS=-DDILLORC_SYS='"$(sysconfdir)/dillorc"' @LIBJPEG_CPPFLAGS@
-+AM_CPPFLAGS=-DDILLORC_SYS='"$(sysconfdir)/dillorc2"' @LIBJPEG_CPPFLAGS@
- AM_CFLAGS = -I../../dw-testbed @LIBPNG_CFLAGS@
- AM_CXXFLAGS = -I../../dw-testbed @LIBPNG_CFLAGS@ @LIBFLTK_CXXFLAGS@
- 
