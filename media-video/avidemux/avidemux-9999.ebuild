@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/avidemux/avidemux-2.0.38_rc2-r1.ebuild,v 1.1 2005/04/18 15:44:32 flameeyes Exp $
 
+EAPI="1"
+
 inherit subversion flag-o-matic qt4 cmake-utils
 
 WANT_AUTOMAKE="1.9"
@@ -25,7 +27,7 @@ RDEPEND="
 	media-libs/libpng
 	>=dev-lang/spidermonkey-1.5-r2
 	gtk? ( >=x11-libs/gtk+-2.6.0 )
-	qt4? ( $(qt4_min_version 4.2) )
+	qt4? ( x11-libs/qt:4 )
 	x264? ( media-libs/x264 )
 	xvid? ( media-libs/xvid )
 	aften? ( media-libs/aften )

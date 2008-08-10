@@ -2,7 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit qt3 qt4 confutils toolchain-funcs
+EAPI="1"
+
+inherit confutils toolchain-funcs
 
 DESCRIPTION="FBReader is an e-book reader for various platforms"
 HOMEPAGE="http://www.fbreader.org/"
@@ -20,8 +22,8 @@ DEPEND="
 	app-arch/bzip2
 	dev-libs/liblinebreak
 	gtk? ( >=x11-libs/gtk+-2.4 )
-	qt3? ( $(qt_min_version 3) )
-	qt4? ( $(qt4_min_version 4) )
+	qt3? ( x11-libs/qt:3 )
+	qt4? ( x11-libs/qt:4 )
 "
 RDEPEND="
 	${DEPEND}
