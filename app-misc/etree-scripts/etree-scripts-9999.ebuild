@@ -10,7 +10,7 @@ ESVN_REPO_URI="https://etree-scripts.svn.sourceforge.net/svnroot/etree-scripts/t
 
 LICENSE="Artistic"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="shorten flac mp3 vorbis cdr"
 
 DEPEND="
@@ -26,5 +26,5 @@ RDEPEND="
 	flac? ( media-libs/flac )
 	mp3? ( media-sound/lame )
 	vorbis? ( media-sound/vorbis-tools )
-	cdr? ( app-cdr/cdrtools )
+	cdr? ( virtual/cdrtools )
 "
