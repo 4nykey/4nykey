@@ -12,11 +12,12 @@ SRC_URI="
 	${BASEURI}/${PN}-75dpi100dpi.tar.gz
 	cjk? ( ${BASEURI}/${PN}-asian.tar.gz )
 "
+RESTRICT="primaryuri"
 S="${WORKDIR}"
 
 LICENSE="X11"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE="cjk"
 
 DOCS="issues.txt README*"
