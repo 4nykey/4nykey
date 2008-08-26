@@ -20,6 +20,7 @@ SRC_URI="
 "
 ESVN_REPO_URI="svn://svn.mplayerhq.hu/mplayer/trunk"
 ESVN_PATCHES="${PN}-*.diff"
+ESVN_OPTIONS+=" --ignore-externals"
 
 SLOT="0"
 LICENSE="GPL-2"
@@ -145,6 +146,7 @@ pkg_setup() {
 	fi
 	LINGUAS="en"
 	confutils_use_conflict win32codecs real bindist
+	confutils_use_conflict external-ffmpeg amr
 	confutils_use_depend_all gtk X png
 	confutils_use_depend_any gtk bitmap-fonts truetype
 	confutils_use_depend_all dga X
@@ -162,7 +164,21 @@ pkg_setup() {
 
 src_unpack() {
 	use xvmc && use video_cards_via && ESVN_PATCHES+=" ${PN}-xvmc_vld.patch"
-	subversion_src_unpack
+
+	subversion_fetch
+
+	local _fflibs="avutil avformat"
+	if use !external-ffmpeg; then
+		_fflibs+=" avcodec postproc"
+	else
+		ESVN_PATCHES+=" ${PN}-ext_ffmpeg.patch"
+	fi
+	for e in ${_fflibs}; do
+		ESVN_PROJECT="ffmpeg/trunk" subversion_fetch \
+			svn://svn.mplayerhq.hu/ffmpeg/trunk/lib${e} lib${e}
+	done
+
+	subversion_bootstrap
 
 	cd ${WORKDIR}
 

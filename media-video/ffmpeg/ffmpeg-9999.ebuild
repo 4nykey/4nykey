@@ -8,6 +8,7 @@ DESCRIPTION="Complete solution to record, convert and stream audio and video. In
 HOMEPAGE="http://ffmpeg.sourceforge.net/"
 ESVN_REPO_URI="svn://svn.mplayerhq.hu/ffmpeg/trunk"
 ESVN_PATCHES="${PN}-*.diff"
+ESVN_OPTIONS+=" --ignore-externals"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -77,6 +78,13 @@ pkg_setup() {
 	confutils_use_conflict vhook avfilter
 	confutils_use_depend_all imlib vhook
 	confutils_use_depend_all truetype vhook
+}
+
+src_unpack() {
+	subversion_fetch
+	ESVN_PROJECT="mplayer/trunk" subversion_fetch \
+		svn://svn.mplayerhq.hu/mplayer/trunk/libswscale libswscale
+	subversion_bootstrap
 }
 
 src_compile() {
