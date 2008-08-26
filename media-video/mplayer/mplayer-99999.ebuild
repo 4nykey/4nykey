@@ -34,7 +34,7 @@ gif ggi gtk ipv6 jack joystick jpeg ladspa libcaca lirc live lzo mad
 mmx mmxext musepack nas openal opengl oss png real rtc samba sdl speex
 sse sse2 ssse3 svga tga theora tremor truetype v4l v4l2 vidix vorbis
 win32codecs X x264 xanim xinerama xv xvid xvmc twolame radio examples zoran
-pulseaudio cddb
+pulseaudio cddb dirac schroedinger mp3
 "
 
 VIDEO_CARDS="s3virge mga tdfx vesa via"
@@ -65,7 +65,7 @@ RDEPEND="
 	dvb? ( media-tv/linuxtv-dvb-headers )
 	dvdread? ( media-libs/libdvdread )
 	encode? (
-		media-sound/lame
+		mp3? ( media-sound/lame )
 		media-sound/twolame
 		dv? ( >=media-libs/libdv-0.9.5 )
 		aac? ( media-libs/faac )
@@ -121,6 +121,8 @@ RDEPEND="
 	amr? ( media-libs/amrnb media-libs/amrwb )
 	vorbis? ( media-libs/libvorbis )
 	pulseaudio? ( media-sound/pulseaudio )
+	dirac? ( media-video/dirac )
+	schroedinger? ( media-libs/schroedinger )
 "
 DEPEND="
 	${RDEPEND}
@@ -146,7 +148,6 @@ pkg_setup() {
 	fi
 	LINGUAS="en"
 	confutils_use_conflict win32codecs real bindist
-	confutils_use_conflict external-ffmpeg amr
 	confutils_use_depend_all gtk X png
 	confutils_use_depend_any gtk bitmap-fonts truetype
 	confutils_use_depend_all dga X
@@ -251,8 +252,12 @@ src_compile() {
 	enable_extension_disable mencoder encode
 	enable_extension_disable libdv dv
 	enable_extension_disable x264 x264
+	my_conf="${my_conf} --disable-x264-lavc"
 	enable_extension_disable twolame twolame
 	enable_extension_disable faac aac
+	my_conf="${my_conf} --disable-faac-lavc"
+	enable_extension_disable mp3lame mp3
+	my_conf="${my_conf} --disable-mp3lame-lavc"
 
 	enable_extension_disable x11 X
 	enable_extension_disable vm X
@@ -301,6 +306,7 @@ src_compile() {
 	enable_extension_disable theora theora
 	enable_extension_disable speex speex
 	enable_extension_disable xvid xvid
+	my_conf="${my_conf} --disable-xvid-lavc"
 	enable_extension_disable real real
 	if use real && use x86; then
 		my_conf="${my_conf} --realcodecsdir=/opt/RealPlayer/codecs"
@@ -310,6 +316,8 @@ src_compile() {
 	enable_extension_disable win32dll win32codecs
 	enable_extension_disable libamr_nb amr
 	enable_extension_disable libamr_wb amr
+	enable_extension_disable libdirac-lavc dirac
+	enable_extension_disable libschroedinger-lavc schroedinger
 
 	#############
 	# Video Output #

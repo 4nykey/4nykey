@@ -16,7 +16,7 @@ KEYWORDS="~x86 ~amd64"
 IUSE="
 aac debug doc ieee1394 a52 encode imlib mmx vorbis oss threads truetype v4l
 v4l2 xvid network zlib X amr x264 mp3 swscaler sdl bindist postproc ipv6 vhook
-avfilter
+avfilter dirac schroedinger
 "
 
 RDEPEND="
@@ -39,6 +39,8 @@ RDEPEND="
 	)
 	X? ( x11-libs/libXext )
 	amr? ( media-libs/amrnb media-libs/amrwb )
+	dirac? ( media-video/dirac )
+	schroedinger? ( media-libs/schroedinger )
 "
 DEPEND="
 	${RDEPEND}
@@ -122,6 +124,8 @@ src_compile() {
 	enable_extension_disable vhook vhook
 	enable_extension_enableonly avfilter avfilter
 	enable_extension_enableonly avfilter-lavf avfilter
+	enable_extension_enableonly libdirac dirac
+	enable_extension_enableonly libschroedinger schroedinger
 
 	./configure \
 		--prefix=/usr \

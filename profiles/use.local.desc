@@ -1,3 +1,4 @@
+app-dicts/makedict:verbose-build - Build in verbose mode (silent oterwise)
 app-text/fbreader:verbose-build - Build in verbose mode (silent oterwise)
 app-text/ocropus:verbose-build - Build in verbose mode (silent oterwise)
 media-fonts/cm-unicode:gs - Ghostscript support
@@ -30,11 +31,14 @@ media-sound/ncmpc:raw-mode - raw terminal mode
 media-sound/snd:postscript - Enable postscript output from OpenGL graphics
 media-video/avidemux:aften - Enable A/52 encoding support via aften
 media-video/avidemux:amrnb - Enables Adaptive Multi-Rate Audio support (Narrow Band)
+media-video/avidemux:faac - AAC encoding support via media-libs/faac
 media-video/avidemux:verbose-build - Build in verbose mode (silent oterwise)
 media-video/ffmpeg:amr - Enables Adaptive Multi-Rate Audio support
 media-video/ffmpeg:avfilter - Enables video filter support (replaces vhook)
+media-video/ffmpeg:dirac - Enable Dirac support via media-video/dirac
 media-video/ffmpeg:network - Enables network streaming support
 media-video/ffmpeg:postproc - Enables GPLed postprocessing support
+media-video/ffmpeg:schroedinger - Enable Dirac support via media-libs/schroedinger
 media-video/ffmpeg:swscaler - Adds support for software scaler
 media-video/ffmpeg:vhook - Enables video hooking support
 media-video/mplayer:3dnowext - Enables 3dnow extensions in mplayer
@@ -44,6 +48,7 @@ media-video/mplayer:bl - Enables Blinkenlights support in mplayer
 media-video/mplayer:cdio - Use cdio where applicable
 media-video/mplayer:cpudetection - Enables runtime cpudetection
 media-video/mplayer:custom-cflags - Enables custom cflags (not supported)
+media-video/mplayer:dirac - Enable Dirac video support (an advanced royalty-free video compression format) via the reference library: dirac.
 media-video/mplayer:dvdnav - DVD menu navigation support (not supported)
 media-video/mplayer:enca - Enables support for charset discovery and conversion
 media-video/mplayer:external-faad - Use system faad2 library instead of bundled one
@@ -53,6 +58,7 @@ media-video/mplayer:mmxext - Enables mmx2 support
 media-video/mplayer:radio - Enable V4L2 radio interface and support
 media-video/mplayer:real - Adds real video support
 media-video/mplayer:rtc - Enables usage of the linux real time clock.  The alternative is software emulation of rtc
+media-video/mplayer:schroedinger - Enable Dirac video support (an advanced royalty-free video compression format) via libschroedinger (high-speed implementation in C of the Dirac codec).
 media-video/mplayer:ssse3 - faster floating point optimization for SSSE3 capable chips (Intel Core 2 and later chips)
 media-video/mplayer:tga - Enables Targa video output
 media-video/mplayer:tremor - Use tremor for decoding vorbis audio
