@@ -218,7 +218,7 @@ src_compile() {
 		--enable-menu \
 		--enable-network \
 		--disable-tv-bsdbt848 \
-		--disable-tremor-external \
+		--disable-tremor \
 	"
 	################
 	#Optional features#
@@ -300,7 +300,7 @@ src_compile() {
 	if use aac; then
 		use external-faad && my_conf="${my_conf} --disable-faad-internal"
 	else
-		my_conf="${my_conf} --disable-faad-internal --disable-faad-external"
+		my_conf="${my_conf} --disable-faad-internal --disable-faad"
 	fi
 	enable_extension_disable libvorbis vorbis
 	enable_extension_disable theora theora
