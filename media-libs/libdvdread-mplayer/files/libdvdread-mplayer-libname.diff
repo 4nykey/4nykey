@@ -2,7 +2,11 @@ Index: src/Makefile.am
 ===================================================================
 --- src/Makefile.am	(revision 1109)
 +++ src/Makefile.am	(working copy)
-@@ -4,15 +4,15 @@
+@@ -4,18 +4,18 @@
+ include $(top_srcdir)/misc/Makefile.common
+ 
+-includedir = ${prefix}/include/dvdread
++includedir = ${prefix}/include/libdvdread
  
  AM_CPPFLAGS = -I$(top_srcdir)/src
  
