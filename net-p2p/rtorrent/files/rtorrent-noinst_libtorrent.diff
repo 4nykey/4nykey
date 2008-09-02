@@ -1,0 +1,104 @@
+Index: configure.ac
+===================================================================
+--- configure.ac	(revision 944)
++++ configure.ac	(working copy)
+@@ -2,6 +2,7 @@
+ 
+ AM_INIT_AUTOMAKE
+ AM_CONFIG_HEADER(config.h)
++AC_CONFIG_SUBDIRS(libtorrent)
+ 
+ TORRENT_CHECK_CXXFLAGS()
+ TORRENT_ENABLE_DEBUG()
+Index: src/Makefile.am
+===================================================================
+--- src/Makefile.am	(revision 944)
++++ src/Makefile.am	(working copy)
+@@ -14,6 +14,7 @@
+ 	$(top_srcdir)/src/display/libsub_display.a \
+ 	$(top_srcdir)/src/input/libsub_input.a \
+ 	$(top_srcdir)/src/rpc/libsub_rpc.a \
++	$(top_srcdir)/libtorrent/src/libtorrent.la \
+ 	$(top_srcdir)/src/utils/libsub_utils.a
+ 
+ rtorrent_SOURCES = \
+Index: Makefile.am
+===================================================================
+--- Makefile.am	(revision 1065)
++++ Makefile.am	(working copy)
+@@ -1,4 +1,5 @@
+ SUBDIRS = \
++	libtorrent \
+ 	doc \
+ 	src
+ 
+Index: libtorrent/src/torrent/peer/Makefile.am
+===================================================================
+--- libtorrent/src/torrent/peer/Makefile.am	(revision 1065)
++++ libtorrent/src/torrent/peer/Makefile.am	(working copy)
+@@ -16,8 +16,8 @@
+ 
+ INCLUDES = -I$(srcdir) -I$(srcdir)/.. -I$(srcdir)/../.. -I$(top_srcdir)
+ 
+-libtorrentincludedir = $(includedir)/torrent/peer
+-libtorrentinclude_HEADERS = \
++dnl libtorrentincludedir = $(includedir)/torrent/peer
++dnl libtorrentinclude_HEADERS = \
+ 	client_info.h \
+ 	client_list.h \
+ 	connection_list.h \
+Index: libtorrent/src/torrent/data/Makefile.am
+===================================================================
+--- libtorrent/src/torrent/data/Makefile.am	(revision 1065)
++++ libtorrent/src/torrent/data/Makefile.am	(working copy)
+@@ -23,8 +23,8 @@
+ 
+ INCLUDES = -I$(srcdir) -I$(srcdir)/.. -I$(srcdir)/../.. -I$(top_srcdir)
+ 
+-libtorrentincludedir = $(includedir)/torrent/data
+-libtorrentinclude_HEADERS = \
++dnl libtorrentincludedir = $(includedir)/torrent/data
++dnl libtorrentinclude_HEADERS = \
+ 	block.h \
+ 	block_list.h \
+ 	block_transfer.h \
+Index: libtorrent/src/torrent/Makefile.am
+===================================================================
+--- libtorrent/src/torrent/Makefile.am	(revision 1065)
++++ libtorrent/src/torrent/Makefile.am	(working copy)
+@@ -52,8 +52,8 @@
+ 
+ INCLUDES = -I$(srcdir) -I$(srcdir)/.. -I$(top_srcdir)
+ 
+-libtorrentincludedir = $(includedir)/torrent
+-libtorrentinclude_HEADERS = \
++dnl libtorrentincludedir = $(includedir)/torrent
++dnl libtorrentinclude_HEADERS = \
+ 	bitfield.h \
+ 	chunk_manager.h \
+ 	common.h \
+Index: libtorrent/src/Makefile.am
+===================================================================
+--- libtorrent/src/Makefile.am	(revision 1065)
++++ libtorrent/src/Makefile.am	(working copy)
+@@ -8,7 +8,7 @@
+ 	tracker \
+ 	utils
+ 
+-lib_LTLIBRARIES = libtorrent.la
++noinst_LTLIBRARIES = libtorrent.la
+ 
+ libtorrent_la_LDFLAGS = -version-info $(LIBTORRENT_INTERFACE_VERSION_INFO)
+ libtorrent_la_LIBADD = \
+Index: libtorrent/Makefile.am
+===================================================================
+--- libtorrent/Makefile.am	(revision 1065)
++++ libtorrent/Makefile.am	(working copy)
+@@ -1,7 +1,5 @@
+ SUBDIRS = src
+ 
+-pkgconfigdir = $(libdir)/pkgconfig
+-pkgconfig_DATA = libtorrent.pc
+ 
+ EXTRA_DIST= \
+ 	autogen.sh \

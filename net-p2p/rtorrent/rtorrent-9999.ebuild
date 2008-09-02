@@ -30,30 +30,25 @@ DEPEND="
 src_unpack() {
 	subversion_fetch
 	subversion_fetch svn://rakshasa.no/libtorrent/trunk/libtorrent libtorrent
-	sed -i ${S}/configure.ac -e 's:libtorrent >= [0-9.]\+::'
 	subversion_bootstrap
 }
 
 src_compile() {
 	replace-flags -Os -O2
 	append-flags -fno-strict-aliasing
+	[[ $(tc-arch) = "x86" ]] && filter-flags -fomit-frame-pointer -fforce-addr
 
-	if [[ $(tc-arch) = "x86" ]]; then
-		filter-flags -fomit-frame-pointer -fforce-addr
-	fi
-
-	CPPFLAGS="-I${S}/libtorrent/src ${CPPFLAGS}" \
+	libtorrent_CFLAGS="-I${S}/libtorrent/src" \
+	libtorrent_LIBS=" " \
 	econf \
 		$(use_enable debug) \
 		$(use_enable ipv6) \
 		$(use_enable openssl) \
 		$(use_with xmlrpc xmlrpc-c) \
 		--disable-dependency-tracking \
-		--disable-shared --enable-static \
 		|| die "econf failed"
 
-	emake -C libtorrent || die "libtorrent emake failed"
-	emake || die "rtorrent emake failed"
+	emake || die "emake failed"
 }
 
 src_install() {
