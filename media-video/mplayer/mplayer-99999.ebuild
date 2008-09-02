@@ -37,7 +37,7 @@ win32codecs X x264 xanim xinerama xv xvid xvmc twolame radio examples zoran
 pulseaudio cddb dirac schroedinger mp3
 "
 
-VIDEO_CARDS="s3virge mga tdfx vesa via"
+VIDEO_CARDS="s3virge mga tdfx vesa"
 for x in ${VIDEO_CARDS}; do
 	IUSE="${IUSE} video_cards_${x}"
 done
@@ -164,8 +164,6 @@ pkg_setup() {
 }
 
 src_unpack() {
-	use xvmc && use video_cards_via && ESVN_PATCHES+=" ${PN}-xvmc_vld.patch"
-
 	subversion_fetch
 
 	local _fflibs="avutil avformat"
