@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/www-client/dillo/dillo-0.8.6.ebuild,v 1.1 2006/09/10 23:08:04 exg Exp $
 
+EAPI="1"
+
 inherit cvs autotools
 
 DESCRIPTION="Lean FLTK-based web browser"
@@ -13,7 +15,7 @@ S="${WORKDIR}/${ECVS_MODULE}"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="ipv6 png jpeg gif ssl"
+IUSE="ipv6 png jpeg gif ssl +doublebuffer"
 
 RDEPEND="
 	=x11-libs/fltk-2*
@@ -49,6 +51,7 @@ src_compile() {
 		$(use_enable jpeg) \
 		$(use_enable gif) \
 		$(use_enable ssl) \
+		$(use_enable doublebuffer) \
 		|| die
 	emake || die
 }

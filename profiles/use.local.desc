@@ -75,6 +75,7 @@ media-video/transcode:network - Enables network streaming support
 media-video/transcode:postproc - Build with ffmpeg libpostproc support
 net-im/tkabber:plugins - Enables installation of extra plugins
 net-p2p/rtorrent:openssl - Use OpenSSL's SHA1 implementation
+www-client/dillo2:doublebuffer - Enable double buffering for drawing
 x11-libs/fltk:noxft - Disables fltk; use for non-english characters
 x11-libs/fltk:verbose-build - Build in verbose mode (silent oterwise)
 x11-misc/barpanel:battery - Support battery status plugin
