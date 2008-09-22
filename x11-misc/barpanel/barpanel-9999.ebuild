@@ -2,11 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit distutils git
+inherit distutils subversion
 
 DESCRIPTION="BarPanel is a powerful desktop panel"
 HOMEPAGE="http://www.ossproject.org/projects/barpanel"
-EGIT_REPO_URI="git://www.ossproject.org/barpanel.git"
+ESVN_REPO_URI="http://svn.ossproject.org/barpanel/trunk"
 
 LICENSE="GPL-3"
 SLOT="0"
