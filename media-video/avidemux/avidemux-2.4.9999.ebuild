@@ -75,6 +75,7 @@ pkg_setup() {
 
 src_compile() {
 	# provide svn revision
+	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
 	local mycmakeargs="
 		-DNO_SVN=1 \
 		-DSubversion_FOUND=1 \
