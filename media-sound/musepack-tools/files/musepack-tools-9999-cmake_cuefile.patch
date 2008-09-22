@@ -1,13 +1,32 @@
+Index: mpcchap/mpcchap.c
+===================================================================
+--- mpcchap/mpcchap.c	(revision 408)
++++ mpcchap/mpcchap.c	(working copy)
+@@ -24,7 +24,7 @@
+ 
+ #include <sys/stat.h>
+ 
+-#include <cuetools/cuefile.h>
++#include <cuefile.h>
+ 
+ // tags.c
+ void    Init_Tags        ( void );
 Index: mpcchap/CMakeLists.txt
 ===================================================================
---- mpcchap/CMakeLists.txt	(revision 404)
+--- mpcchap/CMakeLists.txt	(revision 408)
 +++ mpcchap/CMakeLists.txt	(working copy)
-@@ -2,7 +2,7 @@
- 	${libmpc_SOURCE_DIR}/../cuetools-1.3.1
- )
+@@ -11,12 +11,13 @@
  
--FIND_LIBRARY(CUEFILE_LIBRARY NAMES cuefile_static PATHS
-+FIND_LIBRARY(CUEFILE_LIBRARY NAMES cuefile PATHS
- 	${CUEFILE_INCLUDE_DIR}/src/lib
- )
+ link_directories(${libmpc_BINARY_DIR}/libmpcdec)
+ link_directories(${libmpc_BINARY_DIR}/libmpcenc)
++link_directories(${CUEFILE_INCLUDE_DIR})
  
+ add_executable(mpcchap mpcchap dictionary iniparser ${libmpc_SOURCE_DIR}/common/tags)
+ 
+ target_link_libraries(mpcchap mpcdec_static)
+ target_link_libraries(mpcchap mpcenc_static)
+-target_link_libraries(mpcchap ${CUEFILE_LIBRARY})
++target_link_libraries(mpcchap cuefile)
+ 
+ if(NOT MSVC)
+ target_link_libraries(mpcchap m)

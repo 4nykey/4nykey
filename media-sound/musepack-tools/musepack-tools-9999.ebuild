@@ -36,6 +36,9 @@ src_compile() {
 		cd "${WORKDIR}"/cuetools-1.3.1
 		econf || die
 		emake -C src/lib libcuefile.a || die
+		local mycmakeargs="
+			-DCUEFILE_INCLUDE_DIR=${WORKDIR}/cuetools-1.3.1/src/lib
+		"
 	fi
 	cmake-utils_src_compile
 }
