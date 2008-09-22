@@ -34,7 +34,7 @@ gif ggi gtk ipv6 jack joystick jpeg ladspa libcaca lirc live lzo mad
 mmx mmxext musepack nas openal opengl oss png real rtc samba sdl speex
 sse sse2 ssse3 svga tga theora tremor truetype v4l v4l2 vidix vorbis
 win32codecs X x264 xanim xinerama xv xvid xvmc twolame radio examples zoran
-pulseaudio cddb dirac schroedinger mp3
+pulseaudio cddb dirac schroedinger mp3 srt
 "
 
 VIDEO_CARDS="s3virge mga tdfx vesa"
@@ -161,6 +161,7 @@ pkg_setup() {
 	confutils_use_depend_any radio v4l v4l2
 	confutils_use_conflict cdparanoia cdio
 	confutils_use_depend_any cddb cdparanoia cdio
+	confutils_use_depend_all srt truetype fontconfig
 }
 
 src_unpack() {
@@ -275,6 +276,7 @@ src_compile() {
 	enable_extension_disable bitmap-font bitmap-fonts
 	enable_extension_disable freetype truetype
 	enable_extension_disable fontconfig fontconfig
+	enable_extension_disable ass srt
 	if use !v4l && use !v4l2; then
 		my_conf="${my_conf} --disable-tv"
 	else
