@@ -22,7 +22,6 @@ DEPEND="
 	x11-libs/libxkbfile
 "
 
-src_unpack() {
-	kde_src_unpack
-	epatch "${FILESDIR}"/${P}*.diff
+pkg_setup() {
+	set-kdedir
 }
