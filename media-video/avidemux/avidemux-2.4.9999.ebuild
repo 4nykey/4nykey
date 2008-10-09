@@ -18,7 +18,7 @@ KEYWORDS="~x86 ~amd64"
 IUSE="
 	a52 aac alsa arts esd mmx nls png vorbis sdl truetype xvid xv oss x264
 	dts qt4 fontconfig lame faac aften gtk jack debug libsamplerate amrnb
-	verbose-build
+	verbose-build pulseaudio
 "
 
 RDEPEND="
@@ -51,6 +51,7 @@ RDEPEND="
 	jack? ( media-sound/jack-audio-connection-kit )
 	libsamplerate? ( media-libs/libsamplerate )
 	amrnb? ( media-libs/amrnb )
+	pulseaudio? ( media-sound/pulseaudio )
 "
 DEPEND="
 	$RDEPEND
@@ -61,10 +62,7 @@ DEPEND="
 "
 
 pick() {
-	if ! use $1; then
-		local CMAKE_VAR="$(echo ${2:-${1}} | tr [:lower:] [:upper:])"
-		mycmakeargs="-DNO_${CMAKE_VAR}=1 ${mycmakeargs}"
-	fi
+	use $1 || mycmakeargs+=" -DNO_${2:-${1}}=1"
 }
 
 pkg_setup() {
@@ -77,22 +75,31 @@ src_compile() {
 	# provide svn revision
 	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
 	local mycmakeargs="
-		-DNO_SVN=1 \
-		-DSubversion_FOUND=1 \
+		-DNO_SVN=1
+		-DSubversion_FOUND=1
 		-DProject_WC_REVISION=${ESVN_WC_REVISION}
 	"
 
-	for x in \
-		gtk qt4 nls sdl arts alsa esd jack oss libsamplerate lame faac aften \
-		amrnb vorbis xvid x264 fontconfig
-	do
-		pick $x
-	done
+	pick fontconfig FontConfig
+	pick xv Xvideo
+	pick esd Esd
+	pick jack Jack
+	pick aften Aften
+	pick libsamplerate
+	pick lame Lame
+	pick xvid Xvid
+	pick amrnb AMRNB
 	pick dts libdca
-	pick aac faad
-	pick xv xvideo
-	pick png libpng
-	pick truetype freetype
+	pick x264
+	pick faad FAAD
+	pick faac FAAC
+	pick vorbis Vorbis
+	pick fontconfig FontConfig
+	pick truetype FREETYPE
+	pick gtk GTK
+	pick qt4 QT4
+	pick arts ARTS
+	pick pulse PULSE_SIMPLE
 
 	cmake-utils_src_compile
 }
