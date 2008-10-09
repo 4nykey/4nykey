@@ -6,7 +6,7 @@ inherit subversion autotools
 
 DESCRIPTION="Fbi IMproved is a framebuffer image viewer based on Fbi and inspired from Vim"
 HOMEPAGE="http://www.autistici.org/dezperado/fim"
-ESVN_REPO_URI="http://code.autistici.org/svn/fim"
+ESVN_REPO_URI="http://code.autistici.org/svn/fim/trunk"
 ESVN_PATCHES="${PN}-*.diff"
 ESVN_BOOTSTRAP="eautoreconf"
 
