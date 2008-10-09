@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/ardour/ardour-2.4.1.ebuild,v 1.2 2008/04/20 16:54:45 aballier Exp $
 
+EAPI="2"
+
 inherit toolchain-funcs flag-o-matic fdo-mime gnome2-utils
 
 DESCRIPTION="multi-track hard disk recording software"
@@ -38,6 +40,7 @@ RDEPEND="
 	flac? ( media-libs/flac )
 	curl? ( net-misc/curl )
 	lv2? ( >=media-libs/slv2-0.6 )
+	media-libs/alsa-lib[midi]
 "
 DEPEND="
 	${RDEPEND}
