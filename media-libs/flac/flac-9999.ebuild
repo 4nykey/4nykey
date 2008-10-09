@@ -14,7 +14,7 @@ RESTRICT="test" # see #59482
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="3dnow debug doc ogg sse pic nocxx"
+IUSE="3dnow debug doc ogg sse pic cxx"
 
 RDEPEND="
 	ogg? ( >=media-libs/libogg-1.0_rc2 )
@@ -46,7 +46,7 @@ src_compile() {
 		$(use_enable 3dnow) \
 		$(use_enable debug) \
 		$(use_enable doc) \
-		$(use_enable !nocxx cpplibs) \
+		$(use_enable cxx cpplibs) \
 		$(use_with pic) \
 		--disable-thorough-tests \
 		--disable-dependency-tracking \
