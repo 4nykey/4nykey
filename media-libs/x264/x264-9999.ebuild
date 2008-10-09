@@ -12,12 +12,11 @@ EGIT_PATCHES="${PN}-*.diff"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="X mp4 sdl threads gtk static debug"
+IUSE="X mp4 sdl threads static debug"
 
 RDEPEND="
 	mp4? ( media-video/gpac )
 	X? ( x11-libs/libX11 )
-	gtk? ( >=x11-libs/gtk+-2.6.0 )
 	sdl? ( media-libs/libsdl )
 "
 DEPEND="
@@ -46,8 +45,6 @@ src_compile() {
 
 	emake CC="$(tc-getCC)" || die
 
-	use gtk && emake -C gtk || die
-
 	if use sdl; then
 		echo $(tc-getCC) $CFLAGS $LDFLAGS -o xyuv tools/xyuv.c $(sdl-config --libs)
 		$(tc-getCC) $CFLAGS $LDFLAGS -o xyuv tools/xyuv.c $(sdl-config --libs)
@@ -63,7 +60,6 @@ src_test() {
 
 src_install() {
 	emake DESTDIR=${D} install || die
-	use gtk && emake DESTDIR=${D} -C gtk install || die
 	dobin x264
 	use sdl && dobin xyuv
 	dodoc AUTHORS doc/*.txt tools/*.{pl,sh}
