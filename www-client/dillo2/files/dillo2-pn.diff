@@ -51,7 +51,7 @@ diff -ru dillo2/dpid/dpid.h dillo2_nu/dpid/dpid.h
 @@ -27,7 +27,7 @@
  #define CMDLEN 20
  #define MSGLEN 50
- /*! \todo: Should read this from dillorc */
+ /*! \TODO: Should read this from dillorc */
 -#define SRS_NAME "dpid.srs"
 +#define SRS_NAME "dpid2.srs"
  char *srs_name;
@@ -95,15 +95,6 @@ diff -ru dillo2/dpid/Makefile.am dillo2_nu/dpid/Makefile.am
 +	echo "proto.ftp=ftp/ftp.filter.dpi" >> $(DESTDIR)$(sysconfdir)/dpidrc2
 +	echo "proto.https=https/https.filter.dpi" >> $(DESTDIR)$(sysconfdir)/dpidrc2
 +	echo "proto.data=datauri/datauri.filter.dpi" >> $(DESTDIR)$(sysconfdir)/dpidrc2
-diff -ru dillo2/Makefile.am dillo2_nu/Makefile.am
---- dillo2/Makefile.am	2007-10-07 01:36:34.000000000 +0300
-+++ dillo2_nu/Makefile.am	2007-10-23 01:38:07.000000000 +0300
-@@ -1,4 +1,4 @@
--SUBDIRS = doc dlib dpip src dpid dpi
-+SUBDIRS = ../dw-testbed doc dlib dpip src dpid dpi
- 
- EXTRA_DIST = ChangeLog.old dillorc2 install-dpi-local README-port
- 
 diff -ru dillo2/src/IO/dpi.c dillo2_nu/src/IO/dpi.c
 --- dillo2/src/IO/dpi.c	2007-10-07 01:36:34.000000000 +0300
 +++ dillo2_nu/src/IO/dpi.c	2007-10-23 01:46:32.000000000 +0300
@@ -119,7 +110,7 @@ diff -ru dillo2/src/IO/dpi.c dillo2_nu/src/IO/dpi.c
           dFree(path1);
 -         if (execlp("dpid", "dpid", NULL) == -1) {
 +         if (execlp("dpid2", "dpid2", NULL) == -1) {
-             DEBUG_MSG(4, "Dpi_start_dpid (child): %s\n", dStrerror(errno));
+             MSG("Dpi_start_dpid (child): %s\n", dStrerror(errno));
              do
                 n = write(st_pipe[1], "ERROR", 5);
 @@ -407,7 +407,7 @@

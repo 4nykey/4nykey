@@ -37,7 +37,6 @@ pkg_setup() {
 
 src_unpack() {
 	cvs_src_unpack
-	ECVS_MODULE=dw2 ECVS_LOCALNAME=dw-testbed cvs_src_unpack
 	cd ${S}
 	epatch "${FILESDIR}"/${PN}-*.diff
 	mv dpid/dpidc dpid/dpidc2
