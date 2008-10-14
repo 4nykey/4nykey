@@ -147,11 +147,6 @@ src_install() {
 	emake DESTDIR="${D}" LDCONFIG=true DEPS= VHOOK_DEPS= install ||
 		die "emake install failed"
 	dodoc Changelog CREDITS README MAINTAINERS doc/*.txt
-
-	dodir /usr/include/{ffmpeg,postproc}
-	cd "${D}"usr/include/ffmpeg
-	find .. -type f -name \*.h | while read h; do ln -s ${h}; done
-	mv postprocess.h ../postproc
 }
 
 # Never die for now...
