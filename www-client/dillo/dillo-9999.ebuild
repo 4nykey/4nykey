@@ -2,23 +2,23 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/www-client/dillo/dillo-0.8.6.ebuild,v 1.1 2006/09/10 23:08:04 exg Exp $
 
-EAPI="1"
+EAPI="2"
 
 inherit cvs autotools
 
 DESCRIPTION="Lean FLTK-based web browser"
 HOMEPAGE="http://www.dillo.org/"
 ECVS_SERVER="auriga.wearlab.de:/sfhome/cvs/dillo"
-ECVS_MODULE="${PN}"
+ECVS_MODULE="dillo2"
 S="${WORKDIR}/${ECVS_MODULE}"
 
-LICENSE="GPL-2"
+LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE="ipv6 png jpeg gif ssl +doublebuffer"
 
 RDEPEND="
-	=x11-libs/fltk-2*
+	x11-libs/fltk:2[threads]
 	jpeg? ( media-libs/jpeg )
 	png? ( media-libs/libpng )
 	ssl? ( dev-libs/openssl )
@@ -28,18 +28,9 @@ DEPEND="
 	dev-lang/perl
 "
 
-pkg_setup() {
-	if ! built_with_use '=x11-libs/fltk-2*' threads; then
-		eerror "Please rebuild =x11-libs/fltk-2* with USE=threads"
-		die "need fltk with threading support"
-	fi
-}
-
 src_unpack() {
 	cvs_src_unpack
 	cd ${S}
-	epatch "${FILESDIR}"/${PN}-*.diff
-	mv dpid/dpidc dpid/dpidc2
 	eautoreconf
 }
 
