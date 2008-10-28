@@ -20,7 +20,7 @@ SLOT="0"
 KEYWORDS=""
 IUSE="
 agg cairo cygnal doc fb ffmpeg fltk gnome gstreamer gtk kde neon nsplugin
-opengl parallel sdl video_cards_i810 X
+opengl sdl video_cards_i810 X
 "
 
 RDEPEND="
@@ -93,7 +93,7 @@ pkg_setup() {
 }
 
 src_compile() {
-	local myconf _rend _media _gui _jobs
+	local myconf _rend _media _gui
 
 	# Set nsplugin install directory.
 	use nsplugin && myconf+="
@@ -132,14 +132,11 @@ src_compile() {
 		--enable-gui=${_gui} \
 		${myconf} || die "econf failed"
 
-	# Should the ebuild use parallel compiling ?
-	use parallel || _jobs="-j1"
-
-	emake ${_jobs} || die "emake failed"
+	emake || die "emake failed"
 }
 
 src_install() {
-	emake ${jobs} DESTDIR="${D}" install || die "emake install failed"
+	emake DESTDIR="${D}" install || die "emake install failed"
 	# Install nsplugin in directory set by --with-npapi-plugindir.
 	use nsplugin && emake DESTDIR="${D}" install-plugin
 	# Install kde konqueror plugin.
