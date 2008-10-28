@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit cvs autotools
+inherit cvs autotools savedconfig
 
 DESCRIPTION="Lean FLTK-based web browser"
 HOMEPAGE="http://www.dillo.org/"
@@ -15,7 +15,7 @@ S="${WORKDIR}/${ECVS_MODULE}"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="ipv6 png jpeg gif ssl +doublebuffer"
+IUSE="ipv6 png jpeg gif ssl"
 
 RDEPEND="
 	x11-libs/fltk:2[threads]
@@ -31,19 +31,18 @@ DEPEND="
 src_unpack() {
 	cvs_src_unpack
 	cd ${S}
+	restore_config src/pixmaps.h
 	eautoreconf
 }
 
-src_compile() {
+src_configure() {
 	econf \
 		$(use_enable ipv6) \
 		$(use_enable png) \
 		$(use_enable jpeg) \
 		$(use_enable gif) \
 		$(use_enable ssl) \
-		$(use_enable doublebuffer) \
 		|| die
-	emake || die
 }
 
 src_install() {
@@ -52,4 +51,12 @@ src_install() {
 	dodoc AUTHORS COPYING ChangeLog* README* NEWS
 	docinto doc
 	dodoc doc/*.txt doc/README
+	save_config src/pixmaps.h
+}
+
+pkg_postinst() {
+	elog "To use alternative toolbar iconset, save one of the
+	\`pixmaps.xxx.h' available at http://www.dillo.org/Icons
+	as /etc/portage/savedconfig/${CATEGORY}/${PF}
+	and remerge with USE=savedconfig"
 }
