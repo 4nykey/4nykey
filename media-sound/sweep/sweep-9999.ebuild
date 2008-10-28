@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/sweep/sweep-0.8.3.ebuild,v 1.9 2005/12/26 14:16:50 lu_zero Exp $
 
-inherit subversion autotools
+inherit subversion autotools confutils
 
 DESCRIPTION="audio editor and live playback tool"
 HOMEPAGE="http://www.metadecks.org/software/sweep/"
@@ -13,7 +13,7 @@ ESVN_BOOTSTRAP="eautoreconf"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="alsa nls vorbis mad speex libsamplerate ladspa"
+IUSE="alsa nls vorbis mad speex libsamplerate ladspa pulseaudio"
 
 DEPEND="
 	libsamplerate? ( media-libs/libsamplerate )
@@ -23,6 +23,7 @@ DEPEND="
 	>=x11-libs/gtk+-2.2.0
 	alsa? ( >=media-libs/alsa-lib-1.0.0 )
 	vorbis? ( media-libs/libvorbis )
+	pulseaudio? ( >=media-sound/pulseaudio-0.9.10 )
 "
 RDEPEND="
 	${DEPEND}
@@ -33,9 +34,14 @@ DEPEND="
 	nls? ( sys-devel/gettext )
 "
 
+pkg_setup() {
+	confutils_use_conflict alsa pulseaudio
+}
+
 src_compile() {
 	econf \
 		--enable-experimental \
+		$(use_enable pulseaudio) \
 		$(use_enable alsa) \
 		$(use_enable nls) \
 		$(use_enable vorbis oggvorbis) \
