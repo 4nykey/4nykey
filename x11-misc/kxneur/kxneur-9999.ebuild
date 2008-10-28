@@ -21,3 +21,8 @@ DEPEND="
 	${RDEPEND}
 	x11-libs/libxkbfile
 "
+
+pkg_setup() {
+	set-kdedir
+	kde_pkg_setup
+}

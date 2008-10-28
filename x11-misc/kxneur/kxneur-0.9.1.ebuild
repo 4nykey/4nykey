@@ -10,7 +10,7 @@ SRC_URI="http://dists.xneur.ru/release-${PV}/tgz/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE=""
 
 RDEPEND="
@@ -24,4 +24,5 @@ DEPEND="
 
 pkg_setup() {
 	set-kdedir
+	kde_pkg_setup
 }
