@@ -18,7 +18,7 @@ KEYWORDS="~x86 ~amd64"
 IUSE="ipv6 png jpeg gif ssl"
 
 RDEPEND="
-	x11-libs/fltk:2[threads]
+	x11-libs/fltk:2[threads,-cairo,jpeg=,png=]
 	jpeg? ( media-libs/jpeg )
 	png? ( media-libs/libpng )
 	ssl? ( dev-libs/openssl )

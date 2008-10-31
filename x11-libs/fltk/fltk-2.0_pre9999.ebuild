@@ -29,7 +29,7 @@ RDEPEND="
 	cairo? ( x11-libs/cairo )
 "
 DEPEND="
-	${DEPEND}
+	${RDEPEND}
 	x11-proto/xextproto
 	xinerama? ( x11-proto/xineramaproto )
 	doc? ( app-doc/doxygen )
