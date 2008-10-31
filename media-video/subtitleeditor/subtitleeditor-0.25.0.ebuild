@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+EAPI="2"
+
 inherit eutils versionator
 
 MY_P="${PN}-$(delete_version_separator '_')"
@@ -13,31 +15,32 @@ S="${WORKDIR}/${MY_P}"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="spell cairo debug ttxt nls iso-codes"
+IUSE="spell cairo debug ttxt nls iso-codes opengl"
 
 RDEPEND="
-	>=dev-cpp/gtkmm-2.6.0
-	>=dev-cpp/libglademm-2.4.0
-	>=media-libs/gst-plugins-good-0.10.0
-	dev-libs/libpcre
+	dev-cpp/gtkmm
+	dev-cpp/libglademm:2.4
+	media-libs/gst-plugins-good
+	dev-libs/libpcre[cxx,unicode]
 	spell? ( app-text/enchant )
 	cairo? ( x11-libs/cairo )
 	>=dev-cpp/libxmlpp-2
 	iso-codes? ( app-text/iso-codes )
+	opengl? ( dev-cpp/gtkglextmm )
 "
 DEPEND="
 	${RDEPEND}
 "
 
-src_compile() {
+src_configure() {
 	econf \
 		$(use_enable debug) \
 		$(use_enable nls) \
 		$(use_enable spell enchant-support) \
 		$(use_enable cairo) \
 		$(use_enable ttxt) \
+		$(use_enable opengl gl) \
 		|| die
-	emake || die
 }
 
 src_install() {
