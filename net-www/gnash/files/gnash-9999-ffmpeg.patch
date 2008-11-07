@@ -1,0 +1,35 @@
+=== modified file 'macros/ffmpeg.m4'
+--- macros/ffmpeg.m4	2008-11-06 10:42:59 +0000
++++ macros/ffmpeg.m4	2008-11-06 15:41:24 +0000
+@@ -58,17 +58,19 @@
+         dnl Some systems return /usr/include/ffmpeg, others /usr/include.
+         dnl We use #include <ffmpeg/avcodec.h> everywhere so weed out funny
+         dnl values into the short form.
+-        ffmpeg_pkg=`$PKG_CONFIG --cflags-only-I libavcodec`
+-        ffmpeg_top_incl=`echo ${ffmpeg_pkg} | sed  -e 's:-I::'`
++        ffmpeg_pkg=`$PKG_CONFIG --cflags-only-I libavcodec|sed -e 's:-I::g'`
++        for x in ${ffmpeg_pkg}; do
+         dnl Make sure a header file really exists in the given path.
+         dnl Ubuntu like the headers here in the top level ffmpeg directory.
+         for i in "" ffmpeg libavcodec ffmpeg/libavcodec; do
+-          if test -f ${ffmpeg_top_incl}/${i}/avcodec.h; then
++          if test -f ${x}/${i}/avcodec.h; then
++            ffmpeg_top_incl=${x}
+             ac_cv_path_ffmpeg_incl="-I`(cd ${ffmpeg_top_incl}; pwd)`"
+             avcodec_h="${ffmpeg_top_incl}/${i}/avcodec.h"
+             break
+           fi
+         done
++        done
+       fi
+     fi
+   fi
+@@ -95,6 +97,7 @@
+   if test ${newer_ffmpeg} -eq 0; then
+     AC_DEFINE(HAVE_FFMPEG_AVCODEC_H, 1, [Define if you have avcodec.h installed.])
+   else
++    ffmpeg_top_incl="${ffmpeg_top_incl%/libavcodec}"
+     AC_DEFINE(HAVE_LIBAVCODEC_AVCODEC_H, 1, [Define if you have avcodec.h installed.])
+   fi
+ 
+

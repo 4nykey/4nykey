@@ -2,11 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+EAPI="2"
+
 inherit autotools bzr kde-functions multilib nsplugins qt3 confutils
 
-set-kdedir 3.5
-
-EAPI="1"
 DESCRIPTION="Gnash is a GNU Flash movie player that supports many SWF v7 features"
 HOMEPAGE="http://www.gnu.org/software/gnash/"
 
@@ -90,9 +89,11 @@ pkg_setup() {
 	confutils_use_depend_all nsplugin gtk
 	# only one media handler is used
 	confutils_use_conflict ffmpeg gstreamer
+
+	set-kdedir 3.5
 }
 
-src_compile() {
+src_configure() {
 	local myconf _rend _media _gui
 
 	# Set nsplugin install directory.
@@ -128,11 +129,8 @@ src_compile() {
 		$(use_enable X mit-shm) \
 		--enable-renderer=${_rend/opengl/ogl} \
 		--enable-media=${_media/gstreamer/gst} \
-		--with-ffmpeg-incl=/usr/include \
 		--enable-gui=${_gui} \
 		${myconf} || die "econf failed"
-
-	emake || die "emake failed"
 }
 
 src_install() {
