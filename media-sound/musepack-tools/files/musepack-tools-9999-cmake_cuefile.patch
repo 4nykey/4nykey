@@ -15,7 +15,7 @@ Index: mpcchap/CMakeLists.txt
 ===================================================================
 --- mpcchap/CMakeLists.txt	(revision 408)
 +++ mpcchap/CMakeLists.txt	(working copy)
-@@ -11,12 +11,13 @@
+@@ -11,12 +11,14 @@
  
  link_directories(${libmpc_BINARY_DIR}/libmpcdec)
  link_directories(${libmpc_BINARY_DIR}/libmpcenc)
@@ -23,6 +23,7 @@ Index: mpcchap/CMakeLists.txt
  
  add_executable(mpcchap mpcchap dictionary iniparser ${libmpc_SOURCE_DIR}/common/tags)
  
++set_source_files_properties(mpcchap COMPILE_FLAGS -D_XOPEN_SOURCE)
  target_link_libraries(mpcchap mpcdec_static)
  target_link_libraries(mpcchap mpcenc_static)
 -target_link_libraries(mpcchap ${CUEFILE_LIBRARY})

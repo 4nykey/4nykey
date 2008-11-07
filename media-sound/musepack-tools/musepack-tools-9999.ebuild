@@ -29,6 +29,7 @@ pkg_setup() {
 src_unpack() {
 	[[ -n ${A} ]] && unpack ${A}
 	subversion_src_unpack
+	use cuetools || sed -i CMakeLists.txt -e '/add_subdirectory(mpcchap)/d'
 }
 
 src_compile() {
