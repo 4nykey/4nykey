@@ -322,8 +322,8 @@ src_compile() {
 	#############
 	# Video Output #
 	#############
+	enable_extension_disable dvb dvb
 	enable_extension_disable dvbhead dvb
-	use dvb && my_conf="${my_conf} --with-dvbincdir=/usr/include"
 
 	enable_extension_disable aa aalib
 	enable_extension_disable directfb directfb
