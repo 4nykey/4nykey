@@ -2,11 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit subversion cmake-utils
+inherit subversion cmake-utils autotools
 
 DESCRIPTION="Musepack audio compression tools"
 HOMEPAGE="http://www.musepack.net"
-SRC_URI="cuetools? ( http://download.berlios.de/cuetools/cuetools-1.3.1.tar.gz )"
 ESVN_REPO_URI="http://svn.musepack.net/libmpc/trunk"
 ESVN_PATCHES="${P}-*.patch"
 
@@ -27,18 +26,25 @@ pkg_setup() {
 }
 
 src_unpack() {
-	[[ -n ${A} ]] && unpack ${A}
-	subversion_src_unpack
-	use cuetools || sed -i CMakeLists.txt -e '/add_subdirectory(mpcchap)/d'
+	subversion_fetch
+	if use cuetools; then
+		ESVN_PROJECT="cuetools" subversion_fetch \
+		http://svn.berlios.de/svnroot/repos/cuetools/trunk \
+		cuetools
+		eautoreconf
+	else
+		sed -i CMakeLists.txt -e '/add_subdirectory(mpcchap)/d'
+	fi
+	subversion_bootstrap
 }
 
 src_compile() {
 	if use cuetools; then
-		cd "${WORKDIR}"/cuetools-1.3.1
+		cd cuetools
 		econf || die
 		emake -C src/lib libcuefile.a || die
 		local mycmakeargs="
-			-DCUEFILE_INCLUDE_DIR=${WORKDIR}/cuetools-1.3.1/src/lib
+			-DCUEFILE_INCLUDE_DIR=${S}/cuetools/src/lib
 		"
 	fi
 	cmake-utils_src_compile
