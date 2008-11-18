@@ -18,6 +18,7 @@ KEYWORDS="~x86 ~amd64"
 IUSE="
 X 3dnow a52 aac dv dvdread mp3 truetype imagemagick jpeg lzo mjpeg mmx
 network ogg vorbis quicktime sdl sse sse2 theora v4l2 xvid xml postproc x264
+alsa oss
 "
 
 RDEPEND="
@@ -44,6 +45,7 @@ RDEPEND="
 	virtual/libiconv
 	xml? ( dev-libs/libxml2 )
 	X? ( x11-libs/libXaw x11-libs/libXv )
+	alsa? ( media-libs/alsa-lib )
 "
 DEPEND="
 	${RDEPEND}
@@ -67,6 +69,8 @@ src_compile() {
 		$(use_enable sse2) \
 		$(use_enable truetype freetype2) \
 		$(use_enable v4l2 v4l) \
+		$(use_enable alsa) \
+		$(use_enable oss) \
 		$(use_enable xvid) \
 		$(use_enable x264) \
 		$(use_enable mp3 lame) \

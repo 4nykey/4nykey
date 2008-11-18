@@ -1,0 +1,19 @@
+--- encode/encode_x264.c	2008-09-23 05:44:00.271477519 +0300
++++ encode/encode_x264.c	2008-11-18 08:17:48.000000000 +0200
+@@ -211,12 +211,14 @@
+     OPT_RANGE(analyse.i_mv_range,         "mv_range",      -1,  2048)
+     /* Subpixel motion estimation quality: 1=fast, 7=best */
+     OPT_RANGE(analyse.i_subpel_refine,    "subq",           1,     7)
++#if X264_BUILD < 65
+     /* Bidirectional motion estimation */
+     OPT_FLAG (analyse.b_bidir_me,         "bidir_me")
+-    /* Chroma ME for subpel and mode decision in P-frames */
+-    OPT_FLAG (analyse.b_chroma_me,        "chroma_me")
+     /* RD based mode decision for B-frames */
+     OPT_FLAG (analyse.b_bframe_rdo,       "brdo")
++#endif
++    /* Chroma ME for subpel and mode decision in P-frames */
++    OPT_FLAG (analyse.b_chroma_me,        "chroma_me")
+     /* Allow each MB partition in P-frames to have its own reference number */
+     OPT_FLAG (analyse.b_mixed_references, "mixed_refs")
+     /* Trellis RD quantization */
