@@ -15,8 +15,6 @@ media-sound/aqualung:ape - Add support for decoding of Monkey's Audio
 media-sound/aqualung:cdda - Enables support for audio cd playback through libcdio
 media-sound/aqualung:ifp - Enable support for iRiver devices access through libifp
 media-sound/aqualung:systray - Builds systray (reqires more recent version of GTK+)
-media-sound/ardour:external-libs - Use system libraries instead of bundled (not supported by upstream)
-media-sound/ardour:lv2 - Add support for Ladspa V2
 media-sound/cmus:mp4 - enable mp4 decoding
 media-sound/cmus:verbose-build - Build in verbose mode (silent oterwise)
 media-sound/cmus:zsh-completion - Install zsh command completion
@@ -72,6 +70,8 @@ media-video/transcode:postproc - Build with ffmpeg libpostproc support
 net-p2p/rtorrent:openssl - Use OpenSSL's SHA1 implementation
 net-www/gnash:agg - Rendering based on the Anti-Grain Geometry Rendering Engine library
 net-www/gnash:cygnal - Enable building of the Cygnal server
+net-www/gnash:fb - Enables framebuffer support
+net-www/gnash:neon - Include support for neon
 net-www/gnash:video_cards_i810 - Enable fix for Intel 810 LOD bias problem
 www-client/galeon:nautilus - Enable Nautilus view component
 x11-libs/fltk:noxft - Disables fltk; use for non-english characters
