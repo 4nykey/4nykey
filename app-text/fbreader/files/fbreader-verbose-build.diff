@@ -1,8 +1,14 @@
 diff -ru makefiles.orig/gtksubdir.mk makefiles/gtksubdir.mk
 --- makefiles.orig/gtksubdir.mk	2007-12-24 11:28:01.000000000 +0200
 +++ makefiles/gtksubdir.mk	2007-12-27 09:55:21.000000000 +0200
-@@ -9,9 +9,7 @@
- .SUFFIXES: .cpp .o .h
+@@ -11,14 +11,10 @@
+ .SUFFIXES: .c .cpp .o .h
+ 
+ .c.o:
+-	@echo -n "Compiling $@ ..."
+-	@$(CC) -MMD -c $(CFLAGS) $(INCLUDE) $<
+-	@echo " OK"
++	$(CC) -MMD -c $(CFLAGS) $(INCLUDE) $<
  
  .cpp.o:
 -	@echo -n "Compiling $@ ..."
