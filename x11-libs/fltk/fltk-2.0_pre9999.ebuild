@@ -21,7 +21,7 @@ RDEPEND="
 	x11-libs/libSM
 	x11-libs/libXt
 	xinerama? ( x11-libs/libXinerama )
-	!noxft? ( virtual/xft )
+	!noxft? ( x11-libs/libXft )
 	zlib? ( sys-libs/zlib )
 	png? ( media-libs/libpng )
 	jpeg? ( media-libs/jpeg )
