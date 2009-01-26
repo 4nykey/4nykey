@@ -69,6 +69,7 @@ pkg_setup() {
 }
 
 src_compile() {
+	mkdir -p "${S}/avidemux/ADM_outputs"
 	local mycmakeargs
 
 	for x in \
