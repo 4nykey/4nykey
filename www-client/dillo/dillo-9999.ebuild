@@ -4,13 +4,12 @@
 
 EAPI="2"
 
-inherit cvs autotools savedconfig
+inherit mercurial autotools savedconfig
 
 DESCRIPTION="Lean FLTK-based web browser"
 HOMEPAGE="http://www.dillo.org/"
-ECVS_SERVER="auriga.wearlab.de:/sfhome/cvs/dillo"
-ECVS_MODULE="dillo2"
-S="${WORKDIR}/${ECVS_MODULE}"
+EHG_REPO_URI="http://freehg.org/u/dillo/main"
+S="${WORKDIR}/${EHG_REPO_URI##*/}"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -29,7 +28,7 @@ DEPEND="
 "
 
 src_unpack() {
-	cvs_src_unpack
+	mercurial_src_unpack
 	cd ${S}
 	restore_config src/pixmaps.h
 	eautoreconf
@@ -56,7 +55,7 @@ src_install() {
 
 pkg_postinst() {
 	elog "To use alternative toolbar iconset, save one of the
-	\`pixmaps.xxx.h' available at http://www.dillo.org/Icons
-	as /etc/portage/savedconfig/${CATEGORY}/${PF}
-	and remerge with USE=savedconfig"
+\`pixmaps.xxx.h' available at http://www.dillo.org/Icons
+as /etc/portage/savedconfig/${CATEGORY}/${PF}
+and remerge with USE=savedconfig"
 }
