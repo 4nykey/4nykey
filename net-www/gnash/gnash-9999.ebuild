@@ -3,6 +3,7 @@
 # $Header: $
 
 EAPI="2"
+AT_M4DIR="cygnal"
 
 inherit autotools bzr kde-functions multilib nsplugins qt3 confutils
 
@@ -19,7 +20,7 @@ SLOT="0"
 KEYWORDS=""
 IUSE="
 agg cairo cygnal doc fb ffmpeg fltk gnome gstreamer gtk kde neon nsplugin
-opengl sdl video_cards_i810 X
+opengl sdl video_cards_i810 X kde4 speex
 "
 
 RDEPEND="
@@ -66,7 +67,9 @@ RDEPEND="
 		x11-libs/pango
 	)
 	kde? ( kde-base/kdelibs:3.5 )
+	kde4? ( >=kde-base/kdelibs-4 )
 	sdl? ( media-libs/libsdl )
+	speex? ( media-libs/speex )
 "
 
 DEPEND="
@@ -80,7 +83,7 @@ pkg_setup() {
 	confutils_use_conflict agg cairo opengl
 	confutils_use_conflict cairo opengl
 	# ...and at least one gui toolkit
-	confutils_require_any kde gtk sdl fb fltk
+	confutils_require_any kde4 kde gtk sdl fb fltk
 	# cairo only goes with gtk
 	confutils_use_conflict cairo fb fltk kde sdl
 	# opengl not supported with fb and fltk
@@ -94,20 +97,7 @@ pkg_setup() {
 }
 
 src_configure() {
-	local myconf _rend _media _gui
-
-	# Set nsplugin install directory.
-	use nsplugin && myconf+="
-		--with-npapi-plugindir=/opt/netscape/plugins
-	"
-
-	# Set kde and konqueror plugin directories.
-	use kde && myconf+="
-		--with-kde-pluginprefix=/usr
-		--with-kde-plugindir=/usr/lib/kde3
-		--with-kde-appsdatadir=/usr/share/apps/klash
-		--with-kde-servicesdir=/usr/share/services
-	"
+	local _rend _media _gui g
 
 	# Set rendering engine.
 	_rend=$(usev agg; usev cairo; usev opengl)
@@ -117,20 +107,28 @@ src_configure() {
 	_media=${_media:-none}
 
 	# Set gui.
-	for g in fb fltk gtk kde sdl; do _gui+="$(usev $g),"; done
+	for g in fb fltk gtk kde4 sdl; do _gui+="$(usev $g),"; done
+	use kde && _gui+="kde3"
 
 	econf \
 		$(use_enable cygnal cygnal) \
 		$(use_enable doc docbook) \
 		$(use_enable gnome ghelp) \
 		$(use_enable nsplugin npapi) \
-		$(use_enable kde kparts) \
+		$(use_enable kde kparts3) \
+		$(use_enable kde4 kparts4) \
 		$(use_enable video_cards_i810 i810-lod-bias) \
+		$(use_enable speex speex) \
 		$(use_enable X mit-shm) \
 		--enable-renderer=${_rend/opengl/ogl} \
 		--enable-media=${_media/gstreamer/gst} \
 		--enable-gui=${_gui} \
-		${myconf} || die "econf failed"
+		--with-ffmpeg_incl=/usr/include/libavcodec \
+		--with-plugins-install=system \
+		--with-kde3-prefix=${KDEDIR} \
+		--with-kde4-prefix=/usr \
+		--with-npapi-plugindir=/opt/netscape/plugins \
+		|| die "econf failed"
 }
 
 src_install() {
@@ -140,6 +138,10 @@ src_install() {
 	# Install kde konqueror plugin.
 	if use kde; then
 		cd "${S}/plugin/klash"
+		emake DESTDIR="${D}" install-plugin
+	fi
+	if use kde4; then
+		cd "${S}/plugin/klash4"
 		emake DESTDIR="${D}" install-plugin
 	fi
 	# Create a symlink in /usr/$(get_libdir)/nsbrowser/plugins to the nsplugin install directory.
