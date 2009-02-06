@@ -55,9 +55,7 @@ src_unpack() {
 		-e "s:-lqt-mt:-L${QTDIR}/lib &:" \
 		-e "s:-lQtGui:-L/usr/lib/qt4 &:" \
 
-	echo 'include $(ROOTDIR)/makefiles/target.mk' > platforms.mk
-
-cat << EOF > target.mk
+cat << EOF > platforms.mk
 TARGET_STATUS = $(usev debug || echo release)
 TARGET_ARCH = desktop
 INSTALLDIR=${ROOT}usr
@@ -78,7 +76,8 @@ src_compile() {
 		fi
 	done
 
-	for u in $(usev gtk; usev qt3; usev qt4); do
+	_uis=" $(usev gtk; usev qt3; usev qt4)"
+	for u in $_uis; do
 		_uis+=" $u"
 		emake \
 			UI_TYPE=${u%3} \
