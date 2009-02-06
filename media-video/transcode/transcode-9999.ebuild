@@ -2,15 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/transcode/transcode-1.0.2-r1.ebuild,v 1.6 2006/01/10 11:18:29 flameeyes Exp $
 
-inherit libtool flag-o-matic cvs multilib autotools
+inherit flag-o-matic mercurial multilib autotools
 
 DESCRIPTION="video stream processing tool"
 HOMEPAGE="http://www.transcoding.org"
-ECVS_SERVER="cvs.exit1.org:/cvstc"
-ECVS_MODULE="transcode"
-ECVS_USER="cvs"
-#ECVS_BRANCH="new-module-system"
-S="${WORKDIR}/${ECVS_MODULE}"
+EHG_REPO_URI="http://hg.berlios.de/repos/tcforge"
+S="${WORKDIR}/${EHG_REPO_URI##*/}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -53,7 +50,7 @@ DEPEND="
 "
 
 src_unpack() {
-	cvs_src_unpack
+	mercurial_src_unpack
 	cd ${S}
 	epatch "${FILESDIR}"/${PN}-*.diff
 	eautoreconf || die
