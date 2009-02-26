@@ -8,7 +8,7 @@ inherit mercurial autotools savedconfig
 
 DESCRIPTION="Lean FLTK-based web browser"
 HOMEPAGE="http://www.dillo.org/"
-EHG_REPO_URI="http://freehg.org/u/dillo/main"
+EHG_REPO_URI="http://hg.dillo.org/dillo"
 S="${WORKDIR}/${EHG_REPO_URI##*/}"
 
 LICENSE="GPL-3"
