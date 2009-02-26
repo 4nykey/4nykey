@@ -40,9 +40,15 @@ src_unpack() {
 	unpack ${A}
 	cd ${S}
 
-	use verbose-build && epatch ${FILESDIR}/${PN}-verbose-build.diff
+	sed -i Makefile \
+		-e "s:zlibrary/ui::" \
 
 	cd makefiles
+
+	use verbose-build && \
+	sed -i *.mk \
+		-e "/@echo/d" \
+		-e 's:@\$:$:' \
 
 	sed -i config.mk \
 		-e "s:-O3:${CXXFLAGS}:" \
@@ -65,37 +71,23 @@ EOF
 }
 
 src_compile() {
-	local d u
+	emake || die "emake $d failed"
 
-	for d in $(awk -F= '/DIRS[ ]*=/ {printf $2}' Makefile); do
-		if [[ ${d#*/} = ui ]]; then
-			_ui_dir=$d
-		else
-			_dirs+=" $d"
-			emake -C $d || die "emake $d failed"
-		fi
-	done
-
+	local u
 	_uis=" $(usev gtk; usev qt3; usev qt4)"
 	for u in $_uis; do
 		_uis+=" $u"
-		emake \
-			UI_TYPE=${u%3} \
-			-C $_ui_dir \
-			|| die
+		emake UI_TYPE=${u%3} -C zlibrary/ui || die
 	done
 }
 
 src_install() {
-	local d u
+	local u
 
-	for d in $_dirs; do
-		emake -C $d do_install || die "emake install $d failed"
-	done
+	emake do_install || die
 
 	for u in $_uis; do
-		emake UI_TYPE=${u%3} -C $_ui_dir do_install || \
-			die "emake install $_ui_dir/$u failed"
+		emake UI_TYPE=${u%3} -C zlibrary/ui do_install || die
 		make_wrapper ${PN}-$u "FBReader -zlui ${u%3}"
 	done
 
