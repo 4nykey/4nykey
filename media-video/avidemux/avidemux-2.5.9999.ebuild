@@ -57,6 +57,8 @@ DEPEND="
 	nls? ( sys-devel/gettext )
 "
 
+DOCS="AUTHORS"
+
 pick() {
 	local CMAKE_VAR="$(echo ${2:-${1}} | tr [:lower:] [:upper:])"
 	mycmakeargs+=" -D${CMAKE_VAR}=$(use $1 && echo ON || echo OFF)"
@@ -86,9 +88,4 @@ src_compile() {
 	pick xv xvideo
 
 	cmake-utils_src_compile
-}
-
-src_install() {
-	cmake-utils_src_install
-	dodoc AUTHORS
 }

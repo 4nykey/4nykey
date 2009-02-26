@@ -1,8 +1,20 @@
-Index: avidemux/ADM_userInterfaces/ADM_render/CMakeLists.txt
-===================================================================
---- avidemux/ADM_userInterfaces/ADM_render/CMakeLists.txt	(revision 4126)
-+++ avidemux/ADM_userInterfaces/ADM_render/CMakeLists.txt	(working copy)
-@@ -23,6 +23,10 @@
+diff --git a/avidemux/ADM_coreMuxer/src/CMakeLists.txt b/avidemux/ADM_coreMuxer/src/CMakeLists.txt
+index 818e42b..fda745b 100644
+--- a/avidemux/ADM_coreMuxer/src/CMakeLists.txt
++++ b/avidemux/ADM_coreMuxer/src/CMakeLists.txt
+@@ -9,6 +9,6 @@ ADM_audioClock.cpp
+ ADD_LIBRARY(ADM_coreMuxer SHARED ${ADMcoreMuxer_SRCS})
+ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/avidemux/ADM_coreAudio/include)
+ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/avidemux/ADM_libraries/ADM_ffmpeg)
+-TARGET_LINK_LIBRARIES(ADM_coreMuxer ADM_coreImage ADM_coreAudio ADM_core)
++TARGET_LINK_LIBRARIES(ADM_coreMuxer ADM_coreImage ADM_coreAudio ADM_core ADM_libavformat)
+ 
+ INSTALL(TARGETS ADM_coreMuxer RUNTIME DESTINATION ${BIN_DIR}  LIBRARY DESTINATION lib  ARCHIVE DESTINATION lib)
+diff --git a/avidemux/ADM_userInterfaces/ADM_render/CMakeLists.txt b/avidemux/ADM_userInterfaces/ADM_render/CMakeLists.txt
+index 972eecc..2b3f904 100644
+--- a/avidemux/ADM_userInterfaces/ADM_render/CMakeLists.txt
++++ b/avidemux/ADM_userInterfaces/ADM_render/CMakeLists.txt
+@@ -23,6 +23,10 @@ IF (ADM_UI_GTK)
  		TARGET_LINK_LIBRARIES(${ADM_LIB}_gtk ${SDL_LIBRARY})
  	ENDIF (USE_SDL)
  
@@ -13,7 +25,7 @@ Index: avidemux/ADM_userInterfaces/ADM_render/CMakeLists.txt
  	INSTALL(TARGETS ${ADM_LIB}_gtk RUNTIME DESTINATION ${BIN_DIR}  LIBRARY DESTINATION lib  ARCHIVE DESTINATION lib)
  ENDIF (ADM_UI_GTK)
  
-@@ -31,6 +35,10 @@
+@@ -31,6 +35,10 @@ IF (ADM_UI_QT4)
  		TARGET_LINK_LIBRARIES(${ADM_LIB}_qt4 ${SDL_LIBRARY})
  	ENDIF (USE_SDL)
  

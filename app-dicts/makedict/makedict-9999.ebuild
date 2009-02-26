@@ -13,7 +13,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE="verbose-build"
-DOCS="AUTHORS ChangeLog README TODO"
+DOCS="AUTHORS ChangeLog NEWS README TODO"
 
 DEPEND="
 	sys-libs/zlib

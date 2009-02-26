@@ -17,20 +17,17 @@ IUSE="debug verbose-build"
 DEPEND=""
 RDEPEND=""
 
+DOCS="Changelog README TODO"
+
 pkg_setup() {
 	use verbose-build && CMAKE_COMPILER_VERBOSE=y
 }
 
 src_compile() {
 	local mycmakeargs="
-		-DCMAKE_C_FLAGS_RELEASE= \
-		-DSHARED=ON \
+		-DCMAKE_C_FLAGS_RELEASE=
+		-DSHARED=ON
 		-DSVN_VERSION=${ESVN_WC_REVISION}
 	"
 	cmake-utils_src_compile
-}
-
-src_install() {
-	cmake-utils_src_install
-	dodoc Changelog README
 }

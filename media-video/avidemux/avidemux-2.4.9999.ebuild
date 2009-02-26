@@ -61,6 +61,8 @@ DEPEND="
 	nls? ( sys-devel/gettext )
 "
 
+DOCS="AUTHORS History"
+
 pick() {
 	use $1 || mycmakeargs+=" -DNO_${2:-${1}}=1"
 }
@@ -102,9 +104,4 @@ src_compile() {
 	pick pulse PULSE_SIMPLE
 
 	cmake-utils_src_compile
-}
-
-src_install() {
-	cmake-utils_src_install
-	dodoc AUTHORS
 }
