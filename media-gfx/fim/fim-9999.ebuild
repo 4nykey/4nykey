@@ -14,16 +14,24 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 
-IUSE="debug gif jpeg png tiff postscript screen imagemagick xcf svg xfig dia"
+IUSE="
+debug gif jpeg png tiff postscript screen imagemagick xcf svg xfig dia
+readline fbcon aalib libcaca djvu pdf sdl
+"
 
 DEPEND="
 	gif? ( media-libs/giflib )
 	jpeg? ( >=media-libs/jpeg-6b )
 	png? ( media-libs/libpng )
 	tiff? ( media-libs/tiff )
-	postscript? ( virtual/ghostscript media-libs/tiff )
+	postscript? ( app-text/libspectre )
 	screen? ( app-misc/screen )
-	sys-libs/readline
+	readline? ( sys-libs/readline )
+	aalib? ( media-libs/aalib )
+	libcaca? ( media-libs/libcaca )
+	djvu? ( app-text/djvu )
+	pdf? ( app-text/poppler )
+	sdl? ( media-libs/libsdl )
 "
 RDEPEND="
 	${DEPEND}
@@ -52,10 +60,17 @@ src_compile() {
 		$(use_enable svg inkscape) \
 		$(use_enable xfig) \
 		$(use_enable dia) \
+		$(use_enable fbcon framebuffer) \
+		$(use_enable readline) \
+		$(use_enable postscript ps) \
+		$(use_enable djvu) \
+		$(use_enable pdf poppler) \
+		$(use_enable pdf) \
+		$(use_enable sdl) \
+		$(use_enable aalib aa) \
 		--enable-fimrc \
-		--enable-read-dirs \
 		--enable-recursive-dirs \
-		--with-docdir=/usr/share/doc/${PF} \
+		--docdir=/usr/share/doc/${PF} \
 		|| die "econf failed"
 
 	# parallel make fails
@@ -64,5 +79,4 @@ src_compile() {
 
 src_install() {
 	emake DESTDIR="${D}" prefix=/usr install || die "emake install failed"
-	use postscript || rm -f "${D}"usr/bin/fimgs
 }
