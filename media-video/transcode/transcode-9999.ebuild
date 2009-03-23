@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/transcode/transcode-1.0.2-r1.ebuild,v 1.6 2006/01/10 11:18:29 flameeyes Exp $
 
-inherit flag-o-matic mercurial multilib autotools
+inherit flag-o-matic multilib autotools mercurial
 
 DESCRIPTION="video stream processing tool"
 HOMEPAGE="http://www.transcoding.org"

@@ -5,7 +5,7 @@
 EAPI="2"
 AT_M4DIR="cygnal"
 
-inherit autotools bzr kde-functions multilib nsplugins qt3 confutils
+inherit autotools kde-functions multilib nsplugins qt3 confutils bzr
 
 DESCRIPTION="Gnash is a GNU Flash movie player that supports many SWF v7 features"
 HOMEPAGE="http://www.gnu.org/software/gnash/"

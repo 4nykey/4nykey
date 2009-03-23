@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit subversion cmake-utils autotools
+inherit cmake-utils autotools subversion
 
 DESCRIPTION="Musepack audio compression tools"
 HOMEPAGE="http://www.musepack.net"

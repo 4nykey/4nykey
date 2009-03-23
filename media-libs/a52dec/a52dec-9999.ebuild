@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/a52dec/a52dec-0.7.4-r1.ebuild,v 1.5 2004/07/29 02:55:52 tgall Exp $
 
-inherit flag-o-matic cvs autotools
+inherit flag-o-matic autotools cvs
 
 DESCRIPTION="library for decoding ATSC A/52 streams used in DVD"
 HOMEPAGE="http://liba52.sourceforge.net/"

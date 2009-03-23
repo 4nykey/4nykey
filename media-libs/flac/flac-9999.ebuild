@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/flac/flac-1.1.2-r5.ebuild,v 1.2 2006/05/28 02:16:10 flameeyes Exp $
 
-inherit cvs autotools toolchain-funcs
+inherit autotools toolchain-funcs cvs
 
 DESCRIPTION="Free Lossless Audio Encoder"
 HOMEPAGE="http://flac.sourceforge.net/"

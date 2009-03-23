@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-libs/fltk/fltk-1.1.7.ebuild,v 1.10 2006/08/09 19:49:08 jer Exp $
 
-inherit subversion autotools flag-o-matic
+inherit autotools flag-o-matic subversion
 
 DESCRIPTION="C++ user interface toolkit for X and OpenGL."
 HOMEPAGE="http://www.fltk.org"

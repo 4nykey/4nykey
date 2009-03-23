@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit subversion cmake-utils
+inherit cmake-utils subversion
 
 WANT_AUTOMAKE="1.9"
 DESCRIPTION="Great Video editing/encoding tool"

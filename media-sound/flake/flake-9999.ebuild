@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit subversion cmake-utils
+inherit cmake-utils subversion
 
 DESCRIPTION="Flake is an open-source FLAC audio encoder"
 HOMEPAGE="http://flake-enc.sf.net"

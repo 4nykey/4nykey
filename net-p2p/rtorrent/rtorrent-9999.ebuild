@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/net-p2p/rtorrent/rtorrent-0.8.2-r4.ebuild,v 1.1 2008/08/07 22:00:07 loki_val Exp $
 
-inherit subversion autotools toolchain-funcs flag-o-matic
+inherit autotools toolchain-funcs flag-o-matic subversion
 
 DESCRIPTION="BitTorrent Client using libtorrent"
 HOMEPAGE="http://libtorrent.rakshasa.no/"

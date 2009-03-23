@@ -3,7 +3,7 @@
 # $Header: $
 
 WX_GTK_VER="2.8"
-inherit subversion autotools wxwidgets confutils
+inherit autotools wxwidgets confutils subversion
 
 DESCRIPTION="MediaInfo supplies technical and tag information about media files"
 HOMEPAGE="http://mediainfo.sourceforge.net"

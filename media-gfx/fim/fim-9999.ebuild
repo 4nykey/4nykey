@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit subversion autotools
+inherit autotools subversion
 
 DESCRIPTION="Fbi IMproved is a framebuffer image viewer based on Fbi and inspired from Vim"
 HOMEPAGE="http://www.autistici.org/dezperado/fim"

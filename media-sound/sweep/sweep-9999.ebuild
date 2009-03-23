@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/sweep/sweep-0.8.3.ebuild,v 1.9 2005/12/26 14:16:50 lu_zero Exp $
 
-inherit subversion autotools confutils
+inherit autotools confutils subversion
 
 DESCRIPTION="audio editor and live playback tool"
 HOMEPAGE="http://www.metadecks.org/software/sweep/"

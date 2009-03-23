@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit git cmake-utils
+inherit cmake-utils git
 
 DESCRIPTION="Great Video editing/encoding tool"
 HOMEPAGE="http://fixounet.free.fr/avidemux/"

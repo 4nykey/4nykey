@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit mercurial autotools savedconfig
+inherit autotools savedconfig mercurial
 
 DESCRIPTION="Lean FLTK-based web browser"
 HOMEPAGE="http://www.dillo.org/"

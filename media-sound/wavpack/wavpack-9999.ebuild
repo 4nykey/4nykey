@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit subversion autotools
+inherit autotools subversion
 
 DESCRIPTION="WavPack hybrid audio compression"
 HOMEPAGE="http://www.wavpack.com/"

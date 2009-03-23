@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/xvid/xvid-1.0.1.ebuild,v 1.6 2004/07/29 03:34:28 tgall Exp $
 
-inherit cvs autotools
+inherit autotools cvs
 
 DESCRIPTION="high performance/quality MPEG-4 video de-/encoding solution"
 HOMEPAGE="http://www.xvid.org/"

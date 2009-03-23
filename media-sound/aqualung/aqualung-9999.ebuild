@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit subversion autotools
+inherit autotools subversion
 
 DESCRIPTION="Aqualung"
 HOMEPAGE="http://aqualung.sourceforge.net"

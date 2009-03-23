@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/www-client/galeon/galeon-2.0.4.ebuild,v 1.8 2008/03/14 17:27:42 armin76 Exp $
 
-inherit gnome2 subversion autotools
+inherit gnome2 autotools subversion
 
 DESCRIPTION="A GNOME Web browser based on gecko (mozilla's rendering engine)"
 HOMEPAGE="http://galeon.sourceforge.net"

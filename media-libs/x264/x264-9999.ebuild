@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit git toolchain-funcs
+inherit toolchain-funcs git
 
 DESCRIPTION="x264 is a free library for encoding H264/AVC video streams"
 HOMEPAGE="http://www.videolan.org/x264.html"

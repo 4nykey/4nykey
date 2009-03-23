@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit subversion cmake-utils
+inherit cmake-utils subversion
 
 DESCRIPTION="A converter between many dictionary formats (dictd, dsl, sdict, stardict, xdxf)"
 HOMEPAGE="http://xdxf.sf.net"
