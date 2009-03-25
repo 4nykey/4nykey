@@ -71,12 +71,11 @@ EOF
 }
 
 src_compile() {
-	emake || die "emake $d failed"
+	emake || die "emake failed"
 
 	local u
 	_uis=" $(usev gtk; usev qt3; usev qt4)"
 	for u in $_uis; do
-		_uis+=" $u"
 		emake UI_TYPE=${u%3} -C zlibrary/ui || die
 	done
 }
@@ -88,7 +87,7 @@ src_install() {
 
 	for u in $_uis; do
 		emake UI_TYPE=${u%3} -C zlibrary/ui do_install || die
-		make_wrapper ${PN}-$u "FBReader -zlui ${u%3}"
+		make_wrapper ${PN}-${u} "FBReader -zlui ${u%3}"
 	done
 
 }
