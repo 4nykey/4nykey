@@ -2,19 +2,20 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit eutils
+inherit mercurial
 
 DESCRIPTION="mpc123 - Musepack Console audio player"
 HOMEPAGE="http://mpc123.sf.net"
-SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
+EHG_REPO_URI="http://mpc123.hg.sourceforge.net:8000/hgroot/mpc123"
+S="${WORKDIR}/mpc123"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS=""
 IUSE=""
 
 DEPEND="
-	media-libs/libmpcdec
+	>=media-sound/musepack-tools-9999-r1
 	media-libs/libao
 "
 RDEPEND="
@@ -22,7 +23,7 @@ RDEPEND="
 "
 
 src_unpack() {
-	unpack ${A}
+	mercurial_src_unpack
 	cd ${S}
 	epatch "${FILESDIR}"/${PN}-*.diff
 	tc-export CC

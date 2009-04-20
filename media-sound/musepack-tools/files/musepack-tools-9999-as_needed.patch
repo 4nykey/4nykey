@@ -6,3 +6,15 @@ Index: libmpcdec/CMakeLists.txt
  include_directories(${libmpc_SOURCE_DIR}/include)
  add_library(mpcdec_static STATIC huffman mpc_decoder mpc_reader streaminfo mpc_bits_reader mpc_demux requant synth_filter ${libmpc_SOURCE_DIR}/common/crc32)
 +target_link_libraries(mpcdec_static m)
+Index: libmpcdec/Makefile.am
+===================================================================
+--- libmpcdec/Makefile.am	(revision 442)
++++ libmpcdec/Makefile.am	(working copy)
+@@ -10,6 +10,7 @@
+ 	$(common_sources)
+ 
+ libmpcdec_la_LDFLAGS = -no-undefined -version-info 7:0:1
++libmpcdec_la_LIBADD = -lm
+ 
+ noinst_HEADERS = mpc_bits_reader.h huffman.h decoder.h internal.h requant.h mpcdec_math.h
+ AM_CFLAGS = -fpic -fvisibility=hidden

@@ -1,0 +1,46 @@
+Index: configure.in
+===================================================================
+--- configure.in	(revision 442)
++++ configure.in	(working copy)
+@@ -3,6 +3,7 @@
+ 
+ AM_CONFIG_HEADER(include/config.h)
+ AM_INIT_AUTOMAKE(libmpcs, 0.1)
++AC_CONFIG_SUBDIRS(cuetools)
+ 
+ AC_LANG_C
+ AC_PROG_CC
+Index: Makefile.am
+===================================================================
+--- Makefile.am	(revision 442)
++++ Makefile.am	(working copy)
+@@ -1,3 +1,3 @@
+ AUTOMAKE_OPTIONS = foreign
+-SUBDIRS = include libmpcdec libmpcenc libmpcpsy libwavformat mpcenc mpc2sv8 \
++SUBDIRS = include cuetools/src/lib libmpcdec libmpcenc libmpcpsy libwavformat mpcenc mpc2sv8 \
+ 	mpcchap mpccut mpcdec mpcgain wavcmp
+Index: mpcchap/Makefile.am
+===================================================================
+--- mpcchap/Makefile.am	(revision 442)
++++ mpcchap/Makefile.am	(working copy)
+@@ -7,6 +7,6 @@
+ mpcchap_SOURCES = dictionary.c iniparser.c mpcchap.c $(common_sources)
+ mpcchap_LDADD = $(top_builddir)/libmpcdec/libmpcdec.la \
+ 	$(top_builddir)/libmpcenc/libmpcenc.a \
+-	-lm -lcuefile
++	-lm -L$(top_builddir)/cuetools/src/lib -lcuefile
+ 
+ noinst_HEADERS = dictionary.h iniparser.h
+Index: mpcchap/mpcchap.c
+===================================================================
+--- mpcchap/mpcchap.c	(revision 442)
++++ mpcchap/mpcchap.c	(working copy)
+@@ -24,7 +24,7 @@
+ 
+ #include <sys/stat.h>
+ 
+-#include <cuetools/cuefile.h>
++#include <../cuetools/src/lib/cuefile.h>
+ 
+ // tags.c
+ void    Init_Tags        ( void );
