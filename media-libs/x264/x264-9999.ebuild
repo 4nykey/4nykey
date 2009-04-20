@@ -7,7 +7,7 @@ inherit toolchain-funcs git
 DESCRIPTION="x264 is a free library for encoding H264/AVC video streams"
 HOMEPAGE="http://www.videolan.org/x264.html"
 EGIT_REPO_URI="git://git.videolan.org/x264.git"
-EGIT_PATCHES="${PN}-*.diff"
+EGIT_PATCHES=(${FILESDIR}/${PN}-*.diff)
 
 LICENSE="GPL-2"
 SLOT="0"
