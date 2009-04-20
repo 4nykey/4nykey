@@ -7,6 +7,7 @@ inherit git
 DESCRIPTION="CMus - ncurses based music player."
 HOMEPAGE="http://cmus.sourceforge.net"
 EGIT_REPO_URI="git://github.com/JasonWoof/cmus-unofficial.git"
+EGIT_PATCHES=(${FILESDIR}/${PN}*.diff)
 
 LICENSE="GPL-2"
 KEYWORDS="~x86 ~amd64"

@@ -15,7 +15,7 @@ KEYWORDS=""
 IUSE=""
 
 DEPEND="
-	>=media-sound/musepack-tools-9999-r1
+	>=media-libs/libmpcdec-9999-r1
 	media-libs/libao
 "
 RDEPEND="

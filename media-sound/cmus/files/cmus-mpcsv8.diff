@@ -1,0 +1,195 @@
+diff --git a/configure b/configure
+index 7f1a031..cc3c9cb 100755
+--- a/configure
++++ b/configure
+@@ -94,6 +94,10 @@ check_ncurses()
+ check_mpc()
+ {
+ 	check_library MPC "" "-lmpcdec"
++	if ! check_header 'mpc/mpcdec.h'
++	then
++		MPC_CFLAGS="$MPC_CFLAGS -DMPC_IS_OLD_API"
++	fi
+ 	return $?
+ }
+ 
+diff --git a/mpc.c b/mpc.c
+index 68df486..344f981 100644
+--- a/mpc.c
++++ b/mpc.c
+@@ -11,12 +11,24 @@
+ #include "xmalloc.h"
+ #include "read_wrapper.h"
+ 
++#ifdef MPC_IS_OLD_API
+ #include <mpcdec/mpcdec.h>
++#else
++#include <mpc/mpcdec.h>
++#define TRUE MPC_TRUE;
++#define FALSE MPC_FALSE;
++#endif
+ #include <inttypes.h>
+ #include <errno.h>
+ 
+ struct mpc_private {
++#ifdef MPC_IS_OLD_API
+ 	mpc_decoder decoder;
++#else
++	mpc_demux *decoder;
++	mpc_frame_info frame;
++	mpc_status status;
++#endif
+ 	mpc_reader reader;
+ 	mpc_streaminfo info;
+ 
+@@ -40,9 +52,17 @@ struct mpc_private {
+ };
+ 
+ /* callbacks */
+-static mpc_int32_t read_impl(void *data, void *ptr, mpc_int32_t size)
++#ifdef MPC_IS_OLD_API
++#define cb_first_arg void *data
++#define cb_data data
++#else
++#define cb_first_arg mpc_reader *reader
++#define cb_data reader->data
++#endif
++
++static mpc_int32_t read_impl(cb_first_arg, void *ptr, mpc_int32_t size)
+ {
+-	struct input_plugin_data *ip_data = data;
++	struct input_plugin_data *ip_data = cb_data;
+ 	int rc;
+ 
+ 	rc = read_wrapper(ip_data, ptr, size);
+@@ -55,9 +75,9 @@ static mpc_int32_t read_impl(void *data, void *ptr, mpc_int32_t size)
+ 	return rc;
+ }
+ 
+-static mpc_bool_t seek_impl(void *data, mpc_int32_t offset)
++static mpc_bool_t seek_impl(cb_first_arg, mpc_int32_t offset)
+ {
+-	struct input_plugin_data *ip_data = data;
++	struct input_plugin_data *ip_data = cb_data;
+ 	int rc;
+ 
+ 	rc = lseek(ip_data->fd, offset, SEEK_SET);
+@@ -66,24 +86,24 @@ static mpc_bool_t seek_impl(void *data, mpc_int32_t offset)
+ 	return TRUE;
+ }
+ 
+-static mpc_int32_t tell_impl(void *data)
++static mpc_int32_t tell_impl(cb_first_arg)
+ {
+-	struct input_plugin_data *ip_data = data;
++	struct input_plugin_data *ip_data = cb_data;
+ 
+ 	return lseek(ip_data->fd, 0, SEEK_CUR);
+ }
+ 
+-static mpc_int32_t get_size_impl(void *data)
++static mpc_int32_t get_size_impl(cb_first_arg)
+ {
+-	struct input_plugin_data *ip_data = data;
++	struct input_plugin_data *ip_data = cb_data;
+ 	struct mpc_private *priv = ip_data->private;
+ 
+ 	return priv->file_size;
+ }
+ 
+-static mpc_bool_t canseek_impl(void *data)
++static mpc_bool_t canseek_impl(cb_first_arg)
+ {
+-	struct input_plugin_data *ip_data = data;
++	struct input_plugin_data *ip_data = cb_data;
+ 
+ 	return !ip_data->remote;
+ }
+@@ -112,18 +132,27 @@ static int mpc_open(struct input_plugin_data *ip_data)
+ 	ip_data->private = priv;
+ 
+ 	/* read file's streaminfo data */
++#ifdef MPC_IS_OLD_API
+ 	mpc_streaminfo_init(&priv->info);
+ 	if (mpc_streaminfo_read(&priv->info, &priv->reader) != ERROR_CODE_OK) {
++#else
++	priv->decoder = mpc_demux_init(&priv->reader);
++	if (priv->decoder == NULL) {
++#endif
+ 		free(priv);
+ 		return -IP_ERROR_FILE_FORMAT;
+ 	}
+ 
+ 	/* instantiate a decoder with our file reader */
++#ifdef MPC_IS_OLD_API
+ 	mpc_decoder_setup(&priv->decoder, &priv->reader);
+ 	if (!mpc_decoder_initialize(&priv->decoder, &priv->info)) {
+ 		free(priv);
+ 		return -IP_ERROR_FILE_FORMAT;
+ 	}
++#else
++	mpc_demux_get_info(priv->decoder, &priv->info);
++#endif
+ 
+ 	priv->samples_avail = 0;
+ 	priv->samples_pos = 0;
+@@ -186,13 +215,24 @@ static int mpc_read(struct input_plugin_data *ip_data, char *buffer, int count)
+ 	struct mpc_private *priv = ip_data->private;
+ 
+ 	if (priv->samples_avail == 0) {
+-		uint32_t status = mpc_decoder_decode(&priv->decoder, priv->samples, NULL, NULL);
++		uint32_t status;
++#ifdef MPC_IS_OLD_API
++		status = mpc_decoder_decode(&priv->decoder, priv->samples, NULL, NULL);
+ 
+ 		if (status == (uint32_t)(-1)) {
++#else
++		priv->frame.buffer = (MPC_SAMPLE_FORMAT *)priv->samples;
++		priv->status = mpc_demux_decode(priv->decoder, &priv->frame);
++		if( priv->status != MPC_STATUS_OK ){
++#endif
+ 			/* right ret val? */
+ 			return -IP_ERROR_ERRNO;
+ 		}
++#ifdef MPC_IS_OLD_API
+ 		if (status == 0) {
++#else
++		if( priv->frame.bits == -1 ){
++#endif
+ 			/* EOF */
+ 			return 0;
+ 		}
+@@ -200,6 +240,9 @@ static int mpc_read(struct input_plugin_data *ip_data, char *buffer, int count)
+ 		/* status seems to be number of _frames_
+ 		 * the api documentation is wrong
+ 		 */
++#ifndef MPC_IS_OLD_API
++		status = priv->frame.samples;
++#endif
+ 		priv->samples_avail = status * priv->info.channels;
+ 	}
+ 	return scale(ip_data, buffer, count);
+@@ -212,7 +255,11 @@ static int mpc_seek(struct input_plugin_data *ip_data, double offset)
+ 	priv->samples_pos = 0;
+ 	priv->samples_avail = 0;
+ 
++#ifdef MPC_IS_OLD_API
+ 	if (mpc_decoder_seek_seconds(&priv->decoder, offset))
++#else
++	if (mpc_demux_seek_second(priv->decoder, offset) == MPC_STATUS_OK)
++#endif
+ 		return 0;
+ 	return -1;
+ }
+@@ -281,7 +328,11 @@ static int mpc_duration(struct input_plugin_data *ip_data)
+ 	/* priv->info.pcm_samples seems to be number of frames
+ 	 * priv->info.frames is _not_ pcm frames
+ 	 */
++#ifdef MPC_IS_OLD_API
+ 	return priv->info.pcm_samples / priv->info.sample_freq;
++#else
++	return priv->info.samples / priv->info.sample_freq;
++#endif
+ }
+ 
+ const struct input_plugin_ops ip_ops = {
