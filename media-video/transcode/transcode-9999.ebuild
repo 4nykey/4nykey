@@ -13,7 +13,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE="
-X 3dnow a52 aac dv dvdread mp3 truetype imagemagick jpeg lzo mjpeg mmx
+X 3dnow a52 aac dv dvdread mp3 truetype graphicsmagick jpeg lzo mjpeg mmx
 network ogg vorbis quicktime sdl sse sse2 theora v4l2 xvid xml postproc x264
 alsa oss
 "
@@ -26,7 +26,7 @@ RDEPEND="
 	x264? ( || ( media-libs/x264 media-libs/x264-svn ) )
 	mjpeg? ( >=media-video/mjpegtools-1.6.2-r3 )
 	lzo? ( >=dev-libs/lzo-2 )
-	imagemagick? ( >=media-gfx/imagemagick-5.5.6.0 )
+	graphicsmagick? ( media-gfx/graphicsmagick )
 	media-libs/libexif
 	mp3? ( >=media-sound/lame-3.93 )
 	aac? ( media-libs/faac )
@@ -83,7 +83,7 @@ src_compile() {
 		$(use_enable xml libxml2) \
 		$(use_enable mjpeg mjpegtools) \
 		$(use_enable sdl) \
-		$(use_enable imagemagick) \
+		$(use_enable graphicsmagick) \
 		$(use_enable jpeg libjpeg) \
 		$(use_with X x) \
 		$(use_enable postproc libpostproc) \
