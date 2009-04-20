@@ -1,0 +1,10 @@
+Index: src/Makefile.am
+===================================================================
+--- src/Makefile.am	(revision 340)
++++ src/Makefile.am	(working copy)
+@@ -11,4 +11,4 @@
+ 
+ xneur_LDFLAGS = -L$(top_srcdir)/lib/ai -L$(top_srcdir)/lib/config -L$(top_srcdir)/lib/misc -L$(top_srcdir)/lib/x -L$(top_srcdir)/lib/sound  @X11_LIBS@
+ 
+-xneur_LDADD = ../lib/x/libxnx.la ../lib/ai/libxnai.la ../lib/config/libxnconfig.la ../lib/misc/libxnmisc.la ../lib/sound/libxnsound.la 
++xneur_LDADD = ../lib/x/libxnx.la ../lib/ai/libxnai.la ../lib/config/libxnconfig.la ../lib/misc/libxnmisc.la ../lib/sound/libxnsound.la -lpthread
