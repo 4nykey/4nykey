@@ -1,0 +1,14 @@
+Index: CMakeLists.txt
+===================================================================
+--- CMakeLists.txt	(revision 4708)
++++ CMakeLists.txt	(working copy)
+@@ -120,6 +120,9 @@
+ 
+ IF (NOT Subversion_FOUND)
+ 	SET(ADM_SUBVERSION 0)
++ELSE (NOT Subversion_FOUND)
++	MESSAGE(STATUS "  revision: ${Project_WC_REVISION}")
++	SET(ADM_SUBVERSION ${Project_WC_REVISION})
+ ENDIF (NOT Subversion_FOUND)
+ 
+ ########################################

@@ -1,0 +1,26 @@
+Index: avidemux/ADM_userInterfaces/ADM_render/CMakeLists.txt
+===================================================================
+--- avidemux/ADM_userInterfaces/ADM_render/CMakeLists.txt	(revision 4708)
++++ avidemux/ADM_userInterfaces/ADM_render/CMakeLists.txt	(working copy)
+@@ -23,6 +23,10 @@
+ 		TARGET_LINK_LIBRARIES(${ADM_LIB}_gtk ${SDL_LIBRARY})
+ 	ENDIF (USE_SDL)
+ 
++	IF (USE_XV)
++		TARGET_LINK_LIBRARIES(${ADM_LIB}_gtk ${XVIDEO_LIBRARY_DIR})
++	ENDIF (USE_XV)
++
+ 	INSTALL(TARGETS ${ADM_LIB}_gtk RUNTIME DESTINATION ${BIN_DIR}  LIBRARY DESTINATION lib  ARCHIVE DESTINATION lib)
+ ENDIF (ADM_UI_GTK)
+ 
+@@ -31,6 +35,10 @@
+ 		TARGET_LINK_LIBRARIES(${ADM_LIB}_qt4 ${SDL_LIBRARY})
+ 	ENDIF (USE_SDL)
+ 
++	IF (USE_XV)
++		TARGET_LINK_LIBRARIES(${ADM_LIB}_qt4 ${XVIDEO_LIBRARY_DIR})
++	ENDIF (USE_XV)
++
+ 	INSTALL(TARGETS ${ADM_LIB}_qt4 RUNTIME DESTINATION ${BIN_DIR}  LIBRARY DESTINATION lib  ARCHIVE DESTINATION lib)
+ ENDIF (ADM_UI_QT4)
+ 

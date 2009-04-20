@@ -4,12 +4,12 @@
 
 EAPI="2"
 
-inherit cmake-utils git
+inherit cmake-utils subversion
 
 DESCRIPTION="Great Video editing/encoding tool"
 HOMEPAGE="http://fixounet.free.fr/avidemux/"
-EGIT_REPO_URI="git://git.berlios.de/avidemux"
-EGIT_PATCHES="${P}-*.diff"
+ESVN_REPO_URI="svn://svn.berlios.de/avidemux/branches/avidemux_2.6_branch_mean"
+ESVN_PATCHES="${P}-*.diff"
 
 LICENSE="GPL-2"
 SLOT="2"
@@ -70,6 +70,14 @@ pkg_setup() {
 }
 
 src_configure() {
+	# provide svn revision
+	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
+	local mycmakeargs="
+		-DSVN=OFF
+		-DSubversion_FOUND=1
+		-DProject_WC_REVISION=${ESVN_WC_REVISION}
+	"
+
 	local mycmakeargs="
 		-DAVIDEMUX_LIB_DIR=${WORKDIR}/${PN}_build/avidemux
 		-DAVIDEMUX_CORECONFIG_DIR=${WORKDIR}/${PN}_build/config
