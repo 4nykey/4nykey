@@ -2,14 +2,14 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/www-client/galeon/galeon-2.0.4.ebuild,v 1.8 2008/03/14 17:27:42 armin76 Exp $
 
-inherit gnome2 autotools subversion
+inherit gnome2 autotools git
 
 DESCRIPTION="A GNOME Web browser based on gecko (mozilla's rendering engine)"
 HOMEPAGE="http://galeon.sourceforge.net"
 SRC_URI=""
-ESVN_REPO_URI="http://svn.gnome.org/svn/${PN}/trunk"
-ESVN_PATCHES="${PN}*.diff"
-ESVN_BOOTSTRAP="intltoolize && eautoreconf"
+EGIT_REPO_URI="git://git.gnome.org/galeon"
+EGIT_PATCHES=("${FILESDIR}/"${PN}*.diff)
+EGIT_BOOTSTRAP="intltoolize && eautoreconf"
 
 LICENSE="GPL-2"
 KEYWORDS="~x86 ~amd64"
