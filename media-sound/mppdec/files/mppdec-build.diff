@@ -1,0 +1,37 @@
+--- ./Makefile.orig	2009-04-27 13:15:06.000000000 +0300
++++ ./Makefile	2009-04-27 13:16:11.000000000 +0300
+@@ -221,12 +221,12 @@
+ 
+ OTHER_DEPEND_ASM = $(MAKEFILE) tools.inc version
+ OTHER_DEPEND_DEC = $(MAKEFILE) mppdec.h mpp.h config.h profile.h version
+-OTHER_DEPEND_ENC = $(OTHER_DEPEND_DEC) mppenc.h minimax.h
++OTHER_DEPEND_ENC = $(OTHER_DEPEND_DEC)
+ 
+ 
+ # Lists of object and C files
+ 
+-MPPDEC_OBJ = cpu_feat.o decode.o http.o huffsv7.o huffsv46.o id3tag.o mppdec.o profile.o requant.o synth.o synthasm.o synthtab.o tools.o wave_out.o stderr.o _setargv.o codetable_data.o codetable.o codetable_dec.o priority.o directory.o endianasm.o
++MPPDEC_OBJ = $(MPPDEC_SRC:.c=.o)
+ MPPDEC_SRC =            decode.c http.c huffsv7.c huffsv46.c id3tag.c mppdec.c profile.c requant.c synth.c            synthtab.c tools.c wave_out.c stderr.c _setargv.c codetable_data.c codetable.c codetable_dec.c priority.c directory.c
+ MPPDEC_ASO = cpu_feat.o                                                                                    synthasm.o                                                                                                                       endianasm.o
+ 
+@@ -273,7 +272,7 @@
+ all:    $(ALL_TARGETS)
+ 
+ 
+-$(MPPDEC_TARGET): $(MPPDEC_OBJ)
++$(MPPDEC_TARGET): $(MPPDEC_OBJ) $(MPPDEC_ASO)
+ 	$(CC)         $(CFLAGS) $(MPPDEC_OBJ) -o $(MPPDEC_TARGET)        $(LDADD)
+ 	-$(STRIP)     $(STRIPOPT)                $(MPPDEC_TARGET)
+ 	$(CC) -static $(CFLAGS) $(MPPDEC_OBJ) -o $(MPPDEC_TARGET)-static $(LDADD)
+--- ./stderr.c.orig	2002-10-25 23:39:54.000000000 +0300
++++ ./stderr.c	2009-04-27 13:13:13.000000000 +0300
+@@ -25,7 +25,7 @@
+ #endif
+ 
+ 
+-static Bool_t  stderr_silent = 0;
++Bool_t  stderr_silent = 0;
+ 
+ 
+ void
