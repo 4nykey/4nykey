@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+inherit eutils
+
 DESCRIPTION="X Neural Switcher is an automatic keyboard layout switcher"
 HOMEPAGE="http://xneur.ru"
 SRC_URI="http://dists.xneur.ru/release-${PV}/tgz/${P}.tar.bz2"
@@ -9,13 +11,13 @@ SRC_URI="http://dists.xneur.ru/release-${PV}/tgz/${P}.tar.bz2"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="gstreamer openal alsa debug pcre spell xpm"
+IUSE="gstreamer openal alsa debug pcre spell xosd"
 
 DEPEND="
 	gstreamer? ( media-libs/gstreamer )
 	openal? ( media-libs/freealut )
 	pcre? ( dev-libs/libpcre )
-	xpm? ( x11-libs/libXpm )
+	xosd? ( x11-libs/xosd )
 	x11-libs/libX11
 "
 RDEPEND="
@@ -26,6 +28,12 @@ DEPEND="
 	${DEPEND}
 	dev-util/pkgconfig
 "
+
+src_unpack() {
+	unpack ${A}
+	cd "${S}"
+	epatch "${FILESDIR}"/${P}*.diff
+}
 
 src_compile() {
 	local myconf
@@ -42,8 +50,8 @@ src_compile() {
 	econf \
 		$(use_with debug) \
 		$(use_with pcre) \
-		$(use_with xpm) \
 		$(use_with spell aspell) \
+		$(use_with xosd) \
 		${myconf} \
 		|| die
 

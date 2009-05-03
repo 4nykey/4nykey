@@ -2,17 +2,16 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit autotools subversion
+inherit autotools flag-o-matic subversion
 
 DESCRIPTION="X Neural Switcher is an automatic keyboard layout switcher"
 HOMEPAGE="http://xneur.ru"
 ESVN_REPO_URI="svn://xneur.ru:3690/xneur/xneur"
-ESVN_PATCHES="${P}*.diff"
 ESVN_BOOTSTRAP="eautoreconf"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS=""
 IUSE="gstreamer openal alsa debug pcre spell xosd"
 
 DEPEND="
@@ -42,6 +41,8 @@ src_compile() {
 	else
 		myconf="--without-sound"
 	fi
+
+	append-flags -Wno-error
 
 	econf \
 		$(use_with debug) \
