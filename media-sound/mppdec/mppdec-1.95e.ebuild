@@ -30,9 +30,9 @@ src_unpack() {
 }
 
 src_compile() {
-	emake CFLAGS="${CFLAGS}" config.h || die
+	emake CFLAGS="-O1" config.h || die
 	emake \
-		CC=$(tc-getCC) STRIP=true \
+		CC=$(tc-getCC) \
 		CFLAGS="${CFLAGS} -DMPP_DECODER -DCD_SAMPLE_FREQ=44100" \
 		OPTIM_SIZE= \
 		mppdec replaygain \

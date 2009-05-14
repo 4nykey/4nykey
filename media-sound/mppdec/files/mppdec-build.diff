@@ -15,15 +15,28 @@
  MPPDEC_SRC =            decode.c http.c huffsv7.c huffsv46.c id3tag.c mppdec.c profile.c requant.c synth.c            synthtab.c tools.c wave_out.c stderr.c _setargv.c codetable_data.c codetable.c codetable_dec.c priority.c directory.c
  MPPDEC_ASO = cpu_feat.o                                                                                    synthasm.o                                                                                                                       endianasm.o
  
-@@ -273,7 +272,7 @@
+@@ -274,11 +274,8 @@
  all:    $(ALL_TARGETS)
  
  
 -$(MPPDEC_TARGET): $(MPPDEC_OBJ)
+-	$(CC)         $(CFLAGS) $(MPPDEC_OBJ) -o $(MPPDEC_TARGET)        $(LDADD)
+-	-$(STRIP)     $(STRIPOPT)                $(MPPDEC_TARGET)
+-	$(CC) -static $(CFLAGS) $(MPPDEC_OBJ) -o $(MPPDEC_TARGET)-static $(LDADD)
+-	-$(STRIP)     $(STRIPOPT)                $(MPPDEC_TARGET)-static
 +$(MPPDEC_TARGET): $(MPPDEC_OBJ) $(MPPDEC_ASO)
- 	$(CC)         $(CFLAGS) $(MPPDEC_OBJ) -o $(MPPDEC_TARGET)        $(LDADD)
- 	-$(STRIP)     $(STRIPOPT)                $(MPPDEC_TARGET)
- 	$(CC) -static $(CFLAGS) $(MPPDEC_OBJ) -o $(MPPDEC_TARGET)-static $(LDADD)
++	$(CC)         $(CFLAGS) $(MPPDEC_OBJ) $(MPPDEC_ASO) -o $(MPPDEC_TARGET)        $(LDADD)
+ 
+ 
+ $(MPPDEC_TARGET)16: $(MPPDEC_OBJ)
+@@ -336,7 +333,6 @@
+ 
+ $(REPLAY_TARGET): $(REPLAY_OBJ) mpp.h config.c
+ 	$(CC) $(CFLAGS) $(REPLAY_OBJ) -o $(REPLAY_TARGET)      $(LDADD)
+-	-$(STRIP)     $(STRIPOPT)           $(REPLAY_TARGET)
+ 
+ 
+ $(TAGGER_TARGET):
 --- ./stderr.c.orig	2002-10-25 23:39:54.000000000 +0300
 +++ ./stderr.c	2009-04-27 13:13:13.000000000 +0300
 @@ -25,7 +25,7 @@
