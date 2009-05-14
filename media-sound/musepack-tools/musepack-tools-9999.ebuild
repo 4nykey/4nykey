@@ -26,7 +26,7 @@ pkg_setup() {
 }
 
 src_unpack() {
-	subversion_fetch
+	subversion_src_unpack
 	if use cuetools; then
 		ESVN_PROJECT="cuetools" subversion_fetch \
 		http://svn.berlios.de/svnroot/repos/cuetools/trunk \
@@ -35,7 +35,6 @@ src_unpack() {
 	else
 		sed -i CMakeLists.txt -e '/add_subdirectory(mpcchap)/d'
 	fi
-	subversion_bootstrap
 }
 
 src_compile() {
