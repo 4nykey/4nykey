@@ -1,0 +1,44 @@
+--- avidemux/ADM_userInterfaces/ADM_QT4/ADM_toolkit/qtToolkit.h.origine	2009-05-10 22:26:15.576539220 +0200
++++ avidemux/ADM_userInterfaces/ADM_QT4/ADM_toolkit/qtToolkit.h	2009-05-10 22:28:42.845107326 +0200
+@@ -1,6 +1,7 @@
+ #ifndef QT_TOOLKIT_H
+ #define QT_TOOLKIT_H
+ #include <QtGui/QWidget>
++#include <stdint.h>
+ 
+ void qtRegisterDialog(QWidget *dialog);
+ void qtUnregisterDialog(QWidget *dialog);
+
+--- avidemux/ADM_userInterfaces/ADM_QT4/ADM_gui/gui_none.cpp.origine	2009-05-10 22:51:42.006828737 +0200
++++ avidemux/ADM_userInterfaces/ADM_QT4/ADM_gui/gui_none.cpp	2009-05-10 22:53:11.247685314 +0200
+@@ -9,6 +9,7 @@
+ //
+ 
+ #include "config.h"
++#include <stdint.h>
+ 
+ #include <QtGui/QApplication>
+ #include <QtGui/QDesktopWidget>
+
+--- avidemux/ADM_userInterfaces/ADM_QT4/ADM_gui/ADM_qslider.h.origine	2009-05-10 23:02:46.844829341 +0200
++++ avidemux/ADM_userInterfaces/ADM_QT4/ADM_gui/ADM_qslider.h	2009-05-10 23:03:33.145694106 +0200
+@@ -1,6 +1,8 @@
+ #ifndef ADM_Q_SLIDER_H
+ #define ADM_Q_SLIDER_H
+ 
++#include <stdint.h>
++
+ class ADM_QSlider : public QSlider
+ {
+ protected:
+
+--- avidemux/ADM_userInterfaces/ADM_QT4/ADM_gui/ADM_qslider.cpp.origine	2009-05-10 23:44:35.441710290 +0200
++++ avidemux/ADM_userInterfaces/ADM_QT4/ADM_gui/ADM_qslider.cpp	2009-05-10 23:51:06.825916299 +0200
+@@ -14,6 +14,7 @@
+ 
+ #include "config.h"
+ 
++#include <cstdio>
+ #include <math.h>
+ #include <QPainter>
+ #include <QSlider>
