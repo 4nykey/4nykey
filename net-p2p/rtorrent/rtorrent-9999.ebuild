@@ -29,7 +29,7 @@ DEPEND="
 
 src_unpack() {
 	subversion_fetch
-	subversion_fetch svn://rakshasa.no/libtorrent/trunk/libtorrent libtorrent
+	subversion_fetch svn://rakshasa.no/libtorrent/trunk/libtorrent src/libtorrent
 	subversion_bootstrap
 }
 
@@ -38,7 +38,7 @@ src_compile() {
 	append-flags -fno-strict-aliasing
 	[[ $(tc-arch) = "x86" ]] && filter-flags -fomit-frame-pointer -fforce-addr
 
-	libtorrent_CFLAGS="-I${S}/libtorrent/src" \
+	libtorrent_CFLAGS="-I${S}/src/libtorrent/src" \
 	libtorrent_LIBS=" " \
 	econf \
 		$(use_enable debug) \
@@ -54,11 +54,4 @@ src_compile() {
 src_install() {
 	emake DESTDIR="${D}" install || die "make install failed"
 	dodoc AUTHORS README TODO doc/rtorrent.rc
-}
-
-pkg_postinst() {
-	ewarn "If you're upgrading from rtorrent <0.8.0, you will have to delete your"
-	ewarn "session directory or run the fixSession080-c.py script from this address:"
-	ewarn "http://rssdler.googlecode.com/files/fixSession080-c.py"
-	ewarn "See http://libtorrent.rakshasa.no/wiki/LibTorrentKnownIssues for more info."
 }
