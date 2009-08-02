@@ -24,7 +24,7 @@
  	rm -f *.a
  	rm -f snd sndplay audinfo sndrecord sndinfo
  
--sndplay: $(SNDLIB_HEADERS)
+-sndplay: $(SNDLIB_HEADERS) $(S7_HEADERS)
 -	$(CC) -c $(DEFS) $(CFLAGS) -DUSE_SND=0 headers.c
 -	$(CC) -c $(DEFS) $(CFLAGS) -DUSE_SND=0 io.c
 -	$(CC) -c $(DEFS) $(CFLAGS) -DUSE_SND=0 audio.c
@@ -34,37 +34,37 @@
 +
 +UTILS_OBJ = headers.obj io.obj audio.obj sound.obj
 +
-+sndplay: $(SNDLIB_HEADERS) $(UTILS_OBJ)
++sndplay: $(SNDLIB_HEADERS) $(S7_HEADERS) $(UTILS_OBJ)
  	$(CC) -c $(DEFS) $(CFLAGS) -DUSE_SND=0 sndplay.c
 -	$(CC) $(LDFLAGS) $(CFLAGS) headers.o io.o audio.o sound.o sndplay.o -o sndplay $(JACK_LIBS) $(AUDIO_LIB) $(LIBS)
 +	$(CC) $(LDFLAGS) $(CFLAGS) $(UTILS_OBJ) sndplay.o -o sndplay $(JACK_LIBS) $(AUDIO_LIB) $(LIBS)
  
--sndrecord: $(SNDLIB_HEADERS)
+-sndrecord: $(SNDLIB_HEADERS) $(S7_HEADERS)
 -	$(CC) -c $(DEFS) $(CFLAGS) -DUSE_SND=0 headers.c
 -	$(CC) -c $(DEFS) $(CFLAGS) -DUSE_SND=0 io.c
 -	$(CC) -c $(DEFS) $(CFLAGS) -DUSE_SND=0 audio.c
 -	$(CC) -c $(DEFS) $(CFLAGS) -DUSE_SND=0 sound.c
-+sndrecord: $(SNDLIB_HEADERS) $(UTILS_OBJ)
++sndrecord: $(SNDLIB_HEADERS) $(S7_HEADERS) $(UTILS_OBJ)
  	$(CC) -c $(DEFS) $(CFLAGS) -DUSE_SND=0 sndrecord.c
 -	$(CC) $(LDFLAGS) $(CFLAGS) headers.o io.o audio.o sound.o sndrecord.o -o sndrecord $(JACK_LIBS) $(AUDIO_LIB) $(LIBS)
 +	$(CC) $(LDFLAGS) $(CFLAGS) $(UTILS_OBJ) sndrecord.o -o sndrecord $(JACK_LIBS) $(AUDIO_LIB) $(LIBS)
  
--sndinfo: $(SNDLIB_HEADERS)
+-sndinfo: $(SNDLIB_HEADERS) $(S7_HEADERS)
 -	$(CC) -c $(DEFS) $(CFLAGS) -DUSE_SND=0 headers.c
 -	$(CC) -c $(DEFS) $(CFLAGS) -DUSE_SND=0 io.c
 -	$(CC) -c $(DEFS) $(CFLAGS) -DUSE_SND=0 audio.c
 -	$(CC) -c $(DEFS) $(CFLAGS) -DUSE_SND=0 sound.c
-+sndinfo: $(SNDLIB_HEADERS) $(UTILS_OBJ)
++sndinfo: $(SNDLIB_HEADERS) $(S7_HEADERS) $(UTILS_OBJ)
  	$(CC) -c $(DEFS) $(CFLAGS) -DUSE_SND=0 sndinfo.c
 -	$(CC) $(LDFLAGS) $(CFLAGS) headers.o io.o audio.o sound.o sndinfo.o -o sndinfo $(JACK_LIBS) $(AUDIO_LIB) $(LIBS)
 +	$(CC) $(LDFLAGS) $(CFLAGS) $(UTILS_OBJ) sndinfo.o -o sndinfo $(JACK_LIBS) $(AUDIO_LIB) $(LIBS)
  
--audinfo: $(SNDLIB_HEADERS)
+-audinfo: $(SNDLIB_HEADERS) $(S7_HEADERS)
 -	$(CC) -c $(DEFS) $(CFLAGS) -DUSE_SND=0 headers.c
 -	$(CC) -c $(DEFS) $(CFLAGS) -DUSE_SND=0 io.c
 -	$(CC) -c $(DEFS) $(CFLAGS) -DUSE_SND=0 audio.c
 -	$(CC) -c $(DEFS) $(CFLAGS) -DUSE_SND=0 sound.c
-+audinfo: $(SNDLIB_HEADERS) $(UTILS_OBJ)
++audinfo: $(SNDLIB_HEADERS) $(S7_HEADERS) $(UTILS_OBJ)
  	$(CC) -c $(DEFS) $(CFLAGS) -DUSE_SND=0 audinfo.c
 -	$(CC) $(LDFLAGS) $(CFLAGS) headers.o io.o audio.o sound.o audinfo.o -o audinfo $(JACK_LIBS) $(AUDIO_LIB) $(LIBS)
 +	$(CC) $(LDFLAGS) $(CFLAGS) $(UTILS_OBJ) audinfo.o -o audinfo $(JACK_LIBS) $(AUDIO_LIB) $(LIBS)
