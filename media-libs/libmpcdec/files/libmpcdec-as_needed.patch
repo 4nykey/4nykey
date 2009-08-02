@@ -2,11 +2,8 @@ Index: libmpcdec/Makefile.am
 ===================================================================
 --- libmpcdec/Makefile.am	(revision 442)
 +++ libmpcdec/Makefile.am	(working copy)
-@@ -10,6 +10,7 @@
+@@ -17,3 +17,4 @@
  	$(common_sources)
  
  libmpcdec_la_LDFLAGS = -no-undefined -version-info 7:0:1
 +libmpcdec_la_LIBADD = -lm
- 
- noinst_HEADERS = mpc_bits_reader.h huffman.h decoder.h internal.h requant.h mpcdec_math.h
- AM_CFLAGS = -fpic -fvisibility=hidden

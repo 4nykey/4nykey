@@ -8,7 +8,7 @@ DESCRIPTION="Aqualung"
 HOMEPAGE="http://aqualung.sourceforge.net"
 SRC_URI=""
 ESVN_REPO_URI="https://aqualung.svn.sourceforge.net/svnroot/aqualung/trunk"
-ESVN_PATCHES="${PN}-*.diff"
+ESVN_PATCHES="${PN}-*.diff ${PN}-*.patch"
 ESVN_BOOTSTRAP="eautoreconf"
 
 LICENSE="GPL-2"
@@ -34,7 +34,7 @@ RDEPEND="
 		encode? ( media-sound/lame )
 	)
 	modplug? ( >=media-libs/libmodplug-0.8 )
-	musepack? ( media-libs/libmpcdec )
+	musepack? ( media-libs/libmpcdecsv7 )
 	ape? ( media-sound/mac )
 	ffmpeg? ( media-video/ffmpeg )
 	wavpack? ( >=media-sound/wavpack-4.40 )

@@ -26,25 +26,13 @@ pkg_setup() {
 }
 
 src_unpack() {
-	subversion_src_unpack
+	subversion_fetch
 	if use cuetools; then
-		ESVN_PROJECT="cuetools" subversion_fetch \
-		http://svn.berlios.de/svnroot/repos/cuetools/trunk \
-		cuetools
-		eautoreconf
+		ESVN_PROJECT="${PN}/libcuefile" subversion_fetch \
+			http://svn.musepack.net/libcuefile/trunk libcuefile
+		ESVN_PATCHES+=" ${P}-cue_cmake.diff"
 	else
-		sed -i CMakeLists.txt -e '/add_subdirectory(mpcchap)/d'
+		sed -i "${S}"/CMakeLists.txt -e '/add_subdirectory(mpcchap)/d'
 	fi
-}
-
-src_compile() {
-	if use cuetools; then
-		cd cuetools
-		econf || die
-		emake -C src/lib libcuefile.a || die
-		local mycmakeargs="
-			-DCUEFILE_INCLUDE_DIR=${S}/cuetools/src/lib
-		"
-	fi
-	cmake-utils_src_compile
+	subversion_bootstrap
 }

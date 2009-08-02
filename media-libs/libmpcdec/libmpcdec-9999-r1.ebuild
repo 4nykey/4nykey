@@ -7,12 +7,13 @@ inherit autotools subversion
 DESCRIPTION="Musepack decoder library"
 HOMEPAGE="http://www.musepack.net"
 ESVN_REPO_URI="http://svn.musepack.net/libmpc/trunk"
+ESVN_PROJECT="musepack-tools"
 ESVN_PATCHES="${PN}-*.patch"
 ESVN_BOOTSTRAP="eautoreconf"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 src_install() {
