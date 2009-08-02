@@ -1,14 +1,13 @@
-Index: CMakeLists.txt
+Index: cmake/admGetRevision.cmake
 ===================================================================
---- CMakeLists.txt	(revision 4708)
-+++ CMakeLists.txt	(working copy)
-@@ -120,6 +120,9 @@
- 
- IF (NOT Subversion_FOUND)
- 	SET(ADM_SUBVERSION 0)
-+ELSE (NOT Subversion_FOUND)
-+	MESSAGE(STATUS "  revision: ${Project_WC_REVISION}")
-+	SET(ADM_SUBVERSION ${Project_WC_REVISION})
- ENDIF (NOT Subversion_FOUND)
- 
- ########################################
+--- cmake/admGetRevision.cmake	(revision 5122)
++++ cmake/admGetRevision.cmake	(working copy)
+@@ -16,7 +16,7 @@
+                 SET(${_rev} ${ADM_GIT_SVN_REVISION})
+         else (EXISTS "${_dir}/.git")
+                 MESSAGE(STATUS "Dont know what SCM is used")
+-                SET(${_rev} "0")
++                SET(${_rev} ${Project_WC_REVISION})
+         endif (EXISTS "${_dir}/.git")
+ endif (EXISTS "${_dir}/.svn")
+                 #MESSAGE( STATUS "revision : ${${_rev}}" )

@@ -65,21 +65,21 @@ pick() {
 
 pkg_setup() {
 	use verbose-build && CMAKE_COMPILER_VERBOSE=y
+	CMAKE_IN_SOURCE_BUILD=y
 }
 
 src_compile() {
 	# provide svn revision
 	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
 	local mycmakeargs="
-		-DSVN=OFF
-		-DSubversion_FOUND=1
 		-DProject_WC_REVISION=${ESVN_WC_REVISION}
+		-DAVIDEMUX_SOURCE_DIR=${S}
 	"
-
-	local mycmakeargs="
-		-DAVIDEMUX_LIB_DIR=${WORKDIR}/${PN}_build/avidemux
-		-DAVIDEMUX_CORECONFIG_DIR=${WORKDIR}/${PN}_build/config
-	"
+	if false; then
+		-DAVIDEMUX_LIB_DIR=${S}/avidemux_core
+		-DAVIDEMUX_CORECONFIG_DIR=${WORKDIR}/avidemux_core/config
+		-DAVIDEMUX_LIB_DIR=${WORKDIR}/avidemux/avidemux
+	fi
 
 	for x in \
 		gtk qt4 x264 xvid aften amrnb lame vorbis alsa arts esd jack oss \
@@ -92,5 +92,27 @@ src_compile() {
 	pick nls gettext
 	pick xv xvideo
 
-	cmake-utils_src_compile
+	# probably better is to split it to core/gtk/qt4 packages
+	local dirlist="\"${S}/avidemux_core/ADM_smjs\" "
+	dirlist+=$(find "${S}"/avidemux_core -type d -name src -printf "\"%p\" ")
+	dirlist+=$(find "${S}"/avidemux_core/ADM_ffmpeg -mindepth 1 -maxdepth 1 \
+		-type d -printf "\"%p\" ")
+	sed -e "s:@ADM_CORE_DIRLIST@:${dirlist}:" \
+		-i "${S}"/avidemux/{gtk,qt4}/CMakeLists.txt \
+		"${S}"/avidemux_plugins/CMakeLists.txt
+
+	CMAKE_USE_DIR="${S}"/avidemux_core cmake-utils_src_compile
+	use gtk && \
+		CMAKE_USE_DIR="${S}"/avidemux/gtk cmake-utils_src_compile
+	use qt4 && \
+		CMAKE_USE_DIR="${S}"/avidemux/qt4 cmake-utils_src_compile
+	CMAKE_USE_DIR="${S}"/avidemux_plugins cmake-utils_src_compile
+}
+src_install() {
+	CMAKE_USE_DIR="${S}"/avidemux_core cmake-utils_src_install
+	use gtk && \
+		CMAKE_USE_DIR="${S}"/avidemux/gtk cmake-utils_src_install
+	use qt4 && \
+		CMAKE_USE_DIR="${S}"/avidemux/qt4 cmake-utils_src_install
+	CMAKE_USE_DIR="${S}"/avidemux_plugins cmake-utils_src_install
 }

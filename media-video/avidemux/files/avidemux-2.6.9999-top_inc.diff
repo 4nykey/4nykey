@@ -1,0 +1,46 @@
+Index: avidemux/gtk/CMakeLists.txt
+===================================================================
+--- avidemux/gtk/CMakeLists.txt	(revision 5156)
++++ avidemux/gtk/CMakeLists.txt	(working copy)
+@@ -19,7 +19,9 @@
+ CONFIGURE_FILE("${AVIDEMUX_TOP_SOURCE_DIR}/cmake/config.h.cmake" "${CMAKE_BINARY_DIR}/config/gtk/config.h")
+ MESSAGE(STATUS "GTK config.h generated")
+ 
+-INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/config/gtk/")
++LINK_DIRECTORIES(@ADM_CORE_DIRLIST@)
++INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/config/gtk/"
++    "${AVIDEMUX_TOP_SOURCE_DIR}/avidemux_core/config/")
+ ###########################################
+ # Executable
+ ###########################################
+Index: avidemux/qt4/CMakeLists.txt
+===================================================================
+--- avidemux/qt4/CMakeLists.txt	(revision 5156)
++++ avidemux/qt4/CMakeLists.txt	(working copy)
+@@ -26,7 +26,9 @@
+ CONFIGURE_FILE("${AVIDEMUX_TOP_SOURCE_DIR}/cmake/config.h.cmake" "${CMAKE_BINARY_DIR}/config/qt4/config.h")
+ MESSAGE(STATUS "QT4 config.h generated")
+ 
+-INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/config/qt4/")
++LINK_DIRECTORIES(@ADM_CORE_DIRLIST@)
++INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/config/qt4/"
++    "${AVIDEMUX_TOP_SOURCE_DIR}/avidemux_core/config/")
+ ###########################################
+ # Executable
+ ###########################################
+Index: avidemux_plugins/CMakeLists.txt
+===================================================================
+--- avidemux_plugins/CMakeLists.txt	(revision 5156)
++++ avidemux_plugins/CMakeLists.txt	(working copy)
+@@ -30,8 +30,9 @@
+ # Get regular stuff from main app
+ #########################################
+ include(admCoreIncludes)
+-LINK_DIRECTORIES("${AVIDEMUX_LIB_DIR}")
+-INCLUDE_DIRECTORIES(${AVIDEMUX_INCLUDE_DIR}/avidemux/2.6/)
++LINK_DIRECTORIES("${AVIDEMUX_LIB_DIR}" @ADM_CORE_DIRLIST@)
++INCLUDE_DIRECTORIES(${AVIDEMUX_INCLUDE_DIR}/avidemux/2.6/
++    "${AVIDEMUX_TOP_SOURCE_DIR}/avidemux_core/config/")
+ 
+ IF (FRESH_BUILD)
+ 	MESSAGE("")
