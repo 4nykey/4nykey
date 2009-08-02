@@ -12,10 +12,14 @@ ESVN_PATCHES="${PN}-*.diff"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="debug verbose-build"
+IUSE="debug verbose-build sndfile"
 
-DEPEND=""
-RDEPEND=""
+DEPEND="
+	sndfile? ( media-libs/libsndfile )
+"
+RDEPEND="
+	${DEPEND}
+"
 
 DOCS="Changelog README TODO"
 
@@ -28,6 +32,7 @@ src_compile() {
 		-DCMAKE_C_FLAGS_RELEASE=
 		-DSHARED=ON
 		-DSVN_VERSION=${ESVN_WC_REVISION}
+		-DUSE_LIBSNDFILE=$(use sndfile && echo ON || echo OFF)
 	"
 	cmake-utils_src_compile
 }

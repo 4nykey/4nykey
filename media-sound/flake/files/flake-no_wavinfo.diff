@@ -1,16 +1,21 @@
 Index: CMakeLists.txt
 ===================================================================
---- CMakeLists.txt	(revision 202)
+--- CMakeLists.txt	(revision 258)
 +++ CMakeLists.txt	(working copy)
-@@ -169,10 +169,7 @@
- ENDIF(WIN32)
- TARGET_LINK_LIBRARIES(flake_exe pcm_io flake_static)
+@@ -192,13 +192,13 @@
+ ENDIF(USE_LIBSNDFILE)
  
+ IF(NOT USE_LIBSNDFILE)
 -ADD_EXECUTABLE(wavinfo util/wavinfo.c)
 -TARGET_LINK_LIBRARIES(wavinfo pcm_io)
--
--INSTALL(TARGETS ${INSTALL_TARGETS} flake_exe wavinfo
-+INSTALL(TARGETS ${INSTALL_TARGETS} flake_exe
++ADD_EXECUTABLE(wavinfo-flake util/wavinfo.c)
++TARGET_LINK_LIBRARIES(wavinfo-flake pcm_io)
+ ENDIF(NOT USE_LIBSNDFILE)
+ 
+ SET(INSTALL_TARGETS ${INSTALL_TARGETS} flake_exe)
+ IF(NOT USE_LIBSNDFILE)
+-SET(INSTALL_TARGETS ${INSTALL_TARGETS} wavinfo)
++SET(INSTALL_TARGETS ${INSTALL_TARGETS} wavinfo-flake)
+ ENDIF(NOT USE_LIBSNDFILE)
+ INSTALL(TARGETS ${INSTALL_TARGETS}
          RUNTIME DESTINATION bin
-         LIBRARY DESTINATION lib
-         ARCHIVE DESTINATION lib)
