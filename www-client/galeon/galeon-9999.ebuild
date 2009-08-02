@@ -8,7 +8,7 @@ DESCRIPTION="A GNOME Web browser based on gecko (mozilla's rendering engine)"
 HOMEPAGE="http://galeon.sourceforge.net"
 SRC_URI=""
 EGIT_REPO_URI="git://git.gnome.org/galeon"
-EGIT_PATCHES=("${FILESDIR}/"${PN}*.diff)
+EGIT_PATCHES=("${FILESDIR}"/${PN}*.diff)
 EGIT_BOOTSTRAP="intltoolize && eautoreconf"
 
 LICENSE="GPL-2"
@@ -49,6 +49,9 @@ pkg_setup() {
 	if use xulrunner; then
 		if has_version '>=net-libs/xulrunner-1.9'; then
 			G2CONF="--with-mozilla=libxul-embedding-unstable"
+			if has_version '>=net-libs/xulrunner-1.9.1'; then
+				EGIT_PATCHES+=("${FILESDIR}"/${PN}-2.0.7-build-with-xulrunner-1.9.1.patch)
+			fi
 		else
 			G2CONF="--with-mozilla=xulrunner"
 		fi
