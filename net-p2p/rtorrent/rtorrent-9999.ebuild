@@ -8,7 +8,7 @@ DESCRIPTION="BitTorrent Client using libtorrent"
 HOMEPAGE="http://libtorrent.rakshasa.no/"
 ESVN_REPO_URI="svn://rakshasa.no/libtorrent/trunk/rtorrent"
 ESVN_BOOTSTRAP="eautoreconf"
-ESVN_PATCHES="${PN}-*.diff ${PN}-*.patch"
+ESVN_PATCHES="${PN}-*.diff"
 
 LICENSE="GPL-2"
 SLOT="0"
