@@ -29,7 +29,7 @@ RDEPEND="
 	musepack? ( media-libs/libmpcdec )
 	aac? (
 		media-libs/faad2
-		mp4? ( media-libs/libmp4v2 )
+		mp4? ( >=media-libs/libmp4v2-1.9 )
 	)
 	ffmpeg? ( media-video/ffmpeg )
 "

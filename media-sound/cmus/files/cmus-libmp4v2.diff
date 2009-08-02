@@ -1,0 +1,13 @@
+diff --git a/mp4.c b/mp4.c
+index c1969b4..5161cc3 100644
+--- a/mp4.c
++++ b/mp4.c
+@@ -22,7 +22,7 @@
+ #include "debug.h"
+ #include "file.h"
+ 
+-#include <mp4.h>
++#include <mp4v2/mp4v2.h>
+ #include <faad.h>
+ 
+ #include <errno.h>
