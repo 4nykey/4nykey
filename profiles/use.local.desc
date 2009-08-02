@@ -12,7 +12,6 @@ media-gfx/fim:xfig - Support for xfig files via media-gfx/xfig
 media-libs/a52dec:djbfft - Prefer D.J. Bernstein's library for fourier transforms
 media-libs/x264:mp4 - Adds support for mp4 container via gpac
 media-sound/aqualung:ape - Add support for decoding of Monkey's Audio
-media-sound/aqualung:cdda - Enables support for audio cd playback through libcdio
 media-sound/aqualung:ifp - Enable support for iRiver devices access through libifp
 media-sound/aqualung:systray - Builds systray (reqires more recent version of GTK+)
 media-sound/cmus:mp4 - enable mp4 decoding
@@ -25,20 +24,17 @@ media-sound/snd:postscript - Enable postscript output from OpenGL graphics
 media-video/avidemux:aften - Enable A/52 encoding support via aften
 media-video/avidemux:amrnb - Enables Adaptive Multi-Rate Audio support (Narrow Band)
 media-video/avidemux:faac - AAC encoding support via media-libs/faac
+media-video/avidemux:faad - AAC decoding support via media-libs/faad2
 media-video/avidemux:verbose-build - Build in verbose mode (silent oterwise)
 media-video/pgcedit:wine - Install a preview app that requires Wine on runtime
 media-video/subtitleeditor:iso-codes - Enables iso-codes support
 media-video/subtitleeditor:ttxt - Support for subtitles in TTXT format
+media-video/transcode:dvdread - Enable use of media-libs/libdvdread
+media-video/transcode:graphicsmagick - Enable use of media-gfx/graphicsmagick
 media-video/transcode:mjpeg - Enables mjpegtools support
 media-video/transcode:network - Enables network streaming support
 media-video/transcode:postproc - Build with ffmpeg libpostproc support
 net-p2p/rtorrent:openssl - Use OpenSSL's SHA1 implementation
-net-www/gnash:agg - Rendering based on the Anti-Grain Geometry Rendering Engine library
-net-www/gnash:cygnal - Enable building of the Cygnal server
-net-www/gnash:fb - Enables framebuffer support
-net-www/gnash:neon - Include support for neon
-net-www/gnash:video_cards_i810 - Enable fix for Intel 810 LOD bias problem
 www-client/galeon:nautilus - Enable Nautilus view component
 x11-libs/fltk:noxft - Disables fltk; use for non-english characters
 x11-libs/fltk:verbose-build - Build in verbose mode (silent oterwise)
-x11-misc/barpanel:battery - Support battery status plugin
