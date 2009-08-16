@@ -3,10 +3,10 @@ Index: CMakeLists.txt
 --- CMakeLists.txt	(revision 245)
 +++ CMakeLists.txt	(working copy)
 @@ -7,7 +7,6 @@
- TEST_BIG_ENDIAN(MPC_ENDIANNESS)
+ add_definitions(-DFAST_MATH -DCVD_FASTLOG)
  
  if(NOT MSVC)
--set(CMAKE_C_FLAGS "-O3 -fomit-frame-pointer -pipe")
+-  set(CMAKE_C_FLAGS "-O3 -fomit-frame-pointer -pipe")
  endif(NOT MSVC)
  
  add_subdirectory(libmpcdec)

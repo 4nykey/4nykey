@@ -1,6 +1,6 @@
 Index: libcuefile/src/CMakeLists.txt
 ===================================================================
---- libcuefile/src/CMakeLists.txt	(revision 449)
+--- libcuefile/src/CMakeLists.txt	(revision 452)
 +++ libcuefile/src/CMakeLists.txt	(working copy)
 @@ -4,7 +4,3 @@
  add_library(cuefile-static STATIC cd cdtext cue_parse cue_print cue_scan cuefile time toc toc_parse toc_print toc_scan)
@@ -12,7 +12,7 @@ Index: libcuefile/src/CMakeLists.txt
 -install(TARGETS cuefile-static cuefile-shared LIBRARY DESTINATION "lib${LIB_SUFFIX}" ARCHIVE DESTINATION "lib${LIB_SUFFIX}")
 Index: mpcchap/CMakeLists.txt
 ===================================================================
---- mpcchap/CMakeLists.txt	(revision 449)
+--- mpcchap/CMakeLists.txt	(revision 452)
 +++ mpcchap/CMakeLists.txt	(working copy)
 @@ -1,5 +1,5 @@
  FIND_PATH(CUEFILE_INCLUDE_DIR cuetools/cuefile.h
@@ -21,7 +21,7 @@ Index: mpcchap/CMakeLists.txt
  )
  
  FIND_LIBRARY(CUEFILE_LIBRARY NAMES cuefile PATHS
-@@ -11,12 +11,13 @@
+@@ -11,6 +11,7 @@
  
  link_directories(${libmpc_BINARY_DIR}/libmpcdec)
  link_directories(${libmpc_BINARY_DIR}/libmpcenc)
@@ -29,7 +29,9 @@ Index: mpcchap/CMakeLists.txt
  
  add_executable(mpcchap mpcchap dictionary iniparser ${libmpc_SOURCE_DIR}/common/tags)
  
- target_link_libraries(mpcchap mpcdec_static)
+@@ -21,7 +22,7 @@
+ endif(SHARED)
+ 
  target_link_libraries(mpcchap mpcenc_static)
 -target_link_libraries(mpcchap ${CUEFILE_LIBRARY})
 +target_link_libraries(mpcchap cuefile-static)
@@ -38,11 +40,13 @@ Index: mpcchap/CMakeLists.txt
  target_link_libraries(mpcchap m)
 Index: CMakeLists.txt
 ===================================================================
---- CMakeLists.txt	(revision 449)
+--- CMakeLists.txt	(revision 452)
 +++ CMakeLists.txt	(working copy)
-@@ -21,4 +21,5 @@
+@@ -27,6 +27,7 @@
  add_subdirectory(mpcenc)
  add_subdirectory(mpc2sv8)
  add_subdirectory(mpccut)
 +add_subdirectory(libcuefile)
  add_subdirectory(mpcchap)
+ add_subdirectory(wavcmp)
+ add_subdirectory(include)
