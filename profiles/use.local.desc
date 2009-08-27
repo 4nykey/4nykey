@@ -18,13 +18,14 @@ media-sound/cmus:mp4 - enable mp4 decoding
 media-sound/cmus:verbose-build - Build in verbose mode (silent oterwise)
 media-sound/cmus:zsh-completion - Install zsh command completion
 media-sound/flake:verbose-build - Build in verbose mode (silent oterwise)
-media-sound/musepack-tools:cuetools - Enable support for parsing cue sheets via cuetools
 media-sound/musepack-tools:verbose-build - Build in verbose mode (silent oterwise)
 media-sound/snd:postscript - Enable postscript output from OpenGL graphics
 media-video/avidemux:aften - Enable A/52 encoding support via aften
 media-video/avidemux:amrnb - Enables Adaptive Multi-Rate Audio support (Narrow Band)
 media-video/avidemux:faac - AAC encoding support via media-libs/faac
 media-video/avidemux:faad - AAC decoding support via media-libs/faad2
+media-video/avidemux:opencore-amr - Enables Adaptive Multi-Rate format support
+media-video/avidemux:vdpau - Enables VDPAU support (requires nVidia video card)
 media-video/avidemux:verbose-build - Build in verbose mode (silent oterwise)
 media-video/pgcedit:wine - Install a preview app that requires Wine on runtime
 media-video/subtitleeditor:iso-codes - Enables iso-codes support
