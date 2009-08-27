@@ -12,10 +12,11 @@ ESVN_PATCHES="${P}-*.patch"
 SLOT="8"
 LICENSE="LGPL-2.1"
 KEYWORDS="~x86 ~amd64"
-IUSE="verbose-build cuetools"
+IUSE="verbose-build"
 
 RDEPEND="
 	media-libs/libreplaygain
+	media-libs/libcuefile
 "
 DEPEND="
 	${RDEPEND}
@@ -24,16 +25,4 @@ DEPEND="
 pkg_setup() {
 	use verbose-build && CMAKE_COMPILER_VERBOSE=y
 	mycmakeargs="-DSHARED=OFF"
-}
-
-src_unpack() {
-	subversion_fetch
-	if use cuetools; then
-		ESVN_PROJECT="${PN}/libcuefile" subversion_fetch \
-			http://svn.musepack.net/libcuefile/trunk libcuefile
-		ESVN_PATCHES+=" ${P}-cue_cmake.diff"
-	else
-		sed -i "${S}"/CMakeLists.txt -e '/add_subdirectory(mpcchap)/d'
-	fi
-	subversion_bootstrap
 }
