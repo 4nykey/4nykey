@@ -12,13 +12,15 @@ ESVN_BOOTSTRAP="eautoreconf"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
-IUSE="gstreamer openal alsa debug pcre spell xosd"
+IUSE="gstreamer openal alsa debug pcre spell xosd libnotify"
 
 DEPEND="
 	gstreamer? ( media-libs/gstreamer )
 	openal? ( media-libs/freealut )
 	pcre? ( dev-libs/libpcre )
 	xosd? ( x11-libs/xosd )
+	libnotify? ( x11-libs/libnotify )
+	dev-libs/libmatheval
 	x11-libs/libX11
 "
 RDEPEND="
