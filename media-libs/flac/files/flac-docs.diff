@@ -23,11 +23,26 @@
  AUTOMAKE_OPTIONS = foreign 1.7
  
 -SUBDIRS = doc include man src examples test build obj
-+SUBDIRS = include src examples test build obj
++SUBDIRS = include man src examples test build obj
 +
 +if FLaC__BUILD_DOCS
-+SUBDIRS += doc man
++SUBDIRS += doc
 +endif
  
  DISTCLEANFILES = libtool-disable-static
  
+--- ./doc/html/Makefile.am.orig	2009-10-15 23:13:45.000000000 +0300
++++ ./doc/html/Makefile.am	2009-10-15 23:13:27.000000000 +0300
+@@ -71,6 +71,7 @@
+ 
+ # The install targets don't copy whole directories so we have to
+ # handle 'api/' specially:
++if FLaC__HAS_DOXYGEN
+ install-data-local:
+ 	$(mkinstalldirs) $(DESTDIR)$(docdir)/api
+ 	(cd $(srcdir)/api && $(INSTALL_DATA) * $(DESTDIR)$(docdir)/api)
+@@ -78,3 +79,4 @@
+ 	rm -rf $(DESTDIR)$(docdir)/api
+ maintainer-clean-local:
+ 	rm -rf api
++endif
