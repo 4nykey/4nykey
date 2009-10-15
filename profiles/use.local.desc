@@ -10,13 +10,11 @@ media-gfx/fim:screen - Add (experimental!) support for running under screen
 media-gfx/fim:xcf - Support for xcf files via dev-perl/gimp-perl
 media-gfx/fim:xfig - Support for xfig files via media-gfx/xfig
 media-libs/a52dec:djbfft - Prefer D.J. Bernstein's library for fourier transforms
-media-libs/x264:mp4 - Adds support for mp4 container via gpac
+media-libs/flac:apidocs - Enable API documentation building via Doxygen
 media-sound/aqualung:ape - Add support for decoding of Monkey's Audio
 media-sound/aqualung:ifp - Enable support for iRiver devices access through libifp
 media-sound/aqualung:systray - Builds systray (reqires more recent version of GTK+)
-media-sound/cmus:mp4 - enable mp4 decoding
 media-sound/cmus:verbose-build - Build in verbose mode (silent oterwise)
-media-sound/cmus:zsh-completion - Install zsh command completion
 media-sound/flake:verbose-build - Build in verbose mode (silent oterwise)
 media-sound/musepack-tools:verbose-build - Build in verbose mode (silent oterwise)
 media-sound/snd:postscript - Enable postscript output from OpenGL graphics
@@ -28,8 +26,6 @@ media-video/avidemux:opencore-amr - Enables Adaptive Multi-Rate format support
 media-video/avidemux:vdpau - Enables VDPAU support (requires nVidia video card)
 media-video/avidemux:verbose-build - Build in verbose mode (silent oterwise)
 media-video/pgcedit:wine - Install a preview app that requires Wine on runtime
-media-video/subtitleeditor:iso-codes - Enables iso-codes support
-media-video/subtitleeditor:ttxt - Support for subtitles in TTXT format
 media-video/transcode:dvdread - Enable use of media-libs/libdvdread
 media-video/transcode:graphicsmagick - Enable use of media-gfx/graphicsmagick
 media-video/transcode:mjpeg - Enables mjpegtools support
