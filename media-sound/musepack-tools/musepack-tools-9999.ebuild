@@ -9,7 +9,7 @@ HOMEPAGE="http://www.musepack.net"
 ESVN_REPO_URI="http://svn.musepack.net/libmpc/trunk"
 ESVN_PATCHES="${P}-*.patch"
 
-SLOT="8"
+SLOT="0"
 LICENSE="LGPL-2.1"
 KEYWORDS="~x86 ~amd64"
 IUSE="verbose-build"
