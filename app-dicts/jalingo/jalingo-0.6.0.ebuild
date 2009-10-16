@@ -2,31 +2,28 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit java-pkg-2
+EANT_BUILD_TARGET="dist"
 
+inherit java-pkg-2 java-ant-2
+
+MY_P="${P}-src"
 DESCRIPTION="A dictionary application, supporting various dictionary formats"
 HOMEPAGE="http://jalingo.sourceforge.net"
-SRC_URI="mirror://sourceforge/${PN}/${PN}-setup-${PV}.jar"
-S="${WORKDIR}"
+SRC_URI="mirror://sourceforge/${PN}/${MY_P}.7z"
+S="${WORKDIR}/${MY_P}"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE=""
 
-DEPEND="virtual/jre"
-RDEPEND="${DEPEND}"
-
-src_unpack() {
-	unpack ${A}
-	$(java-config-2 -g JAVA_HOME)/bin/unpack200 \
-		resources/jalingo.jar.pack.gz jalingo.jar || die
-}
+DEPEND=">=virtual/jdk-1.5"
+RDEPEND=">=virtual/jre-1.5"
 
 src_install() {
-	java-pkg_dojar jalingo.jar
+	java-pkg_dojar dist/${PN}.jar
 	java-pkg_dolauncher ${PN}
-	doicon resources/jalingo.png
-	make_desktop_entry jalingo JaLingo
+	doicon src.setup/resources/
+	make_desktop_entry ${PN} JaLingo ${PN}64x64.png
 }
 
