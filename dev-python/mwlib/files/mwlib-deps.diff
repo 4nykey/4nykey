@@ -1,0 +1,11 @@
+--- ./setup.py.orig	2009-10-05 16:00:58.000000000 +0300
++++ ./setup.py	2009-10-26 15:10:05.000000000 +0200
+@@ -64,7 +64,7 @@
+     if os.path.exists(distutils.util.convert_path('Makefile')):
+         build_deps()   # this is a hg checkout.
+ 
+-    install_requires=["pyparsing>=1.4.11", "odfpy==0.9", "flup>=1.0", "twisted>=8.2", "lockfile>=0.8", "timelib>=0.2", "WebOb>=0.9", "pyPdf>=1.12"]
++    install_requires=["pyparsing>=1.4.11", "odfpy>=0.9", "flup>=1.0", "Twisted_Core>=8.2", "lockfile>=0.8", "timelib>=0.2", "WebOb>=0.9", "pyPdf>=1.12"]
+     if sys.version_info[:2] < (2,5):
+         install_requires.append("wsgiref>=0.1.2")
+         install_requires.append("elementtree>=1.2.6")
