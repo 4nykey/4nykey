@@ -66,7 +66,7 @@ pick() {
 }
 
 pkg_setup() {
-	use verbose-build && CMAKE_COMPILER_VERBOSE=y
+	use verbose-build && CMAKE_VERBOSE=y
 	CMAKE_IN_SOURCE_BUILD=y
 	confutils_use_conflict amrnb bindist
 }

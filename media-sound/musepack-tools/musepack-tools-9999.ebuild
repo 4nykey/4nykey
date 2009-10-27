@@ -23,6 +23,6 @@ DEPEND="
 "
 
 pkg_setup() {
-	use verbose-build && CMAKE_COMPILER_VERBOSE=y
+	use verbose-build && CMAKE_VERBOSE=y
 	mycmakeargs="-DSHARED=OFF"
 }

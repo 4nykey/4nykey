@@ -24,7 +24,7 @@ RDEPEND="
 DOCS="Changelog README TODO"
 
 pkg_setup() {
-	use verbose-build && CMAKE_COMPILER_VERBOSE=y
+	use verbose-build && CMAKE_VERBOSE=y
 }
 
 src_compile() {
