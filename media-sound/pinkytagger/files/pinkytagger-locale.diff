@@ -1,0 +1,12 @@
+Index: locale/CMakeLists.txt
+===================================================================
+--- locale/CMakeLists.txt	(revision 28)
++++ locale/CMakeLists.txt	(working copy)
+@@ -1,6 +1,6 @@
+ ADD_CUSTOM_COMMAND(
+   OUTPUT qm-files
+-  COMMAND lrelease *.ts
++  COMMAND lrelease ${CMAKE_CURRENT_SOURCE_DIR}/*.ts
+ )
+ 
+ ADD_CUSTOM_TARGET(
