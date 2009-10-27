@@ -12,17 +12,17 @@ HOMEPAGE="http://gstreamer.freedesktop.org/bindings/cplusplus.html"
 LICENSE="LGPL-2.1 GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="debug doc examples"
+IUSE="debug apidocs examples"
 
 RDEPEND="
-	>=dev-cpp/glibmm-2.16.0
+	>=dev-cpp/glibmm-2.18.1
 	dev-cpp/libxmlpp:2.6
-	>=media-libs/gst-plugins-base-0.10.24
+	>=media-libs/gst-plugins-base-0.10.23
 	examples? ( dev-cpp/gtkmm:2.4 )
 "
 DEPEND="
 	${RDEPEND}
-	doc? ( app-doc/doxygen )
+	apidocs? ( app-doc/doxygen )
 "
 
 DOCS="AUTHORS ChangeLog NEWS README"
@@ -30,7 +30,6 @@ DOCS="AUTHORS ChangeLog NEWS README"
 src_configure() {
 	econf \
 		$(use_enable debug) \
-		$(use_enable doc docs) \
-		$(use_enable examples) \
-		|| die
+		$(use_enable apidocs docs) \
+		$(use_enable examples)
 }
