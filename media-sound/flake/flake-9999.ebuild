@@ -28,9 +28,9 @@ pkg_setup() {
 }
 
 src_compile() {
+	# libflake.so conflicts with app-office/koffice-libs, so SHARED=OFF
 	local mycmakeargs="
-		-DCMAKE_C_FLAGS_RELEASE=
-		-DSHARED=ON
+		-DSHARED=OFF
 		-DSVN_VERSION=${ESVN_WC_REVISION}
 		-DUSE_LIBSNDFILE=$(use sndfile && echo ON || echo OFF)
 	"
