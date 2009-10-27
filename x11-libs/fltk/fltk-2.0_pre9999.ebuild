@@ -13,7 +13,7 @@ ESVN_BOOTSTRAP="eautoreconf"
 KEYWORDS="~x86 ~amd64"
 LICENSE="FLTK LGPL-2"
 SLOT="2"
-IUSE="noxft opengl debug cairo threads jpeg zlib png xinerama doc verbose-build"
+IUSE="noxft opengl debug cairo threads jpeg zlib png xinerama apidocs verbose-build"
 
 RDEPEND="
 	x11-libs/libXext
@@ -32,7 +32,7 @@ DEPEND="
 	${RDEPEND}
 	x11-proto/xextproto
 	xinerama? ( x11-proto/xineramaproto )
-	doc? ( app-doc/doxygen )
+	apidocs? ( app-doc/doxygen )
 "
 
 src_unpack() {
@@ -59,12 +59,12 @@ src_compile() {
 		|| die "Configuration Failed"
 
 	emake || die "Parallel Make Failed"
-	use doc && make -C documentation
+	use apidocs && make -C documentation
 }
 
 src_install() {
 	einstall STRIP="/bin/true" || die "Installation Failed"
-	if use doc; then
+	if use apidocs; then
 		emake -C documentation install || die
 		dohtml documentation/html
 	fi
