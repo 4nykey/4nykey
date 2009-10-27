@@ -1,5 +1,3 @@
-app-dicts/makedict:verbose-build - Build in verbose mode (silent oterwise)
-app-text/fbreader:verbose-build - Build in verbose mode (silent oterwise)
 media-fonts/cm-unicode:gs - Ghostscript support
 media-fonts/cm-unicode:opentype - Install OpenType fonts
 media-fonts/ttf-gandhari-unicode:opentype - Install OpenType fonts
@@ -10,13 +8,9 @@ media-gfx/fim:screen - Add (experimental!) support for running under screen
 media-gfx/fim:xcf - Support for xcf files via dev-perl/gimp-perl
 media-gfx/fim:xfig - Support for xfig files via media-gfx/xfig
 media-libs/a52dec:djbfft - Prefer D.J. Bernstein's library for fourier transforms
-media-libs/flac:apidocs - Enable API documentation building via Doxygen
 media-sound/aqualung:ape - Add support for decoding of Monkey's Audio
 media-sound/aqualung:ifp - Enable support for iRiver devices access through libifp
 media-sound/aqualung:systray - Builds systray (reqires more recent version of GTK+)
-media-sound/cmus:verbose-build - Build in verbose mode (silent oterwise)
-media-sound/flake:verbose-build - Build in verbose mode (silent oterwise)
-media-sound/musepack-tools:verbose-build - Build in verbose mode (silent oterwise)
 media-sound/snd:postscript - Enable postscript output from OpenGL graphics
 media-video/avidemux:aften - Enable A/52 encoding support via aften
 media-video/avidemux:amrnb - Enables Adaptive Multi-Rate Audio support (Narrow Band)
@@ -24,7 +18,6 @@ media-video/avidemux:faac - AAC encoding support via media-libs/faac
 media-video/avidemux:faad - AAC decoding support via media-libs/faad2
 media-video/avidemux:opencore-amr - Enables Adaptive Multi-Rate format support
 media-video/avidemux:vdpau - Enables VDPAU support (requires nVidia video card)
-media-video/avidemux:verbose-build - Build in verbose mode (silent oterwise)
 media-video/pgcedit:wine - Install a preview app that requires Wine on runtime
 media-video/transcode:dvdread - Enable use of media-libs/libdvdread
 media-video/transcode:graphicsmagick - Enable use of media-gfx/graphicsmagick
@@ -34,4 +27,3 @@ media-video/transcode:postproc - Build with ffmpeg libpostproc support
 net-p2p/rtorrent:openssl - Use OpenSSL's SHA1 implementation
 www-client/galeon:nautilus - Enable Nautilus view component
 x11-libs/fltk:noxft - Disables fltk; use for non-english characters
-x11-libs/fltk:verbose-build - Build in verbose mode (silent oterwise)
