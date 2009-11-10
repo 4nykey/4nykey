@@ -15,7 +15,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND="
-	>=media-libs/libmpcdec-9999-r1
+	>=media-sound/musepack-tools-444
 	media-libs/libao
 "
 RDEPEND="

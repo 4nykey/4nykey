@@ -1,9 +1,0 @@
-Index: libmpcdec/Makefile.am
-===================================================================
---- libmpcdec/Makefile.am	(revision 442)
-+++ libmpcdec/Makefile.am	(working copy)
-@@ -17,3 +17,4 @@
- 	$(common_sources)
- 
- libmpcdec_la_LDFLAGS = -no-undefined -version-info 7:0:1
-+libmpcdec_la_LIBADD = -lm

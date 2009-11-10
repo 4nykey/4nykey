@@ -2,7 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit cmake-utils autotools subversion
+EAPI="2"
+
+inherit cmake-utils subversion
 
 DESCRIPTION="Musepack audio compression tools"
 HOMEPAGE="http://www.musepack.net"
@@ -20,9 +22,14 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
+	!media-libs/libmpcdec
 "
 
 pkg_setup() {
 	use verbose-build && CMAKE_VERBOSE=y
-	mycmakeargs="-DSHARED=OFF"
+}
+
+src_configure() {
+	local mycmakeargs="-DSHARED=ON"
+	cmake-utils_src_configure
 }

@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-RDEPEND="!media-sound/musepack-tools:0"
+RDEPEND="!<media-sound/musepack-tools-444"
 
 src_unpack() {
 	unpack ${A}

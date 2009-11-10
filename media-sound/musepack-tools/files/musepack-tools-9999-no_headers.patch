@@ -1,9 +1,0 @@
-Index: CMakeLists.txt
-===================================================================
---- CMakeLists.txt	(revision 452)
-+++ CMakeLists.txt	(working copy)
-@@ -29,4 +29,3 @@
- add_subdirectory(mpccut)
- add_subdirectory(mpcchap)
- add_subdirectory(wavcmp)
--add_subdirectory(include)

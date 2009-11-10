@@ -1,0 +1,38 @@
+Index: src/decoder/dec_mpc.h
+===================================================================
+--- src/decoder/dec_mpc.h	(revision 1082)
++++ src/decoder/dec_mpc.h	(working copy)
+@@ -24,7 +24,7 @@
+ 
+ #ifdef HAVE_MPC
+ #ifdef MPC_OLD_API
+-#include <mpcdec/mpcdec.h>
++#include <mpcdecsv7/mpcdec.h>
+ #else
+ #include <mpc/mpcdec.h>
+ #endif /* MPC_OLD_API */
+Index: configure.ac
+===================================================================
+--- configure.ac	(revision 1082)
++++ configure.ac	(working copy)
+@@ -557,13 +557,17 @@
+ if test "$mpc" = "no"; then
+ 	AC_MSG_RESULT(no)
+ else
+-	AC_CHECK_LIB([mpcdec], [mpc_demux_init], [lib=yes],
+-	  [AC_CHECK_LIB([mpcdec], [mpc_streaminfo_init], [lib=yes
++	AC_CHECK_LIB([mpcdec], [mpc_demux_init], [lib=yes sv8=yes],
++	  [AC_CHECK_LIB([mpcdecsv7], [mpc_streaminfo_init], [lib=yes
+ 	    AC_DEFINE([MPC_OLD_API], [1],
+             [Defined if old Musepack API is used])], [], [-lstdc++])],
+ 	  [-lstdc++])
+ 	if test "$lib" = "yes"; then
+-	        mpc_LIBS="-lmpcdec -lstdc++"
++		if test x"$sv8" = x"yes"; then
++			mpc_LIBS="-lmpcdec"
++		else
++			mpc_LIBS="-lmpcdecsv7"
++		fi
+ 		AC_DEFINE([HAVE_MPC], [1], [Defined if compile with Musepack support])
+ 	fi
+ 	if test "$lib" != "yes" -a "$mpc" = "yes"; then
