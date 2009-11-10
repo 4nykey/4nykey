@@ -11,7 +11,7 @@ ESVN_BOOTSTRAP="autopoint --force && eautoreconf"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 IUSE="nls"
 
 RDEPEND="

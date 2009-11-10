@@ -11,7 +11,7 @@ ESVN_BOOTSTRAP="eautoreconf"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 IUSE="gstreamer openal alsa debug pcre spell xosd libnotify"
 
 DEPEND="
