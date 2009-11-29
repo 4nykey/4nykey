@@ -11,11 +11,12 @@ ESVN_REPO_URI="http://sopcast-player.googlecode.com/svn/trunk"
 
 LICENSE=""
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RDEPEND="
 	net-p2p/sopcast
+	media-video/vlc
 "
 DEPEND="
 	sys-devel/gettext
