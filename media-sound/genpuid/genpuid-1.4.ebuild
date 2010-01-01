@@ -16,8 +16,7 @@ IUSE=""
 
 DEPEND=""
 RDEPEND="
-	amd64? ( app-emulation/emul-linux-x86-compat )
-	x86? ( sys-libs/libstdc++-v3 )
+	virtual/libstdc++
 "
 
 src_install() {
