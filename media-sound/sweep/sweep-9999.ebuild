@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit autotools confutils subversion
+inherit autotools subversion
 
 DESCRIPTION="audio editor and live playback tool"
 HOMEPAGE="http://www.metadecks.org/software/sweep/"
@@ -35,10 +35,6 @@ DEPEND="
 	${DEPEND}
 	nls? ( sys-devel/gettext )
 "
-
-pkg_setup() {
-	confutils_use_conflict alsa pulseaudio
-}
 
 src_configure() {
 	econf \
