@@ -15,9 +15,9 @@ KEYWORDS="~amd64 ~x86"
 IUSE="debug apidocs examples"
 
 RDEPEND="
-	>=dev-cpp/glibmm-2.18.1
+	>=dev-cpp/glibmm-2.21.1
 	dev-cpp/libxmlpp:2.6
-	>=media-libs/gst-plugins-base-0.10.23
+	>=media-libs/gst-plugins-base-0.10.24
 	examples? ( dev-cpp/gtkmm:2.4 )
 "
 DEPEND="

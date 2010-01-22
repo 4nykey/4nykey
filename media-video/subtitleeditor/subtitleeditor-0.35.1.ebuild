@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit gnome2 autotools
+inherit gnome2
 
 DESCRIPTION="Subtitle Editor is a GTK+2 tool to edit subtitles for GNU/Linux"
 HOMEPAGE="http://home.gna.org/subtitleeditor"
@@ -20,20 +20,15 @@ RDEPEND="
 	>=app-text/enchant-1.4
 	dev-cpp/gstreamermm
 	media-libs/gst-plugins-good
+	media-plugins/gst-plugins-pango
 	app-text/iso-codes
 	opengl? ( dev-cpp/gtkglextmm )
 "
 DEPEND="
 	${RDEPEND}
-	dev-util/intltool
 "
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
-
-src_prepare() {
-	intltoolize --automake --copy --force
-	eautoreconf
-}
 
 src_configure() {
 	econf \
