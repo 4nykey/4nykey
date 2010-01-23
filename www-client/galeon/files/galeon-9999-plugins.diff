@@ -1,0 +1,35 @@
+http://cvs.fedoraproject.org/viewvc/devel/galeon/galeon-2.0.7-plugins.patch
+diff --git a/mozilla/Makefile.am b/mozilla/Makefile.am
+index b94eb43..8eb5f34 100644
+--- a/mozilla/Makefile.am
++++ b/mozilla/Makefile.am
+@@ -58,6 +58,7 @@ INCLUDES = \
+ 	-I$(MOZILLA_INCLUDE_ROOT)/xulapp \
+ 	$(GCONF_CFLAGS) \
+ 	$(GALEON_DEPENDENCY_CFLAGS) \
++	-DTOP_LIB_DIR=\"$(libdir)\" \
+ 	-DLIB_DIR=\"$(pkglibdir)\" \
+ 	-DSHARE_DIR=\"$(pkgdatadir)\"	\
+ 	-D_GNU_SOURCE=1			\
+diff --git a/mozilla/mozilla-embed-shell.cpp b/mozilla/mozilla-embed-shell.cpp
+index 309f672..5125584 100644
+--- a/mozilla/mozilla-embed-shell.cpp
++++ b/mozilla/mozilla-embed-shell.cpp
+@@ -248,13 +259,16 @@ mozilla_init_plugin_path ()
+ 	g_string_append (new_path, "/.mozilla/plugins");
+ 
+ 	/* Add /usr/lib/mozilla/plugins (bug 149812) */
+-	g_string_append (new_path, ":/usr/lib/mozilla/plugins");
++	g_string_append (new_path, ":" TOP_LIB_DIR "/nsbrowser/plugins");
+ 
+ #ifdef GALEON_MOZILLA_HOME
+ 	/* Add the current mozilla build's plugins dir */
+ 	g_string_append (new_path, ":" GALEON_MOZILLA_HOME "/plugins");
+ #endif
+ 
++	/* Work-around Flash Player crash */
++	g_setenv ("XLIB_SKIP_ARGB_VISUALS", "1", FALSE);
++
+ 	g_setenv ("MOZ_PLUGIN_PATH", new_path->str, TRUE);
+ 
+ 	g_string_free (new_path, TRUE);

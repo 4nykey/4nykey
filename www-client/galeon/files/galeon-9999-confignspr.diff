@@ -1,0 +1,14 @@
+http://cvs.fedoraproject.org/viewvc/devel/galeon/galeon-2.0.7-confignspr.patch
+diff --git a/configure.in b/configure.in
+index 1fcbc06..acf811d 100644
+--- a/configure.in
++++ b/configure.in
+@@ -377,7 +377,7 @@ TEST_MOZILLA_INCLUDE_DIRS="widget mimetype docshell history dom necko string lay
+ for i in $TEST_MOZILLA_INCLUDE_DIRS ; do
+    CXXFLAGS="$CXXFLAGS -I$MOZILLA_INCLUDE_ROOT/$i"
+ done
+-CXXFLAGS="$CXXFLAGS -DMOZILLA_STRICT_API=1"
++CXXFLAGS="$CXXFLAGS -DMOZILLA_STRICT_API=1 `pkg-config --cflags nspr`"
+ 
+ dnl Check whether we have a mozilla debug build
+ 
