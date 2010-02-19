@@ -1,8 +1,16 @@
 diff --git a/configure b/configure
-index 29e1b25..6d2b95a 100755
+index b254383..bd3caa4 100755
 --- a/configure
 +++ b/configure
-@@ -396,8 +396,7 @@ if [ "$pic" = "yes" ] ; then
+@@ -224,7 +224,6 @@ for opt do
+             cross_prefix="${opt#--cross-prefix=}"
+             ;;
+         *)
+-            echo "Unknown option $opt, ignored"
+             ;;
+     esac
+ done
+@@ -596,8 +595,7 @@ if [ "$pic" = "yes" ] ; then
  fi
  
  if [ "$debug" != "yes" -a "$gprof" != "yes" ]; then
