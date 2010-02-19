@@ -2,6 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+EAPI="1"
 WX_GTK_VER="2.8"
 inherit autotools wxwidgets confutils subversion
 
@@ -17,22 +18,17 @@ S3="${S}/MediaInfo/Project/GNU/GUI"
 LICENSE="GPL-3 LGPL-3 ZLIB"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="debug unicode wxwindows X"
+IUSE="debug unicode X curl libmms"
 
 DEPEND="
 	sys-libs/zlib
-	wxwindows? ( =x11-libs/wxGTK-${WX_GTK_VER}* )
+	X? ( x11-libs/wxGTK:${WX_GTK_VER}[X] )
+	curl? ( net-misc/curl )
+	libmms? ( media-libs/libmms )
 "
 RDEPEND="
 	${DEPEND}
 "
-
-pkg_setup() {
-	confutils_use_depend_all X wxwindows
-	if use X; then
-		confutils_require_built_with_all "=x11-libs/wxGTK-${WX_GTK_VER}*" X
-	fi
-}
 
 src_unpack() {
 	subversion_fetch ${ESVN_REPO_URI} MediaInfo
@@ -60,14 +56,16 @@ src_compile() {
 			--disable-dependency-tracking \
 			$(use_enable debug) \
 			$(use_enable unicode) \
-			$(use_with wxwindows wxwidgets) \
+			$(use_with X wxwidgets) \
+			$(use_with curl libcurl) \
+			$(use_with libmms) \
 	"
 	for d in ${S0} ${S1} ${S2}; do
 		cd ${d}
 		econf \
 			${myconf} \
 			$(use_with X wx-gui) \
-			$(use_with wxwindows wx-config ${WX_CONFIG}) \
+			$(use_with X wx-config ${WX_CONFIG}) \
 			|| die "econf failed in ${d}"
 		emake || die "emake failed in ${d}"
 	done
@@ -85,7 +83,10 @@ src_install() {
 	for d in ${S0} ${S1} ${S2}; do
 		emake DESTDIR="${D}" -C ${d} install || die
 	done
-	use X && emake DESTDIR="${D}" -C ${S3} install || die
-	dodoc MediaInfo/History*.txt MediaInfoLib/*.txt MediaInfoLib/Release/ReadMe.Linux.txt
-	newdoc MediaInfo/Release/ReadMe.Linux.txt ReadMe.CLI.txt
+	if use X; then
+		emake DESTDIR="${D}" -C ${S3} install || die
+		dodoc MediaInfo/History_GUI.txt MediaInfo/Release/ReadMe_GUI_Linux.txt
+	fi
+	dodoc MediaInfo/History_CLI.txt MediaInfo/Release/ReadMe_CLI_Linux.txt\
+		  MediaInfoLib/*.txt MediaInfoLib/Release/*_Linux.txt
 }
