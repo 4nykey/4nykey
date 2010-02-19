@@ -30,7 +30,7 @@ DEPEND="
 	aalib? ( media-libs/aalib )
 	libcaca? ( media-libs/libcaca )
 	djvu? ( app-text/djvu )
-	pdf? ( dev-libs/poppler )
+	pdf? ( virtual/poppler-glib )
 	sdl? ( media-libs/libsdl )
 "
 RDEPEND="
