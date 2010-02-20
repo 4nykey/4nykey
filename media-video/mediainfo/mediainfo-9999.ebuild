@@ -3,7 +3,6 @@
 # $Header: $
 
 EAPI="1"
-WX_GTK_VER="2.8"
 inherit autotools wxwidgets confutils subversion
 
 DESCRIPTION="MediaInfo supplies technical and tag information about media files"
@@ -20,15 +19,20 @@ SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE="debug unicode X curl libmms"
 
+WX_GTK_VER="2.8"
 DEPEND="
 	sys-libs/zlib
-	X? ( x11-libs/wxGTK:${WX_GTK_VER}[X] )
+	X? ( x11-libs/wxGTK:${WX_GTK_VER} )
 	curl? ( net-misc/curl )
 	libmms? ( media-libs/libmms )
 "
 RDEPEND="
 	${DEPEND}
 "
+
+pkg_setup() {
+	use X && need-wxwidgets unicode
+}
 
 src_unpack() {
 	subversion_fetch ${ESVN_REPO_URI} MediaInfo
@@ -43,8 +47,7 @@ src_unpack() {
 	done
 
 	if use X; then
-		cd ${S3}
-		eautoreconf
+		cd ${S3} && eautoreconf
 	fi
 }
 
@@ -59,13 +62,13 @@ src_compile() {
 			$(use_with X wxwidgets) \
 			$(use_with curl libcurl) \
 			$(use_with libmms) \
+			$(use_with X wx-gui) \
+			$(use_with X wx-config ${WX_CONFIG}) \
 	"
 	for d in ${S0} ${S1} ${S2}; do
 		cd ${d}
 		econf \
 			${myconf} \
-			$(use_with X wx-gui) \
-			$(use_with X wx-config ${WX_CONFIG}) \
 			|| die "econf failed in ${d}"
 		emake || die "emake failed in ${d}"
 	done
