@@ -1,0 +1,13 @@
+Index: src/Makefile.am
+===================================================================
+--- src/Makefile.am	(revision 276)
++++ src/Makefile.am	(working copy)
+@@ -22,6 +22,8 @@
+ yacc.tab.cpp: yacc.ypp lex.lex
+ 	$(YACC) $(YFLAGS) yacc.ypp -o yacc.tab.cpp
+ 
++yacc.tab.hpp: yacc.tab.cpp
++
+ FIM_LIB_OBJECTS = yacc.tab.o lex.yy.o
+ 
+ conf.h:       fimrc

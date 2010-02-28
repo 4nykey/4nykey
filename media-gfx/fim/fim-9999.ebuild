@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+EAPI="2"
+
 inherit autotools subversion
 
 DESCRIPTION="Fbi IMproved is a framebuffer image viewer based on Fbi and inspired from Vim"
@@ -30,7 +32,7 @@ DEPEND="
 	aalib? ( media-libs/aalib )
 	libcaca? ( media-libs/libcaca )
 	djvu? ( app-text/djvu )
-	pdf? ( virtual/poppler-glib )
+	pdf? ( app-text/poppler[cairo] )
 	sdl? ( media-libs/libsdl )
 "
 RDEPEND="
@@ -47,7 +49,7 @@ DEPEND="
 	sys-devel/bison
 "
 
-src_compile() {
+src_configure() {
 	econf \
 		$(use_enable debug) \
 		$(use_enable gif) \
@@ -70,13 +72,9 @@ src_compile() {
 		$(use_enable aalib aa) \
 		--enable-fimrc \
 		--enable-recursive-dirs \
-		--docdir=/usr/share/doc/${PF} \
-		|| die "econf failed"
-
-	# parallel make fails
-	emake -j1 || die "emake failed"
+		--docdir=/usr/share/doc/${PF}
 }
 
 src_install() {
-	emake DESTDIR="${D}" prefix=/usr install || die "emake install failed"
+	emake DESTDIR="${D}" install || die "emake install failed"
 }
