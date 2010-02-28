@@ -11,10 +11,10 @@ SRC_URI="mirror://gnu/${PN}/${P}.tar.gz"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="test"
+IUSE=""
 
 DEPEND="
-	test? ( dev-scheme/guile )
+	dev-scheme/guile
 "
 RDEPEND=""
 
