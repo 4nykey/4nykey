@@ -24,16 +24,3 @@ Index: plugins/mpc/Makefile.am
  else
  mpc_la_CXXFLAGS = $(TAGLIB_CFLAGS)
  mpc_la_SOURCES = mpc.cpp
-Index: plugins/mpc/mpcdecode.cpp
-===================================================================
---- plugins/mpc/mpcdecode.cpp	(revision 12482)
-+++ plugins/mpc/mpcdecode.cpp	(working copy)
-@@ -30,7 +30,7 @@
- #include <time.h>
- #include "fileio.h"
- 
--#include <mpcdec/mpcdec.h> 
-+#include <mpcdecsv7/mpcdec.h> 
- 
- extern char *mpcErrorString;
- 

@@ -6,8 +6,8 @@ inherit git
 
 DESCRIPTION="CMus - ncurses based music player."
 HOMEPAGE="http://cmus.sourceforge.net"
-EGIT_REPO_URI="git://github.com/JasonWoof/cmus-unofficial.git"
-EGIT_PATCHES=(${FILESDIR}/${PN}*.diff)
+EGIT_REPO_URI="git://gitorious.org/cmus/cmus.git"
+#EGIT_PATCHES=(${FILESDIR}/${PN}*.diff)
 
 LICENSE="GPL-2"
 KEYWORDS="~x86 ~amd64"
@@ -26,7 +26,7 @@ RDEPEND="
 	mad? ( >=media-libs/libmad-0.14 )
 	modplug? ( >=media-libs/libmodplug-0.7 )
 	vorbis? ( >=media-libs/libvorbis-1.0 )
-	musepack? ( media-libs/libmpcdecsv7 )
+	musepack? ( || ( media-libs/libmpcdec media-sound/musepack-tools ) )
 	aac? (
 		media-libs/faad2
 		mp4? ( >=media-libs/libmp4v2-1.9 )

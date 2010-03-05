@@ -8,39 +8,36 @@ inherit autotools distutils subversion
 DESCRIPTION="TunePimp is a library to create MusicBrainz enabled tagging applications."
 HOMEPAGE="http://www.musicbrainz.org/products/tunepimp"
 ESVN_REPO_URI="http://svn.musicbrainz.org/libtunepimp/trunk"
-#ESVN_PATCHES="${PN}-0.5.3-[bl]*.patch ${P}*.patch"
+#ESVN_PATCHES="${PN}-*.patch"
 ESVN_BOOTSTRAP="eautoreconf"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="python"
+IUSE="python flac mad musepack mp4 vorbis taglib"
 
-RDEPEND="sys-libs/zlib
+RDEPEND="
+	sys-libs/zlib
 	dev-libs/expat
 	net-misc/curl
-	media-libs/flac
-	media-libs/libmad
-	media-libs/libmpcdecsv7
-	>=media-libs/musicbrainz-2.1:1
-	>=media-libs/libmp4v2-1.9
 	media-libs/libofa
-	media-libs/libvorbis
-	sys-libs/readline"
-DEPEND="${RDEPEND}
+	media-libs/musicbrainz:1
+	taglib? (
+		media-libs/taglib
+		musepack? ( media-libs/libmpcdec )
+	)
+	mp4? ( media-libs/libmp4v2 )
+	mad? ( media-libs/libmad )
+	vorbis? ( media-libs/libvorbis )
+	flac? ( media-libs/flac )
+"
+DEPEND="
+	${RDEPEND}
 	dev-util/pkgconfig
-	!media-sound/trm"
-
-# parallel build is broken - https://bugs.gentoo.org/204174
-#MAKEOPTS="${MAKEOPTS} -j1"
+"
 
 src_prepare() {
-	epatch \
-		"${FILESDIR}"/${PN}-0.5.3-libtool.patch \
-		"${FILESDIR}"/${PN}-0.5.3-build-fix.patch \
-		"${FILESDIR}"/${PN}-0.5.3-gcc44.patch \
-		"${FILESDIR}"/${P}-mpcdecsv7.patch \
-		"${FILESDIR}"/${P}-new_libmp4v2.patch
+	epatch "${FILESDIR}"/${PN}-*.patch
 
 	# Don't hardcode ".so", use get_modname instead
 	sed -e "s|.so \$(top_srcdir)|$(get_modname) \$(top_srcdir)|g" \
