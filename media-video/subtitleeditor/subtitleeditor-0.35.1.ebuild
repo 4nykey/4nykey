@@ -29,11 +29,8 @@ DEPEND="
 "
 
 DOCS="AUTHORS ChangeLog NEWS README TODO"
-
-src_configure() {
-	econf \
-		$(use_enable debug) \
-		$(use_enable nls) \
-		$(use_enable opengl gl) \
-		|| die
-}
+G2CONF="
+	$(use_enable debug)
+	$(use_enable nls)
+	$(use_enable opengl gl)
+"

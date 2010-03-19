@@ -34,7 +34,7 @@ RDEPEND="
 		encode? ( media-sound/lame )
 	)
 	modplug? ( >=media-libs/libmodplug-0.8 )
-	musepack? ( || ( media-libs/libmpcdec >=media-sound/musepack-tools-444 ) )
+	musepack? ( media-sound/musepack-tools )
 	ape? ( media-sound/mac )
 	ffmpeg? ( media-video/ffmpeg )
 	wavpack? ( >=media-sound/wavpack-4.40 )

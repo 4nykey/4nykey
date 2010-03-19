@@ -26,7 +26,7 @@ RDEPEND="
 	mad? ( >=media-libs/libmad-0.14 )
 	modplug? ( >=media-libs/libmodplug-0.7 )
 	vorbis? ( >=media-libs/libvorbis-1.0 )
-	musepack? ( || ( media-libs/libmpcdec media-sound/musepack-tools ) )
+	musepack? ( media-sound/musepack-tools )
 	aac? (
 		media-libs/faad2
 		mp4? ( >=media-libs/libmp4v2-1.9 )

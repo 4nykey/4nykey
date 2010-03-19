@@ -12,7 +12,7 @@ EGIT_PATCHES=(${FILESDIR}/${PN}-*.diff)
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="X mp4 sdl threads static debug pic ffmpeg"
+IUSE="X mp4 sdl threads static-libs debug pic ffmpeg"
 
 RDEPEND="
 	mp4? ( media-video/gpac )
@@ -29,7 +29,7 @@ src_compile() {
 	econf\
 		--disable-avs-input\
 		--enable-pic\
-		$(use_enable !static shared)\
+		$(use_enable !static-libs shared)\
 		$(use_enable threads pthread)\
 		$(use_enable mp4 mp4-output)\
 		$(use_enable X visualize)\
