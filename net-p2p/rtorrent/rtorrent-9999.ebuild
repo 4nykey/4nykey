@@ -25,6 +25,7 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	dev-util/pkgconfig
+	dev-util/cppunit
 "
 
 src_unpack() {

@@ -1,7 +1,7 @@
 --- ./makefile.in.orig	2007-04-15 21:57:50.000000000 +0300
 +++ ./makefile.in	2007-09-04 11:43:01.000000000 +0300
 @@ -64,7 +64,7 @@
- SUBDIRS = po
+ GX_HEADERS = $(@GX_HEADERS@)
  
  .SUFFIXES:
 -.SUFFIXES: .c .o
@@ -18,8 +18,8 @@
 +
 +main_target: @MAKE_TARGET@ $(UTILS)
  
- snd: $(SNDLIB_HEADERS) $(SND_HEADERS) $(GX_HEADERS) $(SNDLIB_FILES) $(MIDI_FILES) $(O_FILES) $(GX_FILES) $(GL_FILES)
- 	(cd po && $(MAKE))
+ snd: $(SNDLIB_HEADERS) $(SND_HEADERS) $(GX_HEADERS) $(S7_HEADERS) $(S7_O_FILES) $(SNDLIB_FILES) $(O_FILES) $(GX_FILES) $(GL_FILES)
+ 	$(CC) $(LDFLAGS) $(CFLAGS) $(S7_O_FILES) $(SNDLIB_FILES) $(O_FILES) $(GX_FILES) $(GL_FILES) -o snd $(SNDLIB_LIB) $(XEN_LIBS) $(GTK_LIBS) $(GL_LIBS) $(MOTIF_LIBS) $(JACK_LIBS) $(AUDIO_LIB) $(FFTW_LIBS) $(GSL_LIBS) $(FAM_LIB) $(GMP_LIBS) $(LIBS)
 @@ -157,29 +161,22 @@
  	rm -f *.a
  	rm -f snd sndplay audinfo sndinfo
@@ -62,11 +62,11 @@
  install: snd
  	${SHELL} ${top_srcdir}/mkinstalldirs ${DESTDIR}/${bindir}
 @@ -195,7 +188,7 @@
+ 	${SHELL} ${top_srcdir}/mkinstalldirs ${DESTDIR}/${mandir}
  	${SHELL} ${top_srcdir}/mkinstalldirs ${DESTDIR}/${mandir}/man1
  	${SHELL} ${top_srcdir}/mkinstalldirs ${DESTDIR}/${pkgdatadir}
- 	(cd po && $(MAKE) install)
 -	$(INSTALL) snd ${DESTDIR}/${bindir}/snd
 +	for x in snd $(UTILS); do $(INSTALL) $${x} ${DESTDIR}/${bindir}; done
- 	$(INSTALL) ${top_srcdir}/snd.1 ${DESTDIR}/${mandir}/man1
- 	(cd ${top_srcdir} && for f in ${SND_SCRIPTS}; do ${INSTALL_DATA} ${top_srcdir}/$${f} ${DESTDIR}/${pkgdatadir}/$${f}; done) 
+ 	$(INSTALL_DATA) ${top_srcdir}/snd.1 ${DESTDIR}/${mandir}/man1
+ 	(cd ${top_srcdir} && for f in ${SND_SCRIPTS}; do ${INSTALL_DATA} ${top_srcdir}/$${f} ${DESTDIR}/${pkgdatadir}/$${f}; done)
  

@@ -23,7 +23,7 @@ DEPEND="
 	app-arch/xz-utils
 "
 RDEPEND="
-	gs? ( virtual/ghostscript )
+	gs? ( app-text/ghostscript-gpl )
 "
 
 DOCS="Changes FAQ LICENSE README TODO"

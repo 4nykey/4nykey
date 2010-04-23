@@ -38,7 +38,7 @@ DEPEND="
 RDEPEND="
 	${DEPEND}
 	vorbis? ( media-sound/vorbis-tools )
-	mp3? ( virtual/mpg123 )
+	mp3? ( media-sound/mpg123 )
 	speex? ( media-libs/speex )
 	flac? ( media-libs/flac )
 	timidity? ( media-sound/timidity++ )

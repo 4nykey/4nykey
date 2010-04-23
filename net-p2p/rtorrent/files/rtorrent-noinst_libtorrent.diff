@@ -2,10 +2,10 @@ Index: configure.ac
 ===================================================================
 --- configure.ac	(revision 1092)
 +++ configure.ac	(working copy)
-@@ -2,6 +2,7 @@
- 
+@@ -3,6 +3,7 @@
  AM_INIT_AUTOMAKE
  AM_CONFIG_HEADER(config.h)
+ AM_PATH_CPPUNIT(1.9.6)
 +AC_CONFIG_SUBDIRS(src/libtorrent)
  
  AC_PROG_CXX
@@ -91,7 +91,7 @@ Index: src/libtorrent/Makefile.am
 --- src/libtorrent/Makefile.am	(revision 1092)
 +++ src/libtorrent/Makefile.am	(working copy)
 @@ -1,7 +1,5 @@
- SUBDIRS = src
+ SUBDIRS = src test
  
 -pkgconfigdir = $(libdir)/pkgconfig
 -pkgconfig_DATA = libtorrent.pc
