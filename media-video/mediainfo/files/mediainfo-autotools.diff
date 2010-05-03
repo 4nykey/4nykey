@@ -1,0 +1,90 @@
+--- MediaInfo/Project/GNU/CLI/configure.ac	(revision 3041)
++++ MediaInfo/Project/GNU/CLI/configure.ac	(working copy)
+@@ -130,6 +130,9 @@
+ dnl -------------------------------------------------------------------------
+ dnl MediaInfoLib
+ dnl
++with_mediainfolib="builtin (static)"
++LIBS="$LIBS -L../../../../MediaInfoLib/Project/GNU/Library -lmediainfo"
++if false; then
+ if test "$with_dll" != "yes"; then
+ 	if test -e ../../../../MediaInfoLib/Project/GNU/Library/libmediainfo.la; then
+ 		CXXFLAGS="$CXXFLAGS $(../../../../MediaInfoLib/Project/GNU/Library/libmediainfo-config CXXFLAGS)"
+@@ -166,10 +169,14 @@
+ else
+ 	with_mediainfolib="load at runtime"
+ fi
++fi
+ 
+ dnl -------------------------------------------------------------------------
+ dnl ZenLib
+ dnl
++with_zenlib="builtin (static)"
++LIBS="$LIBS -L../../../../ZenLib/Project/GNU/Library -lzen"
++if false; then
+ if test -e ../../../../ZenLib/Project/GNU/Library/libzen.la; then
+ 	CXXFLAGS="$CXXFLAGS $(../../../../ZenLib/Project/GNU/Library/libzen-config CXXFLAGS)"
+ 	MediaInfoLib_CXXFLAGS="$MediaInfoLib_CXXFLAGS $(../../../../ZenLib/Project/GNU/Library/libzen-config CXXFLAGS)"
+@@ -205,6 +212,7 @@
+ 		AC_MSG_ERROR([libzen configuration is not found])
+ 	fi
+ fi
++fi
+ 
+ dnl #########################################################################
+ dnl ### Compiler specific
+--- MediaInfo/Project/GNU/GUI/configure.ac	(revision 3041)
++++ MediaInfo/Project/GNU/GUI/configure.ac	(working copy)
+@@ -245,6 +245,9 @@
+ dnl -------------------------------------------------------------------------
+ dnl MediaInfoLib
+ dnl
++with_mediainfolib="builtin (static)"
++LIBS="$LIBS -L../../../../MediaInfoLib/Project/GNU/Library -lmediainfo"
++if false; then
+ if test "$with_dll" != "yes"; then
+ 	with_dll="no"
+ 	if test -e ../../../../MediaInfoLib/Project/GNU/Library/libmediainfo.la; then
+@@ -274,10 +277,14 @@
+ 	with_dll="yes"
+ 	with_mediainfolib="system"
+ fi
++fi
+ 
+ dnl -------------------------------------------------------------------------
+ dnl ZenLib
+ dnl
++with_zenlib="builtin (static)"
++LIBS="$LIBS -L../../../../ZenLib/Project/GNU/Library -lzen"
++if false; then
+ if test -e ../../../../ZenLib/Project/GNU/Library/libzen.la; then
+ 	CXXFLAGS="$CXXFLAGS $(../../../../ZenLib/Project/GNU/Library/libzen-config CXXFLAGS)"
+ 	MediaInfoLib_CXXFLAGS="$MediaInfoLib_CXXFLAGS $(../../../../ZenLib/Project/GNU/Library/libzen-config CXXFLAGS)"
+@@ -303,6 +310,7 @@
+ 		AC_MSG_ERROR([libzen configuration is not found])
+ 	fi
+ fi
++fi
+ 
+ dnl #########################################################################
+ dnl ### Compiler specific
+--- MediaInfoLib/Project/GNU/Library/configure.ac	(revision 3041)
++++ MediaInfoLib/Project/GNU/Library/configure.ac	(working copy)
+@@ -318,6 +318,9 @@
+ dnl -------------------------------------------------------------------------
+ dnl ZenLib
+ dnl
++with_zenlib="builtin (static)"
++LIBS="$LIBS -L../../../../ZenLib/Project/GNU/Library -lzen"
++if false; then
+ if test -e ../../../../ZenLib/Project/GNU/Library/libzen.la; then
+ 	CXXFLAGS="$CXXFLAGS $(../../../../ZenLib/Project/GNU/Library/libzen-config CXXFLAGS)"
+ 	MediaInfoLib_CXXFLAGS="$MediaInfoLib_CXXFLAGS $(../../../../ZenLib/Project/GNU/Library/libzen-config CXXFLAGS)"
+@@ -359,6 +362,7 @@
+ 		AC_MSG_ERROR([libzen configuration is not found])
+ 	fi
+ fi
++fi
+ 
+ dnl -------------------------------------------------------------------------
+ dnl libcurl

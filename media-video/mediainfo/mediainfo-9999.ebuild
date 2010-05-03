@@ -2,27 +2,25 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="1"
-inherit autotools wxwidgets confutils subversion
+EAPI="2"
+inherit autotools wxwidgets subversion
 
 DESCRIPTION="MediaInfo supplies technical and tag information about media files"
 HOMEPAGE="http://mediainfo.sourceforge.net"
 ESVN_REPO_URI="https://mediainfo.svn.sourceforge.net/svnroot/mediainfo/MediaInfo/trunk"
+ESVN_PATCHES="${FILESDIR}"/${PN}*.diff
+ESVN_BOOTSTRAP="eautoreconf"
 S="${WORKDIR}"
-S0="${S}/ZenLib/Project/GNU/Library"
-S1="${S}/MediaInfoLib/Project/GNU/Library"
-S2="${S}/MediaInfo/Project/GNU/CLI"
-S3="${S}/MediaInfo/Project/GNU/GUI"
 
 LICENSE="GPL-3 LGPL-3 ZLIB"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="debug unicode X curl libmms"
+IUSE="debug unicode wxwidgets curl libmms minimal"
 
 WX_GTK_VER="2.8"
 DEPEND="
 	sys-libs/zlib
-	X? ( x11-libs/wxGTK:${WX_GTK_VER} )
+	wxwidgets? ( x11-libs/wxGTK:${WX_GTK_VER} )
 	curl? ( net-misc/curl )
 	libmms? ( media-libs/libmms )
 "
@@ -31,7 +29,7 @@ RDEPEND="
 "
 
 pkg_setup() {
-	use X && need-wxwidgets unicode
+	use wxwidgets && need-wxwidgets unicode
 }
 
 src_unpack() {
@@ -42,54 +40,47 @@ src_unpack() {
 	ESVN_PROJECT="zenlib" subversion_fetch\
 		https://zenlib.svn.sourceforge.net/svnroot/zenlib/ZenLib/trunk\
 		ZenLib
-	for d in ${S0} ${S1} ${S2}; do
-		cd ${d} && eautoreconf
-	done
-
-	if use X; then
-		cd ${S3} && eautoreconf
-	fi
 }
 
-src_compile() {
-	local myconf="
-			--disable-static \
-			--enable-shared \
-			--disable-option-checking \
-			--disable-dependency-tracking \
-			$(use_enable debug) \
-			$(use_enable unicode) \
-			$(use_with X wxwidgets) \
-			$(use_with curl libcurl) \
-			$(use_with libmms) \
-			$(use_with X wx-gui) \
-			$(use_with X wx-config ${WX_CONFIG}) \
-	"
-	for d in ${S0} ${S1} ${S2}; do
-		cd ${d}
-		econf \
-			${myconf} \
-			|| die "econf failed in ${d}"
-		emake || die "emake failed in ${d}"
-	done
+src_prepare() {
+	local _subdirs="ZenLib/Project/GNU/Library \
+		MediaInfoLib/Project/GNU/Library \
+		MediaInfo/Project/GNU/CLI \
+		$(use wxwidgets && echo MediaInfo/Project/GNU/GUI)"
 
-	if use X; then
-		cd ${S3}
-		econf \
-			${myconf} \
-			|| die "econf failed in ${S3}"
-		emake || die "emake failed in ${S3}"
-	fi
+	cat <<EOF >"${S}"/configure.ac
+AC_INIT(${PN},${PV})
+AC_CONFIG_SUBDIRS(${_subdirs})
+AM_INIT_AUTOMAKE(${PN},${PV})
+AC_OUTPUT(Makefile)
+EOF
+
+	cat <<EOF >"${S}"/Makefile.am
+SUBDIRS = ${_subdirs}
+EOF
+
+	subversion_src_prepare
+}
+
+src_configure() {
+	econf \
+		--enable-staticlibs \
+		--enable-visibility \
+		--disable-option-checking \
+		--disable-dependency-tracking \
+		$(use_enable debug) \
+		$(use_enable unicode) \
+		$(use_enable minimal minimize-size) \
+		$(use_with curl libcurl) \
+		$(use_with libmms) \
+		$(use_with wxwidgets) \
+		$(use_with wxwidgets wx-gui) \
+		$(use_with wxwidgets wx-config ${WX_CONFIG})
 }
 
 src_install() {
-	for d in ${S0} ${S1} ${S2}; do
-		emake DESTDIR="${D}" -C ${d} install || die
-	done
-	if use X; then
-		emake DESTDIR="${D}" -C ${S3} install || die
-		dodoc MediaInfo/History_GUI.txt MediaInfo/Release/ReadMe_GUI_Linux.txt
-	fi
+	dobin MediaInfo/Project/GNU/CLI/mediainfo
+	use wxwidgets && dobin MediaInfo/Project/GNU/GUI/mediainfo-gui
 	dodoc MediaInfo/History_CLI.txt MediaInfo/Release/ReadMe_CLI_Linux.txt\
 		  MediaInfoLib/*.txt MediaInfoLib/Release/*_Linux.txt
 }
