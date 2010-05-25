@@ -4,25 +4,21 @@
 
 EAPI="2"
 
-inherit gnome2 autotools git
+inherit gnome2 git
 
 DESCRIPTION="A GNOME Web browser based on gecko (mozilla's rendering engine)"
 HOMEPAGE="http://galeon.sourceforge.net"
-SRC_URI="
-	mirror://gentoo/${PN}-2.0.7-patches.tar.lzma
-"
+SRC_URI=""
 EGIT_REPO_URI="git://git.gnome.org/galeon"
 EGIT_PATCHES=("${FILESDIR}"/${P}*.diff)
-EGIT_BOOTSTRAP="intltoolize && eautoreconf"
 
 LICENSE="GPL-2"
 KEYWORDS="~x86 ~amd64"
 SLOT="0"
-IUSE="nautilus"
+IUSE=""
 
 RDEPEND="
 	>=net-libs/xulrunner-1.9.2
-	nautilus? ( gnome-base/nautilus )
 	>=x11-libs/gtk+-2.4.0
 	>=dev-libs/libxml2-2.6.6
 	>=gnome-base/libgnomeui-2.5.2
@@ -40,20 +36,14 @@ DEPEND="
 
 DOCS="AUTHORS ChangeLog FAQ README README.ExtraPrefs THANKS TODO NEWS"
 
-pkg_setup() {
-	G2CONF="
-		--with-mozilla=libxul-embedding
-		$(use_enable nautilus nautilus-view)
-	"
-}
-
-src_unpack() {
-	unpack ${A}
-	git_src_unpack
-}
+G2CONF="
+	--with-mozilla=libxul-embedding
+"
 
 src_prepare() {
-	EGIT_PATCHES+=("${WORKDIR}"/${PN}*patches/${PN}*{dfltfont,warnings}.patch)
 	sed -i configure.in -e 's:libxul-embedding-unstable:libxul-embedding:'
 	git_src_prepare
+	ebegin "Running ./autogen.sh"
+		NOCONFIGURE=y ./autogen.sh >${T}/autogen.log 2>&1
+	eend $? "autogen.sh failed. See ${T}/autogen.log for details."
 }

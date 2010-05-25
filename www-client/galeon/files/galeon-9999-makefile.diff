@@ -1,0 +1,11 @@
+diff --git a/src/Makefile.am b/src/Makefile.am
+index ff5edce..7f92c2f 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -208,3 +208,6 @@ stamp-galeon-dbus-client-bindings.h: $(top_srcdir)/galeon-service.xml Makefile
+ 	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) ||  cp xgen-$(@F) $(@F:stamp-%=%) ) \
+ 	&&  rm -f xgen-$(@F)                                                       \
+ 	&&  echo timestamp > $(@F)
++
++galeon-main.c: galeon-dbus-client-bindings.h
++galeon-dbus.c: galeon-type-builtins.h galeon-dbus-server-bindings.h
