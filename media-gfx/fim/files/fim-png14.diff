@@ -1,0 +1,20 @@
+Index: src/FbiStuffPng.cpp
+===================================================================
+--- src/FbiStuffPng.cpp	(revision 276)
++++ src/FbiStuffPng.cpp	(working copy)
+@@ -29,6 +29,15 @@
+ #include <errno.h>
+ #include <png.h>
+ 
++// If the system libpng is newer than 1.3 then adjust the set_gray call 
++// to conform to the new API 
++#if !defined(png_set_gray_1_2_4_to_8) && \ 
++    defined(PNG_LIBPNG_VER_MAJOR) && defined(PNG_LIBPNG_VER_MINOR) && \ 
++    (PNG_LIBPNG_VER_MAJOR > 1 || \ 
++     (PNG_LIBPNG_VER_MAJOR == 1 && PNG_LIBPNG_VER_MINOR >= 4)) 
++#define png_set_gray_1_2_4_to_8 png_set_expand_gray_1_2_4_to_8 
++#endif 
++     
+ //#include "loader.h"
+ #include "FbiStuff.h"
+ #include "FbiStuffLoader.h"
