@@ -1,0 +1,28 @@
+--- ./Makefile.orig	2010-05-15 10:12:45.000000000 +0300
++++ ./Makefile	2010-05-15 10:16:56.000000000 +0300
+@@ -304,6 +304,7 @@
+ 	cp -f $(RT28xx_DIR)/os/linux/rtnet$(CHIPSET)apsta.ko /tftpboot
+ endif
+ else
++ifeq ($(RT28xx_MODE),ERR_WHAT)
+ 	cp -f $(RT28xx_DIR)/os/linux/rt$(CHIPSET)sta.ko /tftpboot
+ ifeq ($(OSABL),YES)
+ 	cp -f $(RT28xx_DIR)/os/linux/rtutil$(CHIPSET)sta.ko /tftpboot
+@@ -311,6 +312,7 @@
+ endif
+ endif
+ endif
++endif
+ endif
+ 
+ 
+--- ./os/linux/usb_main_dev.c.orig	2010-04-12 11:02:20.000000000 +0300
++++ ./os/linux/usb_main_dev.c	2010-05-15 20:42:05.000000000 +0300
+@@ -32,6 +32,7 @@
+ // Otherwise post to forum in ralinktech's web site(www.ralinktech.com) and let all users help you. ***
+ MODULE_AUTHOR("Paul Lin <paul_lin@ralinktech.com>");
+ MODULE_DESCRIPTION("RT2870 Wireless Lan Linux Driver");
++MODULE_LICENSE("GPL");
+ #ifdef CONFIG_STA_SUPPORT
+ #ifdef MODULE_VERSION
+ MODULE_VERSION(STA_DRIVER_VERSION);
