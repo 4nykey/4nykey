@@ -39,10 +39,6 @@ src_install() {
 	doexe ${_arch}/at_root/usr/${_libd}/sane/libsane-smfp.so.1.0.1
 	dosym libsane-smfp.so.1.0.1 /usr/${_libd}/sane/libsane-smfp.so.1
 
-	dosbin ${_arch}/at_root/usr/sbin/smfpd
-}
-
-pkg_postinst() {
-	elog "You need to add smfp to /etc/sane.d/dll.conf:"
-	elog " # echo smfp >> /etc/sane.d/dll.conf"
+	mkdir -p "${D}"/etc/sane.d/dll.d
+	echo smfp > "${D}"/etc/sane.d/dll.d/${PN}
 }
