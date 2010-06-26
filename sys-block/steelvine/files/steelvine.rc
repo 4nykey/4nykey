@@ -1,0 +1,17 @@
+#!/sbin/runscript
+
+start() {
+	ebegin "Starting SteelVine"
+	start-stop-daemon --start --exec /opt/steelvine/SteelVine \
+		--user steelvine:disk --chdir /var/lib/steelvine \
+		--background --pidfile /var/run/steelvine.pid \
+		--make-pidfile -- -e
+	eend $? "Failed to start SteelVine"
+}
+
+stop() {
+	ebegin "Stopping SteelVine"
+	start-stop-daemon --stop \
+		--pidfile /var/run/steelvine.pid
+	eend $? "Failed to stop SteelVine"
+}
