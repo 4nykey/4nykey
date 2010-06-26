@@ -26,6 +26,10 @@ RDEPEND="
 
 S="${WORKDIR}/cdroot/Linux"
 
+pkg_setup() {
+	check_license ${PORTDIR_OVERLAY}/licenses/${LICENSE}
+}
+
 src_install() {
 	local _arch="i386" _libd="$(get_libdir)"
 	use amd64 && _arch="x86_64"
