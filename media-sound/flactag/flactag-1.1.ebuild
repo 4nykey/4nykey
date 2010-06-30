@@ -20,7 +20,7 @@ RDEPEND="
 	media-libs/libdiscid
 	media-libs/flac[cxx]
 	sys-libs/slang
-	net-misc/neon
+	net-libs/neon
 	app-text/unac
 	media-libs/jpeg
 "
