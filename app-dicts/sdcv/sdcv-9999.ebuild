@@ -8,6 +8,7 @@ DESCRIPTION="sdcv - console version of StarDict program"
 HOMEPAGE="http://sdcv.sourceforge.net"
 ESVN_REPO_URI="https://sdcv.svn.sourceforge.net/svnroot/sdcv/trunk"
 ESVN_BOOTSTRAP="eautoreconf"
+ESVN_PATCHES="${PN}-*.diff"
 
 LICENSE="GPL-2"
 SLOT="0"
