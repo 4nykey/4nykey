@@ -1,0 +1,24 @@
+Index: SConstruct
+===================================================================
+--- SConstruct	(revision 1525)
++++ SConstruct	(working copy)
+@@ -837,9 +837,8 @@
+ # cannot use system one for the time being
+ #
+     
+-    libraries['sndfile-ardour'] = LibraryInfo(LIBS='libsndfile-ardour',
+-                                    LIBPATH='#libs/libsndfile',
+-                                    CPPPATH=['#libs/libsndfile/src'])
++    libraries['sndfile-ardour'] = LibraryInfo()
++    libraries['sndfile-ardour'].ParseConfig ('pkg-config --cflags --libs sndfile')
+ 
+ #    libraries['libglademm'] = LibraryInfo()
+ #    libraries['libglademm'].ParseConfig ('pkg-config --cflags --libs libglademm-2.4')
+@@ -859,7 +858,6 @@
+     ]
+     
+     subdirs = [
+-        'libs/libsndfile',
+         'libs/pbd',
+         'libs/midi++2',
+         'libs/ardour',
