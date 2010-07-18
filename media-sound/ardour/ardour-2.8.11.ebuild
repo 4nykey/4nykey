@@ -1,0 +1,105 @@
+# Copyright 1999-2010 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: /var/cvsroot/gentoo-x86/media-sound/ardour/ardour-2.8.7.ebuild,v 1.2 2010/05/06 11:06:53 ssuominen Exp $
+
+EAPI=2
+inherit eutils toolchain-funcs
+
+DESCRIPTION="Digital Audio Workstation"
+HOMEPAGE="http://ardour.org/"
+SRC_URI="${P}.tar.bz2"
+RESTRICT="fetch"
+
+LICENSE="GPL-2"
+SLOT="0"
+KEYWORDS="~x86 ~amd64"
+IUSE="
+nls debug sse fftw osc ladspa bundled-libs usb curl lv2 gnome soundtouch
+"
+
+RDEPEND="
+	media-libs/liblrdf
+	media-libs/libsamplerate
+	fftw? ( sci-libs/fftw:3.0 )
+	media-sound/jack-audio-connection-kit
+	dev-libs/libxml2
+	dev-libs/libxslt
+	osc? ( media-libs/liblo )
+	!bundled-libs? (
+		dev-libs/libsigc++:2
+		dev-cpp/libgnomecanvasmm
+		soundtouch? ( media-libs/libsoundtouch )
+		media-libs/libsndfile
+		media-libs/vamp-plugin-sdk
+		media-libs/aubio
+	)
+	ladspa? ( media-libs/ladspa-sdk )
+	usb? ( dev-libs/libusb )
+	flac? ( media-libs/flac )
+	curl? ( net-misc/curl )
+	lv2? ( media-libs/slv2 )
+	media-libs/alsa-lib
+"
+DEPEND="
+	${RDEPEND}
+	dev-libs/boost
+	dev-util/pkgconfig
+	dev-util/scons
+	nls? ( sys-devel/gettext )
+	usb? ( virtual/os-headers )
+"
+
+pkg_nofetch() {
+	einfo "Please get ${SRC_URI} from http://ardour.org/download"
+	einfo "and put the file in ${DISTDIR}."
+}
+
+src_unpack() {
+	unpack ${A}
+	cd ${S}
+
+	epatch "${FILESDIR}"/${PN}-*.diff
+}
+
+src_compile() {
+	tc-export CC CXX
+	mkdir -p "${D}"
+
+	scons ${MAKEOPTS} \
+		PREFIX=/usr \
+		DESTDIR="${D}" \
+		FREEDESKTOP=1 \
+		VST=0 \
+		CMT=0 \
+		GTK=1 \
+		KSI=1 \
+		$(use bundled-libs; echo SYSLIBS=$?) \
+		$(use !debug; echo DEBUG=$?) \
+		$(use !nls; echo NLS=$?) \
+		$(use !fftw; echo FFT_ANALYSIS=$?) \
+		$(use soundtouch; echo RUBBERBAND=$?) \
+		$(use !osc; echo LIBLO=$?) \
+		$(use !usb; echo SURFACES=$?) \
+		$(use !sse; echo FPU_OPTIMIZATION=$?) \
+		$(use !curl; echo FREESOUND=$?) \
+		$(use !lv2; echo LV2=$?) \
+		|| die
+}
+
+src_install() {
+	scons ${MAKEOPTS} install || die
+
+	doman ardour.1
+}
+
+pkg_postinst() {
+	fdo-mime_desktop_database_update
+	fdo-mime_mime_database_update
+	use gnome && gnome2_icon_cache_update
+}
+
+pkg_postrm() {
+	fdo-mime_desktop_database_update
+	fdo-mime_mime_database_update
+	use gnome && gnome2_icon_cache_update
+}

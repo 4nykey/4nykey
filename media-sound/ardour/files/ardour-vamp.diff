@@ -1,0 +1,41 @@
+--- ./SConstruct.orig	2010-07-05 22:56:47.000000000 +0300
++++ ./SConstruct	2010-07-18 17:45:38.000000000 +0300
+@@ -868,12 +868,13 @@
+ # these are part of the Ardour source tree because they are C++
+ # 
+ 
+-libraries['vamp'] = LibraryInfo (LIBS='vampsdk',
+-                                 LIBPATH='#libs/vamp-sdk',
+-                                 CPPPATH='#libs/vamp-sdk')
+-libraries['vamphost'] = LibraryInfo (LIBS='vamphostsdk',
+-                                 LIBPATH='#libs/vamp-sdk',
+-                                 CPPPATH='#libs/vamp-sdk')
++if not env['SYSLIBS']:
++    libraries['vamp'] = LibraryInfo (LIBS='vampsdk',
++                                     LIBPATH='#libs/vamp-sdk',
++                                     CPPPATH='#libs/vamp-sdk')
++    libraries['vamphost'] = LibraryInfo (LIBS='vamphostsdk',
++                                     LIBPATH='#libs/vamp-sdk',
++                                     CPPPATH='#libs/vamp-sdk')
+ 
+ env['RUBBERBAND'] = False
+ 
+@@ -1083,6 +1084,10 @@
+     libraries['appleutility'] = LibraryInfo(LIBS='libappleutility',
+                                             LIBPATH='#libs/appleutility',
+                                             CPPPATH='#libs/appleutility')
++    libraries['vamp'] = LibraryInfo()
++    libraries['vamp'].ParseConfig ('pkg-config --cflags --libs vamp-sdk')
++    libraries['vamphost'] = LibraryInfo()
++    libraries['vamphost'].ParseConfig ('pkg-config --cflags --libs vamp-hostsdk')
+     
+     coredirs = [
+         'templates',
+@@ -1093,7 +1098,6 @@
+         'libs/pbd',
+         'libs/midi++2',
+         'libs/ardour',
+-        'libs/vamp-sdk',
+         'libs/vamp-plugins/',
+     # these are unconditionally included but have
+     # tests internally to avoid compilation etc

@@ -1,0 +1,46 @@
+--- ./SConstruct.orig	2010-07-05 22:56:47.000000000 +0300
++++ ./SConstruct	2010-07-18 17:39:42.000000000 +0300
+@@ -47,6 +47,7 @@
+     BoolVariable('DMALLOC', 'Compile and link using the dmalloc library', 0),
+     BoolVariable('EXTRA_WARN', 'Compile with -Wextra, -ansi, and -pedantic.  Might break compilation.  For pedants', 0),
+     BoolVariable('FFT_ANALYSIS', 'Include FFT analysis window', 1),
++    BoolVariable('RUBBERBAND', 'Use rubberband instead of soundtouch for timefx', 1),
+     BoolVariable('FREESOUND', 'Include Freesound database lookup', 0),
+     BoolVariable('FPU_OPTIMIZATION', 'Build runtime checked assembler code', 1),
+     BoolVariable('LIBLO', 'Compile with support for liblo library', 1),
+@@ -875,11 +876,10 @@
+                                  LIBPATH='#libs/vamp-sdk',
+                                  CPPPATH='#libs/vamp-sdk')
+ 
+-env['RUBBERBAND'] = False
+ 
+ conf = Configure (env)
+ 
+-if conf.CheckHeader ('fftw3.h'):
++if env['RUBBERBAND'] and conf.CheckHeader ('fftw3.h'):
+     env['RUBBERBAND'] = True
+     libraries['rubberband'] = LibraryInfo (LIBS='rubberband',
+                                            LIBPATH='#libs/rubberband',
+@@ -1222,7 +1222,10 @@
+ # timestretch libraries
+ #
+ 
+-timefx_subdirs = ['libs/soundtouch']
++if not env['SYSLIBS']:
++    timefx_subdirs = ['libs/soundtouch']
++else:
++    timefx_subdirs = []
+ if env['RUBBERBAND']:
+     timefx_subdirs += ['libs/rubberband']
+ 
+--- ./libs/ardour/ardour/stretch.h.orig	2009-02-24 14:37:52.000000000 +0200
++++ ./libs/ardour/ardour/stretch.h	2010-07-18 17:39:42.000000000 +0300
+@@ -42,7 +42,7 @@
+ 
+ #else
+ 
+-#include <soundtouch/SoundTouch.h>
++#include <SoundTouch.h>
+ 
+ namespace ARDOUR {
+ 
