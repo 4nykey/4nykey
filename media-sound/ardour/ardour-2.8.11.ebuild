@@ -83,7 +83,7 @@ src_compile() {
 }
 
 src_install() {
-	scons ${MAKEOPTS} install || die
+	scons install || die
 
 	doman ardour.1
 }
