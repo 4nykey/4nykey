@@ -3,7 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/media-sound/ardour/ardour-2.8.7.ebuild,v 1.2 2010/05/06 11:06:53 ssuominen Exp $
 
 EAPI=2
-inherit eutils toolchain-funcs
+inherit eutils toolchain-funcs fdo-mime gnome2-utils
 
 DESCRIPTION="Digital Audio Workstation"
 HOMEPAGE="http://ardour.org/"
@@ -54,17 +54,13 @@ pkg_nofetch() {
 	einfo "and put the file in ${DISTDIR}."
 }
 
-src_unpack() {
-	unpack ${A}
-	cd ${S}
-
+src_prepare() {
 	epatch "${FILESDIR}"/${PN}-*.diff
+	mkdir -p "${D}"
 }
 
 src_compile() {
 	tc-export CC CXX
-	mkdir -p "${D}"
-
 	scons ${MAKEOPTS} \
 		PREFIX=/usr \
 		DESTDIR="${D}" \
