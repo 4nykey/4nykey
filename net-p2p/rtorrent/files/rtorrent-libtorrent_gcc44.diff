@@ -1,0 +1,11 @@
+--- src/libtorrent/src/protocol/handshake.cc	(revision 1170)
++++ src/libtorrent/src/protocol/handshake.cc	(working copy)
+@@ -53,6 +53,8 @@
+ #include "handshake.h"
+ #include "handshake_manager.h"
+ 
++#include <cstdio>
++
+ namespace torrent {
+ 
+ const char* Handshake::m_protocol = "BitTorrent protocol";
