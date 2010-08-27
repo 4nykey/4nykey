@@ -1,0 +1,59 @@
+=== modified file 'openshot/classes/cli_render.py'
+--- openshot/classes/cli_render.py	2010-04-03 18:52:42 +0000
++++ openshot/classes/cli_render.py	2010-08-22 21:48:20 +0000
+@@ -38,10 +38,10 @@
+ 		# get the base directory of the openshot installation for all future relative references
+ 		# Note: don't rely on __file__ to be an absolute path. E.g., in the debugger (pdb) it will be
+ 		# a relative path, so use os.path.abspath()
+-		self.BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
++		self.BASE_DIR = os.path.join('/', 'usr', 'share')
+ 		self.UI_DIR = os.path.join(self.BASE_DIR, "openshot", "windows", "ui")
+ 		self.IMAGE_DIR = os.path.join(self.BASE_DIR, "openshot", "images")
+-		self.LOCALE_DIR = os.path.join(self.BASE_DIR, "openshot", "locale")
++		self.LOCALE_DIR = os.path.join(self.BASE_DIR, "locale")
+ 		self.PROFILES_DIR = os.path.join(self.BASE_DIR, "openshot", "profiles")
+ 		self.TRANSITIONS_DIR = os.path.join(self.BASE_DIR, "openshot", "transitions")
+ 		self.EXPORT_PRESETS_DIR = os.path.join(self.BASE_DIR, "openshot", "export_presets")
+
+=== modified file 'openshot/classes/project.py'
+--- openshot/classes/project.py	2010-08-19 04:43:25 +0000
++++ openshot/classes/project.py	2010-08-22 21:48:20 +0000
+@@ -41,10 +41,10 @@
+ 		# get the base directory of the openshot installation for all future relative references
+ 		# Note: don't rely on __file__ to be an absolute path. E.g., in the debugger (pdb) it will be
+ 		# a relative path, so use os.path.abspath()
+-		self.BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
++		self.BASE_DIR = os.path.join('/', 'usr', 'share')
+ 		self.UI_DIR = os.path.join(self.BASE_DIR, "openshot", "windows", "ui")
+ 		self.IMAGE_DIR = os.path.join(self.BASE_DIR, "openshot", "images")
+-		self.LOCALE_DIR = os.path.join(self.BASE_DIR, "openshot", "locale")
++		self.LOCALE_DIR = os.path.join(self.BASE_DIR, "locale")
+ 		self.PROFILES_DIR = os.path.join(self.BASE_DIR, "openshot", "profiles")
+ 		self.TRANSITIONS_DIR = os.path.join(self.BASE_DIR, "openshot", "transitions")
+ 		self.BLENDER_DIR = os.path.join(self.BASE_DIR, "openshot", "blender")
+
+=== modified file 'setup.py'
+--- setup.py	2010-05-31 21:31:32 +0000
++++ setup.py	2010-08-22 21:46:51 +0000
+@@ -48,9 +48,8 @@
+ 
+ # Add all the translations
+ locale_files = []
+-for filepath in glob.glob("openshot/locale/*/LC_MESSAGES/*"):
+-	filepath = filepath.replace('openshot/', '')
+-	locale_files.append(filepath)
++for filepath in glob.glob("openshot/locale/*/LC_MESSAGES"):
++    os_files.append((filepath.replace('openshot/','share/'), [filepath+'/OpenShot.mo']))
+ 
+ # Call the main Distutils setup command
+ # -------------------------------------
+@@ -58,8 +57,6 @@
+ 	 scripts	= ['bin/openshot','bin/openshot-render'],
+ 	 packages	 = ['openshot', 'openshot.classes', 'openshot.language', 'openshot.windows'],
+ 	 package_data = {
+-	 				'openshot' : ['export_presets/*', 'images/*', 'locale/OpenShot/*', 'locale/README', 'profiles/*', 'themes/*/*.png', 'themes/*/icons/*.png', 'titles/*/*.svg', 'transitions/*', 'effects/icons/*.png', 'effects/*.xml'] + locale_files,
+-	 				'openshot.windows' : ['ui/*.ui', 'ui/icons/*'],
+ 	 				},
+ 	 data_files = os_files,
+ 	 **info.SETUP
+
