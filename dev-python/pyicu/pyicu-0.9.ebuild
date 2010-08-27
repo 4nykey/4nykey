@@ -2,6 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+EAPI="3"
+PYTHON_DEPEND="2:2.5"
+SUPPORT_PYTHON_ABIS="1"
+#RESTRICT_PYTHON_ABIS="3.*"
+
 inherit distutils
 
 MY_PN="PyICU"
@@ -15,9 +20,9 @@ SRC_URI="http://pypi.python.org/packages/source/P/${MY_PN}/${MY_P}.tar.gz"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="doc"
+IUSE="apidocs"
 
-DEPEND="doc? ( dev-python/epydoc )"
+DEPEND="apidocs? ( dev-python/epydoc )"
 RDEPEND=">=dev-libs/icu-3.6"
 
 S="${WORKDIR}/${MY_P}"
@@ -25,7 +30,7 @@ S="${WORKDIR}/${MY_P}"
 DOCS="CHANGES CREDITS README"
 
 src_compile() {
-	if use doc; then
+	if use apidocs; then
 		epydoc --html --verbose --url="${HOMEPAGE}" --name="${MY_P}" "${MY_PN}".py \
 		|| die "Making the docs failed!"
 	fi
@@ -38,7 +43,7 @@ src_test() {
 }
 
 src_install() {
-	if use doc; then
+	if use apidocs; then
 		dohtml -r html/* || die "Installing the docs failed!"
 	fi
 	distutils_src_install

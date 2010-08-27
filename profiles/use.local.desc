@@ -24,6 +24,5 @@ media-video/transcode:graphicsmagick - Enable use of media-gfx/graphicsmagick
 media-video/transcode:mjpeg - Enables mjpegtools support
 media-video/transcode:network - Enables network streaming support
 media-video/transcode:postproc - Build with ffmpeg libpostproc support
-net-p2p/rtorrent:openssl - Use OpenSSL's SHA1 implementation
 www-client/galeon:nautilus - Enable Nautilus view component
 x11-libs/fltk:noxft - Disables fltk; use for non-english characters
