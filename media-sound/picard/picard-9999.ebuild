@@ -7,7 +7,7 @@ inherit distutils bzr
 MY_P="${P/_/}"
 DESCRIPTION="An improved rewrite/port of the Picard Tagger using Qt"
 HOMEPAGE="http://musicbrainz.org/doc/PicardQt"
-EBZR_REPO_URI="http://bazaar.launchpad.net/~musicbrainz-developers/picard/trunk"
+EBZR_REPO_URI="lp:picard/"
 
 LICENSE="GPL-2"
 SLOT="0"
