@@ -35,7 +35,6 @@ RDEPEND="
 	)
 	ladspa? ( media-libs/ladspa-sdk )
 	usb? ( dev-libs/libusb )
-	flac? ( media-libs/flac )
 	curl? ( net-misc/curl )
 	lv2? ( media-libs/slv2 )
 	media-libs/alsa-lib
