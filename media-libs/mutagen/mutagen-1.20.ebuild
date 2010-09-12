@@ -12,20 +12,24 @@ inherit distutils eutils
 DESCRIPTION="Mutagen is an audio metadata tag reader and writer implemented in pure Python."
 HOMEPAGE="http://code.google.com/p/mutagen http://pypi.python.org/pypi/mutagen"
 SRC_URI="
-http://${PN}.googlecode.com/files/${P}.tar.gz
-http://${PN}.googlecode.com/issues/attachment?aid=3511520795503940074&name=mpc-sv8-v2.patch&token=4c912efb37fb092357fa478b8e374af4 -> ${PN}-sv8.patch
+http://mutagen.googlecode.com/files/${P}.tar.gz
+http://mutagen.googlecode.com/issues/attachment?aid=3511520795503940074&name=mpc-sv8-v2.patch&token=0df4ed95fe9aff794f5b2e115016786b -> ${PN}-sv8.patch
 "
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-interix ~amd64-linux ~x86-linux"
+KEYWORDS="~amd64 ~x86"
 IUSE="test"
 
 RDEPEND=""
-DEPEND="test? (	dev-python/eyeD3
-			dev-python/pyvorbis
-			media-libs/flac[ogg]
-			media-sound/vorbis-tools )"
+DEPEND="
+	test? (
+		dev-python/eyeD3
+		dev-python/pyvorbis
+		media-libs/flac[ogg]
+		media-sound/vorbis-tools
+	)
+"
 RESTRICT_PYTHON_ABIS="3.*"
 
 DOCS="API-NOTES NEWS README TODO TUTORIAL"
