@@ -32,14 +32,13 @@ Index: src/libtorrent/src/torrent/peer/Makefile.am
 ===================================================================
 --- src/libtorrent/src/torrent/peer/Makefile.am	(revision 1092)
 +++ src/libtorrent/src/torrent/peer/Makefile.am	(working copy)
-@@ -16,8 +16,8 @@
+@@ -16,8 +16,7 @@
  
  INCLUDES = -I$(srcdir) -I$(srcdir)/.. -I$(srcdir)/../.. -I$(top_srcdir)
  
 -libtorrentincludedir = $(includedir)/torrent/peer
 -libtorrentinclude_HEADERS = \
-+dnl libtorrentincludedir = $(includedir)/torrent/peer
-+dnl libtorrentinclude_HEADERS = \
++noinst_HEADERS = \
  	client_info.h \
  	client_list.h \
  	connection_list.h \
@@ -47,14 +46,13 @@ Index: src/libtorrent/src/torrent/data/Makefile.am
 ===================================================================
 --- src/libtorrent/src/torrent/data/Makefile.am	(revision 1092)
 +++ src/libtorrent/src/torrent/data/Makefile.am	(working copy)
-@@ -23,8 +23,8 @@
+@@ -23,8 +23,7 @@
  
  INCLUDES = -I$(srcdir) -I$(srcdir)/.. -I$(srcdir)/../.. -I$(top_srcdir)
  
 -libtorrentincludedir = $(includedir)/torrent/data
 -libtorrentinclude_HEADERS = \
-+dnl libtorrentincludedir = $(includedir)/torrent/data
-+dnl libtorrentinclude_HEADERS = \
++noinst_HEADERS = \
  	block.h \
  	block_list.h \
  	block_transfer.h \
@@ -62,14 +60,13 @@ Index: src/libtorrent/src/torrent/Makefile.am
 ===================================================================
 --- src/libtorrent/src/torrent/Makefile.am	(revision 1092)
 +++ src/libtorrent/src/torrent/Makefile.am	(working copy)
-@@ -52,8 +52,8 @@
+@@ -52,8 +52,7 @@
  
  INCLUDES = -I$(srcdir) -I$(srcdir)/.. -I$(top_srcdir)
  
 -libtorrentincludedir = $(includedir)/torrent
 -libtorrentinclude_HEADERS = \
-+dnl libtorrentincludedir = $(includedir)/torrent
-+dnl libtorrentinclude_HEADERS = \
++noinst_HEADERS = \
  	bitfield.h \
  	chunk_manager.h \
  	common.h \
