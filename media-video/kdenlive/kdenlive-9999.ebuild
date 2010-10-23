@@ -3,8 +3,9 @@
 # $Header: /var/cvsroot/gentoo-x86/media-video/kdenlive/kdenlive-0.7.7.1.ebuild,v 1.4 2010/07/07 12:28:51 fauli Exp $
 
 EAPI=2
-KDE_LINGUAS="ca cs da de el es fi fr gl he hr hu it nl pl pt pt_BR ru sl tr uk
-zh"
+KDE_LINGUAS="
+ca cs da de el es fi fr gl he hr hu it nl pl pt pt_BR ru sl tr uk zh
+"
 inherit kde4-base subversion
 
 DESCRIPTION="Kdenlive! (pronounced Kay-den-live) is a Non Linear Video Editing Suite for KDE."
@@ -13,11 +14,11 @@ ESVN_REPO_URI="https://kdenlive.svn.sourceforge.net/svnroot/kdenlive/trunk/kdenl
 
 LICENSE="GPL-2"
 SLOT="4"
-KEYWORDS="amd64 ~ppc x86 ~x86-linux"
+KEYWORDS="~amd64 ~x86"
 IUSE="debug semantic-desktop"
 
 DEPEND="
-	>=media-libs/mlt-0.5.0[ffmpeg,sdl,xml,melt,qt4,kde]
+	>=media-libs/mlt-0.5.10[ffmpeg,sdl,xml,melt,qt4,kde]
 	media-video/ffmpeg[X,sdl]
 	>=kde-base/kdelibs-${KDE_MINIMAL}[semantic-desktop?]
 	!${CATEGORY}/${PN}:0
@@ -25,10 +26,8 @@ DEPEND="
 
 DOCS="AUTHORS README"
 
-src_configure() {
+pkg_setup() {
 	mycmakeargs+=(
 		$(cmake-utils_use_with semantic-desktop Nepomuk)
-		)
-
-	kde4-base_src_configure
+	)
 }
