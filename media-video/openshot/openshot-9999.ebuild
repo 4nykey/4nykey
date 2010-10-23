@@ -31,7 +31,7 @@ RDEPEND="
 "
 
 src_install() {
-	FAKEROOTKEY=1 distutils_src_install
+	distutils_src_install
 	find openshot -type f -! -iregex '.*\.[pm][yo]' -! -path '*/locale/*'|\
 		xargs tar -cf -|tar -xf - -C "${D}"/usr/share
 }

@@ -35,6 +35,14 @@
 === modified file 'setup.py'
 --- setup.py	2010-05-31 21:31:32 +0000
 +++ setup.py	2010-08-22 21:46:51 +0000
+@@ -31,6 +31,7 @@
+ if not os.getenv("FAKEROOTKEY") == None:
+ 	print "NOTICE: Detected execution in a FakeRoot so disabling calls to system update services."
+ 	ROOT = False
++ROOT = False
+ 
+ os_files = [
+ 	 # XDG application description
 @@ -48,9 +48,8 @@
  
  # Add all the translations
