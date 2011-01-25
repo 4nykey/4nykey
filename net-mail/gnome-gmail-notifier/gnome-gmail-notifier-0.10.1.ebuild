@@ -4,7 +4,7 @@
 
 EAPI=3
 
-inherit gnome2
+inherit gnome2 autotools
 
 DESCRIPTION="A Gmail Inbox Monitor for the GNOME2 desktop"
 HOMEPAGE="http://code.google.com/p/gnome-gmail-notifier/"
@@ -30,3 +30,9 @@ DEPEND="
 "
 
 DOCS="AUTHORS ChangeLog NEWS README THANKS"
+
+src_prepare() {
+	epatch "${FILESDIR}"/${PN}_*.diff
+	gnome2_src_prepare
+	eautoreconf
+}
