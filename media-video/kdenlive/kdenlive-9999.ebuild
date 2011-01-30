@@ -22,6 +22,7 @@ DEPEND="
 	>=media-libs/mlt-0.5.10[ffmpeg,sdl,xml,melt,qt4,kde]
 	media-video/ffmpeg[X,sdl]
 	>=kde-base/kdelibs-${KDE_MINIMAL}[semantic-desktop?]
+	dev-libs/qjson
 	!${CATEGORY}/${PN}:0
 "
 
