@@ -43,7 +43,7 @@ G2CONF="
 src_prepare() {
 	sed -i configure.in -e 's:libxul-embedding-unstable:libxul-embedding:'
 	git_src_prepare
-	ebegin "Running ./autogen.sh"
+	ebegin "Running autogen.sh"
 		NOCONFIGURE=y ./autogen.sh >${T}/autogen.log 2>&1
 	eend $? "autogen.sh failed. See ${T}/autogen.log for details."
 }

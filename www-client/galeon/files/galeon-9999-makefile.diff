@@ -9,3 +9,15 @@ index ff5edce..7f92c2f 100644
 +
 +galeon-main.c: galeon-dbus-client-bindings.h
 +galeon-dbus.c: galeon-type-builtins.h galeon-dbus-server-bindings.h
+diff --git a/configure.in b/configure.in
+index e422e2a..2b24722 100644
+--- a/configure.in
++++ b/configure.in
+@@ -99,6 +99,7 @@ PKG_CHECK_MODULES(GALEON_DEPENDENCY, \
+ 		  gnome-vfs-2.0 >= $GNOME_VFS_REQUIRED\
+ 		  gnome-vfs-module-2.0 >= $GNOME_VFS_REQUIRED\
+ 		  gconf-2.0 >= $GCONF_REQUIRED \
++		  dbus-glib-1 \
+ 		  $gnomedesktop_pkgs
+ 		  )
+ AC_SUBST(GALEON_DEPENDENCY_CFLAGS)
