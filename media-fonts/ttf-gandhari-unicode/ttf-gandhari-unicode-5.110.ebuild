@@ -7,21 +7,18 @@ inherit font versionator
 MY_PV="$(replace_all_version_separators -)"
 DESCRIPTION="Gandhari Unicode Roman true-type font"
 HOMEPAGE="http://andrewglass.org/fonts.php"
-SRC_URI="
-opentype? ( http://andrewglass.org/downloads/gu${MY_PV}.zip )
-!opentype? ( http://andrewglass.org/downloads/gu${MY_PV}_ttf.zip )
-"
+SRC_URI="http://andrewglass.org/downloads/gu${MY_PV}_ttf.zip"
+RESTRICT="primaryuri"
 S="${WORKDIR}"
 
 LICENSE="Aladdin GPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="opentype"
+IUSE=""
 
 DOCS="README.txt"
 DEPEND="app-arch/unzip"
 RDEPEND=""
 
 FONT_SUFFIX="ttf"
-use opentype && FONT_SUFFIX="otf"
 FONT_S="${S}"
