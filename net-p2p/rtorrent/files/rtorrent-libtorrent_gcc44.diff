@@ -9,3 +9,23 @@
  namespace torrent {
  
  const char* Handshake::m_protocol = "BitTorrent protocol";
+--- src/libtorrent/src/torrent/log_files.cc.orig	2011-03-14 12:32:23.103976144 +0200
++++ src/libtorrent/src/torrent/log_files.cc	2011-03-14 14:15:50.444446942 +0200
+@@ -40,6 +40,8 @@
+ #include <functional>
+ #include <cstring>
+ #include <fcntl.h>
++#include <fstream>
++#include <cstdio>
+ 
+ #include "rak/timer.h"
+ #include "log_files.h"
+@@ -57,7 +59,7 @@
+ 
+   m_last_update = rak::timer::current().seconds();
+ 
+-  return (m_fd = open(filename, O_WRONLY | O_CREAT | O_EXCL)) != -1;
++  return (m_fd = open(filename, O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR)) != -1;
+ }
+ 
+ void
