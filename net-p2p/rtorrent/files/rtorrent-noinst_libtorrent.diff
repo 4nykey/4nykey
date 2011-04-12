@@ -95,3 +95,16 @@ Index: src/libtorrent/Makefile.am
  
  EXTRA_DIST= \
  	autogen.sh \
+Index: src/libtorrent/src/torrent/utils/Makefile.am
+===================================================================
+--- src/libtorrent/src/torrent/utils/Makefile.am	(revision 1209)
++++ src/libtorrent/src/torrent/utils/Makefile.am	(working copy)
+@@ -12,7 +12,7 @@
+ INCLUDES = -I$(srcdir) -I$(srcdir)/.. -I$(srcdir)/../.. -I$(top_srcdir)
+ 
+ libtorrentincludedir = $(includedir)/torrent/utils
+-libtorrentinclude_HEADERS = \
++noinst_HEADERS = \
+ 	extents.h \
+ 	log_files.h \
+ 	option_strings.h \
