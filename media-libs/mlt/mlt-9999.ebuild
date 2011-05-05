@@ -20,7 +20,7 @@ mmx qt4 quicktime sdl sse sse2 vorbis xine xml lua python ruby vdpau
 " # java perl php tcl
 
 RDEPEND="
-	ffmpeg? ( >=media-video/ffmpeg-0.5[vdpau?] )
+	ffmpeg? ( virtual/ffmpeg )
 	dv? ( >=media-libs/libdv-0.104 )
 	xml? ( >=dev-libs/libxml2-2.5 )
 	vorbis? ( >=media-libs/libvorbis-1.1.2 )

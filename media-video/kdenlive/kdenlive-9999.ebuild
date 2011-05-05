@@ -9,7 +9,7 @@ ca cs da de el es fi fr gl he hr hu it nl pl pt pt_BR ru sl tr uk zh
 PREFIX="/usr"
 inherit kde4-base subversion
 
-DESCRIPTION="Kdenlive! (pronounced Kay-den-live) is a Non Linear Video Editing Suite for KDE."
+DESCRIPTION="Kdenlive! is a Non Linear Video Editing Suite for KDE."
 HOMEPAGE="http://www.kdenlive.org/"
 ESVN_REPO_URI="https://kdenlive.svn.sourceforge.net/svnroot/kdenlive/trunk/kdenlive"
 
@@ -20,7 +20,7 @@ IUSE="debug semantic-desktop"
 
 DEPEND="
 	>=media-libs/mlt-0.5.10[ffmpeg,sdl,xml,melt,qt4,kde]
-	media-video/ffmpeg[X,sdl]
+	virtual/ffmpeg[X,sdl]
 	>=kde-base/kdelibs-${KDE_MINIMAL}[semantic-desktop?]
 	dev-libs/qjson
 	!${CATEGORY}/${PN}:0
