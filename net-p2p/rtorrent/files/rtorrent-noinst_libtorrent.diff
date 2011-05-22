@@ -1,6 +1,24 @@
+Index: src/Makefile.am
+===================================================================
+--- src/Makefile.am	(revision 1230)
++++ src/Makefile.am	(working copy)
+@@ -1,4 +1,5 @@
+ SUBDIRS = \
++	libtorrent \
+ 	core \
+ 	display \
+ 	input \
+@@ -45,6 +46,7 @@
+ 	display/libsub_display.a \
+ 	input/libsub_input.a \
+ 	rpc/libsub_rpc.a \
++	libtorrent/src/libtorrent.la \
+ 	utils/libsub_utils.a
+ 
+ rtorrent_SOURCES = \
 Index: configure.ac
 ===================================================================
---- configure.ac	(revision 1092)
+--- configure.ac	(revision 1230)
 +++ configure.ac	(working copy)
 @@ -3,6 +3,7 @@
  AM_INIT_AUTOMAKE
@@ -10,69 +28,9 @@ Index: configure.ac
  
  AC_PROG_CXX
  AC_PROG_LIBTOOL
-Index: src/Makefile.am
-===================================================================
---- src/Makefile.am	(revision 1092)
-+++ src/Makefile.am	(working copy)
-@@ -1,4 +1,5 @@
- SUBDIRS = \
-+	libtorrent \
- 	core \
- 	display \
- 	input \
-@@ -14,6 +15,7 @@
- 	display/libsub_display.a \
- 	input/libsub_input.a \
- 	rpc/libsub_rpc.a \
-+	libtorrent/src/libtorrent.la \
- 	utils/libsub_utils.a
- 
- rtorrent_SOURCES = \
-Index: src/libtorrent/src/torrent/peer/Makefile.am
-===================================================================
---- src/libtorrent/src/torrent/peer/Makefile.am	(revision 1092)
-+++ src/libtorrent/src/torrent/peer/Makefile.am	(working copy)
-@@ -16,8 +16,7 @@
- 
- INCLUDES = -I$(srcdir) -I$(srcdir)/.. -I$(srcdir)/../.. -I$(top_srcdir)
- 
--libtorrentincludedir = $(includedir)/torrent/peer
--libtorrentinclude_HEADERS = \
-+noinst_HEADERS = \
- 	client_info.h \
- 	client_list.h \
- 	connection_list.h \
-Index: src/libtorrent/src/torrent/data/Makefile.am
-===================================================================
---- src/libtorrent/src/torrent/data/Makefile.am	(revision 1092)
-+++ src/libtorrent/src/torrent/data/Makefile.am	(working copy)
-@@ -23,8 +23,7 @@
- 
- INCLUDES = -I$(srcdir) -I$(srcdir)/.. -I$(srcdir)/../.. -I$(top_srcdir)
- 
--libtorrentincludedir = $(includedir)/torrent/data
--libtorrentinclude_HEADERS = \
-+noinst_HEADERS = \
- 	block.h \
- 	block_list.h \
- 	block_transfer.h \
-Index: src/libtorrent/src/torrent/Makefile.am
-===================================================================
---- src/libtorrent/src/torrent/Makefile.am	(revision 1092)
-+++ src/libtorrent/src/torrent/Makefile.am	(working copy)
-@@ -52,8 +52,7 @@
- 
- INCLUDES = -I$(srcdir) -I$(srcdir)/.. -I$(top_srcdir)
- 
--libtorrentincludedir = $(includedir)/torrent
--libtorrentinclude_HEADERS = \
-+noinst_HEADERS = \
- 	bitfield.h \
- 	chunk_manager.h \
- 	common.h \
 Index: src/libtorrent/src/Makefile.am
 ===================================================================
---- src/libtorrent/src/Makefile.am	(revision 1092)
+--- src/libtorrent/src/Makefile.am	(revision 1230)
 +++ src/libtorrent/src/Makefile.am	(working copy)
 @@ -8,7 +8,7 @@
  	tracker \
@@ -83,21 +41,51 @@ Index: src/libtorrent/src/Makefile.am
  
  libtorrent_la_LDFLAGS = -version-info $(LIBTORRENT_INTERFACE_VERSION_INFO)
  libtorrent_la_LIBADD = \
-Index: src/libtorrent/Makefile.am
+Index: src/libtorrent/src/torrent/peer/Makefile.am
 ===================================================================
---- src/libtorrent/Makefile.am	(revision 1092)
-+++ src/libtorrent/Makefile.am	(working copy)
-@@ -1,7 +1,5 @@
- SUBDIRS = src test
+--- src/libtorrent/src/torrent/peer/Makefile.am	(revision 1230)
++++ src/libtorrent/src/torrent/peer/Makefile.am	(working copy)
+@@ -17,8 +17,7 @@
  
--pkgconfigdir = $(libdir)/pkgconfig
--pkgconfig_DATA = libtorrent.pc
+ INCLUDES = -I$(srcdir) -I$(srcdir)/.. -I$(srcdir)/../.. -I$(top_srcdir)
  
- EXTRA_DIST= \
- 	autogen.sh \
+-libtorrentincludedir = $(includedir)/torrent/peer
+-libtorrentinclude_HEADERS = \
++noinst_HEADERS = \
+ 	choke_status.h \
+ 	client_info.h \
+ 	client_list.h \
+Index: src/libtorrent/src/torrent/download/Makefile.am
+===================================================================
+--- src/libtorrent/src/torrent/download/Makefile.am	(revision 1230)
++++ src/libtorrent/src/torrent/download/Makefile.am	(working copy)
+@@ -12,8 +12,7 @@
+ 
+ INCLUDES = -I$(srcdir) -I$(srcdir)/.. -I$(srcdir)/../.. -I$(top_srcdir)
+ 
+-libtorrentincludedir = $(includedir)/torrent/download
+-libtorrentinclude_HEADERS = \
++noinst_HEADERS = \
+ 	choke_group.h \
+ 	choke_queue.h \
+ 	download_manager.h \
+Index: src/libtorrent/src/torrent/data/Makefile.am
+===================================================================
+--- src/libtorrent/src/torrent/data/Makefile.am	(revision 1230)
++++ src/libtorrent/src/torrent/data/Makefile.am	(working copy)
+@@ -25,8 +25,7 @@
+ 
+ INCLUDES = -I$(srcdir) -I$(srcdir)/.. -I$(srcdir)/../.. -I$(top_srcdir)
+ 
+-libtorrentincludedir = $(includedir)/torrent/data
+-libtorrentinclude_HEADERS = \
++noinst_HEADERS = \
+ 	block.h \
+ 	block_list.h \
+ 	block_transfer.h \
 Index: src/libtorrent/src/torrent/utils/Makefile.am
 ===================================================================
---- src/libtorrent/src/torrent/utils/Makefile.am	(revision 1209)
+--- src/libtorrent/src/torrent/utils/Makefile.am	(revision 1230)
 +++ src/libtorrent/src/torrent/utils/Makefile.am	(working copy)
 @@ -12,7 +12,7 @@
  INCLUDES = -I$(srcdir) -I$(srcdir)/.. -I$(srcdir)/../.. -I$(top_srcdir)
@@ -108,3 +96,29 @@ Index: src/libtorrent/src/torrent/utils/Makefile.am
  	extents.h \
  	log_files.h \
  	option_strings.h \
+Index: src/libtorrent/src/torrent/Makefile.am
+===================================================================
+--- src/libtorrent/src/torrent/Makefile.am	(revision 1230)
++++ src/libtorrent/src/torrent/Makefile.am	(working copy)
+@@ -59,8 +59,7 @@
+ 
+ INCLUDES = -I$(srcdir) -I$(srcdir)/.. -I$(top_srcdir)
+ 
+-libtorrentincludedir = $(includedir)/torrent
+-libtorrentinclude_HEADERS = \
++noinst_HEADERS = \
+ 	bitfield.h \
+ 	chunk_manager.h \
+ 	common.h \
+Index: src/libtorrent/Makefile.am
+===================================================================
+--- src/libtorrent/Makefile.am	(revision 1230)
++++ src/libtorrent/Makefile.am	(working copy)
+@@ -1,7 +1,5 @@
+ SUBDIRS = src test
+ 
+-pkgconfigdir = $(libdir)/pkgconfig
+-pkgconfig_DATA = libtorrent.pc
+ 
+ EXTRA_DIST= \
+ 	autogen.sh \
