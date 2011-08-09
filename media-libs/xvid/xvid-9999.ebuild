@@ -11,7 +11,7 @@ ECVS_MODULE="xvidcore"
 S="${WORKDIR}/${ECVS_MODULE}/build/generic"
 
 LICENSE="GPL-2"
-SLOT="1"
+SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE="doc examples"
 
