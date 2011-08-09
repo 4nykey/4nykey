@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="3"
+EAPI="4"
 
 inherit fdo-mime gnome2-utils flag-o-matic autotools git
 
@@ -110,11 +110,9 @@ src_configure() {
 }
 
 src_install() {
-	emake DESTDIR="${D}" install || die
-	rm -f "${D}"/usr/share/doc/${PF}/COPYING*
+	emake DESTDIR="${D}" install
 	rm -f "${D}"/usr/$(get_libdir)/${PN}/*.la
-	prepalldocs
-	dodoc AUTHORS CONTRIBUTING
+	docompress -x /usr/share/doc/${PF}
 }
 
 pkg_postinst() {
