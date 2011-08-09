@@ -1,5 +1,20 @@
---- ./SConstruct.orig	2010-07-05 22:56:47.000000000 +0300
-+++ ./SConstruct	2010-07-18 17:39:42.000000000 +0300
+Index: libs/ardour/ardour/stretch.h
+===================================================================
+--- libs/ardour/ardour/stretch.h	(revision 9963)
++++ libs/ardour/ardour/stretch.h	(working copy)
+@@ -42,7 +42,7 @@
+ 
+ #else
+ 
+-#include <soundtouch/SoundTouch.h>
++#include <SoundTouch.h>
+ 
+ namespace ARDOUR {
+ 
+Index: SConstruct
+===================================================================
+--- SConstruct	(revision 9963)
++++ SConstruct	(working copy)
 @@ -47,6 +47,7 @@
      BoolVariable('DMALLOC', 'Compile and link using the dmalloc library', 0),
      BoolVariable('EXTRA_WARN', 'Compile with -Wextra, -ansi, and -pedantic.  Might break compilation.  For pedants', 0),
@@ -8,7 +23,7 @@
      BoolVariable('FREESOUND', 'Include Freesound database lookup', 0),
      BoolVariable('FPU_OPTIMIZATION', 'Build runtime checked assembler code', 1),
      BoolVariable('LIBLO', 'Compile with support for liblo library', 1),
-@@ -875,11 +876,10 @@
+@@ -901,11 +902,10 @@
                                   LIBPATH='#libs/vamp-sdk',
                                   CPPPATH='#libs/vamp-sdk')
  
@@ -21,26 +36,22 @@
      env['RUBBERBAND'] = True
      libraries['rubberband'] = LibraryInfo (LIBS='rubberband',
                                             LIBPATH='#libs/rubberband',
-@@ -1222,7 +1222,10 @@
- # timestretch libraries
- #
+@@ -1108,6 +1108,8 @@
+     libraries['soundtouch'].ParseConfig ('pkg-config --cflags --libs soundtouch-1.0')
+     # Comment the previous line and uncomment this for old versions of Debian:
+     #libraries['soundtouch'].ParseConfig ('pkg-config --cflags --libs libSoundTouch')
++    libraries['rubberband'] = LibraryInfo()
++    libraries['rubberband'].ParseConfig ('pkg-config --cflags --libs rubberband')
  
--timefx_subdirs = ['libs/soundtouch']
-+if not env['SYSLIBS']:
-+    timefx_subdirs = ['libs/soundtouch']
-+else:
-+    timefx_subdirs = []
+     libraries['appleutility'] = LibraryInfo(LIBS='libappleutility',
+                                             LIBPATH='#libs/appleutility',
+@@ -1254,6 +1256,9 @@
+ timefx_subdirs = ['libs/soundtouch']
  if env['RUBBERBAND']:
      timefx_subdirs += ['libs/rubberband']
++    env.Append(CCFLAGS="-DUSE_RUBBERBAND")
++if env['SYSLIBS']:
++    timefx_subdirs = []
  
---- ./libs/ardour/ardour/stretch.h.orig	2009-02-24 14:37:52.000000000 +0200
-+++ ./libs/ardour/ardour/stretch.h	2010-07-18 17:39:42.000000000 +0300
-@@ -42,7 +42,7 @@
- 
- #else
- 
--#include <soundtouch/SoundTouch.h>
-+#include <SoundTouch.h>
- 
- namespace ARDOUR {
- 
+ #
+ # Tools

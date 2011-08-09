@@ -1,0 +1,11 @@
+--- ardour-2.8.11/gtk2_ardour/sfdb_freesound_mootcher.cc.orig
++++ ardour-2.8.11/gtk2_ardour/sfdb_freesound_mootcher.cc
+@@ -342,7 +342,7 @@
+ {
+ 	struct MemoryStruct xml_page;
+ 	xml_page.memory = NULL;
+-	xml_page.size = NULL;
++	xml_page.size = 0;
+ 
+ 	std::string xmlFileName;
+ 	std::string audioFileName;

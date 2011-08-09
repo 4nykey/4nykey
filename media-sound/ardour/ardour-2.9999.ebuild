@@ -8,6 +8,7 @@ inherit eutils toolchain-funcs fdo-mime gnome2-utils subversion
 DESCRIPTION="Digital Audio Workstation"
 HOMEPAGE="http://ardour.org/"
 ESVN_REPO_URI="http://subversion.ardour.org/svn/ardour2/branches/2.0-ongoing"
+ESVN_PATCHES="${PN}-*.diff"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -28,6 +29,7 @@ RDEPEND="
 		dev-libs/libsigc++:2
 		dev-cpp/libgnomecanvasmm
 		soundtouch? ( media-libs/libsoundtouch )
+		!soundtouch? ( media-libs/rubberband )
 		media-libs/libsndfile
 		media-libs/vamp-plugin-sdk
 		media-libs/aubio
@@ -49,7 +51,7 @@ DEPEND="
 
 src_prepare() {
 	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
-	epatch "${FILESDIR}"/${PN}-*.diff
+	subversion_src_prepare
 	mkdir -p "${D}"
 }
 
