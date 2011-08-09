@@ -2,15 +2,15 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=3
+EAPI=4
 
 inherit gnome2-utils
 
 DESCRIPTION="AwOken - Awesome Token icon set"
 HOMEPAGE="http://gnome-look.org/content/show.php/AwOken+-+Awesome+Token+icon+set?content=126344"
 #SRC_URI="http://www.deviantart.com/download/163570862/ -> ${P}.zip"
-SRC_URI="http://fc09.deviantart.net/fs70/f/2011/020/9/f/awoken___awesome_token___1_5_by_alecive-d2pdw32.zip"
-S="${WORKDIR}/AwOken"
+SRC_URI="http://fc04.deviantart.net/fs71/f/2011/188/2/2/${PN%%-*}_by_alecive-d2pdw32.zip"
+S="${WORKDIR}/AwOken-${PV}"
 RESTRICT="primaryuri"
 
 LICENSE="CCPL-Attribution-ShareAlike-NonCommercial-3.0"
@@ -22,22 +22,22 @@ DEPEND=""
 RDEPEND="${DEPEND}"
 
 src_prepare() {
-	tar xjf AwOken.tar.bz2
+	tar xzf AwOken.tar.gz
+	tar xzf AwOkenDark.tar.gz
 	cd "${S}"
 	# broken absolute paths
-	ln -sf ../s11-folders/purple.png clear/128x128/places/s11-original/folder.png
-	ln -sf ../s11-folders/purple.png clear/24x24/places/s11-original/folder.png
-	ln -sf classy/aluminum/folder-new.png clear/24x24/places/folder-new.png
+	ln -sf ../s11-folders/purple.png AwOken/clear/24x24/places/s11-original/folder.png
+	ln -sf ../s11-folders/purple.png AwOken/clear/128x128/places/s11-original/folder.png
 }
 
 src_install() {
-	#insinto /usr/share/icons/AwOken
-	#doins -r index.theme clear extra
-	dodir /usr/share/icons/AwOken
-	cp -rpP index.theme clear extra ${ED}/usr/share/icons/AwOken
-	dodoc awoken-icon-theme-customization* .AwOkenrc
+	insinto /usr/share/icons/AwOken
+	doins -r AwOken/{index.theme,clear,extra}
+	insinto /usr/share/icons/AwOkenDark
+	doins -r AwOkenDark/{index.theme,clear,extra}
+	dodoc AwOken{,Dark}/{awoken-icon-theme-customization*,.AwOkenrc*}
 	insinto /usr/share/doc/${PF}/pdf
-	doins *.pdf
+	doins AwOken/*.pdf
 }
 
 pkg_preinst() { gnome2_icon_savelist; }
