@@ -8,8 +8,8 @@ inherit gnome2-utils
 
 DESCRIPTION="AwOken - Awesome Token icon set"
 HOMEPAGE="http://gnome-look.org/content/show.php/AwOken+-+Awesome+Token+icon+set?content=126344"
-#SRC_URI="http://www.deviantart.com/download/163570862/ -> ${P}.zip"
-SRC_URI="http://fc04.deviantart.net/fs71/f/2011/188/2/2/${PN%%-*}_by_alecive-d2pdw32.zip"
+SRC_URI="http://www.deviantart.com/download/163570862/ -> ${P}.zip"
+#SRC_URI="http://fc04.deviantart.net/fs71/f/2011/246/3/c/${PN%%-*}_by_alecive-d2pdw32.zip"
 S="${WORKDIR}/AwOken-${PV}"
 RESTRICT="primaryuri"
 
