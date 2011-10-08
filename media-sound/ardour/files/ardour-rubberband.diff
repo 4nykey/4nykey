@@ -1,19 +1,6 @@
-Index: libs/ardour/ardour/stretch.h
-===================================================================
---- libs/ardour/ardour/stretch.h	(revision 9963)
-+++ libs/ardour/ardour/stretch.h	(working copy)
-@@ -42,7 +42,7 @@
- 
- #else
- 
--#include <soundtouch/SoundTouch.h>
-+#include <SoundTouch.h>
- 
- namespace ARDOUR {
- 
 Index: SConstruct
 ===================================================================
---- SConstruct	(revision 9963)
+--- SConstruct	(revision 10031)
 +++ SConstruct	(working copy)
 @@ -47,6 +47,7 @@
      BoolVariable('DMALLOC', 'Compile and link using the dmalloc library', 0),
@@ -36,8 +23,12 @@ Index: SConstruct
      env['RUBBERBAND'] = True
      libraries['rubberband'] = LibraryInfo (LIBS='rubberband',
                                             LIBPATH='#libs/rubberband',
-@@ -1108,6 +1108,8 @@
-     libraries['soundtouch'].ParseConfig ('pkg-config --cflags --libs soundtouch-1.0')
+@@ -1105,9 +1105,11 @@
+ 
+ #    libraries['flowcanvas'] = LibraryInfo(LIBS='flowcanvas', LIBPATH='#/libs/flowcanvas', CPPPATH='#libs/flowcanvas')
+     libraries['soundtouch'] = LibraryInfo()
+-    libraries['soundtouch'].ParseConfig ('pkg-config --cflags --libs soundtouch-1.0')
++    libraries['soundtouch'].ParseConfig ('pkg-config --cflags --libs soundtouch')
      # Comment the previous line and uncomment this for old versions of Debian:
      #libraries['soundtouch'].ParseConfig ('pkg-config --cflags --libs libSoundTouch')
 +    libraries['rubberband'] = LibraryInfo()
