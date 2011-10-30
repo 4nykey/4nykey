@@ -2,12 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit git
+inherit git-2
 
 DESCRIPTION="CMus - ncurses based music player."
 HOMEPAGE="http://cmus.sourceforge.net"
 EGIT_REPO_URI="git://gitorious.org/cmus/cmus.git"
-#EGIT_PATCHES=(${FILESDIR}/${PN}*.diff)
 
 LICENSE="GPL-2"
 KEYWORDS="~x86 ~amd64"

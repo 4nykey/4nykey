@@ -4,12 +4,11 @@
 
 EAPI=3
 PYTHON_DEPEND="python? 2:2.6"
-inherit toolchain-funcs multilib python git
+inherit eutils python git-2
 
 DESCRIPTION="An open source multimedia framework, designed and developed for television broadcasting"
 HOMEPAGE="http://www.mltframework.org/"
 EGIT_REPO_URI="git://mltframework.org/mlt.git"
-EGIT_PATCHES=("${FILESDIR}"/${PN}*.patch)
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -74,7 +73,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	git_src_prepare
+	epatch "${FILESDIR}"/${PN}*.patch
 	# respect CFLAGS LDFLAGS when building shared libraries. Bug #308873
 	for x in python lua; do
 		sed -i "/mlt.so/s: -lmlt++ :& ${CFLAGS} ${LDFLAGS} :" src/swig/$x/build

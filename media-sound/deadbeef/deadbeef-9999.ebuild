@@ -4,12 +4,11 @@
 
 EAPI="4"
 
-inherit fdo-mime gnome2-utils flag-o-matic autotools git
+inherit fdo-mime gnome2-utils flag-o-matic autotools git-2
 
 EGIT_BRANCH="devel"
 EGIT_COMMIT="${EGIT_BRANCH}"
 EGIT_REPO_URI="git://deadbeef.git.sourceforge.net/gitroot/deadbeef/deadbeef"
-EGIT_BOOTSTRAP="eautoreconf"
 
 DESCRIPTION="DeaDBeeF - Ultimate Music Player For GNU/Linux"
 HOMEPAGE="http://deadbeef.sourceforge.net/"
@@ -67,7 +66,7 @@ src_prepare() {
 	sed -i "${S}"/plugins/wildmidi/wildmidiplug.c \
 		-e 's,#define DEFAULT_TIMIDITY_CONFIG ",&/usr/share/timidity/freepats/timidity.cfg:,'
 	mkdir -p ${S}/m4
-	git_src_prepare
+	eautoreconf
 }
 
 src_configure() {

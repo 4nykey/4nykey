@@ -2,7 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit git
+EAPI="4"
+inherit toolchain-funcs git-2
 
 DESCRIPTION="A collection of unix tools that nobody thought to write 30 years ago"
 HOMEPAGE="http://www.kitenet.net/~joey/code/moreutils.html"
@@ -24,8 +25,7 @@ DEPEND="
 	)
 "
 
-src_unpack() {
-	git_src_unpack
+src_prepare() {
 	sed -i *.docbook \
 		-e 's#file://.*4\.4#file:///usr/share/sgml/docbook/xml-dtd-4.4#'
 	use doc || sed -i Makefile -e '/man1/d; s:$(MANS)::'
