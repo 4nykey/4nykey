@@ -3,16 +3,16 @@
 # $Header: $
 
 EAPI="3"
-inherit python gnome2 subversion
+inherit python gnome2
 
 DESCRIPTION="SopCast Player is a Linux GUI front-end for the SopCast p2p streaming"
 HOMEPAGE="http://code.google.com/p/sopcast-player/"
-SRC_URI=""
-ESVN_REPO_URI="http://sopcast-player.googlecode.com/svn/trunk"
+SRC_URI="http://sopcast-player.googlecode.com/files/${P}.tar.gz"
+S="${WORKDIR}/${PN}"
 
 LICENSE=""
 SLOT="0"
-KEYWORDS= #"~amd64 ~x86"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RDEPEND="
