@@ -23,12 +23,8 @@ Index: SConstruct
      env['RUBBERBAND'] = True
      libraries['rubberband'] = LibraryInfo (LIBS='rubberband',
                                             LIBPATH='#libs/rubberband',
-@@ -1105,9 +1105,11 @@
- 
- #    libraries['flowcanvas'] = LibraryInfo(LIBS='flowcanvas', LIBPATH='#/libs/flowcanvas', CPPPATH='#libs/flowcanvas')
-     libraries['soundtouch'] = LibraryInfo()
--    libraries['soundtouch'].ParseConfig ('pkg-config --cflags --libs soundtouch-1.0')
-+    libraries['soundtouch'].ParseConfig ('pkg-config --cflags --libs soundtouch')
+@@ -1105,6 +1105,8 @@
+     libraries['soundtouch'].ParseConfig ('pkg-config --cflags --libs soundtouch')
      # Comment the previous line and uncomment this for old versions of Debian:
      #libraries['soundtouch'].ParseConfig ('pkg-config --cflags --libs libSoundTouch')
 +    libraries['rubberband'] = LibraryInfo()
