@@ -7,11 +7,11 @@ KDE_LINGUAS="
 ca cs da de el es fi fr gl he hr hu it nl pl pt pt_BR ru sl tr uk zh
 "
 PREFIX="/usr"
-inherit kde4-base subversion
+inherit kde4-base git-2
 
 DESCRIPTION="Kdenlive! is a Non Linear Video Editing Suite for KDE."
 HOMEPAGE="http://www.kdenlive.org/"
-ESVN_REPO_URI="https://kdenlive.svn.sourceforge.net/svnroot/kdenlive/trunk/kdenlive"
+EGIT_REPO_URI="git://anongit.kde.org/kdenlive.git"
 
 LICENSE="GPL-2"
 SLOT="4"
