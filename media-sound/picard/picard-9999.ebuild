@@ -1,25 +1,26 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/picard/picard-0.12.1-r1.ebuild,v 1.5 2011/04/10 06:14:34 tomka Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/picard/picard-0.16.ebuild,v 1.1 2011/10/24 03:59:39 radhermit Exp $
 
 EAPI="3"
 
 PYTHON_DEPEND="2"
 SUPPORT_PYTHON_ABIS="1"
+RESTRICT_PYTHON_ABIS="2.4 3.*"
 
-inherit distutils bzr
+inherit eutils distutils git-2
 
 DESCRIPTION="An improved rewrite/port of the Picard Tagger using Qt"
 HOMEPAGE="http://musicbrainz.org/doc/PicardQt"
-EBZR_REPO_URI="lp:picard/"
+EGIT_REPO_URI="git://github.com/musicbrainz/picard.git"
 SRC_URI="
-	coverart? ( http://users.musicbrainz.org/~outsidecontext/picard/plugins/coverart.py )
+	coverart? ( http://dev.gentoo.org/~radhermit/distfiles/${PN}-0.15.1-coverart.py.gz )
 "
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="cdda coverart ffmpeg nls"
+IUSE="acoustid cdda coverart ffmpeg nls"
 
 DEPEND="
 	dev-python/PyQt4[X]
@@ -27,20 +28,23 @@ DEPEND="
 	cdda? ( >=media-libs/libdiscid-0.1.1 )
 	ffmpeg? (
 		virtual/ffmpeg
-		>=media-libs/libofa-0.9.2 )"
-RDEPEND="${DEPEND}"
+		>=media-libs/libofa-0.9.2
+	)
+"
+RDEPEND="
+	${DEPEND}
+	acoustid? ( media-libs/chromaprint[examples] )
+"
 
 # doesn't work with ebuilds
 RESTRICT="test"
 
-RESTRICT_PYTHON_ABIS="2.4 3.*"
-
 DOCS="AUTHORS.txt INSTALL.txt NEWS.txt"
 
 pkg_setup() {
-	if ! use ffmpeg; then
-		ewarn "The 'ffmpeg' USE flag is disabled. Acoustic fingerprinting and"
-		ewarn "recognition will not be available."
+	if ! use ffmpeg && ! use acoustid; then
+		ewarn "The 'ffmpeg' and 'acoustid' USE flags are disabled."
+		ewarn "Acoustic fingerprinting and recognition will not be available."
 	fi
 	if ! use cdda; then
 		ewarn "The 'cdda' USE flag is disabled. CD index lookup and"
@@ -50,11 +54,15 @@ pkg_setup() {
 }
 
 src_unpack() {
-	bzr_src_unpack
+	git-2_src_unpack
+	unpack ${A}
 	if use coverart; then
-		cp "${DISTDIR}"/coverart.py "${S}"/${PN}/plugins/coverart.py || \
-			die "Copy of coverart plugin failed"
+		cp "${WORKDIR}"/${PN}-0.15.1-coverart.py "${S}"/${PN}/plugins/coverart.py || die "Copy of coverart plugin failed"
 	fi
+}
+
+src_prepare() {
+	distutils_src_prepare
 }
 
 src_configure() {
