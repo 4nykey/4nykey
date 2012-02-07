@@ -4,13 +4,11 @@
 
 EAPI=2
 
-inherit autotools subversion
+inherit autotools git-2
 
 DESCRIPTION="BitTorrent Client using libtorrent"
 HOMEPAGE="http://libtorrent.rakshasa.no/"
-ESVN_REPO_URI="svn://rakshasa.no/libtorrent/trunk/rtorrent"
-ESVN_BOOTSTRAP="eautoreconf"
-ESVN_PATCHES="${PN}-*.diff"
+EGIT_REPO_URI="git://github.com/rakshasa/rtorrent.git"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -31,8 +29,15 @@ DEPEND="
 "
 
 src_unpack() {
-	subversion_fetch
-	subversion_fetch svn://rakshasa.no/libtorrent/trunk/libtorrent src/libtorrent
+	git-2_src_unpack
+	EGIT_SOURCEDIR="${S}/src/libtorrent" \
+	EGIT_REPO_URI="git://github.com/rakshasa/libtorrent.git" \
+		git-2_src_unpack
+}
+src_prepare() {
+	epatch "${FILESDIR}"/${PN}-*.diff
+	epatch_user
+	eautoreconf
 }
 
 src_configure() {
@@ -50,5 +55,5 @@ src_configure() {
 
 src_install() {
 	emake DESTDIR="${D}" install || die
-	dodoc AUTHORS README TODO doc/rtorrent.rc
+	dodoc AUTHORS README doc/rtorrent.rc
 }
