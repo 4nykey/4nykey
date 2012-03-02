@@ -4,7 +4,7 @@
 
 EAPI=4
 
-inherit autotools toolchain-funcs git-2
+inherit autotools-utils toolchain-funcs git-2
 
 DESCRIPTION="D-Bus to offer libfprint functionality"
 HOMEPAGE="http://cgit.freedesktop.org/libfprint/fprintd/"
@@ -14,6 +14,10 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="doc pam static-libs"
+
+AUTOTOOLS_AUTORECONF="1"
+AUTOTOOLS_IN_SOURCE_BUILD="1"
+HTML_DOCS=(doc/)
 
 RDEPEND="
 	dev-libs/dbus-glib
@@ -29,36 +33,21 @@ DEPEND="
 	doc? ( dev-libs/libxml2 dev-libs/libxslt )
 "
 
-src_prepare() {
-	#cp /usr/share/gtk-doc/data/gtk-doc.make . || die
-	#sed -e '/SUBDIRS/s: po::' -i Makefile.am || die
-	glib-gettextize --copy --force >/dev/null
-	gtkdocize --copy
-	intltoolize --automake --copy --force
-	eautoreconf
-}
-
 src_configure() {
-	econf $(use_enable pam) \
-		$(use_enable static-libs static) \
+	local myeconfargs=(
+		$(use_enable pam)
+		$(use_enable static-libs static)
 		$(use_enable doc gtk-doc-html)
+	)
+	autotools-utils_src_configure
 }
 
 src_install() {
-	emake DESTDIR="${D}" install \
+	autotools-utils_src_install \
 		pammoddir=/$(get_libdir)/security
+	use doc && dohtml -a xml -r "${HTML_DOCS[@]}"
 
 	keepdir /var/lib/fprint
-
-	find "${D}" -name "*.la" -delete || die
-
-	dodoc AUTHORS ChangeLog NEWS README TODO
-	if use doc ; then
-		insinto /usr/share/doc/${PF}/html
-		doins doc/{fprintd-docs,version}.xml
-		insinto /usr/share/doc/${PF}/html/dbus
-		doins doc/dbus/net.reactivated.Fprint.{Device,Manager}.ref.xml
-	fi
 }
 
 pkg_postinst() {

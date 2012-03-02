@@ -4,7 +4,7 @@
 
 EAPI=4
 
-inherit autotools subversion
+inherit subversion autotools-utils
 
 DESCRIPTION="high performance/quality MPEG-4 video de-/encoding solution"
 HOMEPAGE="http://www.xvid.org/"
@@ -12,37 +12,41 @@ ESVN_REPO_URI="http://svn.xvid.org/trunk/xvidcore"
 ESVN_USER="anonymous"
 ESVN_PASSWORD=""
 ESVN_OPTIONS="--non-interactive"
-ESVN_PATCHES="${PN}-*.patch"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE="doc examples +threads"
 
+AUTOTOOLS_AUTORECONF="1"
+AUTOTOOLS_IN_SOURCE_BUILD="1"
+PATCHES=("${FILESDIR}"/${PN}*.patch)
+ECONF_SOURCE="${S}/build/generic"
+
 DEPEND="
 	|| ( dev-lang/yasm dev-lang/nasm )
 "
 
 src_prepare() {
-	subversion_bootstrap
 	cd "${S}"/build/generic
-	eautoreconf
+	autotools-utils_autoreconf
 	automake --add-missing --copy > /dev/null 2>&1
 }
 
 src_configure() {
-	cd "${S}"/build/generic
-	econf $(use_enable threads pthread)
+	local myeconfargs=(
+		$(use_enable threads pthread)
+	)
+	autotools-utils_src_configure
 }
 
 src_compile() {
-	emake -C "${S}"/build/generic || die
+	autotools-utils_src_compile
 	use examples && emake -C "${S}"/examples || die
 }
 
 src_install() {
-	emake DESTDIR="${D}" -C "${S}"/build/generic install || die
-	dodoc AUTHORS ChangeLog* CodingStyle README TODO
+	autotools-utils_src_install
 
 	use examples && dobin examples/xvid_{encraw,decraw,bench}
 

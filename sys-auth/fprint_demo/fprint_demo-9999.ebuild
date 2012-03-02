@@ -4,17 +4,18 @@
 
 EAPI=4
 
-inherit autotools git-2
+inherit git-2 autotools-utils
 
 DESCRIPTION="a simple GTK+ application to demonstrate and test libfprint's capabilities"
 HOMEPAGE="http://www.reactivated.net/fprint/wiki/Fprint_demo"
 EGIT_REPO_URI="git://github.com/dsd/fprint_demo.git"
-EGIT_BOOTSTRAP="eautoreconf"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
+
+AUTOTOOLS_AUTORECONF="1"
 
 RDEPEND="
 	sys-auth/libfprint
@@ -24,9 +25,3 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 "
-
-src_install() {
-	#emake DESTDIR="${D}" install || die
-	einstall
-	dodoc AUTHORS NEWS README
-}

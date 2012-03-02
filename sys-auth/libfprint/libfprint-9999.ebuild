@@ -4,7 +4,7 @@
 
 EAPI=4
 
-inherit autotools git-2
+inherit git-2 autotools-utils
 
 DESCRIPTION="library to add support for consumer fingerprint readers"
 HOMEPAGE="http://cgit.freedesktop.org/libfprint/libfprint/"
@@ -14,6 +14,8 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="debug static-libs vfs301"
+
+AUTOTOOLS_AUTORECONF="1"
 
 RDEPEND="
 	dev-libs/glib:2
@@ -41,18 +43,13 @@ src_prepare() {
 		mv vfs301/{libfprint/vfs301.c,cli/vfs301_*.*} libfprint/drivers
 		epatch vfs301/libfprint/integrate_vfs301.patch
 	fi
-	mkdir m4 || die
-	eautoreconf
+	autotools-utils_src_prepare
 }
 
 src_configure() {
-	econf \
-		$(use_enable debug debug-log) \
+	local myeconfargs=(
+		$(use_enable debug debug-log)
 		$(use_enable static-libs static)
-}
-
-src_install() {
-	emake DESTDIR="${D}" install
-	use static-libs || find "${D}" -name "*.la" -delete
-	dodoc AUTHORS HACKING NEWS README THANKS TODO
+	)
+	autotools-utils_src_configure
 }

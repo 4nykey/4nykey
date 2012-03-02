@@ -4,7 +4,7 @@
 
 EAPI="4"
 
-inherit fdo-mime gnome2-utils flag-o-matic autotools git-2
+inherit fdo-mime gnome2-utils flag-o-matic git-2 autotools-utils
 
 EGIT_BRANCH="devel"
 EGIT_COMMIT="${EGIT_BRANCH}"
@@ -65,53 +65,54 @@ DEPEND="
 src_prepare() {
 	sed -i "${S}"/plugins/wildmidi/wildmidiplug.c \
 		-e 's,#define DEFAULT_TIMIDITY_CONFIG ",&/usr/share/timidity/freepats/timidity.cfg:,'
-	mkdir -p ${S}/m4
-	eautoreconf
+	autotools-utils_autoreconf
 }
 
 src_configure() {
 	local _thr_impl="posix"
 	use pth && _thr_impl="pth"
-	econf \
-		$(use_enable nls) \
-		$(use_enable threads threads ${_thr_impl}) \
-		$(use_enable alsa) \
-		$(use_enable oss) \
-		$(use_enable pulseaudio pulse) \
-		$(use_enable gtk gtkui) \
-		$(use_enable network vfs-curl) \
-		$(use_enable network lfm) \
-		$(use_enable cover artwork) \
-		$(use_enable sid) \
-		$(use_enable mad) \
-		$(use_enable mac ffap) \
-		$(use_enable adplug) \
-		$(use_enable X hotkeys) \
-		$(use_enable vorbis) \
-		$(use_enable ffmpeg) \
-		$(use_enable flac) \
-		$(use_enable sndfile) \
-		$(use_enable wavpack) \
-		$(use_enable cdda ) \
-		$(use_enable gme) \
-		$(use_enable libnotify notify) \
-		$(use_enable musepack) \
-		$(use_enable midi wildmidi) \
-		$(use_enable tta) \
-		$(use_enable dts dca) \
-		$(use_enable aac) \
-		$(use_enable mms) \
-		$(use_enable libsamplerate src) \
-		$(use_enable zip vfs-zip) \
-		--docdir="/usr/share/doc/${PF}" \
-		--disable-dependency-tracking \
+	local myeconfargs=(
+		$(use_enable nls)
+		$(use_enable threads threads ${_thr_impl})
+		$(use_enable alsa)
+		$(use_enable oss)
+		$(use_enable pulseaudio pulse)
+		$(use_enable gtk gtkui)
+		$(use_enable network vfs-curl)
+		$(use_enable network lfm)
+		$(use_enable cover artwork)
+		$(use_enable sid)
+		$(use_enable mad)
+		$(use_enable mac ffap)
+		$(use_enable adplug)
+		$(use_enable X hotkeys)
+		$(use_enable vorbis)
+		$(use_enable ffmpeg)
+		$(use_enable flac)
+		$(use_enable sndfile)
+		$(use_enable wavpack)
+		$(use_enable cdda )
+		$(use_enable gme)
+		$(use_enable libnotify notify)
+		$(use_enable musepack)
+		$(use_enable midi wildmidi)
+		$(use_enable tta)
+		$(use_enable dts dca)
+		$(use_enable aac)
+		$(use_enable mms)
+		$(use_enable libsamplerate src)
+		$(use_enable zip vfs-zip)
+		--docdir="/usr/share/doc/${PF}"
+		--disable-dependency-tracking
 		--disable-static
+	)
+	autotools-utils_src_configure
 }
 
 src_install() {
-	emake DESTDIR="${D}" install
-	rm -f "${D}"/usr/$(get_libdir)/${PN}/*.la
+	autotools-utils_src_install
 	docompress -x /usr/share/doc/${PF}
+	remove_libtool_files all
 }
 
 pkg_postinst() {

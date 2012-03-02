@@ -2,24 +2,25 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="2"
+EAPI="4"
 
-inherit autotools subversion
+inherit subversion autotools-utils
 
 DESCRIPTION="Fbi IMproved is a framebuffer image viewer based on Fbi and inspired from Vim"
 HOMEPAGE="http://www.autistici.org/dezperado/fim"
 ESVN_REPO_URI="http://code.autistici.org/svn/fim/trunk"
-ESVN_PATCHES="${PN}-*.diff"
-ESVN_BOOTSTRAP="eautoreconf"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-
 IUSE="
 debug gif jpeg png tiff postscript screen imagemagick xcf svg xfig dia
 readline fbcon aalib libcaca djvu pdf sdl
 "
+
+AUTOTOOLS_AUTORECONF="1"
+AUTOTOOLS_IN_SOURCE_BUILD="1"
+PATCHES=("${FILESDIR}"/${PN}*.diff)
 
 DEPEND="
 	gif? ( media-libs/giflib )
@@ -50,31 +51,29 @@ DEPEND="
 "
 
 src_configure() {
-	econf \
-		$(use_enable debug) \
-		$(use_enable gif) \
-		$(use_enable jpeg) \
-		$(use_enable png) \
-		$(use_enable tiff) \
-		$(use_enable screen) \
-		$(use_enable imagemagick convert) \
-		$(use_enable xcf xcftopnm) \
-		$(use_enable svg inkscape) \
-		$(use_enable xfig) \
-		$(use_enable dia) \
-		$(use_enable fbcon framebuffer) \
-		$(use_enable readline) \
-		$(use_enable postscript ps) \
-		$(use_enable djvu) \
-		$(use_enable pdf poppler) \
-		$(use_enable pdf) \
-		$(use_enable sdl) \
-		$(use_enable aalib aa) \
-		--enable-fimrc \
-		--enable-recursive-dirs \
+	local myeconfargs=(
+		$(use_enable debug)
+		$(use_enable gif)
+		$(use_enable jpeg)
+		$(use_enable png)
+		$(use_enable tiff)
+		$(use_enable screen)
+		$(use_enable imagemagick convert)
+		$(use_enable xcf xcftopnm)
+		$(use_enable svg inkscape)
+		$(use_enable xfig)
+		$(use_enable dia)
+		$(use_enable fbcon framebuffer)
+		$(use_enable readline)
+		$(use_enable postscript ps)
+		$(use_enable djvu)
+		$(use_enable pdf poppler)
+		$(use_enable pdf)
+		$(use_enable sdl)
+		$(use_enable aalib aa)
+		--enable-fimrc
+		--enable-recursive-dirs
 		--docdir=/usr/share/doc/${PF}
-}
-
-src_install() {
-	emake DESTDIR="${D}" install || die "emake install failed"
+	)
+	autotools-utils_src_configure
 }
