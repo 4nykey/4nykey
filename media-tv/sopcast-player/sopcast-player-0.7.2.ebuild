@@ -16,6 +16,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RDEPEND="
+	dev-python/pygtk:2
 	net-p2p/sopcast
 	media-video/vlc
 "
