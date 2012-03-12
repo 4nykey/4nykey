@@ -38,7 +38,7 @@ src_unpack() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}"/${PN}-fixes.diff
+	epatch "${FILESDIR}"/${PN}*.diff
 }
 
 src_install() {
