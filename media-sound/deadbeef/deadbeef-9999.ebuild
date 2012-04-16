@@ -44,7 +44,7 @@ RDEPEND="
 	sndfile? ( media-libs/libsndfile )
 	network? ( net-misc/curl )
 	cdda? ( dev-libs/libcdio media-libs/libcddb )
-	gtk? ( x11-libs/gtk+:2 )
+	gtk? ( x11-libs/gtkglext )
 	X? ( x11-libs/libX11 )
 	pulseaudio? ( media-sound/pulseaudio )
 	cover? ( media-libs/imlib2 )
