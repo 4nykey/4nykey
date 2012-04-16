@@ -1,9 +1,9 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/ardour/ardour-2.8.7.ebuild,v 1.2 2010/05/06 11:06:53 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/ardour/ardour-2.8.12.ebuild,v 1.2 2011/09/28 22:48:16 ssuominen Exp $
 
-EAPI=2
-inherit eutils toolchain-funcs fdo-mime gnome2-utils subversion
+EAPI=4
+inherit eutils toolchain-funcs fdo-mime gnome2-utils scons-utils subversion
 
 DESCRIPTION="Digital Audio Workstation"
 HOMEPAGE="http://ardour.org/"
@@ -44,7 +44,6 @@ DEPEND="
 	${RDEPEND}
 	dev-libs/boost
 	dev-util/pkgconfig
-	dev-util/scons
 	nls? ( sys-devel/gettext )
 	usb? ( virtual/os-headers )
 "
@@ -57,29 +56,28 @@ src_prepare() {
 
 src_compile() {
 	tc-export CC CXX
-	scons ${MAKEOPTS} \
+	escons \
 		PREFIX=/usr \
 		DESTDIR="${D}" \
+		$(use_scons !bundled-libs SYSLIBS) \
+		$(use_scons debug DEBUG) \
+		$(use_scons nls NLS) \
+		$(use_scons fftw FFT_ANALYSIS) \
+		$(use_scons !soundtouch RUBBERBAND) \
+		$(use_scons osc LIBLO) \
+		$(use_scons usb SURFACES) \
+		$(use_scons sse FPU_OPTIMIZATION) \
+		$(use_scons curl FREESOUND) \
+		$(use_scons lv2 LV2) \
 		FREEDESKTOP=1 \
 		VST=0 \
 		CMT=0 \
 		GTK=1 \
-		KSI=1 \
-		$(use bundled-libs; echo SYSLIBS=$?) \
-		$(use !debug; echo DEBUG=$?) \
-		$(use !nls; echo NLS=$?) \
-		$(use !fftw; echo FFT_ANALYSIS=$?) \
-		$(use soundtouch; echo RUBBERBAND=$?) \
-		$(use !osc; echo LIBLO=$?) \
-		$(use !usb; echo SURFACES=$?) \
-		$(use !sse; echo FPU_OPTIMIZATION=$?) \
-		$(use !curl; echo FREESOUND=$?) \
-		$(use !lv2; echo LV2=$?) \
-		|| die
+		KSI=1
 }
 
 src_install() {
-	scons install || die
+	escons install
 
 	doman ardour.1
 }
