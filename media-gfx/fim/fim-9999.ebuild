@@ -24,7 +24,7 @@ PATCHES=("${FILESDIR}"/${PN}*.diff)
 
 DEPEND="
 	gif? ( media-libs/giflib )
-	jpeg? ( >=media-libs/jpeg-6b )
+	jpeg? ( virtual/jpeg )
 	png? ( media-libs/libpng )
 	tiff? ( media-libs/tiff )
 	postscript? ( app-text/libspectre )

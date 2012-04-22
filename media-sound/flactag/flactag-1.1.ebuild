@@ -22,7 +22,7 @@ RDEPEND="
 	sys-libs/slang
 	net-libs/neon
 	app-text/unac
-	media-libs/jpeg
+	virtual/jpeg
 "
 DEPEND="
 	${RDEPEND}
