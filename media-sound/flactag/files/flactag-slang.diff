@@ -1,0 +1,26 @@
+diff --git a/Makefile.am b/Makefile.am
+index cf0863e..b522f78 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -20,7 +20,7 @@ AM_CPPFLAGS += @DEP_ALL_CFLAGS@ @DEP_FLACTAG_CFLAGS@
+ #AM_LDFLAGS = -ldiscid
+ 
+ bin_PROGRAMS = flactag discid
+-flactag_LDADD = @DEP_ALL_LIBS@ @DEP_FLACTAG_LIBS@
++flactag_LDADD = @DEP_ALL_LIBS@ @DEP_FLACTAG_LIBS@ -lslang
+ #flactag_CFLAGS = -I/usr/include/neon
+ flactag_SOURCES = flactag.cc Album.cc Track.cc AlbumWindow.cc TrackWindow.cc FlacInfo.cc TagName.cc TagsWindow.cc CuesheetTrack.cc Cuesheet.cc DiscIDWrapper.cc base64.cc ScrollableWindow.cc ConfigFile.cc MusicBrainzInfo.cc FileNameBuilder.cc ErrorLog.cc CommandLine.cc CoverArt.cc UTF8Tag.cc WriteInfo.cc
+ discid_LDADD = @DEP_ALL_LIBS@
+diff --git a/configure.ac b/configure.ac
+index 03d0061..6cf880b 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -24,7 +24,7 @@ AC_PROG_LIBTOOL
+ AC_PROG_LN_S
+ 
+ PKG_CHECK_MODULES([DEP_ALL], [libdiscid])
+-PKG_CHECK_MODULES([DEP_FLACTAG], [neon slang libmusicbrainz4 flac++ unac])
++PKG_CHECK_MODULES([DEP_FLACTAG], [neon libmusicbrainz4 flac++ unac])
+ AC_SEARCH_LIBS([jpeg_read_header], jpeg, , [
+      AC_MSG_ERROR([unable to find jpeg_read_header, install libjpeg-dev and/or set CPPFLAGS/LDFLAGS])
+ ])
