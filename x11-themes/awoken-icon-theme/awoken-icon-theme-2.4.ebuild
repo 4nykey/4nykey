@@ -29,12 +29,6 @@ src_unpack() {
 	unpack ${t}
 }
 
-src_prepare() {
-	# broken absolute paths
-	ln -sf ../s11-folders/purple.png ${MY_PN}/clear/24x24/places/s11-original/folder.png
-	ln -sf ../s11-folders/purple.png ${MY_PN}/clear/128x128/places/s11-original/folder.png
-}
-
 src_install() {
 	local d
 	find . -mindepth 1 -maxdepth 1 -type d|while read d; do
