@@ -8,6 +8,7 @@ inherit python gnome2
 DESCRIPTION="SopCast Player is a Linux GUI front-end for the SopCast p2p streaming"
 HOMEPAGE="http://code.google.com/p/sopcast-player/"
 SRC_URI="http://sopcast-player.googlecode.com/files/${P}.tar.gz"
+RESTRICT="primaryuri"
 S="${WORKDIR}/${PN}"
 
 LICENSE=""
