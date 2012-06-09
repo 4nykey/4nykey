@@ -1,35 +1,41 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/kdenlive/kdenlive-0.7.7.1.ebuild,v 1.4 2010/07/07 12:28:51 fauli Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/kdenlive/kdenlive-0.9.2.ebuild,v 1.1 2012/05/31 11:08:21 scarabeus Exp $
 
-EAPI=3
+EAPI=4
 KDE_LINGUAS="
-ca cs da de el es fi fr gl he hr hu it nl pl pt pt_BR ru sl tr uk zh
+ca cs da de el es et fi fr ga gl he hr hu it ja lt nb nds nl pl pt pt_BR ru sk
+sl sv tr uk zh zh_CN zh_TW
 "
-PREFIX="/usr"
+KDE_HANDBOOK="optional"
+OPENGL_REQUIRED="always"
 inherit kde4-base git-2
 
-DESCRIPTION="Kdenlive! is a Non Linear Video Editing Suite for KDE."
+DESCRIPTION="Kdenlive! (pronounced Kay-den-live) is a Non Linear Video Editing Suite for KDE."
 HOMEPAGE="http://www.kdenlive.org/"
-EGIT_REPO_URI="git://anongit.kde.org/kdenlive.git"
+EGIT_REPO_URI="git://anongit.kde.org/kdenlive"
 
 LICENSE="GPL-2"
 SLOT="4"
 KEYWORDS="~amd64 ~x86"
 IUSE="debug semantic-desktop"
 
-DEPEND="
-	>=media-libs/mlt-0.5.10[ffmpeg,sdl,xml,melt,qt4,kde]
-	virtual/ffmpeg[X,sdl]
-	>=kde-base/kdelibs-${KDE_MINIMAL}[semantic-desktop?]
+RDEPEND="
 	dev-libs/qjson
-	!${CATEGORY}/${PN}:0
+	>=media-libs/mlt-0.7.8[ffmpeg,sdl,xml,melt,qt4,kde]
+	virtual/ffmpeg[encode,sdl,X]
+	$(add_kdebase_dep kdelibs 'semantic-desktop?')
+"
+DEPEND="
+	${RDEPEND}
 "
 
-DOCS="AUTHORS README"
+DOCS=( AUTHORS ChangeLog README TODO )
 
-pkg_setup() {
-	mycmakeargs+=(
+src_configure() {
+	local mycmakeargs=(
 		$(cmake-utils_use_with semantic-desktop Nepomuk)
 	)
+
+	kde4-base_src_configure
 }
