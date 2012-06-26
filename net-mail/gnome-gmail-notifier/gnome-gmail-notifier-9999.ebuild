@@ -25,7 +25,7 @@ RDEPEND="
 	x11-libs/libnotify
 	net-libs/libsoup
 	dev-libs/libxml2
-	media-libs/gstreamer
+	media-libs/gst-plugins-good
 	gnome-base/libgnome-keyring
 	dbus? ( dev-libs/dbus-glib )
 	networkmanager? ( net-misc/networkmanager )
@@ -45,5 +45,5 @@ src_configure() {
 		$(use_enable networkmanager nm)
 		$(use_enable nls)
 	)
-	autotools-utils_src_configure
+	GST_INSPECT="$(type -P true)" autotools-utils_src_configure
 }

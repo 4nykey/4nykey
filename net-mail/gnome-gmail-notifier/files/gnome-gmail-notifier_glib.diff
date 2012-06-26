@@ -1,0 +1,10 @@
+--- ./src/main.h.orig	2012-06-26 06:53:19.000000000 +0300
++++ ./src/main.h	2012-06-26 06:53:19.096568374 +0300
+@@ -50,7 +50,6 @@
+  * this includes the gthread header and the pthread
+  * header.
+  */
+-#include <glib/gthread.h>
+ #include <pthread.h>
+ 
+ /*
