@@ -16,7 +16,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="gcrypt"
 
 RDEPEND="
-	media-libs/musicbrainz:4
+	media-libs/musicbrainz:5
 	media-libs/libdiscid
 	media-libs/flac[cxx]
 	sys-libs/slang
