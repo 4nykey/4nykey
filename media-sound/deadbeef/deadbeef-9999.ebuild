@@ -62,10 +62,12 @@ DEPEND="
 	oss? ( virtual/libc )
 "
 
+AUTOTOOLS_AUTORECONF="1"
+
 src_prepare() {
 	sed -i "${S}"/plugins/wildmidi/wildmidiplug.c \
 		-e 's,#define DEFAULT_TIMIDITY_CONFIG ",&/usr/share/timidity/freepats/timidity.cfg:,'
-	autotools-utils_autoreconf
+	autotools-utils_src_prepare
 }
 
 src_configure() {
@@ -113,6 +115,10 @@ src_install() {
 	autotools-utils_src_install
 	docompress -x /usr/share/doc/${PF}
 	remove_libtool_files all
+}
+
+pkg_preinst() {
+	use gtk && gnome2_icon_savelist
 }
 
 pkg_postinst() {

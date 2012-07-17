@@ -20,7 +20,6 @@ IUSE="doc examples +threads"
 
 AUTOTOOLS_AUTORECONF="1"
 AUTOTOOLS_IN_SOURCE_BUILD="1"
-PATCHES=("${FILESDIR}"/${PN}*.patch)
 ECONF_SOURCE="${S}/build/generic"
 
 DEPEND="
@@ -29,7 +28,7 @@ DEPEND="
 
 src_prepare() {
 	cd "${S}"/build/generic
-	autotools-utils_autoreconf
+	autotools-utils_src_prepare
 	automake --add-missing --copy > /dev/null 2>&1
 }
 
