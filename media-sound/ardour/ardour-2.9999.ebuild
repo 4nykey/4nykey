@@ -11,10 +11,10 @@ ESVN_REPO_URI="http://subversion.ardour.org/svn/ardour2/branches/2.0-ongoing"
 ESVN_PATCHES="${PN}-*.diff"
 
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="2"
 KEYWORDS="~x86 ~amd64"
 IUSE="
-nls debug sse fftw osc ladspa bundled-libs usb curl lv2 gnome soundtouch
+nls debug sse fftw ladspa bundled-libs usb curl lv2 soundtouch
 "
 
 RDEPEND="
@@ -24,7 +24,7 @@ RDEPEND="
 	media-sound/jack-audio-connection-kit
 	dev-libs/libxml2
 	dev-libs/libxslt
-	osc? ( media-libs/liblo )
+	media-libs/liblo
 	!bundled-libs? (
 		dev-libs/libsigc++:2
 		dev-cpp/libgnomecanvasmm
@@ -64,7 +64,6 @@ src_compile() {
 		$(use_scons nls NLS) \
 		$(use_scons fftw FFT_ANALYSIS) \
 		$(use_scons !soundtouch RUBBERBAND) \
-		$(use_scons osc LIBLO) \
 		$(use_scons usb SURFACES) \
 		$(use_scons sse FPU_OPTIMIZATION) \
 		$(use_scons curl FREESOUND) \
@@ -82,14 +81,18 @@ src_install() {
 	doman ardour.1
 }
 
+pkg_preinst() {
+	gnome2_icon_savelist
+}
+
 pkg_postinst() {
 	fdo-mime_desktop_database_update
 	fdo-mime_mime_database_update
-	use gnome && gnome2_icon_cache_update
+	gnome2_icon_cache_update
 }
 
 pkg_postrm() {
 	fdo-mime_desktop_database_update
 	fdo-mime_mime_database_update
-	use gnome && gnome2_icon_cache_update
+	gnome2_icon_cache_update
 }

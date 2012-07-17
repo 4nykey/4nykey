@@ -5,7 +5,7 @@
      BoolVariable('EXTRA_WARN', 'Compile with -Wextra, -ansi, and -pedantic.  Might break compilation.  For pedants', 0),
      BoolVariable('FFT_ANALYSIS', 'Include FFT analysis window', 1),
 +    BoolVariable('RUBBERBAND', 'Use rubberband instead of soundtouch for timefx', 1),
-     BoolVariable('FREESOUND', 'Include Freesound database lookup', 0),
+     BoolVariable('FREESOUND', 'Include Freesound database lookup', 1),
      BoolVariable('FPU_OPTIMIZATION', 'Build runtime checked assembler code', 1),
      BoolVariable('LIBLO', 'Compile with support for liblo library', 1),
 @@ -923,11 +924,10 @@
