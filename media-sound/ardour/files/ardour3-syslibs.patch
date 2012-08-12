@@ -2,7 +2,7 @@ Index: wscript
 ===================================================================
 --- wscript	(revision 13053)
 +++ wscript	(working copy)
-@@ -19,17 +19,12 @@
+@@ -19,11 +19,7 @@
          'libs/pbd',
          'libs/midi++2',
          'libs/evoral',
@@ -14,12 +14,6 @@ Index: wscript
          'libs/surfaces',
          'libs/panners',
          'libs/timecode',
-         'libs/ardour',
-         'libs/gtkmm2ext',
--        'libs/clearlooks-newer',
-         'libs/audiographer',
-         'gtk2_ardour',
-         'templates',
 Index: libs/ardour/wscript
 ===================================================================
 --- libs/ardour/wscript	(revision 13053)

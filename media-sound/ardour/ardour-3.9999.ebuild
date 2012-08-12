@@ -14,7 +14,7 @@ ESVN_PATCHES="${PN}${SLOT}-*.diff"
 LICENSE=""
 SLOT="3"
 KEYWORDS="~amd64"
-IUSE="bindist debug lv2 nls sse"
+IUSE="bindist debug lv2 nls osc sse"
 
 RDEPEND="
 	dev-cpp/libgnomecanvasmm
@@ -24,6 +24,7 @@ RDEPEND="
 	media-libs/aubio
 	media-libs/flac
 	media-libs/fontconfig
+	osc? ( media-libs/liblo )
 	media-libs/liblrdf
 	media-libs/libogg
 	media-libs/libsamplerate
@@ -48,6 +49,7 @@ my_use() {
 
 src_prepare() {
 	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
+	sed -e '/libs\/clearlooks-newer/d' -i wscript
 	subversion_src_prepare
 }
 
