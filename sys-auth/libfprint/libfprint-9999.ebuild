@@ -40,7 +40,6 @@ src_unpack() {
 
 src_prepare() {
 	if use vfs301; then
-		mv vfs301/{libfprint/vfs301.c,cli/vfs301_*.*} libfprint/drivers
 		epatch vfs301/libfprint/integrate_vfs301.patch
 	fi
 	autotools-utils_src_prepare
