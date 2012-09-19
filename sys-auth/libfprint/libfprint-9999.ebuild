@@ -13,7 +13,7 @@ EGIT_REPO_URI="git://anongit.freedesktop.org/libfprint/libfprint"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="debug static-libs vfs301"
+IUSE="debug static-libs"
 
 AUTOTOOLS_AUTORECONF="1"
 
@@ -28,22 +28,6 @@ DEPEND="
 	${RDEPEND}
 	dev-util/pkgconfig
 "
-
-src_unpack() {
-	git-2_src_unpack
-	if use vfs301; then
-		EGIT_SOURCEDIR="${S}/vfs301" \
-		EGIT_REPO_URI="git://github.com/andree182/vfs301.git" \
-			git-2_src_unpack
-	fi
-}
-
-src_prepare() {
-	if use vfs301; then
-		epatch vfs301/libfprint/integrate_vfs301.patch
-	fi
-	autotools-utils_src_prepare
-}
 
 src_configure() {
 	local myeconfargs=(
