@@ -1,26 +1,28 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-sound/picard/picard-0.16.ebuild,v 1.1 2011/10/24 03:59:39 radhermit Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/picard/picard-1.0.ebuild,v 1.1 2012/07/12 15:29:33 yngwin Exp $
 
-EAPI="3"
+EAPI=4
 
-PYTHON_DEPEND="2"
+PYTHON_DEPEND="2:2.5"
 SUPPORT_PYTHON_ABIS="1"
 RESTRICT_PYTHON_ABIS="2.4 3.*"
 
-inherit eutils distutils git-2
+PLOCALES="
+af ar ast bg ca cs cy da de el en_CA en_GB en eo es et fa fi fo fr_CA fr fy gl
+he hi hu id is it ja kn ko lt nb nds nl oc pl pt_BR pt ro ru sco sk sl sr sv ta
+tr uk zh_CN
+"
+inherit eutils distutils l10n git-2
 
 DESCRIPTION="An improved rewrite/port of the Picard Tagger using Qt"
 HOMEPAGE="http://musicbrainz.org/doc/PicardQt"
 EGIT_REPO_URI="git://github.com/musicbrainz/picard.git"
-SRC_URI="
-	coverart? ( http://dev.gentoo.org/~radhermit/distfiles/${PN}-0.15.1-coverart.py.gz )
-"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="acoustid cdda coverart ffmpeg nls"
+IUSE="acoustid cdda ffmpeg nls"
 
 DEPEND="
 	dev-python/PyQt4[X]
@@ -39,11 +41,15 @@ RDEPEND="
 # doesn't work with ebuilds
 RESTRICT="test"
 
-DOCS="AUTHORS.txt INSTALL.txt NEWS.txt"
+DOCS="AUTHORS.txt NEWS.txt"
+
+myloc() {
+	sed -e "s:[#]*\((u'${2}',\):${1}\1:" -i picard/const.py
+}
 
 pkg_setup() {
-	if ! use ffmpeg && ! use acoustid; then
-		ewarn "The 'ffmpeg' and 'acoustid' USE flags are disabled."
+	if ! use acoustid && ! use ffmpeg; then
+		ewarn "The 'acoustid' and 'ffmpeg' USE flag are disabled."
 		ewarn "Acoustic fingerprinting and recognition will not be available."
 	fi
 	if ! use cdda; then
@@ -51,17 +57,12 @@ pkg_setup() {
 		ewarn "identification will not be available. You can get audio CD support"
 		ewarn "by installing media-libs/libdiscid."
 	fi
-}
-
-src_unpack() {
-	git-2_src_unpack
-	unpack ${A}
-	if use coverart; then
-		cp "${WORKDIR}"/${PN}-0.15.1-coverart.py "${S}"/${PN}/plugins/coverart.py || die "Copy of coverart plugin failed"
-	fi
+	python_pkg_setup
 }
 
 src_prepare() {
+	l10n_for_each_locale_do myloc ''
+	l10n_for_each_disabled_locale_do myloc '#'
 	distutils_src_prepare
 }
 
@@ -82,8 +83,8 @@ src_install() {
 	distutils_src_install --disable-autoupdate --skip-build \
 		$(use nls || echo "--disable-locales")
 
-	doicon picard.ico || die 'doicon failed'
-	domenu picard.desktop || die 'domenu failed'
+	doicon picard.ico
+	domenu picard.desktop
 }
 
 pkg_postinst() {
@@ -95,8 +96,4 @@ pkg_postinst() {
 	elog
 	elog "You should set the environment variable BROWSER to something like"
 	elog "\"firefox '%s' &\" to let python know which browser to use."
-	if use coverart; then
-		ewarn "You have downloaded and installed the coverart downloader plugin."
-		ewarn "If you expect it to work please enable it in Options->Plugins."
-	fi
 }
