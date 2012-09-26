@@ -1,0 +1,18 @@
+diff --git a/avidemux/gtk/CMakeLists.txt b/avidemux/gtk/CMakeLists.txt
+index 9b28ac2..0962bde 100644
+--- a/avidemux/gtk/CMakeLists.txt
++++ b/avidemux/gtk/CMakeLists.txt
+@@ -109,6 +109,13 @@ TARGET_LINK_LIBRARIES(avidemux3_gtk
+ IF (GETTEXT_FOUND)
+ 	TARGET_LINK_LIBRARIES(avidemux3_gtk ${GETTEXT_LIBRARY_DIR})
+ ENDIF (GETTEXT_FOUND)
++IF (GETTEXT)
++	INCLUDE(Po)
++    COMPILE_PO_FILES(${AVIDEMUX_TOP_SOURCE_DIR}/po MO_FILES)
++	
++	ADD_CUSTOM_TARGET(mofiles ALL DEPENDS ${MO_FILES})
++ENDIF (GETTEXT)
++
+ 
+ 
+ # SDL
