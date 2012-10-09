@@ -1,0 +1,13 @@
+Index: doc/Makefile.am
+===================================================================
+--- doc/Makefile.am	(revision 534)
++++ doc/Makefile.am	(working copy)
+@@ -6,7 +6,7 @@
+ 
+ EXTRA_DIST = FIM.TXT fim.man doctags.c fim-stylesheet.css ./vim2html.pl fimgs.man fimrc.man
+ #MAN2HTML=man2html
+-MAN2HTML=$(MAN) --html=cat
++MAN2HTML=man2html
+ 
+ man1_MANS = fim.man fimgs.man
+ man5_MANS = fimrc.man
