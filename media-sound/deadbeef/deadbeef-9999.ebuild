@@ -19,7 +19,7 @@ KEYWORDS="~x86 ~amd64"
 IUSE="
 alsa oss pulseaudio gtk network sid mad mac adplug vorbis ffmpeg flac sndfile
 wavpack cdda gme libnotify musepack midi tta dts aac mms libsamplerate X cover
-zip nls threads pth gnome
+zip nls threads pth gnome gtk3
 "
 
 # come bundled
@@ -45,6 +45,7 @@ RDEPEND="
 	network? ( net-misc/curl )
 	cdda? ( dev-libs/libcdio media-libs/libcddb )
 	gtk? ( x11-libs/gtkglext )
+	gtk3? ( x11-libs/gtk+:3 )
 	X? ( x11-libs/libX11 )
 	pulseaudio? ( media-sound/pulseaudio )
 	cover? ( media-libs/imlib2 )
@@ -63,10 +64,12 @@ DEPEND="
 "
 
 AUTOTOOLS_AUTORECONF="1"
+AUTOTOOLS_IN_SOURCE_BUILD="1"
 
 src_prepare() {
 	sed -i "${S}"/plugins/wildmidi/wildmidiplug.c \
 		-e 's,#define DEFAULT_TIMIDITY_CONFIG ",&/usr/share/timidity/freepats/timidity.cfg:,'
+	eautopoint --force
 	autotools-utils_src_prepare
 }
 
@@ -79,7 +82,8 @@ src_configure() {
 		$(use_enable alsa)
 		$(use_enable oss)
 		$(use_enable pulseaudio pulse)
-		$(use_enable gtk gtkui)
+		$(use_enable gtk gtk2)
+		$(use_enable gtk3)
 		$(use_enable network vfs-curl)
 		$(use_enable network lfm)
 		$(use_enable cover artwork)
