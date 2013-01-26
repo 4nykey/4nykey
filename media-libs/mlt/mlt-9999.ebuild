@@ -1,10 +1,10 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/mlt/mlt-0.7.8.ebuild,v 1.5 2012/05/16 08:21:59 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/mlt/mlt-0.8.6.ebuild,v 1.1 2012/11/21 00:48:52 aballier Exp $
 
 EAPI=4
 PYTHON_DEPEND="python? 2:2.6"
-inherit eutils python git-2
+inherit eutils toolchain-funcs multilib python git-2
 
 DESCRIPTION="An open source multimedia framework, designed and developed for television broadcasting"
 HOMEPAGE="http://www.mltframework.org/"
@@ -25,7 +25,7 @@ RDEPEND="
 	dv? ( >=media-libs/libdv-0.104 )
 	xml? ( >=dev-libs/libxml2-2.5 )
 	vorbis? ( >=media-libs/libvorbis-1.1.2 )
-	sdl? ( >=media-libs/libsdl-1.2.10
+	sdl? ( >=media-libs/libsdl-1.2.10[X,opengl]
 		 >=media-libs/sdl-image-1.2.4 )
 	libsamplerate? ( >=media-libs/libsamplerate-0.1.2 )
 	jack? ( media-sound/jack-audio-connection-kit
