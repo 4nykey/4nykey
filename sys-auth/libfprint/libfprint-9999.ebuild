@@ -19,7 +19,7 @@ AUTOTOOLS_AUTORECONF="1"
 
 RDEPEND="
 	dev-libs/glib:2
-	dev-libs/libusb:1
+	virtual/libusb:1
 	dev-libs/nss
 	x11-libs/gtk+:2
 	|| ( media-gfx/imagemagick media-gfx/graphicsmagick[imagemagick] )
