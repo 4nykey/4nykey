@@ -6,15 +6,15 @@ EAPI="4"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2 git-2 autotools-utils versionator
+inherit gnome2 git-2 autotools-utils #versionator
 
 DESCRIPTION="An extension for displaying weather notifications in GNOME Shell"
-HOMEPAGE="https://github.com/simon04/gnome-shell-extension-weather"
+HOMEPAGE="https://github.com/Neroth/gnome-shell-extension-weather"
 SRC_URI=""
 
-GNOME_TARGET="$(get_version_component_range -2)"
-EGIT_REPO_URI="git://github.com/simon04/gnome-shell-extension-weather.git"
-EGIT_BRANCH="gnome${GNOME_TARGET}"
+EGIT_REPO_URI="git://github.com/Neroth/gnome-shell-extension-weather.git"
+#EGIT_BRANCH="gnome$(get_version_component_range -2)"
+EGIT_BRANCH="master"
 EGIT_COMMIT="${EGIT_BRANCH}"
 
 LICENSE="GPL-3"
@@ -24,17 +24,13 @@ IUSE=""
 
 AUTOTOOLS_AUTORECONF="1"
 
-DEPEND=""
+DEPEND="
+	app-admin/eselect-gnome-shell-extensions
+"
 RDEPEND="
 	${DEPEND}
-	>=gnome-extra/gnome-shell-extensions-${GNOME_TARGET}
 	dev-python/pygtk
 "
-
-src_install() {
-	autotools-utils_src_install
-	newbin weather-extension-configurator{.py,}
-}
 
 pkg_postinst() {
 	gnome2_pkg_postinst
