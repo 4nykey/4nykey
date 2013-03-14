@@ -25,8 +25,8 @@ DEPEND="
 	>=app-crypt/qca-2.0.0
 	>=app-crypt/qca-ossl-2.0.0_beta3
 	sys-auth/upekbsapi-bin[headers]
-	x11-libs/qt-core:4
-	x11-libs/qt-gui:4
+	dev-qt/qtcore:4
+	dev-qt/qtgui:4
 "
 RDEPEND="${DEPEND}"
 

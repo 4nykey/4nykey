@@ -20,8 +20,8 @@ IUSE="
 
 RDEPEND="
 	~media-video/avidemux-core-${PV}:${SLOT}[sdl=,vdpau=,xv=]
-	x11-libs/qt-gui:4
-	opengl? ( x11-libs/qt-opengl:4 )
+	dev-qt/qtgui:4
+	opengl? ( dev-qt/qtopengl:4 )
 "
 DEPEND="
 	$RDEPEND

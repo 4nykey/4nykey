@@ -39,7 +39,7 @@ RDEPEND="
 	rtaudio? ( kernel_linux? ( media-libs/alsa-lib ) )
 	swfdec? ( media-libs/swfdec )
 	xine? ( >=media-libs/xine-lib-1.1.2_pre20060328-r7 )
-	qt4? ( x11-libs/qt-gui:4 x11-libs/qt-svg:4 media-libs/libexif )
+	qt4? ( dev-qt/qtgui:4 dev-qt/qtsvg:4 media-libs/libexif )
 	!media-libs/mlt++
 	lua? ( >=dev-lang/lua-5.1.4-r4 )
 	ruby? ( dev-lang/ruby )

@@ -17,7 +17,7 @@ IUSE="apidocs ffmpeg phonon verbose-build"
 
 # it will use either lavc or lame for decoding
 RDEPEND="
-	x11-libs/qt-gui
+	dev-qt/qtgui
 	virtual/jpeg
 	media-libs/taglib
 	media-libs/musicbrainz
