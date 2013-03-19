@@ -4,17 +4,16 @@
 
 EAPI=4
 
-inherit fdo-mime gnome2-utils waf-utils subversion
+inherit fdo-mime gnome2-utils waf-utils git-2
 
 DESCRIPTION="Digital Audio Workstation"
 HOMEPAGE="http://ardour.org/"
-ESVN_REPO_URI="http://subversion.ardour.org/svn/ardour2/branches/3.0"
-ESVN_PATCHES="${PN}${SLOT}-*.diff"
+EGIT_REPO_URI="git://git.ardour.org/ardour/ardour.git"
 
-LICENSE=""
+LICENSE="GPL-2"
 SLOT="3"
-KEYWORDS="~amd64"
-IUSE="bindist debug lv2 nls osc sse"
+KEYWORDS="~amd64 ~x86"
+IUSE="bindist +bundled-libs debug lv2 nls osc sse wiimote"
 
 RDEPEND="
 	dev-cpp/libgnomecanvasmm
@@ -30,12 +29,21 @@ RDEPEND="
 	media-libs/libsamplerate
 	media-libs/libsndfile
 	media-sound/jack-audio-connection-kit
+	!bundled-libs? (
+		media-libs/vamp-plugin-sdk
+		media-libs/taglib
+		media-libs/rubberband
+	)
 	net-misc/curl
 	sci-libs/fftw
 	sys-apps/util-linux
 	lv2? (
 		media-libs/suil
 		media-libs/lilv
+	)
+	wiimote? (
+		net-wireless/bluez
+		app-misc/cwiid
 	)
 "
 DEPEND="
@@ -48,9 +56,8 @@ my_use() {
 }
 
 src_prepare() {
-	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
-	sed -e '/libs\/clearlooks-newer/d' -i wscript
-	subversion_src_prepare
+	epatch "${FILESDIR}"/${PN}${SLOT}*.diff
+	use !bundled-libs && epatch "${FILESDIR}"/${PN}${SLOT}-syslibs.patch
 }
 
 src_configure() {

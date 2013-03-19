@@ -3,15 +3,16 @@
 # $Header: /var/cvsroot/gentoo-x86/media-sound/ardour/ardour-2.8.12.ebuild,v 1.2 2011/09/28 22:48:16 ssuominen Exp $
 
 EAPI=4
-inherit eutils toolchain-funcs fdo-mime gnome2-utils scons-utils subversion
+inherit eutils toolchain-funcs fdo-mime gnome2-utils scons-utils git-2
 
 DESCRIPTION="Digital Audio Workstation"
 HOMEPAGE="http://ardour.org/"
-ESVN_REPO_URI="http://subversion.ardour.org/svn/ardour2/branches/2.0-ongoing"
-ESVN_PATCHES="${PN}-*.diff"
+EGIT_REPO_URI="git://git.ardour.org/ardour/ardour.git"
+EGIT_BRANCH="2.0-ongoing"
+EGIT_COMMIT="${EGIT_BRANCH}"
 
 LICENSE="GPL-2"
-SLOT="2"
+SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE="
 nls debug sse fftw ladspa bundled-libs usb curl lv2 soundtouch
@@ -48,9 +49,10 @@ DEPEND="
 	usb? ( virtual/os-headers )
 "
 
+PATCHES=("${FILESDIR}"/${PN}${SLOT}*.diff)
+
 src_prepare() {
-	[[ -z ${ESVN_WC_REVISION} ]] && subversion_wc_info
-	subversion_src_prepare
+	epatch "${PATCHES[@]}"
 	mkdir -p "${D}"
 }
 

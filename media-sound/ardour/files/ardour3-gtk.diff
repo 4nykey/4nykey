@@ -1,0 +1,45 @@
+diff --git a/gtk2_ardour/wscript b/gtk2_ardour/wscript
+index 91a1e0c..a78b928 100644
+--- a/gtk2_ardour/wscript
++++ b/gtk2_ardour/wscript
+@@ -275,6 +275,7 @@ def configure(conf):
+     autowaf.check_pkg(conf, 'ogg', uselib_store='OGG', atleast_version='1.1.2')
+     autowaf.check_pkg(conf, 'x11', uselib_store='X11', atleast_version='1.1', mandatory=False)
+     autowaf.check_pkg(conf, 'fontconfig', uselib_store='FONTCONFIG')
++    autowaf.check_pkg(conf, 'fftw3f', uselib_store='FFTW', atleast_version='3.2')
+ 
+     conf.write_config_header('gtk2ardour-config.h', remove=False)
+ 
+@@ -398,6 +399,7 @@ def build(bld):
+     obj.uselib       = 'UUID FLAC FONTCONFIG GLIBMM GTHREAD GTK OGG ALSA CURL DL'
+     obj.uselib       += ' GTKMM GNOMECANVASMM GNOMECANVAS '
+     obj.uselib       += ' AUDIOUNITS OSX GTKOSX '
++    obj.uselib       += ' FFTW '
+     obj.use          = [ 'libpbd',
+                          'libmidipp',
+                          'libtaglib',
+@@ -546,9 +548,9 @@ def build(bld):
+     else: # Linux/X11 fonts
+         basefont = '' # unspecified - use system defaults
+         font_sizes = {
+-                'SMALLER' : '8',
+-                'SMALL' : '9',
+-                'NORMAL' : '10',
++                'SMALLER' : '7',
++                'SMALL' : '8',
++                'NORMAL' : '9',
+                 'BIGGER' : '17',
+                 'LARGE' : '18',
+                 'LARGER' : '24',
+diff --git a/wscript b/wscript
+index 794c2f1..4599ead 100644
+--- a/wscript
++++ b/wscript
+@@ -28,7 +28,6 @@ children = [
+         'libs/timecode',
+         'libs/ardour',
+         'libs/gtkmm2ext',
+-        'libs/clearlooks-newer',
+         'libs/audiographer',
+         'gtk2_ardour',
+         'templates',
