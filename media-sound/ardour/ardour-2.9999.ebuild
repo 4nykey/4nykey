@@ -12,7 +12,7 @@ EGIT_BRANCH="2.0-ongoing"
 EGIT_COMMIT="${EGIT_BRANCH}"
 
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="2"
 KEYWORDS="~x86 ~amd64"
 IUSE="
 nls debug sse fftw ladspa bundled-libs usb curl lv2 soundtouch
