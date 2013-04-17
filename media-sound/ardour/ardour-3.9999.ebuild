@@ -4,7 +4,10 @@
 
 EAPI=4
 
-inherit fdo-mime gnome2-utils waf-utils git-2
+PLOCALES="
+cs de el es it nn pl ru sv zh
+"
+inherit fdo-mime gnome2-utils waf-utils l10n git-2
 
 DESCRIPTION="Digital Audio Workstation"
 HOMEPAGE="http://ardour.org/"
@@ -49,10 +52,20 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	dev-libs/boost
+	nls? ( sys-devel/gettext )
 "
 
 my_use() {
 	usex $1 --$1 --no-$1
+}
+
+my_lcmsg() {
+	local d
+	for d in gtk2_ardour libs/gtkmm2ext; do
+		msgfmt -c -o ${d}/po/${1}.{m,p}o
+	done
+	MOPREFIX="gtk2_ardour${SLOT}" domo gtk2_ardour/po/${1}.mo
+	MOPREFIX="libardour${SLOT}" domo libs/gtkmm2ext/po/${1}.mo
 }
 
 src_prepare() {
@@ -75,6 +88,7 @@ src_install() {
 	waf-utils_src_install
 	newicon icons/icon/ardour_icon_mac.png ardour3.png
 	newmenu gtk2_ardour/ardour3.desktop.in ardour3.desktop
+	use nls && l10n_for_each_locale_do my_lcmsg
 }
 
 pkg_preinst() {

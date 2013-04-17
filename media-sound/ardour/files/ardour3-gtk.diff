@@ -13,7 +13,7 @@ index 91a1e0c..a78b928 100644
 @@ -398,6 +399,7 @@ def build(bld):
      obj.uselib       = 'UUID FLAC FONTCONFIG GLIBMM GTHREAD GTK OGG ALSA CURL DL'
      obj.uselib       += ' GTKMM GNOMECANVASMM GNOMECANVAS '
-     obj.uselib       += ' AUDIOUNITS OSX GTKOSX '
+     obj.uselib       += ' AUDIOUNITS OSX GTKOSX LO '
 +    obj.uselib       += ' FFTW '
      obj.use          = [ 'libpbd',
                           'libmidipp',
@@ -42,4 +42,4 @@ index 794c2f1..4599ead 100644
 -        'libs/clearlooks-newer',
          'libs/audiographer',
          'gtk2_ardour',
-         'templates',
+         'export',
