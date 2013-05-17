@@ -35,6 +35,11 @@ PATCHES=("${FILESDIR}"/${PN}*.diff)
 AUTOTOOLS_AUTORECONF="1"
 AUTOTOOLS_IN_SOURCE_BUILD="1"
 
+src_prepare() {
+	sed -e 's:AM_CONFIG_HEADER:AC_CONFIG_HEADERS:' -i configure.ac
+	autotools-utils_src_prepare
+}
+
 src_configure() {
 	local myeconfargs=(
 		--docdir=/usr/share/doc/${PF}/html

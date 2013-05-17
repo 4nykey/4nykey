@@ -38,6 +38,11 @@ DEPEND="
 	nls? ( sys-devel/gettext )
 "
 
+src_prepare() {
+	sed -e 's:AM_PROG_CC_STDC:AC_PROG_CC:' -i configure.ac
+	autotools-utils_src_prepare
+}
+
 src_configure() {
 	local myeconfargs=(
 		--enable-experimental

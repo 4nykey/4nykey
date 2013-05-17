@@ -27,6 +27,11 @@ DEPEND="
 	${RDEPEND}
 "
 
+src_prepare() {
+	sed -e 's:AM_CONFIG_HEADER:AC_CONFIG_HEADERS:' -i configure.ac
+	autotools-utils_src_prepare
+}
+
 src_configure() {
 	local myeconfargs=(
 		$(use_enable nls)

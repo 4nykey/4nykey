@@ -35,6 +35,7 @@ DEPEND="
 "
 
 src_prepare() {
+	sed -e 's:AM_CONFIG_HEADER:AC_CONFIG_HEADERS:' -i configure.ac
 	autotools-utils_src_prepare
 	gnome2_src_prepare
 }
