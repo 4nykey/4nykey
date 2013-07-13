@@ -35,7 +35,7 @@ DEPEND="
 "
 RDEPEND="
 	${DEPEND}
-	acoustid? ( media-libs/chromaprint[examples] )
+	acoustid? ( media-libs/chromaprint[tools] )
 "
 
 # doesn't work with ebuilds
