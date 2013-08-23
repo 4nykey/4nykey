@@ -1,9 +1,0 @@
---- liba52/liba52.pc.in.orig	2002-11-13 12:40:20.000000000 +0200
-+++ liba52/liba52.pc.in	2007-03-24 01:43:41.000000000 +0200
-@@ -6,5 +6,5 @@
- Name: liba52
- Description: A decoding library for ATSC A/52 streams.
- Version: @VERSION@
--Libs: -L${libdir} -la52
-+Libs: -L${libdir} -la52 @LIBA52_LIBS@
- Cflags: -I${includedir}/@PACKAGE@

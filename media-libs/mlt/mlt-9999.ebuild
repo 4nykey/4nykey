@@ -25,8 +25,8 @@ RDEPEND="
 	dv? ( >=media-libs/libdv-0.104 )
 	xml? ( >=dev-libs/libxml2-2.5 )
 	vorbis? ( >=media-libs/libvorbis-1.1.2 )
-	sdl? ( >=media-libs/libsdl-1.2.10[X,opengl]
-		 >=media-libs/sdl-image-1.2.4 )
+	sdl? ( >=media-libs/libsdl-1.2.10:0[X,opengl]
+		 >=media-libs/sdl-image-1.2.4:0 )
 	libsamplerate? ( >=media-libs/libsamplerate-0.1.2 )
 	jack? ( media-sound/jack-audio-connection-kit
 		media-libs/ladspa-sdk
