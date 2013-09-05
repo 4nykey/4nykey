@@ -2,10 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI=5
 
 PLOCALES="
-cs de el es it nn pl ru sv zh
+cs de el en_GB es fr it nn pl pt pt_PT ru sv zh
 "
 inherit fdo-mime gnome2-utils waf-utils l10n git-2
 
@@ -16,7 +16,7 @@ EGIT_REPO_URI="git://git.ardour.org/ardour/ardour.git"
 LICENSE="GPL-2"
 SLOT="3"
 KEYWORDS="~amd64 ~x86"
-IUSE="bindist +bundled-libs debug lv2 nls osc sse wiimote"
+IUSE="bindist +bundled-libs c++0x debug lv2 nls osc sse wiimote"
 
 RDEPEND="
 	dev-cpp/libgnomecanvasmm
@@ -65,6 +65,7 @@ my_lcmsg() {
 		msgfmt -c -o ${d}/po/${1}.{m,p}o
 	done
 	MOPREFIX="gtk2_ardour${SLOT}" domo gtk2_ardour/po/${1}.mo
+	[[ -f libs/gtkmm2ext/po/${1}.mo ]] && \
 	MOPREFIX="libardour${SLOT}" domo libs/gtkmm2ext/po/${1}.mo
 }
 
@@ -78,16 +79,18 @@ src_configure() {
 		$(use bindist && echo --freebie) \
 		$(use debug || echo --optimize) \
 		$(use sse || echo --no-fpu-optimization) \
+		$(use c++0x && echo --cxx11) \
 		$(my_use lv2) \
 		$(my_use nls) \
+		--noconfirm \
 		--versioned \
 		--freedesktop
 }
 
 src_install() {
 	waf-utils_src_install
-	newicon icons/icon/ardour_icon_mac.png ardour3.png
-	newmenu gtk2_ardour/ardour3.desktop.in ardour3.desktop
+	newicon icons/icon/ardour_icon_mac.png ${PN}${SLOT}.png
+	newmenu gtk2_ardour/ardour3.desktop.in ${PN}${SLOT}.desktop
 	use nls && l10n_for_each_locale_do my_lcmsg
 }
 
