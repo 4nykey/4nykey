@@ -28,9 +28,9 @@ index 91a1e0c..a78b928 100644
 +                'SMALLER' : '7',
 +                'SMALL' : '8',
 +                'NORMAL' : '9',
+                 'BIG' : '14',
                  'BIGGER' : '17',
                  'LARGE' : '18',
-                 'LARGER' : '24',
 diff --git a/wscript b/wscript
 index 794c2f1..4599ead 100644
 --- a/wscript
