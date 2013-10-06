@@ -20,24 +20,16 @@ EGIT_COMMIT="${EGIT_BRANCH}"
 LICENSE="GPL-2"
 SLOT="4"
 KEYWORDS="" #~amd64 ~x86"
-IUSE="debug semantic-desktop"
+IUSE="debug"
 
 RDEPEND="
 	dev-libs/qjson
 	media-libs/mlt[ffmpeg,sdl,xml,melt,qt4,kdenlive]
 	virtual/ffmpeg[encode,sdl,X]
-	$(add_kdebase_dep kdelibs 'semantic-desktop?')
+	$(add_kdebase_dep kdelibs)
 "
 DEPEND="
 	${RDEPEND}
 "
 
 DOCS=( AUTHORS ChangeLog README TODO )
-
-src_configure() {
-	local mycmakeargs=(
-		$(cmake-utils_use_with semantic-desktop Nepomuk)
-	)
-
-	kde4-base_src_configure
-}
