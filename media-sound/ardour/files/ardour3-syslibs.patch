@@ -29,12 +29,12 @@ index b4a50a8..667cba8 100644
 @@ -378,7 +380,7 @@ def build(bld):
      obj.target       = 'ardour'
      obj.uselib       = ['GLIBMM','GTHREAD','AUBIO','SIGCPP','XML','UUID',
-                         'JACK','SNDFILE','SAMPLERATE','LRDF','AUDIOUNITS',
+                         'SNDFILE','SAMPLERATE','LRDF','AUDIOUNITS',
 -                        'OSX','BOOST','CURL','DL']
 +                        'OSX','BOOST','CURL','DL','VAMP','TAGLIB','RUBBERBAND']
      obj.use          = ['libpbd','libmidipp','libevoral','libvamphost',
                          'libvampplugin','libtaglib','librubberband',
-                         'libaudiographer','libltc']
+                         'libaudiographer','libltc','libtimecode']
 diff --git a/wscript b/wscript
 index 794c2f1..a625d53 100644
 --- a/wscript
