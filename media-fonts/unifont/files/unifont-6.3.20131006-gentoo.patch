@@ -1,0 +1,123 @@
+diff -rud unifont-6.3.20131006_orig/font/Makefile unifont-6.3.20131006/font/Makefile
+--- unifont-6.3.20131006_orig/font/Makefile	2013-10-07 05:55:12.000000000 +0300
++++ unifont-6.3.20131006/font/Makefile	2013-10-20 16:38:31.799092186 +0300
+@@ -30,8 +30,8 @@
+ # and the installation directories for PCF and TrueType fonts.
+ #
+ FONTDEST = $(DESTDIR)/usr/share/fonts
+-PCFDEST = $(FONTDEST)/X11/misc
+-TTFDEST = $(FONTDEST)/truetype/unifont
++PCFDEST = $(FONTDEST)/unifont
++TTFDEST = $(FONTDEST)/unifont
+ #
+ # destination directory for compiled fonts
+ #
+@@ -122,7 +122,7 @@
+ # Use this version because "unassigned.hex" isn't part of the final
+ # .hex font by default now:
+ #
+-coverage:
++coverage: hex
+ 	sort $(HEXDIR)/*.hex | \
+ 		$(BINDIR)/unicoverage > $(COMPILED_DIR)/coverage.txt
+ 
+@@ -152,7 +152,7 @@
+ #
+ # Build one bitmap of the entire Unifont as a 4096 x 16 grid.
+ #
+-bigpic: $(COMPILED_DIR)/unifont-$(VERSION).hex
++bigpic: hex
+ 	sort $(HEXDIR)/*.hex | \
+ 	$(BINDIR)/unigencircles ttfsrc/combining.txt hexsrc/nonprinting.hex | \
+ 	$(BINDIR)/unifontpic -d120 > $(COMPILED_DIR)/unifont-$(MAJORVERSION).bmp
+@@ -164,9 +164,9 @@
+ # and it is created from merging "[0-F].sfd", which take up another 100 MB.
+ #
+ 
+-ttf:
++ttf: hex
+ 	cp $(COMPILED_DIR)/unifont-$(VERSION).hex $(TTFSRC)/unifont.hex
+-	cd $(TTFSRC) ; make && make clean
++	set -e ; $(MAKE) -C $(TTFSRC)
+ 	mv $(TTFSRC)/unifont.sfd $(COMPILED_DIR)/unifont.sfd 
+ 	mv $(TTFSRC)/unifont.ttf $(COMPILED_DIR)/unifont-$(VERSION).ttf 
+ 	gzip -f -9 $(COMPILED_DIR)/unifont.sfd 
+@@ -176,7 +176,7 @@
+ # directory.  This has to be called manually, because the precompiled/
+ # directory usually remains untouched.
+ #
+-precompiled:
++precompiled: coverage
+ 	install -m0644 -p $(COMPILED_DIR)/unifont-$(VERSION).hex $(COMPILED_DIR)/unifont-$(VERSION).bdf.gz \
+ 	   $(COMPILED_DIR)/unifont-$(VERSION).pcf.gz $(COMPILED_DIR)/unifont-$(VERSION).ttf \
+ 	   $(COMPILED_DIR)/coverage.txt $(COMPILED_DIR)/unifont-$(MAJORVERSION).bmp \
+diff -rud unifont-6.3.20131006_orig/font/ttfsrc/Makefile unifont-6.3.20131006/font/ttfsrc/Makefile
+--- unifont-6.3.20131006_orig/font/ttfsrc/Makefile	2013-10-03 15:49:18.000000000 +0300
++++ unifont-6.3.20131006/font/ttfsrc/Makefile	2013-10-20 16:40:53.281005385 +0300
+@@ -57,11 +57,11 @@
+ # We join all the generated .sfd files on a single one,
+ # and generate the final TrueType font
+ 
+-merge:
++merge: hex2sfd
+ 	echo "Merging all .sfd files"
+ 	$(FONTFORGE) -script all.pe
+ 
+-sfd2ttf:
++sfd2ttf: merge
+ 	echo "Converting .sfd font into .ttf font"
+ 	$(FONTFORGE) -c 'Open($$1); Generate($$2)' unifont.sfd unifont.ttf
+ 	\rm -f unifont.hex
+diff -rud unifont-6.3.20131006_orig/Makefile unifont-6.3.20131006/Makefile
+--- unifont-6.3.20131006_orig/Makefile	2013-10-07 05:54:57.000000000 +0300
++++ unifont-6.3.20131006/Makefile	2013-10-20 17:07:40.789950383 +0300
+@@ -38,7 +38,7 @@
+ mandir:
+ 	set -e ; $(MAKE) -C man
+ 
+-fontdir:
++fontdir: bindir
+ 	set -e ; $(MAKE) -C font
+ 
+ precompiled:
+@@ -47,7 +47,7 @@
+ #
+ # Create lib/wchardata.c.  If you want to also build the object file
+ # wchardata.o, uncomment the last line
+-libdir:
++libdir: fontdir
+ 	install -m0755 -d lib
+ 	(cd font/hexsrc ; \
+ 		sort hangul-syllables.hex pua.hex spaces.hex \
+@@ -58,7 +58,7 @@
+ 	\rm -f unifonttemp.hex
+ #	(cd lib ; $(CC) -c wchardata.c ; chmod 644 wchardata.o )
+ 
+-install: bindir libdir
++install:
+ 	$(MAKE) -C src install PREFIX=$(PREFIX)
+ 	$(MAKE) -C man install PREFIX=$(PREFIX) COMPRESS=$(COMPRESS)
+ 	$(MAKE) -C font install PREFIX=$(PREFIX) DESTDIR=$(DESTDIR)
+diff -rud unifont-6.3.20131006_orig/src/Makefile unifont-6.3.20131006/src/Makefile
+--- unifont-6.3.20131006_orig/src/Makefile	2013-09-29 06:04:33.000000000 +0300
++++ unifont-6.3.20131006/src/Makefile	2013-10-20 16:33:35.118389701 +0300
+@@ -30,8 +30,8 @@
+ 
+ all: $(CPROGS)
+ 	install    -m0755 -d $(INSTALLBINDIR)
+-	install -s -m0755 $(CPROGS) $(INSTALLBINDIR)
+-	install    -m0755 $(PPROGS) $(INSTALLBINDIR)
++	install -m0755 $(CPROGS) $(INSTALLBINDIR)
++	install -m0755 $(PPROGS) $(INSTALLBINDIR)
+ 	\rm -f $(CPROGS)
+ 
+ install:
+@@ -44,7 +44,7 @@
+ 	install -m0755 -d $(INSTALLDIR)
+ 	set -e ; \
+ 	   cd $(INSTALLBINDIR) ; \
+-	   install -s -m0755 $(CPROGS) $(INSTALLDIR)
++	   install -m0755 $(CPROGS) $(INSTALLDIR)
+ 	set -e ; \
+ 	   cd ../bin ; \
+ 	   install    -m0755 $(PPROGS) $(INSTALLDIR)
