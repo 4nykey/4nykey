@@ -16,7 +16,7 @@ EGIT_REPO_URI="git://git.ardour.org/ardour/ardour.git"
 LICENSE="GPL-2"
 SLOT="3"
 KEYWORDS="~amd64 ~x86"
-IUSE="bindist +bundled-libs c++0x debug lv2 nls osc sse wiimote"
+IUSE="bindist +bundled-libs c++0x debug lv2 network nls osc sse wiimote"
 
 RDEPEND="
 	dev-cpp/libgnomecanvasmm
@@ -61,25 +61,26 @@ my_use() {
 
 my_lcmsg() {
 	local d
-	for d in gtk2_ardour libs/gtkmm2ext; do
-		msgfmt -c -o ${d}/po/${1}.{m,p}o
+	for d in gtk2_ardour libs/ardour libs/gtkmm2ext; do
+		rm -f ${d}/po/${1}.po
 	done
-	MOPREFIX="gtk2_ardour${SLOT}" domo gtk2_ardour/po/${1}.mo
-	[[ -f libs/gtkmm2ext/po/${1}.mo ]] && \
-	MOPREFIX="libardour${SLOT}" domo libs/gtkmm2ext/po/${1}.mo
 }
 
 src_prepare() {
 	epatch "${FILESDIR}"/${PN}${SLOT}*.diff
 	use !bundled-libs && epatch "${FILESDIR}"/${PN}${SLOT}-syslibs.patch
+	use nls && l10n_for_each_disabled_locale_do my_lcmsg
 }
 
 src_configure() {
+	# phone-home: Contact ardour.org at startup for new announcements
 	waf-utils_src_configure \
+		--configdir=${EPREFIX}/etc \
 		$(use bindist && echo --freebie) \
 		$(use debug || echo --optimize) \
 		$(use sse || echo --no-fpu-optimization) \
 		$(use c++0x && echo --cxx11) \
+		$(use network || echo --no-phone-home) \
 		$(my_use lv2) \
 		$(my_use nls) \
 		--noconfirm \
@@ -87,11 +88,15 @@ src_configure() {
 		--freedesktop
 }
 
+src_compile() {
+	waf-utils_src_compile
+	use nls && "${S}"/waf --jobs=$(makeopts_jobs) i18n || die "i18n build failed"
+}
+
 src_install() {
 	waf-utils_src_install
 	newicon icons/icon/ardour_icon_mac.png ${PN}${SLOT}.png
 	newmenu gtk2_ardour/ardour3.desktop.in ${PN}${SLOT}.desktop
-	use nls && l10n_for_each_locale_do my_lcmsg
 }
 
 pkg_preinst() {
