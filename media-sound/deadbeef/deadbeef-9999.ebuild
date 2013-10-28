@@ -2,13 +2,14 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 
 inherit fdo-mime gnome2-utils flag-o-matic git-2 autotools-utils
 
-EGIT_BRANCH="devel"
+EGIT_BRANCH="master"
 EGIT_COMMIT="${EGIT_BRANCH}"
-EGIT_REPO_URI="git://deadbeef.git.sourceforge.net/gitroot/deadbeef/deadbeef"
+EGIT_REPO_URI="git://git.code.sf.net/p/deadbeef/code"
+EGIT_PROJECT="${PN}"
 
 DESCRIPTION="DeaDBeeF - Ultimate Music Player For GNU/Linux"
 HOMEPAGE="http://deadbeef.sourceforge.net/"
@@ -19,7 +20,7 @@ KEYWORDS="~x86 ~amd64"
 IUSE="
 alsa oss pulseaudio gtk network sid mad mac adplug vorbis ffmpeg flac sndfile
 wavpack cdda gme libnotify musepack midi tta dts aac mms libsamplerate X cover
-zip nls threads pth gnome gtk3
+zip nls threads pth gtk3
 "
 
 # come bundled
@@ -122,17 +123,17 @@ src_install() {
 }
 
 pkg_preinst() {
-	use gtk && gnome2_icon_savelist
+	gnome2_icon_savelist
 }
 
 pkg_postinst() {
 	fdo-mime_desktop_database_update
 	fdo-mime_mime_database_update
-	use gtk && gnome2_icon_cache_update
+	gnome2_icon_cache_update
 }
 
 pkg_postrm() {
 	fdo-mime_desktop_database_update
 	fdo-mime_mime_database_update
-	use gtk && gnome2_icon_cache_update
+	gnome2_icon_cache_update
 }
