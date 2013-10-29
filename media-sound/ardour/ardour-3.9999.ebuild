@@ -71,6 +71,8 @@ my_lcmsg() {
 src_prepare() {
 	epatch "${FILESDIR}"/${PN}${SLOT}*.diff
 	use nls && l10n_for_each_disabled_locale_do my_lcmsg
+	use custom-cflags && sed -i wscript \
+		-e 's:\(prepend_opt_flags = \)True:\1False:'
 }
 
 src_configure() {
@@ -89,7 +91,6 @@ src_configure() {
 	use c++0x && wafargs+=(--cxx11)
 	use bundled-libs || wafargs+=(--use-external-libs)
 	use doc && wafargs+=(--docs)
-	use custom-cflags && wafargs+=(--arch "${CFLAGS}")
 
 	waf-utils_src_configure "${wafargs[@]}"
 }
