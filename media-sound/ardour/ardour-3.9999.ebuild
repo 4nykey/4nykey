@@ -16,7 +16,7 @@ EGIT_REPO_URI="git://git.ardour.org/ardour/ardour.git"
 LICENSE="GPL-2"
 SLOT="3"
 KEYWORDS="~amd64 ~x86"
-IUSE="bindist +bundled-libs c++0x debug lv2 network nls osc sse wiimote"
+IUSE="bindist bundled-libs c++0x custom-cflags debug doc lv2 nls osc phone-home sse wiimote"
 
 RDEPEND="
 	dev-cpp/libgnomecanvasmm
@@ -36,6 +36,7 @@ RDEPEND="
 		media-libs/vamp-plugin-sdk
 		media-libs/taglib
 		media-libs/rubberband
+		media-libs/libltc
 	)
 	net-misc/curl
 	sci-libs/fftw
@@ -53,10 +54,11 @@ DEPEND="
 	${RDEPEND}
 	dev-libs/boost
 	nls? ( sys-devel/gettext )
+	doc? ( app-doc/doxygen )
 "
 
 my_use() {
-	usex $1 --$1 --no-$1
+	usex $1 --${2:-${1}} --no-${2:-${1}}
 }
 
 my_lcmsg() {
@@ -68,24 +70,28 @@ my_lcmsg() {
 
 src_prepare() {
 	epatch "${FILESDIR}"/${PN}${SLOT}*.diff
-	use !bundled-libs && epatch "${FILESDIR}"/${PN}${SLOT}-syslibs.patch
 	use nls && l10n_for_each_disabled_locale_do my_lcmsg
 }
 
 src_configure() {
-	# phone-home: Contact ardour.org at startup for new announcements
-	waf-utils_src_configure \
-		--configdir=${EPREFIX}/etc \
-		$(use bindist && echo --freebie) \
-		$(use debug || echo --optimize) \
-		$(use sse || echo --no-fpu-optimization) \
-		$(use c++0x && echo --cxx11) \
-		$(use network || echo --no-phone-home) \
-		$(my_use lv2) \
-		$(my_use nls) \
-		--noconfirm \
-		--versioned \
+	local wafargs=(
+		--configdir=${EPREFIX}/etc
+		--noconfirm
+		--versioned
 		--freedesktop
+		$(my_use lv2)
+		$(my_use nls)
+		$(my_use phone-home)
+		$(my_use sse fpu-optimization)
+	)
+	use bindist && wafargs+=(--freebie)
+	use debug || wafargs+=(--optimize)
+	use c++0x && wafargs+=(--cxx11)
+	use bundled-libs || wafargs+=(--use-external-libs)
+	use doc && wafargs+=(--docs)
+	use custom-cflags && wafargs+=(--arch "${CFLAGS}")
+
+	waf-utils_src_configure "${wafargs[@]}"
 }
 
 src_compile() {
