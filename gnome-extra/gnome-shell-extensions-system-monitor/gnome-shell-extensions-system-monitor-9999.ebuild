@@ -4,21 +4,19 @@
 
 EAPI="5"
 GCONF_DEBUG="no"
-GNOME2_LA_PUNT="yes"
+PLOCALES="zh_CN sl ru ro pt_BR pt pl it fr fa es_MX es_ES de cs"
 
-inherit gnome2 git-r3 autotools-utils
+inherit gnome2-utils l10n git-2
 
 DESCRIPTION="An extension for displaying sensors information in GNOME Shell"
-HOMEPAGE="http://motorscript.com/gnome-shell-extension-sensors/"
+HOMEPAGE="https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet"
 SRC_URI=""
-EGIT_REPO_URI="git://github.com/xtranophilist/gnome-shell-extension-sensors.git"
+EGIT_REPO_URI="git://github.com/paradoxxxzero/gnome-shell-system-monitor-applet.git"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="hddtemp"
-
-AUTOTOOLS_AUTORECONF="1"
+IUSE=""
 
 DEPEND="
 	app-admin/eselect-gnome-shell-extensions
@@ -26,12 +24,31 @@ DEPEND="
 RDEPEND="
 	${DEPEND}
 	dev-python/pygtk
-	sys-apps/lm_sensors
-	hddtemp? ( app-admin/hddtemp )
+	gnome-base/libgtop[introspection]
+	net-misc/networkmanager[introspection]
 "
+MY_PN="system-monitor@paradoxxx.zero.gmail.com"
+
+my_loc() {
+	mv ${MY_PN}/locale/${1}/LC_MESSAGES/system-monitor.mo ${1}.mo
+	MOPREFIX="system-monitor" domo ${1}.mo
+}
+
+src_install() {
+	insinto /usr/share/gnome-shell/extensions/${MY_PN}
+	doins ${MY_PN}/*.*
+	insinto /usr/share/glib-2.0/schemas
+	doins ${MY_PN}/schemas/*gschema.xml
+	l10n_for_each_locale_do my_loc
+	dodoc ${MY_PN}/README README.md
+}
+
+pkg_preinst() {
+	gnome2_schemas_savelist
+}
 
 pkg_postinst() {
-	gnome2_pkg_postinst
+	gnome2_schemas_update
 
 	ebegin "Updating list of installed extensions"
 	eselect gnome-shell-extensions update
@@ -45,4 +62,11 @@ pkg_postinst() {
 	elog "gnome-extra/gnome-tweak-tool GUI, or modify the org.gnome.shell"
 	elog "enabled-extensions gsettings key from the command line or a script."
 	elog
+}
+
+pkg_postrm() {
+	gnome2_schemas_update
+	ebegin "Updating list of installed extensions"
+	eselect gnome-shell-extensions update
+	eend $?
 }

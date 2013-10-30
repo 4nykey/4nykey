@@ -2,17 +2,16 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 GCONF_DEBUG="no"
 GNOME2_LA_PUNT="yes"
 
-inherit gnome2 git-r3 autotools-utils #versionator
+inherit gnome2 git-r3 autotools-utils
 
-DESCRIPTION="An extension for displaying weather notifications in GNOME Shell"
-HOMEPAGE="https://github.com/Neroth/gnome-shell-extension-weather"
+DESCRIPTION="An connman extension for GNOME Shell"
+HOMEPAGE="https://github.com/connectivity/gnome-extension-connman"
 SRC_URI=""
-EGIT_REPO_URI="git://github.com/Neroth/gnome-shell-extension-weather.git"
-EGIT_BRANCH="gnome$(get_version_component_range -2)"
+EGIT_REPO_URI="git://github.com/connectivity/gnome-extension-connman.git"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -26,7 +25,6 @@ DEPEND="
 "
 RDEPEND="
 	${DEPEND}
-	dev-python/pygtk
 "
 
 pkg_postinst() {
