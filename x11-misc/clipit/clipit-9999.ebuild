@@ -13,7 +13,7 @@ EGIT_REPO_URI="git://git.code.sf.net/p/gtkclipit/code"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="appindicator"
+IUSE="appindicator nls"
 
 RDEPEND="
 	appindicator? ( dev-libs/libappindicator:2 )
@@ -28,7 +28,9 @@ AUTOTOOLS_AUTORECONF="1"
 src_configure() {
 	local myeconfargs=(
 		$(use_enable appindicator)
+		$(use_enable nls)
 	)
+	PKG_CONFIG=`type -P pkg-config` \
 	autotools-utils_src_configure
 }
 
