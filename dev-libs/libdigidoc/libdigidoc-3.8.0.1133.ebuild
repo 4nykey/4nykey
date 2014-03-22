@@ -26,7 +26,7 @@ DEPEND="
 	${RDEPEND}
 "
 
-DOCS="authors ChangeLog readme RELEASE-NOTES.txt"
+DOCS="AUTHORS README RELEASE-NOTES.txt"
 
 src_prepare() {
 	epatch "${FILESDIR}"/${PN}*.patch

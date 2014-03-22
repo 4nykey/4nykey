@@ -13,7 +13,7 @@ RESTRICT="primaryuri"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="mono"
 
 RDEPEND="
 	dev-libs/libdigidoc
@@ -25,29 +25,24 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	>=dev-cpp/xsd-3.2.0
-	dev-lang/swig
+	mono? ( dev-lang/swig )
 "
 RDEPEND="
 	${RDEPEND}
 	>=app-misc/sk-certificates-${PV%.*}
 "
 
-DOCS="AUTHORS"
+DOCS="AUTHORS README RELEASE-NOTES.txt"
 
 src_prepare() {
-	sed -i src/io/ZipSerialize.cpp \
-		-e 's:\(#include\) "../\(minizip/.\+\.h\)":\1 <\2\>:'
-	sed -i src/CMakeLists.txt \
-		-e '/set_target_properties.*minizip/d'
+	use mono || sed -i CMakeLists.txt -e '/find_package(SWIG)/d'
 	# We use another package (app-misc/sk-certificates) to install root certs
-	cd "${S}"
 	rm -r src/minizip etc/certs/*
 }
 
 src_configure() {
 	# If prefix is /usr, sysconf needs to be /etc, not /usr/etc
 	local mycmakeargs="
-		${mycmakeargs}
 		-DCMAKE_INSTALL_SYSCONFDIR=${EROOT}etc
 	"
 

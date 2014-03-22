@@ -6,7 +6,7 @@ EAPI="5"
 inherit cmake-utils nsplugins
 
 MY_P="esteidfirefoxplugin-${PV}"
-MY_EXT="esteidpkcs11loader-3.7.2.1043"
+MY_EXT="esteidpkcs11loader-3.8.0.1052"
 
 DESCRIPTION="Estonian ID card digital signing browser plugin"
 HOMEPAGE="http://installer.id.ee/"
