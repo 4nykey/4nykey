@@ -4,12 +4,9 @@
 
 EAPI="5"
 
-inherit fdo-mime gnome2-utils flag-o-matic git-2 autotools-utils
+inherit fdo-mime gnome2-utils flag-o-matic git-r3 autotools-utils
 
-EGIT_BRANCH="master"
-EGIT_COMMIT="${EGIT_BRANCH}"
 EGIT_REPO_URI="git://git.code.sf.net/p/deadbeef/code"
-EGIT_PROJECT="${PN}"
 
 DESCRIPTION="DeaDBeeF - Ultimate Music Player For GNU/Linux"
 HOMEPAGE="http://deadbeef.sourceforge.net/"
@@ -128,12 +125,10 @@ pkg_preinst() {
 
 pkg_postinst() {
 	fdo-mime_desktop_database_update
-	fdo-mime_mime_database_update
 	gnome2_icon_cache_update
 }
 
 pkg_postrm() {
 	fdo-mime_desktop_database_update
-	fdo-mime_mime_database_update
 	gnome2_icon_cache_update
 }
