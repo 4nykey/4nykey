@@ -7,7 +7,7 @@ inherit eutils multilib
 
 DESCRIPTION="SANE backend for Samsung MFP devices"
 HOMEPAGE="http://www.samsung.com"
-SRC_URI="http://www.bchemnet.com/suldr/UnifiedLinuxDriver-${PV}.tar.gz"
+SRC_URI="http://www.bchemnet.com/suldr/driver/UnifiedLinuxDriver-${PV}.tar.gz"
 
 LICENSE="Samsung-EULA"
 SLOT="0"
