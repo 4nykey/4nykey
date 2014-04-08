@@ -7,16 +7,11 @@ VALA_MIN_API_VERSION="0.16"
 VALA_USE_DEPEND="vapigen"
 PYTHON_COMPAT=(python2_7)
 
-inherit eutils vala python-single-r1
+inherit autotools-utils python-single-r1 vala bzr
 
 DESCRIPTION="A library to allow applications to export a menu into the Unity Menu bar"
 HOMEPAGE="http://launchpad.net/libappindicator"
-DBUSMENU="libdbusmenu-12.10.2"
-SRC_URI="
-	http://launchpad.net/${PN}/${PV%.*}/${PV}/+download/${P}.tar.gz
-	http://launchpad.net/dbusmenu/${PV%.*}/${DBUSMENU#*-}/+download/${DBUSMENU}.tar.gz
-"
-RESTRICT="primaryuri"
+EBZR_REPO_URI="lp:${PN}"
 
 LICENSE="LGPL-2.1 LGPL-3"
 SLOT="2"
@@ -36,23 +31,41 @@ DEPEND="
 	virtual/pkgconfig
 	introspection? ( $(vala_depend) )
 "
+AUTOTOOLS_IN_SOURCE_BUILD="1"
+AUTOTOOLS_PRUNE_LIBTOOL_FILES="modules"
+
+src_unpack() {
+	DBUSMENU="${S}/src/libdbusmenu"
+	bzr_fetch
+	EBZR_REPO_URI="lp:libdbusmenu" EBZR_PROJECT="libdbusmenu" \
+	EBZR_UNPACK_DIR="${DBUSMENU}" bzr_fetch
+}
 
 src_prepare() {
-	DBUSMENU="${WORKDIR}/${DBUSMENU}"
 	# Disable MONO for now because of http://bugs.gentoo.org/382491
 	sed \
 		-e '/^MONO_REQUIRED_VERSION/s:=.*:=9999:' \
 		-e 's:dbusmenu-gtk-0.4 >= [\\]*\$DBUSMENUGTK_REQUIRED_VERSION::' \
-		-i configure || die
-	sed -i -e 's:dbusmenu-glib-0.4 ::' src/appindicator-0.1.pc.in || die
-	sed -i src/Makefile.in -e \
-		"s:LIBRARY_LIBS = .*:& \
+		-i configure.ac || die
+	sed \
+		-e "s:\$(LIBRARY_LIBS):& \
 			${DBUSMENU}/libdbusmenu-glib/libdbusmenu-glib.la\
-			${DBUSMENU}/libdbusmenu-gtk/libdbusmenu-gtk.la:"
+			${DBUSMENU}/libdbusmenu-gtk/libdbusmenu-gtk.la:"\
+		-e 's:-Werror::' \
+		-i src/Makefile.am || die
+	sed -e 's:dbusmenu-glib-0.4 ::' -i src/appindicator-0.1.pc.in || die
 	if use !python; then
-		sed -i bindings/Makefile.in -e 's:\(@USE_GTK3_FALSE@SUBDIRS =\) python:\1:' 
+		sed -e '/python/d' -i bindings/Makefile.am || die
 	fi
+
+	sed \
+		-e '/indicator_desktop_shortcuts_nick_exec_with_context/d' \
+		-i src/app-indicator.c
+	
 	use introspection && vala_src_prepare
+	eautoreconf
+	cd ${DBUSMENU}
+	eautoreconf
 }
 
 src_configure() {
@@ -80,10 +93,4 @@ src_compile() {
 	emake -C ${DBUSMENU}/libdbusmenu-glib
 	emake -C ${DBUSMENU}/libdbusmenu-gtk
 	default
-}
-
-src_install() {
-	default
-	prune_libtool_files --modules
-	use doc || rm -rf "${ED}"/usr/share/gtk-doc
 }
