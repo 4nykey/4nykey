@@ -4,12 +4,13 @@
 
 EAPI="5"
 
-inherit fdo-mime gnome2-utils flag-o-matic git-r3 autotools-utils
+inherit autotools-utils gnome2 git-r3
 
-EGIT_REPO_URI="git://git.code.sf.net/p/deadbeef/code"
+EGIT_REPO_URI="https://github.com/Alexey-Yakovenko/deadbeef.git"
 
 DESCRIPTION="DeaDBeeF - Ultimate Music Player For GNU/Linux"
-HOMEPAGE="http://deadbeef.sourceforge.net/"
+HOMEPAGE="http://deadbeef.sourceforge.net"
+SRC_URI=""
 LICENSE="GPL-2 LGPL-2.1"
 
 SLOT="0"
@@ -60,9 +61,43 @@ DEPEND="
 	${RDEPEND}
 	oss? ( virtual/libc )
 "
+G2CONF="
+	$(use_enable nls)
+	$(use_enable threads threads $(usex pth pth posix))
+	$(use_enable alsa)
+	$(use_enable oss)
+	$(use_enable pulseaudio pulse)
+	$(use_enable gtk gtk2)
+	$(use_enable gtk3)
+	$(use_enable network vfs-curl)
+	$(use_enable network lfm)
+	$(use_enable cover artwork)
+	$(use_enable sid)
+	$(use_enable mad)
+	$(use_enable mac ffap)
+	$(use_enable adplug)
+	$(use_enable X hotkeys)
+	$(use_enable vorbis)
+	$(use_enable ffmpeg)
+	$(use_enable flac)
+	$(use_enable sndfile)
+	$(use_enable wavpack)
+	$(use_enable cdda )
+	$(use_enable gme)
+	$(use_enable libnotify notify)
+	$(use_enable musepack)
+	$(use_enable midi wildmidi)
+	$(use_enable tta)
+	$(use_enable dts dca)
+	$(use_enable aac)
+	$(use_enable mms)
+	$(use_enable libsamplerate src)
+	$(use_enable zip vfs-zip)
+"
 
 AUTOTOOLS_AUTORECONF="1"
 AUTOTOOLS_IN_SOURCE_BUILD="1"
+AUTOTOOLS_PRUNE_LIBTOOL_FILES="modules"
 
 src_prepare() {
 	sed -i "${S}"/plugins/wildmidi/wildmidiplug.c \
@@ -71,64 +106,7 @@ src_prepare() {
 	autotools-utils_src_prepare
 }
 
-src_configure() {
-	local _thr_impl="posix"
-	use pth && _thr_impl="pth"
-	local myeconfargs=(
-		$(use_enable nls)
-		$(use_enable threads threads ${_thr_impl})
-		$(use_enable alsa)
-		$(use_enable oss)
-		$(use_enable pulseaudio pulse)
-		$(use_enable gtk gtk2)
-		$(use_enable gtk3)
-		$(use_enable network vfs-curl)
-		$(use_enable network lfm)
-		$(use_enable cover artwork)
-		$(use_enable sid)
-		$(use_enable mad)
-		$(use_enable mac ffap)
-		$(use_enable adplug)
-		$(use_enable X hotkeys)
-		$(use_enable vorbis)
-		$(use_enable ffmpeg)
-		$(use_enable flac)
-		$(use_enable sndfile)
-		$(use_enable wavpack)
-		$(use_enable cdda )
-		$(use_enable gme)
-		$(use_enable libnotify notify)
-		$(use_enable musepack)
-		$(use_enable midi wildmidi)
-		$(use_enable tta)
-		$(use_enable dts dca)
-		$(use_enable aac)
-		$(use_enable mms)
-		$(use_enable libsamplerate src)
-		$(use_enable zip vfs-zip)
-		--docdir="/usr/share/doc/${PF}"
-		--disable-dependency-tracking
-		--disable-static
-	)
-	autotools-utils_src_configure
-}
-
 src_install() {
 	autotools-utils_src_install
 	docompress -x /usr/share/doc/${PF}
-	remove_libtool_files all
-}
-
-pkg_preinst() {
-	gnome2_icon_savelist
-}
-
-pkg_postinst() {
-	fdo-mime_desktop_database_update
-	gnome2_icon_cache_update
-}
-
-pkg_postrm() {
-	fdo-mime_desktop_database_update
-	gnome2_icon_cache_update
 }
