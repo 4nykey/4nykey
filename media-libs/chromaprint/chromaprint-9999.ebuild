@@ -3,7 +3,7 @@
 # $Header: $
 
 EAPI="4"
-inherit eutils cmake-utils git-2
+inherit eutils cmake-utils git-r3
 
 DESCRIPTION="Core component of the Acoustid audio fingerprinting project."
 HOMEPAGE="http://acoustid.org/chromaprint"

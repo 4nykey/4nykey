@@ -7,7 +7,7 @@ EAPI=5
 PLOCALES="
 cs de el en_GB es fr it nn pl pt pt_PT ru sv zh
 "
-inherit fdo-mime gnome2-utils waf-utils l10n git-2
+inherit fdo-mime gnome2-utils waf-utils l10n git-r3
 
 DESCRIPTION="Digital Audio Workstation"
 HOMEPAGE="http://ardour.org/"

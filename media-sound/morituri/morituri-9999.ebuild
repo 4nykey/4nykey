@@ -6,11 +6,10 @@ EAPI=5
 
 PYTHON_COMPAT="python2_7"
 WANT_AUTOMAKE="1.8"
-EGIT_HAS_SUBMODULES="y"
 AUTOTOOLS_AUTORECONF="1"
 AUTOTOOLS_IN_SOURCE_BUILD="1"
 
-inherit bash-completion-r1 python-single-r1 git-2 autotools-utils
+inherit bash-completion-r1 python-single-r1 git-r3 autotools-utils
 
 DESCRIPTION="morituri is a CD ripper aiming for accuracy over speed"
 HOMEPAGE="http://thomas.apestaart.org/morituri/trac"
@@ -51,7 +50,8 @@ src_configure() {
 
 src_compile() {
 	autotools-utils_src_compile
-	use doc && GST_REGISTRY="${T}/registry.xml" epydoc -o doc/reference morituri
+	use doc && \
+		GST_REGISTRY="${T}/registry.xml" epydoc -o doc/reference morituri
 }
 
 src_install() {

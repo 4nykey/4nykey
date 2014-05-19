@@ -2,9 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI=5
 
-inherit autotools-utils git-2
+inherit autotools-utils git-r3
 
 DESCRIPTION="dcaenc is a encoder for the DTS Coherent Acoustics audio format"
 HOMEPAGE="http://aepatrakov.narod.ru/dcaenc/"
@@ -17,7 +17,6 @@ IUSE="alsa"
 
 DEPEND="
 	alsa? ( media-libs/alsa-lib )
-
 "
 RDEPEND="
 	${DEPEND}

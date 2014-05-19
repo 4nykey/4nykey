@@ -2,11 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI="5"
 
-inherit git-2 autotools-utils
+inherit git-r3 autotools-utils
 
-DESCRIPTION="A utility for tagging FLAC files with embedded CUE sheets via MusicBrainz"
+DESCRIPTION="A utility for tagging FLAC files via MusicBrainz"
 HOMEPAGE="http://software.gently.org.uk/flactag/"
 EGIT_REPO_URI="git://flactag.git.sourceforge.net/gitroot/flactag/flactag"
 
@@ -34,11 +34,6 @@ DEPEND="
 PATCHES=("${FILESDIR}"/${PN}*.diff)
 AUTOTOOLS_AUTORECONF="1"
 AUTOTOOLS_IN_SOURCE_BUILD="1"
-
-src_prepare() {
-	sed -e 's:AM_CONFIG_HEADER:AC_CONFIG_HEADERS:' -i configure.ac
-	autotools-utils_src_prepare
-}
 
 src_configure() {
 	local myeconfargs=(

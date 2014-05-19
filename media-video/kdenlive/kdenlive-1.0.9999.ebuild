@@ -5,7 +5,7 @@
 EAPI=5
 KDE_HANDBOOK="optional"
 OPENGL_REQUIRED="always"
-inherit kde4-base git-2
+inherit kde4-base git-r3
 
 DESCRIPTION="A non-linear video editing suite for KDE"
 HOMEPAGE="http://www.kdenlive.org/"

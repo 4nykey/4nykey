@@ -3,7 +3,7 @@
 # $Header: $
 
 EAPI="4"
-inherit toolchain-funcs git-2
+inherit toolchain-funcs git-r3
 
 DESCRIPTION="A collection of unix tools that nobody thought to write 30 years ago"
 HOMEPAGE="http://www.kitenet.net/~joey/code/moreutils.html"

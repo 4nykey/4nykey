@@ -1,0 +1,21 @@
+diff --git a/Makefile.am b/Makefile.am
+index b688545..39ebd27 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -52,11 +52,11 @@ flactag.html:	flactag.txt Makefile
+ CLEANFILES = ripflac flactag.1.xml flactag.1 flactag.html
+ 
+ install-data-hook:
+-	$(LN_S) $(DESTDIR)$(man1dir)/flactag.1 $(DESTDIR)$(man1dir)/ripflac.1
+-	$(LN_S) $(DESTDIR)$(man1dir)/flactag.1 \
+-		$(DESTDIR)$(man1dir)/ripdataflac.1
+-	$(LN_S) $(DESTDIR)$(man1dir)/flactag.1 $(DESTDIR)$(man1dir)/checkflac.1
+-	$(LN_S) $(DESTDIR)$(man1dir)/flactag.1 $(DESTDIR)$(man1dir)/discid.1
++	$(LN_S) flactag.1 $(DESTDIR)$(man1dir)/ripflac.1
++	$(LN_S) flactag.1 \
++		$(DESTDIR)$(man1dir)/ripdataflac.1
++	$(LN_S) flactag.1 $(DESTDIR)$(man1dir)/checkflac.1
++	$(LN_S) flactag.1 $(DESTDIR)$(man1dir)/discid.1
+ 
+ RM_F = rm -f
+ uninstall-hook:

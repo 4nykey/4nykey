@@ -2,8 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-sound/ardour/ardour-2.8.12.ebuild,v 1.2 2011/09/28 22:48:16 ssuominen Exp $
 
-EAPI=4
-inherit eutils toolchain-funcs fdo-mime gnome2-utils scons-utils git-2
+EAPI=5
+inherit eutils toolchain-funcs fdo-mime gnome2-utils scons-utils git-r3
 
 DESCRIPTION="Digital Audio Workstation"
 HOMEPAGE="http://ardour.org/"

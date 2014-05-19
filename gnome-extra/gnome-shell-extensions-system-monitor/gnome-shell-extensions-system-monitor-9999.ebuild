@@ -6,7 +6,7 @@ EAPI="5"
 GCONF_DEBUG="no"
 PLOCALES="zh_CN sl ru ro pt_BR pt pl it fr fa es_MX es_ES de cs"
 
-inherit gnome2-utils l10n git-2
+inherit gnome2-utils l10n git-r3
 
 DESCRIPTION="An extension for displaying sensors information in GNOME Shell"
 HOMEPAGE="https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet"

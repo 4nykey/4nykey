@@ -3,7 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/dev-dotnet/gtk-sharp-beans/gtk-sharp-beans-2.14.0.ebuild,v 1.5 2012/05/04 03:56:55 jdhore Exp $
 
 EAPI=5
-inherit autotools-utils mono multilib git-2
+inherit autotools-utils mono multilib git-r3
 
 DESCRIPTION="GTK+ API C# binding"
 HOMEPAGE="http://github.com/mono/gtk-sharp-beans"

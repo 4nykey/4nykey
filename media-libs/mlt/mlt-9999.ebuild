@@ -4,7 +4,7 @@
 
 EAPI=4
 PYTHON_DEPEND="python? 2:2.6"
-inherit eutils toolchain-funcs multilib python git-2
+inherit eutils toolchain-funcs multilib python git-r3
 
 DESCRIPTION="An open source multimedia framework, designed and developed for television broadcasting"
 HOMEPAGE="http://www.mltframework.org/"

@@ -4,7 +4,7 @@
 
 EAPI="4"
 
-inherit git-2 autotools-utils
+inherit git-r3 autotools-utils
 
 DESCRIPTION="BitTorrent Client using libtorrent"
 HOMEPAGE="http://libtorrent.rakshasa.no/"
@@ -32,10 +32,10 @@ DEPEND="
 "
 
 src_unpack() {
-	git-2_src_unpack
-	EGIT_SOURCEDIR="${S}/src/libtorrent" \
+	git-r3_src_unpack
+	EGIT_CHECKOUT_DIR="${S}/src/libtorrent" \
 	EGIT_REPO_URI="git://github.com/rakshasa/libtorrent.git" \
-		git-2_src_unpack
+		git-r3_src_unpack
 }
 
 src_prepare() {

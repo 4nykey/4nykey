@@ -4,7 +4,7 @@
 
 EAPI=4
 
-inherit git-2 autotools-utils
+inherit git-r3 autotools-utils
 
 DESCRIPTION="library to add support for consumer fingerprint readers"
 HOMEPAGE="http://cgit.freedesktop.org/libfprint/libfprint/"

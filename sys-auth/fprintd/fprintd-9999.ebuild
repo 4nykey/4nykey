@@ -4,7 +4,7 @@
 
 EAPI=4
 
-inherit autotools-utils toolchain-funcs git-2
+inherit autotools-utils toolchain-funcs git-r3
 
 DESCRIPTION="D-Bus to offer libfprint functionality"
 HOMEPAGE="http://cgit.freedesktop.org/libfprint/fprintd/"

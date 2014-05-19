@@ -4,7 +4,7 @@
 
 EAPI=4
 
-inherit git-2 autotools-utils
+inherit git-r3 autotools-utils
 
 DESCRIPTION="a simple GTK+ application to demonstrate and test libfprint's capabilities"
 HOMEPAGE="http://www.reactivated.net/fprint/wiki/Fprint_demo"

@@ -3,7 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/dev-dotnet/gio-sharp/gio-sharp-0.3.ebuild,v 1.4 2012/05/04 03:56:57 jdhore Exp $
 
 EAPI=5
-inherit autotools-utils mono git-2
+inherit autotools-utils mono git-r3
 
 DESCRIPTION="GIO API C# binding"
 HOMEPAGE="http://github.com/mono/gio-sharp"
@@ -39,6 +39,8 @@ src_install() {
 	insinto /usr/$(get_libdir)/pkgconfig
 	sed -e 's:assemblies_dir=\${libdir}/:&mono/:' -i gio/${PN}-2.0.pc
 	doins gio/${PN}-2.0.pc
+	insinto /usr/share/gapi-2.0
+	doins gio/gio-api.xml
 	mono_multilib_comply
 	dodoc ${DOCS[@]}
 }

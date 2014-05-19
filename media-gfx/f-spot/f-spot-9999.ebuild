@@ -4,13 +4,12 @@
 
 EAPI="5"
 
-inherit autotools-utils gnome2 mono multilib git-2
+inherit autotools-utils gnome2 mono multilib git-r3
 
 DESCRIPTION="Personal photo management application for the gnome desktop"
 HOMEPAGE="http://f-spot.org"
 SRC_URI=""
 EGIT_REPO_URI="git://git.gnome.org/f-spot"
-EGIT_HAS_SUBMODULES="y"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -22,6 +21,7 @@ RDEPEND="
 	dev-dotnet/gtk-sharp-beans
 	media-libs/lcms:0
 	>=dev-lang/mono-2.2
+	dev-dotnet/mono-addins
 	dev-dotnet/gnome-keyring-sharp
 	>=dev-dotnet/gtk-sharp-2.12.2:2
 	dev-dotnet/dbus-sharp-glib
@@ -30,6 +30,7 @@ RDEPEND="
 	dev-dotnet/gconf-sharp:2
 	>=media-libs/lcms-1.12:0
 	>=x11-libs/cairo-1.4
+	dev-libs/libunique:1
 	doc? ( >=app-text/gnome-doc-utils-0.17.3 )
 	flickr? ( >=dev-dotnet/flickrnet-bin-2.2-r1 )
 	raw?	( media-gfx/dcraw )
