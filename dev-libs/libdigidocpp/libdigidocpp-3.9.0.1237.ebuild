@@ -5,37 +5,45 @@
 EAPI=5
 inherit cmake-utils eutils
 
-DESCRIPTION="Library for handling digitally signed documents"
+DESCRIPTION="Library for creating and validating BDoc and DDoc containers"
 HOMEPAGE="http://installer.id.ee"
 SRC_URI="https://installer.id.ee/media/sources/${P}.tar.gz"
 RESTRICT="primaryuri"
+S="${WORKDIR}/${PN}"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="icu"
+IUSE="mono"
 
 RDEPEND="
-	dev-libs/libxml2
-	dev-libs/opensc
-	dev-libs/openssl
-	sys-libs/zlib
-	icu? ( dev-libs/icu )
+	dev-libs/libdigidoc
+	dev-libs/xerces-c
+	dev-libs/xml-security-c
+	dev-util/cppunit
+	sys-libs/zlib[minizip]
 "
 DEPEND="
 	${RDEPEND}
+	>=dev-cpp/xsd-3.2.0
+	mono? ( dev-lang/swig )
+"
+RDEPEND="
+	${RDEPEND}
+	app-misc/sk-certificates
 "
 
 DOCS="AUTHORS README RELEASE-NOTES.txt"
 
 src_prepare() {
-	epatch "${FILESDIR}"/${PN}*.patch
+	use mono || sed -i CMakeLists.txt -e '/find_package(SWIG)/d'
+	# We use another package (app-misc/sk-certificates) to install root certs
+	rm -r src/minizip etc/certs/*
 }
 
 src_configure() {
 	# If prefix is /usr, sysconf needs to be /etc, not /usr/etc
 	local mycmakeargs="
-		${mycmakeargs}
 		-DCMAKE_INSTALL_SYSCONFDIR=${EROOT}etc
 	"
 

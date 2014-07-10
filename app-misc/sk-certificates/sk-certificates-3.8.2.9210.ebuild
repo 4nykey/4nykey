@@ -4,11 +4,13 @@
 
 EAPI=3
 
-MY_P="esteidcerts-${PV}"
+MY_PN="esteidcerts"
+MY_P="${MY_PN}-${PV}"
 
 DESCRIPTION="Estonian root certificates for PKI"
 HOMEPAGE="http://installer.id.ee"
 SRC_URI="https://installer.id.ee/media/sources/${MY_P}.tar.gz"
+SRC_URI="https://installer.id.ee/media/ubuntu/pool/main/${MY_PN:0:1}/${MY_PN}/${MY_PN}_${PV}-ubuntu-14-04.tar.gz"
 RESTRICT="primaryuri"
 
 LICENSE="LGPL-2.1"
@@ -16,9 +18,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-S=${WORKDIR}/${MY_P}
+S="${WORKDIR}/${MY_P}"
 
 src_install() {
-	insinto ${EROOT}/usr/share/esteid/certs
-	doins *.crt
+	doins -r usr
 }

@@ -9,17 +9,28 @@ DESCRIPTION="Digidoc client"
 HOMEPAGE="http://installer.id.ee"
 SRC_URI="https://installer.id.ee/media/sources/${P}.tar.gz"
 RESTRICT="primaryuri"
+S="${WORKDIR}/${PN}"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="qt5"
 
 DEPEND="
 	dev-libs/libdigidocpp
-	dev-qt/qtcore:4[ssl]
-	dev-qt/qtgui:4
-	dev-qt/qtwebkit:4
+	sys-apps/pcsc-lite
+	dev-libs/opensc
+	qt5? (
+		dev-qt/linguist-tools:5
+		dev-qt/qtwidgets:5
+		dev-qt/qtnetwork:5
+		dev-qt/qtprintsupport:5
+	)
+	!qt5? (
+		dev-qt/qtcore:4[ssl]
+		dev-qt/qtgui:4
+		dev-qt/qtwebkit:4
+	)
 	net-nds/openldap
 "
 RDEPEND="
