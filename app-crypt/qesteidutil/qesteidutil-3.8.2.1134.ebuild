@@ -34,3 +34,7 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 "
+
+src_prepare() {
+	use qt5 || sed '/find_package.*Qt5Widgets/d' -i CMakeLists.txt
+}
