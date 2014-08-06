@@ -6,22 +6,23 @@ EAPI=5
 
 inherit font git-r3
 
-DESCRIPTION="A font family that aims to support all the world's languages"
-HOMEPAGE="http://www.google.com/get/noto"
+DESCRIPTION="Open licensed fonts metrically compatible with MS corefonts"
+HOMEPAGE="http://www.google.com/webfonts/specimen/Arimo
+	http://www.google.com/webfonts/specimen/Cousine
+	http://www.google.com/webfonts/specimen/Tinos"
 EGIT_REPO_URI="https://code.google.com/p/noto"
 
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="cjk"
+IUSE=""
 
 DEPEND=""
 RDEPEND="${DEPEND}"
 
-FONT_SUFFIX="$(usex cjk otf '') ttf ttc"
+FONT_SUFFIX="ttf"
 
 src_prepare() {
-	mv fonts/individual/hinted/Noto*.tt[fc] .
-	use cjk && mv third_party/noto_cjk/NotoSansCJK* .
+	mv fonts/individual/hinted/{Arimo,Cousine,Tinos}*.ttf .
 	rm -f Makefile
 }

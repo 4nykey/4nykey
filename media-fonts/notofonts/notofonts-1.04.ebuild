@@ -6,7 +6,7 @@ EAPI=5
 
 inherit font
 
-DESCRIPTION="A font family that aims to support all the world’s languages"
+DESCRIPTION="A font family that aims to support all the world's languages"
 HOMEPAGE="http://www.google.com/get/noto"
 SRC_URI="http://www.google.com/get/noto/pkgs/Noto-hinted.zip"
 EGIT_REPO_URI="https://code.google.com/p/noto"
