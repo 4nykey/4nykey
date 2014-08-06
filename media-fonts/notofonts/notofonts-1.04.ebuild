@@ -4,27 +4,21 @@
 
 EAPI=5
 
-inherit font git-r3
+inherit font
 
 DESCRIPTION="A font family that aims to support all the world’s languages"
 HOMEPAGE="http://www.google.com/get/noto"
+SRC_URI="http://www.google.com/get/noto/pkgs/Noto-hinted.zip"
 EGIT_REPO_URI="https://code.google.com/p/noto"
 
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="cjk"
+IUSE=""
 
 DEPEND=""
-RDEPEND="
-	${DEPEND}
-	!media-fonts/croscorefonts
-"
+RDEPEND="${DEPEND}"
 
-FONT_SUFFIX="$(usex cjk otf '') ttf ttc"
-
-src_prepare() {
-	mv fonts/individual/hinted/*.tt[fc] .
-	use cjk && mv third_party/noto_cjk/NotoSansCJK* .
-	rm -f Makefile
-}
+S="${WORKDIR}"
+FONT_S="${S}"
+FONT_SUFFIX="ttf otf"
