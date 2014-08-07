@@ -1,0 +1,26 @@
+#!/bin/sh
+bld=(
+	1_heuristica-ib
+	1-dejavu-ib
+	ttf-courier-prime-ib
+	ttf-liberation-ib
+	1_noto-family-ib
+	1_noto-family-ib
+	ttf-symbola-ib
+)
+pkg=(
+	otf-heuristica-ib
+	ttf-dejavu-ib
+	ttf-courier-prime-ib
+	ttf-liberation-ib
+	ttf-noto-sans-ib
+	ttf-noto-serif-ib
+	ttf-symbola-ib
+)
+echo 'SRC_URI=('
+for x in ${!pkg[@]}; do
+    y="https://raw.githubusercontent.com/bohoomil/fontconfig-ultimate/pkgbuild/${bld[${x}]}/PKGBUILD"
+    _v=$(curl -s "${y}"|awk -F= '/pkg[vr]e[rl]=/ {print $2}'|tr '\n' '-')
+    echo -e "\t${pkg[${x}]}-${_v%-}"
+done
+echo ')'
