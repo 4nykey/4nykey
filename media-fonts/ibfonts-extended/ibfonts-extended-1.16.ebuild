@@ -15,7 +15,6 @@ SRC_URI=(
 	otf-cantoraone-ib-1.001-4
 	otf-oswald-ib-3.0-5
 	otf-quintessential-ib-1.000-4
-	otf-tex-gyre-ib-2.005-5
 	t1-urw-fonts-ib-2.4-5
 	ttf-caladea-ib-20130214-4
 	ttf-carlito-ib-20130920-5
@@ -38,7 +37,7 @@ SRC_URI=( ${SRC_URI[@]/#/http://bohoomil.com/repo/fonts/} )
 SRC_URI="${SRC_URI[@]/%/-any.pkg.tar.xz}"
 RESTRICT="primaryuri"
 
-LICENSE="Apache-2.0 OFL LPPL-1.3c"
+LICENSE="Apache-2.0 OFL"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
