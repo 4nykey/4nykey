@@ -35,7 +35,7 @@ RDEPEND="app-admin/eselect-infinality
 	fonts-free? (
 		media-fonts/dejavu
 		media-fonts/notofonts
-		media-fonts/liberastika-ttf
+		media-fonts/liberation-fonts
 		media-fonts/heuristica
 		fonts-extra? (
 			media-fonts/cantarell
@@ -84,12 +84,18 @@ src_prepare() {
 }
 
 src_install() {
+	local default_configs cfg flv \
+		flavors='ms free combi' \
+		src='../../conf.src.ultimate' \
+		dst='/etc/fonts/infinality/styles.conf.avail/ultimate-'
+
 	insinto /etc/fonts/infinality/conf.src.ultimate
 	doins conf.d.infinality/*.conf
-	doins fontconfig_patches/{ms,free,combi}/*.conf
+	for flv in ${flavors}; do
+		doins fontconfig_patches/${flv}/*.conf
+	done
 
 	# Cut a list of default .conf files out of Makefile.am
-	local default_configs config
 	default_configs=$(sed --quiet \
 		-e ':again' \
 		-e '/\\$/ N' \
@@ -98,22 +104,11 @@ src_install() {
 		-e 's/^CONF_LINKS =//p' \
 		conf.d.infinality/Makefile.am) || die
 
-	cd fontconfig_patches/ms || die
-	for config in ${default_configs} *.conf; do
-		dosym ../../conf.src.ultimate/"${config}" \
-			/etc/fonts/infinality/styles.conf.avail/ultimate-ms/"${config}"
+	for flv in ${flavors}; do
+		for cfg in ${default_configs} fontconfig_patches/${flv}/*.conf; do
+			dosym {${src},${dst}${flv}}/${cfg##*/}
+		done
 	done
-	cd ../../fontconfig_patches/free || die
-	for config in ${default_configs} *.conf; do
-		dosym ../../conf.src.ultimate/"${config}" \
-			/etc/fonts/infinality/styles.conf.avail/ultimate-free/"${config}"
-	done
-	cd ../../fontconfig_patches/combi || die
-	for config in ${default_configs} *.conf; do
-		dosym ../../conf.src.ultimate/"${config}" \
-			/etc/fonts/infinality/styles.conf.avail/ultimate-combi/"${config}"
-	done
-	cd "${S}"
 
 	insinto /etc/fonts/conf.avail
 	doins fontconfig_patches/ftypes/*.conf
@@ -121,6 +116,6 @@ src_install() {
 	insinto /usr/share/eselect-lcdfilter/env.d
 	doins "${T}"/ultimate
 
-	dodoc README.md
+	dodoc README.md conf.d.infinality/README
 	readme.gentoo_create_doc
 }
