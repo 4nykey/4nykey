@@ -16,7 +16,7 @@ EGIT_REPO_URI="git://git.ardour.org/ardour/ardour.git"
 LICENSE="GPL-2"
 SLOT="3"
 KEYWORDS="~amd64 ~x86"
-IUSE="bindist bundled-libs c++0x custom-cflags debug doc lv2 nls osc phone-home sse wiimote"
+IUSE="bindist bundled-libs -c++0x custom-cflags debug doc lv2 nls osc phone-home sse wiimote"
 
 RDEPEND="
 	dev-cpp/libgnomecanvasmm
@@ -62,10 +62,7 @@ my_use() {
 }
 
 my_lcmsg() {
-	local d
-	for d in gtk2_ardour libs/ardour libs/gtkmm2ext; do
-		rm -f ${d}/po/${1}.po
-	done
+	rm -f {gtk2_ardour,libs/ardour,libs/gtkmm2ext}/po/${1}.po
 }
 
 src_prepare() {
@@ -85,12 +82,12 @@ src_configure() {
 		$(my_use nls)
 		$(my_use phone-home)
 		$(my_use sse fpu-optimization)
+		$(usex bindist '--freebie' '')
+		$(usex debug '' '--optimize')
+		$(usex c++0x '--cxx11' '')
+		$(usex bundled-libs '' '--use-external-libs')
+		$(usex doc '--docs' '')
 	)
-	use bindist && wafargs+=(--freebie)
-	use debug || wafargs+=(--optimize)
-	use c++0x && wafargs+=(--cxx11)
-	use bundled-libs || wafargs+=(--use-external-libs)
-	use doc && wafargs+=(--docs)
 
 	waf-utils_src_configure "${wafargs[@]}"
 }
