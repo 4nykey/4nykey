@@ -119,6 +119,6 @@ index 8f7d9e8..165838d 100644
  libtorrentincludedir = $(includedir)/torrent/utils
 -libtorrentinclude_HEADERS = \
 +noinst_HEADERS = \
+ 	directory_events.h \
  	extents.h \
  	log.h \
- 	log_buffer.h \
