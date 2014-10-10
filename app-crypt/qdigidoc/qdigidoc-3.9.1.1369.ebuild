@@ -8,8 +8,8 @@ inherit cmake-utils
 DESCRIPTION="Digidoc client"
 HOMEPAGE="http://installer.id.ee"
 SRC_URI="https://installer.id.ee/media/sources/${P}.tar.gz"
+SRC_URI="https://installer.id.ee/media/ubuntu/pool/main/${PN:0:1}/${PN}/${PN}_${PV}-ubuntu-14-04.orig.tar.gz"
 RESTRICT="primaryuri"
-S="${WORKDIR}/${PN}"
 
 LICENSE="LGPL-2.1"
 SLOT="0"

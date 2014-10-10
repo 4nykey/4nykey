@@ -8,6 +8,7 @@ inherit cmake-utils eutils
 DESCRIPTION="Library for creating and validating BDoc and DDoc containers"
 HOMEPAGE="http://installer.id.ee"
 SRC_URI="https://installer.id.ee/media/sources/${P}.tar.gz"
+SRC_URI="https://installer.id.ee/media/ubuntu/pool/main/${PN:0:4}/${PN}/${PN}_${PV}-ubuntu-14-04.tar.gz"
 RESTRICT="primaryuri"
 S="${WORKDIR}/${PN}"
 
