@@ -2,18 +2,20 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit cmake-utils subversion
+EAPI=5
+
+inherit cmake-utils git-r3
 
 DESCRIPTION="A converter between many dictionary formats (dictd, dsl, sdict, stardict, xdxf)"
 HOMEPAGE="http://xdxf.sf.net"
-ESVN_REPO_URI="https://xdxf.svn.sourceforge.net/svnroot/xdxf/trunk"
-ESVN_PATCHES="${PN}-*.diff"
+EGIT_REPO_URI="https://github.com/soshial/xdxf_makedict.git"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="verbose-build"
-DOCS="AUTHORS ChangeLog NEWS README TODO"
+IUSE=""
+PATCHES=( "${FILESDIR}"/${PN}-*.diff )
+DOCS=( AUTHORS CHANGELOG README TODO )
 
 DEPEND="
 	sys-libs/zlib
@@ -24,7 +26,3 @@ RDEPEND="
 	${DEPEND}
 	virtual/python
 "
-
-pkg_setup() {
-	use verbose-build && CMAKE_VERBOSE=y
-}

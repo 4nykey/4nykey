@@ -2,14 +2,13 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="2"
+EAPI="5"
 
-inherit distutils mercurial
+inherit distutils git-r3
 
 DESCRIPTION="A multiplatform dictionary and offline Wikipedia reader"
 HOMEPAGE="http://aarddict.org/"
-EHG_REPO_URI="http://bitbucket.org/itkach/${PN}"
-S="${WORKDIR}/${EHG_REPO_URI##*/}"
+EGIT_REPO_URI="https://github.com/aarddict/desktop.git"
 
 LICENSE="GPL-3"
 SLOT="0"
