@@ -34,8 +34,8 @@ DEPEND="
 EXTID="knbfaekihfoeoceefceadfonbmgpfeok"
 
 src_prepare() {
-	mkdir -p "${EXTID}/${PV}_0"
-	unzip -qq -o ${PN}.crx -d "${EXTID}/${PV}_0" 
+	unzip -qq -o ${PN}.crx -d extension 2>/dev/null
+	[[ $? -le 1 ]] || die "failed to unpack ${PN}.crx"
 }
 
 src_compile() {
@@ -46,20 +46,22 @@ src_compile() {
 }
 
 src_install() {
-	dobin out/chrome-token-signing
-	insinto /usr/share/chrome-token-signing
-	doins *.{json,xml}
-	dodir /etc/chromium/{native-messaging-hosts,policies/managed}
-	dosym /usr/share/chrome-token-signing/ee.ria.esteid.json \
-		/etc/chromium/native-messaging-hosts/ee.ria.esteid.json
-	dosym /usr/share/chrome-token-signing/esteid_policy.json \
-		/etc/chromium/policies/managed/esteid_policy.json
-	dodir /usr/$(get_libdir)/chromium-browser/extensions
-	insinto /usr/$(get_libdir)/chromium-browser/extensions
-	doins -r ${EXTID}
-	local d
-	for d in chrome{,-beta,-unstable}; do
-		dosym /usr/$(get_libdir)/chromium-browser/extensions/${EXTID} \
-			/opt/google/${d}/extensions/${EXTID} 
-	done
+	dobin out/${PN}
+	insinto ${EROOT}usr/share/${PN}
+	doins -r extension *.{json,xml}
+	dodir ${EROOT}etc/chromium/{native-messaging-hosts,policies/managed}
+	dosym ../../../usr/share/${PN}/ee.ria.esteid.json \
+		${EROOT}etc/chromium/native-messaging-hosts/ee.ria.esteid.json
+	dosym ../../../../usr/share/${PN}/esteid_policy.json \
+		${EROOT}etc/chromium/policies/managed/esteid_policy.json
+	dodir ${EROOT}usr/$(get_libdir)/chromium-browser/extensions/${EXTID}
+	dosym ../../../../share/${PN}/extension \
+		${EROOT}usr/$(get_libdir)/chromium-browser/extensions/${EXTID}/${PV}_0
+}
+
+pkg_postinst() {
+	elog "To use this with www-client/google-chrome"
+	elog "open chrome://extensions, enable developer mode"
+	elog "press 'Load unpacked extension' and navigate to"
+	elog "${EROOT}usr/share/${PN}/extension"
 }
