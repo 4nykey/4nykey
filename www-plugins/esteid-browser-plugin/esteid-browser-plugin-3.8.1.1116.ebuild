@@ -7,22 +7,27 @@ inherit cmake-utils nsplugins
 
 MY_PN="esteidfirefoxplugin"
 MY_P="${MY_PN}-${PV}"
-MY_EXT="esteidpkcs11loader"
-MY_CHR="chrome-token-signing-3.9.0.374"
+MY_LN="esteidpkcs11loader"
+MY_LV="3.8.1.1056"
+MY_CN="chrome-token-signing"
+MY_CV="3.9.0.374"
 
-DESCRIPTION="Estonian ID card digital signing browser plugin"
-HOMEPAGE="http://installer.id.ee/"
+DESCRIPTION="Estonian ID card browser plugin"
+HOMEPAGE="http://id.ee/"
 SRC_URI="
 	https://installer.id.ee/media/sources/${MY_P}.tar.gz
-	https://installer.id.ee/media/sources/${MY_EXT}.tar.gz
+	https://installer.id.ee/media/sources/${MY_LN}-${MY_LV}.tar.gz
+	chromium? ( 
+		https://installer.id.ee/media/sources/${MY_CN}-${MY_CV}.tar.gz
+	)
 "
 BASE_URI="https://installer.id.ee/media/ubuntu/pool/main"
 SRC_URI="
 	${BASE_URI}/${MY_PN:0:1}/${MY_PN}/${MY_PN}_${PV}-ubuntu-13-10.tar.gz
-	${BASE_URI}/${MY_EXT:0:1}/${MY_EXT}/${MY_EXT}_${PV%.*}.1056-ubuntu-13-10.tar.gz
+	${BASE_URI}/${MY_LN:0:1}/${MY_LN}/${MY_LN}_${MY_LV}-ubuntu-13-10.tar.gz
 	chromium? ( 
-		https://installer.id.ee/media/sources/${MY_CHR}.tar.gz
-		)
+		${BASE_URI}/${MY_CN:0:1}/${MY_CN}/${MY_CN}_${MY_CV}-ubuntu-14-04.tar.gz
+	)
 "
 RESTRICT="primaryuri"
 
@@ -41,16 +46,16 @@ DEPEND="
 "
 RDEPEND="
 	${DEPEND}
-	app-misc/sk-certificates
+	app-misc/esteidcerts
 	dev-libs/opensc
 "
 
-S="${WORKDIR}/${MY_EXT}"
+S="${WORKDIR}/${MY_LN}"
 
 src_compile() {
-	emake -C "${WORKDIR}"/${MY_PN} plugin
+	emake -C "${WORKDIR}/${MY_PN}" plugin
 	cmake-utils_src_compile
-	use chromium && emake -C "${WORKDIR}"/${MY_CHR}
+	use chromium && emake -C "${WORKDIR}/${MY_CN}-${MY_CV}"
 }
 
 src_install() {
@@ -58,7 +63,7 @@ src_install() {
 	doins "${WORKDIR}"/${MY_PN}/npesteid-firefox-plugin.so
 	cmake-utils_src_install
 	if use chromium; then
-		cd "${WORKDIR}"/${MY_CHR}
+		cd "${WORKDIR}/${MY_CN}-${MY_CV}"
 		dobin out/chrome-token-signing
 		insinto /usr/share/chrome-token-signing
 		doins *.{crx,json,xml}

@@ -5,8 +5,8 @@
 EAPI="5"
 inherit cmake-utils
 
-DESCRIPTION="Estonian ID card utility"
-HOMEPAGE="http://installer.id.ee"
+DESCRIPTION="Smart card manager UI application"
+HOMEPAGE="http://id.ee"
 SRC_URI="https://installer.id.ee/media/sources/${P}.tar.gz"
 SRC_URI="https://installer.id.ee/media/ubuntu/pool/main/${PN:0:1}/${PN}/${PN}_${PV}-ubuntu-14-04.tar.gz"
 RESTRICT="primaryuri"
@@ -15,7 +15,7 @@ S="${WORKDIR}/${PN}"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="qt5"
+IUSE="+qt5"
 
 RDEPEND="
 	sys-apps/pcsc-lite
