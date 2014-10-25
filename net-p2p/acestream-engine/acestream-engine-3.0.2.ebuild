@@ -9,18 +9,25 @@ PYTHON_COMPAT=( python2_7 )
 inherit eutils python-single-r1
 
 UR="14.04"
-MY_P="${PN%-*}_${PV}_ubuntu_${UR}_x86_64"
+MY_P="${PN%-*}_${PV}_ubuntu_${UR}_"
 DESCRIPTION="AceStream engine"
 HOMEPAGE="http://acestream.org"
 
-SRC_URI="http://dl.acestream.org/ubuntu/${UR%.*}/${MY_P}.tar.gz"
+SRC_URI="
+amd64? (
+	http://dl.acestream.org/ubuntu/${UR%.*}/${MY_P}x86_64.tar.gz
+)
+x86? (
+	http://dl.acestream.org/ubuntu/${UR%.*}/${MY_P}i686.tar.gz
+)
+"
 RESTRICT="primaryuri strip"
 
 LICENSE="acestream-EULA"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
-S="${WORKDIR}/${MY_P}"
+S="${WORKDIR}/${MY_P}$(usex x86 i686 x86_64)"
 
 DEPEND="
 "
