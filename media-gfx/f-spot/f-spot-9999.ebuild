@@ -20,7 +20,7 @@ RDEPEND="
 	gnome-base/gnome-desktop:2
 	dev-dotnet/gtk-sharp-beans
 	media-libs/lcms:0
-	>=dev-lang/mono-2.2
+	<dev-lang/mono-3.2.8
 	dev-dotnet/mono-addins
 	dev-dotnet/gnome-keyring-sharp
 	>=dev-dotnet/gtk-sharp-2.12.2:2
@@ -32,7 +32,7 @@ RDEPEND="
 	>=x11-libs/cairo-1.4
 	dev-libs/libunique:1
 	doc? ( >=app-text/gnome-doc-utils-0.17.3 )
-	flickr? ( >=dev-dotnet/flickrnet-bin-2.2-r1 )
+	flickr? ( || ( dev-dotnet/flickrnet dev-dotnet/flickrnet-bin ) )
 	raw?	( media-gfx/dcraw )
 	gnome-screensaver? ( gnome-extra/gnome-screensaver )
 "

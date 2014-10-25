@@ -2,11 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-dotnet/flickrnet-bin/flickrnet-bin-2.2-r1.ebuild,v 1.5 2011/06/13 22:19:27 flameeyes Exp $
 
-EAPI=2
+EAPI=5
 
 MY_PN="FlickrNet"
 
-inherit mono multilib
+inherit mono multilib unpacker
 
 DESCRIPTION="A .Net Library for accessing the Flickr API - Binary version"
 HOMEPAGE="http://www.codeplex.com/FlickrNet"
@@ -14,16 +14,20 @@ HOMEPAGE="http://www.codeplex.com/FlickrNet"
 # Upstream download require click-through LGPL-2.1.
 # Since the license allows us to do that, just redistribute
 # it in a decent format.
-SRC_URI="http://download-codeplex.sec.s-msft.com/Download/Release?ProjectName=flickrnet&DownloadId=723458&FileTime=130226110906470000&Build=20808 -> ${P}.zip"
+SRC_URI="http://download-codeplex.sec.s-msft.com/Download/Release?ProjectName=flickrnet&DownloadId=873768&FileTime=130487230497930000&Build=20941 -> ${P}.zip"
+RESTRICT="primaryuri"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="amd64 ppc x86"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-RDEPEND=">=dev-lang/mono-2.4"
-DEPEND="${RDEPEND}
-	app-arch/unzip"
+RDEPEND="
+	>=dev-lang/mono-2.4
+"
+DEPEND="
+	$(unpacker_src_uri_depends)
+"
 
 S="${WORKDIR}"
 
