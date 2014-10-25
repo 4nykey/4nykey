@@ -7,7 +7,7 @@ EAPI=5
 PLOCALES="
 cs de el en_GB es fr it nn pl pt pt_PT ru sv zh
 "
-inherit fdo-mime gnome2-utils waf-utils l10n git-r3
+inherit fdo-mime gnome2-utils waf-utils l10n git-r3 base
 
 DESCRIPTION="Digital Audio Workstation"
 HOMEPAGE="http://ardour.org/"
@@ -57,6 +57,9 @@ DEPEND="
 	doc? ( app-doc/doxygen )
 "
 
+PATCHES= #( "${FILESDIR}"/${PN}${SLOT}*.diff )
+DOCS=( README TRANSLATORS doc/monitor_modes.pdf )
+
 my_use() {
 	usex $1 --${2:-${1}} --no-${2:-${1}}
 }
@@ -66,10 +69,17 @@ my_lcmsg() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}"/${PN}${SLOT}*.diff
+	sed \
+		-e 's:AudioEditing:X-&:' \
+		-i gtk2_ardour/ardour3.desktop.in
+	sed \
+		-e '/clearlooks-newer/d' \
+		-i wscript
+	use custom-cflags && sed \
+		-e 's:\(prepend_opt_flags = \)True:\1False:' \
+		-i wscript
 	use nls && l10n_for_each_disabled_locale_do my_lcmsg
-	use custom-cflags && sed -i wscript \
-		-e 's:\(prepend_opt_flags = \)True:\1False:'
+	base_src_prepare
 }
 
 src_configure() {
@@ -94,13 +104,15 @@ src_configure() {
 
 src_compile() {
 	waf-utils_src_compile
-	use nls && "${S}"/waf --jobs=$(makeopts_jobs) i18n || die "i18n build failed"
+	use nls && \
+		"${S}"/waf --jobs=$(makeopts_jobs) i18n || die "i18n build failed"
 }
 
 src_install() {
 	waf-utils_src_install
 	newicon icons/icon/ardour_icon_mac.png ${PN}${SLOT}.png
 	newmenu gtk2_ardour/ardour3.desktop.in ${PN}${SLOT}.desktop
+	base_src_install_docs
 }
 
 pkg_preinst() {
