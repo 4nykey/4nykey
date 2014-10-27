@@ -36,15 +36,18 @@ src_compile() {
 }
 
 src_install() {
-	local _eid="knbfaekihfoeoceefceadfonbmgpfeok" _pth="${EROOT}usr/share/${PN}"
+	local _eid="knbfaekihfoeoceefceadfonbmgpfeok" _pth="${EROOT}usr/share/${PN}" d
 	dobin out/${PN}
 	insinto ${_pth}
 	doins *.{crx,json,xml}
-	dodir ${EROOT}etc/chromium/{native-messaging-hosts,policies/managed}
-	dosym ../../../usr/share/${PN}/ee.ria.esteid.json \
-		${EROOT}etc/chromium/native-messaging-hosts/ee.ria.esteid.json
-	dosym ../../../../usr/share/${PN}/esteid_policy.json \
-		${EROOT}etc/chromium/policies/managed/esteid_policy.json
+
+	for d in '/chromium/' '/opt/chrome/'; do
+		dodir ${EROOT}etc${d}{native-messaging-hosts,policies/managed}
+		dosym ${EROOT}usr/share/${PN}/ee.ria.esteid.json \
+			${EROOT}etc${d}native-messaging-hosts/ee.ria.esteid.json
+		dosym ${EROOT}usr/share/${PN}/esteid_policy.json \
+			${EROOT}etc${d}policies/managed/esteid_policy.json
+	done
 	cat >"${T}"/${_eid}.json <<-EOF
 	{
 		"external_crx": "${_pth}/${PN}.crx",
