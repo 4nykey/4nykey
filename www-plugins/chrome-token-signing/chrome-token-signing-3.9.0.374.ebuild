@@ -27,16 +27,6 @@ RDEPEND="
 	app-misc/esteidcerts
 	dev-libs/opensc
 "
-DEPEND="
-	${DEPEND}
-	app-arch/unzip
-"
-EXTID="knbfaekihfoeoceefceadfonbmgpfeok"
-
-src_prepare() {
-	unzip -qq -o ${PN}.crx -d extension 2>/dev/null
-	[[ $? -le 1 ]] || die "failed to unpack ${PN}.crx"
-}
 
 src_compile() {
 	emake \
@@ -46,22 +36,23 @@ src_compile() {
 }
 
 src_install() {
+	local _eid="knbfaekihfoeoceefceadfonbmgpfeok" _pth="${EROOT}usr/share/${PN}"
 	dobin out/${PN}
-	insinto ${EROOT}usr/share/${PN}
-	doins -r extension *.{json,xml}
+	insinto ${_pth}
+	doins *.{crx,json,xml}
 	dodir ${EROOT}etc/chromium/{native-messaging-hosts,policies/managed}
 	dosym ../../../usr/share/${PN}/ee.ria.esteid.json \
 		${EROOT}etc/chromium/native-messaging-hosts/ee.ria.esteid.json
 	dosym ../../../../usr/share/${PN}/esteid_policy.json \
 		${EROOT}etc/chromium/policies/managed/esteid_policy.json
-	dodir ${EROOT}usr/$(get_libdir)/chromium-browser/extensions/${EXTID}
-	dosym ../../../../share/${PN}/extension \
-		${EROOT}usr/$(get_libdir)/chromium-browser/extensions/${EXTID}/${PV}_0
-}
-
-pkg_postinst() {
-	elog "To use this with www-client/google-chrome"
-	elog "open chrome://extensions, enable developer mode"
-	elog "press 'Load unpacked extension' and navigate to"
-	elog "${EROOT}usr/share/${PN}/extension"
+	cat >"${T}"/${_eid}.json <<-EOF
+	{
+		"external_crx": "${_pth}/${PN}.crx",
+		"external_version": "${PV}"
+	}
+	EOF
+	insinto ${EROOT}usr/$(get_libdir)/chromium-browser/extensions
+	doins "${T}"/${_eid}.json
+	insinto ${EROOT}usr/share/google-chrome/extensions
+	doins "${T}"/${_eid}.json
 }
