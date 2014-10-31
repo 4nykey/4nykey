@@ -58,10 +58,10 @@ src_prepare() {
 	echo -e "################# FONTCONFIG ULTIMATE STYLE #################\n" \
 	> "${T}"/ultimate || die
 
-	local infinality_style
+	local infinality_style _is="freetype/infinality-settings"
 	infinality_style=$(sed --quiet \
 		-e 's/^USE_STYLE="*\([1-9]\)"*/\1/p' \
-		freetype/infinality-settings.sh) || die
+		${_is}) || die
 
 	if ! [ -n "$infinality_style" ]; then
 		ewarn "Missing USE_STYLE variable in package source."
@@ -70,7 +70,7 @@ src_prepare() {
 
 	sed --quiet \
 		-e '/INFINALITY_FT_FILTER_PARAMS=/p' \
-		freetype/infinality-settings.sh \
+		${_is} \
 	| sed --quiet \
 		-e "${infinality_style} s/[ \t]*export[ \t]*//p" \
 	>> "${T}"/ultimate
@@ -79,7 +79,7 @@ src_prepare() {
 	sed --quiet \
 		-e '/INFINALITY_FT_FILTER_PARAMS/ d' \
 		-e 's/^[ \t]*export[ \t]*INFINALITY_FT/INFINALITY_FT/p' \
-		freetype/infinality-settings.sh \
+		${_is} \
 	>> "${T}"/ultimate || die
 }
 
