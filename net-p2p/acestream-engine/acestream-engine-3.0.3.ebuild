@@ -44,7 +44,7 @@ RDEPEND="
 "
 
 src_install() {
-	local _instdir="${EROOT}opt/acestream" _binary="${PN/-}"
+	local _instdir="/opt/acestream" _binary="${PN/-}"
 	insinto "${_instdir}"
 	doins -r .
 	fperms 0755 "${_instdir}/${_binary}"
