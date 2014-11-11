@@ -1,0 +1,97 @@
+diff --git a/gtk2_ardour/wscript b/gtk2_ardour/wscript
+index 16b1a0a..cbbf18c 100644
+--- a/gtk2_ardour/wscript
++++ b/gtk2_ardour/wscript
+@@ -430,7 +430,7 @@ def build(bld):
+         'PACKAGE="' + I18N_PACKAGE + '"',
+         'DATA_DIR="' + os.path.normpath(bld.env['DATADIR']) + '"',
+         'CONFIG_DIR="' + os.path.normpath(bld.env['SYSCONFDIR']) + '"',
+-        'LOCALEDIR="' + os.path.join(os.path.normpath(bld.env['DATADIR']), 'locale') + '"',
++        'LOCALEDIR="' + os.path.join(os.path.normpath(bld.env['PREFIX']), 'share', 'locale') + '"',
+         ]
+     obj.install_path = bld.env['DLLDIR']
+     obj.uselib       = 'UUID FLAC FONTCONFIG GLIBMM GTHREAD GTK OGG CURL DL'
+@@ -727,7 +727,7 @@ def build(bld):
+     bld.install_files(bld.env['CONFDIR'], 'default_ui_config')
+ 
+     # Default export stuff
+-    bld.install_files(os.path.join(bld.env['CONFDIR'],' export'), bld.path.ant_glob('export/*.format'))
++    bld.install_files(os.path.join(bld.env['CONFDIR'], 'export'), bld.path.ant_glob('export/*.format'))
+ 
+     # i18n
+     if bld.is_defined('ENABLE_NLS'):
+diff --git a/headless/wscript b/headless/wscript
+index 3589ffc..fb5c5a1 100644
+--- a/headless/wscript
++++ b/headless/wscript
+@@ -55,7 +55,7 @@ def build(bld):
+         'VERSIONSTRING="' + str(bld.env['VERSION']) + '"',
+         'DATA_DIR="' + os.path.normpath(bld.env['DATADIR']) + '"',
+         'CONFIG_DIR="' + os.path.normpath(bld.env['SYSCONFDIR']) + '"',
+-        'LOCALEDIR="' + os.path.join(os.path.normpath(bld.env['DATADIR']), 'locale') + '"',
++        'LOCALEDIR="' + os.path.join(os.path.normpath(bld.env['PREFIX']), 'share', 'locale') + '"',
+         ]
+     obj.install_path = bld.env['LIBDIR']
+     obj.uselib       = 'UUID FLAC FONTCONFIG GLIBMM GTHREAD OGG CURL DL'
+diff --git a/libs/ardour/wscript b/libs/ardour/wscript
+index 0abeb86..ff21b89 100644
+--- a/libs/ardour/wscript
++++ b/libs/ardour/wscript
+@@ -367,7 +367,7 @@ def build(bld):
+         'PACKAGE="' + I18N_PACKAGE + '"',
+         'DATA_DIR="' + os.path.normpath(bld.env['DATADIR']) + '"',
+         'CONFIG_DIR="' + os.path.normpath(bld.env['SYSCONFDIR']) + '"',
+-        'LOCALEDIR="' + os.path.join(os.path.normpath(bld.env['DATADIR']), 'locale') + '"',
++        'LOCALEDIR="' + os.path.join(os.path.normpath(bld.env['PREFIX']), 'share', 'locale') + '"',
+         'EVORAL_MIDI_XML=1',
+         ]
+ 
+@@ -437,7 +437,7 @@ def build(bld):
+             'DATA_DIR="' + os.path.normpath(bld.env['DATADIR']) + '"',
+             'CONFIG_DIR="' + os.path.normpath(bld.env['SYSCONFDIR']) + '"',
+             'LOCALEDIR="' + os.path.join(
+-                os.path.normpath(bld.env['DATADIR']), 'locale') + '"',
++                os.path.normpath(bld.env['PREFIX']), 'share', 'locale') + '"',
+             ]
+         testcommon.name         = 'testcommon'
+ 
+@@ -517,7 +517,7 @@ def build(bld):
+             'DATA_DIR="' + os.path.normpath(bld.env['DATADIR']) + '"',
+             'CONFIG_DIR="' + os.path.normpath(bld.env['SYSCONFDIR']) + '"',
+             'LOCALEDIR="' + os.path.join(
+-                os.path.normpath(bld.env['DATADIR']), 'locale') + '"',
++                os.path.normpath(bld.env['PREFIX']), 'share', 'locale') + '"',
+             ]
+         if bld.env['FPU_OPTIMIZATION']:
+             session_load_tester.source += [ 'sse_functions_xmm.cc' ]
+@@ -550,7 +550,7 @@ def build(bld):
+                 'DATA_DIR="' + os.path.normpath(bld.env['DATADIR']) + '"',
+                 'CONFIG_DIR="' + os.path.normpath(bld.env['SYSCONFDIR']) + '"',
+                 'LOCALEDIR="' + os.path.join(
+-                    os.path.normpath(bld.env['DATADIR']), 'locale') + '"',
++                    os.path.normpath(bld.env['PREFIX']), 'share', 'locale') + '"',
+                 ]
+             if bld.env['FPU_OPTIMIZATION']:
+                 profilingobj.source += [ 'sse_functions_xmm.cc' ]
+@@ -582,7 +582,7 @@ def create_ardour_test_program(bld, includes, name, target, sources):
+         'DATA_DIR="' + os.path.normpath(bld.env['DATADIR']) + '"',
+         'CONFIG_DIR="' + os.path.normpath(bld.env['SYSCONFDIR']) + '"',
+         'LOCALEDIR="' + os.path.join(
+-            os.path.normpath(bld.env['DATADIR']), 'locale') + '"',
++            os.path.normpath(bld.env['PREFIX']), 'share', 'locale') + '"',
+         ]
+ 
+ def shutdown():
+diff --git a/libs/gtkmm2ext/wscript b/libs/gtkmm2ext/wscript
+index c385ce0..eccad53 100644
+--- a/libs/gtkmm2ext/wscript
++++ b/libs/gtkmm2ext/wscript
+@@ -107,7 +107,7 @@ def build(bld):
+     obj.defines     += [
+                     'PACKAGE="' + I18N_PACKAGE + '"',
+                     'LOCALEDIR="' + os.path.join(
+-                            os.path.normpath(bld.env['DATADIR']), 'locale') + '"']
++                            os.path.normpath(bld.env['PREFIX']), 'share', 'locale') + '"']
+     if bld.is_defined('GTKOSX'):
+         obj.source += ['gtkapplication_quartz.mm']
+     else:

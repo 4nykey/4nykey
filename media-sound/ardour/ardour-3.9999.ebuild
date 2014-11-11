@@ -56,7 +56,7 @@ DEPEND="
 	doc? ( app-doc/doxygen )
 "
 
-PATCHES= #( "${FILESDIR}"/${PN}${SLOT}*.diff )
+PATCHES=( "${FILESDIR}"/${PN}${SLOT}*.diff )
 DOCS=( README TRANSLATORS doc/monitor_modes.pdf )
 
 my_use() {
@@ -78,11 +78,6 @@ src_prepare() {
 		-e 's:\(prepend_opt_flags = \)True:\1False:' \
 		-i wscript
 	use nls && l10n_for_each_disabled_locale_do my_lcmsg
-	find -type f -name wscript|xargs \
-		sed -e "/locale/s:DATADIR']),:PREFIX']), 'share',:" -i
-	sed \
-		-e "s:,' :, ':" \
-		-i gtk2_ardour/wscript
 	base_src_prepare
 }
 
