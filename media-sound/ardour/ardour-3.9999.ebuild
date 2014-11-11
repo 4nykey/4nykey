@@ -16,39 +16,38 @@ EGIT_REPO_URI="git://git.ardour.org/ardour/ardour.git"
 LICENSE="GPL-2"
 SLOT="3"
 KEYWORDS="~amd64 ~x86"
-IUSE="bindist bundled-libs -c++0x custom-cflags debug doc lv2 nls osc phone-home sse wiimote"
+IUSE="alsa bindist bundled-libs -c++0x custom-cflags debug doc lv2 nls osc phone-home sanitize sse wiimote"
 
 RDEPEND="
-	dev-cpp/libgnomecanvasmm
-	dev-libs/libsigc++
-	dev-libs/libxml2
-	media-libs/alsa-lib
-	media-libs/aubio
+	dev-cpp/gtkmm:2.4
+	sci-libs/fftw:3
 	media-libs/flac
-	media-libs/fontconfig
-	osc? ( media-libs/liblo )
-	media-libs/liblrdf
 	media-libs/libogg
+	media-libs/fontconfig
+	alsa? ( media-libs/alsa-lib )
+	media-libs/aubio
+	dev-libs/libxml2:2
+	media-libs/liblrdf
 	media-libs/libsamplerate
-	media-libs/libsndfile
-	media-sound/jack-audio-connection-kit
-	!bundled-libs? (
-		media-libs/vamp-plugin-sdk
-		media-libs/taglib
-		media-libs/rubberband
-		media-libs/libltc
-	)
-	net-misc/curl
-	sci-libs/fftw
-	sys-apps/util-linux
 	lv2? (
 		media-libs/suil
 		media-libs/lilv
 	)
+	net-misc/curl
+	media-libs/libsndfile
+	media-sound/jack-audio-connection-kit
+	!bundled-libs? (
+		media-libs/libltc
+	)
+	osc? ( media-libs/liblo )
 	wiimote? (
 		net-wireless/bluez
 		app-misc/cwiid
 	)
+	media-libs/taglib
+	media-libs/vamp-plugin-sdk
+	media-libs/rubberband
+	sys-apps/util-linux
 "
 DEPEND="
 	${RDEPEND}
@@ -79,12 +78,17 @@ src_prepare() {
 		-e 's:\(prepend_opt_flags = \)True:\1False:' \
 		-i wscript
 	use nls && l10n_for_each_disabled_locale_do my_lcmsg
+	find -type f -name wscript|xargs \
+		sed -e "/locale/s:DATADIR']),:PREFIX']), 'share',:" -i
+	sed \
+		-e "s:,' :, ':" \
+		-i gtk2_ardour/wscript
 	base_src_prepare
 }
 
 src_configure() {
 	local wafargs=(
-		--configdir=${EPREFIX}/etc
+		--configdir=/etc
 		--noconfirm
 		--versioned
 		--freedesktop
@@ -92,9 +96,11 @@ src_configure() {
 		$(my_use nls)
 		$(my_use phone-home)
 		$(my_use sse fpu-optimization)
+		$(usex alsa '--with-alsabackend' '')
 		$(usex bindist '--freebie' '')
 		$(usex debug '' '--optimize')
 		$(usex c++0x '--cxx11' '')
+		$(usex sanitize '--address-sanitizer' '')
 		$(usex bundled-libs '' '--use-external-libs')
 		$(usex doc '--docs' '')
 	)
@@ -103,16 +109,15 @@ src_configure() {
 }
 
 src_compile() {
-	waf-utils_src_compile
-	use nls && \
-		"${S}"/waf --jobs=$(makeopts_jobs) i18n || die "i18n build failed"
+	"${WAF_BINARY}" --jobs=$(makeopts_jobs) --verbose build $(usex nls i18n '')
 }
 
 src_install() {
 	waf-utils_src_install
 	newicon icons/icon/ardour_icon_mac.png ${PN}${SLOT}.png
 	newmenu gtk2_ardour/ardour3.desktop.in ${PN}${SLOT}.desktop
-	base_src_install_docs
+	insinto /usr/share/mime/packages
+	doins gtk2_ardour/${PN}${SLOT}.xml
 }
 
 pkg_preinst() {
