@@ -10,11 +10,24 @@ DESCRIPTION="A light gray icon set"
 HOMEPAGE="
 	http://tsujan.deviantart.com/art/nouveGnomeGray-300365158
 	http://tsujan.deviantart.com/art/nouveKDEGray-359475268
+	http://cai79.deviantart.com/art/nouveGnomeGrayExtraByCAI-362285825
 "
 SRC_URI="
-gnome? ( http://fc07.deviantart.net/fs71/f/${PV%%.*}/233/f/3/nouvegnomegray_by_tsujan-d4ytv8m.7z -> nouvegnomegray-${PV}.7z )
-kde? ( http://fc07.deviantart.net/fs71/f/${PV%%.*}/233/c/6/nouvekdegray_by_tsujan-d5y0sw4.7z -> nouvekdegray-${PV}.7z )
-smplayer? ( http://fc07.deviantart.net/fs71/f/${PV%%.*}/233/c/6/nouvekdegray_by_tsujan-d5y0sw4.7z -> nouvekdegray-${PV}.7z )
+gnome? (
+http://fc07.deviantart.net/fs71/f/${PV%%.*}/233/f/3/nouvegnomegray_by_tsujan-d4ytv8m.7z
+-> nouvegnomegray-${PV}.7z
+)
+kde? (
+http://fc07.deviantart.net/fs71/f/${PV%%.*}/233/c/6/nouvekdegray_by_tsujan-d5y0sw4.7z
+-> nouvekdegray-${PV}.7z
+)
+smplayer? (
+http://fc07.deviantart.net/fs71/f/${PV%%.*}/233/c/6/nouvekdegray_by_tsujan-d5y0sw4.7z
+-> nouvekdegray-${PV}.7z
+)
+extras? (
+http://fc05.deviantart.net/fs70/f/${PV%%.*}/140/c/4/nouvegnomegrayextrabycai_by_cai79-d5zp1j5.7z
+)
 "
 S="${WORKDIR}"
 RESTRICT="primaryuri"
@@ -22,7 +35,7 @@ RESTRICT="primaryuri"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="branding gnome kde smplayer"
+IUSE="branding extras gnome kde smplayer"
 REQUIRED_USE="|| ( gnome kde smplayer )"
 
 DEPEND="
@@ -56,7 +69,7 @@ src_prepare() {
 		fi
 		mv AUTHORS "${S}"/AUTHORS.nouveKDEGray
 	fi
-	find "${S}"/share/icons -mindepth 2 -! -type d -! -name '*.*' | xargs rm
+	find "${S}"/share/icons -mindepth 2 -! -type d -! -name '*.*' -delete
 }
 
 src_install() {
