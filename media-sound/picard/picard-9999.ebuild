@@ -9,7 +9,7 @@ RESTRICT_PYTHON_ABIS="2.4 2.6 3.*"
 PLOCALES="
 af ar ast bg ca cs cy da de el en_CA en_GB en eo es et fa fi fo fr_CA fr fy gl
 he hi hu id is it ja kn ko lt mr nb nds ne nl oc pl pt_BR pt ro ru sco sk sl sr
-sv ta te tr uk vi zh_CN
+sv ta te tr uk vi zh_CN zh_TW
 "
 inherit eutils distutils l10n git-r3
 
@@ -20,7 +20,7 @@ EGIT_REPO_URI="git://github.com/musicbrainz/picard.git"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86"
-IUSE="+acoustid +cdda nls"
+IUSE="+acoustid +cdda +contrib nls"
 
 DEPEND="
 	dev-python/PyQt4[X]
@@ -43,16 +43,17 @@ myloc() {
 
 src_prepare() {
 	l10n_for_each_disabled_locale_do myloc
+	use contrib && cp -rf contrib/plugins picard/
 	distutils_src_prepare
 }
 
 src_compile() {
-	distutils_src_compile $(use nls || echo "--disable-locales")
+	distutils_src_compile $(usex nls "" "--disable-locales")
 }
 
 src_install() {
 	distutils_src_install --disable-autoupdate --skip-build \
-		$(use nls || echo "--disable-locales")
+		$(usex nls "" "--disable-locales")
 
 	doicon picard.ico
 	domenu picard.desktop
