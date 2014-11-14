@@ -20,7 +20,7 @@ IUSE="alsa bindist bundled-libs -c++0x custom-cflags debug doc lv2 nls osc phone
 
 RDEPEND="
 	dev-cpp/gtkmm:2.4
-	sci-libs/fftw:3
+	sci-libs/fftw:3.0
 	media-libs/flac
 	media-libs/libogg
 	media-libs/fontconfig
