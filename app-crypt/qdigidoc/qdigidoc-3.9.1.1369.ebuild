@@ -4,20 +4,19 @@
 
 EAPI="5"
 
+inherit cmake-utils eutils
 if [[ ${PV} = *9999* ]]; then
-	VCS_ECLASS="subversion"
-	ESVN_REPO_URI="https://svn.eesti.ee/projektid/idkaart_public/branches/${PV%.*}/${PN}"
-	KEYWORDS=""
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/open-eid/${PN}.git"
 else
 	SRC_URI="https://installer.id.ee/media/sources/${P}.tar.gz"
 	SRC_URI="https://installer.id.ee/media/ubuntu/pool/main/${PN:0:1}/${PN}/${PN}_${PV}-ubuntu-14-04.orig.tar.gz"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit cmake-utils eutils ${VCS_ECLASS}
 
 DESCRIPTION="Estonian ID card digital signature desktop tools"
-HOMEPAGE="http://installer.id.ee"
+HOMEPAGE="http://id.ee"
 
 LICENSE="LGPL-2.1 Nokia-Qt-LGPL-Exception-1.1"
 SLOT="0"
@@ -45,14 +44,11 @@ RDEPEND="
 	app-crypt/qesteidutil
 "
 
-src_prepare() {
-	use qt5 || sed '/find_package.*Qt5Widgets/d' -i CMakeLists.txt
-}
-
 src_configure() {
 	local mycmakeargs="
 		${mycmakeargs}
 		$(cmake-utils_useno c++0x DISABLE_CXX11)
+		$(cmake-utils_use_find_package qt5 Qt5Widgets)
 	"
 	cmake-utils_src_configure
 }

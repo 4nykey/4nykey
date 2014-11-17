@@ -4,49 +4,66 @@
 
 EAPI=5
 
+inherit cmake-utils eutils
 if [[ ${PV} = *9999* ]]; then
-	VCS_ECLASS="subversion"
-	ESVN_REPO_URI="https://svn.eesti.ee/projektid/idkaart_public/branches/${PV%.*}/${PN}"
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/open-eid/${PN}.git"
 else
 	SRC_URI="https://installer.id.ee/media/sources/${P}.tar.gz"
-	SRC_URI="https://installer.id.ee/media/ubuntu/pool/main/${PN:0:4}/${PN}/${PN}_${PV}-ubuntu-14-04.orig.tar.gz"
+	SRC_URI="https://installer.id.ee/media/ubuntu/pool/main/${PN:0:4}/${PN}/${PN}_${PV}-ubuntu-14-04.tar.gz"
 	RESTRICT="primaryuri"
+	S="${WORKDIR}/${PN}"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit cmake-utils eutils ${VCS_ECLASS}
 
 DESCRIPTION="DigiDoc digital signature library"
 HOMEPAGE="http://id.ee"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-IUSE="apidocs doc"
+IUSE="apidocs c++0x doc test"
 REQUIRED_USE="apidocs? ( doc )"
 
 RDEPEND="
-	dev-libs/libxml2
-	dev-libs/opensc
-	dev-libs/openssl
+	dev-libs/libdigidoc
+	dev-libs/xerces-c
+	dev-libs/xml-security-c
+	dev-util/cppunit
 	sys-libs/zlib[minizip]
 "
 DEPEND="
 	${RDEPEND}
+	dev-cpp/xsd
+	test? ( dev-libs/boost )
 	apidocs? ( app-doc/doxygen )
 "
+RDEPEND="
+	${RDEPEND}
+	app-misc/esteidcerts
+"
 
-PATCHES=( "${FILESDIR}"/${PN}*.patch )
-DOCS="AUTHORS README RELEASE-NOTES.txt"
+DOCS="AUTHORS README* RELEASE-NOTES.txt"
 
 src_prepare() {
-	sed -i CMakeLists.txt -e "s:doc/${PN}:doc/${PF}:"
+	sed \
+		-e "s:doc/${PN}:doc/${PF}:" \
+		-i CMakeLists.txt
+	use test || sed -i CMakeLists.txt -e '/add_subdirectory(test)/d'
+	sed \
+		-e 's:NOT CERTS_LOCATION:INSTALL_CERTS AND &:' \
+		-e '/INSTALL_RPATH/d' \
+		-i src/CMakeLists.txt
+	rm -rf src/{minizip,openssl}
 	cmake-utils_src_prepare
 }
 
 src_configure() {
+	# If prefix is /usr, sysconf needs to be /etc, not /usr/etc
 	local mycmakeargs="
 		${mycmakeargs}
 		$(cmake-utils_use doc INSTALL_DOC)
-		-DCMAKE_INSTALL_SYSCONFDIR=${EROOT}etc
+		$(cmake-utils_useno c++0x DISABLE_CXX11)
+		-DCMAKE_INSTALL_SYSCONFDIR=/etc
 	"
 	cmake-utils_src_configure
 }

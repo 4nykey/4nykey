@@ -4,9 +4,10 @@
 
 EAPI=5
 
+inherit cmake-utils eutils
 if [[ ${PV} = *9999* ]]; then
-	VCS_ECLASS="subversion"
-	ESVN_REPO_URI="https://svn.eesti.ee/projektid/idkaart_public/branches/${PV%.*}/${PN}"
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/open-eid/${PN}.git"
 else
 	SRC_URI="https://installer.id.ee/media/sources/${P}.tar.gz"
 	SRC_URI="https://installer.id.ee/media/ubuntu/pool/main/${PN:0:4}/${PN}/${PN}_${PV}-ubuntu-14-04.tar.gz"
@@ -14,7 +15,6 @@ else
 	S="${WORKDIR}/${PN}"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit cmake-utils eutils ${VCS_ECLASS}
 
 DESCRIPTION="DigiDoc digital signature library"
 HOMEPAGE="http://id.ee"
@@ -33,7 +33,7 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	>=dev-cpp/xsd-3.2.0
+	dev-cpp/xsd
 	test? ( dev-libs/boost )
 	apidocs? ( app-doc/doxygen )
 "
@@ -42,15 +42,18 @@ RDEPEND="
 	app-misc/esteidcerts
 "
 
-DOCS="AUTHORS README RELEASE-NOTES.txt"
+DOCS="AUTHORS README* RELEASE-NOTES.txt"
 
 src_prepare() {
-	sed -i CMakeLists.txt -e "s:doc/${PN}:doc/${PF}:"
+	sed \
+		-e "s:doc/${PN}:doc/${PF}:" \
+		-i CMakeLists.txt
 	use test || sed -i CMakeLists.txt -e '/add_subdirectory(test)/d'
-	# We use another package (app-misc/esteidcerts) to install root certs
 	sed \
 		-e 's:NOT CERTS_LOCATION:INSTALL_CERTS AND &:' \
+		-e '/INSTALL_RPATH/d' \
 		-i src/CMakeLists.txt
+	rm -rf src/{minizip,openssl}
 	cmake-utils_src_prepare
 }
 
@@ -60,7 +63,7 @@ src_configure() {
 		${mycmakeargs}
 		$(cmake-utils_use doc INSTALL_DOC)
 		$(cmake-utils_useno c++0x DISABLE_CXX11)
-		-DCMAKE_INSTALL_SYSCONFDIR=${EROOT}etc
+		-DCMAKE_INSTALL_SYSCONFDIR=/etc
 	"
 	cmake-utils_src_configure
 }
