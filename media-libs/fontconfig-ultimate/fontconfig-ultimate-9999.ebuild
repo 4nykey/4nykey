@@ -58,7 +58,7 @@ src_prepare() {
 	echo -e "################# FONTCONFIG ULTIMATE STYLE #################\n" \
 	> "${T}"/ultimate || die
 
-	local infinality_style _is="freetype/infinality-settings"
+	local infinality_style _is="freetype/infinality-settings.sh"
 	infinality_style=$(sed --quiet \
 		-e 's/^USE_STYLE="*\([1-9]\)"*/\1/p' \
 		${_is}) || die
