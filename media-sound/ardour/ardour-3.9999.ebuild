@@ -16,7 +16,8 @@ EGIT_REPO_URI="git://git.ardour.org/ardour/ardour.git"
 LICENSE="GPL-2"
 SLOT="3"
 KEYWORDS="~amd64 ~x86"
-IUSE="alsa bindist bundled-libs -c++0x custom-cflags debug doc lv2 nls osc phone-home sanitize sse wiimote"
+IUSE="alsa bindist bundled-libs -c++0x custom-cflags debug doc jack lv2 nls osc phone-home sanitize sse wiimote"
+REQUIRED_USE="|| ( alsa jack )"
 
 RDEPEND="
 	dev-cpp/gtkmm:2.4
@@ -35,7 +36,7 @@ RDEPEND="
 	)
 	net-misc/curl
 	media-libs/libsndfile
-	media-sound/jack-audio-connection-kit
+	jack? ( media-sound/jack-audio-connection-kit )
 	!bundled-libs? (
 		media-libs/libltc
 	)
@@ -87,11 +88,11 @@ src_configure() {
 		--noconfirm
 		--versioned
 		--freedesktop
+		--with-backends="$(usev alsa),$(usev jack)"
 		$(my_use lv2)
 		$(my_use nls)
 		$(my_use phone-home)
 		$(my_use sse fpu-optimization)
-		$(usex alsa '--with-alsabackend' '')
 		$(usex bindist '--freebie' '')
 		$(usex debug '' '--optimize')
 		$(usex c++0x '--cxx11' '')
