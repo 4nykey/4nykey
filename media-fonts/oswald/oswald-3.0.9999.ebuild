@@ -32,6 +32,8 @@ IUSE=""
 RDEPEND="${DEPEND}"
 
 src_prepare() {
-	find "${S}" -mindepth 2 -type f -name 'Oswald-*.[ot]tf' -exec mv {} "${S}" \;
-	rm -f *unhinted.ttf
+	if [[ ${PV} == *9999* ]]; then
+		find "${S}"/${PV%.*} -type f -name '*.[ot]tf' -exec mv {} "${S}" \;
+		rm -f *unhinted.ttf
+	fi
 }
