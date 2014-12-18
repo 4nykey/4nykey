@@ -7,10 +7,6 @@ EAPI=5
 if [[ ${PV} == *9999* ]]; then
 	inherit subversion font
 	ESVN_REPO_URI="http://${PN}.googlecode.com/svn/trunk"
-	DEPEND="
-		media-gfx/fontforge[python]
-		media-gfx/xgridfit
-	"
 else
 	S="${WORKDIR}"
 	inherit font
@@ -27,32 +23,29 @@ else
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
-	DEPEND="
-		fontforge? (
-			media-gfx/fontforge[python]
-			media-gfx/xgridfit
-		)
-	"
 fi
 
 
 
 DESCRIPTION="Liberastika fonts are fork of Liberation Sans"
-HOMEPAGE="http://lib-ka.sf.net"
+HOMEPAGE="https://code.google.com/p/liberastika"
 
-LICENSE="GPL-2"
+LICENSE="GPL-2-with-font-exception"
 SLOT="0"
 
+DEPEND="
+	media-gfx/fontforge[python]
+	media-gfx/xgridfit
+"
 RDEPEND="
 	!media-fonts/liberastika-ttf
 "
 FONT_SUFFIX="ttf pfb"
 
-pkg_setup() {
-	if [[ ${PV} != *9999* ]] && use !fontforge; then
-		FONT_SUFFIX="ttf"
-	fi
-}
+if [[ ${PV} != *9999* ]] && use !fontforge; then
+	DEPEND=""
+	FONT_SUFFIX="ttf"
+fi
 
 src_unpack() {
 	if [[ ${PV} == *9999* ]]; then

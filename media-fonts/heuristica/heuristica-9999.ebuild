@@ -7,11 +7,6 @@ EAPI=5
 if [[ ${PV} == *9999* ]]; then
 	inherit subversion font
 	ESVN_REPO_URI="http://evristika.googlecode.com/svn/trunk"
-	DEPEND="
-		media-gfx/fontforge[python]
-		dev-texlive/texlive-fontutils
-		media-gfx/xgridfit
-	"
 else
 	S="${WORKDIR}"
 	inherit font
@@ -29,21 +24,23 @@ else
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
-	DEPEND="
-		fontforge? (
-			media-gfx/fontforge[python]
-			dev-texlive/texlive-fontutils
-			media-gfx/xgridfit
-		)
-	"
 fi
 
 DESCRIPTION="A font based on Adobe Utopia"
-HOMEPAGE="http://code.google.com/p/evristika/"
+HOMEPAGE="http://code.google.com/p/evristika"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+
+DEPEND="
+	media-gfx/fontforge[python]
+	dev-texlive/texlive-fontutils
+	sys-apps/coreutils
+	media-gfx/xgridfit
+"
+if [[ ${PV} != *9999* ]] && use !fontforge; then
+	DEPEND=""
+fi
 
 FONT_SUFFIX="afm otf pfb ttf"
 DOCS="FontLog.txt"
