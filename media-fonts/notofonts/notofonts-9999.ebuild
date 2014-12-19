@@ -18,12 +18,11 @@ IUSE="cjk"
 DEPEND=""
 RDEPEND="${DEPEND}"
 
-FONT_SUFFIX="otf ttc"
+FONT_SUFFIX="ttc"
+use cjk && FONT_SUFFIX="${FONT_SUFFIX} otf"
 
 src_prepare() {
 	mv fonts/individual/hinted/Noto*.ttc .
-	# combined cjk make fc-cache go berserk
-	#use cjk && mv third_party/noto_cjk/NotoSansCJK*.ttc .
 	use cjk && mv third_party/noto_cjk/NotoSans[JKST]*.otf .
 	rm -f Makefile
 }
