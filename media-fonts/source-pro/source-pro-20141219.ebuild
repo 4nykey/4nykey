@@ -5,7 +5,7 @@
 EAPI=5
 
 S="${WORKDIR}"
-inherit font unpacker
+inherit font
 
 CODE_PN="source-code-pro"
 CODE_PV="1.017R"
@@ -32,25 +32,20 @@ KEYWORDS="~alpha ~x86"
 IUSE="cjk"
 
 # This ebuild does not install any binaries
-RESTRICT="binchecks strip"
+RESTRICT="primaryuri binchecks strip"
 
 RDEPEND="media-libs/fontconfig"
-DEPEND="cjk? ( app-arch/unzip )"
+DEPEND=""
 
 FONT_SUFFIX="otf ttf"
 FONT_CONF=( "${FILESDIR}"/63-${PN}.conf )
 
-src_unpack() {
-	default
-	if use cjk; then
-		FONT_SUFFIX="${FONT_SUFFIX} ttc"
-		unpack_zip "${S}"/${CJK_PN}-${CJK_PV}/SuperOTC/SourceHanSans.ttc.zip
-	fi
-}
-
 src_prepare() {
 	find \
-		"${CODE_PN}-${CODE_PV}" "${SERI_PN}-${SERI_PV}" "${SANS_PN}-${SANS_PV/\//-}"\
+		"${CODE_PN}-${CODE_PV}" \
+		"${SERI_PN}-${SERI_PV}" \
+		"${SANS_PN}-${SANS_PV/\//-}" \
+		"${CJK_PN}-${CJK_PV}/SubsetOTF" \
 		-mindepth 2 -name '*.[ot]tf' -exec mv -f {} "${S}" \;
 }
 
