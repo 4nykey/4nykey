@@ -1,0 +1,15 @@
+diff --git a/FDK/Tools/Programs/spot/source/strftime.c b/FDK/Tools/Programs/spot/source/strftime.c
+index f9dd0f1..55d424b 100644
+--- a/FDK/Tools/Programs/spot/source/strftime.c
++++ b/FDK/Tools/Programs/spot/source/strftime.c
+@@ -66,8 +66,8 @@ static int weeknumber();
+ adddecl(static int iso8601wknum();)
+ #else
+ 
+-/*extern void tzset(void);*/
+-extern char *strchr(const char *str, int ch);
++/*extern void tzset(void);
++extern char *strchr(const char *str, int ch);*/
+ extern char *getenv(const char *v);
+ static int weeknumber(const struct tm *timeptr, int firstweekday);
+ adddecl(static int iso8601wknum(const struct tm *timeptr);)
