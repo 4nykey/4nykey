@@ -25,7 +25,7 @@ else
 		https://github.com/${PN}/${PN}/releases/download/${PV}/${PN}-${PV:0:4}-${PV:4:2}-${PV:6}-Unix-Source.tar.gz
 	"
 	RESTRICT="primaryuri"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS= #"~amd64 ~x86"
 fi
 
 DESCRIPTION="FontForge is a font editor"
