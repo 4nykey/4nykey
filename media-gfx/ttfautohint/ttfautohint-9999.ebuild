@@ -9,9 +9,8 @@ if [[ ${PV} == *9999* ]]; then
 	VIRTUALX_REQUIRED="doc"
 	inherit virtualx git-r3
 	EGIT_REPO_URI="git://repo.or.cz/${PN}.git"
-	AUTOTOOLS_AUTORECONF="1"
-	AUTOTOOLS_IN_SOURCE_BUILD="1"
 	DEPEND="
+		sys-apps/help2man
 		doc? (
 			media-gfx/imagemagick
 			media-gfx/inkscape
@@ -42,6 +41,9 @@ DEPEND="
 	${DEPEND}
 	${RDEPEND}
 "
+AUTOTOOLS_AUTORECONF="1"
+AUTOTOOLS_IN_SOURCE_BUILD="1"
+PATCHES=( "${FILESDIR}"/${PN}*.diff )
 
 src_prepare() {
 	if [[ ${PV} == *9999* ]]; then
@@ -59,7 +61,7 @@ src_configure() {
 		$(use_with doc)
 		$(use_with qt4 qt)
 	)
-	if [[ ${PV} == *9999* ]]; then
+	if [[ ${PV} == *9999* ]] && use doc; then
 		Xeconf "${myeconfargs[@]}"
 	else
 		autotools-utils_src_configure
@@ -67,7 +69,7 @@ src_configure() {
 }
 
 src_compile() {
-	if [[ ${PV} == *9999* ]]; then
+	if [[ ${PV} == *9999* ]] && use doc; then
 		Xemake
 	else
 		autotools-utils_src_compile
