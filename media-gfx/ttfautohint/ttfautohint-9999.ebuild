@@ -4,11 +4,24 @@
 
 EAPI=5
 
-inherit base autotools-utils
+inherit autotools-utils
 if [[ ${PV} == *9999* ]]; then
-	inherit git-r3
+	VIRTUALX_REQUIRED="doc"
+	inherit virtualx git-r3
 	EGIT_REPO_URI="git://repo.or.cz/${PN}.git"
 	AUTOTOOLS_AUTORECONF="1"
+	AUTOTOOLS_IN_SOURCE_BUILD="1"
+	DEPEND="
+		doc? (
+			media-gfx/imagemagick
+			media-gfx/inkscape
+			app-text/pandoc
+			dev-texlive/texlive-xetex
+			media-fonts/freefont
+			media-fonts/pothana2k
+		)
+	"
+	REQUIRED_USE="doc? ( qt4 )"
 else
 	SRC_URI="mirror://sourceforge/freetype/${P}.tar.gz"
 	KEYWORDS="~amd64 ~x86"
@@ -26,6 +39,7 @@ RDEPEND="
 	qt4? ( dev-qt/qtgui:4 )
 "
 DEPEND="
+	${DEPEND}
 	${RDEPEND}
 "
 
@@ -45,5 +59,22 @@ src_configure() {
 		$(use_with doc)
 		$(use_with qt4 qt)
 	)
-	autotools-utils_src_configure
+	if [[ ${PV} == *9999* ]]; then
+		Xeconf "${myeconfargs[@]}"
+	else
+		autotools-utils_src_configure
+	fi
+}
+
+src_compile() {
+	if [[ ${PV} == *9999* ]]; then
+		Xemake
+	else
+		autotools-utils_src_compile
+	fi
+}
+
+src_install() {
+	autotools-utils_src_install \
+		docdir="${EPREFIX}"/usr/share/doc/${PF}
 }
