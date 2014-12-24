@@ -50,7 +50,6 @@ RDEPEND="
 	readline? ( sys-libs/readline )
 	gtk? ( x11-libs/gtk+:2 )
 	ipython? ( dev-python/ipython )
-	dev-libs/uthash
 	x11-libs/libXi
 	x11-libs/libX11
 	x11-proto/inputproto
@@ -61,6 +60,7 @@ DEPEND="
 	sys-devel/gettext
 "
 AUTOTOOLS_AUTORECONF="1"
+AUTOTOOLS_IN_SOURCE_BUILD="1"
 DOCS=( doc/README-unix )
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
@@ -74,6 +74,9 @@ src_unpack() {
 		git-r3_src_unpack
 		EGIT_REPO_URI="git://git.savannah.gnu.org/gnulib.git" \
 		EGIT_CHECKOUT_DIR="${S}/gnulib" \
+			git-r3_src_unpack
+		EGIT_REPO_URI="https://github.com/troydhanson/uthash" \
+		EGIT_CHECKOUT_DIR="${S}/uthash" \
 			git-r3_src_unpack
 	else
 		default
