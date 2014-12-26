@@ -28,7 +28,7 @@ IUSE=""
 DEPEND=""
 RDEPEND="
 	${DEPEND}
-	dev-python/fonttools
+	>=dev-python/fonttools-2.5
 "
 
 src_prepare() {
