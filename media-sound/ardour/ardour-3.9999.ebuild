@@ -57,7 +57,7 @@ DEPEND="
 	doc? ( app-doc/doxygen )
 "
 
-PATCHES=( "${FILESDIR}"/${PN}${SLOT}*.diff )
+PATCHES= #( "${FILESDIR}"/${PN}${SLOT}*.diff )
 DOCS=( README TRANSLATORS doc/monitor_modes.pdf )
 
 my_use() {
