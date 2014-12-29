@@ -13,6 +13,7 @@ if [[ ${PV} = *9999* ]]; then
 else
 	SRC_URI="http://www.imagination-land.org/files/${PN}/${P}.tar.xz"
 	RESTRICT="primaryuri"
+	KEYWORDS="~amd64 ~x86"
 fi
 
 DESCRIPTION="Clipboard management system"
@@ -24,14 +25,12 @@ EGIT_BRANCH="${PN}-${GMAJOR}"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
 IUSE="applet ayatana bash-completion gnome-shell vala zsh-completion"
 
 RDEPEND="
 	>=dev-libs/glib-2.40:2
-	=x11-libs/gtk+-${GMAJOR}*:3
+	=x11-libs/gtk+-${GMAJOR}*:3[introspection]
 	=gnome-base/gnome-control-center-${GMAJOR}*:2
-	>=dev-libs/gobject-introspection-1.31.1
 	>=x11-libs/gdk-pixbuf-2.26
 	sys-apps/dbus
 	vala? ( $(vala_depend) )
