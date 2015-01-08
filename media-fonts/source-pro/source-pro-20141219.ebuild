@@ -48,15 +48,11 @@ FONT_CONF=( "${FILESDIR}"/63-${PN}.conf )
 src_unpack() {
 	local x
 	if [[ ${PV} == *9999* ]]; then
-		for x in code sans serif; do
-		EGIT_REPO_URI="https://github.com/adobe-fonts/source-${x}-pro" \
-		EGIT_CHECKOUT_DIR="${S}/source-${x}-pro" \
+		for x in {code,sans,serif}-pro $(usex cjk 'han-sans' ''); do
+		EGIT_REPO_URI="https://github.com/adobe-fonts/source-${x}" \
+		EGIT_CHECKOUT_DIR="${S}/source-${x}" \
 			git-r3_src_unpack
 		done
-		use cjk && \
-		EGIT_REPO_URI="https://github.com/adobe-fonts/source-han-sans" \
-		EGIT_CHECKOUT_DIR="${S}/source-han-sans" \
-			git-r3_src_unpack
 	else
 		default
 	fi
