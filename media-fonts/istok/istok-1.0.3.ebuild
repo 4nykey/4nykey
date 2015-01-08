@@ -8,7 +8,6 @@ if [[ ${PV} == *9999* ]]; then
 	inherit subversion font
 	ESVN_REPO_URI="http://${PN}.googlecode.com/svn/trunk"
 else
-	S="${WORKDIR}"
 	inherit font
 	IUSE="fontforge gpl"
 	SRC_URI="
@@ -53,7 +52,13 @@ src_unpack() {
 }
 
 src_prepare() {
-	sed -e '/_acc\.xgf:/ s:_\.sfd:.gen.ttf:' -i Makefile
+	sed \
+		-e 's:\<rm\>:& -f:' \
+		-e '/_acc\.xgf:/ s:_\.sfd:.gen.ttf:' \
+		-i Makefile
+	if [[ ${PV} != *9999* ]]; then
+		mv -f "${WORKDIR}"/*.{ff,py} "${S}"
+	fi
 }
 
 src_install() {
