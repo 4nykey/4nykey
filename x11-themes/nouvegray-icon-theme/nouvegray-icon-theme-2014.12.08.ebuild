@@ -14,15 +14,15 @@ HOMEPAGE="
 "
 SRC_URI="
 gnome? (
-http://fc07.deviantart.net/fs71/f/${PV%%.*}/233/f/3/nouvegnomegray_by_tsujan-d4ytv8m.7z
+http://fc07.deviantart.net/fs70/f/${PV%%.*}/342/b/a/nouvegnomegray_by_tsujan-d4ytv8m.7z
 -> nouvegnomegray-${PV}.7z
 )
 kde? (
-http://fc07.deviantart.net/fs71/f/${PV%%.*}/233/c/6/nouvekdegray_by_tsujan-d5y0sw4.7z
+http://fc07.deviantart.net/fs70/f/${PV%%.*}/342/a/9/nouvekdegray_by_tsujan-d5y0sw4.7z
 -> nouvekdegray-${PV}.7z
 )
 smplayer? (
-http://fc07.deviantart.net/fs71/f/${PV%%.*}/233/c/6/nouvekdegray_by_tsujan-d5y0sw4.7z
+http://fc07.deviantart.net/fs70/f/${PV%%.*}/342/a/9/nouvekdegray_by_tsujan-d5y0sw4.7z
 -> nouvekdegray-${PV}.7z
 )
 extras? (
