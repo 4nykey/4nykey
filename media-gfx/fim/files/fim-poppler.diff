@@ -1,0 +1,15 @@
+--- ./src/FbiStuffPdf.cpp.orig	2015-02-14 17:12:38.011095448 +0200
++++ ./src/FbiStuffPdf.cpp	2015-02-14 17:18:32.337628238 +0200
+@@ -199,7 +199,11 @@
+ 	if (!ds->od)
+ 	{
+         	GBool bitmapTopDown = gTrue;
+-        	ds->od = new SplashOutputDev(gSplashColorMode, /*4*/3, gFalse, gBgColor, bitmapTopDown,gFalse/*antialias*/);
++        	ds->od = new SplashOutputDev(gSplashColorMode, /*4*/3, gFalse, gBgColor, bitmapTopDown
++#if defined(POPPLER_VERSION_MINOR) && (POPPLER_VERSION_MINOR<31)
++            ,gFalse/*antialias*/
++#endif
++            );
+ 	        if (ds->od)
+ #ifdef POPPLER_VERSION	/* as of 0.20.2, from poppler/poppler-config.h */
+ 			/* FIXME: this is an incomplete fix (triggered on 20120719's email on fim-devel);
