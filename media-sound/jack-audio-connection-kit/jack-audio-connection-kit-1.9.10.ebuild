@@ -4,7 +4,9 @@
 
 EAPI=5
 
-inherit flag-o-matic waf-utils eutils multilib multilib-minimal
+PYTHON_COMPAT=( python2_7 python3_4 )
+PYTHON_REQ_USE='threads(+)'
+inherit flag-o-matic python-any-r1 waf-utils eutils multilib multilib-minimal
 if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="git://github.com/jackaudio/jack2.git"
@@ -37,6 +39,7 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
+	${PYTHON_DEPS}
 	virtual/pkgconfig
 	doc? ( app-doc/doxygen )
 "

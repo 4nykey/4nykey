@@ -7,7 +7,9 @@ EAPI=5
 PLOCALES="
 cs de el en_GB es fr it nn pl pt pt_PT ru sv zh
 "
-inherit fdo-mime gnome2-utils waf-utils l10n git-r3 base
+PYTHON_COMPAT=( python2_7 python3_4 )
+PYTHON_REQ_USE='threads(+)'
+inherit fdo-mime gnome2-utils python-any-r1 waf-utils l10n git-r3 base
 
 DESCRIPTION="Digital Audio Workstation"
 HOMEPAGE="http://ardour.org/"
@@ -52,6 +54,7 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
+	${PYTHON_DEPS}
 	dev-libs/boost
 	nls? ( sys-devel/gettext )
 	doc? ( app-doc/doxygen )
