@@ -28,7 +28,7 @@ RDEPEND="
 "
 REQUIRED_USE="|| ( firefox chromium )"
 
-LASTPASS_EXEDIR=/opt/lastpass/
+LASTPASS_EXEDIR="/opt/lastpass/"
 
 QA_PREBUILT="
 	${LASTPASS_EXEDIR}*nplastpass*
@@ -42,7 +42,7 @@ src_unpack() {
 	MAINDISTFILE=lplinux.tar.bz2
 	_xpi='lp_linux.xpi'
 	_crx='lpchrome_linux.crx'
-	wget -P ${S} \
+	wget --no-verbose --directory-prefix=${S} \
 		https://lastpass.com/${MAINDISTFILE} \
 		https://lastpass.com/${_crx} \
 		$(usex firefox "https://lastpass.com/${_xpi}" '') || die
@@ -58,7 +58,7 @@ src_install() {
 	doexe "${S}"/*${_bin}*
 
 	# despite the name, this piece seems used by both firefox+chrome
-	inst_plugin ${LASTPASS_EXEDIR}/lib${_bin}.so
+	inst_plugin ${LASTPASS_EXEDIR}lib${_bin}.so
 
 	cat >"${T}"/lastpass_policy.json <<-EOF
 	{
