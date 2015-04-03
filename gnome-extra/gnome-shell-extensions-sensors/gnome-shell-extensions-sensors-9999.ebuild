@@ -21,7 +21,7 @@ IUSE="hddtemp"
 AUTOTOOLS_AUTORECONF="1"
 
 DEPEND="
-	app-admin/eselect-gnome-shell-extensions
+	app-eselect/eselect-gnome-shell-extensions
 "
 RDEPEND="
 	${DEPEND}

@@ -19,7 +19,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND="
-	app-admin/eselect-gnome-shell-extensions
+	app-eselect/eselect-gnome-shell-extensions
 "
 RDEPEND="
 	${DEPEND}

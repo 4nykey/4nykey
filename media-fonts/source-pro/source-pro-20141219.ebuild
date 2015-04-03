@@ -40,7 +40,7 @@ LICENSE="OFL-1.1 cjk? ( Apache-2.0 )"
 SLOT="0"
 IUSE="cjk"
 
-RDEPEND="app-admin/eselect-fontconfig"
+RDEPEND="app-eselect/eselect-fontconfig"
 
 FONT_SUFFIX="otf ttf"
 FONT_CONF=( "${FILESDIR}"/63-${PN}.conf )

@@ -16,8 +16,8 @@ SLOT="0"
 KEYWORDS=""
 IUSE="+fonts-ms +fonts-free fonts-extra"
 
-RDEPEND="app-admin/eselect-infinality
-	app-admin/eselect-lcdfilter
+RDEPEND="app-eselect/eselect-infinality
+	app-eselect/eselect-lcdfilter
 	media-libs/fontconfig-infinality
 	media-libs/freetype:2[infinality]
 	fonts-ms? (
@@ -30,6 +30,7 @@ RDEPEND="app-admin/eselect-infinality
 			media-fonts/droid
 			media-fonts/font-bh-75dpi
 			media-fonts/paratype
+			media-fonts/source-pro
 		)
 	)
 	fonts-free? (
@@ -42,9 +43,11 @@ RDEPEND="app-admin/eselect-infinality
 			media-fonts/croscorefonts
 			media-fonts/droid
 			media-fonts/font-bh-ttf
-			media-fonts/libertine-ttf
+			media-fonts/libertine
 			media-fonts/paratype
 			media-fonts/urw-fonts
+			media-fonts/symbola
+			media-fonts/ubuntu-font-family
 		)
 	)"
 
