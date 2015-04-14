@@ -11,10 +11,11 @@ if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="git://github.com/jackaudio/jack2.git"
 else
-	MY_P="${PN%%-*}-${PV}"
-	SRC_URI="https://dl.dropboxusercontent.com/u/28869550/${MY_P}.tar.bz2"
+	SRC_URI="
+	https://codeload.github.com/jackaudio/jack2/tar.gz/v${PV} -> ${P}.tar.gz
+	"
 	RESTRICT="primaryuri"
-	S="${WORKDIR}/${MY_P}"
+	S="${WORKDIR}/jack2-${PV}"
 fi
 
 DESCRIPTION="A low-latency audio server"
@@ -23,10 +24,9 @@ HOMEPAGE="http://www.jackaudio.org"
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="alsa celt classic dbus debug doc eigen +examples libsamplerate opus portaudio readline sndfile test"
+IUSE="alsa celt classic dbus debug doc eigen +examples libsamplerate opus readline sndfile test"
 
 RDEPEND="
-	portaudio? ( media-libs/portaudio[${MULTILIB_USEDEP}] )
 	celt? ( media-libs/celt:0[${MULTILIB_USEDEP}] )
 	opus? ( media-libs/opus[${MULTILIB_USEDEP},custom-modes] )
 	alsa? ( media-libs/alsa-lib[${MULTILIB_USEDEP}] )
@@ -52,6 +52,10 @@ DOCS=( ChangeLog README README_NETJACK2 TODO )
 src_prepare() {
 	use examples || sed -e '/example-clients/d' -i wscript
 	use test || sed -e '/tests/d' -i wscript
+	sed \
+		-e 's:\(html_docs_source_dir = \).*:\1"html":' \
+		-e "s:\(html_[a-z_]*install_dir = \).*:\1bld.options.destdir + bld.env['PREFIX'] + \"/share/doc/${PF}/html\":" \
+		-i wscript
 	default
 	multilib_copy_sources
 }
@@ -63,7 +67,6 @@ multilib_src_configure() {
 		$(usex doc --doxygen "")
 		$(usex debug --debug "")
 		$(usex alsa --alsa "")
-		$(usex portaudio --portaudio "")
 		--enable-pkg-config-dbus-service-dir
 	)
 
