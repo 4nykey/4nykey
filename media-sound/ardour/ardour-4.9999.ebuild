@@ -14,7 +14,6 @@ inherit fdo-mime gnome2-utils python-any-r1 waf-utils l10n git-r3 base
 DESCRIPTION="Digital Audio Workstation"
 HOMEPAGE="http://ardour.org/"
 EGIT_REPO_URI="git://git.ardour.org/ardour/ardour.git"
-EGIT_COMMIT="1b1c66b77d9c34f72d648336f7e2a34a322de369"
 
 LICENSE="GPL-2"
 SLOT="${PV%%.*}"
@@ -114,10 +113,10 @@ src_compile() {
 
 src_install() {
 	waf-utils_src_install
-	newicon icons/icon/ardour_icon_mac.png ${PN}${SLOT}.png
-	newmenu gtk2_ardour/ardour3.desktop.in ${PN}${SLOT}.desktop
+	newicon icons/icon/${PN}_icon_mac.png ${PN}${SLOT}.png
+	newmenu gtk2_ardour/${PN}*.desktop.in ${PN}${SLOT}.desktop;
 	insinto /usr/share/mime/packages
-	doins gtk2_ardour/${PN}${SLOT}.xml
+	newins gtk2_ardour/${PN}*.xml ${PN}${SLOT}.xml
 }
 
 pkg_preinst() {
