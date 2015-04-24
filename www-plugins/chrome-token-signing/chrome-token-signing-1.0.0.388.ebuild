@@ -4,13 +4,13 @@
 
 EAPI="5"
 
-inherit toolchain-funcs
+inherit toolchain-funcs qmake-utils
 if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/open-eid/${PN}.git"
 else
 	SRC_URI="https://installer.id.ee/media/sources/${MY_CN}-${MY_CV}.tar.gz"
-	SRC_URI="https://installer.id.ee/media/ubuntu/pool/main/${PN:0:1}/${PN}/${PN}_${PV}-ubuntu-14-04.tar.gz"
+	SRC_URI="https://installer.id.ee/media/ubuntu/pool/main/${PN:0:1}/${PN}/${PN}_${PV}.orig.tar.gz"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
@@ -25,7 +25,7 @@ SLOT="0"
 IUSE="debug"
 
 DEPEND="
-	dev-cpp/gtkmm:3.0
+	dev-qt/qtwidgets:5
 	dev-libs/openssl:0
 "
 RDEPEND="
@@ -34,27 +34,15 @@ RDEPEND="
 	dev-libs/opensc
 "
 
-src_prepare() {
-if [[ ${PV} = *9999* ]]; then
-	mv ${PN} extension
-else
-	unzip -qq -o ${PN}.crx -d extension 2>/dev/null
-	[[ $? -le 1 ]] || die "failed to unpack ${PN}.crx"
-fi
-
-}
-
-src_compile() {
-	emake \
-		COPT="${CXXFLAGS}" \
-		CCMD="$(tc-getCXX)" \
-		all
+src_configure() {
+	cd "${S}"/host-linux
+	eqmake5
 }
 
 src_install() {
-	dobin out/${PN}
+	dobin host-linux/${PN}
 	insinto /usr/share/${PN}
-	doins -r extension *.{json,xml}
+	doins -r extension {.,host-linux}/*.json
 
 	for d in '/chromium/' '/opt/chrome/'; do
 		dodir /etc${d}{native-messaging-hosts,policies/managed}
