@@ -9,9 +9,9 @@ if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/open-eid/${PN}.git"
 else
-	SRC_URI="https://installer.id.ee/media/sources/${P}.tar.gz"
-	SRC_URI="https://installer.id.ee/media/ubuntu/pool/main/${PN:0:4}/${PN}/${PN}_${PV}.orig.tar.gz"
+	SRC_URI="https://github.com/open-eid/${PN}/releases/download/v${PV}/${P}.tar.gz"
 	RESTRICT="primaryuri"
+	KEYWORDS="~amd64 ~x86"
 fi
 
 DESCRIPTION="DigiDoc digital signature library"

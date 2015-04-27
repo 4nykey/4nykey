@@ -11,7 +11,7 @@ HOMEPAGE="http://www.codesynthesis.com/projects/libxsd-frontend/"
 SRC_URI="http://www.codesynthesis.com/download/${PN}/$(get_version_component_range 1-2)/${P}.tar.bz2"
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 
 RDEPEND=">=dev-libs/xerces-c-3
 	>=dev-libs/boost-1.52.0-r1:=[threads]
