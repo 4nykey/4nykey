@@ -15,6 +15,11 @@ MOZ_PV="$(get_version_component_range -3)esr"
 # see https://gitweb.torproject.org/builders/tor-browser-bundle.git/tree/gitian/versions?h=maint-4.0
 # https://dist.torproject.org/torbrowser
 TOR_PV="$(version_format_string '$4.$5.$6')"
+if [[ -z ${PV%%*_alpha} ]]; then
+	TOR_PV="$(version_format_string '$4.$5a$6')"
+else
+	KEYWORDS="~amd64 ~x86"
+fi
 # https://gitweb.torproject.org/tor-browser.git/refs/tags
 GIT_TAG="$(version_format_string 'tor-browser-${MOZ_PV}-$4.$5-$7-build$8')"
 
@@ -27,7 +32,6 @@ https://www.torproject.org/projects/torbrowser.html
 https://gitweb.torproject.org/tor-browser.git
 "
 
-KEYWORDS="~amd64 ~x86"
 SLOT="0"
 # BSD license applies to torproject-related code like the patches
 # icons are under CCPL-Attribution-3.0
@@ -52,7 +56,6 @@ SRC_URI="
 "
 SRC_URI="
 	${SRC_URI}
-	https://raw.githubusercontent.com/MeisterP/torbrowser-overlay/master/www-client/torbrowser/files/README.tor-launcher
 	https://gitweb.torproject.org/tor-browser.git/patch/?id=0084df27957d0788bdccaeec0830647a61a3e877
 	-> ${PN}-profiledir.patch
 "
@@ -72,14 +75,6 @@ DEPEND="
 QA_PRESTRIPPED="usr/$(get_libdir)/${PN}/${MY_PN}/firefox"
 
 S="${WORKDIR}/${GIT_TAG}"
-
-# See mozcoreconf-2.eclass
-mozversion_is_new_enough() {
-	if [[ $(get_version_component_range 1) -ge 17 ]] ; then
-		return 0
-	fi
-	return 1
-}
 
 pkg_setup() {
 	moz_pkgsetup
@@ -108,10 +103,6 @@ pkg_pretend() {
 		ewarn "Please ensure you know what you are doing.  If you don't, please consider"
 		ewarn "emerging the package with USE=-jit"
 	fi
-}
-
-src_unpack() {
-	unpack ${A%README*}
 }
 
 src_prepare() {
@@ -187,7 +178,6 @@ src_configure() {
 	mozconfig_annotate 'torbrowser' --libdir="${EPREFIX}"/usr/$(get_libdir)/${PN}
 	mozconfig_annotate 'torbrowser' --with-app-name=torbrowser
 	mozconfig_annotate 'torbrowser' --with-app-basename=torbrowser
-	# see https://gitweb.torproject.org/tor-browser.git/tree/configure.in?h=tor-browser-31.3.0esr-4.0-1#n6401
 	mozconfig_annotate 'torbrowser' --disable-tor-browser-update
 	mozconfig_annotate 'torbrowser' --with-tor-browser-version=${TOR_PV}
 
@@ -230,12 +220,6 @@ src_install() {
 		>> "${S}/${obj_dir}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
 		|| die
 
-	# Disable adobe-flash by default
-	sed -i -e 's:pref("plugin.state.flash", 1);:pref("plugin.state.flash", 0);:g' \
-		"${S}/${obj_dir}/dist/bin/browser/defaults/preferences/000-tor-browser.js" \
-		|| die
-
-	# see: https://gitweb.torproject.org/builders/tor-browser-bundle.git/tree/gitian/descriptors/linux/gitian-bundle.yml?h=maint-4.0#n148
 	echo "pref(\"general.useragent.locale\", \"en-US\");" \
 		>> "${S}/${obj_dir}/dist/bin/browser/defaults/preferences/000-tor-browser.js" \
 		|| die
@@ -252,7 +236,7 @@ src_install() {
 	done
 	# The 128x128 icon has a different name
 	newicon -s 128 "${icon_path}/mozicon128.png" ${PN}.png
-	make_desktop_entry ${PN} "TorBrowser" ${PN} "Network;WebBrowser"
+	make_desktop_entry ${PN} "Tor Browser" ${PN} "Network;WebBrowser" "StartupWMClass=Torbrowser"
 
 	# Add StartupNotify=true bug 237317
 	if use startup-notification ; then
@@ -283,16 +267,9 @@ src_install() {
 	dodoc "${profile_dir}/extensions/tor-launcher@torproject.org.xpi"
 	rm "${profile_dir}/extensions/tor-launcher@torproject.org.xpi" || die "Failed to remove torlauncher extension"
 
-	# Force remote Tor check since the control port might not be available
-	echo "pref(\"extensions.torbutton.local_tor_check\", false);" \
-		>> "${profile_dir}/preferences/extension-overrides.js" \
-		|| die
-
 	insinto ${MOZILLA_FIVE_HOME}/browser/defaults/profile
 	doins -r "${profile_dir}"/{extensions,preferences,bookmarks.html}
 
-	# see: https://gitweb.torproject.org/builders/tor-browser-bundle.git/tree/RelativeLink/RelativeLink.sh?h=maint-4.0#n248
-	dodoc "${DISTDIR}"/README.tor-launcher
 	dodoc "${WORKDIR}/tor-browser_en-US/Browser/TorBrowser/Docs/ChangeLog.txt"
 }
 
@@ -301,21 +278,10 @@ pkg_preinst() {
 }
 
 pkg_postinst() {
-	echo
 	ewarn "This patched firefox build is _NOT_ recommended by Tor upstream but uses"
 	ewarn "the exact same sources. Use this only if you know what you are doing!"
-	echo
 	elog "Torbrowser uses port 9150 to connect to Tor. You can change the port"
 	elog "in the connection settings to match your setup."
-	echo
-
-	if [[ "${REPLACING_VERSIONS}" ]] && [[ "${REPLACING_VERSIONS}" < "31.2.0" ]]; then
-		echo
-		ewarn "Since this is a major upgrade, you need to start with a fresh profile."
-		ewarn "Either move or remove your profile in \"~/.mozilla/torbrowser/\""
-		ewarn "and let Torbrowser generate a new one."
-		echo
-	fi
 
 	gnome2_icon_cache_update
 }
