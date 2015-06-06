@@ -28,7 +28,7 @@ SLOT="0"
 IUSE="applet ayatana bash-completion gnome-shell vala zsh-completion"
 
 RDEPEND="
-	>=dev-libs/glib-2.40:2
+	>=dev-libs/glib-2.44:2
 	=x11-libs/gtk+-${GMAJOR}*:3[introspection]
 	=gnome-base/gnome-control-center-${GMAJOR}*:2
 	>=x11-libs/gdk-pixbuf-2.26
