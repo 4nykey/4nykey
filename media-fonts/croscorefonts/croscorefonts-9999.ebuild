@@ -7,10 +7,12 @@ EAPI=5
 inherit font git-r3
 
 DESCRIPTION="Open licensed fonts metrically compatible with MS corefonts"
-HOMEPAGE="http://www.google.com/webfonts/specimen/Arimo
+HOMEPAGE="
+	http://www.google.com/webfonts/specimen/Arimo
 	http://www.google.com/webfonts/specimen/Cousine
-	http://www.google.com/webfonts/specimen/Tinos"
-EGIT_REPO_URI="https://code.google.com/p/noto"
+	http://www.google.com/webfonts/specimen/Tinos
+"
+EGIT_REPO_URI="https://github.com/googlei18n/noto-fonts.git"
 
 LICENSE="Apache-2.0"
 SLOT="0"
@@ -23,6 +25,5 @@ RDEPEND="${DEPEND}"
 FONT_SUFFIX="ttf"
 
 src_prepare() {
-	mv fonts/individual/hinted/{Arimo,Cousine,Tinos}*.ttf .
-	rm -f Makefile
+	mv hinted/{Arimo,Cousine,Tinos}*.ttf .
 }
