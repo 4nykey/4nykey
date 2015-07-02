@@ -7,10 +7,11 @@ WANT_AUTOCONF="2.1"
 MOZCONFIG_OPTIONAL_WIFI=1
 MOZCONFIG_OPTIONAL_JIT="enabled"
 
-inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils mozconfig-v5.31 multilib pax-utils autotools
+inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils mozconfig-v5.${PV%%.*} multilib pax-utils autotools
 
 MY_PN="firefox"
 MOZ_PV="$(get_version_component_range -3)esr"
+PATCH="${MY_PN}-${PV%%.*}.0-patches-0.2"
 
 # see https://gitweb.torproject.org/builders/tor-browser-bundle.git/tree/gitian/versions?h=maint-4.0
 # https://dist.torproject.org/torbrowser
@@ -18,13 +19,10 @@ TOR_PV="$(version_format_string '$4.$5.$6')"
 if [[ -z ${PV%%*_alpha} ]]; then
 	TOR_PV="$(version_format_string '$4.$5a$6')"
 else
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS= #"~amd64 ~x86"
 fi
 # https://gitweb.torproject.org/tor-browser.git/refs/tags
 GIT_TAG="$(version_format_string 'tor-browser-${MOZ_PV}-$4.$5-$7-build$8')"
-
-# Patch version
-PATCH="${MY_PN}-31.0-patches-0.2"
 
 DESCRIPTION="The Tor Browser"
 HOMEPAGE="
@@ -54,15 +52,10 @@ SRC_URI="
 		${ARCHIVE_SRC_URI}/tor-browser-linux64-${TOR_PV}_en-US.tar.xz
 	)
 "
-SRC_URI="
-	${SRC_URI}
-	https://gitweb.torproject.org/tor-browser.git/patch/?id=0084df27957d0788bdccaeec0830647a61a3e877
-	-> ${PN}-profiledir.patch
-"
 RESTRICT="primaryuri"
 
 RDEPEND="
-	>=dev-libs/nss-3.17.1
+	>=dev-libs/nss-3.19.2
 	>=dev-libs/nspr-4.10.6
 "
 
@@ -113,7 +106,10 @@ src_prepare() {
 
 	# Revert "Change the default Firefox profile directory to be TBB-relative"
 	# https://gitweb.torproject.org/tor-browser.git/commit/?id=0084df27957d0788bdccaeec0830647a61a3e877
-	epatch -R "${DISTDIR}"/${PN}-profiledir.patch
+	epatch -R "${FILESDIR}"/${P%%.*}-profiledir.patch
+
+	# https://bugzilla.mozilla.org/show_bug.cgi?id=1143411
+	epatch "${FILESDIR}"/${P%%.*}-ft26.patch
 
 	# Allow user to apply any additional patches without modifing ebuild
 	epatch_user
