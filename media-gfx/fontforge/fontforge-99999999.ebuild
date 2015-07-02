@@ -16,13 +16,12 @@
 EAPI=5
 
 PYTHON_COMPAT=( python2_7 )
-inherit eutils fdo-mime python-single-r1 autotools-utils
+inherit eutils fdo-mime python-single-r1 git-r3 autotools-utils
 if [[ ${PV} == *9999* ]]; then
-	inherit git-r3
 	EGIT_REPO_URI="git://github.com/${PN}/${PN}.git"
 else
 	SRC_URI="
-		https://github.com/${PN}/${PN}/releases/download/${PV}/${PN}-${PV:0:4}-${PV:4:2}-${PV:6}-Unix-Source.tar.gz
+		https://codeload.github.com/${PN}/${PN}/tar.gz/${PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS= #"~amd64 ~x86"
@@ -70,14 +69,14 @@ pkg_setup() {
 }
 
 src_unpack() {
+	EGIT_REPO_URI="git://git.savannah.gnu.org/gnulib.git" \
+	EGIT_CHECKOUT_DIR="${S}/gnulib" \
+		git-r3_src_unpack
+	EGIT_REPO_URI="https://github.com/troydhanson/uthash" \
+	EGIT_CHECKOUT_DIR="${S}/uthash" \
+		git-r3_src_unpack
 	if [[ ${PV} == *9999* ]]; then
 		git-r3_src_unpack
-		EGIT_REPO_URI="git://git.savannah.gnu.org/gnulib.git" \
-		EGIT_CHECKOUT_DIR="${S}/gnulib" \
-			git-r3_src_unpack
-		EGIT_REPO_URI="https://github.com/troydhanson/uthash" \
-		EGIT_CHECKOUT_DIR="${S}/uthash" \
-			git-r3_src_unpack
 	else
 		default
 	fi
