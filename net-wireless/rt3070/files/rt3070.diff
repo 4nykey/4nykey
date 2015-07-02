@@ -14,3 +14,14 @@
  	mm_segment_t	fs;
  } OS_FS_INFO;
  
+--- ./sta/sta_cfg.c.orig	2012-10-22 06:52:59.000000000 +0300
++++ ./sta/sta_cfg.c	2015-02-21 18:39:43.440913294 +0200
+@@ -4984,7 +4984,7 @@
+             wrq->u.data.length = strlen(extra) + 1; /* 1: size of '\0' */
+             break;
+         case SHOW_DRVIER_VERION:
+-            snprintf(extra, size, "Driver version-%s, %s %s\n", STA_DRIVER_VERSION, __DATE__, __TIME__ );
++            snprintf(extra, size, "Driver version-%s\n", STA_DRIVER_VERSION);
+             wrq->u.data.length = strlen(extra) + 1; /* 1: size of '\0' */
+             break;
+ #ifdef DOT11_N_SUPPORT
