@@ -4,7 +4,7 @@
 
 EAPI=5
 
-USE_RUBY="ruby19 ruby20 ruby21 ruby22"
+USE_RUBY="ruby19 ruby20 ruby21"
 inherit ruby-fakegem
 if [[ "${PV%9999}" != "${PV}" ]]; then
 	inherit git-r3
