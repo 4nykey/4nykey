@@ -5,11 +5,16 @@
 EAPI=5
 
 inherit cmake-utils eutils
+MY_PV="${PV/_/-}"
+MY_PV="${MY_PV/rc/RC}"
 if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/open-eid/${PN}.git"
 else
-	SRC_URI="https://github.com/open-eid/${PN}/releases/download/v${PV}/${P}.tar.gz"
+	SRC_URI="
+		https://codeload.github.com/open-eid/${PN}/tar.gz/v${MY_PV}
+		-> ${P}.tar.gz
+	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
@@ -39,6 +44,7 @@ RDEPEND="
 	${RDEPEND}
 	app-misc/esteidcerts
 "
+S="${WORKDIR}/${PN}-${MY_PV}"
 
 DOCS="AUTHORS README* RELEASE-NOTES.txt"
 
