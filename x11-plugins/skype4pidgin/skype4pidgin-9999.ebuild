@@ -2,17 +2,18 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI=5
 
-inherit subversion
+PLOCALES="cs de en_AU es fr hu it ja mk nb pl pt_BR pt ru"
+inherit l10n git-r3
 
 DESCRIPTION="Skype API Plugin for Pidgin"
-HOMEPAGE="http://code.google.com/p/skype4pidgin"
-ESVN_REPO_URI="http://skype4pidgin.googlecode.com/svn/trunk"
+HOMEPAGE="http://eion.robbmob.com"
+EGIT_REPO_URI="https://github.com/EionRobb/skype4pidgin.git"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~x86"
 IUSE="dbus nls"
 
 DEPEND="
@@ -22,11 +23,25 @@ RDEPEND="
 	${DEPEND}
 	net-im/skype
 "
+DEPEND="
+	${DEPEND}
+	dev-util/pkgconfig
+	nls? ( sys-devel/gettext )
+"
+
+rmloc() {
+	rm -f "${S}"/po/${1}.po
+}
+
+src_prepare() {
+	use nls && l10n_for_each_disabled_locale_do rmloc
+}
 
 src_compile() {
-	local _tgt="libskype64.so libskypenet64.so "
+	local _arc="$(usex amd64 '64' '')"
+	local _tgt="libskype${_arc}.so libskypenet${_arc}.so "
 	if use dbus; then
-		_tgt+="libskype_dbus64.so"
+		_tgt+="libskype_dbus${_arc}.so"
 		local _dfl="$(pkg-config dbus-1 --cflags) -DSKYPE_DBUS"
 	fi
 	if use nls; then
@@ -42,7 +57,7 @@ src_compile() {
 }
 
 src_install() {
-	insinto /usr/lib/purple-2
+	insinto "$(pkg-config purple --variable=plugindir)"
 	doins *.so
 	insinto /usr/share/pixmaps/pidgin/emotes/skype
 	doins theme
@@ -52,5 +67,5 @@ src_install() {
 		doins icons/${d}/*.png
 	done
 	use nls && domo po/*.mo
-	dodoc {CHANGELOG,README,TODO}.txt
+	dodoc {CHANGELOG,README,TODO}.*
 }
