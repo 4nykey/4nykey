@@ -9,7 +9,7 @@ cs de el en_GB es fr it nn pl pt pt_PT ru sv zh
 "
 PYTHON_COMPAT=( python2_7 python3_4 )
 PYTHON_REQ_USE='threads(+)'
-inherit fdo-mime gnome2-utils python-any-r1 waf-utils l10n git-r3 base
+inherit fdo-mime gnome2-utils python-any-r1 waf-utils l10n base git-r3
 
 DESCRIPTION="Digital Audio Workstation"
 HOMEPAGE="http://ardour.org/"
