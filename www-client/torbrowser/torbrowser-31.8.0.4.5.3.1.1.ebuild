@@ -11,7 +11,7 @@ inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils mozconfig-v5
 
 MY_PN="firefox"
 MOZ_PV="$(get_version_component_range -3)esr"
-PATCH="${MY_PN}-${PV%%.*}.0-patches-0.3"
+PATCH="${MY_PN}-${PV%%.*}.0-patches-0.2"
 
 # see https://gitweb.torproject.org/builders/tor-browser-bundle.git/tree/gitian/versions?h=maint-4.0
 # https://dist.torproject.org/torbrowser
@@ -34,7 +34,7 @@ SLOT="0"
 # BSD license applies to torproject-related code like the patches
 # icons are under CCPL-Attribution-3.0
 LICENSE="BSD CC-BY-3.0 MPL-2.0 GPL-2 LGPL-2.1"
-IUSE="egl hardened +minimal selinux test"
+IUSE="hardened test"
 
 BASE_SRC_URI="https://dist.torproject.org/${PN}/${TOR_PV}"
 ARCHIVE_SRC_URI="https://archive.torproject.org/tor-package-archive/${PN}/${TOR_PV}"
@@ -43,7 +43,6 @@ SRC_URI="
 	-> ${GIT_TAG}.tar.gz
 	http://dev.gentoo.org/~anarchy/mozilla/patchsets/${PATCH}.tar.xz
 	http://dev.gentoo.org/~axs/distfiles/${PATCH}.tar.xz
-	http://dev.gentoo.org/~polynomial-c/mozilla/patchsets/${PATCH}.tar.xz
 	x86? (
 		${BASE_SRC_URI}/tor-browser-linux32-${TOR_PV}_en-US.tar.xz
 		${ARCHIVE_SRC_URI}/tor-browser-linux32-${TOR_PV}_en-US.tar.xz
@@ -57,7 +56,7 @@ RESTRICT="primaryuri"
 
 RDEPEND="
 	>=dev-libs/nss-3.19.2
-	>=dev-libs/nspr-4.10.8
+	>=dev-libs/nspr-4.10.6
 "
 
 DEPEND="
@@ -69,12 +68,10 @@ DEPEND="
 QA_PRESTRIPPED="usr/$(get_libdir)/${PN}/${MY_PN}/firefox"
 
 S="${WORKDIR}/${GIT_TAG}"
-BUILD_OBJ_DIR="${WORKDIR}/tb"
 
 pkg_setup() {
 	moz_pkgsetup
 
-	# Avoid PGO profiling problems due to enviroment leakage
 	# These should *always* be cleaned up anyway
 	unset DBUS_SESSION_BUS_ADDRESS \
 		DISPLAY \
@@ -82,7 +79,6 @@ pkg_setup() {
 		SESSION_MANAGER \
 		XDG_SESSION_COOKIE \
 		XAUTHORITY
-
 }
 
 pkg_pretend() {
@@ -93,6 +89,13 @@ pkg_pretend() {
 		CHECKREQS_DISK_BUILD="4G"
 	fi
 	check-reqs_pkg_setup
+
+	if use jit && [[ -n ${PROFILE_IS_HARDENED} ]]; then
+		ewarn "You are emerging this package on a hardened profile with USE=jit enabled."
+		ewarn "This is horribly insecure as it disables all PAGEEXEC restrictions."
+		ewarn "Please ensure you know what you are doing.  If you don't, please consider"
+		ewarn "emerging the package with USE=-jit"
+	fi
 }
 
 src_prepare() {
@@ -102,8 +105,11 @@ src_prepare() {
 	epatch "${WORKDIR}/firefox"
 
 	# Revert "Change the default Firefox profile directory to be TBB-relative"
-	# https://gitweb.torproject.org/tor-browser.git/commit/?id=72dfe790235d714da084b45d341d3cb46a88cd60
+	# https://gitweb.torproject.org/tor-browser.git/commit/?id=0084df27957d0788bdccaeec0830647a61a3e877
 	epatch -R "${FILESDIR}"/${P%%.*}-profiledir.patch
+
+	# https://bugzilla.mozilla.org/show_bug.cgi?id=1143411
+	epatch "${FILESDIR}"/${P%%.*}-ft26.patch
 
 	# Allow user to apply any additional patches without modifing ebuild
 	epatch_user
@@ -140,14 +146,10 @@ src_prepare() {
 	# Must run autoconf in js/src
 	cd "${S}"/js/src || die
 	eautoconf
-
-	# Need to update jemalloc's configure
-	cd "${S}"/memory/jemalloc/src || die
-	WANT_AUTOCONF= eautoconf
 }
 
 src_configure() {
-	MOZILLA_FIVE_HOME="${EPREFIX}"/usr/$(get_libdir)/${PN}/${PN}
+	MOZILLA_FIVE_HOME="${EPREFIX}"/usr/$(get_libdir)/${PN}/${MY_PN}
 	MEXTENSIONS="default"
 
 	####################################
@@ -162,15 +164,11 @@ src_configure() {
 	# Add full relro support for hardened
 	use hardened && append-ldflags "-Wl,-z,relro,-z,now"
 
-	use egl && mozconfig_annotate 'Enable EGL as GL provider' --with-gl-provider=EGL
-
 	mozconfig_annotate '' --enable-extensions="${MEXTENSIONS}"
 	mozconfig_annotate '' --disable-mailnews
 
 	# Other ff-specific settings
 	mozconfig_annotate '' --with-default-mozilla-five-home=${MOZILLA_FIVE_HOME}
-
-	echo "mk_add_options MOZ_OBJDIR=${BUILD_OBJ_DIR}" >> "${S}"/.mozconfig
 
 	# Rename the install directory and the executable
 	mozconfig_annotate 'torbrowser' --libdir="${EPREFIX}"/usr/$(get_libdir)/${PN}
@@ -184,38 +182,42 @@ src_configure() {
 
 	if [[ $(gcc-major-version) -lt 4 ]]; then
 		append-cxxflags -fno-stack-protector
+	elif [[ $(gcc-major-version) -gt 4 || $(gcc-minor-version) -gt 3 ]]; then
+		if use amd64 || use x86; then
+			append-flags -mno-avx
+		fi
 	fi
-
-	# workaround for funky/broken upstream configure...
-	emake -f client.mk configure
 }
 
 src_compile() {
 	CC="$(tc-getCC)" CXX="$(tc-getCXX)" LD="$(tc-getLD)" \
 	MOZ_MAKE_FLAGS="${MAKEOPTS}" SHELL="${SHELL}" \
-	emake -f client.mk realbuild
+	emake -f client.mk
 }
 
 src_install() {
-	MOZILLA_FIVE_HOME="${EPREFIX}"/usr/$(get_libdir)/${PN}/${PN}
+	MOZILLA_FIVE_HOME="${EPREFIX}"/usr/$(get_libdir)/${PN}/${MY_PN}
 	DICTPATH="\"${EPREFIX}/usr/share/myspell\""
 
-	cd "${BUILD_OBJ_DIR}" || die
+	# MOZ_BUILD_ROOT, and hence OBJ_DIR change depending on arch, compiler etc.
+	local obj_dir="$(echo */config.log)"
+	obj_dir="${obj_dir%/*}"
+	cd "${S}/${obj_dir}" || die
 
 	# Pax mark xpcshell for hardened support, only used for startupcache creation.
-	pax-mark m "${BUILD_OBJ_DIR}"/dist/bin/xpcshell
+	pax-mark m "${S}/${obj_dir}"/dist/bin/xpcshell
 
 	# Add an emty default prefs for mozconfig-3.eclass
-	touch "${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
+	touch "${S}/${obj_dir}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
 		|| die
 
 	# Set default path to search for dictionaries.
 	echo "pref(\"spellchecker.dictionary_path\", ${DICTPATH});" \
-		>> "${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
+		>> "${S}/${obj_dir}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
 		|| die
 
 	echo "pref(\"general.useragent.locale\", \"en-US\");" \
-		>> "${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/000-tor-browser.js" \
+		>> "${S}/${obj_dir}/dist/bin/browser/defaults/preferences/000-tor-browser.js" \
 		|| die
 
 	MOZ_MAKE_FLAGS="${MAKEOPTS}" \
@@ -277,8 +279,6 @@ pkg_postinst() {
 	elog "Torbrowser uses port 9150 to connect to Tor. You can change the port"
 	elog "in the connection settings to match your setup."
 
-	# Update mimedb for the new .desktop file
-	fdo-mime_desktop_database_update
 	gnome2_icon_cache_update
 }
 
