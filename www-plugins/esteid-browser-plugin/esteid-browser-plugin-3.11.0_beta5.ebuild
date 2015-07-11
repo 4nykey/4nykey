@@ -4,12 +4,13 @@
 
 EAPI="5"
 inherit cmake-utils nsplugins
-MY_LN="esteidpkcs11loader"
-MY_LV="3.8.1.1056"
 MY_PN="browser-token-signing"
 MY_PV="${PV/_/-}"
 MY_PV="${MY_PV/rc/RC}"
 MY_P="${MY_PN}-${MY_PV}"
+MY_LN="firefox-pkcs11-loader"
+MY_LV="${MY_PV%-*}"
+MY_L="${MY_LN}-${MY_LV}"
 if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_CHECKOUT_DIR="${WORKDIR}/${MY_P}"
@@ -17,8 +18,9 @@ if [[ ${PV} = *9999* ]]; then
 else
 	SRC_URI="
 		https://codeload.github.com/open-eid/${MY_PN}/tar.gz/v${MY_PV}
-		-> ${P}.tar.gz
-		https://installer.id.ee/media/ubuntu/pool/main/${MY_LN:0:1}/${MY_LN}/${MY_LN}_${MY_LV}-ubuntu-13-10.tar.gz
+		-> ${MY_P}.tar.gz
+		https://codeload.github.com/open-eid/${MY_LN}/tar.gz/v${MY_LV}
+		-> ${MY_L}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -39,17 +41,16 @@ DEPEND="
 RDEPEND="
 	${DEPEND}
 	app-misc/esteidcerts
-	dev-libs/opensc
-	dev-libs/esteid-pkcs11
+	|| ( dev-libs/opensc dev-libs/esteid-pkcs11 )
 "
 
-S="${WORKDIR}/${MY_LN}"
+S="${WORKDIR}/${MY_L}"
 CMAKE_IN_SOURCE_BUILD='y'
 
 src_unpack() {
 	if [[ ${PV} = *9999* ]]; then
 		git-r3_src_unpack
-		EGIT_CHECKOUT_DIR="${WORKDIR}/${MY_LN}" \
+		EGIT_CHECKOUT_DIR="${S}" \
 		EGIT_REPO_URI="https://github.com/open-eid/firefox-pkcs11-loader.git" \
 		git-r3_src_unpack
 	else
@@ -64,7 +65,7 @@ src_prepare() {
 	sed \
 		-e 's:64/onepin-opensc-pkcs11:/esteid-pkcs11-onepin:' \
 		-e 's:64/opensc-pkcs11:/esteid-pkcs11:' \
-		-i ${WORKDIR}/${MY_LN}/chrome/content/pkcs11-loader.js
+		-i ${S}/chrome/content/pkcs11-loader.js
 }
 
 src_compile() {
