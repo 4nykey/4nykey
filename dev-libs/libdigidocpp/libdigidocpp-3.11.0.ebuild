@@ -5,18 +5,19 @@
 EAPI=5
 
 inherit cmake-utils eutils
-MY_PV="${PV/_/-}"
-MY_PV="${MY_PV/rc/RC}"
 if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/open-eid/${PN}.git"
 else
+	MY_PV="${PV/_/-}"
+	MY_PV="${MY_PV/rc/RC}"
 	SRC_URI="
 		https://codeload.github.com/open-eid/${PN}/tar.gz/v${MY_PV}
 		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
 
 DESCRIPTION="DigiDoc digital signature library"
@@ -39,18 +40,19 @@ DEPEND="
 	>=dev-cpp/xsd-4.0
 	test? ( dev-libs/boost )
 	apidocs? ( app-doc/doxygen )
+	dev-util/cmake-openeid
 "
 RDEPEND="
 	${RDEPEND}
 	app-misc/esteidcerts
 "
-S="${WORKDIR}/${PN}-${MY_PV}"
 
 DOCS="AUTHORS README* RELEASE-NOTES.txt"
 
 src_prepare() {
 	sed \
 		-e "s:doc/${PN}:doc/${PF}:" \
+		-e 's:\${CMAKE_SOURCE_DIR}/cmake/modules:/usr/share/cmake/openeid:' \
 		-i CMakeLists.txt
 	use test || sed -i CMakeLists.txt -e '/add_subdirectory(test)/d'
 	sed \

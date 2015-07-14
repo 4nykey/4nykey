@@ -3,14 +3,32 @@
 # $Header: $
 
 EAPI="5"
-inherit cmake-utils
-if [[ ${PV} = *9999* ]]; then
+inherit cmake-utils unpacker
+if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/open-eid/${PN}.git"
 else
-	SRC_URI="https://github.com/open-eid/${PN}/releases/download/v${PV}/${P}.tar.gz"
+	MY_PV="${PV/_/-}"
+	MY_PV="${MY_PV/rc/RC}"
+	SRC_URI="
+		https://codeload.github.com/open-eid/${PN}/tar.gz/v${MY_PV}
+		-> ${P}.tar.gz
+	"
+	# submodules not included in github releases
+	MY_QC="qt-common-93208c5842f37c74222d92ed5b12cfaa8eb3466b"
+	MY_GB="google-breakpad-f907c96df0863eb852fe55668932c2a146c6900c"
+	MY_SC="smartcardpp-9a506a0d69f00d5970cf5c213bc23547687104ab"
+	SRC_URI="${SRC_URI}
+		https://codeload.github.com/open-eid/${MY_QC%-*}/zip/${MY_QC##*-}
+		-> ${MY_QC}.zip
+		https://codeload.github.com/open-eid/${MY_GB%-*}/zip/${MY_GB##*-}
+		-> ${MY_GB}.zip
+		https://codeload.github.com/open-eid/${MY_SC%-*}/zip/${MY_SC##*-}
+		-> ${MY_SC}.zip
+	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
 
 
@@ -19,7 +37,6 @@ HOMEPAGE="http://id.ee"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
 IUSE="c++0x +qt5"
 
 RDEPEND="
@@ -38,7 +55,22 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
+	$(unpacker_src_uri_depends)
+	dev-util/cmake-openeid
 "
+
+src_prepare() {
+	if [[ -n ${PV%%*9999} ]]; then
+		mv "${WORKDIR}"/${MY_GB}/* "${WORKDIR}"/${MY_QC}/${MY_GB%-*}/
+		mv "${WORKDIR}"/${MY_QC}/* "${S}"/common/
+		mv "${WORKDIR}"/${MY_SC}/* "${S}"/${MY_SC%-*}/
+	fi
+	sed \
+		-e "s:doc/${PN}:doc/${PF}:" \
+		-e 's:\${CMAKE_SOURCE_DIR}/cmake/modules:/usr/share/cmake/openeid:' \
+		-i CMakeLists.txt
+	cmake-utils_src_prepare
+}
 
 src_configure() {
 	local mycmakeargs="

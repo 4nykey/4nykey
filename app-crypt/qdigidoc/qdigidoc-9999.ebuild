@@ -4,19 +4,29 @@
 
 EAPI="5"
 
-inherit cmake-utils eutils
-MY_PV="${PV/_/-}"
-MY_PV="${MY_PV/rc/RC}"
-if [[ ${PV} = *9999* ]]; then
+inherit cmake-utils eutils unpacker
+if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/open-eid/${PN}.git"
 else
+	MY_PV="${PV/_/-}"
+	MY_PV="${MY_PV/rc/RC}"
 	SRC_URI="
 		https://codeload.github.com/open-eid/${PN}/tar.gz/v${MY_PV}
 		-> ${P}.tar.gz
 	"
+	# submodules not included in github releases
+	MY_QC="qt-common-93208c5842f37c74222d92ed5b12cfaa8eb3466b"
+	MY_GB="google-breakpad-f907c96df0863eb852fe55668932c2a146c6900c"
+	SRC_URI="${SRC_URI}
+		https://codeload.github.com/open-eid/${MY_QC%-*}/zip/${MY_QC##*-}
+		-> ${MY_QC}.zip
+		https://codeload.github.com/open-eid/${MY_GB%-*}/zip/${MY_GB##*-}
+		-> ${MY_GB}.zip
+	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
 
 DESCRIPTION="Estonian ID card digital signature desktop tools"
@@ -47,7 +57,23 @@ RDEPEND="
 	${DEPEND}
 	app-crypt/qesteidutil
 "
-S="${WORKDIR}/${PN}-${MY_PV}"
+DEPEND="
+	${DEPEND}
+	$(unpacker_src_uri_depends)
+	dev-util/cmake-openeid
+"
+
+src_prepare() {
+	if [[ -n ${PV%%*9999} ]]; then
+		mv "${WORKDIR}"/${MY_GB}/* "${WORKDIR}"/${MY_QC}/${MY_GB%-*}/
+		mv "${WORKDIR}"/${MY_QC}/* "${S}"/common/
+	fi
+	sed \
+		-e "s:doc/${PN}:doc/${PF}:" \
+		-e 's:\${CMAKE_SOURCE_DIR}/cmake/modules:/usr/share/cmake/openeid:' \
+		-i CMakeLists.txt
+	cmake-utils_src_prepare
+}
 
 src_configure() {
 	local mycmakeargs="
@@ -57,4 +83,3 @@ src_configure() {
 	"
 	cmake-utils_src_configure
 }
-

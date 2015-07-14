@@ -9,9 +9,15 @@ if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/open-eid/${PN}.git"
 else
-	SRC_URI="https://github.com/open-eid/${PN}/releases/download/v${PV}/${P}.tar.gz"
+	MY_PV="${PV/_/-}"
+	MY_PV="${MY_PV/rc/RC}"
+	SRC_URI="
+		https://codeload.github.com/open-eid/${PN}/tar.gz/v${MY_PV}
+		-> ${P}.tar.gz
+	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
 
 DESCRIPTION="DigiDoc digital signature library"
@@ -32,6 +38,7 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	apidocs? ( app-doc/doxygen )
+	dev-util/cmake-openeid
 "
 
 PATCHES=( "${FILESDIR}"/${PN}*.patch )
@@ -40,6 +47,7 @@ DOCS="AUTHORS README* RELEASE-NOTES.txt"
 src_prepare() {
 	sed \
 		-e "s:doc/${PN}:doc/${PF}:" \
+		-e 's:\${CMAKE_SOURCE_DIR}/cmake/modules:/usr/share/cmake/openeid:' \
 		-i CMakeLists.txt
 	sed \
 		-e '/INSTALL_RPATH/d' \
