@@ -7,7 +7,7 @@ WANT_AUTOCONF="2.1"
 MOZCONFIG_OPTIONAL_WIFI=1
 MOZCONFIG_OPTIONAL_JIT="enabled"
 
-inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils mozconfig-v6.${PV%%.*} multilib pax-utils autotools
+inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils mozconfig-v6.${PV%%.*} multilib pax-utils autotools fdo-mime
 
 MY_PN="firefox"
 MOZ_PV="$(get_version_component_range -3)esr"
@@ -54,11 +54,6 @@ SRC_URI="
 	)
 "
 RESTRICT="primaryuri"
-
-RDEPEND="
-	>=dev-libs/nss-3.19.2
-	>=dev-libs/nspr-4.10.8
-"
 
 DEPEND="
 	${RDEPEND}
@@ -178,6 +173,10 @@ src_configure() {
 	mozconfig_annotate 'torbrowser' --with-app-basename=torbrowser
 	mozconfig_annotate 'torbrowser' --disable-tor-browser-update
 	mozconfig_annotate 'torbrowser' --with-tor-browser-version=${TOR_PV}
+
+	mozconfig_annotate 'torbrowser' --without-system-nspr
+	mozconfig_annotate 'torbrowser' --without-system-nss
+	mozconfig_annotate 'torbrowser' --enable-bundled-fonts
 
 	# Finalize and report settings
 	mozconfig_final
