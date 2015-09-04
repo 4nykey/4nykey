@@ -11,7 +11,7 @@ if [[ ${PV} == *9999* ]]; then
 	PATCHES=( "${FILESDIR}"/${PN}*.diff )
 	LICENSE="Apache-2.0"
 else
-	SRC_URI="http://download.macromedia.com/pub/developer/opentype/FDK-${PV/.}-LINUX.zip"
+	SRC_URI="https://github.com/adobe-type-tools/${PN}/releases/download/${PV}/FDK-${PV}-LINUX.zip"
 	RESTRICT="primaryuri"
 	S="${WORKDIR}"
 	KEYWORDS="~amd64 ~x86"
