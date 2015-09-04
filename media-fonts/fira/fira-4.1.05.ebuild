@@ -9,10 +9,14 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/mozilla/Fira.git"
 	DOCS="README*"
 else
-	MY_P="FiraFonts${PV//./}"
-	S="${WORKDIR}/${MY_P}"
+	MY_MV="3.2.0.5"
+	S="${WORKDIR}"
 	inherit versionator unpacker font
-	SRC_URI="http://www.carrois.com/wordpress/downloads/$(version_format_string '${PN}_$1_$2')/${MY_P}.zip"
+	BASE_URI="http://www.carrois.com/downloads/"
+	SRC_URI="
+		${BASE_URI}$(version_format_string '${PN}_$1_$2')/FiraFonts${PV//./}.zip
+		${BASE_URI}$(version_format_string '${PN}_mono_$1_$2' ${MY_MV})/FiraMonoFonts${MY_MV//./}.zip
+	"
 	RESTRICT="primaryuri"
 	DEPEND="$(unpacker_src_uri_depends)"
 fi
