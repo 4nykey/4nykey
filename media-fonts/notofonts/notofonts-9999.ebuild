@@ -19,8 +19,11 @@ DEPEND=""
 RDEPEND="${DEPEND}"
 
 FONT_SUFFIX="ttc"
-use cjk && FONT_SUFFIX="${FONT_SUFFIX} otf"
-DOCS="*.md CONTRIBUTORS noto_cjk/HISTORY noto_cjk/NEWS noto_cjk/README*"
+DOCS="*.md"
+if use cjk; then
+	FONT_SUFFIX="${FONT_SUFFIX} otf"
+	DOCS="${DOCS} noto_cjk/HISTORY noto_cjk/NEWS noto_cjk/README*"
+fi
 
 src_unpack() {
 	git-r3_src_unpack
