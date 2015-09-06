@@ -10,6 +10,7 @@ if [[ ${PV} == *9999* ]]; then
 	DEPEND="
 		media-gfx/afdko
 	"
+	CHECKREQS_DISK_BUILD="$(usex cjk 1980 450)M"
 else
 	S="${WORKDIR}"
 	MY_COD="source-code-pro/2.010R-ro/1.030R-it"
@@ -25,8 +26,9 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 	use cjk && DOCS=${MY_CJK//\//-}/*.pdf
+	CHECKREQS_DISK_BUILD="$(usex cjk 1940 40)M"
 fi
-inherit base font
+inherit font check-reqs
 
 DESCRIPTION="Adobe Source Pro, an open source multi-lingual font family"
 HOMEPAGE="http://blogs.adobe.com/typblography/2012/08/source-sans-pro.html
