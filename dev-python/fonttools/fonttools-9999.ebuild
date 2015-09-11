@@ -31,4 +31,3 @@ RDEPEND="
 "
 
 DOCS=( README.md Doc/{changes.txt,install.txt} )
-HTML_DOCS=( Doc/documentation.html )
