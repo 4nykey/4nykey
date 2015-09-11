@@ -3,14 +3,19 @@
 # $Header: $
 
 EAPI=5
+MY_PN="certs"
 if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/open-eid/certs.git"
+	EGIT_REPO_URI="https://github.com/open-eid/${MY_PN}.git"
 else
-	SRC_URI="https://installer.id.ee/media/sources/${P}.tar.gz"
-	SRC_URI="https://installer.id.ee/media/ubuntu/pool/main/${PN:0:1}/${PN}/${PN}_${PV}-ubuntu-14-04.tar.gz"
+	MY_PV="30c5201af83815950226bd6daf0505d0936fe926"
+	SRC_URI="
+		https://codeload.github.com/open-eid/${MY_PN}/zip/${MY_PV}
+		-> ${P}.zip
+	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${MY_PN}-${MY_PV}"
 fi
 
 DESCRIPTION="Estonian ID card certificates"
@@ -28,5 +33,5 @@ RDEPEND="
 
 src_install() {
 	insinto /usr/share/esteid/certs
-	find "${S}" -type f -name '*.crt' -print0| xargs -0 doins
+	doins *.crt
 }
