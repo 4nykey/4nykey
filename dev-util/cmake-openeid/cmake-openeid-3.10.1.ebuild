@@ -10,10 +10,11 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/open-eid/${MY_PN}.git"
 else
-	MY_PV="81c22387bfcc2251a49f8eb8d0e7ae181dca2b47"
+	MY_PV="${PV/_/-}"
+	MY_PV="${MY_PV/rc/RC}"
 	SRC_URI="
-		https://codeload.github.com/open-eid/${MY_PN}/zip/${MY_PV}
-		-> ${P}.zip
+		https://codeload.github.com/open-eid/${MY_PN}/tar.gz/v${MY_PV}
+		-> ${P}.tar.gz
 	"
 	S="${WORKDIR}/${MY_PN}-${MY_PV}"
 	RESTRICT="primaryuri"
