@@ -41,7 +41,7 @@ DEPEND="
 RDEPEND="
 	${DEPEND}
 	app-misc/esteidcerts
-	|| ( dev-libs/opensc dev-libs/esteid-pkcs11 )
+	dev-libs/opensc
 "
 
 S="${WORKDIR}/${MY_L}"
@@ -56,16 +56,6 @@ src_unpack() {
 	else
 		default
 	fi
-}
-
-src_prepare() {
-	sed \
-		-e 's:opensc-pkcs11:esteid-pkcs11:' \
-		-i ${WORKDIR}/${MY_P}/Makefile
-	sed \
-		-e 's:64/onepin-opensc-pkcs11:/esteid-pkcs11-onepin:' \
-		-e 's:64/opensc-pkcs11:/esteid-pkcs11:' \
-		-i ${S}/chrome/content/pkcs11-loader.js
 }
 
 src_compile() {
