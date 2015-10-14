@@ -4,18 +4,18 @@
 
 EAPI=5
 
-MY_PV="${PV//./-}"
+MY_PV="${PV//./-}-license-adobe"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlei18n/noto-fonts"
 else
 	SRC_URI="
-		https://codeload.github.com/googlei18n/noto-fonts/tar.gz/v${MY_PV}
+		mirror://github/googlei18n/noto-fonts/archive/v${MY_PV}.tar.gz
 		-> noto-${PV}.tar.gz
 	"
 	RESTRICT="primaryuri"
-	S="${WORKDIR}/noto-fonts-${MY_PV}"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/noto-fonts-${MY_PV}"
 fi
 inherit font
 

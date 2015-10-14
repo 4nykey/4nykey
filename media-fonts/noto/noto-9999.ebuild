@@ -4,23 +4,23 @@
 
 EAPI=5
 
-MY_PV="${PV//./-}"
-MY_CJK="noto-cjk-1.004"
+MY_PV="${PV//./-}-license-adobe"
+MY_CJK="${PN}-cjk-1.004"
 CHECKREQS_DISK_BUILD="$(usex cjk 1130 50)M"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlei18n/noto-fonts"
 else
+	inherit vcs-snapshot
 	SRC_URI="
-		https://codeload.github.com/googlei18n/noto-fonts/tar.gz/v${MY_PV}
+		mirror://github/googlei18n/${PN}-fonts/archive/v${MY_PV}.tar.gz
 		-> ${P}.tar.gz
 		cjk? (
-		https://codeload.github.com/googlei18n/noto-cjk/tar.gz/v${MY_CJK##*-}
+		mirror://github/googlei18n/${MY_CJK%-*}/archive/v${MY_CJK##*-}.tar.gz
 		-> ${MY_CJK}.tar.gz
 		)
 	"
 	RESTRICT="primaryuri"
-	S="${WORKDIR}/noto-fonts-${MY_PV}"
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit check-reqs font
@@ -56,7 +56,7 @@ src_unpack() {
 		EGIT_REPO_URI="https://github.com/googlei18n/noto-cjk.git" \
 			git-r3_src_unpack
 	else
-		default
+		vcs-snapshot_src_unpack
 	fi
 }
 
