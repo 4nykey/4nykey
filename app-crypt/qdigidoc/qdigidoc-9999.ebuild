@@ -4,29 +4,26 @@
 
 EAPI="5"
 
-inherit cmake-utils eutils unpacker
+inherit cmake-utils eutils
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/open-eid/${PN}.git"
 else
+	inherit vcs-snapshot
 	MY_PV="${PV/_/-}"
 	MY_PV="${MY_PV/rc/RC}"
 	SRC_URI="
-		https://codeload.github.com/open-eid/${PN}/tar.gz/v${MY_PV}
-		-> ${P}.tar.gz
+		mirror://github/open-eid/${PN}/archive/v${MY_PV}.tar.gz -> ${P}.tar.gz
 	"
 	# submodules not included in github releases
 	MY_QC="qt-common-93208c5842f37c74222d92ed5b12cfaa8eb3466b"
 	MY_GB="google-breakpad-f907c96df0863eb852fe55668932c2a146c6900c"
 	SRC_URI="${SRC_URI}
-		https://codeload.github.com/open-eid/${MY_QC%-*}/zip/${MY_QC##*-}
-		-> ${MY_QC}.zip
-		https://codeload.github.com/open-eid/${MY_GB%-*}/zip/${MY_GB##*-}
-		-> ${MY_GB}.zip
+		mirror://github/open-eid/${MY_QC%-*}/archive/${MY_QC##*-}.tar.gz -> ${MY_QC}.tar.gz
+		mirror://github/open-eid/${MY_GB%-*}/archive/${MY_GB##*-}.tar.gz -> ${MY_GB}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
-	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
 
 DESCRIPTION="Estonian ID card digital signature desktop tools"
@@ -59,7 +56,6 @@ RDEPEND="
 "
 DEPEND="
 	${DEPEND}
-	$(unpacker_src_uri_depends)
 	dev-util/cmake-openeid
 "
 

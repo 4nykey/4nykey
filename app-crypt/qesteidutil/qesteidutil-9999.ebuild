@@ -3,32 +3,32 @@
 # $Header: $
 
 EAPI="5"
-inherit cmake-utils unpacker
+inherit cmake-utils
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/open-eid/${PN}.git"
+	SRC_URI="
+		mirror://github/open-eid/qt-common/commit/93208c5842f37c74222d92ed5b12cfaa8eb3466b.patch
+		-> ${PN}-qt55.patch
+	"
 else
+	inherit vcs-snapshot
 	MY_PV="${PV/_/-}"
 	MY_PV="${MY_PV/rc/RC}"
 	SRC_URI="
-		https://codeload.github.com/open-eid/${PN}/tar.gz/v${MY_PV}
-		-> ${P}.tar.gz
+		mirror://github/open-eid/${PN}/archive/v${MY_PV}.tar.gz -> ${P}.tar.gz
 	"
 	# submodules not included in github releases
 	MY_QC="qt-common-93208c5842f37c74222d92ed5b12cfaa8eb3466b"
 	MY_GB="google-breakpad-f907c96df0863eb852fe55668932c2a146c6900c"
 	MY_SC="smartcardpp-9a506a0d69f00d5970cf5c213bc23547687104ab"
 	SRC_URI="${SRC_URI}
-		https://codeload.github.com/open-eid/${MY_QC%-*}/zip/${MY_QC##*-}
-		-> ${MY_QC}.zip
-		https://codeload.github.com/open-eid/${MY_GB%-*}/zip/${MY_GB##*-}
-		-> ${MY_GB}.zip
-		https://codeload.github.com/open-eid/${MY_SC%-*}/zip/${MY_SC##*-}
-		-> ${MY_SC}.zip
+		mirror://github/open-eid/${MY_QC%-*}/archive/${MY_QC##*-}.tar.gz -> ${MY_QC}.tar.gz
+		mirror://github/open-eid/${MY_GB%-*}/archive/${MY_GB##*-}.tar.gz -> ${MY_GB}.tar.gz
+		mirror://github/open-eid/${MY_SC%-*}/archive/${MY_SC##*-}.tar.gz -> ${MY_SC}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
-	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
 
 
@@ -55,7 +55,6 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	$(unpacker_src_uri_depends)
 	dev-util/cmake-openeid
 "
 
@@ -64,6 +63,9 @@ src_prepare() {
 		mv "${WORKDIR}"/${MY_GB}/* "${WORKDIR}"/${MY_QC}/${MY_GB%-*}/
 		mv "${WORKDIR}"/${MY_QC}/* "${S}"/common/
 		mv "${WORKDIR}"/${MY_SC}/* "${S}"/${MY_SC%-*}/
+	else
+		EPATCH_OPTS="-d ${S}/common" \
+			epatch ${DISTDIR}/${PN}-qt55.patch
 	fi
 	sed \
 		-e "s:doc/${PN}:doc/${PF}:" \

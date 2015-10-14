@@ -10,6 +10,7 @@ MY_PV="${MY_PV/rc/RC}"
 MY_P="${MY_PN}-${MY_PV}"
 MY_LN="firefox-pkcs11-loader"
 MY_LV="${MY_PV%-*}"
+MY_LV="3.11.0"
 MY_L="${MY_LN}-${MY_LV}"
 if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
@@ -17,9 +18,9 @@ if [[ ${PV} = *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/open-eid/${MY_PN}.git"
 else
 	SRC_URI="
-		https://codeload.github.com/open-eid/${MY_PN}/tar.gz/v${MY_PV}
+		mirror://github/open-eid/${MY_PN}/archive/v${MY_PV}.tar.gz
 		-> ${MY_P}.tar.gz
-		https://codeload.github.com/open-eid/${MY_LN}/tar.gz/v${MY_LV}
+		mirror://github/open-eid/${MY_LN}/archive/v${MY_LV}.tar.gz
 		-> ${MY_L}.tar.gz
 	"
 	RESTRICT="primaryuri"

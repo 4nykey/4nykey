@@ -4,19 +4,17 @@
 
 EAPI=5
 
-inherit unpacker
 MY_PN="cmake"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/open-eid/${MY_PN}.git"
 else
+	inherit vcs-snapshot
 	MY_PV="${PV/_/-}"
 	MY_PV="${MY_PV/rc/RC}"
 	SRC_URI="
-		https://codeload.github.com/open-eid/${MY_PN}/tar.gz/v${MY_PV}
-		-> ${P}.tar.gz
+		mirror://github/open-eid/${MY_PN}/archive/${MY_PV}.tar.gz -> ${P}.tar.gz
 	"
-	S="${WORKDIR}/${MY_PN}-${MY_PV}"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
@@ -29,14 +27,7 @@ SLOT="0"
 IUSE=""
 
 RDEPEND=""
-DEPEND="
-	${RDEPEND}
-	$(unpacker_src_uri_depends)
-"
-RDEPEND="
-	${RDEPEND}
-	app-misc/esteidcerts
-"
+DEPEND=""
 
 DOCS="README*"
 

@@ -9,21 +9,19 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/open-eid/${PN}.git"
 else
+	inherit vcs-snapshot
 	MY_PV="${PV/_/-}"
 	MY_PV="${MY_PV/rc/RC}"
 	SRC_URI="
-		https://codeload.github.com/open-eid/${PN}/tar.gz/v${MY_PV}
-		-> ${P}.tar.gz
+		mirror://github/open-eid/${PN}/archive/v${MY_PV}.tar.gz -> ${P}.tar.gz
 	"
 	# submodules not included in github releases
 	MY_SC="smartcardpp-9a506a0d69f00d5970cf5c213bc23547687104ab"
 	SRC_URI="${SRC_URI}
-		https://codeload.github.com/open-eid/${MY_SC%-*}/zip/${MY_SC##*-}
-		-> ${MY_SC}.zip
+		mirror://github/open-eid/${MY_SC%-*}/archive/${MY_SC##*-}.zip -> ${MY_SC}.zip
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
-	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
 
 DESCRIPTION="EstEID PKCS11 Module"
