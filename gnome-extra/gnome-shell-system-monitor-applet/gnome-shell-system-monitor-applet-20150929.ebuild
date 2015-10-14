@@ -3,19 +3,28 @@
 # $Header: $
 
 EAPI="5"
-GCONF_DEBUG="no"
 PLOCALES="zh_CN sl ru ro pt_BR pt pl it fr fa es_MX es_ES de cs"
 
-inherit gnome2-utils l10n git-r3
+inherit gnome2-utils l10n
+if [[ -z ${PV%%*9999} ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="git://github.com/paradoxxxzero/${PN}.git"
+	SRC_URI=""
+else
+	inherit vcs-snapshot
+	MY_PV="81d1c0800401033a563235f920655a936c907b06"
+	SRC_URI="
+		mirror://github/paradoxxxzero/${PN}/archive/${MY_PV}.tar.gz
+		-> ${P}.tar.gz
+	"
+	KEYWORDS="~amd64 ~x86"
+fi
 
 DESCRIPTION="An extension for displaying sensors information in GNOME Shell"
 HOMEPAGE="https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet"
-SRC_URI=""
-EGIT_REPO_URI="git://github.com/paradoxxxzero/gnome-shell-system-monitor-applet.git"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND="
@@ -26,21 +35,22 @@ RDEPEND="
 	dev-python/pygtk
 	gnome-base/libgtop[introspection]
 	net-misc/networkmanager[introspection]
+	!gnome-extra/gnome-shell-extensions-system-monitor
 "
-MY_PN="system-monitor@paradoxxx.zero.gmail.com"
 
 my_loc() {
-	mv ${MY_PN}/locale/${1}/LC_MESSAGES/system-monitor.mo ${1}.mo
+	mv locale/${1}/LC_MESSAGES/system-monitor.mo ${1}.mo
 	MOPREFIX="system-monitor" domo ${1}.mo
 }
 
 src_install() {
-	insinto /usr/share/gnome-shell/extensions/${MY_PN}
-	doins ${MY_PN}/*.*
+	cd system-monitor@paradoxxx.zero.gmail.com
+	insinto /usr/share/gnome-shell/extensions/system-monitor@paradoxxx.zero.gmail.com
+	doins *.*
 	insinto /usr/share/glib-2.0/schemas
-	doins ${MY_PN}/schemas/*gschema.xml
+	doins schemas/*gschema.xml
 	l10n_for_each_locale_do my_loc
-	dodoc ${MY_PN}/README README.md
+	dodoc README*
 }
 
 pkg_preinst() {
