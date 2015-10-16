@@ -11,7 +11,9 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/behdad/${PN}.git"
 else
-	SRC_URI="https://codeload.github.com/behdad/${PN}/tar.gz/${PV} -> ${P}.tar.gz"
+	SRC_URI="
+		mirror://github/behdad/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz
+	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi

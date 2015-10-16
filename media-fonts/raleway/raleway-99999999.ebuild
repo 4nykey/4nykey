@@ -9,11 +9,12 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/impallari/Raleway.git"
 	DOCS="README*"
 else
-	S="${WORKDIR}/${PN}-family-v${PV}"
-	inherit unpacker font
-	SRC_URI="http://www.impallari.com/media/uploads/prosources/update-100-source.zip"
+	inherit vcs-snapshot font
+	SRC_URI="
+		mirror://github/impallari/Raleway/archive/96652ec1e3b62d0cc8f9d1a8349dfb3fa7cbf55a.tar.gz
+		-> ${P}.tar.gz
+	"
 	RESTRICT="primaryuri"
-	DEPEND="$(unpacker_src_uri_depends)"
 fi
 
 DESCRIPTION="Raleway is an elegant sans-serif typeface"

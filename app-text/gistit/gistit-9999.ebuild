@@ -10,7 +10,7 @@ if [[ "${PV%9999}" != "${PV}" ]]; then
 	EGIT_REPO_URI="https://github.com/jrbasso/gistit.git"
 else
 	SRC_URI="
-		https://codeload.github.com/jrbasso/${PN}/tar.gz/v${PV} -> ${P}.tar.gz
+		mirror://github/jrbasso/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 fi

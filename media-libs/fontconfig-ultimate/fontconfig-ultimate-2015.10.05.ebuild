@@ -4,15 +4,14 @@
 
 EAPI=5
 
-MY_PV="${PV//./-}"
 EGIT_REPO_URI="https://github.com/bohoomil/fontconfig-ultimate"
 inherit readme.gentoo
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 else
-	SRC_URI="${EGIT_REPO_URI}/archive/${MY_PV}.tar.gz -> ${P}.tar.gz"
+	inherit vcs-snapshot
+	SRC_URI="mirror://github/bohoomil/${PN}/archive/${PV//./-}.tar.gz -> ${P}.tar.gz"
 	RESTRICT="primaryuri"
-	S="${WORKDIR}/${PN}-${MY_PV}"
 	KEYWORDS="~amd64 ~x86"
 fi
 
