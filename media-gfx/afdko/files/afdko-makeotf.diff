@@ -1,0 +1,14 @@
+diff --git a/FDK/Tools/SharedData/FDKScripts/MakeOTF.py b/FDK/Tools/SharedData/FDKScripts/MakeOTF.py
+index 63f6e07..3101bec 100755
+--- a/FDK/Tools/SharedData/FDKScripts/MakeOTF.py
++++ b/FDK/Tools/SharedData/FDKScripts/MakeOTF.py
+@@ -2489,8 +2489,5 @@ def main():
+ 	print "Done."
+ 		
+ if __name__=='__main__':
+-	try:
+-		main()
+-	except (MakeOTFOptionsError, MakeOTFTXError, MakeOTFRunError):
+-		pass
++	main()
+ 

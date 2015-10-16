@@ -4,12 +4,12 @@
 
 EAPI=5
 
-inherit base
+inherit base python
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
-	PATCHES=( "${FILESDIR}"/${PN}*.diff )
 	LICENSE="Apache-2.0"
+	FDK_EXE="/usr/$(get_libdir)/${PN}/FDK/Tools/linux"
 else
 	SRC_URI="https://github.com/adobe-type-tools/${PN}/releases/download/${PV}/FDK-${PV}-LINUX.zip"
 	RESTRICT="primaryuri"
@@ -17,6 +17,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 	LICENSE="FDK"
 	LICENSE_URL="http://www.adobe.com/devnet/opentype/afdko/eula.html"
+	FDK_EXE="/opt/${PN}/FDK/Tools/linux"
 fi
 
 DESCRIPTION="Adobe Font Development Kit for OpenType"
@@ -30,13 +31,7 @@ RDEPEND="
 	${DEPEND}
 	>=dev-python/fonttools-2.5
 "
-
-src_prepare() {
-	sed \
-		-e 's:\(AFDKO_Python=\).*:\1"/usr/bin/env python2.7":' \
-		-i FDK/Tools/linux/setFDKPaths
-	base_src_prepare
-}
+PATCHES=( "${FILESDIR}"/${PN}*.diff )
 
 src_compile() {
 	if [[ ${PV} == *9999* ]]; then
@@ -52,10 +47,6 @@ src_compile() {
 }
 
 src_install() {
-	local FDK_EXE="/opt/${PN}/FDK/Tools/linux"
-	if [[ ${PV} == *9999* ]]; then
-		FDK_EXE="/usr/$(get_libdir)/${PN}/FDK/Tools/linux"
-	fi
 	printf \
 		"export FDK_EXE=\"${FDK_EXE}\"\nexport PATH=\"\${FDK_EXE}:\${PATH}\"\n" \
 		> "${T}"/${PN}
@@ -69,4 +60,12 @@ src_install() {
 
 	dodoc FDK/Technical\ Documentation/*.pdf
 	dohtml FDK/Technical\ Documentation/*.htm*
+}
+
+pkg_postinst() {
+	python_mod_optimize "${FDK_EXE%/*}"/SharedData/FDKScripts/
+}
+
+pkg_postrm() {
+	python_mod_cleanup "${FDK_EXE%/*}"/SharedData/FDKScripts/
 }
