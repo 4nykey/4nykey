@@ -7,7 +7,7 @@ index e26b67a..38ed509 100755
  
  # uncomment this to point to the system python
 -# AFDKO_Python="/usr/bin/env python"
-+AFDKO_Python="/usr/bin/env python2"
++AFDKO_Python="/usr/bin/env python2.7"
  
  AFDKO_Scripts="${AFDKO_EXE_PATH}"/../SharedData/FDKScripts
  

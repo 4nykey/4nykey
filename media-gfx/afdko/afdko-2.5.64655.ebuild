@@ -3,8 +3,9 @@
 # $Header: $
 
 EAPI=5
+PYTHON_COMPAT=( python2_7 )
 
-inherit base python
+inherit base python-r1
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
@@ -25,8 +26,11 @@ HOMEPAGE="http://www.adobe.com/devnet/opentype/afdko.html"
 
 SLOT="0"
 IUSE=""
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-DEPEND=""
+DEPEND="
+	${PYTHON_DEPS}
+"
 RDEPEND="
 	${DEPEND}
 	>=dev-python/fonttools-2.5
@@ -60,12 +64,4 @@ src_install() {
 
 	dodoc FDK/Technical\ Documentation/*.pdf
 	dohtml FDK/Technical\ Documentation/*.htm*
-}
-
-pkg_postinst() {
-	python_mod_optimize "${FDK_EXE%/*}"/SharedData/FDKScripts/
-}
-
-pkg_postrm() {
-	python_mod_cleanup "${FDK_EXE%/*}"/SharedData/FDKScripts/
 }
