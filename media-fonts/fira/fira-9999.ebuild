@@ -12,7 +12,7 @@ else
 	inherit font vcs-snapshot
 	BASE_URI="http://www.carrois.com/downloads/"
 	SRC_URI="
-		mirror://github/mozilla/Fira/archive/${PV}.tar.gz -> ${P}.tar.gz
+		mirror://githubcl/mozilla/Fira/tar.gz/${PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	DOCS="*.md"

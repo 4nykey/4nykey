@@ -13,7 +13,7 @@ else
 	MY_PV="${PV/_/-}"
 	MY_PV="${MY_PV/rc/RC}"
 	SRC_URI="
-		mirror://github/open-eid/${MY_PN}/archive/${MY_PV}.tar.gz -> ${P}.tar.gz
+		mirror://githubcl/open-eid/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"

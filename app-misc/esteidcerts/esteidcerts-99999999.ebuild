@@ -11,7 +11,7 @@ else
 	inherit vcs-snapshot
 	MY_PV="30c5201af83815950226bd6daf0505d0936fe926"
 	SRC_URI="
-		mirror://github/open-eid/${MY_PN}/archive/${MY_PV}.tar.gz
+		mirror://githubcl/open-eid/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"

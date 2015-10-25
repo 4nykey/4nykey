@@ -11,7 +11,7 @@ if [[ ${PV} == *9999* ]]; then
 else
 	inherit vcs-snapshot font
 	SRC_URI="
-		mirror://github/impallari/Raleway/archive/96652ec1e3b62d0cc8f9d1a8349dfb3fa7cbf55a.tar.gz
+		mirror://githubcl/impallari/Raleway/tar.gz/96652ec1e3b62d0cc8f9d1a8349dfb3fa7cbf55a
 		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"

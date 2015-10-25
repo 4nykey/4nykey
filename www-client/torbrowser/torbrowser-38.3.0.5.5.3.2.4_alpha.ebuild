@@ -177,6 +177,7 @@ src_configure() {
 	mozconfig_annotate 'torbrowser' --without-system-nspr
 	mozconfig_annotate 'torbrowser' --without-system-nss
 	mozconfig_annotate 'torbrowser' --enable-bundled-fonts
+	mozconfig_annotate 'torbrowser' --enable-tree-freetype
 
 	# Finalize and report settings
 	mozconfig_final

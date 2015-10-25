@@ -18,9 +18,9 @@ if [[ ${PV} = *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/open-eid/${MY_PN}.git"
 else
 	SRC_URI="
-		mirror://github/open-eid/${MY_PN}/archive/v${MY_PV}.tar.gz
+		mirror://githubcl/open-eid/${MY_PN}/tar.gz/v${MY_PV}
 		-> ${MY_P}.tar.gz
-		mirror://github/open-eid/${MY_LN}/archive/v${MY_LV}.tar.gz
+		mirror://githubcl/open-eid/${MY_LN}/tar.gz/v${MY_LV}
 		-> ${MY_L}.tar.gz
 	"
 	RESTRICT="primaryuri"

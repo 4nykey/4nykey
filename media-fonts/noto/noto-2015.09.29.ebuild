@@ -13,10 +13,10 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	SRC_URI="
-		mirror://github/googlei18n/${PN}-fonts/archive/v${MY_PV}.tar.gz
+		mirror://githubcl/googlei18n/${PN}-fonts/tar.gz/v${MY_PV}
 		-> ${P}.tar.gz
 		cjk? (
-		mirror://github/googlei18n/${MY_CJK%-*}/archive/v${MY_CJK##*-}.tar.gz
+		mirror://githubcl/googlei18n/${MY_CJK%-*}/tar.gz/v${MY_CJK##*-}
 		-> ${MY_CJK}.tar.gz
 		)
 	"

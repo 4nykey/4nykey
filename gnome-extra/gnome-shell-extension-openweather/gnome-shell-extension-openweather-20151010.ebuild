@@ -14,7 +14,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 	MY_PV="fe005139a46b7214f69c7a036d1b3b41cb368d42"
 	SRC_URI="
-		mirror://github/jenslody/${PN}/archive/${MY_PV}.tar.gz -> ${P}.tar.gz
+		mirror://githubcl/jenslody/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 fi
 

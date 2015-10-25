@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlei18n/noto-fonts"
 else
 	SRC_URI="
-		mirror://github/googlei18n/noto-fonts/archive/v${MY_PV}.tar.gz
+		mirror://githubcl/googlei18n/noto-fonts/tar.gz/v${MY_PV}
 		-> noto-${PV}.tar.gz
 	"
 	RESTRICT="primaryuri"

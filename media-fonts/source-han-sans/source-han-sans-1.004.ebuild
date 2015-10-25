@@ -12,11 +12,10 @@ if [[ ${PV} == *9999* ]]; then
 else
 	inherit vcs-snapshot
 	SRC_URI="
-		mirror://github/adobe-fonts/${PN}/archive/${PV}R.tar.gz
+		mirror://githubcl/adobe-fonts/${PN}/tar.gz/${PV}R
 		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
-	KEYWORDS="~amd64 ~x86"
 	DOCS=${S}/*.pdf
 	CHECKREQS_DISK_BUILD="1900M"
 fi

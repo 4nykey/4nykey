@@ -10,7 +10,7 @@ if [[ ${PV} == *9999* ]]; then
 else
 	inherit vcs-snapshot font
 	SRC_URI="
-		mirror://github/vernnobile/OswaldFont/archive/9dd0521c8c06dd24998fe5d9cd644dab9cbbacca.tar.gz
+		mirror://githubcl/vernnobile/OswaldFont/tar.gz/9dd0521c8c06dd24998fe5d9cd644dab9cbbacca
 		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"

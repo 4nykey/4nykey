@@ -13,11 +13,11 @@ else
 	MY_SER="source-serif-pro/1.017R"
 	MY_SAN="source-sans-pro/2.020R-ro/1.075R-it"
 	SRC_URI="
-		mirror://github/adobe-fonts/${MY_COD%%/*}/archive/${MY_COD#*/}.tar.gz
+		mirror://githubcl/adobe-fonts/${MY_COD%%/*}/tar.gz/${MY_COD#*/}
 		-> ${MY_COD//\//-}.tar.gz
-		mirror://github/adobe-fonts/${MY_SER%%/*}/archive/${MY_SER#*/}.tar.gz
+		mirror://githubcl/adobe-fonts/${MY_SER%%/*}/tar.gz/${MY_SER#*/}
 		-> ${MY_SER//\//-}.tar.gz
-		mirror://github/adobe-fonts/${MY_SAN%%/*}/archive/${MY_SAN#*/}.tar.gz
+		mirror://githubcl/adobe-fonts/${MY_SAN%%/*}/tar.gz/${MY_SAN#*/}
 		-> ${MY_SAN//\//-}.tar.gz
 	"
 	RESTRICT="primaryuri"

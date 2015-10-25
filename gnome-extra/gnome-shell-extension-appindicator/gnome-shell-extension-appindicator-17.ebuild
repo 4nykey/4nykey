@@ -13,7 +13,7 @@ else
 	inherit vcs-snapshot
 	KEYWORDS="~amd64 ~x86"
 	SRC_URI="
-		mirror://github/rgcjonas/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz
+		mirror://githubcl/rgcjonas/${PN}/tar.gz/v${PV} -> ${P}.tar.gz
 	"
 fi
 

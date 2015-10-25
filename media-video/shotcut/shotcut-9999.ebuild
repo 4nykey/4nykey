@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	SRC_URI="
-		mirror://github/mltframework/${PN}/archive/v${PV}.tar.gz
+		mirror://githubcl/mltframework/${PN}/tar.gz/v${PV}
 		-> ${P}.tar.gz
 	"
 	KEYWORDS="~amd64 ~x86"

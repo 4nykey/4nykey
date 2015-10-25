@@ -4,16 +4,17 @@
 
 EAPI=5
 
-VALA_MIN_API_VERSION="0.14"
+#VALA_MIN_API_VERSION="0.30"
 VALA_USE_DEPEND="vapigen"
-inherit bash-completion-r1 versionator vala gnome2
+inherit bash-completion-r1 versionator vala autotools gnome2
 if [[ ${PV} = *9999* ]]; then
-	inherit git-r3 autotools
+	inherit git-r3
 	SRC_URI=""
 else
-	SRC_URI="http://www.imagination-land.org/files/${PN}/${P}.tar.xz"
+	inherit vcs-snapshot
+	SRC_URI="mirror://githubcl/Keruspe/GPaste/tar.gz/v${PV} -> ${P}.tar.gz"
 	RESTRICT="primaryuri"
-	KEYWORDS="~amd64 ~x86"
+	#KEYWORDS="~amd64 ~x86"
 fi
 
 DESCRIPTION="Clipboard management system"
@@ -52,15 +53,15 @@ G2CONF="
 
 src_prepare() {
 	use vala && vala_src_prepare
-	[[ ${PV} = *9999* ]] && eautoreconf
+	eautoreconf
 	gnome2_src_prepare
 }
 
 src_install() {
 	default
-	use bash-completion && dobashcomp data/completions/${PN}
+	use bash-completion && dobashcomp data/completions/${PN}*
 	if use zsh-completion; then
 		insinto /usr/share/zsh/site-functions
-		doins data/completions/_${PN}
+		doins data/completions/_${PN}*
 	fi
 }

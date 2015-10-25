@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 else
 	inherit vcs-snapshot
-	SRC_URI="mirror://github/bohoomil/${PN}/archive/${PV//./-}.tar.gz -> ${P}.tar.gz"
+	SRC_URI="mirror://githubcl/bohoomil/${PN}/tar.gz/${PV//./-} -> ${P}.tar.gz"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi

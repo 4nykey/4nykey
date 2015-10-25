@@ -11,16 +11,14 @@ if [[ ${PV} = *9999* ]]; then
 		git://github.com/conformal/${PN}.git
 		https://github.com/conformal/${PN}.git
 	"
-	KEYWORDS=""
 else
-	inherit versionator
-	MY_PV="XOMBRERO_$(replace_all_version_separators '_')"
+	inherit vcs-snapshot
 	SRC_URI="
-		https://codeload.github.com/conformal/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/conformal/${PN}/tar.gz/XOMBRERO_${PV//./_}
+		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
-	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
 
 DESCRIPTION="A minimalist web browser with sophisticated security features designed-in"

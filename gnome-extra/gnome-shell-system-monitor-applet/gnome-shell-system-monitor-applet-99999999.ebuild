@@ -14,7 +14,7 @@ else
 	inherit vcs-snapshot
 	MY_PV="81d1c0800401033a563235f920655a936c907b06"
 	SRC_URI="
-		mirror://github/paradoxxxzero/${PN}/archive/${MY_PV}.tar.gz
+		mirror://githubcl/paradoxxxzero/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
 	"
 	KEYWORDS="~amd64 ~x86"

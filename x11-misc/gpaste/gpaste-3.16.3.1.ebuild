@@ -44,7 +44,6 @@ DEPEND="
 "
 
 G2CONF="
-	--disable-silent-rules
 	$(use_enable vala)
 	$(use_enable applet)
 	$(use_enable ayatana unity)

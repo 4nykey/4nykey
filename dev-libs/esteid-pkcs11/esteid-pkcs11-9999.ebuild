@@ -13,7 +13,7 @@ else
 	MY_PV="${PV/_/-}"
 	MY_PV="${MY_PV/rc/RC}"
 	SRC_URI="
-		mirror://github/open-eid/${PN}/archive/v${MY_PV}.tar.gz -> ${P}.tar.gz
+		mirror://githubcl/open-eid/${PN}/tar.gz/v${MY_PV} -> ${P}.tar.gz
 	"
 	# submodules not included in github releases
 	MY_SC="smartcardpp-9a506a0d69f00d5970cf5c213bc23547687104ab"
