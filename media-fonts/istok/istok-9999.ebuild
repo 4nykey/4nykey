@@ -4,61 +4,64 @@
 
 EAPI=5
 
-if [[ ${PV} == *9999* ]]; then
-	inherit subversion font
+if [[ -z ${PV%%*9999} ]]; then
+	inherit subversion
 	ESVN_REPO_URI="http://${PN}.googlecode.com/svn/trunk"
+	MY_PV="1.0.3"
+	SRC_URI="mirror://sourceforge/${PN}/${PN}-src-${MY_PV}.tar.xz"
 else
-	inherit font
-	IUSE="fontforge gpl"
+	IUSE="fontforge"
 	SRC_URI="
 	!fontforge? (
-		gpl? ( mirror://sourceforge/${PN}/${PN}-ttf-${PV}.tar.xz )
-		!gpl? ( mirror://sourceforge/${PN}/${PN}-ofl-ttf-${PV}.tar.xz )
+		mirror://sourceforge/${PN}/${PN}-ttf-${PV}.tar.xz
 	)
 	fontforge? (
 		mirror://sourceforge/${PN}/${PN}-src-${PV}.tar.xz
-		http://font-helpers.googlecode.com/files/font-helpers-src-1.2.1.tar.xz
 	)
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
+inherit font
 
 DESCRIPTION="Istok is a sans serif typeface"
-HOMEPAGE="https://code.google.com/p/istok"
+HOMEPAGE="http://istok.sourceforge.net"
 
-LICENSE="|| ( GPL-3-with-font-exception OFL-1.1 )"
+LICENSE="GPL-3"
 SLOT="0"
 
 DEPEND="
 	media-gfx/fontforge[python]
-	media-gfx/xgridfit
+	>media-gfx/xgridfit-2.3
 	dev-python/fonttools
+	dev-util/font-helpers
 "
 RDEPEND=""
 FONT_SUFFIX="ttf pfb"
-if [[ ${PV} != *9999* ]] && use !fontforge; then
+if [[ -n ${PV%%*9999} ]] && use !fontforge; then
 	FONT_SUFFIX="ttf"
 	DEPEND=""
 fi
+DOCS="AUTHORS ChangeLog README TODO"
 
 src_unpack() {
-	if [[ ${PV} == *9999* ]]; then
+	if [[ -z ${PV%%*9999} ]]; then
+		# some files missing in svn repo
+		unpack ${A}
+		mv "${WORKDIR}/${PN}-${MY_PV}" "${S}"
 		subversion_src_unpack
-		ESVN_PROJECT="font-helpers" \
-			subversion_fetch "http://font-helpers.googlecode.com/svn/trunk"
+	else
+		default
 	fi
-	default
 }
 
 src_prepare() {
+	if [[ -n ${PV%%*9999} ]] && use !fontforge; then return 0; fi
 	sed \
 		-e 's:\<rm\>:& -f:' \
 		-e '/_acc\.xgf:/ s:_\.sfd:.gen.ttf:' \
 		-i Makefile
-	if [[ ${PV} != *9999* ]]; then
-		mv -f "${WORKDIR}"/*.{ff,py} "${S}"
-	fi
+	cp "${EPREFIX}"/usr/share/font-helpers/*.{ff,py} "${S}"/
 }
 
 src_install() {

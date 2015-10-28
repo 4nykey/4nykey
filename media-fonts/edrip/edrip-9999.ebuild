@@ -14,9 +14,7 @@ if [[ ${PV} == *9999* ]]; then
 else
 	S="${WORKDIR}"
 	inherit font
-	SRC_URI="
-		https://${PN}.googlecode.com/files/${PN}-ttf-r${PV}.tar.xz
-	"
+	SRC_URI="https://${PN}.googlecode.com/files/${PN}-ttf-r${PV}.tar.xz"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
@@ -30,12 +28,3 @@ IUSE=""
 
 FONT_SUFFIX="ttf"
 DOCS="FontLog.txt README"
-
-src_unpack() {
-	if [[ ${PV} == *9999* ]]; then
-		subversion_src_unpack
-		ESVN_PROJECT="font-helpers" \
-			subversion_fetch "http://font-helpers.googlecode.com/svn/trunk"
-	fi
-	default
-}

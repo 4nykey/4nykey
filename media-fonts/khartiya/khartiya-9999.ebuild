@@ -4,12 +4,11 @@
 
 EAPI=5
 
-if [[ ${PV} == *9999* ]]; then
-	inherit subversion font
+if [[ -z ${PV%%*9999} ]]; then
+	inherit subversion
 	ESVN_REPO_URI="http://${PN}.googlecode.com/svn/trunk"
 else
 	S="${WORKDIR}"
-	inherit font
 	IUSE="fontforge"
 	SRC_URI="
 	!fontforge? (
@@ -19,12 +18,12 @@ else
 	)
 	fontforge? (
 		mirror://sourceforge/${PN}/${PN}-src-${PV}.tar.xz
-		http://font-helpers.googlecode.com/files/font-helpers-src-1.2.1.tar.xz
 	)
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
+inherit font
 
 DESCRIPTION="Khartiya is extended Bitstream Charter font"
 HOMEPAGE="http://code.google.com/p/khartiya"
@@ -37,21 +36,18 @@ DEPEND="
 	dev-texlive/texlive-fontutils
 	sys-apps/coreutils
 	media-gfx/xgridfit
+	dev-util/font-helpers
 "
-if [[ ${PV} != *9999* ]] && use !fontforge; then
+if [[ -n ${PV%%*9999} ]] && use !fontforge; then
 	DEPEND=""
 fi
 
 FONT_SUFFIX="afm otf pfb ttf"
 DOCS="FontLog.txt"
 
-src_unpack() {
-	if [[ ${PV} == *9999* ]]; then
-		subversion_src_unpack
-		ESVN_PROJECT="font-helpers" \
-			subversion_fetch "http://font-helpers.googlecode.com/svn/trunk"
-	fi
-	default
+src_prepare() {
+	if [[ -n ${PV%%*9999} ]] && use !fontforge; then return 0; fi
+	cp "${EPREFIX}"/usr/share/font-helpers/*.{ff,py} "${S}"/
 }
 
 src_install() {

@@ -4,21 +4,19 @@
 
 EAPI=5
 
-if [[ ${PV} == *9999* ]]; then
+if [[ -z ${PV%%*9999} ]]; then
 	inherit subversion font
 	ESVN_REPO_URI="http://${PN}.googlecode.com/svn/trunk"
 else
 	S="${WORKDIR}"
 	inherit font
 	IUSE="fontforge"
-	MY_PN="lib-ka"
 	SRC_URI="
 	!fontforge? (
-		mirror://sourceforge/${MY_PN}/${PN}-ttf-${PV}.tar.xz
+		mirror://sourceforge/lib-ka/${PN}-ttf-${PV}.tar.xz
 	)
 	fontforge? (
-		mirror://sourceforge/${MY_PN}/${PN}-src-${PV}.tar.xz
-		http://font-helpers.googlecode.com/files/font-helpers-src-1.2.1.tar.xz
+		mirror://sourceforge/lib-ka/${PN}-src-${PV}.tar.xz
 	)
 	"
 	RESTRICT="primaryuri"
@@ -28,7 +26,7 @@ fi
 
 
 DESCRIPTION="Liberastika fonts are fork of Liberation Sans"
-HOMEPAGE="https://code.google.com/p/liberastika"
+HOMEPAGE="http://lib-ka.sourceforge.net"
 
 LICENSE="GPL-2-with-font-exception"
 SLOT="0"
@@ -36,23 +34,19 @@ SLOT="0"
 DEPEND="
 	media-gfx/fontforge[python]
 	media-gfx/xgridfit
+	dev-util/font-helpers
 "
 RDEPEND="
 	!media-fonts/liberastika-ttf
 "
 FONT_SUFFIX="ttf pfb"
 
-if [[ ${PV} != *9999* ]] && use !fontforge; then
+if [[ -n ${PV%%*9999} ]] && use !fontforge; then
 	DEPEND=""
 	FONT_SUFFIX="ttf"
 fi
 
-src_unpack() {
-	if [[ ${PV} == *9999* ]]; then
-		subversion_src_unpack
-		ESVN_PROJECT="font-helpers" \
-			subversion_fetch "http://font-helpers.googlecode.com/svn/trunk"
-	fi
-	default
+src_prepare() {
+	if [[ -n ${PV%%*9999} ]] && use !fontforge; then return 0; fi
+	cp "${EPREFIX}"/usr/share/font-helpers/*.{ff,py} "${S}"/
 }
-
