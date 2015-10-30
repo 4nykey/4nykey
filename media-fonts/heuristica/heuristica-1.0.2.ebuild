@@ -4,17 +4,22 @@
 
 EAPI=5
 
+inherit latex-package
 if [[ -z ${PV%%*9999} ]]; then
 	inherit subversion
 	ESVN_REPO_URI="http://evristika.googlecode.com/svn/trunk"
+	SRC_URI=""
+	REQUIRED_USE="fontforge"
 else
 	S="${WORKDIR}"
-	IUSE="fontforge"
 	SRC_URI="
 	!fontforge? (
 		mirror://sourceforge/${PN}/${PN}-ttf-${PV}.tar.xz
 		mirror://sourceforge/${PN}/${PN}-otf-${PV}.tar.xz
 		mirror://sourceforge/${PN}/${PN}-pfb-${PV}.tar.xz
+		latex? (
+			mirror://sourceforge/${PN}/${PN}-tex-${PV}.tar.xz
+		)
 	)
 	fontforge? (
 		mirror://sourceforge/${PN}/${PN}-src-${PV}.tar.xz
@@ -30,6 +35,7 @@ HOMEPAGE="http://heuristica.sourceforge.net"
 
 LICENSE="OFL-1.1"
 SLOT="0"
+IUSE="fontforge latex"
 
 DEPEND="
 	media-gfx/fontforge[python]
@@ -38,7 +44,7 @@ DEPEND="
 	media-gfx/xgridfit
 	dev-util/font-helpers
 "
-if [[ -n ${PV%%*9999} ]] && use !fontforge; then
+if use !fontforge; then
 	DEPEND=""
 fi
 
@@ -46,11 +52,40 @@ FONT_SUFFIX="afm otf pfb ttf"
 DOCS="FontLog.txt"
 
 src_prepare() {
-	if [[ -n ${PV%%*9999} ]] && use !fontforge; then return 0; fi
-	cp "${EPREFIX}"/usr/share/font-helpers/*.{ff,py} "${S}"/
+	if use fontforge; then
+		cp "${EPREFIX}"/usr/share/font-helpers/*.{ff,py} "${S}"/
+	fi
+}
+
+src_compile() {
+	if use fontforge; then
+		default
+	fi
 }
 
 src_install() {
+	if use latex; then
+		if use fontforge; then
+			emake TEXPREFIX="${ED}/${TEXMF}" tex-support
+			rm -rf "${ED}"/${TEXMF}/doc
+		else
+			insinto "${TEXMF}"
+			doins -r "${WORKDIR}"/{dvips,fonts,tex}
+		fi
+		echo "Map ${PN}.map" > "${T}"/${PN}.cfg
+		insinto /etc/texmf/updmap.d
+		doins "${T}"/${PN}.cfg
+	fi
 	rm -f *.gen.ttf
 	font_src_install
+}
+
+pkg_postinst() {
+	font_pkg_postinst
+	use latex && latex-package_pkg_postinst
+}
+
+pkg_postrm() {
+	font_pkg_postrm
+	use latex && latex-package_pkg_postrm
 }
