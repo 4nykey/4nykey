@@ -11,7 +11,7 @@ inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils mozconfig-v6
 
 MY_PN="firefox"
 MOZ_PV="$(get_version_component_range -3)esr"
-PATCH="${MY_PN}-${PV%%.*}.0-patches-0.3"
+PATCH="${MY_PN}-${PV%%.*}.0-patches-04"
 
 # see https://gitweb.torproject.org/builders/tor-browser-bundle.git/tree/gitian/versions?h=maint-4.0
 # https://dist.torproject.org/torbrowser
@@ -41,9 +41,9 @@ ARCHIVE_SRC_URI="https://archive.torproject.org/tor-package-archive/${PN}/${TOR_
 SRC_URI="
 	https://gitweb.torproject.org/tor-browser.git/snapshot/${GIT_TAG}.tar.gz
 	-> ${GIT_TAG}.tar.gz
-	http://dev.gentoo.org/~anarchy/mozilla/patchsets/${PATCH}.tar.xz
-	http://dev.gentoo.org/~axs/distfiles/${PATCH}.tar.xz
-	http://dev.gentoo.org/~polynomial-c/mozilla/patchsets/${PATCH}.tar.xz
+	https://dev.gentoo.org/~anarchy/mozilla/patchsets/${PATCH}.tar.xz
+	https://dev.gentoo.org/~axs/mozilla/patchsets/${PATCH}.tar.xz
+	https://dev.gentoo.org/~polynomial-c/mozilla/patchsets/${PATCH}.tar.xz
 	x86? (
 		${BASE_SRC_URI}/tor-browser-linux32-${TOR_PV}_en-US.tar.xz
 		${ARCHIVE_SRC_URI}/tor-browser-linux32-${TOR_PV}_en-US.tar.xz
@@ -92,6 +92,7 @@ pkg_pretend() {
 
 src_prepare() {
 	# Apply gentoo firefox patches
+	EPATCH_EXCLUDE="801*.patch" \
 	EPATCH_SUFFIX="patch" \
 	EPATCH_FORCE="yes" \
 	epatch "${WORKDIR}/firefox"
