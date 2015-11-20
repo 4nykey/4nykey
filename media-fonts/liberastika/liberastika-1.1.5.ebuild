@@ -36,19 +36,16 @@ SLOT="0"
 IUSE="fontforge latex"
 
 DEPEND="
-	media-gfx/fontforge[python]
-	media-gfx/xgridfit
-	dev-util/font-helpers
+	fontforge? (
+		media-gfx/fontforge[python]
+		media-gfx/xgridfit
+		dev-util/font-helpers
+	)
 "
 RDEPEND="
 	!media-fonts/liberastika-ttf
 "
-FONT_SUFFIX="ttf pfb"
-
-if [[ -n ${PV%%*9999} ]] && use !fontforge; then
-	DEPEND=""
-	FONT_SUFFIX="ttf"
-fi
+FONT_SUFFIX="$(usex fontforge 'pfb' '') ttf"
 
 src_prepare() {
 	if use fontforge; then

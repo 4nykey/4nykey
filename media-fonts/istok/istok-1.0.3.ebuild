@@ -36,17 +36,15 @@ SLOT="0"
 IUSE="fontforge latex"
 
 DEPEND="
-	media-gfx/fontforge[python]
-	media-gfx/xgridfit
-	<=dev-python/fonttools-2.4
-	dev-util/font-helpers
+	fontforge? (
+		media-gfx/fontforge[python]
+		media-gfx/xgridfit
+		<=dev-python/fonttools-2.4
+		dev-util/font-helpers
+	)
 "
 RDEPEND=""
-FONT_SUFFIX="ttf pfb"
-if [[ -n ${PV%%*9999} ]] && use !fontforge; then
-	FONT_SUFFIX="ttf"
-	DEPEND=""
-fi
+FONT_SUFFIX="$(usex fontforge 'pfb' '') ttf"
 DOCS="AUTHORS ChangeLog README TODO"
 
 src_unpack() {

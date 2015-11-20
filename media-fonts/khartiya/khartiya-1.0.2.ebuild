@@ -38,15 +38,14 @@ SLOT="0"
 IUSE="fontforge latex"
 
 DEPEND="
-	media-gfx/fontforge[python]
-	dev-texlive/texlive-fontutils
-	sys-apps/coreutils
-	media-gfx/xgridfit
-	dev-util/font-helpers
+	fontforge? (
+		media-gfx/fontforge[python]
+		dev-texlive/texlive-fontutils
+		sys-apps/coreutils
+		media-gfx/xgridfit
+		dev-util/font-helpers
+	)
 "
-if [[ -n ${PV%%*9999} ]] && use !fontforge; then
-	DEPEND=""
-fi
 
 FONT_SUFFIX="afm otf pfb ttf"
 DOCS="FontLog.txt"
