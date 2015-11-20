@@ -4,7 +4,7 @@
 
 EAPI=5
 
-#VALA_MIN_API_VERSION="0.30"
+VALA_MIN_API_VERSION="0.30"
 VALA_USE_DEPEND="vapigen"
 inherit bash-completion-r1 versionator vala autotools gnome2
 if [[ ${PV} = *9999* ]]; then
