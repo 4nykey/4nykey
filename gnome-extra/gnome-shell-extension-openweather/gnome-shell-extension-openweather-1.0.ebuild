@@ -12,9 +12,8 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	KEYWORDS="~amd64 ~x86"
-	MY_PV="fe005139a46b7214f69c7a036d1b3b41cb368d42"
 	SRC_URI="
-		mirror://githubcl/jenslody/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/jenslody/${PN}/tar.gz/v${PV} -> ${P}.tar.gz
 	"
 fi
 
@@ -32,10 +31,25 @@ DEPEND="
 	${RDEPEND}
 "
 AUTOTOOLS_AUTORECONF=1
+AUTOTOOLS_IN_SOURCE_BUILD=1
 
 src_prepare() {
 	autotools-utils_src_prepare
 	gnome2_src_prepare
+}
+
+src_configure() {
+	if [[ -z ${PV%%*9999} ]]; then
+		local _v=$(
+		sed -e '/^\(Version\|Release\):/!d; s:[^0-9.]::g' \
+			"${S}"/gnome-shell-extension-openweather.spec |tr '\n' '.'
+		)
+		_v=${_v%.*}$(git log -1 --pretty=format:"%h")
+	fi
+	local myeconfargs=(
+		GIT_VERSION=${_v:-${PV}}
+	)
+	autotools-utils_src_configure
 }
 
 pkg_postinst() {
