@@ -18,7 +18,7 @@ EGIT_REPO_URI="git://git.ardour.org/ardour/ardour.git"
 LICENSE="GPL-2"
 SLOT="${PV%%.*}"
 KEYWORDS="~amd64 ~x86"
-IUSE="alsa bindist bundled-libs -c++0x custom-cflags debug doc jack lv2 nls osc phone-home sanitize sse wiimote"
+IUSE="alsa bindist bundled-libs +c++0x custom-cflags debug doc jack lv2 nls osc phone-home sanitize sse wiimote"
 REQUIRED_USE="|| ( alsa jack )"
 
 RDEPEND="
@@ -74,7 +74,7 @@ my_lcmsg() {
 src_prepare() {
 	sed \
 		-e 's:AudioEditing:X-&:' \
-		-i gtk2_ardour/ardour3.desktop.in
+		-i gtk2_ardour/ardour.desktop.in
 	sed \
 		-e '/clearlooks-newer/d' \
 		-i wscript
