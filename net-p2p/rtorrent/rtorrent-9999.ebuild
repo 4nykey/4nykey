@@ -12,8 +12,7 @@ EGIT_REPO_URI="git://github.com/rakshasa/rtorrent.git"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
-IUSE="debug ipv6 crypt xmlrpc"
+IUSE="c++0x debug ipv6 libressl ssl xmlrpc"
 
 PATCHES=("${FILESDIR}"/${PN}*.diff)
 DOCS=(AUTHORS README doc/rtorrent.rc)
@@ -22,7 +21,10 @@ RDEPEND="
 	dev-libs/libsigc++:2
 	net-misc/curl
 	sys-libs/ncurses
-	crypt? ( dev-libs/openssl )
+	ssl? (
+	    !libressl? ( dev-libs/openssl:0 )
+	    libressl? ( dev-libs/libressl )
+	)
 	xmlrpc? ( dev-libs/xmlrpc-c )
 "
 DEPEND="
@@ -30,6 +32,7 @@ DEPEND="
 	dev-util/pkgconfig
 	dev-util/cppunit
 "
+AUTOTOOLS_AUTORECONF="1"
 
 src_unpack() {
 	git-r3_src_unpack
@@ -38,23 +41,18 @@ src_unpack() {
 		git-r3_src_unpack
 }
 
-src_prepare() {
-	#autotools-utils_src_prepare #autotools_get_subdirs returns nada
-	epatch "${PATCHES[@]}"
-	eautoreconf
-}
-
 src_configure() {
 	local myeconfargs=(
 		--disable-dependency-tracking
 		--enable-aligned
 		--with-posix-fallocate
+		$(use_enable c++0x)
 		$(use_enable debug)
 		$(use_enable ipv6)
-		$(use_enable crypt openssl)
+		$(use_enable ssl openssl)
 		$(use_with xmlrpc xmlrpc-c)
 	)
 	libtorrent_CFLAGS="-I${S}/src/libtorrent/src" \
 	libtorrent_LIBS=" " \
-	autotools-utils_src_configure
+		autotools-utils_src_configure
 }
