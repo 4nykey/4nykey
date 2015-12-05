@@ -64,12 +64,11 @@ src_prepare() {
 
 src_configure() {
 	# If prefix is /usr, sysconf needs to be /etc, not /usr/etc
-	local mycmakeargs="
-		${mycmakeargs}
+	local mycmakeargs=(
 		$(cmake-utils_use doc INSTALL_DOC)
 		$(cmake-utils_useno c++0x DISABLE_CXX11)
 		-DCMAKE_INSTALL_SYSCONFDIR=/etc
-	"
+	)
 	cmake-utils_src_configure
 }
 

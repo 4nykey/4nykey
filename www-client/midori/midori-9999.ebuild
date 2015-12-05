@@ -90,12 +90,12 @@ src_configure() {
 		mycmakeargs+=(
 			-DUSE_GTK3=OFF
 			-DHALF_BRO_INCOM_WEBKIT2=OFF
-			)
+		)
 	else
 		mycmakeargs+=(
 			-DUSE_GTK3=ON
 			$(cmake-utils_use webkit2 HALF_BRO_INCOM_WEBKIT2)
-			)
+		)
 	fi
 
 	cmake-utils_src_configure

@@ -72,10 +72,9 @@ src_prepare() {
 }
 
 src_configure() {
-	local mycmakeargs="
-		${mycmakeargs}
+	local mycmakeargs=(
 		$(cmake-utils_useno c++0x DISABLE_CXX11)
 		$(cmake-utils_use_find_package qt5 Qt5Widgets)
-	"
+	)
 	cmake-utils_src_configure
 }

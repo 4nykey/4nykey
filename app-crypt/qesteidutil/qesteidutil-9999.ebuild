@@ -7,10 +7,6 @@ inherit cmake-utils
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/open-eid/${PN}.git"
-	SRC_URI="
-		mirror://github/open-eid/qt-common/commit/93208c5842f37c74222d92ed5b12cfaa8eb3466b.patch
-		-> ${PN}-qt55.patch
-	"
 else
 	inherit vcs-snapshot
 	MY_PV="${PV/_/-}"
@@ -63,9 +59,6 @@ src_prepare() {
 		mv "${WORKDIR}"/${MY_GB}/* "${WORKDIR}"/${MY_QC}/${MY_GB%-*}/
 		mv "${WORKDIR}"/${MY_QC}/* "${S}"/common/
 		mv "${WORKDIR}"/${MY_SC}/* "${S}"/${MY_SC%-*}/
-	else
-		EPATCH_OPTS="-d ${S}/common" \
-			epatch ${DISTDIR}/${PN}-qt55.patch
 	fi
 	sed \
 		-e "s:doc/${PN}:doc/${PF}:" \
@@ -75,11 +68,10 @@ src_prepare() {
 }
 
 src_configure() {
-	local mycmakeargs="
-		${mycmakeargs}
+	local mycmakeargs=(
 		$(cmake-utils_useno c++0x DISABLE_CXX11)
 		$(cmake-utils_use_find_package qt5 Qt5Widgets)
-	"
+	)
 	cmake-utils_src_configure
 }
 

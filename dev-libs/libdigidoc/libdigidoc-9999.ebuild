@@ -55,11 +55,10 @@ src_prepare() {
 }
 
 src_configure() {
-	local mycmakeargs="
-		${mycmakeargs}
+	local mycmakeargs=(
 		$(cmake-utils_use doc INSTALL_DOC)
 		-DCMAKE_INSTALL_SYSCONFDIR=${EROOT}etc
-	"
+	)
 	cmake-utils_src_configure
 }
 

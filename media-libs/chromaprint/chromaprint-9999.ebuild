@@ -22,9 +22,9 @@ DEPEND="
 RDEPEND="${DEPEND}"
 
 src_configure() {
-	local mycmakeargs="
+	local mycmakeargs=(
 		$(cmake-utils_use_with fftw FFTW3)
 		$(cmake-utils_use_build tools EXAMPLES)
-	"
+	)
 	cmake-utils_src_configure
 }
