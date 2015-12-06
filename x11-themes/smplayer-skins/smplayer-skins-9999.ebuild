@@ -1,25 +1,38 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-themes/smplayer-skins/smplayer-skins-14.9.0.ebuild,v 1.2 2014/09/24 08:30:44 yngwin Exp $
+# $Id$
 
 EAPI=5
 
-inherit subversion
+inherit qmake-utils
+if [[ -z ${PV%%*9999} ]]; then
+	inherit subversion
+	ESVN_REPO_URI="https://subversion.assembla.com/svn/${PN%-*}/${PN}/trunk/"
+else
+	SRC_URI="mirror://sourceforge/${PN%-*}/${P}.tar.bz2"
+	KEYWORDS="~amd64 ~x86"
+fi
 
 DESCRIPTION="Skins for SMPlayer"
 HOMEPAGE="http://smplayer.sourceforge.net/"
-ESVN_REPO_URI="https://subversion.assembla.com/svn/${PN%-*}/${PN}/trunk/"
 
 LICENSE="CC-BY-2.5 CC-BY-SA-2.5 CC-BY-SA-3.0 GPL-2 LGPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="qt4 qt5"
+REQUIRED_USE="^^ ( qt4 qt5 )"
 DEPEND="
-	dev-qt/qtcore:4
+	qt4? ( dev-qt/qtcore:4 )
+	qt5? ( dev-qt/qtcore:5 )
 "
 RDEPEND="
-	media-video/smplayer
+	media-video/smplayer[qt4?,qt5?]
 "
+
+src_prepare() {
+	sed \
+		-e "s:rcc -binary:$(usex qt4 $(qt4_get_bindir) $(qt5_get_bindir))/&:" \
+		-i themes/Makefile
+}
 
 src_install() {
 	einstall DESTDIR="${D}" PREFIX="${EPREFIX}/usr"

@@ -16,7 +16,6 @@ else
 		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
-	KEYWORDS="~amd64 ~x86"
 	DOCS=${S}/*.pdf
 	CHECKREQS_DISK_BUILD="1900M"
 fi

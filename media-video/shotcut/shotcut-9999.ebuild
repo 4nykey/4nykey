@@ -14,6 +14,7 @@ else
 		mirror://githubcl/mltframework/${PN}/tar.gz/v${PV}
 		-> ${P}.tar.gz
 	"
+	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
 

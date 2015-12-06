@@ -9,8 +9,12 @@ if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/open-eid/${PN}.git"
 else
-	SRC_URI="https://installer.id.ee/media/sources/${MY_CN}-${MY_CV}.tar.gz"
-	SRC_URI="https://installer.id.ee/media/ubuntu/pool/main/${PN:0:1}/${PN}/${PN}_${PV}.orig.tar.gz"
+	inherit vcs-snapshot
+	MY_PV="${PV/_/-}"
+	MY_PV="${MY_PV/rc/RC}"
+	SRC_URI="
+		mirror://githubcl/open-eid/${PN}/tar.gz/v${MY_PV} -> ${P}.tar.gz
+	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi

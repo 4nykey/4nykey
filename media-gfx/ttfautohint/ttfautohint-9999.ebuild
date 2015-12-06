@@ -4,23 +4,14 @@
 
 EAPI=5
 
-inherit autotools-utils
+VIRTUALX_REQUIRED="doc"
+inherit virtualx qmake-utils autotools-utils
 if [[ ${PV} == *9999* ]]; then
-	VIRTUALX_REQUIRED="doc"
-	inherit virtualx git-r3
+	inherit git-r3
 	EGIT_REPO_URI="git://repo.or.cz/${PN}.git"
 	DEPEND="
 		sys-apps/help2man
-		doc? (
-			media-gfx/imagemagick
-			media-gfx/inkscape
-			app-text/pandoc
-			dev-texlive/texlive-xetex
-			media-fonts/freefont
-			media-fonts/pothana2k
-		)
 	"
-	REQUIRED_USE="doc? ( qt4 )"
 else
 	SRC_URI="mirror://sourceforge/freetype/${P}.tar.gz"
 	KEYWORDS="~amd64 ~x86"
@@ -31,7 +22,8 @@ HOMEPAGE="http://www.freetype.org/ttfautohint/index.html"
 
 LICENSE="|| ( FTL GPL-2+ )"
 SLOT="0"
-IUSE="doc qt4"
+IUSE="qt4"
+REQUIRED_USE="doc? ( qt4 )"
 
 RDEPEND="
 	media-libs/harfbuzz
@@ -40,6 +32,14 @@ RDEPEND="
 DEPEND="
 	${DEPEND}
 	${RDEPEND}
+	doc? (
+		media-gfx/imagemagick
+		media-gfx/inkscape
+		app-text/pandoc
+		dev-texlive/texlive-xetex
+		media-fonts/freefont
+		media-fonts/pothana2k
+	)
 "
 AUTOTOOLS_AUTORECONF="1"
 AUTOTOOLS_IN_SOURCE_BUILD="1"
@@ -59,9 +59,9 @@ src_prepare() {
 src_configure() {
 	local myeconfargs=(
 		$(use_with doc)
-		$(use_with qt4 qt)
+		$(use_with qt4 qt $(qt4_get_bindir))
 	)
-	if [[ ${PV} == *9999* ]] && use doc; then
+	if use doc; then
 		Xeconf "${myeconfargs[@]}"
 	else
 		autotools-utils_src_configure
@@ -69,7 +69,7 @@ src_configure() {
 }
 
 src_compile() {
-	if [[ ${PV} == *9999* ]] && use doc; then
+	if use doc; then
 		Xemake
 	else
 		autotools-utils_src_compile

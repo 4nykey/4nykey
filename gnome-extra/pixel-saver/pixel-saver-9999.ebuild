@@ -17,7 +17,7 @@ else
 fi
 
 DESCRIPTION="An Gnome Shell extension that merges the activity bar and the title bar of maximized window"
-HOMEPAGE="https://github.com/deadalnix/gnome-shell-extension-taskbar"
+HOMEPAGE="https://github.com/deadalnix/pixel-saver"
 
 LICENSE="GPL-3"
 SLOT="0"

@@ -4,21 +4,29 @@
 
 EAPI="5"
 
-inherit autotools-utils gnome2 git-r3
-
-EGIT_REPO_URI="https://github.com/Alexey-Yakovenko/deadbeef.git"
+inherit autotools-utils gnome2
+if [[ -z ${PV%%*9999} ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/Alexey-Yakovenko/${PN}.git"
+	SRC_URI=""
+else
+	SRC_URI="
+		mirror://githubcl/Alexey-Yakovenko/${PN}/tar.gz/${PV}
+		-> ${P}.tar.gz
+	"
+	RESTRICT="primaryuri"
+	KEYWORDS="~x86 ~amd64"
+fi
 
 DESCRIPTION="DeaDBeeF - Ultimate Music Player For GNU/Linux"
 HOMEPAGE="http://deadbeef.sourceforge.net"
-SRC_URI=""
 LICENSE="GPL-2 LGPL-2.1"
 
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
 IUSE="
 alsa oss pulseaudio gtk network sid mad mac adplug vorbis ffmpeg flac sndfile
 wavpack cdda gme libnotify musepack midi tta dts aac mms libsamplerate X cover
-zip nls threads pth gtk3
+zip nls threads pth gtk3 dumb shorten alac wma
 "
 
 # come bundled
@@ -31,6 +39,9 @@ RDEPEND="
 	sid? ( media-sound/sidplay )
 	tta? ( media-sound/ttaenc )
 	midi? ( media-sound/wildmidi )
+	dumb? ( media-libs/dumb )
+	shorten? ( media-sound/shorten )
+	alac? ( media-sound/alac_decoder )
 "
 # real deps
 RDEPEND="
@@ -93,6 +104,10 @@ G2CONF="
 	$(use_enable mms)
 	$(use_enable libsamplerate src)
 	$(use_enable zip vfs-zip)
+	$(use_enable dumb)
+	$(use_enable shorten shn)
+	$(use_enable alac)
+	$(use_enable wma)
 "
 
 AUTOTOOLS_AUTORECONF="1"

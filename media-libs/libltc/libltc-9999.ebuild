@@ -4,15 +4,22 @@
 
 EAPI=5
 
-inherit autotools-utils git-r3
+inherit autotools-utils
+if [[ -z ${PV%%*9999} ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/x42/libltc.git"
+else
+	inherit vcs-snapshot
+	SRC_URI="mirror://githubcl/x42/${PN}/tar.gz/v${PV} -> ${P}.tar.gz"
+	RESTRICT="primaryuri"
+	KEYWORDS="~amd64 ~x86"
+fi
 
 DESCRIPTION="Linear/Logitudinal Time Code (LTC) Library"
 HOMEPAGE="https://github.com/x42/libltc"
-EGIT_REPO_URI="https://github.com/x42/libltc.git"
 
 LICENSE="LGPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
 IUSE="doc"
 
 RDEPEND=""

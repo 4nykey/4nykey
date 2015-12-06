@@ -4,14 +4,15 @@
 
 EAPI=5
 
-USE_RUBY="ruby19 ruby20 ruby21"
+USE_RUBY="ruby20 ruby21"
 inherit ruby-fakegem
 if [[ "${PV%9999}" != "${PV}" ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/defunkt/gist.git"
-	EGIT_CHECKOUT_DIR="${WORKDIR}/all/${P}"
 	SRC_URI=""
 else
+	inherit vcs-snapshot
+	SRC_URI="mirror://githubcl/defunkt/${PN}/tar.gz/v${PV} -> ${P}.tar.gz"
 	KEYWORDS="~amd64 ~x86"
 fi
 
@@ -27,9 +28,9 @@ RUBY_FAKEGEM_EXTRADOC="README.md"
 RUBY_FAKEGEM_GEMSPEC="${PN}.gemspec"
 
 all_ruby_prepare() {
-	if [[ "${PV%9999}" == "${PV}" ]]; then
-		sed -e '/git ls-files/d' -i gist.gemspec
-	fi
+	mkdir -p all
+	mv ${P} all/
+	sed -e '/git ls-files/d' -i "${WORKDIR}"/all/${P}/gist.gemspec
 }
 
 all_ruby_install() {

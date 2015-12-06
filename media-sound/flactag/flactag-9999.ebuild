@@ -4,15 +4,21 @@
 
 EAPI="5"
 
-inherit git-r3 autotools-utils
+inherit autotools-utils
+if [[ -z ${PV%%*9999} ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="git://flactag.git.sourceforge.net/gitroot/flactag/flactag"
+else
+	SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
+	RESTRICT="primaryuri"
+	KEYWORDS="~amd64 ~x86"
+fi
 
 DESCRIPTION="A utility for tagging FLAC files via MusicBrainz"
 HOMEPAGE="http://software.gently.org.uk/flactag/"
-EGIT_REPO_URI="git://flactag.git.sourceforge.net/gitroot/flactag/flactag"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
 IUSE="gcrypt"
 
 RDEPEND="

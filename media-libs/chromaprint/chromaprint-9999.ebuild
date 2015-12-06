@@ -1,30 +1,47 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
-EAPI="4"
-inherit eutils cmake-utils git-r3
+EAPI=5
+inherit cmake-multilib
+if [[ -z ${PV%%*9999} ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://bitbucket.org/acoustid/${PN}.git"
+else
+	SRC_URI="https://bitbucket.org/acoustid/${PN}/downloads/${P}.tar.gz"
+	KEYWORDS="~amd64 ~x86"
+fi
 
-DESCRIPTION="Core component of the Acoustid audio fingerprinting project."
+DESCRIPTION="A client-side library that implements a custom algorithm for extracting fingerprints"
 HOMEPAGE="http://acoustid.org/chromaprint"
-EGIT_REPO_URI="https://bitbucket.org/acoustid/${PN}.git"
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+IUSE="libav test tools"
 
-IUSE="tools fftw"
+# note: use ffmpeg or libav instead of fftw because it's recommended and required for tools
+RDEPEND="
+	libav? ( >=media-video/libav-11:0=[${MULTILIB_USEDEP}] )
+	!libav? ( >=media-video/ffmpeg-2.6:0=[${MULTILIB_USEDEP}] )
+"
 DEPEND="
-	fftw? ( sci-libs/fftw:3.0 )
-	!fftw? ( virtual/ffmpeg )
-	tools? ( virtual/ffmpeg )
+	${RDEPEND}
+	test? (
+		dev-cpp/gtest[${MULTILIB_USEDEP}]
+		dev-libs/boost[${MULTILIB_USEDEP}]
+	)
 "
 
-RDEPEND="${DEPEND}"
+DOCS="NEWS.txt README.md"
 
-src_configure() {
+multilib_src_configure() {
 	local mycmakeargs=(
-		$(cmake-utils_use_with fftw FFTW3)
-		$(cmake-utils_use_build tools EXAMPLES)
-	)
+		"-DBUILD_EXAMPLES=$(multilib_native_usex tools ON OFF)"
+		"-DBUILD_TESTS=$(usex test ON OFF)"
+		-DWITH_AVFFT=ON
+		)
 	cmake-utils_src_configure
+}
+
+multilib_src_test() {
+	emake check
 }

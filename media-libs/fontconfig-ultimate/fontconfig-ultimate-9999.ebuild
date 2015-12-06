@@ -57,40 +57,11 @@ RDEPEND="app-eselect/eselect-infinality
 		)
 	)"
 
-DISABLE_AUTOFORMATTING="1"
-DOC_CONTENTS="1. Disable all rules but 52-infinality.conf using eselect fontconfig
+#DISABLE_AUTOFORMATTING="1"
+DOC_CONTENTS="
+1. Disable all rules but 52-infinality.conf using eselect fontconfig
 2. Enable one of \"ultimate\" presets using eselect infinality
-3. Select ultimate lcdfilter settings using eselect lcdfilter"
-
-src_prepare() {
-	# Generate lcdfilter config
-	echo -e "################# FONTCONFIG ULTIMATE STYLE #################\n" \
-	> "${T}"/ultimate || die
-
-	local infinality_style _is="freetype/infinality-settings.sh"
-	infinality_style=$(sed --quiet \
-		-e 's/^USE_STYLE="*\([1-9]\)"*/\1/p' \
-		${_is}) || die
-
-	if ! [ -n "$infinality_style" ]; then
-		ewarn "Missing USE_STYLE variable in package source."
-		infinality_style=1
-	fi
-
-	sed --quiet \
-		-e '/INFINALITY_FT_FILTER_PARAMS=/p' \
-		${_is} \
-	| sed --quiet \
-		-e "${infinality_style} s/[ \t]*export[ \t]*//p" \
-	>> "${T}"/ultimate
-	assert
-
-	sed --quiet \
-		-e '/INFINALITY_FT_FILTER_PARAMS/ d' \
-		-e 's/^[ \t]*export[ \t]*INFINALITY_FT/INFINALITY_FT/p' \
-		${_is} \
-	>> "${T}"/ultimate || die
-}
+"
 
 src_install() {
 	local default_configs cfg flv \
@@ -123,7 +94,7 @@ src_install() {
 	doins fontconfig_patches/fonts-settings/*.conf
 
 	insinto /usr/share/eselect-lcdfilter/env.d
-	doins "${T}"/ultimate
+	newins freetype/infinality-settings.sh ultimate
 
 	dodoc README.md conf.d.infinality/README
 	readme.gentoo_create_doc

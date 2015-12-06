@@ -11,11 +11,9 @@ if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="git://github.com/jackaudio/jack2.git"
 else
-	SRC_URI="
-	https://codeload.github.com/jackaudio/jack2/tar.gz/v${PV} -> ${P}.tar.gz
-	"
+	inherit vcs-snapshot
+	SRC_URI="mirror://githubcl/jackaudio/jack2/tar.gz/v${PV} -> ${P}.tar.gz"
 	RESTRICT="primaryuri"
-	S="${WORKDIR}/jack2-${PV}"
 fi
 
 DESCRIPTION="A low-latency audio server"

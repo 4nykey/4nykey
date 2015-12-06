@@ -14,7 +14,7 @@ else
 	inherit vcs-snapshot
 	SRC_URI="mirror://githubcl/Keruspe/GPaste/tar.gz/v${PV} -> ${P}.tar.gz"
 	RESTRICT="primaryuri"
-	#KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64 ~x86"
 fi
 
 DESCRIPTION="Clipboard management system"

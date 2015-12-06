@@ -4,14 +4,14 @@
 
 EAPI=5
 
+AUTOTOOLS_AUTORECONF=1
 AUTOTOOLS_IN_SOURCE_BUILD=1
 inherit autotools-utils
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/megous/${PN}.git"
-	AUTOTOOLS_AUTORECONF=1
 else
-	SRC_URI="http://megatools.megous.com/builds/${P}.tar.gz"
+	SRC_URI="mirror://githubcl/megous/${PN}/tar.gz/${PV} -> ${P}.tar.gz"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
