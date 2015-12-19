@@ -32,11 +32,10 @@ src_prepare() {
 }
 
 src_compile() {
-	go run build.go build
+	go run build.go -no-upgrade
 }
 
 src_install() {
-	go run build.go -no-upgrade
 	dobin bin/*
 	doman man/*.[0-9]
 	dodoc AUTHORS *.md
