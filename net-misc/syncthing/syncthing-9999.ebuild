@@ -6,8 +6,8 @@ EAPI=5
 
 EGO_PN="github.com/${PN}/${PN}"
 S="${WORKDIR}/${P}/src/${EGO_PN}"
+inherit systemd
 if [[ -z ${PV%%*9999} ]]; then
-	#inherit golang-vcs
 	inherit golang-base git-r3
 	EGIT_CHECKOUT_DIR="${S}"
 	EGIT_REPO_URI="https://${EGO_PN}"
@@ -22,7 +22,7 @@ HOMEPAGE="https://syncthing.net/"
 
 LICENSE="MPL-2.0"
 SLOT="0"
-IUSE=""
+IUSE="systemd"
 
 DEPEND=""
 RDEPEND="${DEPEND}"
@@ -39,4 +39,8 @@ src_install() {
 	dobin bin/*
 	doman man/*.[0-9]
 	dodoc AUTHORS *.md
+	if use systemd; then
+		systemd_dounit etc/linux-systemd/system/${PN}@.service
+		systemd_douserunit etc/linux-systemd/user/${PN}.service
+	fi
 }
