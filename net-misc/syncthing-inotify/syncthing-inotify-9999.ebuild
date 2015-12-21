@@ -49,7 +49,7 @@ src_unpack() {
 src_prepare() {
 	if [[ -z ${PV%%*9999} ]]; then
 		local _v="$(env GIT_DIR="${EGO_STORE_DIR}/src/${EGO_PN}/.git" \
-			git describe --abbrev=0 --tags)"
+			git describe --tags)"
 	fi
 	sed \
 		-e "s,\(Version.*=.*\)unknown-dev,\1${_v:-v${PV}}," \
