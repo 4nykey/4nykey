@@ -42,7 +42,7 @@ src_unpack() {
 		cp -r "${EGO_STORE_DIR}"/src/${EGO_PN%/*} "${S}"/src/${EGO_PN%%/*}/
 	else
 		golang-vcs-snapshot_src_unpack
-		default
+		unpack ${MY_GM}.tar.gz ${MY_GH}.tar.gz
 		mv ${MY_GM} "${S}/src/${EGO_PN%/*}"/${MY_GM%-*}
 		mv ${MY_GH} "${S}/src/${EGO_PN%/*}"/${MY_GH%-*}
 	fi
