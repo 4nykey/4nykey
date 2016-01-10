@@ -1,0 +1,11 @@
+--- ./winsup/cygwin/Makefile.in.orig	2015-12-14 17:07:50.000000000 +0200
++++ ./winsup/cygwin/Makefile.in	2015-12-15 15:49:34.921524342 +0200
+@@ -619,8 +619,6 @@
+ 
+ shared.o: shared_info_magic.h
+ 
+-$(srcdir)/devices.cc: gendevices devices.in devices.h
+-	${wordlist 1,2,$^} $@
+ 
+ ${CURDIR}/libc.a: ${LIB_NAME} ${CURDIR}/libm.a libpthread.a libutil.a
+ 	${speclib} -v ${@F}

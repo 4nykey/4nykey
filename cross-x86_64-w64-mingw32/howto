@@ -1,0 +1,16 @@
+for dir in binutils gcc gdb; do
+    ln -s $(portageq portdir)/sys-devel/${dir}
+done
+
+cp -r etc/portage/* /etc/portage/
+
+emerge cross-x86_64-w64-mingw32/binutils -1a
+
+USE="crosscompile_opts_headers-only" \
+    emerge cross-x86_64-w64-mingw32/mingw-runtime -1a
+
+USE="-cxx -fortran -openmp" emerge cross-x86_64-w64-mingw32/gcc -1a
+
+emerge cross-x86_64-w64-mingw32/mingw-runtime cross-x86_64-w64-mingw32/gcc -1a
+
+emerge --noreplace --ask @cross-x86_64-w64-mingw32

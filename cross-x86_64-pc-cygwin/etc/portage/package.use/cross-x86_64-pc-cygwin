@@ -1,0 +1,2 @@
+cross-x86_64-pc-cygwin/binutils	multitarget
+cross-x86_64-pc-cygwin/gcc		libssp multilib -sanitize

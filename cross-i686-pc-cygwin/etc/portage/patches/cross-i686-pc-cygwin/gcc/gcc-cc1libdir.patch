@@ -1,0 +1,11 @@
+--- ./libcc1/Makefile.in.orig	2015-12-15 14:38:02.309194869 +0200
++++ ./libcc1/Makefile.in	2015-12-15 14:48:40.278098961 +0200
+@@ -263,7 +263,7 @@
+ 
+ libiberty_dep = $(patsubst $(Wc)%,%,$(libiberty))
+ plugindir = $(libdir)/gcc/$(target_noncanonical)/$(gcc_version)/plugin
+-cc1libdir = $(libdir)/$(libsuffix)
++cc1libdir = $(libdir)/gcc/$(target_noncanonical)/$(gcc_version)
+ @ENABLE_PLUGIN_TRUE@plugin_LTLIBRARIES = libcc1plugin.la
+ @ENABLE_PLUGIN_TRUE@cc1lib_LTLIBRARIES = libcc1.la
+ BUILT_SOURCES = compiler-name.h

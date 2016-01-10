@@ -1,0 +1,27 @@
+--- ./winsup/cygwin/winbase.h.orig	2015-12-15 18:30:38.203833077 +0200
++++ ./winsup/cygwin/winbase.h	2015-12-15 18:31:36.748289235 +0200
+@@ -11,6 +11,7 @@
+ #ifndef _WINBASE2_H
+ #define _WINBASE2_H
+ 
++#ifndef __CYGWIN__
+ extern __inline__ LONG
+ ilockcmpexch (volatile LONG *t, LONG v, LONG c)
+ {
+@@ -56,4 +57,5 @@
+     (PVOID)InterlockedCompareExchange((LONG volatile *)(d),(LONG)(e),(LONG)(c))
+ 
+ #endif /* !__x86_64 */
++#endif
+ #endif /*_WINBASE2_H*/
+--- ./winsup/cygwin/include/cygwin/config.h.orig	2015-12-15 18:30:38.203833077 +0200
++++ ./winsup/cygwin/include/cygwin/config.h	2015-12-15 18:31:36.744955838 +0200
+@@ -37,7 +37,7 @@
+    compute these offsets already exists for the sake of gendef so
+    we might as well just use it here.  */
+ 
+-#ifdef _COMPILING_NEWLIB
++#ifdef _COMPILING_NEWLIB_NOT
+ #ifdef __x86_64__
+ #include "../tlsoffsets64.h"
+ #else

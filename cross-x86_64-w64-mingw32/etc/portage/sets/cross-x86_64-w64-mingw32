@@ -1,0 +1,3 @@
+cross-x86_64-w64-mingw32/binutils
+cross-x86_64-w64-mingw32/gcc
+cross-x86_64-w64-mingw32/mingw-runtime
