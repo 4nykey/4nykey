@@ -15,10 +15,10 @@ if [[ ${CTARGET} == ${CHOST} ]] ; then
 fi
 
 MY_PV="$(replace_version_separator 3 '-')"
-MY_P="${CATEGORY}-${P}"
+MY_P="${P}_x86"
 DESCRIPTION="Linux-like environment for Windows"
 HOMEPAGE="http://cygwin.com/"
-BASE_URI="mirror://cygwin/x86_64/release/"
+BASE_URI="mirror://cygwin/x86/release/"
 # few headers are missing from binary pkg, so source tarball is needed
 # for headers-only variant as well
 SRC_URI="

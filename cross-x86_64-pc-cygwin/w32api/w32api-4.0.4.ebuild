@@ -19,10 +19,10 @@ HOMEPAGE="http://cygwin.com/"
 BASE_URI="mirror://cygwin/x86_64/release"
 MY_H="${PN}-headers-${PV}-1"
 MY_R="${PN}-runtime-${PV}-1"
-MY_P="${CATEGORY}-${P}"
+MY_P="${P}-x64"
 SRC_URI="
 	!crosscompile_opts_headers-only? (
-		${BASE_URI}/${PN}-runtime/${MY_R}-src.tar.xz
+		${BASE_URI}/${PN}-runtime/${MY_R}-src.tar.xz -> ${MY_P}_src.tar.xz
 	)
 	crosscompile_opts_headers-only? (
 		${BASE_URI}/${PN}-headers/${MY_H}.tar.xz -> ${MY_P}_inc.tar.xz

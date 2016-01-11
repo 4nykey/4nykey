@@ -1,4 +1,4 @@
-cross-x86_64-pc-cygwin/binutils
-cross-x86_64-pc-cygwin/cygwin
-cross-x86_64-pc-cygwin/gcc
-cross-x86_64-pc-cygwin/w32api
+cross-i686-pc-cygwin/binutils
+cross-i686-pc-cygwin/cygwin
+cross-i686-pc-cygwin/gcc
+cross-i686-pc-cygwin/w32api
