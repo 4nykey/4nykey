@@ -7,26 +7,25 @@ EAPI=5
 inherit autotools-utils
 if [[ ${PV} = *9999* ]]; then
 	inherit subversion
-	ESVN_REPO_URI="http://code.autistici.org/svn/fim/trunk"
-	ESVN_OFFLINE="1"
-	SRC_URI="mirror://nongnu/fbi-improved/fim.svndump.gz"
+	ESVN_REPO_URI="http://svn.savannah.nongnu.org/svn/fbi-improved/trunk"
 	KEYWORDS=""
 else
 	MY_P="${P/_/-}"
+	MY_P="${MY_P/pre/trunk}"
 	SRC_URI="mirror://nongnu/fbi-improved/${MY_P}.tar.bz2"
+	RESTRICT="primaryuri"
 	KEYWORDS="~x86 ~amd64"
 	S="${WORKDIR}/${MY_P}"
 fi
 
-DESCRIPTION="Fbi IMproved is a framebuffer image viewer based on Fbi and inspired from Vim"
-HOMEPAGE="http://www.autistici.org/dezperado/fim"
-RESTRICT="primaryuri"
+DESCRIPTION="Fbi IMproved is a framebuffer image viewer"
+HOMEPAGE="http://www.nongnu.org/fbi-improved"
 
 LICENSE="GPL-2"
 SLOT="0"
 IUSE="
 aalib archive debug dia djvu exif fbcon gif graphicsmagick imagemagick imlib
-jpeg pdf png postscript -raw readline +screen sdl svg tiff truetype xcf xfig
+jpeg pdf png postscript readline +screen sdl svg tiff truetype xcf xfig
 "
 
 AUTOTOOLS_AUTORECONF="1"
@@ -47,7 +46,6 @@ DEPEND="
 	exif? ( media-libs/libexif )
 	aalib? ( media-libs/aalib )
 	sdl? ( media-libs/libsdl )
-	raw? ( media-gfx/ufraw )
 	archive? ( app-arch/libarchive )
 	truetype? ( media-libs/freetype:2 )
 "
@@ -95,7 +93,6 @@ src_configure() {
 		$(use_enable pdf)
 		$(use_enable pdf poppler)
 		$(use_enable png)
-		$(use_enable raw ufraw)
 		$(use_enable archive)
 		$(use_enable exif)
 		$(use_enable aalib aa)
