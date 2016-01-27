@@ -10,14 +10,14 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="${PV/_/-}"
-	MY_PV="${MY_PV/rc/RC}"
+	MY_PV="${MY_PV^^}"
 	SRC_URI="
 		mirror://githubcl/open-eid/${PN}/tar.gz/v${MY_PV} -> ${P}.tar.gz
 	"
 	# submodules not included in github releases
-	MY_QC="qt-common-93208c5842f37c74222d92ed5b12cfaa8eb3466b"
-	MY_GB="google-breakpad-f907c96df0863eb852fe55668932c2a146c6900c"
-	MY_SC="smartcardpp-9a506a0d69f00d5970cf5c213bc23547687104ab"
+	MY_QC="qt-common-7a944f2"
+	MY_GB="google-breakpad-f907c96"
+	MY_SC="smartcardpp-4e5146b"
 	SRC_URI="${SRC_URI}
 		mirror://githubcl/open-eid/${MY_QC%-*}/tar.gz/${MY_QC##*-} -> ${MY_QC}.tar.gz
 		mirror://githubcl/open-eid/${MY_GB%-*}/tar.gz/${MY_GB##*-} -> ${MY_GB}.tar.gz

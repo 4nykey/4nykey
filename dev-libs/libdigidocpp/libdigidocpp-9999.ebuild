@@ -11,7 +11,7 @@ if [[ ${PV} = *9999* ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="${PV/_/-}"
-	MY_PV="${MY_PV/rc/RC}"
+	MY_PV="${MY_PV^^}"
 	SRC_URI="
 		mirror://githubcl/open-eid/${PN}/tar.gz/v${MY_PV} -> ${P}.tar.gz
 	"
