@@ -21,6 +21,7 @@ if [[ -z ${PV%%*_alpha} ]]; then
 else
 	KEYWORDS="~amd64 ~x86"
 fi
+TOR_PV="${TOR_PV%.0}"
 # https://gitweb.torproject.org/tor-browser.git/refs/tags
 GIT_TAG="$(version_format_string 'tor-browser-${MOZ_PV}-$4.$5-$7-build$8')"
 
@@ -45,12 +46,12 @@ SRC_URI="
 	https://dev.gentoo.org/~axs/mozilla/patchsets/${PATCH}.tar.xz
 	https://dev.gentoo.org/~polynomial-c/mozilla/patchsets/${PATCH}.tar.xz
 	x86? (
-		${BASE_SRC_URI}/tor-browser-linux32-${TOR_PV}_en-US.tar.xz
 		${ARCHIVE_SRC_URI}/tor-browser-linux32-${TOR_PV}_en-US.tar.xz
+		${BASE_SRC_URI}/tor-browser-linux32-${TOR_PV}_en-US.tar.xz
 	)
 	amd64? (
-		${BASE_SRC_URI}/tor-browser-linux64-${TOR_PV}_en-US.tar.xz
 		${ARCHIVE_SRC_URI}/tor-browser-linux64-${TOR_PV}_en-US.tar.xz
+		${BASE_SRC_URI}/tor-browser-linux64-${TOR_PV}_en-US.tar.xz
 	)
 "
 RESTRICT="primaryuri"
