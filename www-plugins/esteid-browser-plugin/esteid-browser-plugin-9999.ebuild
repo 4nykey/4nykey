@@ -9,9 +9,9 @@ MY_PV="${PV/_/-}"
 MY_PV="${MY_PV/rc/RC}"
 MY_P="${MY_PN}-${MY_PV}"
 MY_LN="firefox-pkcs11-loader"
-MY_LV="${MY_PV%-*}"
-MY_LV="3.11.0"
-MY_L="${MY_LN}-${MY_LV}"
+MY_LV="v${MY_PV%-*}"
+MY_LV="3d76df9"
+MY_L="${MY_LN}-${MY_LV#v}"
 if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_CHECKOUT_DIR="${WORKDIR}/${MY_P}"
@@ -20,7 +20,7 @@ else
 	SRC_URI="
 		mirror://githubcl/open-eid/${MY_PN}/tar.gz/v${MY_PV}
 		-> ${MY_P}.tar.gz
-		mirror://githubcl/open-eid/${MY_LN}/tar.gz/v${MY_LV}
+		mirror://githubcl/open-eid/${MY_LN}/tar.gz/${MY_LV}
 		-> ${MY_L}.tar.gz
 	"
 	RESTRICT="primaryuri"
