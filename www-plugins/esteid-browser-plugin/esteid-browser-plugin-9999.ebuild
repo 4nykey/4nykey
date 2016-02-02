@@ -3,15 +3,11 @@
 # $Header: $
 
 EAPI="5"
-inherit cmake-utils nsplugins
+inherit nsplugins
 MY_PN="browser-token-signing"
 MY_PV="${PV/_/-}"
 MY_PV="${MY_PV/rc/RC}"
 MY_P="${MY_PN}-${MY_PV}"
-MY_LN="firefox-pkcs11-loader"
-MY_LV="v${MY_PV%-*}"
-MY_LV="3d76df9"
-MY_L="${MY_LN}-${MY_LV#v}"
 if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_CHECKOUT_DIR="${WORKDIR}/${MY_P}"
@@ -20,8 +16,6 @@ else
 	SRC_URI="
 		mirror://githubcl/open-eid/${MY_PN}/tar.gz/v${MY_PV}
 		-> ${MY_P}.tar.gz
-		mirror://githubcl/open-eid/${MY_LN}/tar.gz/${MY_LV}
-		-> ${MY_L}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -45,14 +39,11 @@ RDEPEND="
 	dev-libs/opensc
 "
 
-S="${WORKDIR}/${MY_L}"
+S="${WORKDIR}/${MY_P}"
 CMAKE_IN_SOURCE_BUILD='y'
 
 src_unpack() {
 	if [[ ${PV} = *9999* ]]; then
-		git-r3_src_unpack
-		EGIT_CHECKOUT_DIR="${S}" \
-		EGIT_REPO_URI="https://github.com/open-eid/firefox-pkcs11-loader.git" \
 		git-r3_src_unpack
 	else
 		default
@@ -63,12 +54,15 @@ src_compile() {
 	emake \
 		CC="$(tc-getCC)" \
 		CPPFLAGS="${CFLAGS}" \
-		-C "${WORKDIR}/${MY_P}" plugin
-	cmake-utils_src_compile
+		plugin
 }
 
 src_install() {
 	insinto "/usr/$(get_libdir)/${PLUGINS_DIR}"
 	doins "${WORKDIR}"/${MY_P}/npesteid-firefox-plugin.so
-	cmake-utils_src_install
+}
+
+pkg_postinst() {
+	elog "Estonian ID Card PKCS11 module loader is available at"
+	elog "https://addons.mozilla.org/firefox/addon/est-pkcs11-load"
 }
