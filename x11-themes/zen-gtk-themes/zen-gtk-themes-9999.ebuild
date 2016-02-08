@@ -5,14 +5,23 @@
 EAPI=5
 
 inherit gnome2
+if [[ -z ${PV%%*9999} ]]; then
+	SRC_URI=""
+	EGIT_REPO_URI="https://github.com/cedl38/${PN}.git"
+	inherit git-r3
+else
+	SRC_URI="
+		mirror://githubcl/cedl38/${PN}/tar.gz/v${PV} -> ${P}.tar.gz
+	"
+	RESTRICT="primaryuri"
+	KEYWORDS="~amd64 ~x86"
+fi
 
 DESCRIPTION="A simple, consistent and visually appealing GTK+ theme"
 HOMEPAGE="https://github.com/cedl38/zen-gtk-themes"
-SRC_URI="https://codeload.github.com/cedl38/${PN}/tar.gz/v${PV} -> ${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND="
