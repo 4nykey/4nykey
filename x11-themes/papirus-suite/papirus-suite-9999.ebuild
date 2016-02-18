@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/varlesh/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="f13d5c4"
+	MY_PV="d3795f0"
 	SRC_URI="
 		mirror://githubcl/varlesh/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -18,35 +18,55 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 
-DESCRIPTION="Papirus GTK Icon Theme"
-HOMEPAGE="https://github.com/varlesh/papirus-gtk-icon-theme"
+DESCRIPTION="Papirus Theme"
+HOMEPAGE="https://github.com/varlesh/papirus-suite"
 
-LICENSE="CC-BY-SA-4.0"
+LICENSE="
+	CC-BY-SA-4.0
+	gtk? ( LGPL-2.1 )
+	libreoffice? ( GPL-3 )
+	smplayer? ( GPL-3 )
+"
 SLOT="0"
-IUSE="libreoffice smplayer"
+IUSE="gtk kde libreoffice smplayer"
 
 DEPEND=""
 RDEPEND="
 	libreoffice? ( app-office/libreoffice )
 	smplayer? ( media-video/smplayer )
+	!x11-themes/papirus-gtk-icon-theme
 "
 
 src_prepare() {
-	mv Papirus-GTK/AUTHORS .
+	mv gtk-icons/Papirus-GTK/AUTHORS .
 	find -mindepth 2 -type f -regex '.*\(AUTHORS\|LICENSE\)' -delete
 	find -L -type l -delete
 }
 
 src_install() {
 	insinto /usr/share/icons
-	doins -r Papirus*-GTK
+	doins -r gtk-icons/Papirus*-GTK
 	if use smplayer; then
 		insinto /usr/share/smplayer/themes/
-		doins -r extra/smplayer-themes/Papirus*
+		doins -r players-skins/smplayer-themes/Papirus*
 	fi
 	if use libreoffice; then
 		insinto /usr/$(get_libdir)/libreoffice/share/config
-		doins extra/libreoffice-icons/*.zip
+		doins libreoffice-icons/*.zip
+	fi
+	if use gtk; then
+		insinto /usr/share/themes
+		doins -r kde-pack/gtk-themes/papirus*
+	fi
+	if use kde; then
+		insinto /usr/share
+		doins -r kde-pack/{color-schemes,QtCurve}
+		insinto /usr/share/plasma
+		doins -r kde-pack/look-and-feel
+		insinto /usr/share/plasma/desktoptheme
+		doins -r kde-pack/plasma-themes/papirus*
+		insinto /usr/share/konsole
+		doins kde-pack/konsole-colorschemes/*.colorscheme
 	fi
 	dodoc AUTHORS README.md
 }
