@@ -38,7 +38,7 @@ RDEPEND="
 	)
 	net-misc/curl
 	media-libs/libsndfile
-	jack? ( media-sound/jack-audio-connection-kit )
+	jack? ( virtual/jack )
 	!bundled-libs? (
 		media-libs/libltc
 	)
