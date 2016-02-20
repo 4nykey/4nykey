@@ -1,0 +1,18 @@
+--- ./configure.ac.orig	2016-02-20 10:45:32.841834914 +0200
++++ ./configure.ac	2016-02-20 11:02:42.655386525 +0200
+@@ -1075,12 +1075,12 @@
+ 		fi
+ 	else
+ 		fim_cv_aalib=no
+-	fi
+-else
+-	fim_cv_aalib=no
+         AC_MSG_ERROR([Sorry, it does not seem like aalib is installed or detectable.
+ 	Please run --disable-aa or install aalib in a system-wide directory instead.
+ 	])
++	fi
++else
++	fim_cv_aalib=no
+ fi
+ 
+ dnl ================================================================================

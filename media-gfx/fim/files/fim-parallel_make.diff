@@ -2,9 +2,13 @@ Index: src/Makefile.am
 ===================================================================
 --- src/Makefile.am	(revision 276)
 +++ src/Makefile.am	(working copy)
-@@ -22,6 +22,8 @@
- yacc.tab.cpp: yacc.ypp lex.lex
- 	$(YACC) $(YFLAGS) yacc.ypp -o yacc.tab.cpp
+@@ -18,9 +18,11 @@
+ 	@$(ECHO) "Applying a horrible hack to avoid the flex non-throwing isatty() redeclaration in 'extern "C" int isatty (int );'"
+ 	$(SED) -i 's/^.*extern.*isatty.*int.*$$//g' $@
+ 
+-yacc.tab.hpp yacc.tab.cpp: yacc.ypp lex.lex
++yacc.tab.cpp: yacc.ypp lex.lex
+ 	$(YACC) $(YFLAGS) $< -o $@
  
 +yacc.tab.hpp: yacc.tab.cpp
 +
