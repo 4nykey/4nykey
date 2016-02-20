@@ -10,11 +10,18 @@ if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 	LICENSE="Apache-2.0"
+	S="${WORKDIR}/${P}/FDK"
 	FDK_EXE="/usr/$(get_libdir)/${PN}/FDK/Tools/linux"
 else
-	SRC_URI="https://github.com/adobe-type-tools/${PN}/releases/download/${PV}/FDK-${PV}-LINUX.zip"
+	inherit unpacker versionator
+	MY_P=$(version_format_string 'FDK-$1$2-LINUX.b$3')
+	SRC_URI="
+		http://download.macromedia.com/pub/developer/opentype/FDK.${PV}/${MY_P}.zip
+		https://github.com/adobe-type-tools/afdko/releases/download/${PV}/${MY_P}.zip
+	"
 	RESTRICT="primaryuri"
-	S="${WORKDIR}"
+	DEPEND="$(unpacker_src_uri_depends)"
+	S="${WORKDIR}/${MY_P}"
 	KEYWORDS="~amd64 ~x86"
 	LICENSE="FDK"
 	LICENSE_URL="http://www.adobe.com/devnet/opentype/afdko/eula.html"
@@ -28,11 +35,8 @@ SLOT="0"
 IUSE=""
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-DEPEND="
-	${PYTHON_DEPS}
-"
 RDEPEND="
-	${DEPEND}
+	${PYTHON_DEPS}
 	>=dev-python/fonttools-2.5
 "
 PATCHES=( "${FILESDIR}"/${PN}*.diff )
@@ -46,7 +50,7 @@ src_compile() {
 		done
 		find -path '*exe/linux/debug/*' -exec mv -fv {} "FDK/Tools/linux" \;
 	else
-		rm -rf "FDK/Tools/linux/Python"
+		rm -rf "Tools/linux/Python"
 	fi
 }
 
@@ -58,10 +62,10 @@ src_install() {
 	doins "${T}"/${PN}
 
 	insinto "${FDK_EXE%/*}"
-	doins -r "${S}"/FDK/Tools/SharedData
+	doins -r "${S}"/Tools/SharedData
 	exeinto "${FDK_EXE}"
-	doexe FDK/Tools/linux/*
+	doexe Tools/linux/*
 
-	dodoc FDK/Technical\ Documentation/*.pdf
-	dohtml FDK/Technical\ Documentation/*.htm*
+	dodoc Technical\ Documentation/*.pdf
+	dohtml Technical\ Documentation/*.htm*
 }
