@@ -15,13 +15,11 @@ else
 		mirror://githubcl/open-eid/${PN}/tar.gz/v${MY_PV} -> ${P}.tar.gz
 	"
 	# submodules not included in github releases
-	MY_QC="qt-common-1f5809e"
+	MY_QC="qt-common-c490b97"
 	MY_GB="google-breakpad-f907c96"
-	MY_SC="smartcardpp-4e5146b"
 	SRC_URI="${SRC_URI}
 		mirror://githubcl/open-eid/${MY_QC%-*}/tar.gz/${MY_QC##*-} -> ${MY_QC}.tar.gz
 		mirror://githubcl/open-eid/${MY_GB%-*}/tar.gz/${MY_GB##*-} -> ${MY_GB}.tar.gz
-		mirror://githubcl/open-eid/${MY_SC%-*}/tar.gz/${MY_SC##*-} -> ${MY_SC}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -58,7 +56,6 @@ src_prepare() {
 	if [[ -n ${PV%%*9999} ]]; then
 		mv "${WORKDIR}"/${MY_GB}/* "${WORKDIR}"/${MY_QC}/${MY_GB%-*}/
 		mv "${WORKDIR}"/${MY_QC}/* "${S}"/common/
-		mv "${WORKDIR}"/${MY_SC}/* "${S}"/${MY_SC%-*}/
 	fi
 	sed \
 		-e "s:doc/${PN}:doc/${PF}:" \
