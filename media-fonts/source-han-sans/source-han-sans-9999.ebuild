@@ -38,14 +38,10 @@ src_prepare() {
 	if [[ -n ${PV%%*9999} ]]; then
 		find SubsetOTF -mindepth 2 -name '*.otf' -exec mv -f {} "${S}" \;
 	else
-		cp "${FILESDIR}"/build.sh "${S}"
-		sed \
-			-e '/^makeotf/!d;/\<OTC\>/d' \
-			-e 's:makeotf.*:& 2> "${T}"/${PN}.log || die "failed to build, see ${T}/${PN}.log":' \
-			"${S}"/COMMANDS.txt > "${S}"/cmd.sh
+		epatch "${FILESDIR}"/*.diff
 	fi
 }
 
 src_compile() {
-	[[ -z ${PV%%*9999} ]] && source "${S}"/build.sh
+	[[ -z ${PV%%*9999} ]] && source "${S}"/COMMANDS.txt
 }
