@@ -7,17 +7,24 @@ EAPI=5
 PLOCALES="
 cs de el en_GB es fr it nn pl pt pt_PT ru sv zh
 "
-PYTHON_COMPAT=( python2_7 python3_4 )
+PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE='threads(+)'
-inherit fdo-mime gnome2-utils python-any-r1 waf-utils l10n base git-r3
+inherit fdo-mime gnome2-utils python-any-r1 waf-utils l10n base
+if [[ -z ${PV%%*9999} ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="git://git.ardour.org/ardour/ardour.git"
+else
+	inherit vcs-snapshot
+	SRC_URI="mirror://githubcl/Ardour/${PN}/tar.gz/${PV} -> ${P}.tar.gz"
+	RESTRICT="primaryuri"
+	KEYWORDS="~amd64 ~x86"
+fi
 
 DESCRIPTION="Digital Audio Workstation"
 HOMEPAGE="http://ardour.org/"
-EGIT_REPO_URI="git://git.ardour.org/ardour/ardour.git"
 
 LICENSE="GPL-2"
 SLOT="${PV%%.*}"
-KEYWORDS="~amd64 ~x86"
 IUSE="alsa bindist bundled-libs +c++0x custom-cflags debug doc jack lv2 nls osc phone-home sanitize sse wiimote"
 REQUIRED_USE="|| ( alsa jack )"
 
@@ -60,24 +67,16 @@ DEPEND="
 	doc? ( app-doc/doxygen )
 "
 
-PATCHES= #( "${FILESDIR}"/${PN}${SLOT}*.diff )
+PATCHES=( "${FILESDIR}"/${PN}${SLOT}*.diff )
 DOCS=( README TRANSLATORS doc/monitor_modes.pdf )
 
-my_use() {
-	usex $1 --${2:-${1}} --no-${2:-${1}}
-}
-
-my_lcmsg() {
-	rm -f {gtk2_ardour,libs/ardour,libs/gtkmm2ext}/po/${1}.po
-}
-
 src_prepare() {
+	my_lcmsg() {
+		rm -f {gtk2_ardour,libs/ardour,libs/gtkmm2ext}/po/${1}.po
+	}
 	sed \
 		-e 's:AudioEditing:X-&:' \
 		-i gtk2_ardour/ardour.desktop.in
-	sed \
-		-e '/clearlooks-newer/d' \
-		-i wscript
 	use custom-cflags && sed \
 		-e 's:\(prepend_opt_flags = \)True:\1False:' \
 		-i wscript
@@ -86,6 +85,9 @@ src_prepare() {
 }
 
 src_configure() {
+	my_use() {
+		usex $1 --${2:-${1}} --no-${2:-${1}}
+	}
 	local wafargs=(
 		--configdir=/etc
 		--noconfirm
@@ -103,7 +105,6 @@ src_configure() {
 		$(usex bundled-libs '' '--use-external-libs')
 		$(usex doc '--docs' '')
 	)
-
 	waf-utils_src_configure "${wafargs[@]}"
 }
 

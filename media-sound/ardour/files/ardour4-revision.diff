@@ -1,0 +1,20 @@
+--- a/wscript
++++ b/wscript
+@@ -165,7 +165,7 @@ def fetch_tarball_revision ():
+ if os.path.isdir (os.path.join(os.getcwd(), '.git')):
+     rev = fetch_git_revision ()
+ else:
+-    rev = fetch_tarball_revision ()
++    rev = os.environ['PV']
+ 
+ #
+ # rev is now of the form MAJOR.MINOR[-rcX]-rev-commit
+@@ -260,7 +260,7 @@ def create_stored_revision():
+         return
+     else:
+         print("Missing libs/ardour/revision.cc.  Blame the packager.")
+-        sys.exit(-1)
++        rev = os.environ['PV']
+ 
+     try:
+         #
