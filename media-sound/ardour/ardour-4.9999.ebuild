@@ -12,7 +12,7 @@ PYTHON_REQ_USE='threads(+)'
 inherit fdo-mime gnome2-utils python-any-r1 waf-utils l10n base
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="git://git.ardour.org/ardour/ardour.git"
+	EGIT_REPO_URI="git://git.ardour.org/${PN}/${PN}.git"
 else
 	inherit vcs-snapshot
 	SRC_URI="mirror://githubcl/Ardour/${PN}/tar.gz/${PV} -> ${P}.tar.gz"
@@ -25,7 +25,7 @@ HOMEPAGE="http://ardour.org/"
 
 LICENSE="GPL-2"
 SLOT="${PV%%.*}"
-IUSE="alsa bindist bundled-libs +c++0x custom-cflags debug doc jack lv2 nls osc phone-home sanitize sse wiimote"
+IUSE="alsa bindist bundled-libs +c++0x custom-cflags debug doc jack lv2 nls phone-home sanitize sse vst wiimote"
 REQUIRED_USE="|| ( alsa jack )"
 
 RDEPEND="
@@ -37,11 +37,11 @@ RDEPEND="
 	alsa? ( media-libs/alsa-lib )
 	media-libs/aubio
 	dev-libs/libxml2:2
-	media-libs/liblrdf
 	media-libs/libsamplerate
 	lv2? (
 		media-libs/suil
 		media-libs/lilv
+		media-libs/liblrdf
 	)
 	net-misc/curl
 	media-libs/libsndfile
@@ -49,7 +49,7 @@ RDEPEND="
 	!bundled-libs? (
 		media-libs/libltc
 	)
-	osc? ( media-libs/liblo )
+	media-libs/liblo
 	wiimote? (
 		net-wireless/bluez
 		app-misc/cwiid
@@ -94,7 +94,9 @@ src_configure() {
 		--versioned
 		--freedesktop
 		--with-backends="$(usev alsa),$(usev jack)"
+		$(usex lv2 '' '--no-lrdf')
 		$(my_use lv2)
+		$(my_use vst lxvst)
 		$(my_use nls)
 		$(my_use phone-home)
 		$(my_use sse fpu-optimization)
