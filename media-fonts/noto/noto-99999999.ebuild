@@ -7,7 +7,7 @@ EAPI=5
 CHECKREQS_DISK_BUILD="30"
 use cjk && CHECKREQS_DISK_BUILD="$((CHECKREQS_DISK_BUILD+930))"
 use emoji && CHECKREQS_DISK_BUILD="$((CHECKREQS_DISK_BUILD+60))"
-use fontmake && CHECKREQS_DISK_BUILD="$((CHECKREQS_DISK_BUILD+960))"
+use fontmake && CHECKREQS_DISK_BUILD="$((CHECKREQS_DISK_BUILD+2540))"
 CHECKREQS_DISK_BUILD="${CHECKREQS_DISK_BUILD}M"
 MY_PV="bdf7562"
 MY_CJK="${PN}-cjk-1.004"
@@ -101,7 +101,7 @@ src_compile() {
 			multijob_child_init source ./build.sh build_one "${g}" || die
 		done
 		multijob_finish
-		mv master_[ot]tf/*.[ot]tf "${S}"/
+		find -name '*.[ot]tf' -exec mv -f {} "${S}" \;
 	fi
 	if use emoji; then
 		addpredict /dev/dri
