@@ -15,7 +15,7 @@ else
 		mirror://githubcl/open-eid/${PN}/tar.gz/v${MY_PV} -> ${P}.tar.gz
 	"
 	# submodules not included in github releases
-	MY_QC="qt-common-c490b97"
+	MY_QC="qt-common-eda7141"
 	MY_GB="google-breakpad-f907c96"
 	SRC_URI="${SRC_URI}
 		mirror://githubcl/open-eid/${MY_QC%-*}/tar.gz/${MY_QC##*-} -> ${MY_QC}.tar.gz
