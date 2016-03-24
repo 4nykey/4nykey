@@ -24,16 +24,20 @@ HOMEPAGE="https://github.com/varlesh/papirus-suite"
 LICENSE="
 	CC-BY-SA-4.0
 	gtk? ( LGPL-2.1 )
+	kde? ( GPL-3 )
 	libreoffice? ( GPL-3 )
 	smplayer? ( GPL-3 )
 "
 SLOT="0"
-IUSE="gtk kde libreoffice smplayer"
+IUSE="gtk kde libreoffice smplayer vlc"
 
 DEPEND=""
 RDEPEND="
+	x11-themes/gtk-engines-murrine
+	x11-libs/gdk-pixbuf:2
 	libreoffice? ( app-office/libreoffice )
 	smplayer? ( media-video/smplayer )
+	vlc? ( media-video/vlc[skins] )
 	!x11-themes/papirus-gtk-icon-theme
 "
 
@@ -49,6 +53,10 @@ src_install() {
 	if use smplayer; then
 		insinto /usr/share/smplayer/themes/
 		doins -r players-skins/smplayer-themes/Papirus*
+	fi
+	if use vlc; then
+		insinto /usr/share/vlc/skins2
+		doins players-skins/vlc-skins/Papirus*
 	fi
 	if use libreoffice; then
 		insinto /usr/$(get_libdir)/libreoffice/share/config
