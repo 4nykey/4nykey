@@ -51,15 +51,6 @@ pkg_postinst() {
 	ebegin "Updating list of installed extensions"
 	eselect gnome-shell-extensions update
 	eend $?
-	elog
-	elog "Installed extensions installed are initially disabled by default."
-	elog "To change the system default and enable some extensions, you can use"
-	elog "# eselect gnome-shell-extensions"
-	elog "Alternatively, to enable/disable extensions on a per-user basis,"
-	elog "you can use the https://extensions.gnome.org/ web interface, the"
-	elog "gnome-extra/gnome-tweak-tool GUI, or modify the org.gnome.shell"
-	elog "enabled-extensions gsettings key from the command line or a script."
-	elog
 }
 
 pkg_postrm() {
