@@ -4,9 +4,10 @@
 
 EAPI=5
 
-VALA_MIN_API_VERSION="0.30"
+VALA_MIN_API_VERSION="0.32"
+VALA_MAX_API_VERSION="${VALA_MIN_API_VERSION}"
 VALA_USE_DEPEND="vapigen"
-inherit bash-completion-r1 versionator vala autotools gnome2
+inherit versionator vala autotools gnome2
 if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	SRC_URI=""
@@ -26,22 +27,25 @@ EGIT_BRANCH="${PN}-${GMAJOR}"
 
 LICENSE="GPL-3"
 SLOT="0"
-IUSE="applet ayatana bash-completion gnome-shell vala zsh-completion"
+IUSE="applet ayatana bash-completion gnome-shell introspection vala zsh-completion"
+REQUIRED_USE="gnome-shell? ( introspection )"
 
 RDEPEND="
-	>=dev-libs/glib-2.44:2
-	=x11-libs/gtk+-${GMAJOR}*:3[introspection]
+	>=dev-libs/glib-2.46:2
+	=x11-libs/gtk+-${GMAJOR}*:3
 	=gnome-base/gnome-control-center-${GMAJOR}*:2
 	>=x11-libs/gdk-pixbuf-2.26
 	sys-apps/dbus
 	vala? ( $(vala_depend) )
 	ayatana? ( dev-libs/libappindicator:3 )
 	gnome-shell? ( media-libs/clutter )
+	introspection? ( >=dev-libs/gobject-introspection-1.48 )
 "
 DEPEND="
 	${RDEPEND}
 	dev-util/intltool
 	virtual/pkgconfig
+	dev-libs/appstream-glib
 "
 
 src_prepare() {
@@ -53,18 +57,12 @@ src_prepare() {
 src_configure() {
 	local myconf="
 		$(use_enable vala)
+		$(use_enable introspection)
 		$(use_enable applet)
-		$(use_enable ayatana unity)
+		$(use_enable bash-completion)
 		$(use_enable gnome-shell gnome-shell-extension)
+		$(use_enable ayatana unity)
+		$(use_enable zsh-completion)
 	"
 	gnome2_src_configure ${myconf}
-}
-
-src_install() {
-	default
-	use bash-completion && dobashcomp data/completions/${PN}*
-	if use zsh-completion; then
-		insinto /usr/share/zsh/site-functions
-		doins data/completions/_${PN}*
-	fi
 }
