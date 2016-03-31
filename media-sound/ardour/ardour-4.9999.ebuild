@@ -38,6 +38,7 @@ RDEPEND="
 	media-libs/aubio
 	dev-libs/libxml2:2
 	media-libs/libsamplerate
+	media-libs/lv2
 	lv2? (
 		media-libs/suil
 		media-libs/lilv
