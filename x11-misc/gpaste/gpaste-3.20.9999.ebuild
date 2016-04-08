@@ -25,7 +25,7 @@ GMAJOR="$(get_version_component_range -2)"
 EGIT_REPO_URI="https://github.com/Keruspe/GPaste.git"
 EGIT_BRANCH="${PN}-${GMAJOR}"
 
-LICENSE="GPL-3"
+LICENSE="BSD-2"
 SLOT="0"
 IUSE="applet ayatana bash-completion gnome-shell introspection vala zsh-completion"
 REQUIRED_USE="gnome-shell? ( introspection )"
