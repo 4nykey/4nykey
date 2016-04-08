@@ -4,15 +4,15 @@
 
 EAPI=5
 
-CHECKREQS_DISK_BUILD="30"
+CHECKREQS_DISK_BUILD="90"
 use cjk && CHECKREQS_DISK_BUILD="$((CHECKREQS_DISK_BUILD+930))"
-use emoji && CHECKREQS_DISK_BUILD="$((CHECKREQS_DISK_BUILD+60))"
-use fontmake && CHECKREQS_DISK_BUILD="$((CHECKREQS_DISK_BUILD+2540))"
+use emoji && CHECKREQS_DISK_BUILD="$((CHECKREQS_DISK_BUILD+65))"
+use fontmake && CHECKREQS_DISK_BUILD="$((CHECKREQS_DISK_BUILD+5315))"
 CHECKREQS_DISK_BUILD="${CHECKREQS_DISK_BUILD}M"
-MY_PV="bdf7562"
+MY_PV="345db45"
 MY_CJK="${PN}-cjk-1.004"
-MY_EMJ="${PN}-emoji-91ef95d"
-MY_SRC="${PN}-source-2f579b0"
+MY_EMJ="${PN}-emoji-ae285e5"
+MY_SRC="${PN}-source-c311bc2"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlei18n/noto-fonts"
@@ -86,27 +86,39 @@ src_unpack() {
 }
 
 src_prepare() {
-	mv unhinted/Noto*.ttf "${S}"/
-	mv hinted/Noto*.ttf "${S}"/
+	local d
+	for d in \
+		unhinted \
+		alpha/from-pipeline \
+		hinted;
+	do mv ${d}/Noto*.ttf "${S}"/; done
 	use cjk && mv "${WORKDIR}"/${MY_CJK}/NotoSans[JKST]*.otf "${S}"/
 	use emoji && mv "${WORKDIR}"/${MY_EMJ}/fonts/Noto*.ttf "${S}"/
 }
 
 src_compile() {
-	if use fontmake; then
-		cd "${WORKDIR}"/${MY_SRC}
-		multijob_init
-		local g
-		for g in src/*.glyphs src/*/*.plist; do
-			multijob_child_init source ./build.sh build_one "${g}" || die
-		done
-		multijob_finish
-		find -name '*.[ot]tf' -exec mv -f {} "${S}" \;
-	fi
 	if use emoji; then
 		addpredict /dev/dri
 		cd "${WORKDIR}"/${MY_EMJ}
 		emake PNGQUANT=/usr/bin/pngquant $(usex zopfli '' 'MISSING_ZOPFLI=1')
 		mv NotoColorEmoji.ttf "${S}"/
+	fi
+	if use fontmake; then
+		local g
+		cd "${WORKDIR}"/${MY_SRC}
+		multijob_init
+		for g in src/*.glyphs src/*/*.plist; do
+			multijob_pre_fork
+			(
+				multijob_child_init
+				/bin/bash ./build.sh build_one "${g}" || \
+				echo -n " ${g}" >> ${T}/_failed
+			) &
+		done
+		multijob_finish
+		find -type f -size 0 -delete
+		find -name '*.[ot]tf' -exec mv -f {} "${S}" \;
+		[[ -e ${T}/_failed ]] && \
+			ewarn "These fonts failed to build:$(cat ${T}/_failed)"
 	fi
 }
