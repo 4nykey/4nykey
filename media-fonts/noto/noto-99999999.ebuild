@@ -4,15 +4,15 @@
 
 EAPI=5
 
-CHECKREQS_DISK_BUILD="90"
+CHECKREQS_DISK_BUILD="155"
 use cjk && CHECKREQS_DISK_BUILD="$((CHECKREQS_DISK_BUILD+930))"
 use emoji && CHECKREQS_DISK_BUILD="$((CHECKREQS_DISK_BUILD+65))"
-use fontmake && CHECKREQS_DISK_BUILD="$((CHECKREQS_DISK_BUILD+5315))"
+use fontmake && CHECKREQS_DISK_BUILD="$((CHECKREQS_DISK_BUILD+5835))"
 CHECKREQS_DISK_BUILD="${CHECKREQS_DISK_BUILD}M"
-MY_PV="345db45"
+MY_PV="0e8739b"
 MY_CJK="${PN}-cjk-1.004"
-MY_EMJ="${PN}-emoji-ae285e5"
-MY_SRC="${PN}-source-c311bc2"
+MY_EMJ="${PN}-emoji-bc208e5"
+MY_SRC="${PN}-source-a323cc1"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlei18n/noto-fonts"
@@ -86,14 +86,16 @@ src_unpack() {
 }
 
 src_prepare() {
-	local d
-	for d in \
-		unhinted \
-		alpha/from-pipeline \
-		hinted;
-	do mv ${d}/Noto*.ttf "${S}"/; done
+	mv hinted/Noto*.ttf "${S}"/
 	use cjk && mv "${WORKDIR}"/${MY_CJK}/NotoSans[JKST]*.otf "${S}"/
 	use emoji && mv "${WORKDIR}"/${MY_EMJ}/fonts/Noto*.ttf "${S}"/
+	if use fontmake; then
+		sed \
+			-e 's:python -m fontmake:fontmake -o otf:' \
+			-i "${WORKDIR}"/${MY_SRC}/build.sh
+	else
+		mv alpha/from-pipeline/Noto*.ttf "${S}"/
+	fi
 }
 
 src_compile() {
@@ -117,7 +119,7 @@ src_compile() {
 		done
 		multijob_finish
 		find -type f -size 0 -delete
-		find -name '*.[ot]tf' -exec mv -f {} "${S}" \;
+		find -name '*.otf' -exec mv -f {} "${S}" \;
 		[[ -e ${T}/_failed ]] && \
 			ewarn "These fonts failed to build:$(cat ${T}/_failed)"
 	fi
