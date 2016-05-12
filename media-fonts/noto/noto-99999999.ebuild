@@ -11,8 +11,8 @@ use fontmake && CHECKREQS_DISK_BUILD="$((CHECKREQS_DISK_BUILD+5835))"
 CHECKREQS_DISK_BUILD="${CHECKREQS_DISK_BUILD}M"
 MY_PV="0e8739b"
 MY_CJK="${PN}-cjk-1.004"
-MY_EMJ="${PN}-emoji-bc208e5"
-MY_SRC="${PN}-source-a323cc1"
+MY_EMJ="${PN}-emoji-7c0d24f"
+MY_SRC="${PN}-source-d61e417"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlei18n/noto-fonts"
