@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/robofab-developers/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="c3829d4"
+	MY_PV="673acdc"
 	SRC_URI="
 		mirror://githubcl/robofab-developers/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"

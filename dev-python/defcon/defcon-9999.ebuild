@@ -12,7 +12,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_BRANCH="ufo3"
 else
 	inherit vcs-snapshot
-	MY_PV="d9e06b0"
+	MY_PV="d9bc820"
 	SRC_URI="
 		mirror://githubcl/typesupply/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"

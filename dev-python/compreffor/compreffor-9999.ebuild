@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="d564a13"
+	MY_PV="626c2b2"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -19,19 +19,16 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 
-DESCRIPTION="A wrapper for several Python libraries to compile fonts from sources"
+DESCRIPTION="A CFF table subroutinizer for FontTools"
 HOMEPAGE="https://github.com/googlei18n/${PN}"
 
-LICENSE="Apache-2.0"
+LICENSE=""
 SLOT="0"
+KEYWORDS=""
 IUSE=""
 
 RDEPEND="
-	dev-python/cu2qu
-	dev-python/glyphsLib
-	dev-python/ufo2ft
-	dev-python/booleanOperations
-	dev-python/robofab
+	dev-python/fonttools
 "
 DEPEND="
 	${RDEPEND}

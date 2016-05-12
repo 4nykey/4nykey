@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="4691677"
+	MY_PV="9e0b45e"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -29,5 +29,6 @@ IUSE=""
 DEPEND="
 	>dev-python/fonttools-3.0
 	dev-python/feaTools
+	dev-python/compreffor
 "
 RDEPEND="${DEPEND}"
