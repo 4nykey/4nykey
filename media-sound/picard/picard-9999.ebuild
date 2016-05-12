@@ -11,7 +11,7 @@ af ar ast bg ca cs cy da de el en_CA en_GB en eo es et fa fi fo fr_CA fr fy gl
 he hi hr hu id is it ja kn ko lt mr nb nds ne nl oc pa pl pt_BR pt ro ru sco sk
 sl sr sv ta te tr uk vi zh_CN zh_TW
 "
-inherit eutils distutils-r1 readme.gentoo l10n
+inherit eutils distutils-r1 readme.gentoo-r1 l10n
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="git://github.com/musicbrainz/picard.git"
