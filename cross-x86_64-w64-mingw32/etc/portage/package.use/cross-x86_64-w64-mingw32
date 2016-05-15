@@ -1,2 +1,2 @@
 cross-x86_64-w64-mingw32/binutils   multitarget
-cross-x86_64-w64-mingw32/gcc        -fortran -multilib -sanitize
+cross-x86_64-w64-mingw32/gcc        -fortran -multilib -sanitize -vtv

@@ -15,10 +15,10 @@ if [[ ${CTARGET} == ${CHOST} ]] ; then
 fi
 
 MY_PV="$(replace_version_separator 3 '-')"
-MY_P="${P}_x86"
+MY_P="${P}_x64"
 DESCRIPTION="Linux-like environment for Windows"
 HOMEPAGE="http://cygwin.com/"
-BASE_URI="mirror://cygwin/x86/release/"
+BASE_URI="mirror://cygwin/x86_64/release/"
 # few headers are missing from binary pkg, so source tarball is needed
 # for headers-only variant as well
 SRC_URI="
@@ -79,6 +79,7 @@ src_configure() {
 	just_headers && return
 	econf \
 		--disable-werror \
+		--with-cross-bootstrap \
 		--infodir="${EPREFIX}/usr/${CTARGET}/usr/share/info" \
 		--with-windows-headers="${EPREFIX}/usr/${CTARGET}/usr/include/w32api" \
 		--with-windows-libs="${EPREFIX}/usr/${CTARGET}/usr/lib/w32api"
