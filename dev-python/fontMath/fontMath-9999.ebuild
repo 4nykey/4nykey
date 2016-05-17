@@ -9,9 +9,10 @@ inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/typesupply/${PN}.git"
+	EGIT_BRANCH="ufo3"
 else
 	inherit vcs-snapshot
-	MY_PV="49e9b92"
+	MY_PV="1e1ffc5"
 	SRC_URI="
 		mirror://githubcl/typesupply/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
