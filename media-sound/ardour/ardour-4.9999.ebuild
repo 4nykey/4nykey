@@ -117,10 +117,10 @@ src_compile() {
 
 src_install() {
 	waf-utils_src_install
-	newicon icons/icon/${PN}_icon_mac.png ${PN}${SLOT}.png
-	newmenu gtk2_ardour/${PN}*.desktop.in ${PN}${SLOT}.desktop;
+	newicon gtk2_ardour/icons/${PN}-app-icon_osx.png ${PN}${SLOT}.png
+	domenu build/gtk2_ardour/${PN}${SLOT}.desktop
 	insinto /usr/share/mime/packages
-	newins gtk2_ardour/${PN}*.xml ${PN}${SLOT}.xml
+	newins build/gtk2_ardour/${PN}.xml ${PN}${SLOT}.xml
 }
 
 pkg_preinst() {
