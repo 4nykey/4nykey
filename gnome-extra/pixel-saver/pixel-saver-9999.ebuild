@@ -4,6 +4,7 @@
 
 EAPI=5
 
+inherit base
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/deadalnix/${PN}"
@@ -14,9 +15,10 @@ else
 	SRC_URI="
 		mirror://githubcl/deadalnix/${PN}/tar.gz/${PV} -> ${P}.tar.gz
 	"
+	RESTRICT="primaryuri"
 fi
 
-DESCRIPTION="An Gnome Shell extension that merges the activity bar and the title bar of maximized window"
+DESCRIPTION="An extension to merge the title bar of a maximized window into GS activity bar"
 HOMEPAGE="https://github.com/deadalnix/pixel-saver"
 
 LICENSE="GPL-3"

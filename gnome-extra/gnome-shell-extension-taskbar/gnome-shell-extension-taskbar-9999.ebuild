@@ -15,9 +15,10 @@ else
 	SRC_URI="
 		mirror://githubcl/zpydr/${PN}/tar.gz/${PV} -> ${P}.tar.gz
 	"
+	RESTRICT="primaryuri"
 fi
 
-DESCRIPTION="GNOME Shell Extension TaskBar"
+DESCRIPTION="TaskBar displays icons of running applications on the top or bottom panel"
 HOMEPAGE="https://github.com/zpydr/gnome-shell-extension-taskbar"
 
 LICENSE="GPL-3"

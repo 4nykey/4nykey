@@ -15,9 +15,10 @@ else
 	SRC_URI="
 		mirror://githubcl/mpdeimos/${PN}/tar.gz/version/${PV} -> ${P}.tar.gz
 	"
+	RESTRICT="primaryuri"
 fi
 
-DESCRIPTION="Remove Dropdown Arrows Gnome Shell extension"
+DESCRIPTION="An extension that removes the dropdown arrows from GS menus"
 HOMEPAGE="https://github.com/mpdeimos/${PN}"
 
 LICENSE="GPL-3"

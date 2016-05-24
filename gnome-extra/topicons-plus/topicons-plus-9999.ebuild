@@ -12,16 +12,17 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	KEYWORDS="~amd64 ~x86"
-	MY_PV="99d9d8f"
+	MY_PV="c2788be"
 	SRC_URI="
 		mirror://githubcl/phocean/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
+	RESTRICT="primaryuri"
 fi
 
-DESCRIPTION="An alternative to GNOME Shell's Legacy Tray, making use of the top panel"
+DESCRIPTION="An extension to move legacy tray icons to the top panel"
 HOMEPAGE="https://github.com/phocean/${PN}"
 
-LICENSE="as-is"
+LICENSE="GPL-2+"
 SLOT="0"
 IUSE=""
 
