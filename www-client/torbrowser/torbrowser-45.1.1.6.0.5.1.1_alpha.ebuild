@@ -59,7 +59,7 @@ DEPEND="
 	virtual/opengl
 "
 
-QA_PRESTRIPPED="usr/$(get_libdir)/${PN}/${MY_PN}/firefox"
+QA_PRESTRIPPED="usr/lib*/${PN}/${MY_PN}/firefox"
 
 S="${WORKDIR}/${GIT_TAG}"
 BUILD_OBJ_DIR="${WORKDIR}/tb"
@@ -91,7 +91,6 @@ pkg_pretend() {
 src_prepare() {
 	# Apply gentoo firefox patches
 	eapply "${WORKDIR}/firefox" \
-		"${FILESDIR}"/jit-none-branch64.patch \
 		"${FILESDIR}"/${P%%.*}-exedir.patch
 
 	# Revert "Change the default Firefox profile directory to be TBB-relative"
