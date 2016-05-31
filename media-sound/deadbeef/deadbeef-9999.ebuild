@@ -72,43 +72,6 @@ DEPEND="
 	${RDEPEND}
 	oss? ( virtual/libc )
 "
-G2CONF="
-	$(use_enable nls)
-	$(use_enable threads threads $(usex pth pth posix))
-	$(use_enable alsa)
-	$(use_enable oss)
-	$(use_enable pulseaudio pulse)
-	$(use_enable gtk gtk2)
-	$(use_enable gtk3)
-	$(use_enable network vfs-curl)
-	$(use_enable network lfm)
-	$(use_enable cover artwork)
-	$(use_enable sid)
-	$(use_enable mad)
-	$(use_enable mac ffap)
-	$(use_enable adplug)
-	$(use_enable X hotkeys)
-	$(use_enable vorbis)
-	$(use_enable ffmpeg)
-	$(use_enable flac)
-	$(use_enable sndfile)
-	$(use_enable wavpack)
-	$(use_enable cdda )
-	$(use_enable gme)
-	$(use_enable libnotify notify)
-	$(use_enable musepack)
-	$(use_enable midi wildmidi)
-	$(use_enable tta)
-	$(use_enable dts dca)
-	$(use_enable aac)
-	$(use_enable mms)
-	$(use_enable libsamplerate src)
-	$(use_enable zip vfs-zip)
-	$(use_enable dumb)
-	$(use_enable shorten shn)
-	$(use_enable alac)
-	$(use_enable wma)
-"
 
 AUTOTOOLS_AUTORECONF="1"
 AUTOTOOLS_IN_SOURCE_BUILD="1"
@@ -119,6 +82,47 @@ src_prepare() {
 		-e 's,#define DEFAULT_TIMIDITY_CONFIG ",&/usr/share/timidity/freepats/timidity.cfg:,'
 	eautopoint --force
 	autotools-utils_src_prepare
+}
+
+src_configure() {
+	local myconf="
+		$(use_enable nls)
+		$(use_enable threads threads $(usex pth pth posix))
+		$(use_enable alsa)
+		$(use_enable oss)
+		$(use_enable pulseaudio pulse)
+		$(use_enable gtk gtk2)
+		$(use_enable gtk3)
+		$(use_enable network vfs-curl)
+		$(use_enable network lfm)
+		$(use_enable cover artwork)
+		$(use_enable sid)
+		$(use_enable mad)
+		$(use_enable mac ffap)
+		$(use_enable adplug)
+		$(use_enable X hotkeys)
+		$(use_enable vorbis)
+		$(use_enable ffmpeg)
+		$(use_enable flac)
+		$(use_enable sndfile)
+		$(use_enable wavpack)
+		$(use_enable cdda )
+		$(use_enable gme)
+		$(use_enable libnotify notify)
+		$(use_enable musepack)
+		$(use_enable midi wildmidi)
+		$(use_enable tta)
+		$(use_enable dts dca)
+		$(use_enable aac)
+		$(use_enable mms)
+		$(use_enable libsamplerate src)
+		$(use_enable zip vfs-zip)
+		$(use_enable dumb)
+		$(use_enable shorten shn)
+		$(use_enable alac)
+		$(use_enable wma)
+	"
+	gnome2_src_configure ${myconf}
 }
 
 src_install() {
