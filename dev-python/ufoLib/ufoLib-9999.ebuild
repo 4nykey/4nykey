@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/unified-font-object/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="ec6e943"
+	MY_PV="4d26482"
 	SRC_URI="
 		mirror://githubcl/unified-font-object/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
