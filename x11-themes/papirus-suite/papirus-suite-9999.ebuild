@@ -36,7 +36,10 @@ RDEPEND="
 	x11-themes/gtk-engines-murrine
 	x11-libs/gdk-pixbuf:2
 	libreoffice? ( app-office/libreoffice )
-	smplayer? ( media-video/smplayer )
+	smplayer? (
+		media-video/smplayer
+		!>=x11-themes/smplayer-themes-16.5.3
+	)
 	vlc? ( media-video/vlc[skins] )
 	!x11-themes/papirus-gtk-icon-theme
 "

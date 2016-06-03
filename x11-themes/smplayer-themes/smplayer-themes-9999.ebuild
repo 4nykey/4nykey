@@ -26,6 +26,7 @@ DEPEND="
 "
 RDEPEND="
 	media-video/smplayer[qt4?,qt5?]
+	!x11-themes/papirus-suite[smplayer]
 "
 DOCS=( Changelog README.txt )
 
