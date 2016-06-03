@@ -15,7 +15,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="git://git.ardour.org/${PN}/${PN}.git"
 else
 	inherit vcs-snapshot
-	SRC_URI="mirror://githubcl/Ardour/${PN}/tar.gz/${PV} -> ${P}.tar.gz"
+	SRC_URI="mirror://githubcl/Ardour/${PN}/tar.gz/${PV//_/-} -> ${P}.tar.gz"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
@@ -108,7 +108,7 @@ src_configure() {
 		$(usex bundled-libs '' '--use-external-libs')
 		$(usex doc '--docs' '')
 	)
-	waf-utils_src_configure "${wafargs[@]}"
+	PV="${PV//_/-}" waf-utils_src_configure "${wafargs[@]}"
 }
 
 src_compile() {
