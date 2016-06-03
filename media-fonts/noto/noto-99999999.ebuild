@@ -9,10 +9,10 @@ use cjk && CHECKREQS_DISK_BUILD="$((CHECKREQS_DISK_BUILD+930))"
 use emoji && CHECKREQS_DISK_BUILD="$((CHECKREQS_DISK_BUILD+65))"
 use fontmake && CHECKREQS_DISK_BUILD="$((CHECKREQS_DISK_BUILD+5835))"
 CHECKREQS_DISK_BUILD="${CHECKREQS_DISK_BUILD}M"
-MY_PV="0e8739b"
+MY_PV="165832a"
 MY_CJK="${PN}-cjk-1.004"
-MY_EMJ="${PN}-emoji-7c0d24f"
-MY_SRC="${PN}-source-d61e417"
+MY_EMJ="${PN}-emoji-a964c12"
+MY_SRC="${PN}-source-0364766"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlei18n/noto-fonts"
@@ -91,7 +91,7 @@ src_prepare() {
 	use emoji && mv "${WORKDIR}"/${MY_EMJ}/fonts/Noto*.ttf "${S}"/
 	if use fontmake; then
 		sed \
-			-e 's:python -m fontmake:fontmake -o otf:' \
+			-e 's:fontmake:fontmake -o otf:' \
 			-i "${WORKDIR}"/${MY_SRC}/build.sh
 	else
 		mv alpha/from-pipeline/Noto*.ttf "${S}"/
