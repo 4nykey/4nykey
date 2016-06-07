@@ -1,8 +1,8 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
-EAPI="5"
+EAPI=6
 WANT_AUTOCONF="2.1"
 MOZCONFIG_OPTIONAL_WIFI=1
 MOZCONFIG_OPTIONAL_JIT="enabled"
@@ -35,10 +35,9 @@ SLOT="0"
 # BSD license applies to torproject-related code like the patches
 # icons are under CCPL-Attribution-3.0
 LICENSE="BSD CC-BY-3.0 MPL-2.0 GPL-2 LGPL-2.1"
-IUSE="egl hardened +minimal selinux test"
+IUSE="hardened +hwaccel selinux test"
 
 BASE_SRC_URI="https://dist.torproject.org/${PN}/${TOR_PV}"
-ARCHIVE_SRC_URI="https://archive.torproject.org/tor-package-archive/${PN}/${TOR_PV}"
 SRC_URI="
 	https://gitweb.torproject.org/tor-browser.git/snapshot/${GIT_TAG}.tar.gz
 	-> ${GIT_TAG}.tar.gz
@@ -46,11 +45,9 @@ SRC_URI="
 	https://dev.gentoo.org/~axs/mozilla/patchsets/${PATCH}.tar.xz
 	https://dev.gentoo.org/~polynomial-c/mozilla/patchsets/${PATCH}.tar.xz
 	x86? (
-		${ARCHIVE_SRC_URI}/tor-browser-linux32-${TOR_PV}_en-US.tar.xz
 		${BASE_SRC_URI}/tor-browser-linux32-${TOR_PV}_en-US.tar.xz
 	)
 	amd64? (
-		${ARCHIVE_SRC_URI}/tor-browser-linux64-${TOR_PV}_en-US.tar.xz
 		${BASE_SRC_URI}/tor-browser-linux64-${TOR_PV}_en-US.tar.xz
 	)
 "
@@ -62,7 +59,7 @@ DEPEND="
 	virtual/opengl
 "
 
-QA_PRESTRIPPED="usr/$(get_libdir)/${PN}/${MY_PN}/firefox"
+QA_PRESTRIPPED="usr/lib*/${PN}/${MY_PN}/firefox"
 
 S="${WORKDIR}/${GIT_TAG}"
 BUILD_OBJ_DIR="${WORKDIR}/tb"
@@ -93,17 +90,16 @@ pkg_pretend() {
 
 src_prepare() {
 	# Apply gentoo firefox patches
-	EPATCH_EXCLUDE="801*.patch" \
-	EPATCH_SUFFIX="patch" \
-	EPATCH_FORCE="yes" \
-	epatch "${WORKDIR}/firefox"
+	rm -f "${WORKDIR}"/firefox/8004_mark-jit-pages-non-writeable.patch
+	eapply "${WORKDIR}/firefox" \
+		"${FILESDIR}"/${P%%.*}-exedir.patch
 
 	# Revert "Change the default Firefox profile directory to be TBB-relative"
 	# https://gitweb.torproject.org/tor-browser.git/commit/?id=72dfe790235d714da084b45d341d3cb46a88cd60
-	epatch -R "${FILESDIR}"/${P%%.*}-profiledir.patch
+	eapply -R "${FILESDIR}"/${P%%.*}-profiledir.patch
 
 	# Allow user to apply any additional patches without modifing ebuild
-	epatch_user
+	eapply_user
 
 	# Enable gnomebreakpad
 	if use debug ; then
@@ -132,6 +128,10 @@ src_prepare() {
 	sed 's@\(xargs rm\)$@\1 -f@' \
 		-i "${S}"/toolkit/mozapps/installer/packager.mk || die
 
+	# Keep codebase the same even if not using official branding
+	sed '/^MOZ_DEV_EDITION=1/d' \
+		-i "${S}"/browser/branding/aurora/configure.sh || die
+
 	eautoreconf
 
 	# Must run autoconf in js/src
@@ -144,8 +144,12 @@ src_prepare() {
 }
 
 src_configure() {
-	MOZILLA_FIVE_HOME="${EPREFIX}"/usr/$(get_libdir)/${PN}/${PN}
+	MOZILLA_FIVE_HOME="/usr/$(get_libdir)/${PN}/${PN}"
 	MEXTENSIONS="default"
+	# Google API keys (see http://www.chromium.org/developers/how-tos/api-keys)
+	# Note: These are for Gentoo Linux use ONLY. For your own distribution, please
+	# get your own set of keys.
+	_google_api_key=AIzaSyDEAOvatFo0eTgsV_ZlEzx0ObmepsMzfAc
 
 	####################################
 	#
@@ -156,10 +160,18 @@ src_configure() {
 	mozconfig_init
 	mozconfig_config
 
+	# We want rpath support to prevent unneeded hacks on different libc variants
+	append-ldflags -Wl,-rpath="${MOZILLA_FIVE_HOME}"
+
 	# Add full relro support for hardened
 	use hardened && append-ldflags "-Wl,-z,relro,-z,now"
 
-	use egl && mozconfig_annotate 'Enable EGL as GL provider' --with-gl-provider=EGL
+	# Only available on mozilla-overlay for experimentation -- Removed in Gentoo repo per bug 571180
+	#use egl && mozconfig_annotate 'Enable EGL as GL provider' --with-gl-provider=EGL
+
+	# Setup api key for location services
+	echo -n "${_google_api_key}" > "${S}"/google-api-key
+	mozconfig_annotate '' --with-google-api-keyfile="${S}/google-api-key"
 
 	mozconfig_annotate '' --enable-extensions="${MEXTENSIONS}"
 	mozconfig_annotate '' --disable-mailnews
@@ -194,13 +206,12 @@ src_configure() {
 
 src_compile() {
 	CC="$(tc-getCC)" CXX="$(tc-getCXX)" LD="$(tc-getLD)" \
-	MOZ_MAKE_FLAGS="${MAKEOPTS}" SHELL="${SHELL}" \
+	MOZ_MAKE_FLAGS="${MAKEOPTS}" SHELL="${SHELL:-${EPREFIX%/}/bin/bash}" \
 	emake -f client.mk realbuild
 }
 
 src_install() {
-	MOZILLA_FIVE_HOME="${EPREFIX}"/usr/$(get_libdir)/${PN}/${PN}
-	DICTPATH="\"${EPREFIX}/usr/share/myspell\""
+	MOZILLA_FIVE_HOME="/usr/$(get_libdir)/${PN}/${PN}"
 
 	cd "${BUILD_OBJ_DIR}" || die
 
@@ -211,9 +222,14 @@ src_install() {
 	touch "${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
 		|| die
 
-	# Set default path to search for dictionaries.
-	echo "pref(\"spellchecker.dictionary_path\", ${DICTPATH});" \
-		>> "${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
+	if use hwaccel ; then
+		cat "${FILESDIR}"/gentoo-hwaccel-prefs.js-1 >> \
+		"${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
+		|| die
+	fi
+
+	echo "pref(\"extensions.autoDisableScopes\", 3);" >> \
+		"${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
 		|| die
 
 	echo "pref(\"general.useragent.locale\", \"en-US\");" \
@@ -225,7 +241,7 @@ src_install() {
 
 	# Install icons and .desktop for menu entry
 	local size sizes icon_path
-	sizes="16 24 32 48 256"
+	sizes="16 22 24 32 48 256"
 	icon_path="${S}/browser/branding/official"
 	for size in ${sizes}; do
 		newicon -s ${size} "${icon_path}/default${size}.png" ${PN}.png
@@ -245,10 +261,6 @@ src_install() {
 	pax-mark m "${ED}"${MOZILLA_FIVE_HOME}/plugin-container
 	# Required in order for jit to work on hardened, as of torbroser-31
 	use jit && pax-mark pm "${ED}"${MOZILLA_FIVE_HOME}/{torbrowser,torbrowser-bin}
-
-	# We dont want development files
-	rm -r "${ED}"/usr/include "${ED}${MOZILLA_FIVE_HOME}"/{idl,include,lib,sdk} \
-		|| die "Failed to remove sdk and headers"
 
 	# revdep-rebuild entry
 	insinto /etc/revdep-rebuild
