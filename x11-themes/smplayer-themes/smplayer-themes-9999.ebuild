@@ -1,8 +1,8 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=6
 
 inherit qmake-utils
 if [[ -z ${PV%%*9999} ]]; then
@@ -14,29 +14,29 @@ else
 fi
 
 DESCRIPTION="Icon themes for smplayer"
-HOMEPAGE="http://smplayer.sourceforge.net/"
+HOMEPAGE="http://www.smplayer.eu/"
 
-LICENSE="CC-BY-2.5 CC-BY-SA-2.5 CC-BY-SA-3.0 GPL-2 LGPL-3"
+LICENSE="CC-BY-2.5 CC-BY-SA-2.5 CC-BY-SA-3.0 CC0-1.0 GPL-2 GPL-3+ LGPL-3"
 SLOT="0"
-IUSE="qt4 qt5"
-REQUIRED_USE="^^ ( qt4 qt5 )"
+IUSE="qt5"
 DEPEND="
-	qt4? ( dev-qt/qtcore:4 )
+	!qt5? ( dev-qt/qtcore:4 )
 	qt5? ( dev-qt/qtcore:5 )
 "
 RDEPEND="
-	media-video/smplayer[qt4?,qt5?]
+	media-video/smplayer[qt5?]
 	!x11-themes/papirus-suite[smplayer]
 "
 DOCS=( Changelog README.txt )
 
 src_prepare() {
+	default
 	sed \
 		-e 's:usr/local:${EPREFIX}/usr:' \
 		-e 's:install -d \$(THEMES_PATH):& $(THEMES_PATH)/../../doc/$(PF):' \
 		-e '/README/s:/\([^/]\+\)/$:/../../doc/$(PF)/\1_README.txt:' \
 		-i Makefile
 	sed \
-		-e "s:rcc -binary:$(usex qt4 $(qt4_get_bindir) $(qt5_get_bindir))/&:" \
+		-e "s:rcc -binary:$(usex qt5 $(qt5_get_bindir) $(qt4_get_bindir))/&:" \
 		-i themes/Makefile
 }
