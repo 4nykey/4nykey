@@ -9,7 +9,6 @@ inherit python-r1
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
-	FDK_EXE="/usr/$(get_libdir)/${PN}/FDK/Tools/linux"
 else
 	inherit vcs-snapshot
 	SRC_URI="
@@ -17,7 +16,6 @@ else
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
-	FDK_EXE="/opt/${PN}/FDK/Tools/linux"
 fi
 
 DESCRIPTION="Adobe Font Development Kit for OpenType"
@@ -59,6 +57,7 @@ src_compile() {
 
 src_install() {
 	default
+	local FDK_EXE="/usr/$(get_libdir)/${PN}/FDK/Tools/linux"
 	printf \
 		'export FDK_EXE="%s"\nexport PATH="${FDK_EXE}:${PATH}"\n' \
 		"${FDK_EXE}" > "${T}"/${PN}
