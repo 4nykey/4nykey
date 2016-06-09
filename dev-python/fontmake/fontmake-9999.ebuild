@@ -30,8 +30,9 @@ RDEPEND="
 	dev-python/cu2qu
 	dev-python/glyphsLib
 	dev-python/ufo2ft
+	dev-python/MutatorMath
 	dev-python/booleanOperations
-	dev-python/robofab
+	dev-python/defcon
 "
 DEPEND="
 	${RDEPEND}
