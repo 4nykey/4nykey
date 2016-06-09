@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE="xml(+)"
@@ -28,6 +28,7 @@ HOMEPAGE="https://github.com/behdad/${PN}"
 LICENSE="BSD"
 SLOT="0"
 IUSE=""
+DOCS=( README.md NEWS )
 
 DEPEND="
 	>=dev-python/numpy-1.0.2[${PYTHON_USEDEP}]
