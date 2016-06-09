@@ -2,13 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-fonts/heuristica/heuristica-0.2.1.ebuild,v 1.1 2010/03/06 20:02:59 spatz Exp $
 
-EAPI=5
+EAPI=6
 
-inherit latex-package
 if [[ -z ${PV%%*9999} ]]; then
-	inherit subversion
-	ESVN_REPO_URI="http://evristika.googlecode.com/svn/trunk"
-	SRC_URI=""
+	SRC_URI="mirror://gcarchive/evristika/source-archive.zip -> ${P}.zip"
+	S="${WORKDIR}/evristika/trunk"
 	REQUIRED_USE="fontforge"
 else
 	S="${WORKDIR}"
@@ -25,10 +23,9 @@ else
 		mirror://sourceforge/${PN}/${PN}-src-${PV}.tar.xz
 	)
 	"
-	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit font
+inherit latex-package font
 
 DESCRIPTION="A font based on Adobe Utopia"
 HOMEPAGE="http://heuristica.sourceforge.net"
@@ -36,10 +33,11 @@ HOMEPAGE="http://heuristica.sourceforge.net"
 LICENSE="OFL-1.1"
 SLOT="0"
 IUSE="fontforge latex"
+RESTRICT="primaryuri"
 
 DEPEND="
 	fontforge? (
-		media-gfx/fontforge[python]
+		<media-gfx/fontforge-20150430[python]
 		dev-texlive/texlive-fontutils
 		sys-apps/coreutils
 		media-gfx/xgridfit
@@ -51,15 +49,13 @@ FONT_SUFFIX="afm otf pfb ttf"
 DOCS="FontLog.txt"
 
 src_prepare() {
-	if use fontforge; then
+	default
+	use fontforge && \
 		cp "${EPREFIX}"/usr/share/font-helpers/*.{ff,py} "${S}"/
-	fi
 }
 
 src_compile() {
-	if use fontforge; then
-		default
-	fi
+	default
 }
 
 src_install() {

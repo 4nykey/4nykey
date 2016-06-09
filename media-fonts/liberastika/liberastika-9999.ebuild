@@ -2,17 +2,14 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=5
+EAPI=6
 
-inherit latex-package
 if [[ -z ${PV%%*9999} ]]; then
-	inherit subversion font
-	ESVN_REPO_URI="http://${PN}.googlecode.com/svn/trunk"
-	SRC_URI=""
 	REQUIRED_USE="fontforge"
+	SRC_URI="mirror://gcarchive/${PN}/source-archive.zip -> ${P}.zip"
+	S="${WORKDIR}/${PN}/trunk"
 else
 	S="${WORKDIR}"
-	inherit font
 	SRC_URI="
 	!fontforge? (
 		mirror://sourceforge/lib-ka/${PN}-ttf-${PV}.tar.xz
@@ -24,9 +21,9 @@ else
 		mirror://sourceforge/lib-ka/${PN}-src-${PV}.tar.xz
 	)
 	"
-	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
+inherit latex-package font
 
 DESCRIPTION="Liberastika fonts are fork of Liberation Sans"
 HOMEPAGE="http://lib-ka.sourceforge.net"
@@ -37,7 +34,7 @@ IUSE="fontforge latex"
 
 DEPEND="
 	fontforge? (
-		media-gfx/fontforge[python]
+		<media-gfx/fontforge-20150430[python]
 		media-gfx/xgridfit
 		dev-util/font-helpers
 	)
@@ -45,18 +42,16 @@ DEPEND="
 RDEPEND="
 	!media-fonts/liberastika-ttf
 "
-FONT_SUFFIX="$(usex fontforge 'pfb' '') ttf"
+RESTRICT="primaryuri"
 
 src_prepare() {
-	if use fontforge; then
-		cp "${EPREFIX}"/usr/share/font-helpers/*.{ff,py} "${S}"/
-	fi
+	default
+	use fontforge && \
+	cp "${EPREFIX}"/usr/share/font-helpers/*.{ff,py} "${S}"/
 }
 
 src_compile() {
-	if use fontforge; then
-		default
-	fi
+	default
 }
 
 src_install() {
@@ -73,6 +68,7 @@ src_install() {
 		doins "${T}"/${PN}.cfg
 	fi
 	rm -f *.gen.ttf
+	FONT_SUFFIX="$(usex fontforge 'pfb' '') ttf"
 	font_src_install
 }
 

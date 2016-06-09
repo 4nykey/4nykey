@@ -2,13 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=6
 if [[ -z ${PV%%*9999} ]]; then
-	inherit subversion
-	ESVN_REPO_URI="http://${PN}.googlecode.com/svn/trunk"
+	SRC_URI="mirror://gcarchive/${PN}/source-archive.zip -> ${P}.zip"
+	S="${WORKDIR}/${PN}/trunk"
 else
 	SRC_URI="http://${PN}.googlecode.com/files/${PN}-src-${PV}.tar.xz"
-	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 	S="${WORKDIR}"
 fi
@@ -18,11 +17,11 @@ HOMEPAGE="https://code.google.com/p/font-helpers"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND=""
 RDEPEND="${DEPEND}"
+RESTRICT="primaryuri"
 
 src_install() {
 	insinto /usr/share/${PN}

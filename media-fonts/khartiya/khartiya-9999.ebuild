@@ -2,14 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=5
+EAPI=6
 
-inherit latex-package
 if [[ -z ${PV%%*9999} ]]; then
-	inherit subversion
-	ESVN_REPO_URI="http://${PN}.googlecode.com/svn/trunk"
-	SRC_URI=""
 	REQUIRED_USE="fontforge"
+	SRC_URI="mirror://gcarchive/${PN}/source-archive.zip -> ${P}.zip"
+	S="${WORKDIR}/${PN}/trunk"
 else
 	S="${WORKDIR}"
 	SRC_URI="
@@ -25,10 +23,9 @@ else
 		mirror://sourceforge/${PN}/${PN}-src-${PV}.tar.xz
 	)
 	"
-	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit font
+inherit latex-package font
 
 DESCRIPTION="Khartiya is extended Bitstream Charter font"
 HOMEPAGE="http://code.google.com/p/khartiya"
@@ -46,20 +43,17 @@ DEPEND="
 		dev-util/font-helpers
 	)
 "
-
+RESTRICT="primaryuri"
 FONT_SUFFIX="afm otf pfb ttf"
-DOCS="FontLog.txt"
+DOCS=( FontLog.txt )
 
 src_prepare() {
-	if use fontforge; then
-		cp "${EPREFIX}"/usr/share/font-helpers/*.{ff,py} "${S}"/
-	fi
+	default
+	use fontforge && cp "${EPREFIX}"/usr/share/font-helpers/*.{ff,py} "${S}"/
 }
 
 src_compile() {
-	if use fontforge; then
-		default
-	fi
+	default
 }
 
 src_install() {
