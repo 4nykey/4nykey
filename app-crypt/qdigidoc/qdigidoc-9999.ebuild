@@ -1,10 +1,9 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
-EAPI="5"
+EAPI=6
 
-inherit cmake-utils eutils
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/open-eid/${PN}.git"
@@ -17,21 +16,20 @@ else
 	"
 	# submodules not included in github releases
 	MY_QC="qt-common-124e1af"
-	MY_GB="google-breakpad-f907c96"
 	SRC_URI="${SRC_URI}
 		mirror://githubcl/open-eid/${MY_QC%-*}/tar.gz/${MY_QC##*-} -> ${MY_QC}.tar.gz
-		mirror://githubcl/open-eid/${MY_GB%-*}/tar.gz/${MY_GB##*-} -> ${MY_GB}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
+inherit cmake-utils
 
 DESCRIPTION="Estonian ID card digital signature desktop tools"
 HOMEPAGE="http://id.ee"
 
 LICENSE="LGPL-2.1 Nokia-Qt-LGPL-Exception-1.1"
 SLOT="0"
-IUSE="c++0x +qt5"
+IUSE="c++0x kde nautilus +qt5"
 
 DEPEND="
 	dev-libs/libdigidocpp
@@ -53,17 +51,16 @@ DEPEND="
 RDEPEND="
 	${DEPEND}
 	app-crypt/qesteidutil
+	nautilus? ( gnome-base/nautilus )
 "
 DEPEND="
 	${DEPEND}
 	dev-util/cmake-openeid
 "
+DOCS=( AUTHORS README.md RELEASE-NOTES.txt )
 
 src_prepare() {
-	if [[ -n ${PV%%*9999} ]]; then
-		mv "${WORKDIR}"/${MY_GB}/* "${WORKDIR}"/${MY_QC}/${MY_GB%-*}/
-		mv "${WORKDIR}"/${MY_QC}/* "${S}"/common/
-	fi
+	[[ -n ${PV%%*9999} ]] && mv "${WORKDIR}"/${MY_QC}/* "${S}"/common/
 	sed \
 		-e "s:doc/${PN}:doc/${PF}:" \
 		-e 's:\${CMAKE_SOURCE_DIR}/cmake/modules:/usr/share/cmake/openeid:' \
@@ -72,8 +69,12 @@ src_prepare() {
 }
 
 src_configure() {
-	local mycmakeargs=(
-		$(cmake-utils_useno c++0x DISABLE_CXX11)
+	local mycmakeargs
+	[[ -n ${PV%%*9999} ]] && mycmakeargs=( -DBREAKPAD='' )
+	mycmakeargs+=(
+		-DDISABLE_CXX11=$(usex !c++0x)
+		-DENABLE_KDE=$(usex kde)
+		-DENABLE_NAUTILUS_EXTENSION=$(usex nautilus)
 		$(cmake-utils_use_find_package qt5 Qt5Widgets)
 	)
 	cmake-utils_src_configure

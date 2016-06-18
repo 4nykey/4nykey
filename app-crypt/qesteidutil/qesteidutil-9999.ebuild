@@ -1,9 +1,9 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
-EAPI="5"
-inherit cmake-utils
+EAPI=6
+
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/open-eid/${PN}.git"
@@ -16,15 +16,13 @@ else
 	"
 	# submodules not included in github releases
 	MY_QC="qt-common-eda7141"
-	MY_GB="google-breakpad-f907c96"
 	SRC_URI="${SRC_URI}
 		mirror://githubcl/open-eid/${MY_QC%-*}/tar.gz/${MY_QC##*-} -> ${MY_QC}.tar.gz
-		mirror://githubcl/open-eid/${MY_GB%-*}/tar.gz/${MY_GB##*-} -> ${MY_GB}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-
+inherit cmake-utils
 
 DESCRIPTION="Smart card manager UI application"
 HOMEPAGE="http://id.ee"
@@ -51,12 +49,10 @@ DEPEND="
 	${RDEPEND}
 	dev-util/cmake-openeid
 "
+DOCS=( AUTHORS README.md RELEASE-NOTES.txt )
 
 src_prepare() {
-	if [[ -n ${PV%%*9999} ]]; then
-		mv "${WORKDIR}"/${MY_GB}/* "${WORKDIR}"/${MY_QC}/${MY_GB%-*}/
-		mv "${WORKDIR}"/${MY_QC}/* "${S}"/common/
-	fi
+	[[ -n ${PV%%*9999} ]] && mv "${WORKDIR}"/${MY_QC}/* "${S}"/common/
 	sed \
 		-e "s:doc/${PN}:doc/${PF}:" \
 		-e 's:\${CMAKE_SOURCE_DIR}/cmake/modules:/usr/share/cmake/openeid:' \
@@ -65,10 +61,11 @@ src_prepare() {
 }
 
 src_configure() {
-	local mycmakeargs=(
-		$(cmake-utils_useno c++0x DISABLE_CXX11)
+	local mycmakeargs
+	[[ -n ${PV%%*9999} ]] && mycmakeargs=( -DBREAKPAD='' )
+	mycmakeargs+=(
+		-DDISABLE_CXX11=$(usex !c++0x)
 		$(cmake-utils_use_find_package qt5 Qt5Widgets)
 	)
 	cmake-utils_src_configure
 }
-

@@ -2,9 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=5
+EAPI=6
 
-inherit cmake-utils eutils
 if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/open-eid/${PN}.git"
@@ -18,6 +17,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
+inherit flag-o-matic cmake-utils
 
 DESCRIPTION="DigiDoc digital signature library"
 HOMEPAGE="http://id.ee"
@@ -39,9 +39,7 @@ DEPEND="
 	apidocs? ( app-doc/doxygen )
 	dev-util/cmake-openeid
 "
-
-PATCHES=( "${FILESDIR}"/${PN}*.patch )
-DOCS="AUTHORS README* RELEASE-NOTES.txt"
+DOCS=( AUTHORS README.md RELEASE-NOTES.txt )
 
 src_prepare() {
 	sed \
@@ -52,20 +50,13 @@ src_prepare() {
 		-e '/INSTALL_RPATH/d' \
 		-i libdigidoc/CMakeLists.txt
 	cmake-utils_src_prepare
+	append-cppflags '-DOF=_Z_OF'
 }
 
 src_configure() {
 	local mycmakeargs=(
-		$(cmake-utils_use doc INSTALL_DOC)
+		-DINSTALL_DOC=$(usex doc)
 		-DCMAKE_INSTALL_SYSCONFDIR=${EROOT}etc
 	)
 	cmake-utils_src_configure
-}
-
-pkg_postinst() {
-	if use doc; then
-		einfo 'You might want to alter ecompress exclude mask'
-		einfo 'by adding the following line to make.conf:'
-		einfo 'PORTAGE_COMPRESS_EXCLUDE_SUFFIXES="${PORTAGE_COMPRESS_EXCLUDE_SUFFIXES} zip docx"'
-	fi
 }
