@@ -18,19 +18,18 @@ HOMEPAGE="http://smplayer.sourceforge.net/"
 
 LICENSE="CC-BY-2.5 CC-BY-SA-2.5 CC-BY-SA-3.0 GPL-2 LGPL-3"
 SLOT="0"
-IUSE="qt4 qt5"
-REQUIRED_USE="^^ ( qt4 qt5 )"
+IUSE="qt5"
 DEPEND="
-	qt4? ( dev-qt/qtcore:4 )
+	!qt5? ( dev-qt/qtcore:4 )
 	qt5? ( dev-qt/qtcore:5 )
 "
 RDEPEND="
-	media-video/smplayer[qt4?,qt5?]
+	media-video/smplayer[qt5?]
 "
 
 src_prepare() {
 	sed \
-		-e "s:rcc -binary:$(usex qt4 $(qt4_get_bindir) $(qt5_get_bindir))/&:" \
+		-e "s:rcc -binary:$(usex qt5 $(qt5_get_bindir) $(qt4_get_bindir))/&:" \
 		-i themes/Makefile
 }
 
