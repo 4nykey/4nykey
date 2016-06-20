@@ -10,7 +10,7 @@ HOMEPAGE="https://github.com/varlesh/papirus-suite"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="gtk kde libreoffice qtcurve sddm smplayer vlc"
+IUSE="gtk kde libreoffice sddm smplayer vlc"
 
 DEPEND=""
 RDEPEND="
@@ -19,7 +19,6 @@ RDEPEND="
 		x11-themes/papirus-gtk-theme
 	)
 	libreoffice? ( x11-themes/papirus-libreoffice-theme )
-	qtcurve? ( x11-themes/papirus-qtcurve-theme )
 	sddm? ( x11-themes/papirus-sddm-theme )
 	smplayer? ( x11-themes/papirus-smplayer-theme )
 	vlc? ( x11-themes/papirus-vlc-theme )
