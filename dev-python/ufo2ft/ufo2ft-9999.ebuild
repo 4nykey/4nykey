@@ -28,7 +28,7 @@ IUSE=""
 
 DEPEND="
 	>dev-python/fonttools-3.0
-	dev-python/feaTools
 	dev-python/compreffor
+	dev-python/ufoLib
 "
 RDEPEND="${DEPEND}"
