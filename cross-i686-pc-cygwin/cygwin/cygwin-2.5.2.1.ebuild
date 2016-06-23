@@ -29,7 +29,7 @@ SRC_URI="
 	)
 "
 
-LICENSE="GPL-2"
+LICENSE="NEWLIB LGPL-3+"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE="crosscompile_opts_headers-only"
