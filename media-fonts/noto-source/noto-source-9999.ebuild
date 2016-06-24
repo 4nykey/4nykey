@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}"
 else
 	inherit vcs-snapshot
-	MY_PV="0364766"
+	MY_PV="058c3b2"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -38,7 +38,7 @@ DOCS="*.md"
 src_prepare() {
 	default
 	sed \
-		-e 's:fontmake:fontmake -o otf:' \
+		-e 's:fontmake:& -o otf:' \
 		-i build.sh
 }
 
@@ -57,5 +57,5 @@ src_compile() {
 	find -type f -size 0 -delete
 	find -name '*.otf' -exec mv -f {} "${S}" \;
 	[[ -e ${T}/_failed ]] && \
-		ewarn "These fonts failed to build:$(cat ${T}/_failed)"
+		ewarn "These fonts failed to build:$(<${T}/_failed)"
 }
