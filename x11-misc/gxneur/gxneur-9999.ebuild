@@ -49,7 +49,7 @@ DEPEND="
 "
 
 src_prepare() {
-	eautoreconf
+	[[ -z ${PV%%*9999} ]] && eautoreconf
 	gnome2_src_prepare
 }
 
@@ -60,5 +60,5 @@ src_configure() {
 		$(use_enable nls)
 	"
 	gnome2_src_configure ${myconf}
-	emake clean
+	[[ -z ${PV%%*9999} ]] && emake clean
 }

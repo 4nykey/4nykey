@@ -24,27 +24,25 @@ HOMEPAGE="http://www.xneur.ru/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="aspell enchant alsa debug gstreamer gtk3 keylogger libnotify nls openal xosd"
+IUSE="alsa aspell debug enchant gstreamer keylogger libnotify nls openal xosd"
 
 DEPEND="
-	>=dev-libs/libpcre-5.0
 	sys-libs/zlib
-	>=x11-libs/libX11-1.1
-	x11-libs/libXtst
-	gstreamer? ( >=media-libs/gstreamer-0.10.6 )
-	openal? ( >=media-libs/freealut-1.0.1 )
-	alsa? ( >=media-sound/alsa-utils-1.0.17 )
+	x11-libs/libXi
+	gstreamer? ( media-libs/gstreamer:1.0 )
+	openal? ( media-libs/freealut )
+	>=dev-libs/libpcre-5.0
+	enchant? ( app-text/enchant )
+	aspell? ( app-text/aspell )
+	xosd? ( x11-libs/xosd )
 	libnotify? (
 		>=x11-libs/libnotify-0.4.0
-		gtk3? ( x11-libs/gtk+:3 )
-		!gtk3? ( x11-libs/gtk+:2 )
+		x11-libs/gtk+:2
 	)
-	aspell? ( app-text/aspell )
-	enchant? ( app-text/enchant )
-	xosd? ( x11-libs/xosd )
 "
 RDEPEND="
 	${DEPEND}
+	alsa? ( media-sound/alsa-utils )
 	gstreamer? (
 		media-libs/gst-plugins-good
 		media-plugins/gst-plugins-alsa
@@ -53,7 +51,7 @@ RDEPEND="
 "
 DEPEND="
 	${DEPEND}
-	>=dev-util/pkgconfig-0.20
+	virtual/pkgconfig
 	nls? ( sys-devel/gettext )
 "
 
@@ -64,21 +62,20 @@ REQUIRED_USE="
 
 src_prepare() {
 	default
-	eautoreconf
+	[[ -z ${PV%%*9999} ]] && eautoreconf
 }
 
 src_configure() {
-	local x _snd _gtk _spl
+	local _snd _spl
 	_snd=$(usev gstreamer)$(usev openal)$(usev alsa)
 	_snd=${_snd:-no}
 	_spl=$(usev aspell)$(usev enchant)
 	_spl=${_spl:-no}
-	_gtk="$(usex libnotify $(usex gtk3 gtk3 gtk2) no)"
 
 	local myeconfargs=(
 		--with-sound=${_snd}
-		--with-gtk=${_gtk}
 		--with-spell=${_spl}
+		--with-gtk=$(usex libnotify gtk2)
 		$(use_with debug)
 		$(use_enable nls)
 		$(use_with xosd)
@@ -87,5 +84,5 @@ src_configure() {
 	)
 
 	econf ${myeconfargs[@]}
-	emake clean
+	[[ -z ${PV%%*9999} ]] && emake clean
 }
