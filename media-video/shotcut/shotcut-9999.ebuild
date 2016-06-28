@@ -2,9 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=6
 
-inherit l10n base qmake-utils
+PLOCALES="
+ca cs da de el en es fr it nl pl pt_BR pt_PT ru sk uk zh
+"
+inherit l10n qmake-utils
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/mltframework/${PN}.git"
@@ -27,10 +30,12 @@ IUSE="nls"
 
 RDEPEND="
 	media-libs/mlt
-	dev-qt/qtwebkit:5
-	dev-qt/qtquickcontrols:5
-	dev-qt/qtwebsockets:5
+	dev-qt/qtopengl:5
 	dev-qt/qtdeclarative:5
+	dev-qt/qtsql:5
+	dev-qt/qtwebkit:5
+	dev-qt/qtmultimedia:5
+	dev-qt/qtwebsockets:5
 "
 DEPEND="
 	${RDEPEND}
@@ -41,15 +46,16 @@ src_configure() {
 	eqmake5 ${PN}.pro PREFIX=${EPREFIX}/usr
 }
 
-src_compile() {
-	base_src_compile
-	use nls && "$(qt5_get_bindir)"/lrelease src/src.pro
-}
-
 src_install() {
-	base_src_install INSTALL_ROOT="${D}"
-	if use nls; then
-		insinto /usr/share/${PN}/translations
-		doins translations/*.qm
-	fi
+	emake install INSTALL_ROOT="${D}"
+	einstalldocs
+
+	use nls || return
+	insinto /usr/share/${PN}/translations
+	local q
+	for q in $(l10n_get_locales); do
+		q="translations/${PN}_${q}"
+		"$(qt5_get_bindir)"/lrelease ${q}.ts -qm ${q}.qm
+		doins ${q}.qm
+	done
 }
