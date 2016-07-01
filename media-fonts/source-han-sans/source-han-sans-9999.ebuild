@@ -32,13 +32,15 @@ HOMEPAGE="https://github.com/adobe-fonts/source-han-sans/"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="afdko l10n_ja l10n_ko l10n_zh-CN l10n_zh-TW"
+IUSE="afdko l10n_ja l10n_ko l10n_zh-CN l10n_zh-TW monospace"
 REQUIRED_USE="|| ( l10n_ja l10n_ko l10n_zh-CN l10n_zh-TW )"
 
 DEPEND="
 	afdko? ( media-gfx/afdko )
 "
-RDEPEND=""
+RDEPEND="
+	l10n_ja? ( monospace? ( media-fonts/source-han-code-jp ) )
+"
 
 FONT_SUFFIX="otf"
 DOCS="README.md"
