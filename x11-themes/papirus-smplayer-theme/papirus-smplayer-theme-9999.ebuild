@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/PapirusDevelopmentTeam/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="a7ce240"
+	MY_PV="ab367f8"
 	SRC_URI="
 		mirror://githubcl/PapirusDevelopmentTeam/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -34,21 +34,6 @@ RDEPEND="
 "
 DOCS=( AUTHORS README.md )
 
-src_prepare() {
-	default
-	rm -f "${S}"/Makefile
-	cd src
-	mv dark Papirus
-	mv white PapirusDark
-	local d
-	for d in Papirus{,Dark}; do
-		printf \
-			'<RCC><qresource prefix="/">%s</qresource></RCC>\n' \
-			$(find ${d} -name '*.png' -printf '<file>%p</file>') \
-			> ${d}.qrc
-	done
-}
-
 src_compile() {
 	local d _rcc="$(usex qt5 $(qt5_get_bindir) $(qt4_get_bindir))/rcc -binary"
 	for d in Papirus{,Dark}; do
@@ -57,10 +42,10 @@ src_compile() {
 }
 
 src_install() {
-	default
 	local d
 	for d in Papirus{,Dark}; do
 		insinto /usr/share/smplayer/themes/${d}
 		doins ${d}.rcc
 	done
+	einstalldocs
 }
