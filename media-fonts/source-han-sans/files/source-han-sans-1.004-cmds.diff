@@ -2,11 +2,10 @@ diff --git a/COMMANDS.txt b/COMMANDS.txt
 index 5152caf..f912190 100644
 --- a/COMMANDS.txt
 +++ b/COMMANDS.txt
-@@ -18,60 +18,64 @@
+@@ -18,23 +18,26 @@
  
  ### Command lines for building the region-specific subset OTFs
  ### Executed in {ExtraLight,Light,Normal,Regular,Medium,Bold,Heavy}
-+source /etc/afdko
 +for x in "${S}"/{ExtraLight,Light,Normal,Regular,Medium,Bold,Heavy}; do
  
  # Simplified Chinese
@@ -29,51 +28,6 @@ index 5152caf..f912190 100644
 -makeotf -f cidfont.ps.KR -ff features.KR -fi cidfontinfo.KR -mf ../FontMenuNameDB.SUBSET -r -nS -cs 3 -ch ../UniSourceHanSansKR-UTF32-H -ci ../SourceHanSans_KR_sequences.txt
 +makeotf -f ${x}/cidfont.ps.KR -ff ${x}/features.KR -fi ${x}/cidfontinfo.KR -mf "${S}"/FontMenuNameDB.SUBSET -r -nS -cs 3 -ch "${S}"/UniSourceHanSansKR-UTF32-H -ci "${S}"/SourceHanSans_KR_sequences.txt || die
 +done
- 
- ### Command lines for building alternate style-linked region-specific subset OTFs
- ### Executed in Regular
- 
- # Simplified Chinese
- 
--makeotf -f cidfont.ps.CN -ff features.CN -fi cidfontinfo.CN -mf ../FontMenuNameDB.SUBSET.SL -r -nS -cs 25 -ch ../UniSourceHanSansCN-UTF32-H
-+makeotf -f "${S}"/Regular/cidfont.ps.CN -ff "${S}"/Regular/features.CN -fi "${S}"/Regular/cidfontinfo.CN -mf "${S}"/FontMenuNameDB.SUBSET.SL -r -nS -cs 25 -ch "${S}"/UniSourceHanSansCN-UTF32-H || die
- 
- # Traditional Chinese (TW)
- 
--makeotf -f cidfont.ps.TW -ff features.TW -fi cidfontinfo.TW -mf ../FontMenuNameDB.SUBSET.SL -r -nS -cs 2 -ch ../UniSourceHanSansTW-UTF32-H -ci ../SourceHanSans_TWHK_sequences.txt
-+makeotf -f "${S}"/Regular/cidfont.ps.TW -ff "${S}"/Regular/features.TW -fi "${S}"/Regular/cidfontinfo.TW -mf "${S}"/FontMenuNameDB.SUBSET.SL -r -nS -cs 2 -ch "${S}"/UniSourceHanSansTW-UTF32-H -ci "${S}"/SourceHanSans_TWHK_sequences.txt || die
- 
- # Japanese
- 
--makeotf -f cidfont.ps.JP -ff features.JP -fi cidfontinfo.JP -mf ../FontMenuNameDB.SUBSET.SL -r -nS -cs 1 -ch ../UniSourceHanSansJP-UTF32-H -ci ../SourceHanSans_JP_sequences.txt
-+makeotf -f "${S}"/Regular/cidfont.ps.JP -ff "${S}"/Regular/features.JP -fi "${S}"/Regular/cidfontinfo.JP -mf "${S}"/FontMenuNameDB.SUBSET.SL -r -nS -cs 1 -ch "${S}"/UniSourceHanSansJP-UTF32-H -ci "${S}"/SourceHanSans_JP_sequences.txt || die
- 
- # Korean
- 
--makeotf -f cidfont.ps.KR -ff features.KR -fi cidfontinfo.KR -mf ../FontMenuNameDB.SUBSET.SL -r -nS -cs 3 -ch ../UniSourceHanSansKR-UTF32-H -ci ../SourceHanSans_KR_sequences.txt
-+makeotf -f "${S}"/Regular/cidfont.ps.KR -ff "${S}"/Regular/features.KR -fi "${S}"/Regular/cidfontinfo.KR -mf "${S}"/FontMenuNameDB.SUBSET.SL -r -nS -cs 3 -ch "${S}"/UniSourceHanSansKR-UTF32-H -ci "${S}"/SourceHanSans_KR_sequences.txt || die
- 
- ### Executed in Bold
- 
- # Simplified Chinese
- 
--makeotf -f cidfont.ps.CN -ff features.CN -fi cidfontinfo.CN.SL -mf ../FontMenuNameDB.SUBSET.SL -r -nS -cs 25 -ch ../UniSourceHanSansCN-UTF32-H
-+makeotf -f "${S}"/Bold/cidfont.ps.CN -ff "${S}"/Bold/features.CN -fi "${S}"/Bold/cidfontinfo.CN.SL -mf "${S}"/FontMenuNameDB.SUBSET.SL -r -nS -cs 25 -ch "${S}"/UniSourceHanSansCN-UTF32-H || die
- 
- # Traditional Chinese (TW)
- 
--makeotf -f cidfont.ps.TW -ff features.TW -fi cidfontinfo.TW.SL -mf ../FontMenuNameDB.SUBSET.SL -r -nS -cs 2 -ch ../UniSourceHanSansTW-UTF32-H -ci ../SourceHanSans_TWHK_sequences.txt
-+makeotf -f "${S}"/Bold/cidfont.ps.TW -ff "${S}"/Bold/features.TW -fi "${S}"/Bold/cidfontinfo.TW.SL -mf "${S}"/FontMenuNameDB.SUBSET.SL -r -nS -cs 2 -ch "${S}"/UniSourceHanSansTW-UTF32-H -ci "${S}"/SourceHanSans_TWHK_sequences.txt || die
- 
- # Japanese
- 
--makeotf -f cidfont.ps.JP -ff features.JP -fi cidfontinfo.JP.SL -mf ../FontMenuNameDB.SUBSET.SL -r -nS -cs 1 -ch ../UniSourceHanSansJP-UTF32-H -ci ../SourceHanSans_JP_sequences.txt
-+makeotf -f "${S}"/Bold/cidfont.ps.JP -ff "${S}"/Bold/features.JP -fi "${S}"/Bold/cidfontinfo.JP.SL -mf "${S}"/FontMenuNameDB.SUBSET.SL -r -nS -cs 1 -ch "${S}"/UniSourceHanSansJP-UTF32-H -ci "${S}"/SourceHanSans_JP_sequences.txt || die
- 
- # Korean
- 
--makeotf -f cidfont.ps.KR -ff features.KR -fi cidfontinfo.KR.SL -mf ../FontMenuNameDB.SUBSET.SL -r -nS -cs 3 -ch ../UniSourceHanSansKR-UTF32-H -ci ../SourceHanSans_KR_sequences.txt
-+makeotf -f "${S}"/Bold/cidfont.ps.KR -ff "${S}"/Bold/features.KR -fi "${S}"/Bold/cidfontinfo.KR.SL -mf "${S}"/FontMenuNameDB.SUBSET.SL -r -nS -cs 3 -ch "${S}"/UniSourceHanSansKR-UTF32-H -ci "${S}"/SourceHanSans_KR_sequences.txt || die
  
 +if false; then
  ### Command lines for building the language-specific OTFs

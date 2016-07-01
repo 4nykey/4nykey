@@ -21,11 +21,10 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-CHECKREQS_DISK_BUILD="1750M"
-inherit font check-reqs
+inherit font
 
-DESCRIPTION="Pan-CJK OpenType/CFF font family"
-HOMEPAGE="https://github.com/adobe-fonts/source-han-sans/"
+DESCRIPTION="Serif typeface designed to complement Source Sans Pro"
+HOMEPAGE="http://adobe-fonts.github.io/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
@@ -36,7 +35,7 @@ DEPEND="
 "
 RDEPEND=""
 
-FONT_SUFFIX="otf"
+FONT_SUFFIX="otf ttf"
 DOCS="README.md"
 
 pkg_setup() {
@@ -51,14 +50,19 @@ pkg_setup() {
 
 src_prepare() {
 	default
-	use afdko && eapply "${FILESDIR}"/${P}*.diff
+	use !afdko && return 0
+	sed \
+		-e 's:makeotf.*:& 2>> "${T}"/makeotf.log || die "failed to build $family-$w, see ${T}/makeotf.log":' \
+		-e 's:addSVG=.*:addSVG=$(find "${S}" -name addSVGtable.py):' \
+		-i "${S}"/build.sh
 }
 
 src_compile() {
 	if use !afdko; then
-		find SubsetOTF -mindepth 2 -name '*.otf' -exec mv -f {} "${S}" \;
+		find "${S}" -mindepth 2 -name '*.[ot]tf' -exec mv -f {} "${S}" \;
 	else
 		source ${EROOT}etc/afdko
-		source "${S}"/COMMANDS.txt
+		source "${S}"/build.sh
+		find "${S}" -path '*/target/[OT]TF/*.[ot]tf' -exec mv -f {} "${S}" \;
 	fi
 }

@@ -69,4 +69,5 @@ src_install() {
 	exeinto "${FDK_EXE}"
 	doexe "${S}"/FDK/Tools/linux/*
 	dosym "${PYTHON}" "${FDK_EXE}"/AFDKOPython
+	python_optimize "${ED}"/usr/$(get_libdir)/${PN}/FDK/Tools/SharedData/FDKScripts
 }

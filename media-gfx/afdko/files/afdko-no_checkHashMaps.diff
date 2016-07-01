@@ -1,0 +1,12 @@
+diff --git a/FDK/Tools/SharedData/FDKScripts/MakeOTF.py b/FDK/Tools/SharedData/FDKScripts/MakeOTF.py
+index 4d8d881..601cfad 100755
+--- a/FDK/Tools/SharedData/FDKScripts/MakeOTF.py
++++ b/FDK/Tools/SharedData/FDKScripts/MakeOTF.py
+@@ -1710,7 +1710,6 @@ def convertFontIfNeeded(makeOTFParams):
+ 			if not allMatch:
+ 				for msg in msgList:
+ 					print msg
+-				raise MakeOTFTXError
+ 		elif os.path.exists(os.path.join(filePath, "glyphs", "contents.plist")):
+ 			print "The source file looks like a UFO font, but makeotf requires a fontinfo.plist, which this font does not have. %s." % (filePath)
+ 			print "makeotf [Error] Failed to convert input font '%s' to temp file." % (filePath)
