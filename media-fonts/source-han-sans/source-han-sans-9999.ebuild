@@ -8,10 +8,13 @@ if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-fonts/${PN}"
 else
+	SRC_URI="https://github.com/adobe-fonts/${PN}/raw/${PV}R/"
 	SRC_URI="
 		!afdko? (
-			mirror://githubcl/adobe-fonts/${PN}/tar.gz/${PV}R
-			-> ${P}R.tar.gz
+			l10n_ja? ( ${SRC_URI}SubsetOTF/SourceHanSansJP.zip )
+			l10n_ko? ( ${SRC_URI}SubsetOTF/SourceHanSansKR.zip )
+			l10n_zh-CN? ( ${SRC_URI}SubsetOTF/SourceHanSansCN.zip )
+			l10n_zh-TW? ( ${SRC_URI}SubsetOTF/SourceHanSansTW.zip )
 		)
 		afdko? (
 			mirror://githubcl/adobe-fonts/${PN}/tar.gz/${PV}
@@ -21,15 +24,15 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-CHECKREQS_DISK_BUILD="1750M"
-inherit font check-reqs
+inherit font
 
 DESCRIPTION="Pan-CJK OpenType/CFF font family"
 HOMEPAGE="https://github.com/adobe-fonts/source-han-sans/"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="afdko"
+IUSE="afdko l10n_ja l10n_ko l10n_zh-CN l10n_zh-TW"
+REQUIRED_USE="|| ( l10n_ja l10n_ko l10n_zh-CN l10n_zh-TW )"
 
 DEPEND="
 	afdko? ( media-gfx/afdko )
@@ -39,14 +42,18 @@ RDEPEND=""
 FONT_SUFFIX="otf"
 DOCS="README.md"
 
-pkg_setup() {
+src_unpack() {
 	if [[ ${PV} == *9999* ]]; then
 		EGIT_BRANCH="$(usex afdko master release)"
+		git-r3_src_unpack
 	else
-		S="${WORKDIR}/${P}$(usex afdko '' 'R')"
-		FONT_S="${S}"
+		default
+		if use !afdko; then
+			DOCS=
+			mkdir -p "${S}"/SubsetOTF
+			mv SourceHanSans[CJKT][NPRW] "${S}"/SubsetOTF/
+		fi
 	fi
-	font_pkg_setup
 }
 
 src_prepare() {
