@@ -8,13 +8,14 @@ if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-fonts/${PN}"
 else
-	SRC_URI="https://github.com/adobe-fonts/${PN}/raw/${PV}R/"
+	MY_PN="SourceHanSans"
+	SRC_URI="https://github.com/adobe-fonts/${PN}/raw/${PV}R/SubsetOTF/${MY_PN}"
 	SRC_URI="
 		!afdko? (
-			l10n_ja? ( ${SRC_URI}SubsetOTF/SourceHanSansJP.zip )
-			l10n_ko? ( ${SRC_URI}SubsetOTF/SourceHanSansKR.zip )
-			l10n_zh-CN? ( ${SRC_URI}SubsetOTF/SourceHanSansCN.zip )
-			l10n_zh-TW? ( ${SRC_URI}SubsetOTF/SourceHanSansTW.zip )
+			l10n_ja? ( ${SRC_URI}JP.zip -> ${MY_PN}JP-${PV}.zip )
+			l10n_ko? ( ${SRC_URI}KR.zip -> ${MY_PN}KR-${PV}.zip )
+			l10n_zh-CN? ( ${SRC_URI}CN.zip -> ${MY_PN}CN-${PV}.zip )
+			l10n_zh-TW? ( ${SRC_URI}TW.zip -> ${MY_PN}TW-${PV}.zip )
 		)
 		afdko? (
 			mirror://githubcl/adobe-fonts/${PN}/tar.gz/${PV}
