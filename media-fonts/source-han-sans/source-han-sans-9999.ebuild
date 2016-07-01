@@ -46,12 +46,18 @@ src_unpack() {
 	if [[ ${PV} == *9999* ]]; then
 		EGIT_BRANCH="$(usex afdko master release)"
 		git-r3_src_unpack
+		if use !afdko; then
+			use l10n_ja || rm -r "${S}"/SubsetOTF/JP
+			use l10n_ko || rm -r "${S}"/SubsetOTF/KR
+			use l10n_zh-CN || rm -r "${S}"/SubsetOTF/CN
+			use l10n_zh-TW || rm -r "${S}"/SubsetOTF/TW
+		fi
 	else
 		default
 		if use !afdko; then
 			DOCS=
 			mkdir -p "${S}"/SubsetOTF
-			mv SourceHanSans[CJKT][NPRW] "${S}"/SubsetOTF/
+			mv SourceHanSans* "${S}"/SubsetOTF/
 		fi
 	fi
 }

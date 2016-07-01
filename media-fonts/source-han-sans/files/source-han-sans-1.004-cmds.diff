@@ -11,22 +11,22 @@ index 5152caf..f912190 100644
  # Simplified Chinese
  
 -makeotf -f cidfont.ps.CN -ff features.CN -fi cidfontinfo.CN -mf ../FontMenuNameDB.SUBSET -r -nS -cs 25 -ch ../UniSourceHanSansCN-UTF32-H
-+makeotf -f ${x}/cidfont.ps.CN -ff ${x}/features.CN -fi ${x}/cidfontinfo.CN -mf "${S}"/FontMenuNameDB.SUBSET -r -nS -cs 25 -ch "${S}"/UniSourceHanSansCN-UTF32-H || die
++if use l10n_zh-CN; then makeotf -f ${x}/cidfont.ps.CN -ff ${x}/features.CN -fi ${x}/cidfontinfo.CN -mf "${S}"/FontMenuNameDB.SUBSET -r -nS -cs 25 -ch "${S}"/UniSourceHanSansCN-UTF32-H || die; fi
  
  # Traditional Chinese (TW)
  
 -makeotf -f cidfont.ps.TW -ff features.TW -fi cidfontinfo.TW -mf ../FontMenuNameDB.SUBSET -r -nS -cs 2 -ch ../UniSourceHanSansTW-UTF32-H -ci ../SourceHanSans_TWHK_sequences.txt
-+makeotf -f ${x}/cidfont.ps.TW -ff ${x}/features.TW -fi ${x}/cidfontinfo.TW -mf "${S}"/FontMenuNameDB.SUBSET -r -nS -cs 2 -ch "${S}"/UniSourceHanSansTW-UTF32-H -ci "${S}"/SourceHanSans_TWHK_sequences.txt || die
++if use l10n_zh-TW; then makeotf -f ${x}/cidfont.ps.TW -ff ${x}/features.TW -fi ${x}/cidfontinfo.TW -mf "${S}"/FontMenuNameDB.SUBSET -r -nS -cs 2 -ch "${S}"/UniSourceHanSansTW-UTF32-H -ci "${S}"/SourceHanSans_TWHK_sequences.txt || die; fi
  
  # Japanese
  
 -makeotf -f cidfont.ps.JP -ff features.JP -fi cidfontinfo.JP -mf ../FontMenuNameDB.SUBSET -r -nS -cs 1 -ch ../UniSourceHanSansJP-UTF32-H -ci ../SourceHanSans_JP_sequences.txt
-+makeotf -f ${x}/cidfont.ps.JP -ff ${x}/features.JP -fi ${x}/cidfontinfo.JP -mf "${S}"/FontMenuNameDB.SUBSET -r -nS -cs 1 -ch "${S}"/UniSourceHanSansJP-UTF32-H -ci "${S}"/SourceHanSans_JP_sequences.txt || die
++if use l10n_ja; then makeotf -f ${x}/cidfont.ps.JP -ff ${x}/features.JP -fi ${x}/cidfontinfo.JP -mf "${S}"/FontMenuNameDB.SUBSET -r -nS -cs 1 -ch "${S}"/UniSourceHanSansJP-UTF32-H -ci "${S}"/SourceHanSans_JP_sequences.txt || die; fi
  
  # Korean
  
 -makeotf -f cidfont.ps.KR -ff features.KR -fi cidfontinfo.KR -mf ../FontMenuNameDB.SUBSET -r -nS -cs 3 -ch ../UniSourceHanSansKR-UTF32-H -ci ../SourceHanSans_KR_sequences.txt
-+makeotf -f ${x}/cidfont.ps.KR -ff ${x}/features.KR -fi ${x}/cidfontinfo.KR -mf "${S}"/FontMenuNameDB.SUBSET -r -nS -cs 3 -ch "${S}"/UniSourceHanSansKR-UTF32-H -ci "${S}"/SourceHanSans_KR_sequences.txt || die
++if use l10n_ko; then makeotf -f ${x}/cidfont.ps.KR -ff ${x}/features.KR -fi ${x}/cidfontinfo.KR -mf "${S}"/FontMenuNameDB.SUBSET -r -nS -cs 3 -ch "${S}"/UniSourceHanSansKR-UTF32-H -ci "${S}"/SourceHanSans_KR_sequences.txt || die; fi
 +done
  
 +if false; then
