@@ -51,6 +51,7 @@ pkg_setup() {
 		S="${WORKDIR}/${PN}-${_v}"
 		FONT_S="${S}"
 	fi
+	use afdko && DOCS="${DOCS} relnotes.txt"
 	font_pkg_setup
 }
 

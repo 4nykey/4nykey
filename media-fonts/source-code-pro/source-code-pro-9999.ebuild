@@ -43,7 +43,7 @@ DOCS="README.md"
 
 pkg_setup() {
 	if [[ ${PV} == *9999* ]]; then
-		EGIT_BRANCH="$(usex afdko master release)"
+		EGIT_BRANCH="$(usex afdko new-release release)"
 	else
 		local _v
 		_v=$(usex afdko ${MY_PVS} ${MY_PVR})
@@ -51,6 +51,7 @@ pkg_setup() {
 		S="${WORKDIR}/${PN}-${_v}"
 		FONT_S="${S}"
 	fi
+	use afdko && DOCS="${DOCS} relnotes.txt"
 	font_pkg_setup
 }
 
