@@ -29,7 +29,6 @@ DEPEND="
 "
 RDEPEND="
 	${DEPEND}
-	!gnome-extra/gnome-shell-extensions-appindicator
 "
 
 src_compile() { :; }

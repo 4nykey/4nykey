@@ -1,0 +1,2 @@
+move app-misc/sk-certificates app-misc/esteidcerts
+move media-fonts/liberastika-ttf media-fonts/liberastika

@@ -30,7 +30,7 @@ IUSE=""
 DEPEND="
 	dev-python/fontmake
 "
-RDEPEND="!media-fonts/notofonts"
+RDEPEND=""
 
 FONT_SUFFIX="otf"
 DOCS="*.md"

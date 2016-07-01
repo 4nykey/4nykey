@@ -1,0 +1,3 @@
+move gnome-extra/gnome-shell-extensions-appindicator gnome-extra/gnome-shell-extension-appindicator
+move gnome-extra/gnome-shell-extensions-system-monitor gnome-extra/gnome-shell-system-monitor-applet
+move media-fonts/notofonts media-fonts/noto

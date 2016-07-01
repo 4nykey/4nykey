@@ -39,9 +39,7 @@ DEPEND="
 		dev-util/font-helpers
 	)
 "
-RDEPEND="
-	!media-fonts/liberastika-ttf
-"
+RDEPEND=""
 RESTRICT="primaryuri"
 
 src_prepare() {

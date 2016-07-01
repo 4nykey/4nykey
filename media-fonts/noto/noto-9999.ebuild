@@ -31,7 +31,7 @@ DEPEND="
 	emoji? ( media-fonts/noto-emoji )
 	fontmake? ( media-fonts/noto-source )
 "
-RDEPEND="!media-fonts/notofonts"
+RDEPEND=""
 
 FONT_SUFFIX="ttf"
 DOCS="*.md"

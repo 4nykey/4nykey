@@ -27,10 +27,7 @@ SLOT="0"
 IUSE=""
 
 DEPEND=""
-RDEPEND="
-	${DEPEND}
-	!app-misc/sk-certificates
-"
+RDEPEND=""
 
 src_install() {
 	insinto /usr/share/esteid/certs

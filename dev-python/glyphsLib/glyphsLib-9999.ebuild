@@ -28,7 +28,6 @@ IUSE=""
 
 RDEPEND="
 	dev-python/MutatorMath
-	!dev-python/glyphs2ufo
 "
 DEPEND="
 	${RDEPEND}

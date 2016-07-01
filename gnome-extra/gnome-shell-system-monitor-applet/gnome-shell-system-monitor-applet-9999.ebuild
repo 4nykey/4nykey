@@ -12,7 +12,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI=""
 else
 	inherit vcs-snapshot
-	MY_PV="81d1c0800401033a563235f920655a936c907b06"
+	MY_PV="8b31f07"
 	SRC_URI="
 		mirror://githubcl/paradoxxxzero/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -35,7 +35,6 @@ RDEPEND="
 	dev-python/pygtk
 	gnome-base/libgtop[introspection]
 	net-misc/networkmanager[introspection]
-	!gnome-extra/gnome-shell-extensions-system-monitor
 "
 
 my_loc() {
