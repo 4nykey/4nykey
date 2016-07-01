@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 		<media-gfx/fontforge-20150430[python]
 		dev-python/fonttools
 		dev-util/font-helpers
-		media-gfx/afdko
+		dev-util/afdko
 		dev-libs/kpathsea
 		dev-texlive/texlive-basic
 	"

@@ -36,7 +36,7 @@ IUSE="afdko l10n_ja l10n_ko l10n_zh-CN l10n_zh-TW monospace"
 REQUIRED_USE="|| ( l10n_ja l10n_ko l10n_zh-CN l10n_zh-TW )"
 
 DEPEND="
-	afdko? ( media-gfx/afdko )
+	afdko? ( dev-util/afdko )
 "
 RDEPEND="
 	l10n_ja? ( monospace? ( media-fonts/source-han-code-jp ) )

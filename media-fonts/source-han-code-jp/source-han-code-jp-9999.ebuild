@@ -32,7 +32,7 @@ SLOT="0"
 IUSE="afdko"
 
 DEPEND="
-	afdko? ( media-gfx/afdko )
+	afdko? ( dev-util/afdko )
 "
 RDEPEND=""
 

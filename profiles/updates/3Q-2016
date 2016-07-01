@@ -1,2 +1,3 @@
 move media-fonts/source-sans-pro media-fonts/source-sans-pro
 move media-fonts/source-code-pro media-fonts/source-code-pro
+move media-gfx/afdko dev-util/afdko
