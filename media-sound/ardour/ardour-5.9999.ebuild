@@ -2,20 +2,21 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=5
+EAPI=6
 
 PLOCALES="
 cs de el en_GB es fr it nn pl pt pt_PT ru sv zh
 "
 PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE='threads(+)'
-inherit fdo-mime gnome2-utils python-any-r1 waf-utils l10n base
+MY_PV="${PV//_/-}"
+inherit fdo-mime gnome2-utils python-any-r1 waf-utils l10n
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="git://git.ardour.org/${PN}/${PN}.git"
 else
 	inherit vcs-snapshot
-	SRC_URI="mirror://githubcl/Ardour/${PN}/tar.gz/${PV//_/-} -> ${P}.tar.gz"
+	SRC_URI="mirror://githubcl/Ardour/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
@@ -68,10 +69,11 @@ DEPEND="
 	doc? ( app-doc/doxygen )
 "
 
-PATCHES=( "${FILESDIR}"/${PN}${SLOT}*.diff )
+PATCHES=( "${FILESDIR}"/${PN}${SLOT}-revision.diff )
 DOCS=( README TRANSLATORS doc/monitor_modes.pdf )
 
 src_prepare() {
+	default
 	my_lcmsg() {
 		rm -f {gtk2_ardour,libs/ardour,libs/gtkmm2ext}/po/${1}.po
 	}
@@ -82,7 +84,6 @@ src_prepare() {
 		-e 's:\(prepend_opt_flags = \)True:\1False:' \
 		-i wscript
 	use nls && l10n_for_each_disabled_locale_do my_lcmsg
-	base_src_prepare
 }
 
 src_configure() {
@@ -108,11 +109,13 @@ src_configure() {
 		$(usex bundled-libs '' '--use-external-libs')
 		$(usex doc '--docs' '')
 	)
-	PV="${PV//_/-}" waf-utils_src_configure "${wafargs[@]}"
+	MY_PV="${MY_PV}" waf-utils_src_configure "${wafargs[@]}"
 }
 
 src_compile() {
-	"${WAF_BINARY}" --jobs=$(makeopts_jobs) --verbose build $(usex nls i18n '')
+	"${WAF_BINARY}" \
+		--jobs=$(makeopts_jobs) --verbose \
+		build $(usex nls i18n '')
 }
 
 src_install() {

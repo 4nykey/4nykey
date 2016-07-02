@@ -5,7 +5,7 @@
      rev = fetch_git_revision ()
  else:
 -    rev = fetch_tarball_revision ()
-+    rev = os.environ['PV']
++    rev = os.environ['MY_PV']
  
  #
  # rev is now of the form MAJOR.MINOR[-rcX]-rev-commit
@@ -14,7 +14,7 @@
      else:
          print("Missing libs/ardour/revision.cc.  Blame the packager.")
 -        sys.exit(-1)
-+        rev = os.environ['PV']
++        rev = os.environ['MY_PV']
  
      try:
          #
