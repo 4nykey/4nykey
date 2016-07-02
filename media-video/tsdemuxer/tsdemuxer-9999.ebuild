@@ -20,10 +20,10 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 
-DESCRIPTION="MPEG2-TS to Elementary Stream demuxer"
-HOMEPAGE="https://code.google.com/p/tsdemuxer"
+DESCRIPTION="AVCHD/Blu-Ray HDMV Transport Stream demultiplexer"
+HOMEPAGE="https://github.com/clark15b/${PN}"
 
-LICENSE=""
+LICENSE="MIT"
 SLOT="0"
 IUSE="qt4"
 
