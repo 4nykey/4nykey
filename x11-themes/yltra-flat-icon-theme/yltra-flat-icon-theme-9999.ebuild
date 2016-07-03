@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI=""
 else
 	inherit vcs-snapshot
-	MY_PV="afb59a7"
+	MY_PV="6035cfc"
 	SRC_URI="
 		mirror://githubcl/erikdubois/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -31,9 +31,7 @@ RDEPEND=""
 DOCS=( README.md CREDITS log.txt )
 
 src_prepare() {
-	local d
-	for d in Yltra\ Flat*; do mv "${d}" "${d// /}"; done
-	mv YltraFlat/{CREDITS,log.txt} .
+	mv Yltra-Flat/{CREDITS,log.txt} .
 	find -mindepth 2 \
 		-regex '.*\(CREDITS\|.*\.txt\|.*\.cache\|.* .*\)' -delete
 	find -L -type l -delete
