@@ -2,13 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=6
 
-inherit base
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/deadalnix/${PN}"
-	SRC_URI=""
 else
 	inherit vcs-snapshot
 	KEYWORDS="~amd64 ~x86"
@@ -21,7 +19,7 @@ fi
 DESCRIPTION="An extension to merge the title bar of a maximized window into GS activity bar"
 HOMEPAGE="https://github.com/deadalnix/pixel-saver"
 
-LICENSE="GPL-3"
+LICENSE="MIT"
 SLOT="0"
 IUSE=""
 
@@ -36,7 +34,7 @@ RDEPEND="
 src_install() {
 	insinto /usr/share/gnome-shell/extensions
 	doins -r pixel-saver@deadalnix.me
-	dodoc README*
+	einstalldocs
 }
 
 pkg_postinst() {
