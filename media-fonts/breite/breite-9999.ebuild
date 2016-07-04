@@ -2,14 +2,19 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=5
+EAPI=6
 
-inherit base font
+inherit font
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/metapolator/Breite"
 else
-	SRC_URI="https://codeload.github.com/metapolator/${PN}/tar.gz/${PV} -> ${P}.tar.gz"
+	inherit vcs-snapshot
+	MY_PV="93e02d7"
+	SRC_URI="
+		https://codeload.github.com/metapolator/${PN}/tar.gz/${MY_PV}
+		-> ${P}.tar.gz
+	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
@@ -28,8 +33,12 @@ DEPEND="
 	media-gfx/ttfautohint
 "
 FONT_SUFFIX="otf"
+DOCS=( README.md )
 
-src_install() {
-	mv Output/*.otf .
-	font_src_install
+src_prepare() {
+	default
+	local _o
+	cd Output
+	for _o in *.otf; do mv "${_o}" BreiteGrotesk-"${_o// /}"; done
+	mv *.otf "${FONT_S}"
 }
