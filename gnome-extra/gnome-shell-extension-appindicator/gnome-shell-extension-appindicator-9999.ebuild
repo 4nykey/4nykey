@@ -20,7 +20,7 @@ fi
 DESCRIPTION="Adds AppIndicator support to gnome shell"
 HOMEPAGE="https://github.com/rgcjonas/gnome-shell-extension-appindicator"
 
-LICENSE="as-is"
+LICENSE="undetermined"
 SLOT="0"
 IUSE=""
 
