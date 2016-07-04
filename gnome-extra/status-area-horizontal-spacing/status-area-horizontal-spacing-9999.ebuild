@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=6
 
 inherit gnome2-utils
 if [[ -z ${PV%%*9999} ]]; then
@@ -11,14 +11,15 @@ if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI=""
 else
 	inherit vcs-snapshot
-	KEYWORDS="~amd64 ~x86"
 	SRC_URI="
 		https://bitbucket.org/mathematicalcoffee/${PN}-gnome-shell-extension/get/6774bac.tar.gz
 		-> ${P}.tar.gz
 	"
+	RESTRICT="primaryuri"
+	KEYWORDS="~amd64 ~x86"
 fi
 
-DESCRIPTION="A GNOME shell extension to reduce the horizontal spacing between status area icons"
+DESCRIPTION="An GS extension to reduce the horizontal spacing between status area icons"
 HOMEPAGE="https://bitbucket.org/mathematicalcoffee/status-area-horizontal-spacing-gnome-shell-extension"
 
 LICENSE="GPL-3"
@@ -31,19 +32,17 @@ DEPEND="
 RDEPEND="
 	${DEPEND}
 "
-
-src_prepare() {
-	mv ${PN}@mathematical.coffee.gmail.com/schemas "${S}"
-}
+DOCS=( Readme.md )
 
 src_compile() { :; }
 
 src_install() {
+	local _ext="${PN}@mathematical.coffee.gmail.com"
 	insinto /usr/share/gnome-shell/extensions
-	doins -r ${PN}@mathematical.coffee.gmail.com
+	doins -r ${_ext}
 	insinto /usr/share/glib-2.0/schemas
-	doins schemas/*.xml
-	dodoc Readme*
+	doins ${_ext}/schemas/*.xml
+	einstalldocs
 }
 
 pkg_preinst() {

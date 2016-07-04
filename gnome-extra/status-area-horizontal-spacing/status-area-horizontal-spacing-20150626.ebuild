@@ -1,1 +1,0 @@
-status-area-horizontal-spacing-99999999.ebuild
