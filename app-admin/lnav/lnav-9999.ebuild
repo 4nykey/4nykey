@@ -1,10 +1,10 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-admin/lnav/lnav-0.7.1.ebuild,v 1.1 2014/12/04 01:57:18 radhermit Exp $
+# $Id$
 
-EAPI=5
+EAPI=6
 
-inherit toolchain-funcs autotools-utils
+inherit toolchain-funcs autotools
 if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/tstack/lnav.git"
 	inherit git-r3
@@ -28,24 +28,28 @@ RDEPEND="
 	app-arch/bzip2
 	dev-db/sqlite:3
 	dev-libs/libpcre[cxx]
-	sys-libs/ncurses[unicode?]
-	sys-libs/readline
+	sys-libs/ncurses:0[unicode?]
+	sys-libs/readline:0
 	sys-libs/zlib
 	net-misc/curl
 "
 DEPEND="
 	${RDEPEND}
 "
-AUTOTOOLS_AUTORECONF="1"
+
+src_prepare() {
+	default
+	eautoreconf
+}
 
 src_configure() {
 	local myeconfargs=(
 		--disable-static
 		$(use_with unicode ncursesw)
 	)
-	autotools-utils_src_configure
+	econf "${myeconfargs[@]}"
 }
 
 src_compile() {
-	autotools-utils_src_compile AR="$(tc-getAR)"
+	emake AR="$(tc-getAR)"
 }

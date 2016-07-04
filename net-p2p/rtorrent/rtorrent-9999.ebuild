@@ -20,7 +20,7 @@ DOCS=( AUTHORS README doc/rtorrent.rc )
 RDEPEND="
 	dev-libs/libsigc++:2
 	net-misc/curl
-	sys-libs/ncurses
+	sys-libs/ncurses:0
 	ssl? (
 	    !libressl? ( dev-libs/openssl:0 )
 	    libressl? ( dev-libs/libressl )

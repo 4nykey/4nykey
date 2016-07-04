@@ -2,14 +2,14 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="5"
+EAPI=6
 
-inherit autotools-utils
+inherit autotools
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="git://flactag.git.sourceforge.net/gitroot/flactag/flactag"
+	EGIT_REPO_URI="https://github.com/adhawkins/${PN}.git"
 else
-	SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
+	SRC_URI="mirror://githubcl/adhawkins/${PN}/tar.gz/${PV} -> ${P}.tar.gz"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
@@ -28,8 +28,8 @@ RDEPEND="
 	sys-libs/slang
 	net-libs/neon
 	app-text/unac
-	virtual/jpeg
-	gcrypt? ( dev-libs/libgcrypt )
+	virtual/jpeg:62
+	gcrypt? ( dev-libs/libgcrypt:0 )
 "
 DEPEND="
 	${RDEPEND}
@@ -37,14 +37,17 @@ DEPEND="
 	app-text/asciidoc
 "
 
-PATCHES=("${FILESDIR}"/${PN}*.diff)
-AUTOTOOLS_AUTORECONF="1"
-AUTOTOOLS_IN_SOURCE_BUILD="1"
+PATCHES=( "${FILESDIR}" )
+
+src_prepare() {
+	default
+	eautoreconf
+}
 
 src_configure() {
 	local myeconfargs=(
 		--docdir=/usr/share/doc/${PF}/html
 		$(use_with gcrypt libgcrypt)
 	)
-	autotools-utils_src_configure
+	econf "${myeconfargs[@]}"
 }

@@ -25,7 +25,7 @@ DEPEND="
 	media-libs/libexif
 	dev-libs/libxml2
 	dev-libs/json-glib
-	dev-libs/libgcrypt
+	dev-libs/libgcrypt:0
 	net-libs/libsoup:2.4
 	gstreamer? ( media-libs/gstreamer:1.0 )
 "

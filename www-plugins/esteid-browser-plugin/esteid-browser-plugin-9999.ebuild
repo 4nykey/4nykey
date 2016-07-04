@@ -30,7 +30,7 @@ IUSE="debug"
 
 DEPEND="
 	x11-libs/gtk+:2
-	dev-libs/openssl
+	dev-libs/openssl:0
 "
 RDEPEND="
 	${DEPEND}

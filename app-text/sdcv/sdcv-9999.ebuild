@@ -30,7 +30,7 @@ IUSE="readline nls"
 RDEPEND="
 	sys-libs/zlib
 	>=dev-libs/glib-2.6.1
-	readline? ( sys-libs/readline )
+	readline? ( sys-libs/readline:0 )
 "
 DEPEND="
 	${RDEPEND}
