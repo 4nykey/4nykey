@@ -45,7 +45,7 @@ RDEPEND="
 DEPEND="
 	${DEPEND}
 	nls? ( sys-devel/gettext )
-	>=dev-util/pkgconfig-0.20
+	virtual/pkgconfig
 "
 
 src_prepare() {

@@ -2,18 +2,26 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=5
+EAPI=6
 
 PLOCALES="cs de en_AU es fr hu it ja mk nb pl pt_BR pt ru"
-inherit l10n git-r3
+inherit l10n toolchain-funcs
+if [[ -z ${PV%%*9999} ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/EionRobb/skype4pidgin.git"
+else
+	SRC_URI="
+		mirror://githubcl/EionRobb/${PN}/tar.gz/${PV} -> ${P}.tar.gz
+	"
+	RESTRICT="primaryuri"
+	KEYWORDS="~amd64 ~x86"
+fi
 
 DESCRIPTION="Skype API Plugin for Pidgin"
 HOMEPAGE="http://eion.robbmob.com"
-EGIT_REPO_URI="https://github.com/EionRobb/skype4pidgin.git"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
 IUSE="dbus nls"
 
 DEPEND="
@@ -25,7 +33,7 @@ RDEPEND="
 "
 DEPEND="
 	${DEPEND}
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	nls? ( sys-devel/gettext )
 "
 
@@ -35,6 +43,7 @@ rmloc() {
 
 src_prepare() {
 	use nls && l10n_for_each_disabled_locale_do rmloc
+	default
 }
 
 src_compile() {
@@ -67,5 +76,5 @@ src_install() {
 		doins icons/${d}/*.png
 	done
 	use nls && domo po/*.mo
-	dodoc {CHANGELOG,README,TODO}.*
+	einstalldocs
 }

@@ -2,9 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/net-p2p/rtorrent/rtorrent-0.8.6-r1.ebuild,v 1.6 2010/07/04 13:23:28 ssuominen Exp $
 
-EAPI="4"
+EAPI=6
 
-inherit git-r3 autotools-utils
+inherit autotools git-r3
 
 DESCRIPTION="BitTorrent Client using libtorrent"
 HOMEPAGE="http://libtorrent.rakshasa.no/"
@@ -14,8 +14,8 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="c++0x debug ipv6 libressl ssl xmlrpc"
 
-PATCHES=("${FILESDIR}"/${PN}*.diff)
-DOCS=(AUTHORS README doc/rtorrent.rc)
+PATCHES=( "${FILESDIR}"/${PN}-noinst_libtorrent.diff )
+DOCS=( AUTHORS README doc/rtorrent.rc )
 
 RDEPEND="
 	dev-libs/libsigc++:2
@@ -29,10 +29,14 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	dev-util/cppunit
 "
-AUTOTOOLS_AUTORECONF="1"
+
+src_prepare() {
+	default
+	eautoreconf
+}
 
 src_unpack() {
 	git-r3_src_unpack
@@ -54,5 +58,5 @@ src_configure() {
 	)
 	libtorrent_CFLAGS="-I${S}/src/libtorrent/src" \
 	libtorrent_LIBS=" " \
-		autotools-utils_src_configure
+		econf "${myeconfargs[@]}"
 }
