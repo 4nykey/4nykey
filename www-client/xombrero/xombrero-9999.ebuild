@@ -2,9 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/www-client/xombrero/xombrero-9999.ebuild,v 1.4 2014/03/01 22:22:26 mgorny Exp $
 
-EAPI="5"
+EAPI=6
 
-inherit eutils fdo-mime toolchain-funcs base
+inherit eutils fdo-mime toolchain-funcs
 if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="
@@ -64,29 +64,33 @@ src_prepare() {
 		-e "s:Application;::" \
 		-e "s:icon64\.png::" \
 		-i xombrero.desktop || die
-	base_src_prepare
+	default
 }
 
 src_compile() {
 	CC="$(tc-getCC)" CFLAGS="${CFLAGS}" LDADD="${LDFLAGS}" \
-	base_src_compile -C linux \
+	emake -C linux \
 		GTK_VERSION=$(usex gtk3 gtk3 gtk2) \
 		PREFIX=/usr
 }
 
 src_install() {
-	base_src_install -C linux \
-		PREFIX=/usr
+	emake -C linux \
+		DESTDIR="${D}" \
+		PREFIX=/usr \
+		install
 	
 	newicon ${PN}{icon256,}.png
 
-	if use examples;then
+	if use examples; then
 		insinto "/usr/share/doc/${PF}/examples"
 		doins \
 			${PN}.conf \
 			playflash.sh \
 			favorites
 	fi
+
+	einstalldocs
 }
 
 pkg_postinst() {
