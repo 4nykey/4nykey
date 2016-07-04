@@ -1,24 +1,24 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-client/midori/midori-0.5.8-r1.ebuild,v 1.2 2015/01/03 15:06:12 mgorny Exp $
+# $Id$
 
-EAPI=5
-
-VALA_MIN_API_VERSION=0.17
+EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE='threads(+)'
 
-inherit eutils fdo-mime gnome2-utils pax-utils python-any-r1 cmake-utils vala
+inherit eutils pax-utils python-any-r1 vala gnome2 cmake-utils
 
 if [[ -z ${PV%%*9999} ]]; then
 	EBZR_REPO_URI="lp:${PN}"
 	inherit bzr
+	SRC_URI=
 else
-	KEYWORDS="~amd64 ~x86"
 	SRC_URI="
 		http://www.${PN}-browser.org/downloads/${PN}_${PV}_all_.tar.bz2
 	"
+	RESTRICT="primaryuri"
+	KEYWORDS="~amd64 ~x86"
 fi
 
 DESCRIPTION="A lightweight web browser based on WebKitGTK+"
@@ -70,6 +70,7 @@ pkg_setup() {
 }
 
 src_prepare() {
+	default
 	vala_src_prepare
 	sed -i -e '/install/s:COPYING:HACKING TODO TRANSLATE:' CMakeLists.txt || die
 }
@@ -79,10 +80,10 @@ src_configure() {
 
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_DOCDIR=/usr/share/doc/${PF}
-		$(cmake-utils_use_use doc APIDOCS)
-		$(cmake-utils_use_use introspection GIR)
-		$(cmake-utils_use_use granite)
-		$(cmake-utils_use_use zeitgeist)
+		-DUSE_APIDOCS=$(usex doc)
+		-DUSE_GIR=$(usex introspection)
+		-DUSE_GRANITE=$(usex granite)
+		-DUSE_ZEITGEIST=$(usex zeitgeist)
 		-DVALA_EXECUTABLE="${VALAC}"
 		)
 
@@ -94,7 +95,7 @@ src_configure() {
 	else
 		mycmakeargs+=(
 			-DUSE_GTK3=ON
-			$(cmake-utils_use webkit2 HALF_BRO_INCOM_WEBKIT2)
+			-DHALF_BRO_INCOM_WEBKIT2=$(usex webkit2)
 		)
 	fi
 
@@ -103,6 +104,7 @@ src_configure() {
 
 src_install() {
 	cmake-utils_src_install
+	einstalldocs
 
 	local jit_is_enabled
 	if use deprecated; then
@@ -111,20 +113,4 @@ src_install() {
 		has_version 'net-libs/webkit-gtk:3[jit]' && jit_is_enabled=yes
 	fi
 	[[ ${jit_is_enabled} == yes ]] && pax-mark -m "${ED}"/usr/bin/${PN} #480290
-}
-
-pkg_preinst() {
-	gnome2_icon_savelist
-}
-
-pkg_postinst() {
-	fdo-mime_desktop_database_update
-	fdo-mime_mime_database_update
-	gnome2_icon_cache_update
-}
-
-pkg_postrm() {
-	fdo-mime_desktop_database_update
-	fdo-mime_mime_database_update
-	gnome2_icon_cache_update
 }
