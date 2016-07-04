@@ -2,10 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=5
+EAPI=6
 
 VIRTUALX_REQUIRED="doc"
-inherit virtualx qmake-utils autotools-utils
+inherit virtualx autotools
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="git://repo.or.cz/${PN}.git"
@@ -41,11 +41,10 @@ DEPEND="
 		media-fonts/pothana2k
 	)
 "
-AUTOTOOLS_AUTORECONF="1"
-AUTOTOOLS_IN_SOURCE_BUILD="1"
-PATCHES=( "${FILESDIR}"/${PN}*.diff )
+PATCHES=( "${FILESDIR}"/${PN}-man.diff )
 
 src_prepare() {
+	default
 	if [[ ${PV} == *9999* ]]; then
 	ebegin "Running bootstrap"
 	AUTORECONF=true \
@@ -53,18 +52,18 @@ src_prepare() {
 		"${T}"/bootstrap.log
 	eend $? || die "bootstrap failed, check ${T}/bootstrap.log"
 	fi
-	autotools-utils_src_prepare
+	eautoreconf
 }
 
 src_configure() {
 	local myeconfargs=(
 		$(use_with doc)
-		$(use_with qt4 qt $(qt4_get_bindir))
+		$(use_with qt4 qt)
 	)
 	if use doc; then
 		Xeconf "${myeconfargs[@]}"
 	else
-		autotools-utils_src_configure
+		econf "${myeconfargs[@]}"
 	fi
 }
 
@@ -72,11 +71,6 @@ src_compile() {
 	if use doc; then
 		Xemake
 	else
-		autotools-utils_src_compile
+		default
 	fi
-}
-
-src_install() {
-	autotools-utils_src_install \
-		docdir="${EPREFIX}"/usr/share/doc/${PF}
 }
