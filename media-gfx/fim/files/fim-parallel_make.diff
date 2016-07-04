@@ -1,7 +1,5 @@
-Index: src/Makefile.am
-===================================================================
---- src/Makefile.am	(revision 276)
-+++ src/Makefile.am	(working copy)
+--- a/src/Makefile.am	(revision 276)
++++ b/src/Makefile.am	(working copy)
 @@ -18,9 +18,11 @@
  	@$(ECHO) "Applying a horrible hack to avoid the flex non-throwing isatty() redeclaration in 'extern "C" int isatty (int );'"
  	$(SED) -i 's/^.*extern.*isatty.*int.*$$//g' $@

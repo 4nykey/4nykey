@@ -2,9 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=5
+EAPI=6
 
-inherit autotools-utils
+inherit autotools
 if [[ ${PV} = *9999* ]]; then
 	inherit subversion
 	ESVN_REPO_URI="http://svn.savannah.nongnu.org/svn/fbi-improved/trunk"
@@ -25,12 +25,10 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="
 aalib archive debug dia djvu exif fbcon gif graphicsmagick imagemagick imlib
-jpeg pdf png postscript readline +screen sdl svg tiff truetype xcf xfig
+jpeg pdf png postscript readline +screen sdl svg tiff truetype xfig
 "
 
-AUTOTOOLS_AUTORECONF="1"
-AUTOTOOLS_IN_SOURCE_BUILD="1"
-PATCHES=( "${FILESDIR}"/${PN}*.diff )
+PATCHES=( "${FILESDIR}" )
 
 DEPEND="
 	graphicsmagick? ( media-gfx/graphicsmagick )
@@ -52,7 +50,6 @@ DEPEND="
 RDEPEND="
 	${DEPEND}
 	imagemagick? ( media-gfx/imagemagick )
-	xcf? ( dev-perl/gimp-perl )
 	svg? ( media-gfx/inkscape )
 	xfig? ( media-gfx/xfig )
 	dia? ( app-office/dia )
@@ -66,6 +63,7 @@ DEPEND="
 "
 
 src_prepare() {
+	default
 	sed \
 		-e "s:esyscmd.*:${ESVN_WC_REVISION:--1}):" \
 		-e '/LIBS/s:GraphicsMagick.*`:pkg-config GraphicsMagick --libs`:' \
@@ -76,7 +74,7 @@ src_prepare() {
 		-e 's:htmldir = \$(docdir)$:&/html:' \
 		-e 's:\(MAN2HTML=\).*:\1man2html:' \
 		-i doc/Makefile.am
-	autotools-utils_src_prepare
+	eautoreconf
 }
 
 src_configure() {
@@ -98,7 +96,6 @@ src_configure() {
 		$(use_enable aalib aa)
 		$(use_enable sdl)
 		$(use_enable imagemagick convert)
-		$(use_enable xcf xcftopnm)
 		$(use_enable svg inkscape)
 		$(use_enable xfig)
 		$(use_enable dia)
@@ -126,5 +123,5 @@ src_configure() {
 		--enable-windows
 		--enable-custom-status-bar
 	)
-	autotools-utils_src_configure
+	econf "${myeconfargs[@]}"
 }
