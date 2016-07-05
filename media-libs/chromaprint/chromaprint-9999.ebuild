@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=6
 inherit cmake-multilib
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -12,7 +12,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 
-DESCRIPTION="A client-side library that implements a custom algorithm for extracting fingerprints"
+DESCRIPTION="A client-side library for extracting AcoustID fingerprints"
 HOMEPAGE="http://acoustid.org/chromaprint"
 LICENSE="LGPL-2.1"
 SLOT="0"
@@ -31,7 +31,7 @@ DEPEND="
 	)
 "
 
-DOCS="NEWS.txt README.md"
+DOCS=( NEWS.txt README.md )
 
 multilib_src_configure() {
 	local mycmakeargs=(
