@@ -12,7 +12,7 @@ else
 	inherit vcs-snapshot
 	MY_PV="93e02d7"
 	SRC_URI="
-		https://codeload.github.com/metapolator/${PN}/tar.gz/${MY_PV}
+		mirror://githubcl/metapolator/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
