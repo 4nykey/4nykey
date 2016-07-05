@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=5
+EAPI=6
 
 S="${WORKDIR}"
 inherit font unpacker
@@ -19,7 +19,7 @@ ${BASE_URI}sansus-webissimo/9e7ef959f7aeef22383039a04e56def9/sansus-webissimo.zi
 "
 RESTRICT="primaryuri"
 
-LICENSE="CC-BY-ND-4.0 CC-BY-ND-3.0"
+LICENSE="CC-BY-ND-3.0 CC-BY-ND-4.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
@@ -29,6 +29,8 @@ RDEPEND=""
 FONT_SUFFIX="otf ttf"
 
 src_prepare() {
-	find "${S}" -type d -name 'Web' -print0 | xargs -0 rm -rf
+	default
+	rm -rf 'Blogger Sans/Web'
 	find "${S}" -mindepth 2 -type f -name '*.[ot]tf' -exec mv {} "${S}" \;
+	for f in *' '*.[ot]tf; do mv -f "${f}" "${f// /}"; done
 }
