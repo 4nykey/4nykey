@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>4nykey@gmail.com</email>
+	</maintainer>
+	<use>
+		<flag name="fontmake">Use dev-python/fontmake to build fonts from source</flag>
+		<flag name="emoji">Install additional emoji fonts</flag>
+	</use>
+</pkgmetadata>

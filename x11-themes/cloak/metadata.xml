@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>4nykey@gmail.com</email>
+	</maintainer>
+	<use>
+		<flag name="xfce">Install xfwm4 theme</flag>
+		<flag name="openbox">Install openbox theme</flag>
+		<flag name="firefox">Install firefox theme</flag>
+		<flag name="gdm">Install gnome-base/gdm theme</flag>
+		<flag name="cinnamon">Install gnome-extra/cinnamon theme</flag>
+	</use>
+</pkgmetadata>

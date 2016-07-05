@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>4nykey@gmail.com</email>
+	</maintainer>
+	<use>
+		<flag name="fonts-ms">Pull in MS fonts</flag>
+		<flag name="fonts-free">Pull in free fonts</flag>
+		<flag name="fonts-extra">Pull in extra fonts</flag>
+	</use>
+</pkgmetadata>

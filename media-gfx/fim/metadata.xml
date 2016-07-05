@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>4nykey@gmail.com</email>
+	</maintainer>
+	<use>
+		<flag name="xfig">Enable FIG file support via media-gfx/xfig</flag>
+		<flag name="screen">Add experimental support for running under screen</flag>
+		<flag name="graphicsmagick">Enable GraphicsMagick library support</flag>
+		<flag name="dia">Enable DIA file support via app-office/dia</flag>
+		<flag name="archive">Enable archive support using app-arch/libarchive</flag>
+	</use>
+</pkgmetadata>
