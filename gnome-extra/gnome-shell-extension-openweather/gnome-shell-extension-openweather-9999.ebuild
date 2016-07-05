@@ -24,10 +24,10 @@ LICENSE="GPL-3+ BSD"
 SLOT="0"
 IUSE=""
 
-RDEPEND="
+HDEPEND="
 	app-eselect/eselect-gnome-shell-extensions
 "
-DEPEND="
+BDEPEND="
 	${RDEPEND}
 "
 AUTOTOOLS_AUTORECONF=1

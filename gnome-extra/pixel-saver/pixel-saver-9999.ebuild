@@ -23,11 +23,11 @@ LICENSE="MIT"
 SLOT="0"
 IUSE=""
 
-DEPEND="
+BDEPEND="
 	app-eselect/eselect-gnome-shell-extensions
 "
-RDEPEND="
-	${DEPEND}
+HDEPEND="
+	${BDEPEND}
 	x11-apps/xprop
 "
 

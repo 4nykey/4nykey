@@ -26,11 +26,11 @@ LICENSE="GPL-3"
 SLOT="0"
 IUSE=""
 
-DEPEND="
+BDEPEND="
 	app-eselect/eselect-gnome-shell-extensions
 "
-RDEPEND="
-	${DEPEND}
+HDEPEND="
+	${BDEPEND}
 "
 DOCS=( Readme.md )
 

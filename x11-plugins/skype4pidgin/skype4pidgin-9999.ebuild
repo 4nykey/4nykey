@@ -29,9 +29,12 @@ DEPEND="
 "
 RDEPEND="
 	${DEPEND}
+"
+HDEPEND="
+	${DEPEND}
 	net-im/skype
 "
-DEPEND="
+BDEPEND="
 	${DEPEND}
 	virtual/pkgconfig
 	nls? ( sys-devel/gettext )

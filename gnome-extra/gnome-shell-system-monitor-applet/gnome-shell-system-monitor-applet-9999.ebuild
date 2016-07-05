@@ -27,11 +27,11 @@ LICENSE="GPL-3"
 SLOT="0"
 IUSE=""
 
-DEPEND="
+BDEPEND="
 	app-eselect/eselect-gnome-shell-extensions
 "
-RDEPEND="
-	${DEPEND}
+HDEPEND="
+	${BDEPEND}
 	dev-python/pygtk
 	gnome-base/libgtop[introspection]
 	net-misc/networkmanager[introspection]
