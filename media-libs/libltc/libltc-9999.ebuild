@@ -1,6 +1,6 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
@@ -32,7 +32,7 @@ AUTOTOOLS_IN_SOURCE_BUILD="1"
 
 pkg_setup() {
 	if use doc; then
-		MAKEOPTS+=" all dox" 
+		MAKEOPTS+=" all dox"
 		HTML_DOCS=(doc/html/)
 	fi
 }

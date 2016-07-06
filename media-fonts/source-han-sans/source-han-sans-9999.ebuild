@@ -74,7 +74,7 @@ src_compile() {
 	if use !afdko; then
 		find SubsetOTF -mindepth 2 -name '*.otf' -exec mv -f {} "${S}" \;
 	else
-		source ${EROOT}etc/afdko
+		source "${EROOT}"etc/afdko
 		source "${S}"/COMMANDS.txt
 	fi
 }

@@ -1,6 +1,6 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=6
 
@@ -65,7 +65,7 @@ src_configure() {
 	local mycmakeargs=(
 		-DINSTALL_DOC=$(usex doc)
 		-DDISABLE_CXX11=$(usex !c++0x)
-		-DCMAKE_INSTALL_SYSCONFDIR=${EROOT}etc
+		-DCMAKE_INSTALL_SYSCONFDIR="${EROOT}etc"
 	)
 	cmake-utils_src_configure
 }

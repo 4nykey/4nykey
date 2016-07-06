@@ -1,6 +1,6 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-client/xombrero/xombrero-9999.ebuild,v 1.4 2014/03/01 22:22:26 mgorny Exp $
+# $Id$
 
 EAPI=6
 
@@ -79,7 +79,7 @@ src_install() {
 		DESTDIR="${D}" \
 		PREFIX=/usr \
 		install
-	
+
 	newicon ${PN}{icon256,}.png
 
 	if use examples; then

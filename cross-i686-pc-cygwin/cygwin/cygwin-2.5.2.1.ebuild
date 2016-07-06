@@ -1,6 +1,6 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/cygwin/cygwin-1.5.25.15.ebuild,v 1.1 2008/11/28 09:21:44 vapier Exp $
+# $Id$
 
 EAPI="5"
 
@@ -58,7 +58,7 @@ pkg_setup() {
 src_unpack() {
 	default
 	local _p="newlib-${PN}-$(get_version_component_range -3)"
-	unpacker ${WORKDIR}/${PN}-${MY_PV}.src/${_p}.tar.bz2
+	unpacker "${WORKDIR}"/${PN}-${MY_PV}.src/${_p}.tar.bz2
 }
 
 src_prepare() {

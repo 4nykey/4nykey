@@ -1,6 +1,6 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
@@ -56,7 +56,7 @@ pkg_setup() {
 src_unpack() {
 	mkdir -p "${S}"
 	default
-	just_headers || unpacker ${WORKDIR}/${MY_R}.src/mingw-w64-${PV}.tar.bz2
+	just_headers || unpacker "${WORKDIR}"/${MY_R}.src/mingw-w64-${PV}.tar.bz2
 }
 
 src_configure() {

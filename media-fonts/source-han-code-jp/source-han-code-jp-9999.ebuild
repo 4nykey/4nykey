@@ -51,7 +51,7 @@ pkg_setup() {
 
 src_compile() {
 	if use afdko; then
-		source ${EROOT}etc/afdko
+		source "${EROOT}"etc/afdko
 		/bin/sh "${S}"/commands.sh
 	fi
 	find "${S}" -mindepth 2 -name "*.${FONT_SUFFIX}" -exec mv -f {} "${S}" \;

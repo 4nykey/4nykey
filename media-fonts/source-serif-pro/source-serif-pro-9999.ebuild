@@ -62,7 +62,7 @@ src_compile() {
 	if use !afdko; then
 		find "${S}" -mindepth 2 -name '*.[ot]tf' -exec mv -f {} "${S}" \;
 	else
-		source ${EROOT}etc/afdko
+		source "${EROOT}"etc/afdko
 		source "${S}"/build.sh
 		find "${S}" -path '*/target/[OT]TF/*.[ot]tf' -exec mv -f {} "${S}" \;
 	fi

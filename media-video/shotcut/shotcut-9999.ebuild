@@ -1,4 +1,4 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -43,7 +43,7 @@ DEPEND="
 "
 
 src_configure() {
-	eqmake5 ${PN}.pro PREFIX=${EPREFIX}/usr
+	eqmake5 ${PN}.pro PREFIX="${EPREFIX}"/usr
 }
 
 src_install() {
