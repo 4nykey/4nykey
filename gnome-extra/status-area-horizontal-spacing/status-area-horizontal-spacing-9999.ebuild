@@ -37,12 +37,13 @@ DOCS=( Readme.md )
 src_compile() { :; }
 
 src_install() {
-	local _ext="${PN}@mathematical.coffee.gmail.com"
-	insinto /usr/share/gnome-shell/extensions
-	doins -r ${_ext}
-	insinto /usr/share/glib-2.0/schemas
-	doins ${_ext}/schemas/*.xml
 	einstalldocs
+	local _ext="${PN}@mathematical.coffee.gmail.com"
+	cd ${_ext}
+	insinto /usr/share/gnome-shell/extensions/${_ext}
+	doins *.js*
+	insinto /usr/share/glib-2.0/schemas
+	doins schemas/*.xml
 }
 
 pkg_preinst() {
