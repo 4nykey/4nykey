@@ -9,12 +9,10 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/Aseman-Land/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="v${PV}-stable"
+	MY_PV="439f68d"
 	SRC_URI="
 		mirror://githubcl/Aseman-Land/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
-		https://github.com/Aseman-Land/aseman-qt-tools/commit/439f68d.patch
 	"
-	PATCHES=( "${DISTDIR}"/439f68d.patch )
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi

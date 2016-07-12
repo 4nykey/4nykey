@@ -1,11 +1,12 @@
-diff --git a/share/Cutegram.desktop b/share/Cutegram.desktop
-index c5710b9..7afd526 100644
 --- a/share/Cutegram.desktop
 +++ b/share/Cutegram.desktop
-@@ -1,5 +1,5 @@
+@@ -1,7 +1,7 @@
  [Desktop Entry]
 -Categories=Network;Application;
 +Categories=Network;
  Comment=A telegram client by Aseman
- Exec=qmlscene /usr/share/cutegram/3.0/main.qml
+-Exec=qmlscene /usr/share/cutegram/3.0/main.qml
++Exec=cutegram
  GenericName=Telegram client
+ Icon=cutegram
+ Name=Cutegram
