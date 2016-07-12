@@ -1,0 +1,15 @@
+diff --git a/cutegram.pro b/cutegram.pro
+index 2e5092c..899f99f 100644
+--- a/cutegram.pro
++++ b/cutegram.pro
+@@ -41,4 +41,10 @@ qmlFiles.files = \
+     GPL.txt \
+     LICENSE
+ 
++contains(CONFIG, binaryMode) {
++target = $$TARGET
++target.path = $$PREFIX/bin
++INSTALLS += target shortcut icons pixmaps
++} else {
+ INSTALLS += qmlFiles shortcut icons pixmaps
++}
