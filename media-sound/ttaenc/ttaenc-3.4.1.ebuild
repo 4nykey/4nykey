@@ -1,8 +1,10 @@
-# Copyright 1999-2007 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
-inherit eutils
+EAPI=6
+
+inherit toolchain-funcs
 
 MY_P="${P}-src"
 DESCRIPTION="TTA lossless audio encoder/decoder"
@@ -20,16 +22,15 @@ IUSE=""
 
 DEPEND=""
 RDEPEND=""
+PATCHES=( "${DISTDIR}"/${MY_P}-shntool.patch )
 
-src_unpack() {
-	unpack ${MY_P}.tgz
-	cd ${S}
+src_prepare() {
 	sed -i -e "s:gcc:$(tc-getCC):g" Makefile
-	epatch ${DISTDIR}/${MY_P}-shntool.patch
+	default
 }
 
 src_compile() {
-	emake CFLAGS="${CFLAGS}" || die
+	emake CFLAGS="${CFLAGS}"
 }
 
 src_install() {

@@ -50,7 +50,7 @@ src_compile() {
 		(
 			multijob_child_init
 			/bin/bash ./build.sh build_one "${g}" || \
-			echo -n " ${g}" >> ${T}/_failed
+			echo -n " ${g}" >> "${T}"/_failed
 		) &
 	done
 	multijob_finish

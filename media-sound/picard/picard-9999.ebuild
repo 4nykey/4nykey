@@ -1,4 +1,4 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -11,7 +11,7 @@ af ar ast bg ca cs cy da de el en_CA en_GB en eo es et fa fi fo fr_CA fr fy gl
 he hi hr hu id is it ja kn ko lt mr nb nds ne nl oc pa pl pt_BR pt ro ru sco sk
 sl sr sv ta te tr uk vi zh_CN zh_TW
 "
-inherit eutils distutils-r1 readme.gentoo-r1 l10n
+inherit eutils distutils-r1 l10n
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="git://github.com/musicbrainz/picard.git"
@@ -43,14 +43,6 @@ RDEPEND="${DEPEND}"
 RESTRICT="test" # doesn't work with ebuilds
 DOCS="AUTHORS.txt NEWS.txt"
 
-DOC_CONTENTS="If you are upgrading Picard and it does not start,
-try removing Picard's settings:
-    rm ~/.config/MusicBrainz/Picard.conf
-
-You should set the environment variable BROWSER to something like
-    firefox '%s' &
-to let python know which browser to use."
-
 src_prepare() {
 	myloc() {
 		rm -f po/{.,attributes,countries}/${1}.po
@@ -69,5 +61,4 @@ src_install() {
 
 	doicon picard.ico
 	domenu picard.desktop
-	readme.gentoo_create_doc
 }

@@ -56,7 +56,7 @@ pkg_setup() {
 src_unpack() {
 	mkdir -p "${S}"
 	default
-	just_headers || unpacker ${WORKDIR}/${MY_R}.src/mingw-w64-${PV}.tar.bz2
+	just_headers || unpacker "${WORKDIR}"/${MY_R}.src/mingw-w64-${PV}.tar.bz2
 }
 
 src_configure() {
