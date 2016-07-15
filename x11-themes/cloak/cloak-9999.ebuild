@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=6
 
 MY_P="Cloak-3.20"
 if [[ -z ${PV%%*9999} ]]; then
@@ -32,10 +32,6 @@ RDEPEND="
 	${DEPEND}
 "
 S="${WORKDIR}/${P}/${MY_P}"
-
-src_prepare() {
-	sed -e 's:Cantarell, ::' -i gnome-shell/gnome-shell.css
-}
 
 src_install() {
 	insinto /usr/share/themes/${MY_P}
