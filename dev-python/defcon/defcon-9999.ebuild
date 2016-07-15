@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
 inherit distutils-r1
@@ -12,7 +12,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_BRANCH="ufo3"
 else
 	inherit vcs-snapshot
-	MY_PV="61340fd"
+	MY_PV="ad4d1d3"
 	SRC_URI="
 		mirror://githubcl/typesupply/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
