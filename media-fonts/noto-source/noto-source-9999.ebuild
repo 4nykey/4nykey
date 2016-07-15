@@ -4,13 +4,13 @@
 
 EAPI=6
 
-CHECKREQS_DISK_BUILD="5835M"
+CHECKREQS_DISK_BUILD="5920M"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}"
 else
 	inherit vcs-snapshot
-	MY_PV="74f7c33"
+	MY_PV="1f6b1b6"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
