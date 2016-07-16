@@ -16,7 +16,7 @@ else
 			mirror://githubcl/eosrei/${PN}/tar.gz/v${MY_PV} -> ${P}.tar.gz
 		)
 		binary? (
-			https://github.com/eosrei/${PN}/releases/download/v${MY_PV}/${MY_P}.zip
+			https://github.com/eosrei/${PN}/releases/download/v${MY_PV}/${MY_P}.tar.gz
 		)
 	"
 	RESTRICT="primaryuri"
@@ -43,9 +43,9 @@ prebuilt() {
 pkg_setup() {
 	local _fc="fontconfig/56-twemoji-color.conf"
 	if prebuilt; then
-		S="${WORKDIR}"
+		S="${WORKDIR}/${MY_P}"
 		FONT_S="${S}"
-		FONT_CONF="${S}/fontconfig/user-bitstream-vera-fonts.conf"
+		FONT_CONF="${S}/${_fc}"
 	else
 		FONT_S="${S}/build"
 		FONT_CONF="${S}/linux/${_fc}"
