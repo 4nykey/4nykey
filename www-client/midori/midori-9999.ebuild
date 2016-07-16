@@ -6,6 +6,7 @@ EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE='threads(+)'
+VALA_MIN_API_VERSION="0.30"
 
 inherit eutils pax-utils python-any-r1 vala gnome2 cmake-utils
 
@@ -26,8 +27,12 @@ HOMEPAGE="http://www.midori-browser.org/"
 
 LICENSE="LGPL-2.1 MIT"
 SLOT="0"
-IUSE="deprecated doc granite introspection +jit +webkit2 zeitgeist"
-
+IUSE="gtk2 apidocs granite introspection +jit +webkit2 zeitgeist"
+REQUIRED_USE="
+	granite? ( !gtk2 )
+	webkit2? ( !gtk2 )
+	introspection? ( gtk2 )
+"
 RDEPEND="
 	>=dev-db/sqlite-3.6.19:3
 	>=dev-libs/glib-2.32.3
@@ -36,16 +41,16 @@ RDEPEND="
 	>=net-libs/libsoup-gnome-2.38:2.4
 	>=x11-libs/libnotify-0.7
 	x11-libs/libXScrnSaver
-	deprecated? (
+	gtk2? (
 		>=net-libs/webkit-gtk-1.8.1:2[jit=]
 		>=x11-libs/gtk+-2.24:2
-		)
-	!deprecated? (
+	)
+	!gtk2? (
 		>=app-crypt/gcr-3
 		x11-libs/gtk+:3
 		webkit2? ( >=net-libs/webkit-gtk-2.3.91:4[jit=] )
 		!webkit2? ( >=net-libs/webkit-gtk-1.8.1:3[jit=] )
-		)
+	)
 	granite? ( >=dev-libs/granite-0.2 )
 	introspection? ( dev-libs/gobject-introspection )
 	zeitgeist? ( >=dev-libs/libzeitgeist-0.3.14 )
@@ -57,12 +62,7 @@ DEPEND="
 	dev-util/intltool
 	gnome-base/librsvg
 	sys-devel/gettext
-	doc? ( dev-util/gtk-doc )
-"
-REQUIRED_USE="
-	granite? ( !deprecated )
-	introspection? ( deprecated )
-	webkit2? ( !deprecated )
+	apidocs? ( dev-util/gtk-doc )
 "
 
 pkg_setup() {
@@ -73,32 +73,20 @@ src_prepare() {
 	default
 	vala_src_prepare
 	sed -i -e '/install/s:COPYING:HACKING TODO TRANSLATE:' CMakeLists.txt || die
+	strip-linguas -i po
 }
 
 src_configure() {
-	strip-linguas -i po
-
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_DOCDIR=/usr/share/doc/${PF}
-		-DUSE_APIDOCS=$(usex doc)
+		-DUSE_APIDOCS=$(usex apidocs)
 		-DUSE_GIR=$(usex introspection)
 		-DUSE_GRANITE=$(usex granite)
 		-DUSE_ZEITGEIST=$(usex zeitgeist)
 		-DVALA_EXECUTABLE="${VALAC}"
-		)
-
-	if use deprecated; then
-		mycmakeargs+=(
-			-DUSE_GTK3=OFF
-			-DHALF_BRO_INCOM_WEBKIT2=OFF
-		)
-	else
-		mycmakeargs+=(
-			-DUSE_GTK3=ON
-			-DHALF_BRO_INCOM_WEBKIT2=$(usex webkit2)
-		)
-	fi
-
+		-DUSE_GTK3=$(usex !gtk2)
+		-DHALF_BRO_INCOM_WEBKIT2=$(usex webkit2)
+	)
 	cmake-utils_src_configure
 }
 
@@ -106,11 +94,14 @@ src_install() {
 	cmake-utils_src_install
 	einstalldocs
 
-	local jit_is_enabled
-	if use deprecated; then
-		has_version 'net-libs/webkit-gtk:2[jit]' && jit_is_enabled=yes
-	else
-		has_version 'net-libs/webkit-gtk:3[jit]' && jit_is_enabled=yes
-	fi
-	[[ ${jit_is_enabled} == yes ]] && pax-mark -m "${ED}"/usr/bin/${PN} #480290
+	jit_is_enabled() {
+		if use gtk2; then
+			has_version 'net-libs/webkit-gtk:2[jit]'
+		elif use webkit2; then
+			has_version 'net-libs/webkit-gtk:4[jit]'
+		else
+			has_version 'net-libs/webkit-gtk:3[jit]'
+		fi
+	}
+	jit_is_enabled && pax-mark -m "${ED}"/usr/bin/${PN} #480290
 }
