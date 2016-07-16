@@ -93,15 +93,5 @@ src_configure() {
 src_install() {
 	cmake-utils_src_install
 	einstalldocs
-
-	jit_is_enabled() {
-		if use gtk2; then
-			has_version 'net-libs/webkit-gtk:2[jit]'
-		elif use webkit2; then
-			has_version 'net-libs/webkit-gtk:4[jit]'
-		else
-			has_version 'net-libs/webkit-gtk:3[jit]'
-		fi
-	}
-	jit_is_enabled && pax-mark -m "${ED}"/usr/bin/${PN} #480290
+	use jit && pax-mark -m "${ED}"/usr/bin/${PN} #480290
 }
