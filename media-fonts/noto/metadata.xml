@@ -5,7 +5,8 @@
 		<email>4nykey@gmail.com</email>
 	</maintainer>
 	<use>
-		<flag name="fontmake">Use dev-python/fontmake to build fonts from source</flag>
 		<flag name="emoji">Install additional emoji fonts</flag>
+		<flag name="fontmake">Use <pkg>dev-python/fontmake</pkg> to build fonts from source</flag>
+		<flag name="pipeline">Install WIP fonts created from glyphs files</flag>
 	</use>
 </pkgmetadata>

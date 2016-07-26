@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlei18n/noto-fonts"
 else
 	inherit vcs-snapshot
-	MY_PV="19ce9d5"
+	MY_PV="c6a3356"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}-fonts/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -24,22 +24,23 @@ HOMEPAGE="http://www.google.com/get/noto"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="cjk emoji fontmake"
+IUSE="cjk emoji fontmake pipeline"
+REQUIRED_USE="^^ ( fontmake pipeline )"
 
-DEPEND="
+DEPEND=""
+RDEPEND="
 	cjk? ( media-fonts/noto-cjk )
 	emoji? ( media-fonts/noto-emoji )
 	fontmake? ( media-fonts/noto-source )
 "
-RDEPEND=""
 
 FONT_SUFFIX="ttf"
 DOCS="*.md"
 
 src_prepare() {
 	default
-	mv hinted/Noto*.${FONT_SUFFIX} "${S}"/
-	use fontmake && return
+	mv hinted/Noto*.ttf "${S}"/
+	use pipeline || return
 	FONT_SUFFIX="ttf otf"
 	mv alpha/OTF/from-pipeline/Noto*.otf "${S}"/
 }
