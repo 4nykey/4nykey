@@ -1,0 +1,15 @@
+--- ./src/main/java/mobac/program/DirectoryManager.java.orig	2013-03-21 14:49:40.000000000 +0200
++++ ./src/main/java/mobac/program/DirectoryManager.java	2016-07-30 05:31:06.569085796 +0300
+@@ -65,9 +65,9 @@
+ 
+ 		mapSourcesDir = applyDirConfig("mobac.mapsourcesdir", new File(programDir, "mapsources"));
+ 		toolsDir = applyDirConfig("mobac.toolsdir", new File(programDir, "tools"));
+-		userSettingsDir = applyDirConfig("mobac.usersettingsdir", programDir);
+-		atlasProfilesDir = applyDirConfig("mobac.atlasprofilesdir", currentDir);
+-		tileStoreDir = applyDirConfig("mobac.tilestoredir", new File(programDir, "tilestore"));
++		userSettingsDir = applyDirConfig("mobac.usersettingsdir", userAppDataDir);
++		atlasProfilesDir = applyDirConfig("mobac.atlasprofilesdir", userAppDataDir);
++		tileStoreDir = applyDirConfig("mobac.tilestoredir", new File(userAppDataDir, "tilestore"));
+ 	}
+ 
+ 	private static File applyDirConfig(String propertyName, File defaultDir) {
