@@ -33,7 +33,9 @@ RDEPEND="
 	dev-python/ufoNormalizer
 	>=dev-python/fonttools-2.5
 "
-PATCHES=( "${FILESDIR}"/${PN}*.diff )
+PATCHES=(
+	"${FILESDIR}"/${PN}-makeotf.diff
+)
 DOCS=( "FDK/Technical Documentation" )
 
 pkg_setup() {
@@ -43,6 +45,9 @@ pkg_setup() {
 src_prepare() {
 	rm -f "FDK/Tools/linux/AFDKOPython"
 	rm -rf "FDK/Tools/linux/Python"
+	sed \
+		-e "s:\(AFDKO_Python=\).*:\1\"/usr/bin/env ${EPYTHON}\":" \
+		-i FDK/Tools/linux/setFDKPaths
 	default
 }
 
@@ -68,6 +73,6 @@ src_install() {
 	doins -r "${S}"/FDK/Tools/SharedData
 	exeinto "${FDK_EXE}"
 	doexe "${S}"/FDK/Tools/linux/*
-	dosym "${PYTHON}" "${FDK_EXE}"/AFDKOPython
+
 	python_optimize "${ED}"/usr/$(get_libdir)/${PN}/FDK/Tools/SharedData/FDKScripts
 }
