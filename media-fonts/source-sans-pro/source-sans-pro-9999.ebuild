@@ -8,8 +8,8 @@ if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-fonts/${PN}"
 else
-	inherit vcs-snapshot
-	MY_PVR="${PV}R-ro/1.075R-it"
+	inherit versionator vcs-snapshot
+	MY_PVR="$(get_version_component_range -2)R-ro/$(get_version_component_range 3-)R-it"
 	MY_PVS="${MY_PVR//R}"
 	SRC_URI="
 		!afdko? (
@@ -57,7 +57,7 @@ pkg_setup() {
 
 src_prepare() {
 	default
-	use !afdko && return 0
+	use afdko || return 0
 	sed \
 		-e 's:makeotf.*:& 2>> "${T}"/makeotf.log || die "failed to build $family-$w, see ${T}/makeotf.log":' \
 		-e 's:addSVG=.*:addSVG=$(find "${S}" -name addSVGtable.py):' \
@@ -65,11 +65,11 @@ src_prepare() {
 }
 
 src_compile() {
-	if use !afdko; then
-		find "${S}" -mindepth 2 -name '*.[ot]tf' -exec mv -f {} "${S}" \;
-	else
+	if use afdko; then
 		source "${EROOT}"etc/afdko
 		source "${S}"/build.sh
 		find "${S}" -path '*/target/[OT]TF/*.[ot]tf' -exec mv -f {} "${S}" \;
+	else
+		find "${S}" -mindepth 2 -name '*.[ot]tf' -exec mv -f {} "${S}" \;
 	fi
 }
