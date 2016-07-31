@@ -12,7 +12,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/soshial/${MY_PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="c31bb9f"
+	MY_PV="a26b847"
 	SRC_URI="
 		mirror://githubcl/soshial/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -26,7 +26,6 @@ HOMEPAGE="http://xdxf.sf.net"
 LICENSE="GPL-2"
 SLOT="0"
 IUSE=""
-PATCHES=( "${FILESDIR}"/${PN}-gcc43.diff )
 DOCS=( AUTHORS CHANGELOG README.md TODO )
 
 DEPEND="
