@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -10,10 +10,11 @@ cs de el en_GB es fr it nn pl pt pt_PT ru sv zh
 PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE='threads(+)'
 MY_PV="${PV//_/-}"
-inherit fdo-mime gnome2-utils python-any-r1 waf-utils l10n
+inherit gnome2 python-any-r1 waf-utils l10n
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="git://git.ardour.org/${PN}/${PN}.git"
+	SRC_URI=
 else
 	inherit vcs-snapshot
 	SRC_URI="mirror://githubcl/Ardour/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz"
@@ -113,31 +114,16 @@ src_configure() {
 }
 
 src_compile() {
+	MY_PV="${MY_PV}" \
 	"${WAF_BINARY}" \
 		--jobs=$(makeopts_jobs) --verbose \
 		build $(usex nls i18n '')
 }
 
 src_install() {
-	waf-utils_src_install
+	MY_PV="${MY_PV}" waf-utils_src_install
 	newicon gtk2_ardour/icons/${PN}-app-icon_osx.png ${PN}${SLOT}.png
 	domenu build/gtk2_ardour/${PN}${SLOT}.desktop
 	insinto /usr/share/mime/packages
 	newins build/gtk2_ardour/${PN}.xml ${PN}${SLOT}.xml
-}
-
-pkg_preinst() {
-	gnome2_icon_savelist
-}
-
-pkg_postinst() {
-	fdo-mime_desktop_database_update
-	fdo-mime_mime_database_update
-	gnome2_icon_cache_update
-}
-
-pkg_postrm() {
-	fdo-mime_desktop_database_update
-	fdo-mime_mime_database_update
-	gnome2_icon_cache_update
 }
