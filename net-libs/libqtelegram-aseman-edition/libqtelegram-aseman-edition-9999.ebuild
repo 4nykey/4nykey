@@ -32,6 +32,21 @@ DEPEND="
 RDEPEND="${DEPEND}"
 
 src_configure() {
+	local _g="libqtelegram-generator"
+	sed \
+		-e 's:\$ASEMAN_SRC_PATH:"${S}":g' \
+		-e "s:\./${_g}:\"${S}\"/${_g}:" \
+		-ne "/${_g}/p" \
+		-i "${S}"/init
+	eqmake5 "${S}"/libqtelegram-code-generator
+
+	ebegin "Building ${_g}"
+	make ${MAKE_OPTS} >& "${T}"/${_g}.log
+	eend $? || die "failed to build ${_g}, see ${T}/${_g}.log"
+	ebegin "Running ${_g}"
+	source "${S}"/init
+	eend $? || die
+
 	eqmake5 CONFIG+=typeobjects
 }
 
