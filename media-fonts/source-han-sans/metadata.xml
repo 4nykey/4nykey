@@ -6,6 +6,5 @@
 	</maintainer>
 	<use>
 		<flag name="monospace">Install monospace fonts</flag>
-		<flag name="afdko">Use dev-util/afdko to build fonts from source</flag>
 	</use>
 </pkgmetadata>

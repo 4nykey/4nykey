@@ -10,11 +10,11 @@ if [[ ${PV} == *9999* ]]; then
 else
 	inherit vcs-snapshot
 	SRC_URI="
-		!afdko? (
+		binary? (
 			mirror://githubcl/adobe-fonts/${PN}/tar.gz/${PV}R
 			-> ${P}R.tar.gz
 		)
-		afdko? (
+		!binary? (
 			mirror://githubcl/adobe-fonts/${PN}/tar.gz/${PV}
 			-> ${P}.tar.gz
 		)
@@ -29,10 +29,10 @@ HOMEPAGE="http://adobe-fonts.github.io/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="afdko"
+IUSE="+binary"
 
 DEPEND="
-	afdko? ( dev-util/afdko )
+	!binary? ( dev-util/afdko )
 "
 RDEPEND=""
 
@@ -41,16 +41,16 @@ DOCS="README.md relnotes.txt"
 
 pkg_setup() {
 	if [[ ${PV} == *9999* ]]; then
-		EGIT_BRANCH="$(usex afdko master release)"
+		EGIT_BRANCH="$(usex binary release master)"
 	else
-		S="${WORKDIR}/${P}$(usex afdko '' 'R')"
+		S="${WORKDIR}/${P}$(usex binary 'R' '')"
 		FONT_S="${S}"
 	fi
 	font_pkg_setup
 }
 
 src_compile() {
-	if use afdko; then
+	if use !binary; then
 		source "${EROOT}"etc/afdko
 		/bin/sh "${S}"/commands.sh
 	fi

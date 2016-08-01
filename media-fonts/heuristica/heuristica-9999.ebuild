@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-fonts/heuristica/heuristica-0.2.1.ebuild,v 1.1 2010/03/06 20:02:59 spatz Exp $
 
@@ -7,11 +7,11 @@ EAPI=6
 if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI="mirror://gcarchive/evristika/source-archive.zip -> ${P}.zip"
 	S="${WORKDIR}/evristika/trunk"
-	REQUIRED_USE="fontforge"
+	REQUIRED_USE="!binary"
 else
 	S="${WORKDIR}"
 	SRC_URI="
-	!fontforge? (
+	binary? (
 		mirror://sourceforge/${PN}/${PN}-ttf-${PV}.tar.xz
 		mirror://sourceforge/${PN}/${PN}-otf-${PV}.tar.xz
 		mirror://sourceforge/${PN}/${PN}-pfb-${PV}.tar.xz
@@ -19,7 +19,7 @@ else
 			mirror://sourceforge/${PN}/${PN}-tex-${PV}.tar.xz
 		)
 	)
-	fontforge? (
+	!binary? (
 		mirror://sourceforge/${PN}/${PN}-src-${PV}.tar.xz
 	)
 	"
@@ -32,11 +32,11 @@ HOMEPAGE="http://heuristica.sourceforge.net"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="fontforge latex"
+IUSE="+binary latex"
 RESTRICT="primaryuri"
 
-DEPEND="
-	fontforge? (
+BDEPEND="
+	!binary? (
 		<media-gfx/fontforge-20150430[python]
 		dev-texlive/texlive-fontutils
 		sys-apps/coreutils
@@ -50,7 +50,7 @@ DOCS="FontLog.txt"
 
 src_prepare() {
 	default
-	use fontforge && \
+	use binary || \
 		cp "${EPREFIX}"/usr/share/font-helpers/*.{ff,py} "${S}"/
 }
 
@@ -60,12 +60,12 @@ src_compile() {
 
 src_install() {
 	if use latex; then
-		if use fontforge; then
-			emake TEXPREFIX="${ED}/${TEXMF}" tex-support
-			rm -rf "${ED}"/${TEXMF}/doc
-		else
+		if use binary; then
 			insinto "${TEXMF}"
 			doins -r "${WORKDIR}"/{dvips,fonts,tex}
+		else
+			emake TEXPREFIX="${ED}/${TEXMF}" tex-support
+			rm -rf "${ED}"/${TEXMF}/doc
 		fi
 		echo "Map ${PN}.map" > "${T}"/${PN}.cfg
 		insinto /etc/texmf/updmap.d

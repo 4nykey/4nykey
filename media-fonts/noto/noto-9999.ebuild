@@ -24,14 +24,14 @@ HOMEPAGE="http://www.google.com/get/noto"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="cjk emoji fontmake pipeline"
-REQUIRED_USE="^^ ( fontmake pipeline )"
+IUSE="cjk emoji +binary pipeline"
+REQUIRED_USE="pipeline? ( binary )"
 
 DEPEND=""
 RDEPEND="
 	cjk? ( media-fonts/noto-cjk )
 	emoji? ( media-fonts/noto-emoji )
-	fontmake? ( media-fonts/noto-source )
+	!binary? ( media-fonts/noto-source )
 "
 
 FONT_SUFFIX="ttf"

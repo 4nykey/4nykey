@@ -12,11 +12,11 @@ else
 	MY_PVR="$(get_version_component_range -2)R-ro/$(get_version_component_range 3-)R-it"
 	MY_PVS="${MY_PVR//R}"
 	SRC_URI="
-		!afdko? (
+		binary? (
 			mirror://githubcl/adobe-fonts/${PN}/tar.gz/${MY_PVR}
 			-> ${PN}-${MY_PVR/\//-}.tar.gz
 		)
-		afdko? (
+		!binary? (
 			mirror://githubcl/adobe-fonts/${PN}/tar.gz/${MY_PVS}
 			-> ${PN}-${MY_PVS/\//-}.tar.gz
 		)
@@ -31,10 +31,10 @@ HOMEPAGE="http://adobe-fonts.github.io/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="afdko"
+IUSE="+binary"
 
 DEPEND="
-	afdko? ( dev-util/afdko )
+	!binary? ( dev-util/afdko )
 "
 RDEPEND=""
 
@@ -43,21 +43,21 @@ DOCS="README.md"
 
 pkg_setup() {
 	if [[ ${PV} == *9999* ]]; then
-		EGIT_BRANCH="$(usex afdko master release)"
+		EGIT_BRANCH="$(usex binary release master)"
 	else
 		local _v
-		_v=$(usex afdko ${MY_PVS} ${MY_PVR})
+		_v=$(usex binary ${MY_PVR} ${MY_PVS})
 		_v="${_v/\//-}"
 		S="${WORKDIR}/${PN}-${_v}"
 		FONT_S="${S}"
 	fi
-	use afdko && DOCS="${DOCS} relnotes.txt"
+	use binary || DOCS="${DOCS} relnotes.txt"
 	font_pkg_setup
 }
 
 src_prepare() {
 	default
-	use afdko || return 0
+	use binary && return 0
 	sed \
 		-e 's:makeotf.*:& 2>> "${T}"/makeotf.log || die "failed to build $family-$w, see ${T}/makeotf.log":' \
 		-e 's:addSVG=.*:addSVG=$(find "${S}" -name addSVGtable.py):' \
@@ -65,11 +65,11 @@ src_prepare() {
 }
 
 src_compile() {
-	if use afdko; then
+	if use binary; then
+		find "${S}" -mindepth 2 -name '*.[ot]tf' -exec mv -f {} "${S}" \;
+	else
 		source "${EROOT}"etc/afdko
 		source "${S}"/build.sh
 		find "${S}" -path '*/target/[OT]TF/*.[ot]tf' -exec mv -f {} "${S}" \;
-	else
-		find "${S}" -mindepth 2 -name '*.[ot]tf' -exec mv -f {} "${S}" \;
 	fi
 }

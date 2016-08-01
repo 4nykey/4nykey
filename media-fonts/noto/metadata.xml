@@ -6,7 +6,6 @@
 	</maintainer>
 	<use>
 		<flag name="emoji">Install additional emoji fonts</flag>
-		<flag name="fontmake">Use <pkg>dev-python/fontmake</pkg> to build fonts from source</flag>
-		<flag name="pipeline">Install WIP fonts created from glyphs files</flag>
+		<flag name="pipeline">Install WIP fonts created from glyphs</flag>
 	</use>
 </pkgmetadata>

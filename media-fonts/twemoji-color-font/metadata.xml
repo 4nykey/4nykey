@@ -4,7 +4,4 @@
 	<maintainer type="person">
 		<email>4nykey@gmail.com</email>
 	</maintainer>
-	<use>
-		<flag name="binary">Install pre-built font instead of building from sources</flag>
-	</use>
 </pkgmetadata>
