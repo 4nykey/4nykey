@@ -1,1 +1,2 @@
-apidocs - Build API documentation using doxygen
+apidocs - Build API documentation
+binary - Use official upstream pre-built binaries
