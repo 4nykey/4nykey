@@ -11,7 +11,7 @@ inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils mozconfig-v6
 
 MY_PN="firefox"
 MOZ_PV="$(get_version_component_range -3)esr"
-PATCH="${MY_PN}-${PV%%.*}.0-patches-04"
+PATCH="${MY_PN}-${PV%%.*}.0-patches-05"
 
 # see https://gitweb.torproject.org/builders/tor-browser-bundle.git/tree/gitian/versions?h=maint-4.0
 # https://dist.torproject.org/torbrowser
@@ -90,8 +90,7 @@ pkg_pretend() {
 
 src_prepare() {
 	# Apply gentoo firefox patches
-	eapply "${WORKDIR}/firefox" \
-		"${FILESDIR}"/${P%%.*}-exedir.patch
+	eapply "${WORKDIR}/firefox"
 
 	# Revert "Change the default Firefox profile directory to be TBB-relative"
 	# https://gitweb.torproject.org/tor-browser.git/commit/?id=72dfe790235d714da084b45d341d3cb46a88cd60
