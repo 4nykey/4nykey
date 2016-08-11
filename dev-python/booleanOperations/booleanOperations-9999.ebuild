@@ -27,7 +27,7 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
-	>=dev-python/cython-0.23.4
+	>=dev-python/cython-0.24
 "
 DEPEND="
 	${RDEPEND}

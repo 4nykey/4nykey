@@ -2,34 +2,34 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/robofab-developers/${PN}.git"
+	EGIT_REPO_URI="https://github.com/typesupply/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="673acdc"
+	MY_PV="3ee4547"
 	SRC_URI="
-		mirror://githubcl/robofab-developers/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/typesupply/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
 
-DESCRIPTION="A library for fonts and type design"
-HOMEPAGE="http://robofab.org"
+DESCRIPTION="A basic OpenType GSUB and GPOS layout engine"
+HOMEPAGE="https://github.com/typesupply/${PN}"
 
-LICENSE="BSD"
+LICENSE="MIT"
 SLOT="0"
 IUSE=""
 
-DEPEND="
-	dev-python/numpy
+RDEPEND="
 	dev-python/fonttools
 "
-RDEPEND="
-	${DEPEND}
+DEPEND="
+	${RDEPEND}
+	dev-python/setuptools
 "

@@ -28,7 +28,8 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
-	dev-python/robofab
+	dev-python/fonttools
+	dev-python/ufoLib
 "
 DEPEND="
 	${RDEPEND}
