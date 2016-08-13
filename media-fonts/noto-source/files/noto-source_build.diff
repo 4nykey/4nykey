@@ -1,0 +1,46 @@
+--- a/build.sh
++++ b/build.sh
+@@ -33,22 +33,25 @@ build_all() {
+ }
+ 
+ build_one() {
++    _d="${1//[^a-zA-Z]/_}"
++    mkdir -p "${_d}"
++    pushd "${_d}" > /dev/null
+     case "$1" in
+         *.plist)
+-            g="${1/.plist/.glyphs}"
++            g="../${1/.plist/.glyphs}"
+             case "$1" in
+                 */NotoSansDevanagariUI-MM.plist)
+                     g="${g/UI/}"
+                     f='Noto Sans Devanagari UI'
+-                    fontmake -g "$g" --mti-source "$1" --family-name "$f"
++                    fontmake -o otf -g "$g" --mti-source ../"$1" --family-name "$f"
+                     ;;
+                 *)
+-                    fontmake -g "$g" --mti-source "$1"
++                    fontmake -o otf -g "$g" --mti-source ../"$1"
+                     ;;
+             esac
+             ;;
+         *.glyphs)
+-            fontmake -i -g "$1"
++            fontmake -o otf -i -g ../"$1"
+             ;;
+         *.ufo)
+             fontmake --keep-overlaps -u "$1" -o ttf
+@@ -58,9 +61,11 @@ build_one() {
+             exit 1
+             ;;
+     esac
+-    if [[ "$?" -ne 0 && "$2" != 'force' ]]; then
+-        exit 1
++    if [[ "$?" -ne 0 ]]; then
++        echo -n " $1" >> "${T}"/_failed
+     fi
++    rm -rf *_ufo
++    popd > /dev/null
+ }
+ 
+ main() {

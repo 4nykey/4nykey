@@ -4,13 +4,12 @@
 
 EAPI=6
 
-CHECKREQS_DISK_BUILD="5920M"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}"
 else
 	inherit vcs-snapshot
-	MY_PV="29f7487"
+	MY_PV="508c42d"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -18,14 +17,14 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit check-reqs multiprocessing font
+inherit multiprocessing font
 
 DESCRIPTION="A WIP versions of the noto fonts"
 HOMEPAGE="https://github.com/googlei18n/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE=""
+IUSE="interpolate multiprocessing"
 
 DEPEND="
 	dev-python/fontmake
@@ -34,28 +33,32 @@ RDEPEND=""
 
 FONT_SUFFIX="otf"
 DOCS="*.md"
+PATCHES=( "${FILESDIR}"/${PN}_build.diff )
 
 src_prepare() {
 	default
-	sed \
-		-e 's:fontmake:& -o otf:' \
+	use interpolate || sed \
+		-e '/fontmake/ s: -i : :' \
 		-i build.sh
 }
 
 src_compile() {
-	local g
-	multijob_init
-	for g in src/*.glyphs src/*/*.plist; do
-		multijob_pre_fork
-		(
-			multijob_child_init
-			/bin/bash ./build.sh build_one "${g}" || \
-			echo -n " ${g}" >> "${T}"/_failed
-		) &
-	done
-	multijob_finish
-	find -type f -size 0 -delete
-	find -name '*.otf' -exec mv -f {} "${S}" \;
+	if use multiprocessing; then
+		local g
+		multijob_init
+		for g in src/*.glyphs src/*/*.plist; do
+			multijob_pre_fork
+			(
+				multijob_child_init
+				/bin/bash ./build.sh build_one "${g}" || \
+				echo -n " ${g}" >> "${T}"/_failed
+			) &
+		done
+		multijob_finish
+	else
+		default
+	fi
+	find -mindepth 3 -maxdepth 3 -name '*.otf' -! -size 0 -exec mv -f {} "${S}" \;
 	[[ -e ${T}/_failed ]] && \
 		ewarn "These fonts failed to build:$(<${T}/_failed)"
 }
