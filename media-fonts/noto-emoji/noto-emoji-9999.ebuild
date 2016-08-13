@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="v${PV//./-}-license-apache"
-	MY_PV="f94b8f3"
+	MY_PV="2c3079c"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
