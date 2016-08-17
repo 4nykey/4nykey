@@ -35,9 +35,9 @@ LICENSE="GPL-3"
 SLOT="0"
 IUSE="+binary latex"
 
-BDEPEND="
+DEPEND="
 	!binary? (
-		<media-gfx/fontforge-20150430[python]
+		media-gfx/fontforge[python]
 		media-gfx/xgridfit
 		dev-python/fonttools
 		dev-util/font-helpers
@@ -68,6 +68,8 @@ src_prepare() {
 }
 
 src_compile() {
+	# fontforge fails with EMFILE otherwise
+	use binary || ulimit -n 4096
 	default
 }
 

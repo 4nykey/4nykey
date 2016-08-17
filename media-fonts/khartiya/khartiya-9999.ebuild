@@ -53,6 +53,8 @@ src_prepare() {
 }
 
 src_compile() {
+	# fontforge fails with EMFILE otherwise
+	use binary || ulimit -n 4096
 	default
 }
 

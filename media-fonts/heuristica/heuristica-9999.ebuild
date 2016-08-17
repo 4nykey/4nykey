@@ -35,9 +35,9 @@ SLOT="0"
 IUSE="+binary latex"
 RESTRICT="primaryuri"
 
-BDEPEND="
+DEPEND="
 	!binary? (
-		<media-gfx/fontforge-20150430[python]
+		media-gfx/fontforge[python]
 		dev-texlive/texlive-fontutils
 		sys-apps/coreutils
 		media-gfx/xgridfit
@@ -55,6 +55,8 @@ src_prepare() {
 }
 
 src_compile() {
+	# fontforge fails with EMFILE otherwise
+	use binary || ulimit -n 4096
 	default
 }
 
