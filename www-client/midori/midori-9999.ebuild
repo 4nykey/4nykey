@@ -38,7 +38,7 @@ RDEPEND="
 	>=dev-libs/glib-2.32.3
 	dev-libs/libxml2
 	>=net-libs/libsoup-2.38:2.4
-	>=net-libs/libsoup-gnome-2.38:2.4
+	!webkit2? ( >=net-libs/libsoup-gnome-2.38:2.4 )
 	>=x11-libs/libnotify-0.7
 	x11-libs/libXScrnSaver
 	gtk2? (
@@ -64,6 +64,9 @@ DEPEND="
 	sys-devel/gettext
 	apidocs? ( dev-util/gtk-doc )
 "
+PATCHES=(
+	"${FILESDIR}"/${PN}_soup-gnome.diff
+)
 
 pkg_setup() {
 	python-any-r1_pkg_setup
