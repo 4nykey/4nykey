@@ -31,8 +31,7 @@ LICENSE="CC-BY-4.0 MIT"
 SLOT="0"
 IUSE="+binary"
 
-DEPEND=""
-RDEPEND="${DEPEND}"
+RDEPEND=""
 FONT_SUFFIX="ttf"
 DOCS=( README.md )
 
@@ -49,7 +48,7 @@ pkg_setup() {
 	else
 		FONT_S="${S}/build"
 		FONT_CONF="${S}/linux/${_fc}"
-		BDEPEND="
+		DEPEND="
 			media-gfx/inkscape
 			media-gfx/imagemagick
 			media-gfx/potrace

@@ -25,9 +25,8 @@ LICENSE="CC-BY-4.0 MIT"
 SLOT="0"
 IUSE=""
 
-DEPEND=""
-RDEPEND="${DEPEND}"
-BDEPEND="
+RDEPEND=""
+DEPEND="
 	dev-python/scfbuild
 "
 FONT_SUFFIX="ttf"

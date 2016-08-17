@@ -4,6 +4,7 @@
 
 EAPI=6
 
+PYTHON_COMPAT=( python2_7 )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}"
@@ -19,7 +20,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 FONT_SUFFIX="ttf"
-inherit font
+inherit python-r1 font
 
 DESCRIPTION="Noto Emoji fonts"
 HOMEPAGE="https://github.com/googlei18n/${PN}"
@@ -39,6 +40,11 @@ DEPEND="
 	x11-libs/cairo
 "
 DOCS="AUTHORS CONTRIBUTORS *.md"
+
+pkg_setup() {
+	font_pkg_setup
+	python_setup
+}
 
 src_prepare() {
 	default
