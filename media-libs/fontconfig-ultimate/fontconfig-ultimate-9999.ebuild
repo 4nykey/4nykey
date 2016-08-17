@@ -1,11 +1,11 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=5
+EAPI=6
 
 EGIT_REPO_URI="https://github.com/bohoomil/fontconfig-ultimate"
-inherit readme.gentoo
+inherit readme.gentoo-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 else
@@ -25,7 +25,7 @@ IUSE="+fonts-ms +fonts-free fonts-extra"
 RDEPEND="app-eselect/eselect-infinality
 	app-eselect/eselect-lcdfilter
 	media-libs/fontconfig-infinality
-	media-libs/freetype:2[infinality]
+	media-libs/freetype:2
 	fonts-ms? (
 		media-fonts/corefonts
 		media-fonts/dejavu
@@ -98,4 +98,8 @@ src_install() {
 
 	dodoc README.md conf.d.infinality/README
 	readme.gentoo_create_doc
+}
+
+pkg_postinst() {
+	readme.gentoo_print_elog
 }
