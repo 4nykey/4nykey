@@ -1,0 +1,22 @@
+diff --git a/Makefile b/Makefile
+index 611e70a..d86c516 100644
+--- a/Makefile
++++ b/Makefile
+@@ -11,14 +11,13 @@ clean:
+ 
+ # pdf support using mupdf
+ fbpdf: fbpdf.o mupdf.o draw.o
+-	$(CC) -o $@ $^ $(LDFLAGS) -lmupdf -lmujs -lfreetype \
+-			-ljbig2dec -ljpeg -lz -lopenjpeg -lm -lcrypto
++	$(CC) -o $@ $^ $(LDFLAGS) `pkg-config --libs mupdf` -lmujs
+ # djvu support
+ fbdjvu: fbpdf.o djvulibre.o draw.o
+-	$(CC) -o $@ $^ $(LDFLAGS) -ldjvulibre -ljpeg -lm -lstdc++ -lpthread
++	$(CC) -o $@ $^ $(LDFLAGS) `pkg-config --libs ddjvuapi`
+ 
+ # pdf support using poppler
+ poppler.o: poppler.c
+-	$(CXX) -c $(CFLAGS) `pkg-config --cflags poppler-cpp` $<
++	$(CXX) -c $(CXXFLAGS) `pkg-config --cflags poppler-cpp` $<
+ fbpdf2: fbpdf.o poppler.o draw.o
+ 	$(CXX) -o $@ $^ $(LDFLAGS) `pkg-config --libs poppler-cpp`
