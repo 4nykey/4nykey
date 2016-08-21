@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/typesupply/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="ad4d1d3"
+	MY_PV="a70a27b"
 	SRC_URI="
 		mirror://githubcl/typesupply/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
