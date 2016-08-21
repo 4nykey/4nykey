@@ -1,0 +1,24 @@
+diff --git a/src/fontview/font_var_axis.cpp b/src/fontview/font_var_axis.cpp
+index ef961a4..2707572 100644
+--- a/src/fontview/font_var_axis.cpp
++++ b/src/fontview/font_var_axis.cpp
+@@ -15,6 +15,7 @@
+  */
+ 
+ #include <string>
++#include <memory>
+ 
+ #include <ft2build.h>
+ #include FT_FREETYPE_H
+diff --git a/src/fontview/main.cpp b/src/fontview/main.cpp
+index 272d53c..90a70ee 100644
+--- a/src/fontview/main.cpp
++++ b/src/fontview/main.cpp
+@@ -21,6 +21,7 @@
+ #include <set>
+ #include <string>
+ #include <vector>
++#include <algorithm>
+ 
+ #include <wx/wx.h>
+ #include <wx/aboutdlg.h>
