@@ -10,6 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="201db95"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/HOST-Oman/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
