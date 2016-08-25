@@ -5,7 +5,7 @@
 EAPI=6
 PYTHON_COMPAT=( python2_7 )
 
-inherit python-r1
+inherit python-single-r1
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
@@ -28,10 +28,10 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 RDEPEND="
 	${PYTHON_DEPS}
-	dev-python/booleanOperations
-	dev-python/MutatorMath
-	dev-python/ufoNormalizer
-	>=dev-python/fonttools-2.5
+	dev-python/booleanOperations[${PYTHON_USEDEP}]
+	dev-python/MutatorMath[${PYTHON_USEDEP}]
+	dev-python/ufoNormalizer[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-2.5[${PYTHON_USEDEP}]
 "
 PATCHES=(
 	"${FILESDIR}"/${PN}-makeotf.diff

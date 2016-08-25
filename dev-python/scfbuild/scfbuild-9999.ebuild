@@ -5,6 +5,7 @@
 EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
+DISTUTILS_SINGLE_IMPL=1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/eosrei/${PN}.git"
@@ -27,9 +28,9 @@ SLOT="0"
 IUSE=""
 
 DEPEND="
-	dev-python/fonttools
-	media-gfx/fontforge[python]
-	dev-python/pyyaml
+	dev-python/fonttools[${PYTHON_USEDEP}]
+	media-gfx/fontforge[python,${PYTHON_USEDEP}]
+	dev-python/pyyaml[${PYTHON_USEDEP}]
 "
 RDEPEND="${DEPEND}"
 

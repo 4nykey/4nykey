@@ -1,15 +1,13 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
-EAPI=5
+EAPI=6
 
-PYTHON_COMPAT=(python2_7)
+PYTHON_COMPAT=( python2_7 )
 WANT_AUTOMAKE="1.8"
-AUTOTOOLS_AUTORECONF="1"
-AUTOTOOLS_IN_SOURCE_BUILD="1"
 
-inherit bash-completion-r1 python-single-r1 autotools-utils
+inherit bash-completion-r1 python-single-r1 autotools
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="git://github.com/thomasvs/morituri.git"
@@ -36,17 +34,18 @@ HOMEPAGE="http://thomas.apestaart.org/morituri/trac"
 LICENSE="GPL-3"
 SLOT="0"
 IUSE="alac doc flac mp3 test vorbis wavpack"
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 RDEPEND="
-	dev-python/pygobject
-	dev-python/gst-python
+	dev-python/pygobject[${PYTHON_USEDEP}]
+	dev-python/gst-python[${PYTHON_USEDEP}]
 	media-sound/cdparanoia
 	app-cdr/cdrdao
 	media-libs/gst-plugins-good
-	dev-python/python-musicbrainz
-	>=dev-python/pycdio-0.19
-	dev-python/pyxdg
-	dev-python/cddb-py
+	dev-python/python-musicbrainz[${PYTHON_USEDEP}]
+	>=dev-python/pycdio-0.19[${PYTHON_USEDEP}]
+	dev-python/pyxdg[${PYTHON_USEDEP}]
+	dev-python/cddb-py[${PYTHON_USEDEP}]
 	alac? ( media-plugins/gst-plugins-ffmpeg )
 	flac? ( media-plugins/gst-plugins-flac )
 	mp3? ( media-plugins/gst-plugins-lame )
@@ -54,9 +53,10 @@ RDEPEND="
 	wavpack? ( media-plugins/gst-plugins-wavpack )
 "
 DEPEND="
-	dev-python/setuptools
-	doc? ( dev-python/epydoc )
-	test? ( dev-python/pychecker )
+	${PYTHON_DEPS}
+	dev-python/setuptools[${PYTHON_USEDEP}]
+	doc? ( dev-python/epydoc[${PYTHON_USEDEP}] )
+	test? ( dev-python/pychecker[${PYTHON_USEDEP}] )
 "
 
 src_prepare() {
@@ -65,24 +65,25 @@ src_prepare() {
 			"${WORKDIR}"/{flog,python-command,python-deps,python-musicbrainz-ngs} \
 			"${S}"/${PN}/extern
 	fi
-	autotools-utils_src_prepare
+	default
+	eautoreconf
 }
 
 src_configure() {
 	ac_cv_prog_EPYDOC="" \
 	ac_cv_path_PYTHON="${EPYTHON}" \
-		autotools-utils_src_configure
+		econf
 }
 
 src_compile() {
-	autotools-utils_src_compile
+	default
 	use doc && \
 		GST_REGISTRY="${T}/registry.xml" epydoc -o doc/reference morituri
 }
 
 src_install() {
 	use doc && local HTML_DOCS=(doc/reference/)
-	autotools-utils_src_install
+	default
 
 	rm -r "${D}"/etc
 	dobashcomp etc/bash_completion.d/rip

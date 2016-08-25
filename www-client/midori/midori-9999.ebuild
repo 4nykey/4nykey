@@ -4,11 +4,9 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 )
-PYTHON_REQ_USE='threads(+)'
 VALA_MIN_API_VERSION="0.30"
 
-inherit eutils pax-utils python-any-r1 vala gnome2 cmake-utils
+inherit eutils pax-utils vala gnome2 cmake-utils
 
 if [[ -z ${PV%%*9999} ]]; then
 	EBZR_REPO_URI="lp:${PN}"
@@ -57,7 +55,6 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	${PYTHON_DEPS}
 	$(vala_depend)
 	dev-util/intltool
 	gnome-base/librsvg
@@ -67,10 +64,6 @@ DEPEND="
 PATCHES=(
 	"${FILESDIR}"/${PN}_soup-gnome.diff
 )
-
-pkg_setup() {
-	python-any-r1_pkg_setup
-}
 
 src_prepare() {
 	default

@@ -20,7 +20,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 FONT_SUFFIX="ttf"
-inherit python-r1 font
+inherit python-single-r1 font
 
 DESCRIPTION="Noto Emoji fonts"
 HOMEPAGE="https://github.com/googlei18n/${PN}"
@@ -28,11 +28,13 @@ HOMEPAGE="https://github.com/googlei18n/${PN}"
 LICENSE="OFL-1.1"
 SLOT="0"
 IUSE="zopfli"
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 RDEPEND=""
 DEPEND="
 	${RDEPEND}
-	dev-python/nototools
+	${PYTHON_DEPS}
+	dev-python/nototools[${PYTHON_USEDEP}]
 	media-gfx/pngquant
 	media-gfx/imagemagick
 	zopfli? ( app-arch/zopfli )

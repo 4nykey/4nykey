@@ -34,12 +34,12 @@ REQUIRED_USE="
 "
 RDEPEND="
 	${PYTHON_DEPS}
-	dev-python/pygtk:2
-	dev-python/dbus-python
-	dev-python/pillow
-	dev-python/numpy
-	dev-python/pycairo
-	media-libs/mlt[python]
+	dev-python/pygtk:2[${PYTHON_USEDEP}]
+	dev-python/dbus-python[${PYTHON_USEDEP}]
+	dev-python/pillow[${PYTHON_USEDEP}]
+	dev-python/numpy[${PYTHON_USEDEP}]
+	dev-python/pycairo[${PYTHON_USEDEP}]
+	media-libs/mlt[python,${PYTHON_USEDEP}]
 	frei0r? ( media-plugins/frei0r-plugins )
 	swh? ( media-plugins/swh-plugins )
 	gmic? ( media-gfx/gmic )

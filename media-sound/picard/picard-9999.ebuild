@@ -5,7 +5,6 @@
 EAPI=5
 PYTHON_COMPAT=( python2_7 )
 DISTUTILS_SINGLE_IMPL=1
-DISABLE_AUTOFORMATTING=true
 PLOCALES="
 af ar ast bg ca cs cy da de el en_CA en_GB en eo es et fa fi fo fr_CA fr fy gl
 he hi hr hu id is it ja kn ko lt mr nb nds ne nl oc pa pl pt_BR pt ro ru sco sk
@@ -32,11 +31,12 @@ SLOT="0"
 IUSE="+acoustid +cdda nls"
 
 DEPEND="
+	${PYTHON_DEPS}
 	dev-python/PyQt4[X,${PYTHON_USEDEP}]
 	dev-qt/qtgui:4[accessibility]
-	media-libs/mutagen
+	media-libs/mutagen[${PYTHON_USEDEP}]
 	acoustid? ( >=media-libs/chromaprint-1.0[tools] )
-	cdda? ( dev-python/python-discid )
+	cdda? ( dev-python/python-discid[${PYTHON_USEDEP}] )
 "
 RDEPEND="${DEPEND}"
 

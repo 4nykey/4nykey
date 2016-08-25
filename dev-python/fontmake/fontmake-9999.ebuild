@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
 inherit distutils-r1
@@ -27,14 +27,14 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
-	dev-python/cu2qu
-	dev-python/glyphsLib
-	dev-python/ufo2ft
-	dev-python/MutatorMath
-	dev-python/booleanOperations
-	dev-python/defcon
+	dev-python/cu2qu[${PYTHON_USEDEP}]
+	dev-python/glyphsLib[${PYTHON_USEDEP}]
+	dev-python/ufo2ft[${PYTHON_USEDEP}]
+	dev-python/MutatorMath[${PYTHON_USEDEP}]
+	dev-python/booleanOperations[${PYTHON_USEDEP}]
+	dev-python/defcon[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
-	dev-python/setuptools
+	dev-python/setuptools[${PYTHON_USEDEP}]
 "

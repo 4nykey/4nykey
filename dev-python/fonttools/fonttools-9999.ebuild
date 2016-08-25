@@ -4,7 +4,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python2_7 python3_{3,4,5} )
 PYTHON_REQ_USE="xml(+)"
 
 inherit distutils-r1
@@ -35,6 +35,6 @@ DEPEND="
 "
 RDEPEND="
 	${DEPEND}
-	brotli? ( app-arch/brotli )
-	zopfli? ( dev-python/py-zopfli )
+	brotli? ( app-arch/brotli[${PYTHON_USEDEP}] )
+	zopfli? ( dev-python/py-zopfli[${PYTHON_USEDEP}] )
 "

@@ -28,7 +28,10 @@ HOMEPAGE="http://ardour.org/"
 LICENSE="GPL-2"
 SLOT="${PV%%.*}"
 IUSE="alsa bindist bundled-libs +c++0x custom-cflags debug doc jack lv2 nls phone-home sanitize sse vst wiimote"
-REQUIRED_USE="|| ( alsa jack )"
+REQUIRED_USE="
+	|| ( alsa jack )
+	${PYTHON_REQUIRED_USE}
+"
 
 RDEPEND="
 	dev-cpp/gtkmm:2.4
@@ -60,6 +63,7 @@ RDEPEND="
 	media-libs/taglib
 	media-libs/vamp-plugin-sdk
 	media-libs/rubberband
+	media-sound/fluidsynth
 	sys-apps/util-linux
 "
 DEPEND="

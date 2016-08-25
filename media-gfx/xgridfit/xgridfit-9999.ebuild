@@ -1,10 +1,10 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
-EAPI=5
+EAPI=6
 
-PYTHON_COMPAT=(python2_7)
+PYTHON_COMPAT=( python2_7 )
 DISTUTILS_SINGLE_IMPL="1"
 inherit distutils-r1
 
@@ -26,7 +26,8 @@ SLOT="0"
 IUSE=""
 
 DEPEND="
-	media-gfx/fontforge[python]
+	${PYTHON_DEPS}
+	media-gfx/fontforge[python,${PYTHON_USEDEP}]
 "
 RDEPEND="
 	${DEPEND}

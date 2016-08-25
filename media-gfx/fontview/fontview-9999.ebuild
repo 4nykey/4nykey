@@ -29,8 +29,10 @@ HOMEPAGE="https://github.com/googlei18n/${PN}"
 LICENSE="Apache-2.0"
 SLOT="0"
 IUSE=""
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 RDEPEND="
+	${PYTHON_DEPS}
 	x11-libs/wxGTK:3.0
 	dev-libs/libraqm
 "

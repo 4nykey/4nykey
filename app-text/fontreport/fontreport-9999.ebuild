@@ -27,11 +27,12 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
+	${PYTHON_DEPS}
 	virtual/tex-base
 	virtual/latex-base
-	>=dev-python/fonttools-3.0
+	>=dev-python/fonttools-3.0[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
-	dev-python/setuptools
+	dev-python/setuptools[${PYTHON_USEDEP}]
 "

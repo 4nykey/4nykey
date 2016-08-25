@@ -26,16 +26,17 @@ HOMEPAGE="http://xdxf.sf.net"
 LICENSE="GPL-2"
 SLOT="0"
 IUSE=""
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 DOCS=( AUTHORS CHANGELOG README.md TODO )
 
 DEPEND="
+	${PYTHON_DEPS}
 	sys-libs/zlib
 	>=dev-libs/glib-2.6.0
 	dev-libs/expat
 "
 RDEPEND="
 	${DEPEND}
-	${PYTHON_DEPS}
 "
 
 src_install() {
