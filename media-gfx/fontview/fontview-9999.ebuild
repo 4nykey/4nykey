@@ -12,6 +12,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_SUBMODULES=( src/third_party/gyp )
 else
 	MY_PV="2697f15"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	MY_GYP="gyp-e7079f0"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -20,7 +21,7 @@ else
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
-	S="${WORKDIR}/${PN}-${MY_PV}"
+	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 
 DESCRIPTION="An app that shows the contents of a font file"
@@ -32,18 +33,22 @@ IUSE=""
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 RDEPEND="
-	${PYTHON_DEPS}
 	x11-libs/wxGTK:3.0
 	dev-libs/libraqm
 "
 DEPEND="
 	${DEPEND}
+	${PYTHON_DEPS}
 	virtual/pkgconfig
 "
-PATCHES=( "${FILESDIR}" )
 
 pkg_setup() {
 	python_setup
+}
+
+src_prepare() {
+	default
+	sed -e "/'dependencies':/,/\]\,/d" -i src/fontview/fontview.gyp
 }
 
 src_unpack() {
