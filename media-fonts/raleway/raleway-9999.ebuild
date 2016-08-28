@@ -9,7 +9,7 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/impallari/Raleway.git"
 else
 	inherit vcs-snapshot
-	MY_PV="010399c"
+	MY_PV="a48dcf5"
 	SRC_URI="
 		mirror://githubcl/impallari/Raleway/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -35,18 +35,23 @@ DOCS="CONTRIBUTORS.txt FONTLOG.txt README.md"
 
 src_prepare() {
 	default
-	use binary && mv "${S}/fonts/OTF v4.006 Glyphs"/*.otf "${FONT_S}"
+	use binary && mv "${S}/fonts/OTF v${PV} Glyphs"/*.otf "${FONT_S}"
 }
 
 src_compile() {
 	use binary && return
 
 	local _g
-	for _g in "${S}"/src/*.glyphs; do
+	for _g in "${S}"/source/*.glyphs; do
+		_d="$(basename ${_g})"
+		_d="${S}/${_d//[^a-zA-Z]/_}"
+		mkdir -p "${_d}"
+		pushd "${_d}" > /dev/null
 		fontmake \
 			--output otf \
 			--interpolate \
 			--glyphs-path "${_g}"
+		mv "${_d}"/instance_otf/*.otf "${FONT_S}"
+		popd > /dev/null
 	done
-	mv "${S}"/instance_otf/*.otf "${FONT_S}"
 }
