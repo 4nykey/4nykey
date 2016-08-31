@@ -12,7 +12,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI=
 else
 	MY_P="${MY_PN}-$(replace_all_version_separators '_')_Linux"
-	MY_SDK="f1f9d50"
+	MY_SDK="d7412bb"
 	SRC_URI="
 		mirror://githubcl/meganz/${MY_P%-*}/tar.gz/v${MY_P##*-}
 		-> ${MY_P}.tar.gz
@@ -49,12 +49,12 @@ DOCS=( CREDITS.md README.md )
 PATCHES=( "${FILESDIR}"/${PN}-qmake.diff )
 
 src_prepare() {
-	default
 	local _sdk="${S}/src/MEGASync/mega"
 	if [[ -n ${PV%%*9999} ]]; then
 		rm -r "${_sdk}"
 		mv -f "${WORKDIR}"/sdk-${MY_SDK} "${_sdk}"
 	fi
+	default
 	cd "${_sdk}"
 	eautoreconf
 }
