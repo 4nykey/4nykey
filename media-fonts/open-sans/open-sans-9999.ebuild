@@ -1,15 +1,15 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
-EAPI=5
+EAPI=6
 
 EGIT_REPO_URI="https://github.com/google/fonts"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 else
-	_base="90abd17b4f97671435798b6147b698aa9087612f"
-	_base="${EGIT_REPO_URI}/raw/${_base}/apache/opensans/OpenSans-"
+	_base="90abd17"
+	_base="mirror://githubraw/google/fonts/${_base}/apache/opensans/OpenSans-"
 	SRC_URI="
 		${_base}Bold.ttf
 		${_base}BoldItalic.ttf
@@ -35,7 +35,7 @@ else
 fi
 inherit font
 
-DESCRIPTION="Open Sans is a clean and modern sans-serif typeface"
+DESCRIPTION="A clean and modern sans-serif typeface for web, print and mobile"
 HOMEPAGE="http://opensans.com/"
 
 LICENSE="Apache-2.0"
@@ -50,8 +50,8 @@ FONT_SUFFIX="ttf"
 src_unpack() {
 	if [[ -z ${PV%%*9999} ]]; then
 		git-r3_src_unpack
-		mv "${S}"/apache/${PN}*/*.ttf "${S}"/
+		mv "${S}"/apache/${PN/-}*/*.ttf "${FONT_S}"/
 	else
-		cp "${DISTDIR}"/*.ttf "${S}"/
+		cp "${DISTDIR}"/*.ttf "${FONT_S}"/
 	fi
 }

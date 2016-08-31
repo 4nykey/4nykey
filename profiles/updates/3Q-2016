@@ -1,3 +1,4 @@
+move media-fonts/opensans media-fonts/open-sans
 move media-fonts/otf2bdf dev-util/otf2bdf
 move media-fonts/source-sans-pro media-fonts/source-sans-pro
 move media-fonts/source-code-pro media-fonts/source-code-pro
