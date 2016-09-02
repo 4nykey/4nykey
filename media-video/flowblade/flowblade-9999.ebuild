@@ -5,6 +5,8 @@
 EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
+PYTHON_REQ_USE="xml(+)"
+DISTUTILS_SINGLE_IMPL=1
 PLOCALES="cs de es fi fr it"
 inherit l10n gnome2 distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
@@ -29,28 +31,26 @@ IUSE="frei0r gmic swh"
 PATCHES=( "${FILESDIR}" )
 S="${WORKDIR}/${P}/${PN}-trunk"
 
-REQUIRED_USE="
-	${PYTHON_REQUIRED_USE}
-"
 RDEPEND="
 	${PYTHON_DEPS}
-	dev-python/pygtk:2[${PYTHON_USEDEP}]
+	dev-python/pygobject:3[cairo,${PYTHON_USEDEP}]
 	dev-python/dbus-python[${PYTHON_USEDEP}]
 	dev-python/pillow[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
-	dev-python/pycairo[${PYTHON_USEDEP}]
 	media-libs/mlt[python,${PYTHON_USEDEP}]
+	gnome-base/librsvg:2[introspection]
+	x11-libs/gtk+:3[introspection]
 	frei0r? ( media-plugins/frei0r-plugins )
 	swh? ( media-plugins/swh-plugins )
 	gmic? ( media-gfx/gmic )
 "
-DEPEND=""
+DEPEND="
+	${RDEPEND}
+"
 DOCS=( AUTHORS README docs/{FAQ,KNOWN_ISSUES,RELEASE_NOTES,ROADMAP}.md )
 
 src_compile() {
-	rmloc() {
-		rm -rf "${S}"/Flowblade/locale/${1}
-	}
+	rmloc() { rm -rf "${S}"/Flowblade/locale/${1}; }
 	l10n_for_each_disabled_locale_do rmloc
 	distutils-r1_src_compile
 }
