@@ -4,6 +4,7 @@
 
 EAPI=6
 
+PYTHON_COMPAT=( python2_7 )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/ossobuffo/${PN}.git"
@@ -24,7 +25,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 	S="${WORKDIR}"
 fi
-inherit font
+inherit python-any-r1 font
 
 DESCRIPTION="A family of sans-serif fonts in the Eurostile vein"
 HOMEPAGE="http://danieljohnson.name/fonts/jura"
@@ -34,7 +35,12 @@ SLOT="0"
 IUSE="+binary"
 
 DEPEND="
-	!binary? ( media-gfx/fontforge )
+	!binary? (
+		${PYTHON_DEPS}
+		$(python_gen_any_dep '
+			media-gfx/fontforge[${PYTHON_USEDEP}]
+		')
+	)
 "
 RDEPEND=""
 
@@ -52,14 +58,10 @@ src_unpack() {
 			default
 		fi
 	fi
+	cp "${FILESDIR}"/generate_otf.py "${S}"
 }
 
 src_compile() {
 	use binary && return
-	local _s
-	for _s in "${S}"/Jura*.sfd; do
-		fontforge -lang=ff \
-			-c 'Open($1); Generate($2,"",0x20+0x40+0x800)' \
-			"${_s}" "${_s%.*}.${FONT_SUFFIX}"
-	done
+	fontforge -quiet -lang=py -script generate_otf.py "${S}"/Jura*.sfd
 }
