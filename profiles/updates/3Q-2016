@@ -1,3 +1,4 @@
+move dev-python/fontmake dev-util/fontmake
 move media-fonts/opensans media-fonts/open-sans
 move media-fonts/otf2bdf dev-util/otf2bdf
 move media-fonts/source-sans-pro media-fonts/source-sans-pro

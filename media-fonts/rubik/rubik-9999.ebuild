@@ -4,7 +4,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python2_7 python3_{3,4,5} )
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}.git"
@@ -30,13 +30,18 @@ DEPEND="
 	!binary? (
 		${PYTHON_DEPS}
 		$(python_gen_any_dep '
-			dev-python/fontmake[${PYTHON_USEDEP}]
+			dev-util/fontmake[${PYTHON_USEDEP}]
 		')
 	)
 "
 
 FONT_SUFFIX="otf"
 DOCS="AUTHORS.txt CONTRIBUTORS.txt README.md"
+
+pkg_setup() {
+	use binary || python-any-r1_pkg_setup
+	font_pkg_setup
+}
 
 src_prepare() {
 	default
@@ -48,6 +53,6 @@ src_compile() {
 
 	fontmake \
 		--output otf \
-		--ufo-paths "${S}"/2_sources/*.ufo
+		--ufo-paths "${S}"/2_sources/*.ufo || die
 	mv "${S}"/master_otf/*.otf "${FONT_S}"
 }

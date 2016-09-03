@@ -5,7 +5,6 @@
 EAPI=6
 
 PYTHON_COMPAT=( python2_7 python3_{3,4,5} )
-DISTUTILS_SINGLE_IMPL=1
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3

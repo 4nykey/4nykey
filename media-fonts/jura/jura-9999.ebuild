@@ -4,7 +4,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python2_7 python3_{3,4,5} )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/ossobuffo/${PN}.git"
@@ -46,6 +46,8 @@ RDEPEND=""
 
 pkg_setup() {
 	FONT_SUFFIX="$(usex binary t o)tf"
+	use binary || python-any-r1_pkg_setup
+	font_pkg_setup
 }
 
 src_unpack() {

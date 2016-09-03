@@ -4,6 +4,7 @@
 
 EAPI=6
 
+PYTHON_COMPAT=( python2_7 )
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/impallari/Raleway.git"
@@ -16,7 +17,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit font
+inherit python-any-r1 font
 
 DESCRIPTION="Raleway is an elegant sans-serif typeface"
 HOMEPAGE="http://www.impallari.com/projects/overview/matt-mcinerneys-raleway-family"
@@ -26,12 +27,22 @@ SLOT="0"
 IUSE="+binary"
 
 DEPEND="
-	!binary? ( dev-python/fontmake )
+	!binary? (
+		${PYTHON_DEPS}
+		$(python_gen_any_dep '
+			dev-util/fontmake[${PYTHON_USEDEP}]
+		')
+	)
 "
 RDEPEND=""
 
 FONT_SUFFIX="otf"
 DOCS="CONTRIBUTORS.txt FONTLOG.txt README.md"
+
+pkg_setup() {
+	use binary || python-any-r1_pkg_setup
+	font_pkg_setup
+}
 
 src_prepare() {
 	default
@@ -50,7 +61,7 @@ src_compile() {
 		fontmake \
 			--output otf \
 			--interpolate \
-			--glyphs-path "${_g}"
+			--glyphs-path "${_g}" || die
 		mv "${_d}"/instance_otf/*.otf "${FONT_S}"
 		popd > /dev/null
 	done

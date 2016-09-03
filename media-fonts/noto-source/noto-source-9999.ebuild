@@ -4,6 +4,7 @@
 
 EAPI=6
 
+PYTHON_COMPAT=( python2_7 python3_{3,4,5} )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}"
@@ -17,7 +18,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit multiprocessing font
+inherit python-any-r1 multiprocessing font
 
 DESCRIPTION="A WIP versions of the noto fonts"
 HOMEPAGE="https://github.com/googlei18n/${PN}"
@@ -27,13 +28,21 @@ SLOT="0"
 IUSE="interpolate multiprocessing"
 
 DEPEND="
-	dev-python/fontmake
+	${PYTHON_DEPS}
+	$(python_gen_any_dep '
+		dev-util/fontmake[${PYTHON_USEDEP}]
+	')
 "
 RDEPEND=""
 
 FONT_SUFFIX="otf"
 DOCS="*.md"
 PATCHES=( "${FILESDIR}"/${PN}_build.diff )
+
+pkg_setup() {
+	python-any-r1_pkg_setup
+	font_pkg_setup
+}
 
 src_prepare() {
 	default
