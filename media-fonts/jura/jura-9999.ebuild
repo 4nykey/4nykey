@@ -7,28 +7,20 @@ EAPI=6
 PYTHON_COMPAT=( python2_7 python3_{3,4,5} )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/ossobuffo/${PN}.git"
-	REQUIRED_USE='!binary'
+	EGIT_REPO_URI="https://github.com/alexeiva/${PN}.git"
 else
+	inherit vcs-snapshot
+	MY_PV="7bdd67f"
 	SRC_URI="
-		binary? (
-			http://danieljohnson.name/ttf/Jura-Light.ttf
-			http://danieljohnson.name/ttf/Jura-Book.ttf
-			http://danieljohnson.name/ttf/Jura-Medium.ttf
-			http://danieljohnson.name/ttf/Jura-DemiBold.ttf
-		)
-		!binary? (
-			http://danieljohnson.name/sfd/${PN}-sfd-${PV}.tar.gz
-		)
+		mirror://githubcl/alexeiva/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
-	S="${WORKDIR}"
 fi
 inherit python-any-r1 font
 
 DESCRIPTION="A family of sans-serif fonts in the Eurostile vein"
-HOMEPAGE="http://danieljohnson.name/fonts/jura"
+HOMEPAGE="http://danieljohnson.name/fonts/jura https://github.com/alexeiva/jura"
 
 LICENSE="GPL-3 OFL-1.1"
 SLOT="0"
@@ -43,27 +35,22 @@ DEPEND="
 	)
 "
 RDEPEND=""
+FONT_SUFFIX="otf"
+DOCS+=" README.md"
 
 pkg_setup() {
-	FONT_SUFFIX="$(usex binary t o)tf"
-	use binary || python-any-r1_pkg_setup
-	font_pkg_setup
-}
-
-src_unpack() {
-	if [[ -z ${PV%%*9999} ]]; then
-		git-r3_src_unpack
+	if use binary; then
+		FONT_S="${S}/fonts/otf"
 	else
-		if use binary; then
-			cp -a "${DISTDIR}"/Jura*.ttf "${FONT_S}"/
-		else
-			default
-		fi
+		python-any-r1_pkg_setup
+		FONT_S="${S}/master_otf"
 	fi
-	cp "${FILESDIR}"/generate_otf.py "${S}"
+	font_pkg_setup
 }
 
 src_compile() {
 	use binary && return
-	fontforge -quiet -lang=py -script generate_otf.py "${S}"/Jura*.sfd
+	fontmake \
+		--glyphs-path sources/1-drawing/Jura.glyphs \
+		--output otf || die
 }
