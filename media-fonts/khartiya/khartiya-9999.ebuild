@@ -1,9 +1,10 @@
 # Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=6
 
+PYTHON_COMPAT=( python2_7 )
 if [[ -z ${PV%%*9999} ]]; then
 	REQUIRED_USE="!binary"
 	SRC_URI="mirror://gcarchive/${PN}/source-archive.zip -> ${P}.zip"
@@ -12,9 +13,7 @@ else
 	S="${WORKDIR}"
 	SRC_URI="
 	binary? (
-		mirror://sourceforge/${PN}/${PN}-ttf-${PV}.tar.xz
 		mirror://sourceforge/${PN}/${PN}-otf-${PV}.tar.xz
-		mirror://sourceforge/${PN}/${PN}-pfb-${PV}.tar.xz
 		latex? (
 			mirror://sourceforge/${PN}/${PN}-tex-${PV}.tar.xz
 		)
@@ -25,7 +24,7 @@ else
 	"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit latex-package font
+inherit python-any-r1 latex-package font
 
 DESCRIPTION="Khartiya is extended Bitstream Charter font"
 HOMEPAGE="http://code.google.com/p/khartiya"
@@ -36,16 +35,24 @@ IUSE="+binary latex"
 
 DEPEND="
 	!binary? (
-		media-gfx/fontforge[python]
+		${PYTHON_DEPS}
+		$(python_gen_any_dep '
+			media-gfx/fontforge[python,${PYTHON_USEDEP}]
+			media-gfx/xgridfit[${PYTHON_USEDEP}]
+		')
 		dev-texlive/texlive-fontutils
 		sys-apps/coreutils
-		media-gfx/xgridfit
 		dev-util/font-helpers
 	)
 "
 RESTRICT="primaryuri"
-FONT_SUFFIX="afm otf pfb ttf"
+FONT_SUFFIX="otf"
 DOCS=( FontLog.txt )
+
+pkg_setup() {
+	python-any-r1_pkg_setup
+	font_pkg_setup
+}
 
 src_prepare() {
 	default
