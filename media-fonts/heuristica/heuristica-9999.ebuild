@@ -1,9 +1,10 @@
 # Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-fonts/heuristica/heuristica-0.2.1.ebuild,v 1.1 2010/03/06 20:02:59 spatz Exp $
+# $Id$
 
 EAPI=6
 
+PYTHON_COMPAT=( python2_7 )
 if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI="mirror://gcarchive/evristika/source-archive.zip -> ${P}.zip"
 	S="${WORKDIR}/evristika/trunk"
@@ -12,9 +13,7 @@ else
 	S="${WORKDIR}"
 	SRC_URI="
 	binary? (
-		mirror://sourceforge/${PN}/${PN}-ttf-${PV}.tar.xz
 		mirror://sourceforge/${PN}/${PN}-otf-${PV}.tar.xz
-		mirror://sourceforge/${PN}/${PN}-pfb-${PV}.tar.xz
 		latex? (
 			mirror://sourceforge/${PN}/${PN}-tex-${PV}.tar.xz
 		)
@@ -25,7 +24,7 @@ else
 	"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit latex-package font
+inherit python-any-r1 latex-package font
 
 DESCRIPTION="A font based on Adobe Utopia"
 HOMEPAGE="http://heuristica.sourceforge.net"
@@ -37,16 +36,24 @@ RESTRICT="primaryuri"
 
 DEPEND="
 	!binary? (
-		media-gfx/fontforge[python]
+		${PYTHON_DEPS}
+		$(python_gen_any_dep '
+			media-gfx/fontforge[python,${PYTHON_USEDEP}]
+			media-gfx/xgridfit[${PYTHON_USEDEP}]
+		')
 		dev-texlive/texlive-fontutils
 		sys-apps/coreutils
-		media-gfx/xgridfit
 		dev-util/font-helpers
 	)
 "
 
-FONT_SUFFIX="afm otf pfb ttf"
+FONT_SUFFIX="otf"
 DOCS="FontLog.txt"
+
+pkg_setup() {
+	python-any-r1_pkg_setup
+	font_pkg_setup
+}
 
 src_prepare() {
 	default
