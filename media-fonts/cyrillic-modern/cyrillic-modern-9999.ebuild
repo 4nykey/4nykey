@@ -4,14 +4,19 @@
 
 EAPI=6
 
+PYTHON_COMPAT=( python2_7 )
+inherit python-any-r1
 if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI="mirror://gcarchive/${PN}/source-archive.zip -> ${P}.zip"
 	S="${WORKDIR}/${PN}/trunk"
 	DEPEND="
-		media-gfx/fontforge[python]
-		dev-python/fonttools
+		${PYTHON_DEPS}
+		$(python_gen_any_dep '
+			media-gfx/fontforge[python,${PYTHON_USEDEP}]
+			dev-python/fonttools[${PYTHON_USEDEP}]
+			dev-util/afdko[${PYTHON_USEDEP}]
+		')
 		dev-util/font-helpers
-		dev-util/afdko
 		dev-libs/kpathsea
 		dev-texlive/texlive-basic
 	"
@@ -35,6 +40,12 @@ RESTRICT="primaryuri"
 FONT_SUFFIX="otf ttc"
 DOCS="FontLog.txt"
 
+pkg_setup() {
+	use latex && DOCS+=" USAGE"
+	python-any-r1_pkg_setup
+	font_pkg_setup
+}
+
 src_prepare() {
 	default
 	[[ -n ${PV%%*9999} ]] && return
@@ -48,7 +59,7 @@ src_compile() {
 	[[ -n ${PV%%*9999} ]] && return
 	# fontforge fails with EMFILE otherwise
 	ulimit -n 4096
-	source "${EPREFIX}"/etc/afdko
+	source /etc/afdko
 	emake otf \
 		$(usex latex 'all nm.map' '') \
 		OTF2OTC="${FDK_EXE}/otf2otc"
