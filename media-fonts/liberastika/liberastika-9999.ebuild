@@ -1,9 +1,10 @@
 # Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=6
 
+PYTHON_COMPAT=( python2_7 )
 if [[ -z ${PV%%*9999} ]]; then
 	REQUIRED_USE="!binary"
 	SRC_URI="mirror://gcarchive/${PN}/source-archive.zip -> ${P}.zip"
@@ -13,9 +14,7 @@ else
 	SRC_URI="
 	binary? (
 		mirror://sourceforge/lib-ka/${PN}-ttf-${PV}.tar.xz
-		latex? (
-			mirror://sourceforge/lib-ka/${PN}-tex-${PV}.tar.xz
-		)
+		latex? ( mirror://sourceforge/lib-ka/${PN}-tex-${PV}.tar.xz )
 	)
 	!binary? (
 		mirror://sourceforge/lib-ka/${PN}-src-${PV}.tar.xz
@@ -23,7 +22,7 @@ else
 	"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit latex-package font
+inherit python-any-r1 latex-package font
 
 DESCRIPTION="Liberastika fonts are fork of Liberation Sans"
 HOMEPAGE="http://lib-ka.sourceforge.net"
@@ -34,13 +33,22 @@ IUSE="+binary latex"
 
 DEPEND="
 	!binary? (
-		media-gfx/fontforge[python]
-		media-gfx/xgridfit
+		${PYTHON_DEPS}
+		$(python_gen_any_dep '
+			media-gfx/fontforge[python,${PYTHON_USEDEP}]
+			media-gfx/xgridfit[${PYTHON_USEDEP}]
+		')
 		dev-util/font-helpers
 	)
 "
 RDEPEND=""
 RESTRICT="primaryuri"
+FONT_SUFFIX="ttf"
+
+pkg_setup() {
+	use binary || python-any-r1_pkg_setup
+	font_pkg_setup
+}
 
 src_prepare() {
 	default
@@ -68,7 +76,6 @@ src_install() {
 		doins "${T}"/${PN}.cfg
 	fi
 	rm -f *.gen.ttf
-	FONT_SUFFIX="$(usex binary '' 'pfb') ttf"
 	font_src_install
 }
 
