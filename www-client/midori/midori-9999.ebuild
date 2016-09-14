@@ -4,8 +4,6 @@
 
 EAPI=6
 
-VALA_MIN_API_VERSION="0.30"
-
 inherit eutils pax-utils vala gnome2 cmake-utils
 
 if [[ -z ${PV%%*9999} ]]; then
@@ -25,32 +23,19 @@ HOMEPAGE="http://www.midori-browser.org/"
 
 LICENSE="LGPL-2.1 MIT"
 SLOT="0"
-IUSE="gtk2 apidocs granite introspection +jit +webkit2 zeitgeist"
-REQUIRED_USE="
-	granite? ( !gtk2 )
-	webkit2? ( !gtk2 )
-	introspection? ( gtk2 )
-"
+IUSE="apidocs granite xscreensaver +jit zeitgeist"
+
 RDEPEND="
+	>=app-crypt/gcr-3:=[gtk]
 	>=dev-db/sqlite-3.6.19:3
-	>=dev-libs/glib-2.32.3
+	>=dev-libs/glib-2.32.3:2
 	dev-libs/libxml2
 	>=net-libs/libsoup-2.38:2.4
-	!webkit2? ( >=net-libs/libsoup-gnome-2.38:2.4 )
 	>=x11-libs/libnotify-0.7
-	x11-libs/libXScrnSaver
-	gtk2? (
-		>=net-libs/webkit-gtk-1.8.1:2[jit=]
-		>=x11-libs/gtk+-2.24:2
-	)
-	!gtk2? (
-		>=app-crypt/gcr-3
-		x11-libs/gtk+:3
-		webkit2? ( >=net-libs/webkit-gtk-2.3.91:4[jit=] )
-		!webkit2? ( >=net-libs/webkit-gtk-1.8.1:3[jit=] )
-	)
+	xscreensaver? ( x11-libs/libXScrnSaver )
+	>=x11-libs/gtk+-3.10.0:3
+	>=net-libs/webkit-gtk-2.3.91:4[jit=]
 	granite? ( >=dev-libs/granite-0.2 )
-	introspection? ( dev-libs/gobject-introspection )
 	zeitgeist? ( >=dev-libs/libzeitgeist-0.3.14 )
 "
 DEPEND="
@@ -66,28 +51,23 @@ PATCHES=(
 )
 
 src_prepare() {
-	default
+	gnome2_src_prepare
 	vala_src_prepare
-	sed -i -e '/install/s:COPYING:HACKING TODO TRANSLATE:' CMakeLists.txt || die
-	strip-linguas -i po
+	sed -i -e '/^install/s:COPYING:HACKING TODO TRANSLATE:' CMakeLists.txt || die
 }
 
 src_configure() {
+	strip-linguas -i po
+
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_DOCDIR=/usr/share/doc/${PF}
 		-DUSE_APIDOCS=$(usex apidocs)
-		-DUSE_GIR=$(usex introspection)
 		-DUSE_GRANITE=$(usex granite)
 		-DUSE_ZEITGEIST=$(usex zeitgeist)
-		-DVALA_EXECUTABLE="${VALAC}"
-		-DUSE_GTK3=$(usex !gtk2)
-		-DHALF_BRO_INCOM_WEBKIT2=$(usex webkit2)
+		-DUSE_XSCREENSAVER=$(usex xscreensaver)
+		-DVALA_EXECUTABLE=${VALAC}
+		-DUSE_GTK3=ON
+		-DHALF_BRO_INCOM_WEBKIT2=ON
 	)
 	cmake-utils_src_configure
-}
-
-src_install() {
-	cmake-utils_src_install
-	einstalldocs
-	use jit && pax-mark -m "${ED}"/usr/bin/${PN} #480290
 }
