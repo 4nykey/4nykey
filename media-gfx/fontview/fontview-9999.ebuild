@@ -5,7 +5,7 @@
 EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
-inherit python-r1 toolchain-funcs
+inherit python-any-r1 toolchain-funcs wxwidgets
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}.git"
@@ -29,11 +29,12 @@ HOMEPAGE="https://github.com/googlei18n/${PN}"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE=""
+IUSE="gtk3"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 RDEPEND="
-	x11-libs/wxGTK:3.0
+	!gtk3? ( x11-libs/wxGTK:3.0 )
+	gtk3? ( x11-libs/wxGTK:3.0-gtk3 )
 	dev-libs/libraqm
 "
 DEPEND="
@@ -43,7 +44,9 @@ DEPEND="
 "
 
 pkg_setup() {
-	python_setup
+	python-any-r1_pkg_setup
+	WX_GTK_VER=$(usex gtk3 3.0-gtk3 3.0)
+	setup-wxwidgets
 }
 
 src_prepare() {
@@ -69,10 +72,10 @@ src_configure() {
 src_compile() {
 	emake \
 		CXX=$(tc-getCXX) \
-		LIBS="$(wx-config-3.0 --libs) \
+		LIBS="$(${WX_CONFIG} --libs) \
 			$(pkg-config --libs fribidi freetype2 harfbuzz raqm)" \
-		CXXFLAGS="$(wx-config-3.0 --cppflags) \
-			$(pkg-config --cflags fribidi freetype2 harfbuzz) -std=c++11" \
+		CXXFLAGS="$(${WX_CONFIG} --cppflags) \
+			$(pkg-config --cflags fribidi freetype2 harfbuzz)" \
 		V=1
 }
 
