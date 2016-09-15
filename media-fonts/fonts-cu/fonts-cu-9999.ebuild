@@ -41,6 +41,7 @@ DEPEND="
 		$(python_gen_any_dep '
 			media-gfx/fontforge[${PYTHON_USEDEP}]
 		')
+		dev-util/grcompiler
 	)
 "
 RDEPEND=""
@@ -54,15 +55,24 @@ pkg_setup() {
 		FONT_S="${S}"
 	else
 		python-any-r1_pkg_setup
-		DOCS+=" README.md"
+		DOCS+=" README.* RUSSIAN"
 	fi
 	font_pkg_setup
 }
 
 src_compile() {
 	use binary && return
-	local _s
+	local _s="${S}/Indiction/IndictionUnicode.sfd"
+
+	# for consistency
+	[[ -f "${_s}" ]] && sed -e '/Layer:/s:TTF:&Layer:' -i "${_s}"
+
 	for _s in */*.sfd; do
-		fontforge -script Ponomar/hp-generate.py ${_s}
+		fontforge -script Ponomar/hp-generate.py ${_s} || die
+	done
+
+	for _s in */*.gdl; do
+		grcompiler "${_s}" "$(dirname ${_s})Unicode.ttf" "${_s%.*}.ttf" || die
+		mv -f "${_s%.*}.ttf" "$(dirname ${_s})Unicode.ttf"
 	done
 }

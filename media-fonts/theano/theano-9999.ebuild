@@ -41,6 +41,7 @@ DEPEND="
 		$(python_gen_any_dep '
 			media-gfx/fontforge[${PYTHON_USEDEP}]
 		')
+		dev-util/grcompiler
 	)
 "
 RDEPEND=""
@@ -61,4 +62,9 @@ pkg_setup() {
 src_compile() {
 	use binary && return
 	fontforge -lang=py -script ${PN}-generate.py || die
+	local _t
+	for _t in *.ttf; do
+		grcompiler "${_t%.*}.gdl" "${_t}" "${T}/${_t}" || die
+		mv -f "${T}/${_t}" "${_t}"
+	done
 }
