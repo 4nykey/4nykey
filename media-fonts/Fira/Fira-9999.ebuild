@@ -1,18 +1,18 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
-EAPI=5
+EAPI=6
 
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3 font
-	EGIT_REPO_URI="https://github.com/mozilla/Fira.git"
+	EGIT_REPO_URI="https://github.com/mozilla/${PN}.git"
 	DOCS="README*"
 else
 	inherit font vcs-snapshot
 	BASE_URI="http://www.carrois.com/downloads/"
 	SRC_URI="
-		mirror://githubcl/mozilla/Fira/tar.gz/${PV} -> ${P}.tar.gz
+		mirror://githubcl/mozilla/${PN}/tar.gz/${PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	DOCS="*.md"
@@ -26,9 +26,9 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-RDEPEND="${DEPEND}"
-FONT_SUFFIX="otf ttf"
-
-src_prepare() {
-	find "${S}" -type f -name '*.[ot]tf' -exec mv {} . \;
-}
+RDEPEND="
+	!media-fonts/fira-mono
+	!media-fonts/fira-sans
+"
+FONT_SUFFIX="otf"
+FONT_S="${S}/otf"
