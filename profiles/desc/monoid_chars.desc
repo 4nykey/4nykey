@@ -1,0 +1,5 @@
+empty_dollar - Enable variants with alternative dollar sign
+dotted_zero - Enable variants with dotted zero
+base_one - Enable variants with alternative 1
+zstyle_l - Enable variants with alternative l
+no_contextual_alternates - Enable variants with disabled contextual alternates
