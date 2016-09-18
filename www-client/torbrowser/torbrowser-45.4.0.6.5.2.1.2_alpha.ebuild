@@ -240,7 +240,7 @@ src_install() {
 
 	# Install icons and .desktop for menu entry
 	local size sizes icon_path
-	sizes="16 22 24 32 48 256"
+	sizes="16 24 32 48 256"
 	icon_path="${S}/browser/branding/official"
 	for size in ${sizes}; do
 		newicon -s ${size} "${icon_path}/default${size}.png" ${PN}.png

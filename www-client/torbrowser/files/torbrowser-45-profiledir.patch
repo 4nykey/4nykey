@@ -39,7 +39,7 @@ index a828d33..831a373 100644
      // We must create the profile directory here if it does not exist.
      nsresult tmp = EnsureDirectoryExists(file);
      if (NS_FAILED(tmp)) {
-@@ -1275,26 +1275,22 @@
+@@ -1275,26 +1275,24 @@
  nsXREDirProvider::GetUserDataDirectoryHome(nsIFile** aFile, bool aLocal)
  {
    // Copied from nsAppFileLocationProvider (more or less)
@@ -49,6 +49,7 @@ index a828d33..831a373 100644
 +  nsresult rv = GetTorBrowserUserDataDir(getter_AddRefs(localDir));
 +  NS_ENSURE_SUCCESS(rv, rv);
  
++#if !defined(ANDROID)
 +#ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
 +  rv = localDir->AppendNative(NS_LITERAL_CSTRING("Browser"));
 +#else
@@ -56,6 +57,7 @@ index a828d33..831a373 100644
 +                                     XPCOM_FILE_PATH_SEPARATOR "Browser"));
 +#endif
 +  NS_ENSURE_SUCCESS(rv, rv);
++#endif
 -  const char* homeDir = getenv("HOME");
  
    if (aLocal) {
