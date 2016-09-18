@@ -1,0 +1,272 @@
+--- a/source/glyphs/FiraMono.glyphs
++++ b/source/glyphs/FiraMono.glyphs
+@@ -111958,7 +111958,6 @@ name = Medium;
+ weightClass = Medium;
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = panose;
+diff --git a/source/glyphs/FiraSans.glyphs b/source/glyphs/FiraSans.glyphs
+index 4607f56..40c2be4 100644
+--- a/source/glyphs/FiraSans.glyphs
++++ b/source/glyphs/FiraSans.glyphs
+@@ -705075,7 +705075,6 @@ weightClass = ExtraLight;
+ widthClass = "Extra Condensed";
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = weightClass;
+@@ -705142,7 +705141,6 @@ weightClass = ExtraLight;
+ widthClass = Condensed;
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = weightClass;
+@@ -705209,7 +705207,6 @@ weightClass = Thin;
+ widthClass = Condensed;
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = weightClass;
+@@ -705276,7 +705273,6 @@ weightClass = Thin;
+ widthClass = Condensed;
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = weightClass;
+@@ -705343,7 +705339,6 @@ weightClass = Thin;
+ widthClass = Condensed;
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = weightClass;
+@@ -705402,7 +705397,6 @@ weightClass = Thin;
+ widthClass = Condensed;
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = weightClass;
+@@ -705490,7 +705484,6 @@ weightClass = UltraLight;
+ widthClass = "Extra Condensed";
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = panose;
+@@ -705541,7 +705534,6 @@ weightClass = ExtraLight;
+ widthClass = Condensed;
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = panose;
+@@ -705617,7 +705609,6 @@ weightClass = Light;
+ widthClass = "Extra Condensed";
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = weightClass;
+@@ -705674,7 +705665,6 @@ name = Book;
+ widthClass = Condensed;
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = panose;
+@@ -705747,7 +705737,6 @@ name = WORK_RegularCompressed;
+ widthClass = "Extra Condensed";
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = panose;
+@@ -705798,7 +705787,6 @@ weightClass = Medium;
+ widthClass = Condensed;
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = panose;
+@@ -705874,7 +705862,6 @@ weightClass = SemiBold;
+ widthClass = "Extra Condensed";
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = panose;
+@@ -705927,7 +705914,6 @@ weightClass = Bold;
+ widthClass = Condensed;
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = panose;
+@@ -705978,7 +705964,6 @@ weightClass = ExtraBold;
+ widthClass = Condensed;
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = panose;
+@@ -706054,7 +706039,6 @@ weightClass = Heavy;
+ widthClass = "Extra Condensed";
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = weightClass;
+--- a/source/glyphs/FiraSansItalic.glyphs
++++ b/source/glyphs/FiraSansItalic.glyphs
+@@ -975023,7 +975023,6 @@ unicode = E003;
+ );
+ instances = (
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = weightClass;
+@@ -975127,7 +975126,6 @@ weightClass = ExtraLight;
+ widthClass = "Extra Condensed";
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = weightClass;
+@@ -975198,7 +975196,6 @@ weightClass = Thin;
+ widthClass = Condensed;
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = weightClass;
+@@ -975269,7 +975266,6 @@ weightClass = ExtraLight;
+ widthClass = Condensed;
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = weightClass;
+@@ -975340,7 +975336,6 @@ weightClass = Thin;
+ widthClass = Condensed;
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = weightClass;
+@@ -975403,7 +975398,6 @@ weightClass = Thin;
+ widthClass = Condensed;
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = weightClass;
+@@ -975495,7 +975489,6 @@ weightClass = UltraLight;
+ widthClass = "Extra Condensed";
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = panose;
+@@ -975550,7 +975543,6 @@ weightClass = ExtraLight;
+ widthClass = Condensed;
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = panose;
+@@ -975630,7 +975622,6 @@ weightClass = Light;
+ widthClass = "Extra Condensed";
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = weightClass;
+@@ -975691,7 +975682,6 @@ name = "Book Italic";
+ widthClass = Condensed;
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = panose;
+@@ -975768,7 +975758,6 @@ name = "WORK_RegularCompressed Italic ";
+ widthClass = "Extra Condensed";
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = panose;
+@@ -975823,7 +975812,6 @@ weightClass = Medium;
+ widthClass = Condensed;
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = panose;
+@@ -975903,7 +975891,6 @@ weightClass = SemiBold;
+ widthClass = "Extra Condensed";
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = panose;
+@@ -975960,7 +975947,6 @@ weightClass = Bold;
+ widthClass = Condensed;
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = panose;
+@@ -976015,7 +976001,6 @@ weightClass = ExtraBold;
+ widthClass = Condensed;
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = panose;
+@@ -976095,7 +976080,6 @@ weightClass = Heavy;
+ widthClass = "Extra Condensed";
+ },
+ {
+-active = 0;
+ customParameters = (
+ {
+ name = weightClass;
