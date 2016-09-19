@@ -1,0 +1,25 @@
+diff --git a/setup.py b/setup.py
+index 55aff0e..36c7638 100755
+--- a/setup.py
++++ b/setup.py
+@@ -60,7 +60,7 @@ ext = Extension("pyclipper",
+ 
+ setup(
+     name='pyclipper',
+-    use_scm_version=True,
++    use_scm_version=False,
+     description='Cython wrapper for the C++ translation of the Angus Johnson\'s Clipper library (ver. 6.2.1)',
+     author='Angus Johnson, Maxime Chalton, Lukas Treyer, Gregor Ratajc',
+     author_email='me@gregorratajc.com',
+@@ -83,10 +83,7 @@ setup(
+         "Topic :: Software Development :: Libraries :: Python Modules"
+     ],
+     ext_modules=[ext],
+-    setup_requires=[
+-       'setuptools_scm>=1.11.1',
+-       'setuptools_scm_git_archive>=1.0',
+-    ] + pytest_runner,
++    setup_requires=pytest_runner,
+     tests_require=['unittest2', 'pytest'],
+     cmdclass=cmdclass,
+ )
