@@ -28,7 +28,9 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
-	>=dev-python/cython-0.24[${PYTHON_USEDEP}]
+	dev-python/pyclipper[${PYTHON_USEDEP}]
+	dev-python/fonttools[${PYTHON_USEDEP}]
+	dev-python/ufoLib[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
