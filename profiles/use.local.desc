@@ -1,0 +1,109 @@
+# This file is deprecated as per GLEP 56 in favor of metadata.xml. Please add
+# your descriptions to your package's metadata.xml ONLY.
+# * generated automatically using egencache *
+
+app-arch/wimlib:fuse - Support mounting WIMs via sys-fs/fuse
+app-arch/wimlib:ntfs - Support direct manipulation on a NTFS volume via sys-fs/ntfs3g
+app-arch/wimlib:openssl - Use SHA-1 implementation from libcrypto (dev-libs/openssl)
+app-arch/wimlib:yasm - Prefer dev-lang/yasm over dev-lang/nasm
+app-crypt/qdigidoc:c++0x - Compile using the C++11 standard
+app-crypt/qdigidoc:nautilus - Build gnome-base/nautilus extension
+app-crypt/qesteidutil:c++0x - Compile using the C++11 standard
+app-text/fbpdf:mupdf - Use app-text/mupdf for rendering
+app-text/fbpdf:poppler - Use app-text/poppler for rendering
+dev-cpp/xsd:ace - Enable support for serializing to/from an ACE CDR stream
+dev-libs/libdigidocpp:c++0x - Compile using the C++11 standard
+dev-python/fonttools:brotli - Enable brotli support, needed for WOFF2
+dev-python/fonttools:zopfli - Enable zopfli compression support
+dev-qt/aseman-qt-tools:keychain - Pull in dev-libs/qtkeychain
+dev-qt/aseman-qt-tools:multimedia - Pull in dev-qt/qtmultimedia
+dev-qt/aseman-qt-tools:positioning - Pull in dev-qt/qtpositioning
+dev-qt/aseman-qt-tools:sensors - Pull in dev-qt/qtsensors
+dev-qt/aseman-qt-tools:webengine - Pull in dev-qt/qtwebengine
+dev-qt/aseman-qt-tools:widgets - Pull in dev-qt/qtwidgets
+media-fonts/Fira:interpolate - Interpolate masters
+media-fonts/noto:emoji - Install additional emoji fonts
+media-fonts/noto:pipeline - Install WIP fonts created from glyphs
+media-fonts/noto-emoji:zopfli - Optimize using app-arch/zopfli
+media-fonts/noto-source:interpolate - Interpolate masters
+media-fonts/noto-source:multiprocessing - Enable multiprocessing (reduced build time, higher RAM usage)
+media-fonts/source-han-sans:monospace - Install monospace fonts
+media-fonts/source-pro:monospace - Install monospace fonts
+media-fonts/source-pro:sans - Install sans fonts
+media-fonts/source-pro:serif - Install serif fonts
+media-gfx/fim:archive - Enable archive support using app-arch/libarchive
+media-gfx/fim:dia - Enable DIA file support via app-office/dia
+media-gfx/fim:graphicsmagick - Enable GraphicsMagick library support
+media-gfx/fim:screen - Add experimental support for running under screen
+media-gfx/fim:xfig - Enable FIG file support via media-gfx/xfig
+media-gfx/fontview:gtk3 - Use GTK+3 instead of GTK+2
+media-libs/chromaprint:tools - Build additional tools
+media-libs/fontconfig-ultimate:fonts-extra - Pull in extra fonts
+media-libs/fontconfig-ultimate:fonts-free - Pull in free fonts
+media-libs/fontconfig-ultimate:fonts-ms - Pull in MS fonts
+media-sound/ardour:bundled-libs - Use bundled libs instead of system installed
+media-sound/ardour:c++0x - Compile using the C++11 standard
+media-sound/ardour:lv2 - Add support for Ladspa V2
+media-sound/ardour:phone-home - Contact ardour.org at startup for new announcements
+media-sound/ardour:sanitize - Turn on AddressSanitizer (requires GCC >= 4.8 or clang >= 3.1)
+media-sound/ardour:sse - Build runtime checked assembler code
+media-sound/ardour:vst - Enable VST plugin support
+media-sound/ardour:wiimote - Enable support for Wii remote
+media-sound/deadbeef:adplug - Enable the AdPlug decoder plugin
+media-sound/deadbeef:alac - Add support for Apple Lossless Audio Codec files
+media-sound/deadbeef:cover - Enable cover art plugin
+media-sound/deadbeef:dumb - Enable media-libs/dumb module library support
+media-sound/deadbeef:gme - Add support for playing various video game music formats
+media-sound/deadbeef:gtk3 - Enable support for GTK+3
+media-sound/deadbeef:mac - Add support for decoding Monkey's Audio files
+media-sound/deadbeef:midi - Enables MIDI support
+media-sound/deadbeef:network - Enable HTTP streaming vfs plugin
+media-sound/deadbeef:pth - Use GNU Portable Threads lib
+media-sound/deadbeef:sid - Build with SID (Commodore 64 Audio) support
+media-sound/deadbeef:tta - Add support for decoding True Audio input files
+media-sound/deadbeef:wma - Add support for decoding Windows Media Audio files
+media-sound/deadbeef:zip - Build vfs_zip plugin
+media-sound/flactag:gcrypt - Use libgcrypt for low-level crypto
+media-sound/jack-audio-connection-kit:celt - Support CELT low delay audio codec (media-libs/celt)
+media-sound/jack-audio-connection-kit:classic - Force enable standard JACK (jackd) even if D-Bus JACK (jackdbus) is enabled too
+media-sound/jack-audio-connection-kit:opus - Support media-libs/opus
+media-sound/morituri:alac - Add support for Apple Lossless Audio Codec files
+media-sound/picard:acoustid - Use media-libs/chromaprint for acoustic fingerprinting
+media-video/flowblade:frei0r - Additional video filters (media-plugins/frei0r-plugins)
+media-video/flowblade:gmic - Additional image filters (media-gfx/gmic)
+media-video/flowblade:swh - Additional audio filters (media-plugins/swh-plugins)
+net-misc/megasync:nautilus - Install the gnome-base/nautilus extension
+net-p2p/rtorrent:c++0x - Compile using the C++11 standard
+sys-block/f3:extras - Compile the extra applications
+www-client/midori:granite - Enable support for the elementary library dev-libs/granite
+www-client/midori:zeitgeist - Add support for Zeitgeist event tracking system
+www-client/torbrowser:custom-optimization - Fine-tune custom compiler optimizations (-Os, -O0, -O1, -O2, -O3)
+www-client/torbrowser:gstreamer-0 - Use gstreamer:0.10 instead of gstreamer:1 for media support
+www-client/torbrowser:hwaccel - Use hardware-accelerated rendering
+www-client/torbrowser:jemalloc3 - Enable or disable jemalloc3 (forced-on when supported prior to 38.0)
+www-client/torbrowser:system-cairo - Use the system-wide x11-libs/cairo instead of bundled.
+www-client/torbrowser:system-harfbuzz - Use the system-wide media-libs/harfbuzz and media-gfx/graphite2 instead of bundled.
+www-client/torbrowser:system-icu - Use the system-wide dev-libs/icu instead of bundled.
+www-client/torbrowser:system-jpeg - Use the system-wide media-libs/libjpeg-turbo instead of bundled.
+www-client/torbrowser:system-libevent - Use the system-wide dev-libs/libevent instead of bundled.
+www-client/torbrowser:system-libvpx - Use the system-wide media-libs/libvpx instead of bundled.
+www-client/torbrowser:system-sqlite - Use the system-wide dev-db/sqlite installation with secure-delete enabled
+www-client/xombrero:gtk3 - Enable support for GTK+3
+x11-misc/gpaste:applet - Enable gpaste-applet
+x11-misc/gpaste:gnome-shell - Install gnome-shell extension
+x11-misc/gxneur:gconf - Enable GConf as configuration backend
+x11-misc/xneur:aspell - Enable spellchecking using app-text/aspell
+x11-misc/xneur:enchant - Enable spell checking using app-text/enchant
+x11-misc/xneur:keylogger - Enable keyboard logger
+x11-themes/candra:gdm - Install gnome-base/gdm theme
+x11-themes/cloak:cinnamon - Install gnome-extra/cinnamon theme
+x11-themes/cloak:firefox - Install firefox theme
+x11-themes/cloak:gdm - Install gnome-base/gdm theme
+x11-themes/cloak:openbox - Install openbox theme
+x11-themes/cloak:xfce - Install xfwm4 theme
+x11-themes/nouvegray-icon-theme:extras - Install extras
+x11-themes/nouvegray-icon-theme:smplayer - Install media-video/smplayer theme
+x11-themes/papirus-suite:libreoffice - Install libreoffice theme
+x11-themes/papirus-suite:sddm - Install sddm theme
+x11-themes/papirus-suite:smplayer - Install smplayer theme
+x11-themes/papirus-suite:vlc - Install vlc theme
