@@ -79,8 +79,7 @@ src_configure() {
 }
 
 src_compile() {
-	local linguas=$(usex nls "$(l10n_get_locales)" '')
-	declare -x linguas
+	use nls || declare -x LINGUAS=''
 	"${PYTHON}" ./build.py || die
 }
 

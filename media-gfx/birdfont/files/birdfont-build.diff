@@ -19,7 +19,7 @@
 -    for f_name in glob.glob('po/*.po'):
 -        lang = f_name.replace ("po/", "").replace (".po", "")
 -        lang = lang.replace ("\\", "/")
-+    for lang in os.environ['linguas'].split():
++    for lang in os.environ['LINGUAS'].split():
          build_path = "build/locale/" + lang + "/LC_MESSAGES/"
          target = build_path + "birdfont.mo"
          run ("mkdir -p " + build_path);
