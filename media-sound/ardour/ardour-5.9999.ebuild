@@ -10,17 +10,14 @@ cs de el en_GB es fr it nn pl pt pt_PT ru sv zh
 PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE='threads(+)'
 MY_PV="${PV//_/-}"
-inherit gnome2 python-any-r1 waf-utils l10n
-if [[ -z ${PV%%*9999} ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="git://git.ardour.org/${PN}/${PN}.git"
-	SRC_URI=
-else
-	inherit vcs-snapshot
-	SRC_URI="mirror://githubcl/Ardour/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz"
-	RESTRICT="primaryuri"
+EGIT_REPO_URI="https://git.ardour.org/${PN}/${PN}.git"
+inherit gnome2 python-any-r1 waf-utils l10n git-r3
+if [[ -n ${PV%%*9999} ]]; then
+	EGIT_COMMIT="${PV}"
+	SRC_URI="https://community.ardour.org/srctar/Ardour-${PV}.0.tar.bz2"
 	KEYWORDS="~amd64 ~x86"
 fi
+SRC_URI=
 
 DESCRIPTION="Digital Audio Workstation"
 HOMEPAGE="http://ardour.org/"
