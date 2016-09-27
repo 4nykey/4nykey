@@ -6,6 +6,5 @@
 	</maintainer>
 	<use>
 		<flag name="interpolate">Interpolate masters</flag>
-		<flag name="multiprocessing">Enable multiprocessing (reduced build time, higher RAM usage)</flag>
 	</use>
 </pkgmetadata>

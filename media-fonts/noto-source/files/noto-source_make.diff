@@ -1,0 +1,16 @@
+--- a/Makefile
++++ b/Makefile
+@@ -12,7 +12,12 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
+-all: build
++glyphs=$(wildcard src/*.glyphs src/*/*.plist src/*/*.ufo)
++targets:=$(addsuffix .built,$(glyphs))
++all: $(targets)
++%.built: %
++	$(SHELL) ./build.sh build_one $<
++	@touch $@
+ 
+ build:
+ 	bash build.sh
