@@ -35,29 +35,18 @@ DEPEND="
 "
 RDEPEND=""
 
+FONT_S="${S}/instance_otf"
 FONT_SUFFIX="otf"
 DOCS="*.md"
-PATCHES=(
-	"${FILESDIR}"/${PN}_build.diff
-	"${FILESDIR}"/${PN}_make.diff
-)
 
 pkg_setup() {
 	python-any-r1_pkg_setup
 	font_pkg_setup
 }
 
-src_prepare() {
-	default
-	use interpolate || sed \
-		-e '/fontmake/ s: -i : :' \
-		-i build.sh
-}
-
-src_install() {
-	find -mindepth 3 -maxdepth 3 -name '*.otf' -! -size 0 \
-		-exec mv -f {} "${FONT_S}" \;
-	[[ -e ${T}/_failed ]] && \
-		ewarn "These fonts failed to build:$(<${T}/_failed)"
-	font_src_install
+src_compile() {
+	cp "${FILESDIR}"/Makefile "${S}"/
+	emake \
+		FONTMAKE="fontmake -o otf $(usex interpolate '-i' '-M')" \
+		all
 }
