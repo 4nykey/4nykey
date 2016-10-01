@@ -4,33 +4,30 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 python3_{3,4,5} )
+PYTHON_COMPAT=( python2_7 python3_{4,5} )
 PYTHON_REQ_USE="xml(+)"
 
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/behdad/${PN}.git"
+	EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
 else
-	inherit vcs-snapshot
-	MY_PV="1b2af58"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
-	SRC_URI="
-		mirror://githubcl/behdad/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
-	"
+	SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.zip"
+	DEPEND="app-arch/unzip"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
 
 DESCRIPTION="Library for manipulating TrueType, OpenType, AFM and Type1 fonts"
-HOMEPAGE="https://github.com/behdad/${PN}"
+HOMEPAGE="https://github.com/${PN}/${PN}"
 
 LICENSE="BSD"
 SLOT="0"
 IUSE="brotli zopfli"
 DOCS=( README.md NEWS )
 
-DEPEND="
+DEPEND+="
+	>=dev-python/setuptools_scm-1.11.1[${PYTHON_USEDEP}]
 	>=dev-python/numpy-1.0.2[${PYTHON_USEDEP}]
 "
 RDEPEND="
