@@ -1,0 +1,10 @@
+--- a/Lib/glyphsLib/interpolation.py
++++ b/Lib/glyphsLib/interpolation.py
+@@ -166,6 +166,7 @@ def add_instances_to_writer(writer, family_name, instance_data, out_dir):
+                 for s in ('weight', 'width', 'custom')},
+             familyName=instance_family,
+             styleName=style_name,
++            postScriptFontName='-'.join((instance_family.split()+style_name.split())),
+             fileName=ufo_path)
+ 
+         writer.writeInfo()
