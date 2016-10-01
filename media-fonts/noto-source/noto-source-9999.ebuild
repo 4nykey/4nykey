@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}"
 else
 	inherit vcs-snapshot
-	MY_PV="7317096"
+	MY_PV="571bec8"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -19,6 +19,11 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-a693140"
+SRC_URI+="
+	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
+	-> ${MY_MK}.tar.gz
+"
 
 DESCRIPTION="A WIP versions of the noto fonts"
 HOMEPAGE="https://github.com/googlei18n/${PN}"
@@ -35,7 +40,7 @@ DEPEND="
 "
 RDEPEND=""
 
-FONT_S="${S}/instance_otf"
+FONT_S="${S}/master_otf"
 FONT_SUFFIX="otf"
 DOCS="*.md"
 
@@ -44,9 +49,23 @@ pkg_setup() {
 	font_pkg_setup
 }
 
+src_unpack() {
+	if [[ -z ${PV%%*9999} ]]; then
+		git-r3_src_unpack
+		unpack ${MY_MK}.tar.gz
+	else
+		vcs-snapshot_src_unpack
+	fi
+}
+
+src_prepare() {
+	default
+	ln -s "${S}"/src/NotoSansDevanagari/NotoSansDevanagari{,UI}-MM.glyphs
+	rm -f "${S}"/NotoSansEthiopic-MM-20160908.glyphs
+}
+
 src_compile() {
-	cp "${FILESDIR}"/Makefile "${S}"/
 	emake \
-		FONTMAKE="fontmake -o otf $(usex interpolate '-i' '-M')" \
-		all
+		INTERPOLATE="$(usex interpolate 'fontmake -o ufo -i -m' '')" \
+		-f "${WORKDIR}"/${MY_MK}/Makefile
 }
