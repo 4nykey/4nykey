@@ -15,18 +15,17 @@ dev-cpp/xsd:ace - Enable support for serializing to/from an ACE CDR stream
 dev-libs/libdigidocpp:c++0x - Compile using the C++11 standard
 dev-python/fonttools:brotli - Enable brotli support, needed for WOFF2
 dev-python/fonttools:zopfli - Enable zopfli compression support
+dev-python/pyclipper:cython - Generate cpp sources with dev-python/cython
 dev-qt/aseman-qt-tools:keychain - Pull in dev-libs/qtkeychain
 dev-qt/aseman-qt-tools:multimedia - Pull in dev-qt/qtmultimedia
 dev-qt/aseman-qt-tools:positioning - Pull in dev-qt/qtpositioning
 dev-qt/aseman-qt-tools:sensors - Pull in dev-qt/qtsensors
 dev-qt/aseman-qt-tools:webengine - Pull in dev-qt/qtwebengine
 dev-qt/aseman-qt-tools:widgets - Pull in dev-qt/qtwidgets
-media-fonts/Fira:interpolate - Interpolate masters
 media-fonts/noto:emoji - Install additional emoji fonts
 media-fonts/noto:pipeline - Install WIP fonts created from glyphs
 media-fonts/noto-emoji:zopfli - Optimize using app-arch/zopfli
 media-fonts/noto-source:interpolate - Interpolate masters
-media-fonts/noto-source:multiprocessing - Enable multiprocessing (reduced build time, higher RAM usage)
 media-fonts/source-han-sans:monospace - Install monospace fonts
 media-fonts/source-pro:monospace - Install monospace fonts
 media-fonts/source-pro:sans - Install sans fonts
