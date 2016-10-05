@@ -19,7 +19,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-a693140"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-0251c9f"
 SRC_URI+="
 	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
 	-> ${MY_MK}.tar.gz
@@ -61,11 +61,11 @@ src_unpack() {
 src_prepare() {
 	default
 	ln -s "${S}"/src/NotoSansDevanagari/NotoSansDevanagari{,UI}-MM.glyphs
-	rm -f "${S}"/NotoSansEthiopic-MM-20160908.glyphs
 }
 
 src_compile() {
 	emake \
+		FONTMAKE="fontmake -o otf" \
 		INTERPOLATE="$(usex interpolate 'fontmake -o ufo -i -m' '')" \
 		-f "${WORKDIR}"/${MY_MK}/Makefile
 }
