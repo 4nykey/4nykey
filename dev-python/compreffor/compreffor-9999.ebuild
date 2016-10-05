@@ -4,13 +4,14 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 python3_{3,4,5} )
+PYTHON_COMPAT=( python2_7 python3_{4,5} )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}.git"
 else
 	inherit vcs-snapshot
 	MY_PV="19fb191"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -24,21 +25,18 @@ HOMEPAGE="https://github.com/googlei18n/${PN}"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE=""
+IUSE="+cython"
 
 RDEPEND="
-	dev-python/fonttools[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.1.1[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
+	cython? ( >=dev-python/cython-0.24[${PYTHON_USEDEP}] )
 "
 
 src_prepare() {
-	sed \
-		-e 's:CXXFLAGS =:CXXFLAGS +=:' \
-		-e '/^CC =/d' \
-		-e 's:\<CC\>:CXX:g' \
-		-i "${S}"/cxx-src/Makefile
-	distutils-r1_src_prepare
+	default
+	use cython && rm -f "${S}"/src/cython/_compreffor.cpp
 }
