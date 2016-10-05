@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlei18n/noto-fonts"
 else
 	inherit vcs-snapshot
-	MY_PV="f07324a"
+	MY_PV="3dfd3e9"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}-fonts/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
