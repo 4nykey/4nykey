@@ -29,21 +29,13 @@ HOMEPAGE="http://id.ee"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-IUSE="c++0x +qt5"
+IUSE=""
 
 RDEPEND="
 	sys-apps/pcsc-lite
 	dev-libs/opensc
-	qt5? (
-		dev-qt/linguist-tools:5
-		dev-qt/qtwidgets:5
-		dev-qt/qtnetwork:5
-	)
-	!qt5? (
-		dev-qt/qtcore:4[ssl]
-		dev-qt/qtgui:4
-		dev-qt/qtwebkit:4
-	)
+	dev-qt/linguist-tools:5
+	dev-qt/qtwidgets:5
 "
 DEPEND="
 	${RDEPEND}
@@ -61,11 +53,7 @@ src_prepare() {
 }
 
 src_configure() {
-	local mycmakeargs
+	local mycmakeargs=()
 	[[ -n ${PV%%*9999} ]] && mycmakeargs=( -DBREAKPAD='' )
-	mycmakeargs+=(
-		-DDISABLE_CXX11=$(usex !c++0x)
-		$(cmake-utils_use_find_package qt5 Qt5Widgets)
-	)
 	cmake-utils_src_configure
 }

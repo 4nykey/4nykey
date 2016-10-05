@@ -29,24 +29,15 @@ HOMEPAGE="http://id.ee"
 
 LICENSE="LGPL-2.1 Nokia-Qt-LGPL-Exception-1.1"
 SLOT="0"
-IUSE="c++0x kde nautilus +qt5"
+IUSE="kde nautilus"
 
 DEPEND="
 	dev-libs/libdigidocpp
 	sys-apps/pcsc-lite
 	dev-libs/opensc
-	qt5? (
-		dev-qt/linguist-tools:5
-		dev-qt/qtwidgets:5
-		dev-qt/qtnetwork:5
-		dev-qt/qtprintsupport:5
-	)
-	!qt5? (
-		dev-qt/qtcore:4[ssl]
-		dev-qt/qtgui:4
-		dev-qt/qtwebkit:4
-	)
-	net-nds/openldap
+	dev-qt/linguist-tools:5
+	dev-qt/qtwidgets:5
+	dev-qt/qtprintsupport:5
 "
 RDEPEND="
 	${DEPEND}
@@ -69,13 +60,11 @@ src_prepare() {
 }
 
 src_configure() {
-	local mycmakeargs
+	local mycmakeargs=()
 	[[ -n ${PV%%*9999} ]] && mycmakeargs=( -DBREAKPAD='' )
 	mycmakeargs+=(
-		-DDISABLE_CXX11=$(usex !c++0x)
 		-DENABLE_KDE=$(usex kde)
 		-DENABLE_NAUTILUS_EXTENSION=$(usex nautilus)
-		$(cmake-utils_use_find_package qt5 Qt5Widgets)
 	)
 	cmake-utils_src_configure
 }

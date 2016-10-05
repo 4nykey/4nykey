@@ -6,6 +6,5 @@
 	</maintainer>
 	<use>
 		<flag name="nautilus">Build gnome-base/nautilus extension</flag>
-		<flag name="c++0x">Compile using the C++11 standard</flag>
 	</use>
 </pkgmetadata>
