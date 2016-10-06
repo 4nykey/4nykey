@@ -1,23 +1,30 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
-EAPI=5
+EAPI=6
 
+PYTHON_COMPAT=( python2_7 )
+FONT_TYPES="otf ttf"
+inherit python-any-r1 font
 if [[ ${PV} == *9999* ]]; then
-	inherit git-r3 font
+	inherit git-r3
 	EGIT_REPO_URI="https://bitbucket.org/georgd/${PN}.git"
 	DEPEND="
-		media-gfx/fontforge[python]
+		${PYTHON_DEPS}
+		$(python_gen_any_dep '
+			media-gfx/fontforge[${PYTHON_USEDEP}]
+		')
 		media-gfx/ttfautohint
 	"
 else
-	MY_P="${PN/eb-g/EBG}-${PV}"
-	S="${WORKDIR}/${MY_P}"
-	inherit unpacker font
-	SRC_URI="https://bitbucket.org/georgd/${PN}/downloads/${MY_P}.zip -> ${P}.zip"
+	inherit vcs-snapshot
+	MY_PV="3590428"
+	SRC_URI="
+		https://bitbucket.org/georgd/${PN}/get/${MY_PV}.tar.gz
+		-> ${P}.tar.gz
+	"
 	RESTRICT="primaryuri"
-	DEPEND="$(unpacker_src_uri_depends)"
 	KEYWORDS="~amd64 ~x86"
 fi
 
@@ -26,17 +33,27 @@ HOMEPAGE="http://www.georgduffner.at/ebgaramond"
 
 LICENSE="OFL-1.1"
 SLOT="0"
+IUSE="
+	$(printf '+font_types_%s ' ${FONT_TYPES})
+"
 
 RDEPEND=""
 
-FONT_SUFFIX="otf ttf"
+FONT_S="${S}/build"
 DOCS="Changes specimen/Specimen.pdf"
 
+pkg_setup() {
+	local t
+	for t in ${FONT_TYPES}; do
+		use font_types_${t} && FONT_SUFFIX+="${t} "
+	done
+	python-any-r1_pkg_setup
+	font_pkg_setup
+}
+
 src_compile() {
-	if [[ ${PV} == *9999* ]]; then
-		emake otf ttf
-		mv build/*.[ot]tf .
-	else
-		mv otf/*.otf ttf/*.ttf .
-	fi
+	emake \
+		$(usex font_types_otf otf '') \
+		$(usex font_types_ttf ttf '') \
+		PY=${PYTHON}
 }
