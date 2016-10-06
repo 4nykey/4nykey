@@ -4,6 +4,7 @@
 
 EAPI=6
 
+FONT_TYPES="otf ttf"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlei18n/noto-fonts"
@@ -24,7 +25,10 @@ HOMEPAGE="http://www.google.com/get/noto"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="cjk emoji +binary pipeline"
+IUSE="
+	cjk emoji +binary pipeline
+	$(printf '+font_types_%s ' ${FONT_TYPES})
+"
 REQUIRED_USE="pipeline? ( binary )"
 
 DEPEND=""
@@ -32,15 +36,23 @@ RDEPEND="
 	cjk? ( media-fonts/noto-cjk )
 	emoji? ( media-fonts/noto-emoji )
 	!binary? ( media-fonts/noto-source )
+	!media-fonts/croscorefonts
 "
 
 FONT_SUFFIX="ttf"
 DOCS="*.md"
 
+pkg_setup() {
+	use pipeline || return
+	use font_types_otf && FONT_SUFFIX+=" otf"
+}
+
 src_prepare() {
 	default
-	mv hinted/Noto*.ttf "${S}"/
+	mv "${S}"/hinted/*.ttf "${FONT_S}"/
 	use pipeline || return
-	FONT_SUFFIX="ttf otf"
-	mv alpha/OTF/from-pipeline/Noto*.otf "${S}"/
+	use font_types_ttf && \
+		mv "${S}"/alpha/from-pipeline/*.ttf "${FONT_S}"/
+	use font_types_otf && \
+		mv "${S}"/alpha/OTF/from-pipeline/*.otf "${FONT_S}"/
 }
