@@ -32,7 +32,6 @@ RDEPEND="app-eselect/eselect-infinality
 		media-fonts/noto
 		fonts-extra? (
 			media-fonts/cantarell
-			media-fonts/croscorefonts
 			media-fonts/droid
 			media-fonts/font-bh-75dpi
 			media-fonts/paratype
@@ -46,7 +45,6 @@ RDEPEND="app-eselect/eselect-infinality
 		media-fonts/heuristica
 		fonts-extra? (
 			media-fonts/cantarell
-			media-fonts/croscorefonts
 			media-fonts/droid
 			media-fonts/font-bh-ttf
 			media-fonts/libertine
