@@ -4,6 +4,7 @@
 
 EAPI=6
 
+FONT_TYPES="otf ttf"
 PYTHON_COMPAT=( python2_7 )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -17,7 +18,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-a693140"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-0251c9f"
 SRC_URI+="
 	!binary? (
 		mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
@@ -30,7 +31,10 @@ HOMEPAGE="https://www.mozilla.org/en-US/styleguide/products/firefox-os/typeface/
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="+binary"
+IUSE="
+	+binary
+	$(printf '+font_types_%s ' ${FONT_TYPES})
+"
 
 DEPEND="
 	!binary? (
@@ -45,7 +49,6 @@ RDEPEND="
 	!media-fonts/fira-mono
 	!media-fonts/fira-sans
 "
-FONT_SUFFIX="otf"
 DOCS="*.md"
 
 pkg_setup() {
@@ -53,7 +56,10 @@ pkg_setup() {
 		PATCHES=( "${FILESDIR}"/${PN}-glyphslib.diff )
 		python-any-r1_pkg_setup
 	fi
-	FONT_S="${S}/$(usex binary otf master_otf)"
+	local t
+	for t in ${FONT_TYPES}; do
+		use font_types_${t} && FONT_SUFFIX+="${t} "
+	done
 	font_pkg_setup
 	. /etc/afdko
 }
@@ -78,8 +84,17 @@ src_prepare() {
 }
 
 src_compile() {
-	use binary && return
-	emake \
-		INTERPOLATE='makeInstancesUFO -a -c -n -dec -d' \
-		-f "${WORKDIR}"/${MY_MK}/Makefile
+	if use binary; then
+		mv -f "${S}"/[ot]tf/*.[ot]tf "${S}"/
+	else
+		local t=" -o ${FONT_SUFFIX}"
+		[[ ${#t} -eq 8 ]] || t=
+		emake \
+			FONTMAKE="fontmake${t}" \
+			INTERPOLATE='makeInstancesUFO -a -c -n -dec -d' \
+			-f "${WORKDIR}"/${MY_MK}/Makefile
+		for t in ${FONT_SUFFIX}; do
+			mv -f "${S}"/master_${t}/*.${t} "${S}"/
+		done
+	fi
 }
