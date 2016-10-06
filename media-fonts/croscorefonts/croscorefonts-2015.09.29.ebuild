@@ -1,1 +1,0 @@
-croscorefonts-9999.ebuild
