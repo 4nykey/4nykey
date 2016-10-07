@@ -4,13 +4,14 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 python3_{3,4,5} )
+FONT_TYPES="otf ttf"
+PYTHON_COMPAT=( python2_7 )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/alexeiva/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="7bdd67f"
+	MY_PV="5618dd4"
 	SRC_URI="
 		mirror://githubcl/alexeiva/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -24,33 +25,44 @@ HOMEPAGE="http://danieljohnson.name/fonts/jura https://github.com/alexeiva/jura"
 
 LICENSE="GPL-3 OFL-1.1"
 SLOT="0"
-IUSE="+binary"
+IUSE="
+	+binary
+	$(printf '+font_types_%s ' ${FONT_TYPES})
+"
 
 DEPEND="
 	!binary? (
 		${PYTHON_DEPS}
 		$(python_gen_any_dep '
-			media-gfx/fontforge[${PYTHON_USEDEP}]
+			dev-util/fontmake[${PYTHON_USEDEP}]
 		')
 	)
 "
 RDEPEND=""
-FONT_SUFFIX="otf"
 DOCS+=" README.md"
 
 pkg_setup() {
-	if use binary; then
-		FONT_S="${S}/fonts/otf"
-	else
-		python-any-r1_pkg_setup
-		FONT_S="${S}/master_otf"
-	fi
+	local t
+	for t in ${FONT_TYPES}; do
+		use font_types_${t} && FONT_SUFFIX+="${t} "
+	done
+	use binary || python-any-r1_pkg_setup
 	font_pkg_setup
 }
 
 src_compile() {
-	use binary && return
-	fontmake \
-		--glyphs-path sources/1-drawing/Jura.glyphs \
-		--output otf || die
+	if use binary; then
+		mv -f "${S}"/fonts/[ot]tf/*.[ot]tf "${S}"/
+	else
+		local t=" -o ${FONT_SUFFIX}"
+		[[ ${#t} -eq 8 ]] || t=
+		fontmake \
+			--glyphs-path sources/Jura.glyphs \
+			--masters-as-instances \
+			${t} \
+			|| die
+		for t in ${FONT_SUFFIX}; do
+			mv -f "${S}"/instance_${t}/*.${t} "${S}"/
+		done
+	fi
 }
