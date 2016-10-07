@@ -5,6 +5,7 @@
 EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
+FONT_TYPES="pfb otf ttf"
 if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI="mirror://gcarchive/evristika/source-archive.zip -> ${P}.zip"
 	S="${WORKDIR}/evristika/trunk"
@@ -13,7 +14,9 @@ else
 	S="${WORKDIR}"
 	SRC_URI="
 	binary? (
-		mirror://sourceforge/${PN}/${PN}-otf-${PV}.tar.xz
+		font_types_pfb? ( mirror://sourceforge/${PN}/${PN}-pfb-${PV}.tar.xz )
+		font_types_otf? ( mirror://sourceforge/${PN}/${PN}-otf-${PV}.tar.xz )
+		font_types_ttf? ( mirror://sourceforge/${PN}/${PN}-ttf-${PV}.tar.xz )
 		latex? (
 			mirror://sourceforge/${PN}/${PN}-tex-${PV}.tar.xz
 		)
@@ -31,8 +34,12 @@ HOMEPAGE="http://heuristica.sourceforge.net"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="+binary latex"
 RESTRICT="primaryuri"
+IUSE="
+	+binary
+	latex
+	$(printf '+font_types_%s ' ${FONT_TYPES})
+"
 
 DEPEND="
 	!binary? (
@@ -47,11 +54,14 @@ DEPEND="
 	)
 "
 
-FONT_SUFFIX="otf"
 DOCS="FontLog.txt"
 
 pkg_setup() {
-	python-any-r1_pkg_setup
+	local t
+	for t in ${FONT_TYPES}; do
+		use font_types_${t} && FONT_SUFFIX+="${t} "
+	done
+	use binary || python-any-r1_pkg_setup
 	font_pkg_setup
 }
 
