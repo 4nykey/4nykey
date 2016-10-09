@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/Aseman-Land/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="4f865ec"
+	MY_PV="48f2217"
 	SRC_URI="
 		mirror://githubcl/Aseman-Land/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -32,7 +32,8 @@ DEPEND="
 	dev-qt/qtprintsupport:5
 "
 RDEPEND="${DEPEND}"
-PATCHES=( "${FILESDIR}" )
+PATCHES=(
+)
 
 src_configure() {
 	eqmake5 \
