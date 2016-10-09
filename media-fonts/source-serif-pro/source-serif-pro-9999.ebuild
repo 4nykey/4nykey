@@ -5,6 +5,7 @@
 EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
+FONT_TYPES="otf ttf"
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-fonts/${PN}"
@@ -25,7 +26,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font
-MY_MK="3c71e576827753fc395f44f4c2d91131-4e1e133"
+MY_MK="3c71e576827753fc395f44f4c2d91131-740f886"
 SRC_URI+="
 	!binary? (
 		mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
@@ -38,7 +39,10 @@ HOMEPAGE="http://adobe-fonts.github.io/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="+binary"
+IUSE="
+	+binary
+	$(printf '+font_types_%s ' ${FONT_TYPES})
+"
 
 DEPEND="
 	!binary? (
@@ -50,23 +54,27 @@ DEPEND="
 "
 RDEPEND=""
 
-FONT_SUFFIX="otf"
 DOCS="README.md"
 
 pkg_setup() {
+	local t
+	for t in ${FONT_TYPES}; do
+		use font_types_${t} && FONT_SUFFIX+="${t} "
+	done
+
 	if [[ ${PV} == *9999* ]]; then
 		EGIT_BRANCH="$(usex binary release master)"
 	else
 		S="${WORKDIR}/${P}$(usex binary R '')"
+		FONT_S="${S}"
 	fi
-	if use binary; then
-		FONT_S="${S}/OTF"
-	else
-		python-any-r1_pkg_setup
-		DOCS="${DOCS} relnotes.txt"
-		source /etc/afdko
-	fi
+
 	font_pkg_setup
+
+	use binary && return
+	python-any-r1_pkg_setup
+	DOCS="${DOCS} relnotes.txt"
+	source /etc/afdko
 }
 
 src_unpack() {
@@ -78,7 +86,14 @@ src_unpack() {
 	fi
 }
 
+src_prepare() {
+	default
+	use binary && mv "${S}"/[OT]TF/*.[ot]tf "${FONT_S}"
+}
+
 src_compile() {
-	use binary || \
-		emake -f "${WORKDIR}"/${MY_MK}/Makefile
+	use binary && return
+	emake \
+		${FONT_SUFFIX} \
+		-f "${WORKDIR}"/${MY_MK}/Makefile
 }
