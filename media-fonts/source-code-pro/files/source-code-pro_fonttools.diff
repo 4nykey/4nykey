@@ -1,0 +1,10 @@
+--- a/addSVGtable.py
++++ b/addSVGtable.py
+@@ -12,6 +12,7 @@
+ 
+ try:
+ 	from fontTools import ttLib, version
++	if not isinstance(version,str): version=version.__version__
+ except ImportError:
+ 	print >> sys.stderr, "ERROR: FontTools Python module is not installed."
+ 	sys.exit(1)
