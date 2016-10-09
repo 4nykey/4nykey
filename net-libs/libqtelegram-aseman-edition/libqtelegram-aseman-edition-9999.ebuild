@@ -4,14 +4,18 @@
 
 EAPI=6
 
+MY_CG="libqtelegram-code-generator-29462b4"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/Aseman-Land/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="v${PV}-stable"
+	MY_PV="1865e02"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}-stable"
 	SRC_URI="
 		mirror://githubcl/Aseman-Land/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/Aseman-Land/${MY_CG%-*}/tar.gz/${MY_CG##*-}
+		-> ${MY_CG}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -31,22 +35,22 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 
-src_configure() {
-	local _g="libqtelegram-generator"
+src_prepare() {
+	default
+	local _c="${S}/${MY_CG%-*}"
 	sed \
-		-e 's:\$ASEMAN_SRC_PATH:"${S}":g' \
-		-e "s:\./${_g}:\"${S}\"/${_g}:" \
-		-ne "/${_g}/p" \
+		-e '/libqtelegram-generator/!d' \
+		-e "s:\$ASEMAN_SRC_PATH:${S}:g" \
 		-i "${S}"/init
-	eqmake5 "${S}"/libqtelegram-code-generator
+	[[ -z ${PV%%*9999} ]] && return
+	rm -r "${_c}"
+	mv -f "${WORKDIR}"/${MY_CG} "${_c}"
+}
 
-	ebegin "Building ${_g}"
-	make ${MAKE_OPTS} >& "${T}"/${_g}.log
-	eend $? || die "failed to build ${_g}, see ${T}/${_g}.log"
-	ebegin "Running ${_g}"
-	source "${S}"/init
-	eend $? || die
-
+src_configure() {
+	eqmake5 -r "${S}"/${MY_CG%-*}
+	emake
+	. "${S}"/init || die
 	eqmake5 CONFIG+=typeobjects
 }
 
