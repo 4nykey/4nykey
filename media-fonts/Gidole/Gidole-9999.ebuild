@@ -4,6 +4,7 @@
 
 EAPI=6
 
+FONT_TYPES="otf ttf"
 PYTHON_COMPAT=( python2_7 )
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
@@ -24,8 +25,9 @@ HOMEPAGE="http://gidole.github.io"
 
 LICENSE="MIT OFL-1.1"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="
+	$(printf '+font_types_%s ' ${FONT_TYPES})
+"
 
 DEPEND="
 	${PYTHON_DEPS}
@@ -35,16 +37,26 @@ DEPEND="
 "
 RDEPEND=""
 
-FONT_SUFFIX="otf"
 DOCS="ReadMe.md"
 
+pkg_setup() {
+	local t
+	for t in ${FONT_TYPES}; do
+		use font_types_${t} && FONT_SUFFIX+="${t} "
+	done
+	font_pkg_setup
+}
+
 src_compile() {
-	fontforge -quiet -lang=py -c \
-	'from sys import argv;\
-	f=fontforge.open(argv[1]);\
-	f.encoding="UnicodeFull";\
-	f.selection.all();\
-	f.generate(argv[2],flags=("opentype"));\
-	f.close()' \
-	Source/Gidole-Regular.sfdir Gidole-Regular.otf || die
+	local t
+	for t in ${FONT_SUFFIX}; do
+		fontforge -quiet -lang=py -c \
+		'from sys import argv;\
+		f=fontforge.open(argv[1]);\
+		f.encoding="UnicodeFull";\
+		f.selection.all();\
+		f.generate(argv[2],flags=("opentype"));\
+		f.close()' \
+		Source/Gidole-Regular.sfdir Gidole-Regular.${t} || die
+	done
 }
