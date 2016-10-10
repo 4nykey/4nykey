@@ -9,15 +9,22 @@ inherit python-any-r1 toolchain-funcs wxwidgets
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}.git"
-	EGIT_SUBMODULES=( src/third_party/gyp )
+	EGIT_SUBMODULES=(
+		src/third_party/gyp
+		src/third_party/raqm/libraqm
+		src/third_party/ucdn/ucdn
+	)
 else
-	MY_PV="2697f15"
+	MY_PV="a0581ed"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
-	MY_GYP="gyp-e7079f0"
+	MY_G="gyp-e7079f0"
+	MY_R="libraqm-59d68d5"
+	MY_U="ucdn-6ca0116"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
-		https://chromium.googlesource.com/external/${MY_GYP%-*}/+archive/${MY_GYP##*-}.tar.gz
-		-> ${MY_GYP}.tar.gz
+		mirror://githubcl/bnoordhuis/${MY_G%-*}/tar.gz/${MY_G##*-} -> ${MY_G}.tar.gz
+		mirror://githubcl/HOST-Oman/${MY_R%-*}/tar.gz/${MY_R##*-} -> ${MY_R}.tar.gz
+		mirror://githubcl/grigorig/${MY_U%-*}/tar.gz/${MY_U##*-} -> ${MY_U}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -35,7 +42,6 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 RDEPEND="
 	!gtk3? ( x11-libs/wxGTK:3.0 )
 	gtk3? ( x11-libs/wxGTK:3.0-gtk3 )
-	dev-libs/libraqm
 "
 DEPEND="
 	${DEPEND}
@@ -51,17 +57,14 @@ pkg_setup() {
 
 src_prepare() {
 	default
-	sed -e "/'dependencies':/,/\]\,/d" -i src/fontview/fontview.gyp
-}
+	sed \
+		-e '/\(freetype\|fribidi\|harfbuzz\|wxWidgets\)/d' \
+		-i "${S}"/src/fontview/fontview.gyp "${S}"/src/third_party/raqm/raqm.gyp
 
-src_unpack() {
-	if [[ -z ${PV%%*9999} ]]; then
-		git-r3_src_unpack
-	else
-		unpack ${P}.tar.gz
-		cd "${S}"/src/third_party/${MY_GYP%-*}
-		unpack ${MY_GYP}.tar.gz
-	fi
+	[[ -z ${PV%%*9999} ]] && return
+	mv "${WORKDIR}"/${MY_G}/* "${S}"/src/third_party/gyp/
+	mv "${WORKDIR}"/${MY_R}/* "${S}"/src/third_party/raqm/libraqm/
+	mv "${WORKDIR}"/${MY_U}/* "${S}"/src/third_party/ucdn/ucdn/
 }
 
 src_configure() {
@@ -72,10 +75,12 @@ src_configure() {
 src_compile() {
 	emake \
 		CXX=$(tc-getCXX) \
+		CC=$(tc-getCC) \
 		LIBS="$(${WX_CONFIG} --libs) \
-			$(pkg-config --libs fribidi freetype2 harfbuzz raqm)" \
+			$(pkg-config --libs fribidi freetype2 harfbuzz)" \
 		CXXFLAGS="$(${WX_CONFIG} --cppflags) \
 			$(pkg-config --cflags fribidi freetype2 harfbuzz)" \
+		CFLAGS="$(pkg-config --cflags fribidi freetype2 harfbuzz)" \
 		V=1
 }
 
