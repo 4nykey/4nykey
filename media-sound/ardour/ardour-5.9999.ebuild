@@ -51,6 +51,7 @@ RDEPEND="
 	jack? ( virtual/jack )
 	!bundled-libs? (
 		media-libs/libltc
+		media-libs/qm-dsp
 	)
 	media-libs/liblo
 	wiimote? (
@@ -71,13 +72,16 @@ DEPEND="
 	doc? ( app-doc/doxygen )
 "
 
-PATCHES=( "${FILESDIR}"/${PN}${SLOT}-revision.diff )
+PATCHES=(
+	"${FILESDIR}"/${PN}${SLOT}-revision.diff
+	"${FILESDIR}"/${PN}${SLOT}-lv2.diff
+)
 DOCS=( README TRANSLATORS doc/monitor_modes.pdf )
 
 src_prepare() {
 	default
 	my_lcmsg() {
-		rm -f {gtk2_ardour,libs/ardour,libs/gtkmm2ext}/po/${1}.po
+		rm -f {gtk2_ardour,gtk2_ardour/appdata,libs/ardour,libs/gtkmm2ext}/po/${1}.po
 	}
 	sed \
 		-e 's:AudioEditing:X-&:' \
@@ -118,7 +122,7 @@ src_compile() {
 	MY_PV="${MY_PV}" \
 	"${WAF_BINARY}" \
 		--jobs=$(makeopts_jobs) --verbose \
-		build $(usex nls i18n '')
+		build $(usex nls i18n '') || die
 }
 
 src_install() {
