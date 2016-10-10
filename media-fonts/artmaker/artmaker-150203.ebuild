@@ -27,6 +27,8 @@ KEYWORDS="~amd64 ~x86"
 IUSE="
 	$(printf '+font_types_%s ' ${FONT_TYPES})
 "
+REQUIRED_USE+=" || ( $(printf 'font_types_%s ' ${FONT_TYPES}) )"
+
 DEPEND="$(unpacker_src_uri_depends)"
 RDEPEND=""
 

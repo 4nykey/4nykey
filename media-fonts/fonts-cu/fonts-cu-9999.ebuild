@@ -37,6 +37,7 @@ IUSE="
 	+binary
 	$(printf '+font_types_%s ' ${FONT_TYPES})
 "
+REQUIRED_USE+=" || ( $(printf 'font_types_%s ' ${FONT_TYPES}) )"
 
 DEPEND="
 	binary? ( app-arch/unzip )

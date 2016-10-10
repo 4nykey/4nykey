@@ -36,6 +36,7 @@ SLOT="0"
 IUSE="
 	$(printf '+font_types_%s ' ${FONT_TYPES})
 "
+REQUIRED_USE+=" || ( $(printf 'font_types_%s ' ${FONT_TYPES}) )"
 
 RDEPEND=""
 
