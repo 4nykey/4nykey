@@ -49,9 +49,11 @@ pkg_setup() {
 
 src_prepare() {
 	default
+	# force rebuild
 	touch "${S}"/Makefile
-	has_version media-gfx/sortsmill-tools && return
-	sed -e 's:, "no-mac-names"::' -i "${S}"/tools/build.py
+	# strip flag that fontforge doesn't understand
+	has_version media-gfx/sortsmill-tools || \
+		sed -e 's:, "no-mac-names"::' -i "${S}"/tools/build.py
 }
 
 src_compile() {
