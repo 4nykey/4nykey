@@ -1,8 +1,8 @@
 # Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/gmpy/Attic/gmpy-1.17.ebuild,v 1.4 2014/10/22 10:03:39 idella4 dead $
+# $Id$
 
-EAPI=5
+EAPI=6
 
 PYTHON_COMPAT=( python{2_7,3_4,3_5} )
 
