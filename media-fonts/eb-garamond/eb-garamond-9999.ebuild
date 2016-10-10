@@ -53,7 +53,6 @@ pkg_setup() {
 
 src_compile() {
 	emake \
-		$(usex font_types_otf otf '') \
-		$(usex font_types_ttf ttf '') \
+		${FONT_SUFFIX} \
 		PY=${PYTHON}
 }

@@ -79,8 +79,7 @@ src_prepare() {
 src_compile() {
 	use binary && return
 	emake \
-		$(usex font_types_otf otf '') \
-		$(usex font_types_ttf ttf '') \
+		${FONT_SUFFIX} \
 		FF=fontforge IFP=true
 }
 

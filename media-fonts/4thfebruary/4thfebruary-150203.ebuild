@@ -40,6 +40,7 @@ pkg_setup() {
 	for t in ${FONT_TYPES}; do
 		use font_types_${t} && FONT_SUFFIX+="${t} "
 	done
+	font_pkg_setup
 }
 
 src_prepare() {
