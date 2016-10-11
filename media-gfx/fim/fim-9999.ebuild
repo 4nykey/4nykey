@@ -1,6 +1,6 @@
-# Copyright 1999-2007 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=6
 
@@ -25,10 +25,15 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="
 aalib archive debug dia djvu exif fbcon gif graphicsmagick imagemagick imlib
-jpeg pdf png postscript readline +screen sdl svg tiff truetype xfig
+jpeg jpeg2k pdf png postscript readline +screen sdl svg tiff truetype xfig
 "
 
-PATCHES=( "${FILESDIR}" )
+PATCHES=(
+	"${FILESDIR}"/${PN}-aalib.diff
+	"${FILESDIR}"/${PN}-parallel_make.diff
+	"${FILESDIR}"/${PN}-poppler.diff
+	"${FILESDIR}"/${PN}-string.diff
+)
 
 DEPEND="
 	graphicsmagick? ( media-gfx/graphicsmagick )
@@ -37,6 +42,7 @@ DEPEND="
 	tiff? ( media-libs/tiff:0 )
 	readline? ( sys-libs/readline:0 )
 	jpeg? ( virtual/jpeg:62 )
+	jpeg2k? ( media-libs/jasper )
 	postscript? ( app-text/libspectre )
 	djvu? ( app-text/djvu )
 	pdf? ( app-text/poppler[cairo] )
@@ -86,6 +92,7 @@ src_configure() {
 		$(use_enable tiff)
 		$(use_enable readline)
 		$(use_enable jpeg)
+		$(use_enable jpeg2k jasper)
 		$(use_enable postscript ps)
 		$(use_enable djvu)
 		$(use_enable pdf)

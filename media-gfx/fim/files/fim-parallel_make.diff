@@ -6,7 +6,7 @@
  
 -yacc.tab.hpp yacc.tab.cpp: yacc.ypp lex.lex
 +yacc.tab.cpp: yacc.ypp lex.lex
- 	$(YACC) $(YFLAGS) $< -o $@
+ 	LC_ALL=C $(YACC) $(YFLAGS) $< -o $@
  
 +yacc.tab.hpp: yacc.tab.cpp
 +
