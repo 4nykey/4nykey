@@ -38,7 +38,7 @@ RDEPEND="
 		x11-libs/cairo
 		x11-libs/gdk-pixbuf:2
 		x11-libs/gtk+:3
-		net-libs/webkit-gtk:3=
+		net-libs/webkit-gtk:4
 		net-libs/libsoup:2.4
 		x11-libs/libnotify
 	)
