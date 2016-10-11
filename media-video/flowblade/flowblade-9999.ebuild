@@ -28,7 +28,9 @@ HOMEPAGE="http://jliljebl.github.io/flowblade"
 LICENSE="GPL-3"
 SLOT="0"
 IUSE="frei0r gmic swh"
-PATCHES=( "${FILESDIR}" )
+PATCHES=(
+	"${FILESDIR}"/${PN}-modpath.diff
+)
 S="${WORKDIR}/${P}/${PN}-trunk"
 
 RDEPEND="
