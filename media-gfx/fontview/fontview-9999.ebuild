@@ -40,11 +40,14 @@ IUSE="gtk3"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 RDEPEND="
+	dev-libs/fribidi
+	media-libs/freetype:2
+	media-libs/harfbuzz
 	!gtk3? ( x11-libs/wxGTK:3.0 )
 	gtk3? ( x11-libs/wxGTK:3.0-gtk3 )
 "
 DEPEND="
-	${DEPEND}
+	${RDEPEND}
 	${PYTHON_DEPS}
 	virtual/pkgconfig
 "
@@ -68,19 +71,20 @@ src_prepare() {
 }
 
 src_configure() {
-	sh "${S}"/src/third_party/gyp/gyp -f make --depth . \
-		src/fontview/fontview.gyp || die
+	${EPYTHON} "${S}"/src/third_party/gyp/gyp_main.py \
+		-f make --depth . \
+		"${S}"/src/fontview/fontview.gyp || die
 }
 
 src_compile() {
+	local _pc="$(tc-getPKG_CONFIG)"
 	emake \
 		CXX=$(tc-getCXX) \
 		CC=$(tc-getCC) \
 		LIBS="$(${WX_CONFIG} --libs) \
-			$(pkg-config --libs fribidi freetype2 harfbuzz)" \
-		CXXFLAGS="$(${WX_CONFIG} --cppflags) \
-			$(pkg-config --cflags fribidi freetype2 harfbuzz)" \
-		CFLAGS="$(pkg-config --cflags fribidi freetype2 harfbuzz)" \
+			$(${_pc} --libs fribidi freetype2 harfbuzz)" \
+		CPPFLAGS="$(${WX_CONFIG} --cppflags) \
+			$(${_pc} --cflags fribidi freetype2 harfbuzz)" \
 		V=1
 }
 
