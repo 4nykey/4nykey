@@ -4,88 +4,86 @@
 
 EAPI=6
 
-MY_INC="c6c7e43"
-MY_MP="mplus-TESTFLIGHT-061"
-MY_IPA="IPAfont00303"
+MY_IN="Inconsolata-613f4f0" #20161011 https://github.com/m4rc1e/Inconsolata
+MY_MP="mplus-TESTFLIGHT-062" #20160930 https://osdn.net/projects/mplus-fonts/releases/62344
+MY_IP="ipag00303"
+FONT_SUFFIX="ttf"
+S="${WORKDIR}"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/seinto1003/${PN}.git"
-	ECVS_USER="anonymous"
-	REQUIRED_USE="!binary"
+	EGIT_REPO_URI="https://github.com/m4rc1e/Inconsolata.git"
 else
 	SRC_URI="
-		binary? (
-			http://www.rs.tus.ac.jp/yyusa/${PN}_diminished/${PN}_diminished-${PV}.tar.gz
-		)
-		!binary? (
-			http://www.rs.tus.ac.jp/yyusa/${PN}/${PN}_generator-${PV}.sh
-			http://www.rs.tus.ac.jp/yyusa/${PN}/${PN}_discord_converter.pe
-		)
+		http://www.rs.tus.ac.jp/yyusa/${PN}/${PN}_generator-${PV}.sh
+		mirror://githubcl/m4rc1e/${MY_IN%-*}/tar.gz/${MY_IN##*-}
+		-> ${MY_IN}.tar.gz
 	"
-	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit font
+RESTRICT="primaryuri bindist"
 
 DESCRIPTION="A monotype font combining Inconsolata and Japanese M+/IPA"
 HOMEPAGE="http://www.rs.tus.ac.jp/yyusa/ricty.html"
 SRC_URI+="
-	!binary? (
-		mirror://githubraw/google/fonts/${MY_INC}/ofl/inconsolata/Inconsolata-Regular.ttf
-		mirror://githubraw/google/fonts/${MY_INC}/ofl/inconsolata/Inconsolata-Bold.ttf
-		http://www.rs.tus.ac.jp/yyusa/${PN}/regular2oblique_converter.pe
-		https://osdn.jp/dl/mplus-fonts/${MY_MP}.tar.xz
-		http://dl.ipafont.ipa.go.jp/IPAfont/${MY_IPA}.zip
-	)
+	http://www.rs.tus.ac.jp/yyusa/${PN}/${PN}_discord_converter.pe
+	http://www.rs.tus.ac.jp/yyusa/${PN}/regular2oblique_converter.pe
+	https://osdn.jp/dl/mplus-fonts/${MY_MP}.tar.xz
+	http://dl.ipafont.ipa.go.jp/IPAfont/${MY_IP}.zip
 "
 
-LICENSE="BSD-2 OFL-1.1 IPAfont"
+LICENSE="OFL-1.1 IPAfont"
 SLOT="0"
-IUSE="+binary bindist"
-REQUIRED_USE+=" bindist? ( binary )"
+IUSE=""
 
 DEPEND="
-	!binary? ( media-gfx/fontforge )
+	media-gfx/fontforge
 "
 RDEPEND=""
 
-FONT_SUFFIX="ttf"
-S="${WORKDIR}"
-FONT_S="${S}"
-
 src_unpack() {
-	[[ -z ${PV%%*9999} ]] && git-r3_src_unpack
-	if use binary; then
-		unpack ${PN}_diminished-${PV}.tar.gz
+	unpack ${MY_MP}.tar.xz ${MY_IP}.zip
+	local x
+	if [[ -z ${PV%%*9999} ]]; then
+		wget --no-verbose http://www.rs.tus.ac.jp/yyusa/${PN}/${PN}_generator.sh
+		EGIT_CHECKOUT_DIR="${S}/${MY_IN}" git-r3_src_unpack
 	else
-		unpack ${MY_MP}.tar.xz ${MY_IPA}.zip
+		cp "${DISTDIR}"/${PN}_generator-${PV}.sh "${S}"/${PN}_generator.sh
+		unpack ${MY_IN}.tar.gz
 	fi
 }
 
 src_prepare() {
 	default
-	use binary || \
-	cp "${WORKDIR}"/${MY_IPA}/ipag.ttf "${FILESDIR}"/m++ipa.pe \
-		"${WORKDIR}"/${MY_MP}/
+	printf 'family = "Migu 1M"\n' > "${S}"/m++ipa.pe
+	sed -e '/panose_mono.*=/!d' ${MY_MP}/m++ipa.pe >> "${S}"/m++ipa.pe
+	sed \
+		-e '/Open(Mplus1m)/,/Close()/!d' \
+		-e "s:Mplus1m:\"${MY_MP}/mplus-1m-regular.ttf\":" \
+		-e '/SetFontNames(/ s:(family +:("Migu-1M" +:' \
+		-e 's:family + ".ttf:"migu-1m-regular.ttf:' \
+		-e "s:KanjiFont:\"${MY_IP}/ipag.ttf\":" \
+		${MY_MP}/m++ipa.pe > "${T}"/_rgl
+	sed \
+		-e 's:Regular:Bold:g' \
+		-e 's:regular:bold:g' \
+		"${T}"/_rgl > "${T}"/_bld
+	cat "${T}"/_rgl "${T}"/_bld >> "${S}"/m++ipa.pe
+	sed -e 's:\<65551\>:"zero.ss02":' \
+		"${DISTDIR}/${PN}_discord_converter.pe" > "${S}"/discord.pe
 }
 
 src_compile() {
-	use binary && return
+	fontforge -script "${S}"/m++ipa.pe || die
 
-	local _g="${DISTDIR}/${PN}_generator-${PV}.sh"
-	[[ -z ${PV%%*9999} ]] && _g="${WORKDIR}/${P}/${PN}_generator.sh"
-
-	pushd "${WORKDIR}"/${MY_MP}/ > /dev/null
-	fontforge -script m++ipa.pe || die
-	popd > /dev/null
-
-	sh "${_g}" \
-		"${DISTDIR}"/Inconsolata-{Regular,Bold}.ttf \
-		"${WORKDIR}"/${MY_MP}/migu-1m-{regular,bold}.ttf \
+	sh "${S}"/${PN}_generator.sh \
+		"${S}"/${MY_IN}/fonts/ttf/Inconsolata-{Regular,Bold}.ttf \
+		"${S}"/migu-1m-{regular,bold}.ttf \
 		|| die
 
+	fontforge -script "${S}"/discord.pe -r Ricty*.ttf || die
 	fontforge -script "${DISTDIR}"/regular2oblique_converter.pe \
 		Ricty*.ttf || die
 
-	mv -f Ricty*.ttf "${FONT_S}"/
+	rm -f "${S}"/migu-1m-{regular,bold}.ttf
 }
