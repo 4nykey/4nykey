@@ -71,10 +71,10 @@ pkg_setup() {
 
 src_compile() {
 	use binary && return
-	local _s="${S}/Indiction/IndictionUnicode.sfd"
+	local _s
 
 	# for consistency
-	[[ -f "${_s}" ]] && sed -e '/Layer:/s:\<TTF\>:&Layer:' -i "${_s}"
+	sed -e '/Layer:/s:\<TTF\>:&Layer:' -i "${S}"/*/*.sfd
 
 	for _s in */*.sfd; do
 		fontforge -script Ponomar/hp-generate.py ${_s} || die
