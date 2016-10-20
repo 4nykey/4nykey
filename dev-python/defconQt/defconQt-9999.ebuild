@@ -4,7 +4,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_{3,4,5} )
+PYTHON_COMPAT=( python3_{4,5} )
 PYTHON_REQ_USE="xml(+)"
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
