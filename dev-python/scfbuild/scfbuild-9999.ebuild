@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/eosrei/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="c179c8d"
+	MY_PV="b953192"
 	SRC_URI="
 		mirror://githubcl/eosrei/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -28,11 +28,14 @@ SLOT="0"
 IUSE=""
 
 DEPEND="
-	dev-python/fonttools[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-2.5[${PYTHON_USEDEP}]
 	media-gfx/fontforge[python,${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 "
 RDEPEND="${DEPEND}"
+PATCHES=(
+	"${FILESDIR}"/${PN}-no_fonttools_version_check.diff
+)
 
 pkg_setup() {
 	python_setup
