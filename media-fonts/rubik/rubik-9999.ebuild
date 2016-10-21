@@ -20,7 +20,7 @@ else
 fi
 inherit python-any-r1 font
 
-DESCRIPTION="Rubik fonts"
+DESCRIPTION="A sans serif font family with slightly rounded corners"
 HOMEPAGE="https://github.com/googlefonts/${PN}"
 
 LICENSE="OFL-1.1"
