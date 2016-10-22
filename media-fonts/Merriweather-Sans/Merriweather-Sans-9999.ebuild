@@ -48,11 +48,9 @@ pkg_setup() {
 }
 
 src_compile() {
-	local t=" -o ${FONT_SUFFIX}"
-	[[ ${#t} -eq 8 ]] || t=
 	fontmake \
 		--ufo-paths "${S}"/SRC/${PN/-/}*.ufo \
-		${t} \
+		-o ${FONT_SUFFIX} \
 		|| die
 	for t in ${FONT_SUFFIX}; do
 		mv -f "${S}"/master_${t}/*.${t} "${FONT_S}"/

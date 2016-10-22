@@ -4,18 +4,18 @@
 
 EAPI=6
 
-MY_IN="Inconsolata-613f4f0" #20161011 https://github.com/m4rc1e/Inconsolata
+MY_IN="Inconsolata-c57f86c" #20161013 https://github.com/cyrealtype/Inconsolata
 MY_MP="mplus-TESTFLIGHT-062" #20160930 https://osdn.net/projects/mplus-fonts/releases/62344
 MY_IP="ipag00303"
 FONT_SUFFIX="ttf"
 S="${WORKDIR}"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/m4rc1e/Inconsolata.git"
+	EGIT_REPO_URI="https://github.com/cyrealtype/Inconsolata.git"
 else
 	SRC_URI="
 		http://www.rs.tus.ac.jp/yyusa/${PN}/${PN}_generator-${PV}.sh
-		mirror://githubcl/m4rc1e/${MY_IN%-*}/tar.gz/${MY_IN##*-}
+		mirror://githubcl/cyrealtype/${MY_IN%-*}/tar.gz/${MY_IN##*-}
 		-> ${MY_IN}.tar.gz
 	"
 	KEYWORDS="~amd64 ~x86"

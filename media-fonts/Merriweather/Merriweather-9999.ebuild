@@ -62,13 +62,12 @@ src_compile() {
 	if use binary; then
 		mv -f "${S}"/fonts/[ot]tf/*.[ot]tf "${S}"/
 	else
-		local g t=" -o ${FONT_SUFFIX}"
-		[[ ${#t} -eq 8 ]] || t=
+		local g
 		for g in "${S}"/sources/${PN}*.glyphs; do
 			fontmake \
 				--glyphs-path "${g}" \
 				--interpolate \
-				${t} \
+				-o ${FONT_SUFFIX} \
 				|| die
 		done
 		for t in ${FONT_SUFFIX}; do

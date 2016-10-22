@@ -66,11 +66,9 @@ src_prepare() {
 
 src_compile() {
 	use binary && return
-	local t=" -o ${FONT_SUFFIX}"
-	[[ ${#t} -eq 8 ]] || t=
 	fontmake \
 		--glyphs-path "${S}"/sources/${PN}.glyphs \
-		${t} \
+		-o ${FONT_SUFFIX} \
 		|| die
 	for t in ${FONT_SUFFIX}; do
 		mv -f "${S}"/master_${t}/*.${t} "${S}"/

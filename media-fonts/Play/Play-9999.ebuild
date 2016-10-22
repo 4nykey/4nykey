@@ -58,13 +58,12 @@ src_prepare() {
 
 src_compile() {
 	use binary && return
-	local g t=" -o ${FONT_SUFFIX}"
-	[[ ${#t} -eq 8 ]] || t=
+	local g
 	for g in "${S}"/sources/${PN}*.glyphs; do
 		fontmake \
 			--glyphs-path "${g}" \
 			--masters-as-instances \
-			${t} \
+			-o ${FONT_SUFFIX} \
 			|| die
 	done
 	for t in ${FONT_SUFFIX}; do

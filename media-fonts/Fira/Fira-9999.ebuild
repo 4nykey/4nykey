@@ -18,7 +18,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-0251c9f"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-8e4962a"
 SRC_URI+="
 	!binary? (
 		mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
@@ -76,26 +76,24 @@ src_unpack() {
 
 src_prepare() {
 	default
-	use binary && return
-	sed \
-		-e 's:active = 0\;:exports = 0\;:' \
-		-e 's:WORK_::' \
-		-i "${S}"/source/glyphs/${PN}*.glyphs
-	ln -s source/glyphs src
-}
-
-src_compile() {
 	if use binary; then
 		mv -f "${S}"/[ot]tf/*.[ot]tf "${S}"/
 	else
-		local t=" -o ${FONT_SUFFIX}"
-		[[ ${#t} -eq 8 ]] || t=
-		emake \
-			FONTMAKE="fontmake${t}" \
-			INTERPOLATE='makeInstancesUFO -a -c -n -dec -d' \
-			-f "${WORKDIR}"/${MY_MK}/Makefile
-		for t in ${FONT_SUFFIX}; do
-			mv -f "${S}"/master_${t}/*.${t} "${S}"/
-		done
+		sed \
+			-e 's:active = 0\;:exports = 0\;:' \
+			-e 's:WORK_::' \
+			-i "${S}"/source/glyphs/${PN}*.glyphs
 	fi
+}
+
+src_compile() {
+	use binary && return
+	emake \
+		SRCDIR="${S}/source/glyphs" \
+		FONTMAKE="fontmake -o ${FONT_SUFFIX}" \
+		INTERPOLATE='makeInstancesUFO -a -c -n -dec -d' \
+		-f "${WORKDIR}"/${MY_MK}/Makefile
+	for t in ${FONT_SUFFIX}; do
+		mv -f "${S}"/master_${t}/*.${t} "${S}"/
+	done
 }

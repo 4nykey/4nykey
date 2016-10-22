@@ -55,12 +55,10 @@ src_compile() {
 	if use binary; then
 		mv -f "${S}"/fonts/[ot]tf/*.[ot]tf "${S}"/
 	else
-		local t=" -o ${FONT_SUFFIX}"
-		[[ ${#t} -eq 8 ]] || t=
 		fontmake \
 			--glyphs-path sources/Jura.glyphs \
 			--masters-as-instances \
-			${t} \
+			-o ${FONT_SUFFIX} \
 			|| die
 		for t in ${FONT_SUFFIX}; do
 			mv -f "${S}"/instance_${t}/*.${t} "${S}"/

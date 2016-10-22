@@ -52,22 +52,18 @@ pkg_setup() {
 
 src_prepare() {
 	default
-	use binary && \
 	mv -f "${S}"/{CFF,TTF}/*.[ot]tf "${FONT_S}"/
 }
 
 src_compile() {
 	use binary && return
-	local f g
-	for f in 'Playfair Display' 'Playfair Display SC'; do
+	local g
 	for g in "${S}"/Glyphs/*.glyphs; do
 		fontmake \
 			--glyphs-path "${g}" \
 			--interpolate \
-			--family-name "${f}" \
 			-o ${FONT_SUFFIX} \
 			|| die
-	done
 	done
 	for t in ${FONT_SUFFIX}; do
 		mv -f "${S}"/instance_${t}/*.${t} "${FONT_S}"/

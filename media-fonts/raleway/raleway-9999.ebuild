@@ -20,6 +20,13 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-8e4962a"
+SRC_URI+="
+	!binary? (
+		mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
+		-> ${MY_MK}.tar.gz
+	)
+"
 
 DESCRIPTION="Raleway is an elegant sans-serif typeface"
 HOMEPAGE="http://www.impallari.com/projects/overview/matt-mcinerneys-raleway-family"
@@ -56,6 +63,15 @@ pkg_setup() {
 	font_pkg_setup
 }
 
+src_unpack() {
+	if [[ -z ${PV%%*9999} ]]; then
+		git-r3_src_unpack
+		use binary || unpack ${MY_MK}.tar.gz
+	else
+		vcs-snapshot_src_unpack
+	fi
+}
+
 src_prepare() {
 	default
 	use binary && mv "${S}/fonts/OTF v4.010 Glyphs"/*.otf "${FONT_S}"
@@ -63,16 +79,11 @@ src_prepare() {
 
 src_compile() {
 	use binary && return
-	local g t=" -o ${FONT_SUFFIX}"
-	[[ ${#t} -eq 8 ]] || t=
-	for g in "${S}"/source/${MY_PN}*.glyphs; do
-		fontmake \
-			--glyphs-path "${g}" \
-			--interpolate \
-			${t} \
-			|| die
-	done
+	emake \
+		SRCDIR="${S}/source" \
+		FONTMAKE="fontmake -o ${FONT_SUFFIX}" \
+		-f "${WORKDIR}"/${MY_MK}/Makefile
 	for t in ${FONT_SUFFIX}; do
-		mv -f "${S}"/instance_${t}/*.${t} "${S}"/
+		mv -f "${S}"/master_${t}/*.${t} "${S}"/
 	done
 }
