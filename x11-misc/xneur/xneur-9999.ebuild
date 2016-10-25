@@ -1,6 +1,6 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=6
 
@@ -62,7 +62,14 @@ REQUIRED_USE="
 
 src_prepare() {
 	default
-	[[ -z ${PV%%*9999} ]] && eautoreconf
+	sed \
+		-e '/Libs:/s:@libdir@:${libdir}:' \
+		-e '/Libs:/s: @LDFLAGS@::' \
+		-e '/Cflags:/s:@includedir@:${includedir}:' \
+		-i "${S}"/xn*.pc.in
+	[[ -n ${PV%%*9999} ]] && return
+	sed -e '/\<INSTALL\>/d' -i "${S}"/Makefile.am
+	eautoreconf
 }
 
 src_configure() {
