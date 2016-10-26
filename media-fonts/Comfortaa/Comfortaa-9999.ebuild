@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/alexeiva/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="074f0ed"
+	MY_PV="ddcfe30"
 	SRC_URI="
 		mirror://githubcl/alexeiva/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -44,7 +44,6 @@ DOCS+=" AUTHORS.txt CONTRIBUTORS.txt README.md"
 
 pkg_setup() {
 	if use binary; then
-		FONT_TYPES="ttf"
 		FONT_S="${S}/fonts"
 	else
 		python-any-r1_pkg_setup
@@ -58,8 +57,7 @@ pkg_setup() {
 
 src_prepare() {
 	default
-	use binary || \
-	sed -e 's:Zhedescender-cy\.001::' -i "${S}"/sources/${PN}.glyphs
+	use binary && mv -f "${FONT_S}"/OTF/*.otf "${FONT_S}"
 }
 
 src_compile() {
