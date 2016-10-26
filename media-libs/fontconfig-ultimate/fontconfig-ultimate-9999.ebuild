@@ -1,10 +1,10 @@
 # Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=6
 
-EGIT_REPO_URI="https://github.com/bohoomil/fontconfig-ultimate"
+EGIT_REPO_URI="https://github.com/bohoomil/${PN}"
 inherit readme.gentoo-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -16,46 +16,19 @@ else
 fi
 
 DESCRIPTION="A set of rendering and font replacement rules for fontconfig-infinality"
-HOMEPAGE="http://bohoomil.cu.cc/"
+HOMEPAGE="http://bohoomil.com/"
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="+fonts-ms +fonts-free fonts-extra"
+IUSE=""
 
-RDEPEND="app-eselect/eselect-infinality
+RDEPEND="
+	app-eselect/eselect-infinality
 	app-eselect/eselect-lcdfilter
 	media-libs/fontconfig-infinality
-	media-libs/freetype:2
-	fonts-ms? (
-		media-fonts/corefonts
-		media-fonts/dejavu
-		media-fonts/noto
-		fonts-extra? (
-			media-fonts/cantarell
-			media-fonts/droid
-			media-fonts/font-bh-75dpi
-			media-fonts/paratype
-			media-fonts/source-pro
-		)
-	)
-	fonts-free? (
-		media-fonts/dejavu
-		media-fonts/noto
-		media-fonts/liberation-fonts
-		media-fonts/heuristica
-		fonts-extra? (
-			media-fonts/cantarell
-			media-fonts/droid
-			media-fonts/font-bh-ttf
-			media-fonts/libertine
-			media-fonts/paratype
-			media-fonts/urw-fonts
-			media-fonts/symbola
-			media-fonts/ubuntu-font-family
-		)
-	)"
+	media-libs/freetype:2[infinality]
+"
 
-#DISABLE_AUTOFORMATTING="1"
 DOC_CONTENTS="
 1. Disable all rules but 52-infinality.conf using eselect fontconfig
 2. Enable one of \"ultimate\" presets using eselect infinality
