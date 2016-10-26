@@ -43,16 +43,16 @@ DEPEND="
 DOCS+=" README.md"
 
 pkg_setup() {
-	if use binary; then
-		FONT_TYPES="ttf"
-		FONT_S="${S}/fonts"
-	else
-		python-any-r1_pkg_setup
-	fi
 	local t
 	for t in ${FONT_TYPES}; do
 		use font_types_${t} && FONT_SUFFIX+="${t} "
 	done
+	if use binary; then
+		FONT_S="${S}/fonts"
+		FONT_SUFFIX="ttf"
+	else
+		python-any-r1_pkg_setup
+	fi
 	font_pkg_setup
 }
 
