@@ -7,7 +7,7 @@ EAPI=6
 inherit gnome2
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3 autotools
-	EGIT_REPO_URI="git://git.gnome.org/frogr"
+	EGIT_REPO_URI="https://git.gnome.org/browse/frogr"
 	SRC_URI=""
 else
 	KEYWORDS="~amd64 ~x86"
