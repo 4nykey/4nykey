@@ -56,13 +56,13 @@ pkg_setup() {
 	if use !binary; then
 		PATCHES=( "${FILESDIR}"/${PN}-glyphslib.diff )
 		python-any-r1_pkg_setup
+		. /etc/afdko
 	fi
 	local t
 	for t in ${FONT_TYPES}; do
 		use font_types_${t} && FONT_SUFFIX+="${t} "
 	done
 	font_pkg_setup
-	. /etc/afdko
 }
 
 src_unpack() {
