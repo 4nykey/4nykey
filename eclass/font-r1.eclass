@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-# @ECLASS: font.eclass
+# @ECLASS: font-r1.eclass
 # @MAINTAINER:
 # fonts@gentoo.org
 # @BLURB: Eclass to make font installation uniform
@@ -56,10 +56,10 @@ DEPEND="X? (
 	)"
 RDEPEND=""
 
-# @FUNCTION: font_xfont_config
+# @FUNCTION: font-r1_xfont_config
 # @DESCRIPTION:
 # Generate Xorg font files (mkfontscale/mkfontdir).
-font_xfont_config() {
+font-r1_xfont_config() {
 	local dir_name
 	if has X ${IUSE//+} && use X ; then
 		dir_name="${1:-${FONT_PN}}"
@@ -77,10 +77,10 @@ font_xfont_config() {
 	fi
 }
 
-# @FUNCTION: font_fontconfig
+# @FUNCTION: font-r1_fontconfig
 # @DESCRIPTION:
 # Install fontconfig conf files given in FONT_CONF.
-font_fontconfig() {
+font-r1_fontconfig() {
 	local conffile
 	if [[ -n ${FONT_CONF[@]} ]]; then
 		insinto /etc/fonts/conf.avail/
@@ -90,10 +90,10 @@ font_fontconfig() {
 	fi
 }
 
-# @FUNCTION: font_cleanup_dirs
+# @FUNCTION: font-r1_cleanup_dirs
 # @DESCRIPTION:
 # Remove font directories containing only generated files.
-font_cleanup_dirs() {
+font-r1_cleanup_dirs() {
 	local genfiles="encodings.dir fonts.alias fonts.cache-1 fonts.dir fonts.scale"
 	# fonts.alias isn't generated but it's a special case (see below).
 	local d f g generated candidate otherfile
@@ -137,11 +137,11 @@ font_cleanup_dirs() {
 	eend 0
 }
 
-# @FUNCTION: font_pkg_setup
+# @FUNCTION: font-r1_pkg_setup
 # @DESCRIPTION:
 # The font pkg_setup function.
 # Collision protection and Prefix compat for eapi < 3.
-font_pkg_setup() {
+font-r1_pkg_setup() {
 	# Prefix compat
 	case ${EAPI:-0} in
 		0|1|2)
@@ -159,10 +159,10 @@ font_pkg_setup() {
 	[[ -e "${EROOT}/${FONTDIR}/fonts.cache-1" ]] && rm -f "${EROOT}/${FONTDIR}/fonts.cache-1"
 }
 
-# @FUNCTION: font_src_install
+# @FUNCTION: font-r1_src_install
 # @DESCRIPTION:
 # The font src_install function.
-font_src_install() {
+font-r1_src_install() {
 	local dir suffix commondoc
 
 	set -- ${FONT_S:-${S}}
@@ -198,10 +198,10 @@ font_src_install() {
 	done
 }
 
-# @FUNCTION: font_pkg_postinst
+# @FUNCTION: font-r1_pkg_postinst
 # @DESCRIPTION:
 # The font pkg_postinst function.
-font_pkg_postinst() {
+font-r1_pkg_postinst() {
 	# unreadable font files = fontconfig segfaults
 	find "${EROOT}"usr/share/fonts/ -type f '!' -perm 0644 -print0 \
 		| xargs -0 chmod -v 0644 2>/dev/null
@@ -230,11 +230,11 @@ font_pkg_postinst() {
 	fi
 }
 
-# @FUNCTION: font_pkg_postrm
+# @FUNCTION: font-r1_pkg_postrm
 # @DESCRIPTION:
 # The font pkg_postrm function.
-font_pkg_postrm() {
-	font_cleanup_dirs
+font-r1_pkg_postrm() {
+	font-r1_cleanup_dirs
 
 	# unreadable font files = fontconfig segfaults
 	find "${EROOT}"usr/share/fonts/ -type f '!' -perm 0644 -print0 \
