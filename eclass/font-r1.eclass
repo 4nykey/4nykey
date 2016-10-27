@@ -165,30 +165,16 @@ font-r1_pkg_setup() {
 font-r1_src_install() {
 	local dir suffix commondoc
 
-	set -- ${FONT_S:-${S}}
-	if [[ $# -gt 1 ]]; then
-		# if we have multiple FONT_S elements then we want to recreate the dir
-		# structure
-		for dir in ${FONT_S}; do
-			pushd "${dir}" > /dev/null
-			insinto "${FONTDIR}/${dir//${S}/}"
-			for suffix in ${FONT_SUFFIX}; do
-				doins *.${suffix}
-			done
-			font_xfont_config "${dir}"
-			popd > /dev/null
-		done
-	else
-		pushd "${FONT_S}" > /dev/null
-		insinto "${FONTDIR}"
-		for suffix in ${FONT_SUFFIX}; do
-			doins *.${suffix}
-		done
-		font_xfont_config
-		popd > /dev/null
-	fi
+	insinto "${FONTDIR}"
 
-	font_fontconfig
+	for suffix in ${FONT_SUFFIX}; do
+		find ${FONT_S} -mindepth 1 -maxdepth 1 -! -size 0 -type f \
+			-ipath "*.${suffix}" -print0 | xargs -0 --no-run-if-empty doins
+	done
+
+	font-r1_xfont_config
+
+	font-r1_fontconfig
 
 	[[ -n ${DOCS} ]] && { dodoc ${DOCS} || die "docs installation failed" ; }
 
