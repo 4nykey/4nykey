@@ -55,6 +55,7 @@ DEPEND="X? (
 		media-fonts/encodings
 	)"
 RDEPEND=""
+RESTRICT+=" strip binchecks"
 
 # @FUNCTION: font-r1_xfont_config
 # @DESCRIPTION:
