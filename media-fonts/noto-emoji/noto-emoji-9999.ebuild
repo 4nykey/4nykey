@@ -20,7 +20,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 FONT_SUFFIX="ttf"
-inherit python-single-r1 font
+inherit python-any-r1 font-r1
 
 DESCRIPTION="Noto Emoji fonts"
 HOMEPAGE="https://github.com/googlei18n/${PN}"
@@ -28,24 +28,23 @@ HOMEPAGE="https://github.com/googlei18n/${PN}"
 LICENSE="OFL-1.1"
 SLOT="0"
 IUSE="zopfli"
-REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-RDEPEND=""
 DEPEND="
-	${RDEPEND}
 	${PYTHON_DEPS}
-	dev-python/nototools[${PYTHON_USEDEP}]
+	$(python_gen_any_dep '
+		dev-python/nototools[${PYTHON_USEDEP}]
+	')
 	media-gfx/pngquant
 	media-gfx/imagemagick
 	zopfli? ( app-arch/zopfli )
 	!zopfli? ( media-gfx/optipng )
 	x11-libs/cairo
 "
-DOCS="AUTHORS CONTRIBUTORS *.md"
+FONT_S+=( fonts )
 
 pkg_setup() {
-	font_pkg_setup
-	python_setup
+	python-any-r1_pkg_setup
+	font-r1_pkg_setup
 }
 
 src_prepare() {
@@ -53,7 +52,6 @@ src_prepare() {
 	sed \
 		-e 's:CFLAGS =:CFLAGS +=:' \
 		-i Makefile
-	mv "${S}"/fonts/Noto*.${FONT_SUFFIX} "${S}"/
 }
 
 src_compile() {

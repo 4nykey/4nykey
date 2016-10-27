@@ -20,7 +20,7 @@ else
 	"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit font
+inherit font-r1
 RESTRICT="primaryuri bindist"
 
 DESCRIPTION="A monotype font combining Inconsolata and Japanese M+/IPA"
@@ -39,7 +39,6 @@ IUSE=""
 DEPEND="
 	media-gfx/fontforge
 "
-RDEPEND=""
 
 src_unpack() {
 	unpack ${MY_MP}.tar.xz ${MY_IP}.zip

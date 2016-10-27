@@ -4,6 +4,7 @@
 
 EAPI=6
 
+FONT_TYPES="otf ttf"
 PYTHON_COMPAT=( python2_7 )
 MY_PN="${PN}-hinted"
 if [[ ${PV} == *9999* ]]; then
@@ -25,14 +26,18 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font
+inherit python-any-r1 font-r1
 
 DESCRIPTION="Google's signature family of fonts"
 HOMEPAGE="https://github.com/google/roboto"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE="+binary"
+IUSE="
+	+binary
+	$(printf '+font_types_%s ' ${FONT_TYPES})
+"
+REQUIRED_USE+=" || ( $(printf 'font_types_%s ' ${FONT_TYPES}) )"
 
 DEPEND="
 	binary? (
@@ -52,16 +57,18 @@ DEPEND="
 "
 
 pkg_setup() {
+	local t
+	for t in ${FONT_TYPES}; do
+		use font_types_${t} && FONT_SUFFIX+="${t} "
+	done
 	if use binary; then
 		S="${WORKDIR}/${MY_PN}"
-		FONT_S="${S}"
 		FONT_SUFFIX="ttf"
 	else
-		DOCS="README.md"
-		FONT_SUFFIX="otf"
 		python-any-r1_pkg_setup
+		FONT_S=( out/Roboto{,Condensed}{O,T}TF )
 	fi
-	font_pkg_setup
+	font-r1_pkg_setup
 }
 
 src_prepare() {
@@ -74,5 +81,4 @@ src_prepare() {
 src_compile() {
 	use binary && return
 	default
-	mv -f "${S}"/out/Roboto*OTF/*.otf "${FONT_S}"/
 }

@@ -30,7 +30,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font
+inherit python-any-r1 font-r1
 
 DESCRIPTION="A Greek font designed from historic samples"
 HOMEPAGE="https://github.com/akryukov/${PN}"
@@ -53,7 +53,6 @@ DEPEND="
 		font_types_ttf? ( dev-util/grcompiler )
 	)
 "
-RDEPEND=""
 
 pkg_setup() {
 	local t
@@ -63,12 +62,10 @@ pkg_setup() {
 
 	if use binary; then
 		S="${WORKDIR}"
-		FONT_S="${S}"
 	else
 		python-any-r1_pkg_setup
-		DOCS+=" README.md"
 	fi
-	font_pkg_setup
+	font-r1_pkg_setup
 }
 
 src_compile() {

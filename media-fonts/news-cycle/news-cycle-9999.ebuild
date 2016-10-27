@@ -1,8 +1,8 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
-EAPI=5
+EAPI=6
 
 MY_PN="${PN/-}"
 FONT_SUFFIX="ttf"
@@ -19,7 +19,7 @@ else
 	S="${WORKDIR}/${MY_P}"
 	DEPEND="$(unpacker_src_uri_depends)"
 fi
-inherit font
+inherit font-r1
 
 DESCRIPTION="A realist sans-serif typeface based on ATF 1908 News Gothic"
 HOMEPAGE="https://launchpad.net/newscycle"
@@ -29,6 +29,5 @@ SLOT="0"
 IUSE=""
 
 DEPEND=""
-RDEPEND=""
 
 DOCS="FontLog.txt"

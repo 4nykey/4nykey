@@ -1,6 +1,6 @@
 # Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=6
 
@@ -28,7 +28,7 @@ else
 	S="${WORKDIR}/nm-${PV}"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit latex-package font
+inherit latex-package font-r1
 
 DESCRIPTION="Cyrillic version of Computer Modern fonts"
 HOMEPAGE="http://code.google.com/p/cyrillic-modern"
@@ -38,12 +38,11 @@ SLOT="0"
 IUSE="latex"
 RESTRICT="primaryuri"
 FONT_SUFFIX="otf ttc"
-DOCS="FontLog.txt"
 
 pkg_setup() {
 	use latex && DOCS+=" USAGE"
 	python-any-r1_pkg_setup
-	font_pkg_setup
+	font-r1_pkg_setup
 }
 
 src_prepare() {
@@ -82,15 +81,15 @@ src_install() {
 		doins "${T}"/${PN}.cfg
 	fi
 	[[ -z ${PV%%*9999} ]] && emake cleanotf
-	font_src_install
+	font-r1_src_install
 }
 
 pkg_postinst() {
-	font_pkg_postinst
+	font-r1_pkg_postinst
 	use latex && latex-package_pkg_postinst
 }
 
 pkg_postrm() {
-	font_pkg_postrm
+	font-r1_pkg_postrm
 	use latex && latex-package_pkg_postrm
 }

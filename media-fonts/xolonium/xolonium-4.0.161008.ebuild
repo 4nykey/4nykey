@@ -5,19 +5,15 @@
 EAPI=6
 
 FONT_TYPES="otf ttf"
-S="${WORKDIR}"
+S="${WORKDIR}/${PN}-fonts-${PV%.*}"
 inherit font-r1 unpacker
 
-DESCRIPTION="Fonts by artmaker"
-HOMEPAGE="http://be.net/artmaker"
-SRC_URI="mirror://fontlibrary/"
+DESCRIPTION="A futuristic font with focus on legibility"
+HOMEPAGE="http://openfontlibrary.org/en/font/xolonium"
+SRC_URI="38b086e531b4f1562471bbcec9ff61c9"
 SRC_URI="
-	${SRC_URI}banana-brick/2100182bf265504c3dc286eccb6383a9/banana-brick.zip
-	-> ${PN}-banana-brick-2011-12-19.zip
-	${SRC_URI}unique/1539764ecc445a7321c68badd777ccaa/unique.zip
-	-> ${PN}-unique-2013-09-03.zip
-	${SRC_URI}vds/4af6691b4cf3d06bb623421ad4e10665/vds.zip
-	-> ${PN}-vds-2012-10-05.zip
+http://openfontlibrary.org/assets/downloads/${PN}/${SRC_URI}/${PN}.zip
+-> ${P}.zip
 "
 RESTRICT="primaryuri"
 
@@ -29,7 +25,10 @@ IUSE="
 "
 REQUIRED_USE+=" || ( $(printf 'font_types_%s ' ${FONT_TYPES}) )"
 
-DEPEND="$(unpacker_src_uri_depends)"
+DEPEND="
+	$(unpacker_src_uri_depends)
+"
+FONT_S=( otf ttf )
 
 pkg_setup() {
 	local t

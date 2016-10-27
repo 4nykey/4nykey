@@ -1,6 +1,6 @@
-# Copyright 1999-2006 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=6
 
@@ -8,7 +8,7 @@ MY_PN="NAU"
 MY_PV="${PV//./_}"
 S="${WORKDIR}/${MY_PN}${PV}"
 
-inherit unpacker font
+inherit unpacker font-r1
 
 DESCRIPTION="New Athena Unicode is a freeware multilingual font"
 HOMEPAGE="http://socrates.berkeley.edu/~pinax/greekkeys/NAUdownload.html"
@@ -21,7 +21,6 @@ KEYWORDS="~x86 ~amd64"
 IUSE=""
 
 DEPEND="$(unpacker_src_uri_depends)"
-RDEPEND=""
 
 DOCS="AboutNAUfont_v${MY_PV}.pdf"
 FONT_SUFFIX="ttf"

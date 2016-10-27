@@ -19,7 +19,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font
+inherit python-any-r1 font-r1
 
 DESCRIPTION="A Latin, Cyrillic and Devanagari typeface derived from Gabriela"
 HOMEPAGE="https://github.com/etunni/${PN}"
@@ -41,19 +41,18 @@ DEPEND="
 	)
 "
 
-DOCS+=" AUTHORS.txt CONTRIBUTORS.txt README.md"
-
 pkg_setup() {
 	if use binary; then
-		FONT_S="${S}/fonts"
+		FONT_S=( fonts )
 	else
 		python-any-r1_pkg_setup
+		FONT_S=( master_{o,t}tf )
 	fi
 	local t
 	for t in ${FONT_TYPES}; do
 		use font_types_${t} && FONT_SUFFIX+="${t} "
 	done
-	font_pkg_setup
+	font-r1_pkg_setup
 }
 
 src_prepare() {
@@ -70,7 +69,4 @@ src_compile() {
 		--glyphs-path "${S}"/sources/${MY_PN}.glyphs \
 		-o ${FONT_SUFFIX} \
 		|| die
-	for t in ${FONT_SUFFIX}; do
-		mv -f "${S}"/master_${t}/*.${t} "${S}"/
-	done
 }

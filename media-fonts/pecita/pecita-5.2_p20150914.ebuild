@@ -1,17 +1,17 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
-EAPI=5
+EAPI=6
 
 S="${WORKDIR}"
-inherit font unpacker
+inherit font-r1 unpacker
 
-DESCRIPTION="Pecita is a typeface that mimics handwriting"
+DESCRIPTION="A typeface that mimics handwriting"
 HOMEPAGE="http://pecita.eu"
-MY_MD5="2ccbb215bd63c7e377bcc0762159f3db"
+SRC_URI="c7230bc2a72ad2313a2e2e515b0fd16a"
 SRC_URI="
-http://openfontlibrary.org/assets/downloads/${PN}/${MY_MD5}/${PN}.zip
+http://openfontlibrary.org/assets/downloads/${PN}/${SRC_URI}/${PN}.zip
 -> ${P}.zip
 "
 RESTRICT="primaryuri"

@@ -6,7 +6,7 @@ EAPI=6
 
 FONT_TYPES="otf ttf"
 S="${WORKDIR}"
-inherit font unpacker
+inherit font-r1 unpacker
 
 DESCRIPTION="Fonts by Context Ltd"
 HOMEPAGE="http://openfontlibrary.org/en/search?query=Context+Ltd"
@@ -50,7 +50,6 @@ IUSE="
 REQUIRED_USE+=" || ( $(printf 'font_types_%s ' ${FONT_TYPES}) )"
 
 DEPEND="$(unpacker_src_uri_depends)"
-RDEPEND=""
 DOCS="*_Description.txt"
 
 pkg_setup() {
@@ -58,5 +57,5 @@ pkg_setup() {
 	for t in ${FONT_TYPES}; do
 		use font_types_${t} && FONT_SUFFIX+="${t} "
 	done
-	font_pkg_setup
+	font-r1_pkg_setup
 }

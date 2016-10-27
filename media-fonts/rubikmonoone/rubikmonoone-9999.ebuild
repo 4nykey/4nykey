@@ -18,7 +18,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font
+inherit python-any-r1 font-r1
 
 DESCRIPTION="A monospaced sister of the Black roman style in the Rubik family"
 HOMEPAGE="https://github.com/googlefonts/${PN}"
@@ -40,19 +40,18 @@ DEPEND="
 	)
 "
 
-DOCS+=" AUTHORS.txt CONTRIBUTORS.txt"
-
 pkg_setup() {
 	local t
 	for t in ${FONT_TYPES}; do
 		use font_types_${t} && FONT_SUFFIX+="${t} "
 	done
 	if use binary; then
-		FONT_S="${S}/fonts"
+		FONT_S=( fonts )
 	else
 		python-any-r1_pkg_setup
+		FONT_S=( master_{o,t}tf )
 	fi
-	font_pkg_setup
+	font-r1_pkg_setup
 }
 
 src_compile() {
@@ -63,8 +62,5 @@ src_compile() {
 			--glyphs-path "${g}" \
 			-o ${FONT_SUFFIX} \
 			|| die
-	done
-	for t in ${FONT_SUFFIX}; do
-		mv -f "${S}"/master_${t}/*.${t} "${S}"/
 	done
 }

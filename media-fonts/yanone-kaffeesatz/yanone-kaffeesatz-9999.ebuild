@@ -18,7 +18,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font
+inherit python-any-r1 font-r1
 
 DESCRIPTION="An open-source font by Jan Gerner"
 HOMEPAGE="https://github.com/alexeiva/${PN}"
@@ -40,21 +40,18 @@ DEPEND="
 	)
 "
 
-DOCS+=" AUTHORS.txt CONTRIBUTORS.txt"
-
 pkg_setup() {
 	local t
 	for t in ${FONT_TYPES}; do
 		use font_types_${t} && FONT_SUFFIX+="${t} "
 	done
-	use binary || python-any-r1_pkg_setup
-	font_pkg_setup
-}
-
-src_prepare() {
-	default
-	use binary && \
-	mv -f "${S}"/fonts/[ot]tf/*.[ot]tf "${FONT_S}"/
+	if use binary; then
+		FONT_S=( fonts/{o,t}tf )
+	else
+		python-any-r1_pkg_setup
+		FONT_S=( instance_{o,t}tf )
+	fi
+	font-r1_pkg_setup
 }
 
 src_compile() {
@@ -63,7 +60,4 @@ src_compile() {
 		--glyphs-path "${S}"/sources/Yanone-Kaffeesatz-MM.glyphs \
 		--interpolate \
 		-o ${FONT_SUFFIX} || die
-	for t in ${FONT_SUFFIX}; do
-		mv -f "${S}"/instance_${t}/*.${t} "${FONT_S}"/
-	done
 }

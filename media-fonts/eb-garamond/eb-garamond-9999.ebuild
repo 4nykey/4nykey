@@ -6,7 +6,7 @@ EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
 FONT_TYPES="otf ttf"
-inherit python-any-r1 font
+inherit python-any-r1 font-r1
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://bitbucket.org/georgd/${PN}.git"
@@ -38,8 +38,6 @@ IUSE="
 "
 REQUIRED_USE+=" || ( $(printf 'font_types_%s ' ${FONT_TYPES}) )"
 
-RDEPEND=""
-
 FONT_S="${S}/build"
 DOCS="Changes specimen/Specimen.pdf"
 
@@ -49,7 +47,7 @@ pkg_setup() {
 		use font_types_${t} && FONT_SUFFIX+="${t} "
 	done
 	python-any-r1_pkg_setup
-	font_pkg_setup
+	font-r1_pkg_setup
 }
 
 src_compile() {

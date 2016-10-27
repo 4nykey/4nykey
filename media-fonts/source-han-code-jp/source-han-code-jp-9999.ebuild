@@ -22,7 +22,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit font
+inherit font-r1
 
 DESCRIPTION="An monospaced font for mixed Latin and Japanese text"
 HOMEPAGE="http://adobe-fonts.github.io/${PN}"
@@ -34,7 +34,6 @@ IUSE="+binary"
 DEPEND="
 	!binary? ( dev-util/afdko )
 "
-RDEPEND=""
 
 FONT_SUFFIX="otf"
 DOCS="README.md relnotes.txt"
@@ -44,15 +43,17 @@ pkg_setup() {
 		EGIT_BRANCH="$(usex binary release master)"
 	else
 		S="${WORKDIR}/${P}$(usex binary 'R' '')"
-		FONT_S="${S}"
 	fi
-	font_pkg_setup
+	if use binary; then
+		FONT_S=( OTF )
+	else
+		FONT_S=( Bold ExtraLight Heavy Light Medium Normal Regular )
+		. /etc/afdko
+	fi
+	font-r1_pkg_setup
 }
 
 src_compile() {
-	if use !binary; then
-		source "${EROOT}"etc/afdko
-		/bin/sh "${S}"/commands.sh
-	fi
-	find "${S}" -mindepth 2 -name "*.${FONT_SUFFIX}" -exec mv -f {} "${S}" \;
+	use binary && return
+	/bin/sh "${S}"/commands.sh
 }

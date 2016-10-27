@@ -18,7 +18,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font
+inherit python-any-r1 font-r1
 
 DESCRIPTION="A serif typeface with soft shapes and terminal forms shaped like curls"
 HOMEPAGE="https://github.com/etunni/${PN}"
@@ -40,20 +40,19 @@ DEPEND="
 	)
 "
 
-DOCS+=" README.md"
-
 pkg_setup() {
 	local t
 	for t in ${FONT_TYPES}; do
 		use font_types_${t} && FONT_SUFFIX+="${t} "
 	done
 	if use binary; then
-		FONT_S="${S}/fonts"
+		FONT_S=( fonts )
 		FONT_SUFFIX="ttf"
 	else
+		FONT_S=( master_{o,t}tf )
 		python-any-r1_pkg_setup
 	fi
-	font_pkg_setup
+	font-r1_pkg_setup
 }
 
 src_prepare() {
@@ -70,7 +69,4 @@ src_compile() {
 		--glyphs-path "${S}"/sources/${PN}.glyphs \
 		-o ${FONT_SUFFIX} \
 		|| die
-	for t in ${FONT_SUFFIX}; do
-		mv -f "${S}"/master_${t}/*.${t} "${S}"/
-	done
 }

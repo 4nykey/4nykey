@@ -23,7 +23,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit font
+inherit font-r1
 
 DESCRIPTION="A color emoji SVGinOT font using Twitter Unicode 8.0 emoji"
 HOMEPAGE="https://github.com/eosrei/${PN}"
@@ -41,20 +41,18 @@ DEPEND="
 		dev-python/scfbuild
 	)
 "
-RDEPEND=""
 FONT_SUFFIX="ttf"
-DOCS=( README.md )
 
 pkg_setup() {
 	local _fc="fontconfig/56-twemoji-color.conf"
 	if use binary; then
 		S="${WORKDIR}/${MY_P}"
-		FONT_S="${S}"
 		FONT_CONF="${S}/${_fc}"
 	else
-		FONT_S="${S}/build"
+		FONT_S=( build )
 		FONT_CONF="${S}/linux/${_fc}"
 	fi
+	font-r1_pkg_setup
 }
 
 src_prepare() {
@@ -70,9 +68,4 @@ src_compile() {
 
 	emake \
 		SCFBUILD="${EROOT}usr/bin/scfbuild"
-}
-
-src_install() {
-	font_src_install
-	einstalldocs
 }

@@ -17,7 +17,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font
+inherit python-any-r1 font-r1
 
 DESCRIPTION="An Open Source typeface family for display and titling use"
 HOMEPAGE="https://github.com/clauseggers/${PN}"
@@ -46,13 +46,13 @@ pkg_setup() {
 	for t in ${FONT_TYPES}; do
 		use font_types_${t} && FONT_SUFFIX+="${t} "
 	done
-	use binary || python-any-r1_pkg_setup
-	font_pkg_setup
-}
-
-src_prepare() {
-	default
-	mv -f "${S}"/{CFF,TTF}/*.[ot]tf "${FONT_S}"/
+	if use binary; then
+		FONT_S=( fonts/{CFF,TTF} )
+	else
+		python-any-r1_pkg_setup
+		FONT_S=( instance_{o,t}tf )
+	fi
+	font-r1_pkg_setup
 }
 
 src_compile() {
@@ -64,8 +64,5 @@ src_compile() {
 			--interpolate \
 			-o ${FONT_SUFFIX} \
 			|| die
-	done
-	for t in ${FONT_SUFFIX}; do
-		mv -f "${S}"/instance_${t}/*.${t} "${FONT_S}"/
 	done
 }

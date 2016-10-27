@@ -21,7 +21,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit font
+inherit font-r1
 
 DESCRIPTION="A color emoji SVGinOT font using EmojiOne Unicode 9.0 emoji"
 HOMEPAGE="https://github.com/eosrei/emojione-color-font"
@@ -40,19 +40,18 @@ DEPEND="
 	)
 "
 FONT_SUFFIX="ttf"
-DOCS=( README.md )
 
 pkg_setup() {
 	local _fc="fontconfig/56-emojione-color.conf"
 	if use binary; then
 		S="${WORKDIR}/${MY_P}"
-		FONT_S="${S}"
 		FONT_CONF="${S}/${_fc}"
 	else
-		FONT_S="${S}/build"
+		FONT_S=( build )
 		FONT_CONF="${S}/linux/${_fc}"
-		DOCS+=( {full,mini}-demo.html )
+		DOCS="*-demo.html"
 	fi
+	font-r1_pkg_setup
 }
 
 src_prepare() {
@@ -68,9 +67,4 @@ src_compile() {
 
 	emake \
 		SCFBUILD="${EROOT}usr/bin/scfbuild"
-}
-
-src_install() {
-	font_src_install
-	einstalldocs
 }

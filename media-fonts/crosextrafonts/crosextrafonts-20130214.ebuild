@@ -1,17 +1,18 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
-EAPI=5
+EAPI=6
 
-inherit font
+S="${WORKDIR}"
+inherit font-r1
 
 DESCRIPTION="ChromiumOS extra fonts"
 HOMEPAGE="http://www.chromium.org/chromium-os"
-BASE_URI="http://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/"
+SRC_URI="http://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/"
 SRC_URI="
-	${BASE_URI}${P}.tar.gz
-	${BASE_URI}${PN}-carlito-20130920.tar.gz
+	${SRC_URI}${P}.tar.gz
+	${SRC_URI}${PN}-carlito-20130920.tar.gz
 "
 RESTRICT="primaryuri"
 EGIT_REPO_URI="https://code.google.com/p/noto"
@@ -21,11 +22,5 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND=""
-RDEPEND="${DEPEND}"
-
 FONT_SUFFIX="ttf"
-
-src_prepare() {
-	mv ../${PN}-carlito-20130920/*.ttf .
-}
+FONT_S=( ${P} ${PN}-carlito-20130920 )

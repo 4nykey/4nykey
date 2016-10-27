@@ -22,7 +22,7 @@ else
 	"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 latex-package font
+inherit python-any-r1 latex-package font-r1
 
 DESCRIPTION="Liberastika fonts are fork of Liberation Sans"
 HOMEPAGE="http://lib-ka.sourceforge.net"
@@ -41,13 +41,12 @@ DEPEND="
 		dev-util/font-helpers
 	)
 "
-RDEPEND=""
 RESTRICT="primaryuri"
 FONT_SUFFIX="ttf"
 
 pkg_setup() {
 	use binary || python-any-r1_pkg_setup
-	font_pkg_setup
+	font-r1_pkg_setup
 }
 
 src_prepare() {
@@ -76,15 +75,15 @@ src_install() {
 		doins "${T}"/${PN}.cfg
 	fi
 	rm -f *.gen.ttf
-	font_src_install
+	font-r1_src_install
 }
 
 pkg_postinst() {
-	font_pkg_postinst
+	font-r1_pkg_postinst
 	use latex && latex-package_pkg_postinst
 }
 
 pkg_postrm() {
-	font_pkg_postrm
+	font-r1_pkg_postrm
 	use latex && latex-package_pkg_postrm
 }

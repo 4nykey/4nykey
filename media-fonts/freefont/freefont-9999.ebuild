@@ -26,7 +26,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
-inherit python-any-r1 font
+inherit python-any-r1 font-r1
 
 DESCRIPTION="A free family of scalable outline unicode fonts"
 HOMEPAGE="http://www.gnu.org/software/freefont"
@@ -39,7 +39,7 @@ IUSE="
 "
 REQUIRED_USE+=" || ( $(printf 'font_types_%s ' ${FONT_TYPES}) )"
 
-DOCS=( AUTHORS ChangeLog CREDITS README )
+DOCS="CREDITS"
 
 DEPEND="
 	!binary? (
@@ -57,15 +57,14 @@ pkg_setup() {
 	done
 
 	if use binary; then
-		DOCS+=( TROUBLESHOOTING USAGE )
+		DOCS+=" TROUBLESHOOTING USAGE"
 	else
 		python-any-r1_pkg_setup
-		FONT_S="${S}/sfd"
-		DOCS+=( notes/{features,maintenance,troubleshooting,usage}.txt )
+		FONT_S=( sfd )
+		DOCS+=" notes/*.txt"
 	fi
-	DOCS="${DOCS[@]}"
 
-	font_pkg_setup
+	font-r1_pkg_setup
 }
 
 src_prepare() {

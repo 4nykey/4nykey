@@ -18,7 +18,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font
+inherit python-any-r1 font-r1
 
 DESCRIPTION="Open Source Modern DIN"
 HOMEPAGE="http://gidole.github.io"
@@ -36,8 +36,6 @@ DEPEND="
 		media-gfx/fontforge[${PYTHON_USEDEP}]
 	')
 "
-RDEPEND=""
-
 DOCS="ReadMe.md"
 
 pkg_setup() {
@@ -45,7 +43,7 @@ pkg_setup() {
 	for t in ${FONT_TYPES}; do
 		use font_types_${t} && FONT_SUFFIX+="${t} "
 	done
-	font_pkg_setup
+	font-r1_pkg_setup
 }
 
 src_compile() {

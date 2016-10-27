@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlei18n/noto-fonts"
 else
 	inherit vcs-snapshot
-	MY_PV="3dfd3e9"
+	MY_PV="86b2e55"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}-fonts/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -18,7 +18,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit font
+inherit font-r1
 
 DESCRIPTION="A font family that aims to support all the world's languages"
 HOMEPAGE="http://www.google.com/get/noto"
@@ -41,19 +41,10 @@ RDEPEND="
 "
 
 FONT_SUFFIX="ttf"
-DOCS="*.md"
+FONT_S=( hinted )
 
 pkg_setup() {
 	use pipeline || return
 	use font_types_otf && FONT_SUFFIX+=" otf"
-}
-
-src_prepare() {
-	default
-	mv "${S}"/hinted/*.ttf "${FONT_S}"/
-	use pipeline || return
-	use font_types_ttf && \
-		mv "${S}"/alpha/from-pipeline/*.ttf "${FONT_S}"/
-	use font_types_otf && \
-		mv "${S}"/alpha/OTF/from-pipeline/*.otf "${FONT_S}"/
+	FONT_S+=( alpha{,/OTF}/from-pipeline )
 }

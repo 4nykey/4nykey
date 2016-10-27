@@ -18,7 +18,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font
+inherit python-any-r1 font-r1
 
 DESCRIPTION="A fork of the Linux Libertine and Linux Biolinum fonts"
 HOMEPAGE="https://github.com/khaledhosny/${PN}"
@@ -32,19 +32,19 @@ DEPEND="
 		${PYTHON_DEPS}
 		$(python_gen_any_dep '
 			|| (
-			media-gfx/fontforge[python,${PYTHON_USEDEP}]
 			media-gfx/sortsmill-tools[python,${PYTHON_USEDEP}]
+			media-gfx/fontforge[python,${PYTHON_USEDEP}]
 			)
 		')
 	)
 "
 RDEPEND="${DEPEND}"
 FONT_SUFFIX="otf"
-DOCS+=" *.linuxlibertine.txt README.md"
+DOCS="*.linuxlibertine.txt"
 
 pkg_setup() {
 	use binary || python-any-r1_pkg_setup
-	font_pkg_setup
+	font-r1_pkg_setup
 }
 
 src_prepare() {

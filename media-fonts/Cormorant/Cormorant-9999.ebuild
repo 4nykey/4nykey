@@ -19,7 +19,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font
+inherit python-any-r1 font-r1
 MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-8e4962a"
 SRC_URI+="
 	!binary? (
@@ -28,7 +28,7 @@ SRC_URI+="
 	)
 "
 
-DESCRIPTION="An open-source display font family"
+DESCRIPTION="An open-source display family"
 HOMEPAGE="https://github.com/CatharsisFonts/${PN}"
 
 LICENSE="OFL-1.1"
@@ -48,15 +48,18 @@ DEPEND="
 	)
 "
 
-DOCS+=" README.md"
-
 pkg_setup() {
 	local t
 	for t in ${FONT_TYPES}; do
 		use font_types_${t} && FONT_SUFFIX+="${t} "
 	done
-	use binary || python-any-r1_pkg_setup
-	font_pkg_setup
+	if use binary; then
+		FONT_S=( '1. TrueType Font Files' '2. OpenType Files' )
+	else
+		python-any-r1_pkg_setup
+		FONT_S=( master_{o,t}tf )
+	fi
+	font-r1_pkg_setup
 }
 
 src_unpack() {
@@ -71,7 +74,6 @@ src_unpack() {
 src_prepare() {
 	default
 	ln -s "4. Glyphs Source Files" src
-	mv -f "${S}"/*/*.[ot]tf "${FONT_S}"/
 }
 
 src_compile() {
@@ -79,7 +81,4 @@ src_compile() {
 	emake \
 		FONTMAKE="fontmake -o ${FONT_SUFFIX}" \
 		-f "${WORKDIR}"/${MY_MK}/Makefile
-	for t in ${FONT_SUFFIX}; do
-		mv -f "${S}"/master_${t}/*.${t} "${S}"/
-	done
 }

@@ -15,10 +15,8 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-FONT_S="${WORKDIR}"
-FONT_SUFFIX="otf"
 CHECKREQS_DISK_BUILD="930M"
-inherit check-reqs font
+inherit check-reqs font-r1
 
 DESCRIPTION="Noto CJK fonts"
 HOMEPAGE="http://www.google.com/get/noto/help/cjk"
@@ -27,16 +25,11 @@ LICENSE="OFL-1.1"
 SLOT="0"
 IUSE=""
 
-DEPEND=""
-RDEPEND="${DEPEND}"
-DOCS=( HISTORY README.formats README.third_party )
+FONT_SUFFIX="otf"
+FONT_S=( inst )
 
 src_prepare() {
 	default
+	mkdir -p "${FONT_S}"/
 	mv "${S}"/NotoSans[JKST]*.otf "${FONT_S}"/
-}
-
-src_install() {
-	default
-	font_src_install
 }

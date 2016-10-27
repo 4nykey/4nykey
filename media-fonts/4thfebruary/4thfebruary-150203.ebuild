@@ -6,7 +6,7 @@ EAPI=6
 
 FONT_TYPES="otf ttf"
 S="${WORKDIR}"
-inherit font unpacker
+inherit font-r1 unpacker
 
 DESCRIPTION="Fonts by 4th february"
 HOMEPAGE="http://fonts.4thfebruary.com.ua"
@@ -34,19 +34,13 @@ IUSE="
 REQUIRED_USE+=" || ( $(printf 'font_types_%s ' ${FONT_TYPES}) )"
 
 DEPEND="$(unpacker_src_uri_depends)"
-RDEPEND=""
+FONT_S+=( {.,'Blogger Sans'}/OT-{ps,tt} )
+DOCS="readme.txt"
 
 pkg_setup() {
 	local t
 	for t in ${FONT_TYPES}; do
 		use font_types_${t} && FONT_SUFFIX+="${t} "
 	done
-	font_pkg_setup
-}
-
-src_prepare() {
-	default
-	rm -rf 'Blogger Sans/Web'
-	find "${S}" -mindepth 2 -type f -name '*.[ot]tf' -exec mv {} "${S}" \;
-	for f in *' '*.[ot]tf; do mv -f "${f}" "${f// /}"; done
+	font-r1_pkg_setup
 }

@@ -25,7 +25,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font
+inherit python-any-r1 font-r1
 MY_MK="3c71e576827753fc395f44f4c2d91131-740f886"
 SRC_URI+="
 	!binary? (
@@ -53,7 +53,6 @@ DEPEND="
 		')
 	)
 "
-RDEPEND=""
 
 DOCS="README.md"
 
@@ -70,12 +69,17 @@ pkg_setup() {
 		FONT_S="${S}"
 	fi
 
-	font_pkg_setup
+	font-r1_pkg_setup
 
-	use binary && return
-	python-any-r1_pkg_setup
-	DOCS="${DOCS} relnotes.txt"
+	if use binary; then
+		FONT_S=( {O,T}TF )
+	else
+		python-any-r1_pkg_setup
+		PATCHES=(
+			"${FILESDIR}"/${PN}_fonttools.diff
+		)
 	source /etc/afdko
+	fi
 }
 
 src_unpack() {
@@ -85,11 +89,6 @@ src_unpack() {
 	else
 		vcs-snapshot_src_unpack
 	fi
-}
-
-src_prepare() {
-	default
-	use binary && mv "${S}"/[OT]TF/*.[ot]tf "${FONT_S}"
 }
 
 src_compile() {

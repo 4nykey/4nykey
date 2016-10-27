@@ -19,7 +19,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font
+inherit python-any-r1 font-r1
 MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-8e4962a"
 SRC_URI+="
 	!binary? (
@@ -48,19 +48,17 @@ DEPEND="
 	)
 "
 
-DOCS+=" CONTRIBUTORS.txt README.md"
-
 pkg_setup() {
 	local t
 	for t in ${FONT_TYPES}; do
 		use font_types_${t} && FONT_SUFFIX+="${t} "
 	done
 	if use binary; then
-		FONT_S="${S}/fonts"
+		FONT_S=( fonts{,/"OTF v4.010 Glyphs"} )
 	else
 		python-any-r1_pkg_setup
 	fi
-	font_pkg_setup
+	font-r1_pkg_setup
 }
 
 src_unpack() {
@@ -72,18 +70,10 @@ src_unpack() {
 	fi
 }
 
-src_prepare() {
-	default
-	use binary && mv "${S}/fonts/OTF v4.010 Glyphs"/*.otf "${FONT_S}"
-}
-
 src_compile() {
 	use binary && return
 	emake \
 		SRCDIR="${S}/source" \
 		FONTMAKE="fontmake -o ${FONT_SUFFIX}" \
 		-f "${WORKDIR}"/${MY_MK}/Makefile
-	for t in ${FONT_SUFFIX}; do
-		mv -f "${S}"/master_${t}/*.${t} "${S}"/
-	done
 }

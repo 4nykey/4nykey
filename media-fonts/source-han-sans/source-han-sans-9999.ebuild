@@ -25,7 +25,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit font
+inherit font-r1
 
 DESCRIPTION="Pan-CJK OpenType/CFF font family"
 HOMEPAGE="https://github.com/adobe-fonts/source-han-sans/"
@@ -43,7 +43,6 @@ RDEPEND="
 "
 
 FONT_SUFFIX="otf"
-DOCS="README.md"
 
 src_unpack() {
 	if [[ ${PV} == *9999* ]]; then
@@ -52,30 +51,29 @@ src_unpack() {
 	else
 		default
 	fi
-	mkdir -p "${S}"/SubsetOTF
 }
 
-src_prepare() {
-	default
+pkg_setup() {
 	if use binary; then
+		FONT_S=(
+			$(usex l10n_ja JP '')
+			$(usex l10n_ko KR '')
+			$(usex l10n_zh-CN CN '')
+			$(usex l10n_zh-TW TW '')
+		)
 		if [[ -n ${PV%%*9999} ]]; then
-			DOCS=
-			mv "${WORKDIR}"/SourceHanSans* "${S}"/SubsetOTF/
+			S="${WORKDIR}"
+			FONT_S=( ${FONT_S[@]/#/SourceHanSans} )
+		else
+			S="${WORKDIR}/${P}/SubsetOTF"
 		fi
-		use l10n_ja || rm -r "${S}"/SubsetOTF/JP
-		use l10n_ko || rm -r "${S}"/SubsetOTF/KR
-		use l10n_zh-CN || rm -r "${S}"/SubsetOTF/CN
-		use l10n_zh-TW || rm -r "${S}"/SubsetOTF/TW
 	else
-		eapply "${FILESDIR}"/${P}*.diff
+		PATCHES=( "${FILESDIR}"/${P}-cmds.diff )
+		source "${EROOT}"etc/afdko
 	fi
 }
 
 src_compile() {
-	if use binary; then
-		find SubsetOTF -mindepth 2 -name '*.otf' -exec mv -f {} "${S}" \;
-	else
-		source "${EROOT}"etc/afdko
-		source "${S}"/COMMANDS.txt
-	fi
+	use binary && return
+	source "${S}"/COMMANDS.txt
 }

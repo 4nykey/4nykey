@@ -5,7 +5,7 @@
 EAPI=6
 
 S="${WORKDIR}"
-inherit font unpacker
+inherit font-r1 unpacker
 
 DESCRIPTION="Free fonts project aiming to make free typography more popular"
 HOMEPAGE="http://www.typetype.ru/free-fonts"
@@ -74,9 +74,8 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND="$(unpacker_src_uri_depends)"
-RDEPEND=""
 FONT_SUFFIX="otf ttf"
-FONT_S="${S}/inst"
+FONT_S=( inst )
 DOCS="inst/*.pdf"
 
 src_prepare() {
@@ -86,8 +85,4 @@ src_prepare() {
 	find "${S}" -type f \
 		-ipath '*.[otp][dt]f' -! -ipath '*webfont*' \
 		-exec mv {} "${FONT_S}" \;
-	local f
-	find "${FONT_S}" -path '* *' | while read f; do
-		mv "${f}" "${f// /-}"
-	done
 }

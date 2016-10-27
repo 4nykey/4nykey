@@ -17,7 +17,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font
+inherit python-any-r1 font-r1
 MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-8e4962a"
 SRC_URI+="
 	!binary? (
@@ -53,16 +53,19 @@ RDEPEND="
 DOCS="*.md"
 
 pkg_setup() {
-	if use !binary; then
-		PATCHES=( "${FILESDIR}"/${PN}-glyphslib.diff )
-		python-any-r1_pkg_setup
-		. /etc/afdko
-	fi
 	local t
 	for t in ${FONT_TYPES}; do
 		use font_types_${t} && FONT_SUFFIX+="${t} "
 	done
-	font_pkg_setup
+	if use binary; then
+		FONT_S=( {o,t}tf )
+	else
+		FONT_S=( master_{o,t}tf )
+		PATCHES=( "${FILESDIR}"/${PN}-glyphslib.diff )
+		python-any-r1_pkg_setup
+		. /etc/afdko
+	fi
+	font-r1_pkg_setup
 }
 
 src_unpack() {
@@ -76,14 +79,11 @@ src_unpack() {
 
 src_prepare() {
 	default
-	if use binary; then
-		mv -f "${S}"/[ot]tf/*.[ot]tf "${S}"/
-	else
-		sed \
-			-e 's:active = 0\;:exports = 0\;:' \
-			-e 's:WORK_::' \
-			-i "${S}"/source/glyphs/${PN}*.glyphs
-	fi
+	use binary && return
+	sed \
+		-e 's:active = 0\;:exports = 0\;:' \
+		-e 's:WORK_::' \
+		-i "${S}"/source/glyphs/${PN}*.glyphs
 }
 
 src_compile() {
@@ -93,7 +93,4 @@ src_compile() {
 		FONTMAKE="fontmake -o ${FONT_SUFFIX}" \
 		INTERPOLATE='makeInstancesUFO -a -c -n -dec -d' \
 		-f "${WORKDIR}"/${MY_MK}/Makefile
-	for t in ${FONT_SUFFIX}; do
-		mv -f "${S}"/master_${t}/*.${t} "${S}"/
-	done
 }

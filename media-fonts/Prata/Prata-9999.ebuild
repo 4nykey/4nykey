@@ -18,7 +18,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font
+inherit python-any-r1 font-r1
 
 DESCRIPTION="An elegant Didone typeface with sharp features and organic teardrops"
 HOMEPAGE="https://github.com/cyrealtype/${PN}"
@@ -40,19 +40,18 @@ DEPEND="
 	)
 "
 
-DOCS+=" AUTHORS.txt CONTRIBUTORS.txt README.md"
-
 pkg_setup() {
 	local t
 	for t in ${FONT_TYPES}; do
 		use font_types_${t} && FONT_SUFFIX+="${t} "
 	done
 	if use binary; then
-		FONT_S="${S}/fonts"
+		FONT_S=( fonts )
 	else
 		python-any-r1_pkg_setup
+		FONT_S=( master_{o,t}tf )
 	fi
-	font_pkg_setup
+	font-r1_pkg_setup
 }
 
 src_compile() {
@@ -61,11 +60,7 @@ src_compile() {
 	for g in "${S}"/sources/${PN}*.glyphs; do
 		fontmake \
 			--glyphs-path "${g}" \
-			--masters-as-instances \
 			-o ${FONT_SUFFIX} \
 			|| die
-	done
-	for t in ${FONT_SUFFIX}; do
-		mv -f "${S}"/instance_${t}/*.${t} "${S}"/
 	done
 }

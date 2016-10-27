@@ -18,7 +18,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font
+inherit python-any-r1 font-r1
 
 DESCRIPTION="A serif font useful for creating long texts for books or articles"
 HOMEPAGE="https://github.com/EbenSorkin/${PN}"
@@ -36,15 +36,15 @@ DEPEND="
 		dev-util/fontmake[${PYTHON_USEDEP}]
 	')
 "
+FONT_S=( master_{o,t}tf )
 
 pkg_setup() {
 	local t
 	for t in ${FONT_TYPES}; do
 		use font_types_${t} && FONT_SUFFIX+="${t} "
 	done
-	DOCS+=" README.md"
 	python-any-r1_pkg_setup
-	font_pkg_setup
+	font-r1_pkg_setup
 }
 
 src_compile() {
@@ -52,7 +52,4 @@ src_compile() {
 		--ufo-paths "${S}"/SRC/${PN/-/}*.ufo \
 		-o ${FONT_SUFFIX} \
 		|| die
-	for t in ${FONT_SUFFIX}; do
-		mv -f "${S}"/master_${t}/*.${t} "${FONT_S}"/
-	done
 }

@@ -19,7 +19,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 	MY_PV="${PV}"
 fi
-inherit python-any-r1 latex-package font
+inherit python-any-r1 latex-package font-r1
 
 DESCRIPTION="Istok is a sans serif typeface"
 HOMEPAGE="http://istok.sourceforge.net"
@@ -42,14 +42,12 @@ DEPEND="
 		dev-util/font-helpers
 	)
 "
-RDEPEND=""
-DOCS=( AUTHORS ChangeLog README TODO )
 FONT_SUFFIX="ttf"
 RESTRICT="primaryuri"
 
 pkg_setup() {
 	use binary || python-any-r1_pkg_setup
-	font_pkg_setup
+	font-r1_pkg_setup
 }
 
 src_prepare() {
@@ -82,15 +80,15 @@ src_install() {
 		doins "${T}"/${PN}.cfg
 	fi
 	rm -f *.gen.ttf
-	font_src_install
+	font-r1_src_install
 }
 
 pkg_postinst() {
-	font_pkg_postinst
+	font-r1_pkg_postinst
 	use latex && latex-package_pkg_postinst
 }
 
 pkg_postrm() {
-	font_pkg_postrm
+	font-r1_pkg_postrm
 	use latex && latex-package_pkg_postrm
 }

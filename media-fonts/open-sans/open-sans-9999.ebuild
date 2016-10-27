@@ -7,6 +7,7 @@ EAPI=6
 EGIT_REPO_URI="https://github.com/google/fonts"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
+	FONT_S=( apache/opensans{,condensed,hebrew,hebrewcondensed} )
 else
 	_base="90abd17"
 	_base="mirror://githubraw/google/fonts/${_base}/apache/opensans/OpenSans-"
@@ -33,7 +34,7 @@ else
 	S="${WORKDIR}"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit font
+inherit font-r1
 
 DESCRIPTION="A clean and modern sans-serif typeface for web, print and mobile"
 HOMEPAGE="http://opensans.com/"
@@ -42,15 +43,11 @@ LICENSE="Apache-2.0"
 SLOT="0"
 IUSE=""
 
-RDEPEND=""
-DEPEND=""
-
 FONT_SUFFIX="ttf"
 
 src_unpack() {
 	if [[ -z ${PV%%*9999} ]]; then
 		git-r3_src_unpack
-		mv "${S}"/apache/${PN/-}*/*.ttf "${FONT_S}"/
 	else
 		cp "${DISTDIR}"/*.ttf "${FONT_S}"/
 	fi

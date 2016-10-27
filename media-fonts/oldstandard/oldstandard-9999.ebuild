@@ -30,7 +30,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font
+inherit python-any-r1 font-r1
 
 DESCRIPTION="A font with wide range of Latin, Greek and Cyrillic characters"
 HOMEPAGE="https://github.com/akryukov/oldstand"
@@ -53,22 +53,18 @@ DEPEND="
 		font_types_ttf? ( dev-util/grcompiler )
 	)
 "
-RDEPEND=""
 
 pkg_setup() {
 	local t
 	for t in ${FONT_TYPES}; do
 		use font_types_${t} && FONT_SUFFIX+="${t} "
 	done
-
 	if use binary; then
 		S="${WORKDIR}"
-		FONT_S="${S}"
 	else
 		python-any-r1_pkg_setup
-		DOCS+=" README.md"
 	fi
-	font_pkg_setup
+	font-r1_pkg_setup
 }
 
 src_compile() {

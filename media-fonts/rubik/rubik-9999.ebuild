@@ -18,7 +18,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font
+inherit python-any-r1 font-r1
 
 DESCRIPTION="A sans serif font family with slightly rounded corners"
 HOMEPAGE="https://github.com/googlefonts/${PN}"
@@ -40,31 +40,27 @@ DEPEND="
 	)
 "
 
-DOCS+=" AUTHORS.txt CONTRIBUTORS.txt README.md"
-
 pkg_setup() {
 	local t
 	for t in ${FONT_TYPES}; do
 		use font_types_${t} && FONT_SUFFIX+="${t} "
 	done
-	use binary || python-any-r1_pkg_setup
-	font_pkg_setup
+	if use binary; then
+		FONT_S=( fonts/{o,t}tf )
+	else
+		python-any-r1_pkg_setup
+		FONT_S=( instance_{o,t}tf )
+	fi
+	font-r1_pkg_setup
 }
 
 src_compile() {
-	if use binary; then
-		mv -f "${S}"/fonts/[ot]tf/*.[ot]tf "${S}"/
-	else
-		local g
-		for g in "${S}"/sources/Rubik*.glyphs; do
-			fontmake \
-				--glyphs-path "${g}" \
-				--interpolate \
-				-o ${FONT_SUFFIX} \
-				|| die
-		done
-		for t in ${FONT_SUFFIX}; do
-			mv -f "${S}"/instance_${t}/*.${t} "${S}"/
-		done
-	fi
+	local g
+	for g in "${S}"/sources/Rubik*.glyphs; do
+		fontmake \
+			--glyphs-path "${g}" \
+			--interpolate \
+			-o ${FONT_SUFFIX} \
+			|| die
+	done
 }

@@ -23,7 +23,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font
+inherit python-any-r1 font-r1
 MY_MK="3c71e576827753fc395f44f4c2d91131-4e1e133"
 SRC_URI+="
 	!binary? (
@@ -47,19 +47,16 @@ DEPEND="
 		')
 	)
 "
-RDEPEND=""
-
 FONT_SUFFIX="otf"
 
 pkg_setup() {
 	if use binary; then
 		S="${WORKDIR}"
-		FONT_S="${S}"
 	else
 		python-any-r1_pkg_setup
 		source /etc/afdko
 	fi
-	font_pkg_setup
+	font-r1_pkg_setup
 }
 
 src_unpack() {

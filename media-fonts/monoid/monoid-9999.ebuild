@@ -17,7 +17,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font
+inherit python-any-r1 font-r1
 
 DESCRIPTION="Customisable coding font with alternates, ligatures and contextual positioning"
 HOMEPAGE="http://larsenwork.com/monoid"
@@ -40,15 +40,14 @@ DEPEND="
 		media-gfx/fontforge[${PYTHON_USEDEP}]
 	')
 "
-RDEPEND=""
 
 FONT_SUFFIX="ttf"
-FONT_S="${S}/_release"
+FONT_S=( _release )
 DOCS="Readme.md"
 
 pkg_setup() {
 	python-any-r1_pkg_setup
-	font_pkg_setup
+	font-r1_pkg_setup
 }
 
 src_configure() {

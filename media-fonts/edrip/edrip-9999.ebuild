@@ -30,7 +30,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 	S="${WORKDIR}"
 fi
-inherit font
+inherit font-r1
 
 DESCRIPTION="A contrast sans-serif font based on the Teams font"
 HOMEPAGE="http://code.google.com/p/edrip"
@@ -40,10 +40,9 @@ SLOT="0"
 IUSE="+binary"
 
 FONT_SUFFIX="ttf"
-DOCS=( FontLog.txt README )
 RESTRICT="primaryuri"
 
 pkg_setup() {
 	use binary || python-any-r1_pkg_setup
-	font_pkg_setup
+	font-r1_pkg_setup
 }

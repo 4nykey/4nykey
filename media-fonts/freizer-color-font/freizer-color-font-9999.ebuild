@@ -16,7 +16,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit font
+inherit font-r1
 
 DESCRIPTION="A SVG-in-OpenType Polychromatic Color Font"
 HOMEPAGE="https://xerographer.github.io/${PN%%-*}"
@@ -29,7 +29,7 @@ DEPEND="
 	dev-python/scfbuild
 "
 FONT_SUFFIX="ttf"
-FONT_S="${S}/build"
+FONT_S=( build )
 
 src_prepare() {
 	default

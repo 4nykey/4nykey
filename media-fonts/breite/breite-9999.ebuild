@@ -1,10 +1,10 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=6
 
-inherit font
+inherit font-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/metapolator/Breite"
@@ -26,19 +26,10 @@ LICENSE="OFL-1.1"
 SLOT="0"
 IUSE=""
 
-RDEPEND=""
 DEPEND="
 	${RDEPEND}
 	media-gfx/fontforge
 	media-gfx/ttfautohint
 "
 FONT_SUFFIX="otf"
-DOCS=( README.md )
-
-src_prepare() {
-	default
-	local _o
-	cd Output
-	for _o in *.otf; do mv "${_o}" BreiteGrotesk-"${_o// /}"; done
-	mv *.otf "${FONT_S}"
-}
+FONT_S=( Output )

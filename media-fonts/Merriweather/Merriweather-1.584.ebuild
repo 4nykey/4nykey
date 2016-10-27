@@ -23,7 +23,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font
+inherit python-any-r1 font-r1
 
 DESCRIPTION="A serif font useful for creating long texts for books or articles"
 HOMEPAGE="https://github.com/EbenSorkin/${PN}"
@@ -59,7 +59,7 @@ pkg_setup() {
 		DOCS+=" README.md"
 		python-any-r1_pkg_setup
 	fi
-	font_pkg_setup
+	font-r1_pkg_setup
 }
 
 src_compile() {

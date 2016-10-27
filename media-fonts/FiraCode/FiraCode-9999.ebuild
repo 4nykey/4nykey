@@ -14,7 +14,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font
+inherit python-any-r1 font-r1
 
 DESCRIPTION="A monospaced font with programming ligatures"
 HOMEPAGE="https://github.com/tonsky/${PN}"
@@ -35,16 +35,19 @@ DEPEND="
 		')
 	)
 "
-RDEPEND="${DEPEND}"
-DOCS=( README.md )
 
 pkg_setup() {
 	local t
 	for t in ${FONT_TYPES}; do
 		use font_types_${t} && FONT_SUFFIX+="${t} "
 	done
-	use binary || python-any-r1_pkg_setup
-	font_pkg_setup
+	if use binary; then
+		FONT_S=( fonts/{o,t}tf )
+	else
+		python-any-r1_pkg_setup
+		FONT_S=( instance_{o,t}tf )
+	fi
+	font-r1_pkg_setup
 }
 
 src_prepare() {
@@ -54,16 +57,9 @@ src_prepare() {
 }
 
 src_compile() {
-	if use binary; then
-		mv -f "${S}"/distr/[ot]tf/*.[ot]tf "${S}"/
-	else
-		fontmake \
-			--glyphs-path "${S}"/${PN}.glyphs \
-			--interpolate \
-			-o ${FONT_SUFFIX} \
-			|| die
-		for t in ${FONT_SUFFIX}; do
-			mv -f "${S}"/instance_${t}/*.${t} "${S}"/
-		done
-	fi
+	fontmake \
+		--glyphs-path "${S}"/${PN}.glyphs \
+		--interpolate \
+		-o ${FONT_SUFFIX} \
+		|| die
 }
