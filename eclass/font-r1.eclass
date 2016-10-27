@@ -170,6 +170,7 @@ font-r1_src_install() {
 
 	for dir in "${FONT_S[@]}"; do
 	for suffix in ${FONT_SUFFIX}; do
+		[[ -d "${S}/${dir}" ]] && \
 		find "${S}/${dir}" -mindepth 1 -maxdepth 1 -! -size 0 -type f \
 			-ipath "*.${suffix}" -print0 | xargs -0 --no-run-if-empty doins
 	done
