@@ -182,9 +182,10 @@ font-r1_src_install() {
 	[[ -n ${DOCS} ]] && { dodoc ${DOCS} || die "docs installation failed" ; }
 
 	# install common docs
-	for commondoc in COPYRIGHT README{,.txt,.md} NEWS AUTHORS{,.txt} BUGS \
-		ChangeLog F{ont,ONT}L{og,OG}.txt CONTRIBUTORS{,.txt} relnotes.txt; do
-		[[ -s ${commondoc} ]] && dodoc ${commondoc}
+	for commondoc in \
+		COPYRIGHT README{,.txt,.md} HISTORY NEWS AUTHORS{,.txt} BUGS TODO \
+		ChangeLog F{ont,ONT}L{og,OG}.txt CONTRIBUTORS{,.txt} relnotes.txt
+		do [[ -s ${commondoc} ]] && dodoc ${commondoc}
 	done
 }
 
