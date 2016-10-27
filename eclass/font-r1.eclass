@@ -21,8 +21,8 @@ FONT_SUFFIX=${FONT_SUFFIX:-}
 # @ECLASS-VARIABLE: FONT_S
 # @REQUIRED
 # @DESCRIPTION:
-# Space delimited list of directories containing the fonts.
-FONT_S=${FONT_S:-${S}}
+# An array of directories containing the fonts, ${S} if unset.
+FONT_S=( ${FONT_S[@]:-.} )
 
 # @ECLASS-VARIABLE: FONT_PN
 # @DESCRIPTION:
@@ -167,9 +167,11 @@ font-r1_src_install() {
 
 	insinto "${FONTDIR}"
 
+	for dir in "${FONT_S[@]}"; do
 	for suffix in ${FONT_SUFFIX}; do
-		find ${FONT_S} -mindepth 1 -maxdepth 1 -! -size 0 -type f \
+		find "${S}/${dir}" -mindepth 1 -maxdepth 1 -! -size 0 -type f \
 			-ipath "*.${suffix}" -print0 | xargs -0 --no-run-if-empty doins
+	done
 	done
 
 	font-r1_xfont_config
