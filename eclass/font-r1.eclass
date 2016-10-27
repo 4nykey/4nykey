@@ -169,11 +169,12 @@ font-r1_src_install() {
 	insinto "${FONTDIR}"
 
 	for dir in "${FONT_S[@]}"; do
-	for suffix in ${FONT_SUFFIX}; do
-		[[ -d "${S}/${dir}" ]] && \
-		find "${S}/${dir}" -mindepth 1 -maxdepth 1 -! -size 0 -type f \
-			-ipath "*.${suffix}" -print0 | xargs -0 --no-run-if-empty doins
-	done
+	if [[ -d "${S}/${dir}" ]]; then
+		for suffix in ${FONT_SUFFIX}; do
+			find "${S}/${dir}" -mindepth 1 -maxdepth 1 -! -size 0 -type f \
+				-ipath "*.${suffix}" -print0 | xargs -0 --no-run-if-empty doins
+		done
+	fi
 	done
 
 	font-r1_xfont_config
