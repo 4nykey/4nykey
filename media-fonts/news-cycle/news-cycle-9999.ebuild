@@ -5,11 +5,10 @@
 EAPI=6
 
 MY_PN="${PN/-}"
-FONT_SUFFIX="ttf"
 if [[ -z ${PV%%*9999} ]]; then
 	EBZR_REPO_URI="lp:${MY_PN}"
 	inherit bzr
-	FONT_SUFFIX="${FONT_SUFFIX} otf"
+	FONT_TYPES="otf ttf"
 else
 	inherit unpacker
 	MY_P="${MY_PN}-${PV}"

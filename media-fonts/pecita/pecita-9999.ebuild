@@ -4,6 +4,7 @@
 
 EAPI=6
 
+FONT_TYPES="otf"
 S="${WORKDIR}"
 inherit font-r1
 
@@ -21,7 +22,6 @@ DEPEND="
 	net-misc/wget
 	!binary? ( media-gfx/fontforge )
 "
-FONT_SUFFIX="otf"
 
 src_unpack() {
 	local _u="${HOMEPAGE}/b/"

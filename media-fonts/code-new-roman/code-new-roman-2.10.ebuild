@@ -4,6 +4,7 @@
 
 EAPI=6
 
+FONT_TYPES="otf"
 S="${WORKDIR}"
 inherit font-r1
 
@@ -19,8 +20,6 @@ IUSE=""
 
 DEPEND=""
 RDEPEND="${DEPEND}"
-
-FONT_SUFFIX="otf"
 
 src_unpack() {
 	cp "${DISTDIR}"/${A} "${S}"/

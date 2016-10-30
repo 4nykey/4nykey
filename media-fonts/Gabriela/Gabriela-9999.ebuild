@@ -37,6 +37,7 @@ DEPEND="
 "
 
 pkg_setup() {
+	font-r1_pkg_setup
 	if use binary; then
 		FONT_S=( fonts )
 		FONT_SUFFIX="ttf"
@@ -44,7 +45,6 @@ pkg_setup() {
 		FONT_S=( master_{o,t}tf )
 		python-any-r1_pkg_setup
 	fi
-	font-r1_pkg_setup
 }
 
 src_prepare() {

@@ -19,7 +19,6 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-FONT_SUFFIX="ttf"
 inherit python-any-r1 font-r1
 
 DESCRIPTION="Noto Emoji fonts"

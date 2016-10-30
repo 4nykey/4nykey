@@ -28,7 +28,6 @@ IUSE=""
 DEPEND="
 	dev-python/scfbuild
 "
-FONT_SUFFIX="ttf"
 FONT_S=( build )
 
 src_prepare() {

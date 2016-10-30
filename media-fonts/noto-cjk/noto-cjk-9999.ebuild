@@ -4,6 +4,7 @@
 
 EAPI=6
 
+FONT_TYPES="otf"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}"
@@ -24,8 +25,6 @@ HOMEPAGE="http://www.google.com/get/noto/help/cjk"
 LICENSE="OFL-1.1"
 SLOT="0"
 IUSE=""
-
-FONT_SUFFIX="otf"
 FONT_S=( inst )
 
 src_prepare() {

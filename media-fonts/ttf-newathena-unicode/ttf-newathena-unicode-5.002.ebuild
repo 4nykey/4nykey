@@ -23,4 +23,3 @@ IUSE=""
 DEPEND="$(unpacker_src_uri_depends)"
 
 DOCS="AboutNAUfont_v${MY_PV}.pdf"
-FONT_SUFFIX="ttf"

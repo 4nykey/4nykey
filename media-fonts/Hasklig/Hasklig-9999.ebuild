@@ -5,6 +5,7 @@
 EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
+FONT_TYPES="otf"
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/i-tu/${PN}"
@@ -47,7 +48,6 @@ DEPEND="
 		')
 	)
 "
-FONT_SUFFIX="otf"
 
 pkg_setup() {
 	if use binary; then

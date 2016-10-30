@@ -4,6 +4,7 @@
 
 EAPI=6
 
+FONT_TYPES="otf"
 inherit font-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -31,5 +32,4 @@ DEPEND="
 	media-gfx/fontforge
 	media-gfx/ttfautohint
 "
-FONT_SUFFIX="otf"
 FONT_S=( Output )

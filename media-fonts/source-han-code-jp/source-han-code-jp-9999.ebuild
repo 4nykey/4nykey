@@ -4,6 +4,7 @@
 
 EAPI=6
 
+FONT_TYPES="otf"
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-fonts/${PN}"
@@ -34,8 +35,6 @@ IUSE="+binary"
 DEPEND="
 	!binary? ( dev-util/afdko )
 "
-
-FONT_SUFFIX="otf"
 
 pkg_setup() {
 	if [[ ${PV} == *9999* ]]; then

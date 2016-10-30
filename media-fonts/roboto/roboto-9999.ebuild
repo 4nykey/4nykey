@@ -55,7 +55,6 @@ DEPEND="
 pkg_setup() {
 	if use binary; then
 		S="${WORKDIR}/${MY_PN}"
-		FONT_SUFFIX="ttf"
 	else
 		python-any-r1_pkg_setup
 		FONT_S=( out/Roboto{,Condensed}{O,T}TF )

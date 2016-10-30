@@ -39,7 +39,6 @@ DEPEND="
 		dev-python/scfbuild
 	)
 "
-FONT_SUFFIX="ttf"
 
 pkg_setup() {
 	local _fc="fontconfig/56-emojione-color.conf"

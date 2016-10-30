@@ -4,6 +4,7 @@
 
 EAPI=6
 
+FONT_TYPES="otf"
 S="${WORKDIR}"
 inherit font-r1 unpacker
 
@@ -24,5 +25,4 @@ IUSE=""
 DEPEND="$(unpacker_src_uri_depends)"
 RDEPEND="${DEPEND}"
 
-FONT_SUFFIX="otf"
 DOCS="Pecita.txt"

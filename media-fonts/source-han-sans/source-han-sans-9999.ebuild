@@ -4,6 +4,7 @@
 
 EAPI=6
 
+FONT_TYPES="otf"
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-fonts/${PN}"
@@ -41,8 +42,6 @@ DEPEND="
 RDEPEND="
 	l10n_ja? ( monospace? ( media-fonts/source-han-code-jp ) )
 "
-
-FONT_SUFFIX="otf"
 
 src_unpack() {
 	if [[ ${PV} == *9999* ]]; then

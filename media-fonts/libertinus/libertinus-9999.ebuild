@@ -5,6 +5,7 @@
 EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
+FONT_TYPES="otf"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/khaledhosny/${PN}.git"
@@ -39,7 +40,6 @@ DEPEND="
 	)
 "
 RDEPEND="${DEPEND}"
-FONT_SUFFIX="otf"
 DOCS="*.linuxlibertine.txt"
 
 pkg_setup() {

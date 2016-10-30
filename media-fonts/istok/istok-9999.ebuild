@@ -42,7 +42,6 @@ DEPEND="
 		dev-util/font-helpers
 	)
 "
-FONT_SUFFIX="ttf"
 RESTRICT="primaryuri"
 
 pkg_setup() {

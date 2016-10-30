@@ -39,7 +39,6 @@ LICENSE="OFL-1.1"
 SLOT="0"
 IUSE="+binary"
 
-FONT_SUFFIX="ttf"
 RESTRICT="primaryuri"
 
 pkg_setup() {

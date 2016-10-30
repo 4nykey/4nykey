@@ -22,5 +22,4 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-FONT_SUFFIX="ttf"
 FONT_S=( ${P} ${PN}-carlito-20130920 )

@@ -29,9 +29,9 @@ WIDTHS="loose halfloose halftight tight"
 HEIGHTS="xtrasmall small large xtralarge"
 CHARS="empty_dollar dotted_zero base_one zstyle_l no_contextual_alternates"
 IUSE="
-$(printf 'monoid_widths_%s ' ${WIDTHS})
-$(printf 'monoid_heights_%s ' ${HEIGHTS})
-$(printf 'monoid_chars_%s ' ${CHARS})
+$(printf +monoid_widths_%s' ' ${WIDTHS})
+$(printf +monoid_heights_%s' ' ${HEIGHTS})
+$(printf +monoid_chars_%s' ' ${CHARS})
 "
 
 DEPEND="
@@ -41,7 +41,6 @@ DEPEND="
 	')
 "
 
-FONT_SUFFIX="ttf"
 FONT_S=( _release )
 DOCS="Readme.md"
 

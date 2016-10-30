@@ -42,7 +42,6 @@ DEPEND="
 	)
 "
 RESTRICT="primaryuri"
-FONT_SUFFIX="ttf"
 
 pkg_setup() {
 	use binary || python-any-r1_pkg_setup

@@ -18,4 +18,3 @@ IUSE=""
 
 DEPEND=""
 RDEPEND="${DEPEND}"
-FONT_SUFFIX="ttf"

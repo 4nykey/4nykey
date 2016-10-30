@@ -41,9 +41,6 @@ HOMEPAGE="http://opensans.com/"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE=""
-
-FONT_SUFFIX="ttf"
 
 src_unpack() {
 	if [[ -z ${PV%%*9999} ]]; then

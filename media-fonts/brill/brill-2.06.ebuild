@@ -23,5 +23,4 @@ IUSE=""
 DEPEND="
 	$(unpacker_src_uri_depends)
 "
-FONT_SUFFIX="ttf"
 DOCS="Brill_Typeface_User_Guide_${PV}.pdf"

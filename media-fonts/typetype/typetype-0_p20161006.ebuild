@@ -4,6 +4,7 @@
 
 EAPI=6
 
+FONT_TYPES="otf ttf"
 S="${WORKDIR}"
 inherit font-r1 unpacker
 
@@ -74,7 +75,6 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND="$(unpacker_src_uri_depends)"
-FONT_SUFFIX="otf ttf"
 FONT_S=( inst )
 DOCS="inst/*.pdf"
 

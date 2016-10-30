@@ -18,6 +18,3 @@ KEYWORDS="~x86 ~amd64"
 IUSE=""
 
 DEPEND="app-arch/unzip"
-
-DOCS="*.txt"
-FONT_SUFFIX="ttf TTF"

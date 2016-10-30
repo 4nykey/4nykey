@@ -5,6 +5,7 @@
 EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
+FONT_TYPES="otf ttc"
 inherit python-any-r1
 if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI="mirror://gcarchive/${PN}/source-archive.zip -> ${P}.zip"
@@ -37,7 +38,6 @@ LICENSE="OFL-1.1"
 SLOT="0"
 IUSE="latex"
 RESTRICT="primaryuri"
-FONT_SUFFIX="otf ttc"
 
 pkg_setup() {
 	use latex && DOCS+=" USAGE"

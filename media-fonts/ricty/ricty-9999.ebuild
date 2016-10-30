@@ -7,7 +7,6 @@ EAPI=6
 MY_IN="Inconsolata-c57f86c" #20161013 https://github.com/cyrealtype/Inconsolata
 MY_MP="mplus-TESTFLIGHT-062" #20160930 https://osdn.net/projects/mplus-fonts/releases/62344
 MY_IP="ipag00303"
-FONT_SUFFIX="ttf"
 S="${WORKDIR}"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
