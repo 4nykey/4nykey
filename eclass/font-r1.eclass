@@ -11,9 +11,14 @@ inherit eutils
 
 EXPORT_FUNCTIONS pkg_setup src_install pkg_postinst pkg_postrm
 
+# @ECLASS-VARIABLE: FONT_TYPES
+# @REQUIRED
+# @DESCRIPTION:
+# Space delimited list of font formats available for install.
+FONT_TYPES=${FONT_TYPES:-ttf}
+
 # @ECLASS-VARIABLE: FONT_SUFFIX
 # @DEFAULT_UNSET
-# @REQUIRED
 # @DESCRIPTION:
 # Space delimited list of font suffixes to install.
 FONT_SUFFIX=${FONT_SUFFIX:-}
@@ -49,6 +54,8 @@ FONT_CONF=( "" )
 DOCS=${DOCS:-}
 
 IUSE="X"
+IUSE+=" $(printf +font_types_%s' ' ${FONT_TYPES})"
+REQUIRED_USE+=" || ( $(printf font_types_%s' ' ${FONT_TYPES}) )"
 
 DEPEND="X? (
 		x11-apps/mkfontdir
@@ -158,6 +165,11 @@ font-r1_pkg_setup() {
 	# make sure we get no collisions
 	# setup is not the nicest place, but preinst doesn't cut it
 	[[ -e "${EROOT}/${FONTDIR}/fonts.cache-1" ]] && rm -f "${EROOT}/${FONTDIR}/fonts.cache-1"
+
+	local _t
+	for _t in ${FONT_TYPES}; do
+		use font_types_${_t} && FONT_SUFFIX+=" ${_t}"
+	done
 }
 
 # @FUNCTION: font-r1_src_install
