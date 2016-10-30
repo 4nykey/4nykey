@@ -172,11 +172,11 @@ font-r1_pkg_setup() {
 	done
 }
 
-# @FUNCTION: font-r1_src_install
+# @FUNCTION: font-r1_font_install
 # @DESCRIPTION:
-# The font src_install function.
-font-r1_src_install() {
-	local dir suffix commondoc
+# The main font install function.
+font-r1_font_install() {
+	local dir suffix
 
 	insinto "${FONTDIR}"
 
@@ -188,14 +188,20 @@ font-r1_src_install() {
 		done
 	fi
 	done
+}
 
+# @FUNCTION: font-r1_src_install
+# @DESCRIPTION:
+# The font src_install function.
+font-r1_src_install() {
+	font-r1_font_install
 	font-r1_xfont_config
-
 	font-r1_fontconfig
 
 	[[ -n ${DOCS} ]] && { dodoc ${DOCS} || die "docs installation failed" ; }
 
 	# install common docs
+	local commondoc
 	for commondoc in \
 		COPYRIGHT README{,.txt,.md} HISTORY NEWS AUTHORS{,.txt} BUGS TODO \
 		ChangeLog F{ont,ONT}L{og,OG}.txt CONTRIBUTORS{,.txt} relnotes.txt
