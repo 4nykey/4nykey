@@ -25,7 +25,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
-MY_MK="3c71e576827753fc395f44f4c2d91131-4e1e133"
+MY_MK="3c71e576827753fc395f44f4c2d91131-740f886"
 SRC_URI+="
 	!binary? (
 		mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
@@ -53,6 +53,9 @@ pkg_setup() {
 	if use binary; then
 		S="${WORKDIR}"
 	else
+		PATCHES=(
+			"${FILESDIR}"/${PN}-ftversion.diff
+		)
 		python-any-r1_pkg_setup
 		source /etc/afdko
 	fi
@@ -69,6 +72,9 @@ src_unpack() {
 }
 
 src_compile() {
-	use binary || \
-		emake -f "${WORKDIR}"/${MY_MK}/Makefile family=${PN}
+	use binary && return
+	emake \
+		${FONT_SUFFIX} \
+		family=${PN} \
+		-f "${WORKDIR}"/${MY_MK}/Makefile
 }
