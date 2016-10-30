@@ -20,7 +20,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-0251c9f"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-8e4962a"
 SRC_URI+="
 	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
 	-> ${MY_MK}.tar.gz
@@ -31,11 +31,7 @@ HOMEPAGE="https://github.com/googlei18n/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="
-interpolate
-$(printf '+font_types_%s ' ${FONT_TYPES})
-"
-REQUIRED_USE+=" || ( $(printf 'font_types_%s ' ${FONT_TYPES}) )"
+IUSE="interpolate"
 
 DEPEND="
 	${PYTHON_DEPS}
@@ -47,10 +43,6 @@ DEPEND="
 FONT_S=( master_{o,t}tf )
 
 pkg_setup() {
-	local t
-	for t in ${FONT_TYPES}; do
-		use font_types_${t} && FONT_SUFFIX+="${t} "
-	done
 	python-any-r1_pkg_setup
 	font-r1_pkg_setup
 }

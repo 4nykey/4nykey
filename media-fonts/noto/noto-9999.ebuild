@@ -25,12 +25,8 @@ HOMEPAGE="http://www.google.com/get/noto"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="
-	cjk emoji +binary pipeline
-	$(printf '+font_types_%s ' ${FONT_TYPES})
-"
+IUSE="cjk emoji +binary pipeline"
 REQUIRED_USE="pipeline? ( binary )"
-REQUIRED_USE+=" || ( $(printf 'font_types_%s ' ${FONT_TYPES}) )"
 
 DEPEND=""
 RDEPEND="
@@ -40,11 +36,11 @@ RDEPEND="
 	!media-fonts/croscorefonts
 "
 
-FONT_SUFFIX="ttf"
-FONT_S=( hinted )
-
-pkg_setup() {
-	use pipeline || return
-	use font_types_otf && FONT_SUFFIX+=" otf"
-	FONT_S+=( alpha{,/OTF}/from-pipeline )
+src_install() {
+	if use pipeline; then
+		declare -a FONT_S=( alpha{,/OTF}/from-pipeline )
+		font-r1_font_install
+	fi
+	declare -a FONT_S=( hinted )
+	FONT_SUFFIX="ttf" font-r1_src_install
 }

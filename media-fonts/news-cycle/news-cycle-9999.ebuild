@@ -26,8 +26,3 @@ HOMEPAGE="https://launchpad.net/newscycle"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE=""
-
-DEPEND=""
-
-DOCS="FontLog.txt"

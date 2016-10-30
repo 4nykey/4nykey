@@ -24,17 +24,5 @@ RESTRICT="primaryuri"
 LICENSE="OFL-1.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="
-	$(printf '+font_types_%s ' ${FONT_TYPES})
-"
-REQUIRED_USE+=" || ( $(printf 'font_types_%s ' ${FONT_TYPES}) )"
 
 DEPEND="$(unpacker_src_uri_depends)"
-
-pkg_setup() {
-	local t
-	for t in ${FONT_TYPES}; do
-		use font_types_${t} && FONT_SUFFIX+="${t} "
-	done
-	font-r1_pkg_setup
-}

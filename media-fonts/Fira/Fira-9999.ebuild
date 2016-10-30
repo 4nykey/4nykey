@@ -31,11 +31,7 @@ HOMEPAGE="https://www.mozilla.org/en-US/styleguide/products/firefox-os/typeface/
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="
-	+binary
-	$(printf '+font_types_%s ' ${FONT_TYPES})
-"
-REQUIRED_USE+=" || ( $(printf 'font_types_%s ' ${FONT_TYPES}) )"
+IUSE="+binary"
 
 DEPEND="
 	!binary? (
@@ -53,10 +49,6 @@ RDEPEND="
 DOCS="*.md"
 
 pkg_setup() {
-	local t
-	for t in ${FONT_TYPES}; do
-		use font_types_${t} && FONT_SUFFIX+="${t} "
-	done
 	if use binary; then
 		FONT_S=( {o,t}tf )
 	else

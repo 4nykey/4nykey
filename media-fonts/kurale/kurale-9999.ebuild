@@ -26,11 +26,7 @@ HOMEPAGE="https://github.com/etunni/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="
-	+binary
-	$(printf '+font_types_%s ' ${FONT_TYPES})
-"
-REQUIRED_USE+=" || ( $(printf 'font_types_%s ' ${FONT_TYPES}) )"
+IUSE="+binary"
 
 DEPEND="
 	!binary? (
@@ -48,10 +44,6 @@ pkg_setup() {
 		python-any-r1_pkg_setup
 		FONT_S=( master_{o,t}tf )
 	fi
-	local t
-	for t in ${FONT_TYPES}; do
-		use font_types_${t} && FONT_SUFFIX+="${t} "
-	done
 	font-r1_pkg_setup
 }
 

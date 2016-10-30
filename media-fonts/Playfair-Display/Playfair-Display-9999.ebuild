@@ -24,11 +24,7 @@ HOMEPAGE="https://github.com/clauseggers/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="
-	+binary
-	$(printf '+font_types_%s ' ${FONT_TYPES})
-"
-REQUIRED_USE+=" || ( $(printf 'font_types_%s ' ${FONT_TYPES}) )"
+IUSE="+binary"
 
 DEPEND="
 	!binary? (
@@ -39,13 +35,7 @@ DEPEND="
 	)
 "
 
-DOCS+=" README.md"
-
 pkg_setup() {
-	local t
-	for t in ${FONT_TYPES}; do
-		use font_types_${t} && FONT_SUFFIX+="${t} "
-	done
 	if use binary; then
 		FONT_S=( fonts/{CFF,TTF} )
 	else

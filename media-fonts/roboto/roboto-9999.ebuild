@@ -33,11 +33,7 @@ HOMEPAGE="https://github.com/google/roboto"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE="
-	+binary
-	$(printf '+font_types_%s ' ${FONT_TYPES})
-"
-REQUIRED_USE+=" || ( $(printf 'font_types_%s ' ${FONT_TYPES}) )"
+IUSE="+binary"
 
 DEPEND="
 	binary? (
@@ -57,10 +53,6 @@ DEPEND="
 "
 
 pkg_setup() {
-	local t
-	for t in ${FONT_TYPES}; do
-		use font_types_${t} && FONT_SUFFIX+="${t} "
-	done
 	if use binary; then
 		S="${WORKDIR}/${MY_PN}"
 		FONT_SUFFIX="ttf"

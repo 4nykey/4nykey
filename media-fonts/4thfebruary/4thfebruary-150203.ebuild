@@ -28,19 +28,7 @@ RESTRICT="primaryuri"
 LICENSE="CC-BY-ND-3.0 CC-BY-ND-4.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="
-	$(printf '+font_types_%s ' ${FONT_TYPES})
-"
-REQUIRED_USE+=" || ( $(printf 'font_types_%s ' ${FONT_TYPES}) )"
 
 DEPEND="$(unpacker_src_uri_depends)"
 FONT_S+=( {.,'Blogger Sans'}/OT-{ps,tt} )
 DOCS="readme.txt"
-
-pkg_setup() {
-	local t
-	for t in ${FONT_TYPES}; do
-		use font_types_${t} && FONT_SUFFIX+="${t} "
-	done
-	font-r1_pkg_setup
-}

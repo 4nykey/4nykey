@@ -33,19 +33,11 @@ HOMEPAGE="http://www.georgduffner.at/ebgaramond"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="
-	$(printf '+font_types_%s ' ${FONT_TYPES})
-"
-REQUIRED_USE+=" || ( $(printf 'font_types_%s ' ${FONT_TYPES}) )"
 
-FONT_S="${S}/build"
+FONT_S=( build )
 DOCS="Changes specimen/Specimen.pdf"
 
 pkg_setup() {
-	local t
-	for t in ${FONT_TYPES}; do
-		use font_types_${t} && FONT_SUFFIX+="${t} "
-	done
 	python-any-r1_pkg_setup
 	font-r1_pkg_setup
 }

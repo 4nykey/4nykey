@@ -39,11 +39,7 @@ HOMEPAGE="http://adobe-fonts.github.io/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="
-	+binary
-	$(printf '+font_types_%s ' ${FONT_TYPES})
-"
-REQUIRED_USE+=" || ( $(printf 'font_types_%s ' ${FONT_TYPES}) )"
+IUSE="+binary"
 
 DEPEND="
 	!binary? (
@@ -54,21 +50,12 @@ DEPEND="
 	)
 "
 
-DOCS="README.md"
-
 pkg_setup() {
-	local t
-	for t in ${FONT_TYPES}; do
-		use font_types_${t} && FONT_SUFFIX+="${t} "
-	done
-
 	if [[ ${PV} == *9999* ]]; then
 		EGIT_BRANCH="$(usex binary release master)"
 	else
 		S="${WORKDIR}/${P}$(usex binary R '')"
 	fi
-
-	font-r1_pkg_setup
 
 	if use binary; then
 		FONT_S=( {O,T}TF )
@@ -77,8 +64,10 @@ pkg_setup() {
 		PATCHES=(
 			"${FILESDIR}"/${PN}_fonttools.diff
 		)
-	source /etc/afdko
+		source /etc/afdko
 	fi
+
+	font-r1_pkg_setup
 }
 
 src_unpack() {

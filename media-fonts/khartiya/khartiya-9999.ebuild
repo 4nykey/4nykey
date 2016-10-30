@@ -34,12 +34,7 @@ HOMEPAGE="http://code.google.com/p/khartiya"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="
-	+binary
-	latex
-	$(printf '+font_types_%s ' ${FONT_TYPES})
-"
-REQUIRED_USE+=" || ( $(printf 'font_types_%s ' ${FONT_TYPES}) )"
+IUSE="+binary latex"
 
 DEPEND="
 	!binary? (
@@ -54,13 +49,8 @@ DEPEND="
 	)
 "
 RESTRICT="primaryuri"
-DOCS=( FontLog.txt )
 
 pkg_setup() {
-	local t
-	for t in ${FONT_TYPES}; do
-		use font_types_${t} && FONT_SUFFIX+="${t} "
-	done
 	use binary || python-any-r1_pkg_setup
 	font-r1_pkg_setup
 }

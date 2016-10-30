@@ -33,11 +33,7 @@ HOMEPAGE="http://ponomar.net/cu_support/fonts.html"
 
 LICENSE="|| ( GPL-3 OFL-1.1 )"
 SLOT="0"
-IUSE="
-	+binary
-	$(printf '+font_types_%s ' ${FONT_TYPES})
-"
-REQUIRED_USE+=" || ( $(printf 'font_types_%s ' ${FONT_TYPES}) )"
+IUSE="+binary"
 
 DEPEND="
 	binary? ( app-arch/unzip )
@@ -51,11 +47,6 @@ DEPEND="
 "
 
 pkg_setup() {
-	local t
-	for t in ${FONT_TYPES}; do
-		use font_types_${t} && FONT_SUFFIX+="${t} "
-	done
-
 	if use binary; then
 		S="${WORKDIR}"
 	else
@@ -77,7 +68,6 @@ src_compile() {
 		fontforge -script Ponomar/hp-generate.py ${_s} || die
 	done
 
-	use font_types_ttf || return
 	for _s in */*.gdl; do
 		grcompiler "${_s}" "$(dirname ${_s})Unicode.ttf" "${_s%.*}.ttf" || die
 		mv -f "${_s%.*}.ttf" "$(dirname ${_s})Unicode.ttf"

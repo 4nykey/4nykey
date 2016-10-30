@@ -5,6 +5,7 @@
 EAPI=6
 
 FONT_TYPES="otf ttf"
+FONT_S=( master_{o,t}tf )
 PYTHON_COMPAT=( python2_7 )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -25,10 +26,6 @@ HOMEPAGE="https://github.com/EbenSorkin/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="
-	$(printf '+font_types_%s ' ${FONT_TYPES})
-"
-REQUIRED_USE+=" || ( $(printf 'font_types_%s ' ${FONT_TYPES}) )"
 
 DEPEND="
 	${PYTHON_DEPS}
@@ -36,13 +33,8 @@ DEPEND="
 		dev-util/fontmake[${PYTHON_USEDEP}]
 	')
 "
-FONT_S=( master_{o,t}tf )
 
 pkg_setup() {
-	local t
-	for t in ${FONT_TYPES}; do
-		use font_types_${t} && FONT_SUFFIX+="${t} "
-	done
 	python-any-r1_pkg_setup
 	font-r1_pkg_setup
 }

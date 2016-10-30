@@ -25,10 +25,6 @@ HOMEPAGE="http://gidole.github.io"
 
 LICENSE="MIT OFL-1.1"
 SLOT="0"
-IUSE="
-	$(printf '+font_types_%s ' ${FONT_TYPES})
-"
-REQUIRED_USE+=" || ( $(printf 'font_types_%s ' ${FONT_TYPES}) )"
 
 DEPEND="
 	${PYTHON_DEPS}
@@ -38,16 +34,7 @@ DEPEND="
 "
 DOCS="ReadMe.md"
 
-pkg_setup() {
-	local t
-	for t in ${FONT_TYPES}; do
-		use font_types_${t} && FONT_SUFFIX+="${t} "
-	done
-	font-r1_pkg_setup
-}
-
 src_compile() {
-	local t
 	for t in ${FONT_SUFFIX}; do
 		fontforge -quiet -lang=py -c \
 		'from sys import argv;\

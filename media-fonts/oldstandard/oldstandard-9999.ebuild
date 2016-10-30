@@ -37,11 +37,7 @@ HOMEPAGE="https://github.com/akryukov/oldstand"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="
-	+binary
-	$(printf '+font_types_%s ' ${FONT_TYPES})
-"
-REQUIRED_USE+=" || ( $(printf 'font_types_%s ' ${FONT_TYPES}) )"
+IUSE="+binary"
 
 DEPEND="
 	binary? ( app-arch/unzip )
@@ -55,10 +51,6 @@ DEPEND="
 "
 
 pkg_setup() {
-	local t
-	for t in ${FONT_TYPES}; do
-		use font_types_${t} && FONT_SUFFIX+="${t} "
-	done
 	if use binary; then
 		S="${WORKDIR}"
 	else
@@ -70,7 +62,6 @@ pkg_setup() {
 src_compile() {
 	use binary && return
 	fontforge -lang=py -script ost-generate.py || die
-	use font_types_ttf || return
 	local _t
 	for _t in *.ttf; do
 		grcompiler "${_t%.*}.gdl" "${_t}" "${T}/${_t}" || die

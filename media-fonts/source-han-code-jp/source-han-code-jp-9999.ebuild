@@ -36,7 +36,6 @@ DEPEND="
 "
 
 FONT_SUFFIX="otf"
-DOCS="README.md relnotes.txt"
 
 pkg_setup() {
 	if [[ ${PV} == *9999* ]]; then

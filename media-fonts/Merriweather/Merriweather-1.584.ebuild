@@ -12,6 +12,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="f312a66"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		binary? (
 			https://github.com/EbenSorkin/${PN}/releases/download/${PV}/${P}.zip
@@ -30,11 +31,7 @@ HOMEPAGE="https://github.com/EbenSorkin/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="
-	+binary
-	$(printf '+font_types_%s ' ${FONT_TYPES})
-"
-REQUIRED_USE+=" || ( $(printf 'font_types_%s ' ${FONT_TYPES}) )"
+IUSE="+binary"
 
 DEPEND="
 	binary? ( app-arch/unzip )
@@ -47,37 +44,29 @@ DEPEND="
 "
 
 pkg_setup() {
-	local t
-	for t in ${FONT_TYPES}; do
-		use font_types_${t} && FONT_SUFFIX+="${t} "
-	done
 	if use binary; then
 		S="${WORKDIR}"
-		FONT_S="${S}"
+		FONT_S=( {O,T}TF )
 	else
-		FONT_S="${S}/SRC"
-		DOCS+=" README.md"
+		FONT_S=( SRC )
 		python-any-r1_pkg_setup
 	fi
 	font-r1_pkg_setup
 }
 
 src_compile() {
-	if use binary; then
-		mv -f "${S}"/[OT]TF/${PN}*.[ot]tf "${FONT_S}"/
-	else
-		local t u
-		for u in "${FONT_S}"/${PN}*.ufo; do
-		for t in ${FONT_SUFFIX}; do
-			fontforge -quiet -lang=py -c \
-			'from sys import argv;\
-			f=fontforge.open(argv[1]);\
-			f.encoding="UnicodeFull";\
-			f.selection.all();\
-			f.generate(argv[2],flags=("opentype"));\
-			f.close()' \
-			"${u}" "${u%.ufo}.${t}" || die
-		done
-		done
-	fi
+	use binary && return
+	local t u
+	for u in "${FONT_S}"/${PN}*.ufo; do
+	for t in ${FONT_SUFFIX}; do
+		fontforge -quiet -lang=py -c \
+		'from sys import argv;\
+		f=fontforge.open(argv[1]);\
+		f.encoding="UnicodeFull";\
+		f.selection.all();\
+		f.generate(argv[2],flags=("opentype"));\
+		f.close()' \
+		"${u}" "${u%.ufo}.${t}" || die
+	done
+	done
 }
