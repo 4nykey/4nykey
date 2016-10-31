@@ -66,6 +66,7 @@ src_compile() {
 	ulimit -n 4096
 	emake otf \
 		$(usex latex 'all nm.map' '') \
+		$(usex font_types_ttc '' 'OTCFONTS=') \
 		OTF2OTC="otf2otc"
 }
 
