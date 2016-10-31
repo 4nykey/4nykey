@@ -55,7 +55,6 @@ pkg_setup() {
 		FONT_S=( master_{o,t}tf )
 		PATCHES=( "${FILESDIR}"/${PN}-glyphslib.diff )
 		python-any-r1_pkg_setup
-		. /etc/afdko
 	fi
 	font-r1_pkg_setup
 }

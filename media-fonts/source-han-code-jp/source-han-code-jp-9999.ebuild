@@ -46,7 +46,6 @@ pkg_setup() {
 		FONT_S=( OTF )
 	else
 		FONT_S=( Bold ExtraLight Heavy Light Medium Normal Regular )
-		. /etc/afdko
 	fi
 	font-r1_pkg_setup
 }

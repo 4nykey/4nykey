@@ -68,7 +68,6 @@ pkg_setup() {
 		fi
 	else
 		PATCHES=( "${FILESDIR}"/${P}-cmds.diff )
-		source "${EROOT}"etc/afdko
 	fi
 }
 

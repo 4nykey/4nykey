@@ -58,7 +58,6 @@ src_compile() {
 	[[ -n ${PV%%*9999} ]] && return
 	# fontforge fails with EMFILE otherwise
 	ulimit -n 4096
-	source /etc/afdko
 	emake otf \
 		$(usex latex 'all nm.map' '') \
 		OTF2OTC="${FDK_EXE}/otf2otc"

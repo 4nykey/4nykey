@@ -64,7 +64,6 @@ pkg_setup() {
 		PATCHES=(
 			"${FILESDIR}"/${PN}_fonttools.diff
 		)
-		source /etc/afdko
 	fi
 
 	font-r1_pkg_setup

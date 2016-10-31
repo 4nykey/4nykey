@@ -57,7 +57,6 @@ pkg_setup() {
 			"${FILESDIR}"/${PN}-ftversion.diff
 		)
 		python-any-r1_pkg_setup
-		source /etc/afdko
 	fi
 	font-r1_pkg_setup
 }
