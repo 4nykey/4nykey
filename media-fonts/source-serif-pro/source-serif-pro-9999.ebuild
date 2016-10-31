@@ -61,9 +61,6 @@ pkg_setup() {
 		FONT_S=( {O,T}TF )
 	else
 		python-any-r1_pkg_setup
-		PATCHES=(
-			"${FILESDIR}"/${PN}_fonttools.diff
-		)
 	fi
 
 	font-r1_pkg_setup
