@@ -15,7 +15,7 @@ if [[ -z ${PV%%*9999} ]]; then
 		$(python_gen_any_dep '
 			media-gfx/fontforge[python,${PYTHON_USEDEP}]
 			dev-python/fonttools[${PYTHON_USEDEP}]
-			dev-util/afdko[${PYTHON_USEDEP}]
+			font_types_ttc? ( dev-util/afdko[${PYTHON_USEDEP}] )
 		')
 		dev-util/font-helpers
 		dev-libs/kpathsea
@@ -49,9 +49,15 @@ src_prepare() {
 	default
 	[[ -n ${PV%%*9999} ]] && return
 	cp "${EPREFIX}"/usr/share/font-helpers/*.{ff,py} "${S}"/
-	sed -e \
-		's%nm.map: all%cleanotf:\n\t-rm -f $(OTFFILES_COLLECTIONS)\nnm.map:%' \
-		-i Makefile
+	if use font_types_ttc; then
+		sed -e \
+			's%\(nm.map:\) all%cleanotf:\n\t-rm -f $(OTFFILES_COLLECTIONS)\n\1%' \
+			-i Makefile
+	else
+		sed \
+			-e 's:OTFFILES_COLLECTIONS=:OTFFILES_SINGLE+=:' \
+			-i Makefile
+	fi
 }
 
 src_compile() {
@@ -60,7 +66,7 @@ src_compile() {
 	ulimit -n 4096
 	emake otf \
 		$(usex latex 'all nm.map' '') \
-		OTF2OTC="${FDK_EXE}/otf2otc"
+		OTF2OTC="otf2otc"
 }
 
 src_install() {
@@ -79,7 +85,9 @@ src_install() {
 		insinto /etc/texmf/updmap.d
 		doins "${T}"/${PN}.cfg
 	fi
-	[[ -z ${PV%%*9999} ]] && emake cleanotf
+	if [[ -z ${PV%%*9999} ]] && use font_types_ttc; then
+		emake cleanotf
+	fi
 	font-r1_src_install
 }
 
