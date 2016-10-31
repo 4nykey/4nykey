@@ -5,6 +5,7 @@
 EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
+MULTILIB_COMPAT=( abi_x86_32 )
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
@@ -16,7 +17,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-single-r1
+inherit python-single-r1 multilib-build
 
 DESCRIPTION="Adobe Font Development Kit for OpenType"
 HOMEPAGE="http://www.adobe.com/devnet/opentype/afdko.html"
@@ -55,7 +56,8 @@ src_prepare() {
 src_compile() {
 	local _d
 	find -path '*/linux/gcc/release/Makefile' | while read _d; do
-		emake -C "${_d%/Makefile}" || die
+		emake -C "${_d%/Makefile}" \
+			XFLAGS="${CFLAGS_x86} ${CFLAGS} -D__NO_STRING_INLINES" || die
 	done
 	find -path '*exe/linux/release/*' -exec mv -f {} "FDK/Tools/linux" \;
 }
