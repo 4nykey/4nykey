@@ -3,9 +3,8 @@
 # $Id$
 
 EAPI=6
-PYTHON_COMPAT=( python2_7 )
 
-inherit python-single-r1
+PYTHON_COMPAT=( python2_7 )
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
@@ -17,6 +16,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
+inherit python-single-r1
 
 DESCRIPTION="Adobe Font Development Kit for OpenType"
 HOMEPAGE="http://www.adobe.com/devnet/opentype/afdko.html"
@@ -35,44 +35,38 @@ RDEPEND="
 "
 PATCHES=(
 	"${FILESDIR}"/${PN}-makeotf.diff
+	"${FILESDIR}"/${PN}-paths.diff
+	"${FILESDIR}"/${PN}-inc.diff
 )
 DOCS=( "FDK/Technical Documentation" )
 
-pkg_setup() {
-	python_setup
-}
-
 src_prepare() {
-	rm -f "FDK/Tools/linux/AFDKOPython"
-	rm -rf "FDK/Tools/linux/Python"
+	rm -f "${S}"/FDK/Tools/linux/{AFDKOPython,setFDKPaths,ttx,ufonormalizer}
+	rm -rf "${S}"/FDK/Tools/linux/Python
+	local _d="${EROOT}usr/share/${PN}/SharedData/FDKScripts"
 	sed \
-		-e "s:\(AFDKO_Python=\).*:\1\"/usr/bin/env ${EPYTHON}\":" \
-		-i FDK/Tools/linux/setFDKPaths
+		-e '/source.*setFDKPaths/d' \
+		-e "s:\$AFDKO_Python \"\${AFDKO_Scripts}/:/usr/bin/env ${EPYTHON} \"${_d}/:" \
+		-i "${S}"/FDK/Tools/linux/*
 	default
+	tc-export CC CPP AR
 }
 
 src_compile() {
-	tc-export CC
-	local x
-	find -path '*/linux/gcc/release/Makefile' -printf '%h\n'|while read x; do
-		emake -C "${x}" || die
+	local _d
+	find -path '*/linux/gcc/release/Makefile' | while read _d; do
+		emake -C "${_d%/Makefile}" || die
 	done
 	find -path '*exe/linux/release/*' -exec mv -f {} "FDK/Tools/linux" \;
 }
 
 src_install() {
 	default
-	local FDK_EXE="/usr/$(get_libdir)/${PN}/FDK/Tools/linux"
-	printf \
-		'export FDK_EXE="%s"\nexport PATH="${FDK_EXE}:${PATH}"\n' \
-		"${FDK_EXE}" > "${T}"/${PN}
-	insinto /etc
-	doins "${T}"/${PN}
+	dobin "${S}"/FDK/Tools/linux/*
 
-	insinto "${FDK_EXE%/*}"
+	local _d="/usr/share/${PN}"
+	insinto "${_d%}"
 	doins -r "${S}"/FDK/Tools/SharedData
-	exeinto "${FDK_EXE}"
-	doexe "${S}"/FDK/Tools/linux/*
 
-	python_optimize "${ED}"/usr/$(get_libdir)/${PN}/FDK/Tools/SharedData/FDKScripts
+	python_optimize "${ED}"/${_d}/SharedData/FDKScripts
 }

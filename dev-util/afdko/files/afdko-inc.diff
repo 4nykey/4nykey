@@ -1,0 +1,50 @@
+--- a/FDK/Tools/Programs/autohint/autohintlib/source/ac/read.c
++++ b/FDK/Tools/Programs/autohint/autohintlib/source/ac/read.c
+@@ -4,6 +4,7 @@
+ /* read.c */
+ 
+ 
++#include <math.h>
+ #include "ac.h"
+ #include "bftoac.h"
+ #include "charpath.h"
+--- a/FDK/Tools/Programs/autohint/autohintlib/source/bf/machinedep.c
++++ b/FDK/Tools/Programs/autohint/autohintlib/source/bf/machinedep.c
+@@ -16,6 +16,7 @@
+ 
+ #include <sys/types.h>
+ #include <sys/stat.h>
++#include <time.h>
+ #ifdef WIN32
+ #include <file.h>
+ #include <time.h>
+--- a/FDK/Tools/Programs/public/lib/source/absfont/absfont_draw.c
++++ b/FDK/Tools/Programs/public/lib/source/absfont/absfont_draw.c
+@@ -8,6 +8,7 @@
+ #include "absfont.h"
+ 
+ #include <stdio.h>
++#include <time.h>
+ #ifdef _WIN32
+ #include <time.h>
+ #else
+--- a/FDK/Tools/Programs/sfntdiff/source/Dglobal.c
++++ b/FDK/Tools/Programs/sfntdiff/source/Dglobal.c
+@@ -13,6 +13,7 @@
+ #include <stdarg.h> 
+ #include <string.h>
+ #include <ctype.h>
++#include <time.h>
+ #ifdef _WINDOWS
+   #include <time.h>
+ #else
+--- a/FDK/Tools/Programs/spot/source/sys.c
++++ b/FDK/Tools/Programs/spot/source/sys.c
+@@ -11,6 +11,7 @@
+ 
+ #include <errno.h>
+ #include <fcntl.h>
++#include <unistd.h>
+ 
+ 
+ #if MSDOS || WIN32

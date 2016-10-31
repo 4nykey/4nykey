@@ -1,0 +1,20 @@
+--- a/FDK/Tools/SharedData/FDKScripts/FDKUtils.py
++++ b/FDK/Tools/SharedData/FDKScripts/FDKUtils.py
+@@ -20,14 +20,14 @@
+ 	pass
+ 
+ def findFDKDirs():
+-	fdkScriptsDir = None
+-	fdkToolsDir = None
++	fdkSharedDataDir = os.path.abspath('/usr/share/afdko/SharedData')
++	fdkToolsDir = os.path.abspath('/usr/bin')
+ 	""" Look up the file path to find the "Tools" directory;
+ 	then add the os.name for the executables, and .'FDKScripts' for the scripts.
+ 	"""
+ 	dir = os.path.dirname(__file__)
+ 
+-	while dir:
++	while False:
+ 		if os.path.basename(dir) == "Tools":
+ 			fdkScriptsDir = os.path.join(dir, "SharedData", "FDKScripts")
+ 			if curSystem == "Darwin":
