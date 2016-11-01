@@ -1,1 +1,1 @@
-news-cycle-9999.ebuild
+news-cycle-0.5.9999.ebuild
