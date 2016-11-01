@@ -59,18 +59,10 @@ pkg_setup() {
 	font-r1_pkg_setup
 }
 
-src_unpack() {
-	if [[ -z ${PV%%*9999} ]]; then
-		git-r3_src_unpack
-		use binary || unpack ${MY_MK}.tar.gz
-	else
-		vcs-snapshot_src_unpack
-	fi
-}
-
 src_prepare() {
 	default
 	use binary && return
+	unpack ${MY_MK}.tar.gz
 	sed \
 		-e 's:active = 0\;:exports = 0\;:' \
 		-e 's:WORK_::' \
@@ -83,5 +75,5 @@ src_compile() {
 		SRCDIR="${S}/source/glyphs" \
 		FONTMAKE="fontmake -o ${FONT_SUFFIX}" \
 		INTERPOLATE='makeInstancesUFO -a -c -n -dec -d' \
-		-f "${WORKDIR}"/${MY_MK}/Makefile
+		-f ${MY_MK}/Makefile
 }

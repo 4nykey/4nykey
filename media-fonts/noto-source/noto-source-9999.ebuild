@@ -47,23 +47,15 @@ pkg_setup() {
 	font-r1_pkg_setup
 }
 
-src_unpack() {
-	if [[ -z ${PV%%*9999} ]]; then
-		git-r3_src_unpack
-		unpack ${MY_MK}.tar.gz
-	else
-		vcs-snapshot_src_unpack
-	fi
-}
-
 src_prepare() {
 	default
 	ln -s "${S}"/src/NotoSansDevanagari/NotoSansDevanagari{,UI}-MM.glyphs
+	unpack ${MY_MK}.tar.gz
 }
 
 src_compile() {
 	emake \
 		FONTMAKE="fontmake -o ${FONT_SUFFIX}" \
 		INTERPOLATE="$(usex interpolate 'fontmake -o ufo -i -m' '')" \
-		-f "${WORKDIR}"/${MY_MK}/Makefile
+		-f ${MY_MK}/Makefile
 }

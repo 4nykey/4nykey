@@ -54,17 +54,10 @@ pkg_setup() {
 	font-r1_pkg_setup
 }
 
-src_unpack() {
-	if [[ -z ${PV%%*9999} ]]; then
-		git-r3_src_unpack
-		use binary || unpack ${MY_MK}.tar.gz
-	else
-		vcs-snapshot_src_unpack
-	fi
-}
-
 src_prepare() {
 	default
+	use binary && return
+	unpack ${MY_MK}.tar.gz
 	ln -s "4. Glyphs Source Files" src
 }
 
@@ -72,5 +65,5 @@ src_compile() {
 	use binary && return
 	emake \
 		FONTMAKE="fontmake -o ${FONT_SUFFIX}" \
-		-f "${WORKDIR}"/${MY_MK}/Makefile
+		-f ${MY_MK}/Makefile
 }

@@ -18,6 +18,11 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
+MY_MK="f9edc47e189d8495b647a4feac8ca240-1827636"
+SRC_URI+="
+	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
+	-> ${MY_MK}.tar.gz
+"
 inherit python-any-r1 font-r1
 
 DESCRIPTION="Open Source Modern DIN"
@@ -34,15 +39,20 @@ DEPEND="
 "
 DOCS="ReadMe.md"
 
+pkg_setup() {
+	python-any-r1_pkg_setup
+	font-r1_pkg_setup
+}
+
+src_prepare() {
+	default
+	unpack ${MY_MK}.tar.gz
+}
+
 src_compile() {
-	for t in ${FONT_SUFFIX}; do
-		fontforge -quiet -lang=py -c \
-		'from sys import argv;\
-		f=fontforge.open(argv[1]);\
-		f.encoding="UnicodeFull";\
-		f.selection.all();\
-		f.generate(argv[2],flags=("opentype"));\
-		f.close()' \
-		Source/Gidole-Regular.sfdir Gidole-Regular.${t} || die
+	local _t
+	for _t in ${FONT_SUFFIX}; do
+		fontforge -script ${MY_MK}/ffgen.py Source/Gidole-Regular.sfdir \
+			${_t} || die
 	done
 }
