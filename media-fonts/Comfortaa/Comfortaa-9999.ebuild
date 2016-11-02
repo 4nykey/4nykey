@@ -12,6 +12,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="ddcfe30"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v.${PV}"
 	SRC_URI="
 		mirror://githubcl/alexeiva/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -21,7 +22,7 @@ fi
 inherit python-any-r1 font-r1
 
 DESCRIPTION="A rounded geometric sans-serif type design intended for large sizes"
-HOMEPAGE="https://github.com/googlefonts/${PN}"
+HOMEPAGE="https://github.com/alexeiva/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
@@ -38,7 +39,7 @@ DEPEND="
 
 pkg_setup() {
 	if use binary; then
-		FONT_S=( fonts/{.,OTF} )
+		FONT_S=( fonts/{O,T}TF )
 	else
 		python-any-r1_pkg_setup
 		FONT_S=( instance_{o,t}tf )

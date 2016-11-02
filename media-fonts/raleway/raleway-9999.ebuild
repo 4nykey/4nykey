@@ -4,17 +4,17 @@
 
 EAPI=6
 
-MY_PN="Raleway"
 FONT_TYPES="otf ttf"
 PYTHON_COMPAT=( python2_7 )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/alexeiva/${MY_PN}"
+	EGIT_REPO_URI="https://github.com/cyrealtype/${PN}"
 else
 	inherit vcs-snapshot
 	MY_PV="a48dcf5"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v.${PV}"
 	SRC_URI="
-		mirror://githubcl/impallari/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/cyrealtype/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -28,7 +28,7 @@ SRC_URI+="
 	)
 "
 
-DESCRIPTION="Raleway is an elegant sans-serif typeface"
+DESCRIPTION="An elegant sans-serif typeface"
 HOMEPAGE="http://www.impallari.com/projects/overview/matt-mcinerneys-raleway-family"
 
 LICENSE="OFL-1.1"
@@ -46,8 +46,9 @@ DEPEND="
 
 pkg_setup() {
 	if use binary; then
-		FONT_S=( fonts{,/"OTF v4.010 Glyphs"} )
+		FONT_S=( fonts/{o,t}tf )
 	else
+		FONT_S=( master_{o,t}tf )
 		python-any-r1_pkg_setup
 	fi
 	font-r1_pkg_setup
