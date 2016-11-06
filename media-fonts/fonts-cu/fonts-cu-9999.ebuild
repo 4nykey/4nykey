@@ -68,6 +68,7 @@ src_compile() {
 		fontforge -script Ponomar/hp-generate.py ${_s} || die
 	done
 
+	use font_types_ttf || return
 	for _s in */*.gdl; do
 		grcompiler "${_s}" "$(dirname ${_s})Unicode.ttf" "${_s%.*}.ttf" || die
 		mv -f "${_s%.*}.ttf" "$(dirname ${_s})Unicode.ttf"

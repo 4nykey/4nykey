@@ -62,6 +62,7 @@ pkg_setup() {
 src_compile() {
 	use binary && return
 	fontforge -lang=py -script ${PN}-generate.py || die
+	use font_types_ttf || return
 	local _t
 	for _t in *.ttf; do
 		grcompiler "${_t%.*}.gdl" "${_t}" "${T}/${_t}" || die
