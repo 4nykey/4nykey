@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="c01d8eb"
+	MY_PV="27f8d8b"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -24,7 +24,7 @@ HOMEPAGE="https://github.com/googlei18n/${PN}"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE=""
+IUSE="test"
 
 RDEPEND="
 	dev-python/cu2qu[${PYTHON_USEDEP}]
@@ -38,7 +38,23 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
+	test? ( media-gfx/fontdiff )
 "
 PATCHES=(
 	"${FILESDIR}"/${PN}-mti_paths.diff
 )
+
+src_prepare() {
+	default
+	has test $FEATURES || return
+	sed \
+		-e 's:fontmake:${EPYTHON} -m &:g' \
+		-e 's:\./fontdiff:fontdiff:g' \
+		-e 's%check_failure "%[[ $? -eq 0 ]] || die "Tests failed under ${EPYTHON}: %g' \
+		-i "${S}"/test/run.sh
+}
+
+python_test() {
+	cd "${S}"/test
+	PYTHONPATH="${S}/test:${BUILD_DIR}/lib" . ./run.sh
+}
