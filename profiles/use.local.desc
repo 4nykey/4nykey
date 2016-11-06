@@ -6,13 +6,12 @@ app-arch/wimlib:fuse - Support mounting WIMs via sys-fs/fuse
 app-arch/wimlib:ntfs - Support direct manipulation on a NTFS volume via sys-fs/ntfs3g
 app-arch/wimlib:openssl - Use SHA-1 implementation from libcrypto (dev-libs/openssl)
 app-arch/wimlib:yasm - Prefer dev-lang/yasm over dev-lang/nasm
-app-crypt/qdigidoc:c++0x - Compile using the C++11 standard
 app-crypt/qdigidoc:nautilus - Build gnome-base/nautilus extension
-app-crypt/qesteidutil:c++0x - Compile using the C++11 standard
 app-text/fbpdf:mupdf - Use app-text/mupdf for rendering
 app-text/fbpdf:poppler - Use app-text/poppler for rendering
-dev-cpp/xsd:ace - Enable support for serializing to/from an ACE CDR stream
 dev-libs/libdigidocpp:c++0x - Compile using the C++11 standard
+dev-libs/sortsmill-core:atomic-ops - Disabling this will sacrifice thread-safety in some operations
+dev-python/compreffor:cython - Generate cpp sources with dev-python/cython
 dev-python/fonttools:brotli - Enable brotli support, needed for WOFF2
 dev-python/fonttools:zopfli - Enable zopfli compression support
 dev-python/pyclipper:cython - Generate cpp sources with dev-python/cython
@@ -22,11 +21,16 @@ dev-qt/aseman-qt-tools:positioning - Pull in dev-qt/qtpositioning
 dev-qt/aseman-qt-tools:sensors - Pull in dev-qt/qtsensors
 dev-qt/aseman-qt-tools:webengine - Pull in dev-qt/qtwebengine
 dev-qt/aseman-qt-tools:widgets - Pull in dev-qt/qtwidgets
+dev-scheme/sortsmill-core-guile:atomic-ops - Disabling this will sacrifice thread-safety in some operations
+media-fonts/Fira:clean-as-you-go - Clean intermediate ufos after they were built (useful when PORTAGE_TMPDIR resides on a tmpfs)
+media-fonts/Fira:interpolate - Interpolate to get more font weights (significantly increases build time and diskspace requirements)
 media-fonts/noto:emoji - Install additional emoji fonts
 media-fonts/noto:pipeline - Install WIP fonts created from glyphs
 media-fonts/noto-emoji:zopfli - Optimize using app-arch/zopfli
-media-fonts/noto-source:interpolate - Interpolate masters
+media-fonts/noto-source:clean-as-you-go - Clean intermediate ufos after they were built (useful when PORTAGE_TMPDIR resides on a tmpfs)
+media-fonts/noto-source:interpolate - Interpolate to get more font weights (significantly increases build time and diskspace requirements)
 media-fonts/source-han-sans:monospace - Install monospace fonts
+media-fonts/source-pro:emoji - Install emoji fonts
 media-fonts/source-pro:monospace - Install monospace fonts
 media-fonts/source-pro:sans - Install sans fonts
 media-fonts/source-pro:serif - Install serif fonts
@@ -36,10 +40,10 @@ media-gfx/fim:graphicsmagick - Enable GraphicsMagick library support
 media-gfx/fim:screen - Add experimental support for running under screen
 media-gfx/fim:xfig - Enable FIG file support via media-gfx/xfig
 media-gfx/fontview:gtk3 - Use GTK+3 instead of GTK+2
+media-gfx/sortsmill-tools:editor - Build sortsmill-editor and related programs
+media-gfx/sortsmill-tools:legacy - Install legacy Python modules
+media-gfx/sortsmill-tools:truetype-debugger - Enable truetype debugger in editor
 media-libs/chromaprint:tools - Build additional tools
-media-libs/fontconfig-ultimate:fonts-extra - Pull in extra fonts
-media-libs/fontconfig-ultimate:fonts-free - Pull in free fonts
-media-libs/fontconfig-ultimate:fonts-ms - Pull in MS fonts
 media-sound/ardour:bundled-libs - Use bundled libs instead of system installed
 media-sound/ardour:c++0x - Compile using the C++11 standard
 media-sound/ardour:lv2 - Add support for Ladspa V2
@@ -72,7 +76,6 @@ media-video/flowblade:frei0r - Additional video filters (media-plugins/frei0r-pl
 media-video/flowblade:gmic - Additional image filters (media-gfx/gmic)
 media-video/flowblade:swh - Additional audio filters (media-plugins/swh-plugins)
 net-misc/megasync:nautilus - Install the gnome-base/nautilus extension
-net-p2p/rtorrent:c++0x - Compile using the C++11 standard
 sys-block/f3:extras - Compile the extra applications
 www-client/midori:granite - Enable support for the elementary library dev-libs/granite
 www-client/midori:zeitgeist - Add support for Zeitgeist event tracking system
