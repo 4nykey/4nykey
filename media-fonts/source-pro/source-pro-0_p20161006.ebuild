@@ -13,10 +13,11 @@ HOMEPAGE="
 LICENSE="OFL-1.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="cjk +monospace +sans +serif"
+IUSE="cjk emoji +monospace +sans +serif"
 
 RDEPEND="
 	cjk? ( media-fonts/source-han-sans )
+	emoji? ( media-fonts/source-emoji )
 	monospace? ( media-fonts/source-code-pro )
 	serif? ( media-fonts/source-serif-pro )
 	sans? ( media-fonts/source-sans-pro )
