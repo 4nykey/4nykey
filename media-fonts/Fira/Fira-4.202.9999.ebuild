@@ -31,14 +31,13 @@ HOMEPAGE="https://www.mozilla.org/en-US/styleguide/products/firefox-os/typeface/
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="+binary"
+IUSE="clean-as-you-go +binary interpolate"
 
 DEPEND="
 	!binary? (
 		${PYTHON_DEPS}
 		$(python_gen_any_dep '
 			dev-util/fontmake[${PYTHON_USEDEP}]
-			dev-util/afdko[${PYTHON_USEDEP}]
 		')
 	)
 "
@@ -64,9 +63,12 @@ src_prepare() {
 	use binary && return
 	unpack ${MY_MK}.tar.gz
 	sed \
-		-e 's:active = 0\;:exports = 0\;:' \
+		-e '/\(active\|export\) = 0/d' \
 		-e 's:WORK_::' \
 		-i "${S}"/source/glyphs/${PN}*.glyphs
+	sed \
+		-f "${FILESDIR}"/onefamily.sed \
+		-i "${S}"/source/glyphs/${PN}Sans*.glyphs
 }
 
 src_compile() {
@@ -74,6 +76,7 @@ src_compile() {
 	emake \
 		SRCDIR="${S}/source/glyphs" \
 		FONTMAKE="fontmake -o ${FONT_SUFFIX}" \
-		INTERPOLATE='makeInstancesUFO -a -c -n -dec -d' \
+		$(usex interpolate '' 'INTERPOLATE=') \
+		$(usex clean-as-you-go '' 'RM=true') \
 		-f ${MY_MK}/Makefile
 }
