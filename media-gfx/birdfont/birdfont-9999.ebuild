@@ -26,7 +26,7 @@ HOMEPAGE="https://birdfont.org"
 
 LICENSE="GPL-3"
 SLOT="0"
-IUSE="gtk nls"
+IUSE="+gtk nls"
 
 RDEPEND="
 	dev-libs/xmlbird
@@ -85,10 +85,11 @@ src_compile() {
 
 src_install() {
 	"${PYTHON}" ./install.py \
-		--dest "${D}" \
-		--nogzip \
-		--libdir "/$(get_libdir)" \
-		--manpages-directory "/share/man/man1" \
+		--dest="${D}" \
+		--nogzip=1 \
+		--libdir="/$(get_libdir)" \
+		--manpages-directory="/share/man/man1" \
+		--skip-command-line-tools=$(usex gtk '0' '1') \
 		|| die
 	einstalldocs
 }
