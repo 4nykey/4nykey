@@ -10,8 +10,12 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/typemytype/${PN}.git"
 else
-	SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.zip"
-	DEPEND="app-arch/unzip"
+	inherit vcs-snapshot
+	MY_PV="0a9cc5c"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
+	SRC_URI="
+		mirror://githubcl/typemytype/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
@@ -30,5 +34,14 @@ RDEPEND="
 "
 DEPEND+="
 	${RDEPEND}
-	>=dev-python/setuptools_scm-1.11.1[${PYTHON_USEDEP}]
 "
+
+src_prepare() {
+	default
+	local _v="${PV%_p*}"
+	[[ -z ${PV%%*9999} ]] && _v="$(git describe --tags)"
+	sed \
+		-e '/setuptools_scm/d' \
+		-e "s:use_scm_version=True:version=\"${_v}\":" \
+		-i "${S}"/setup.py
+}
