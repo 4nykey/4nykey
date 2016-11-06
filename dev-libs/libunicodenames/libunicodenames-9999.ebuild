@@ -43,9 +43,6 @@ src_unpack() {
 
 src_prepare() {
 	default
-	local _g="gnulib-tool --update"
-	ebegin "Running ${_g}"
-	"${WORKDIR}"/${MY_GL}/${_g} > /dev/null
-	eend $? || die
+	autotools_run_tool "${WORKDIR}"/${MY_GL}/gnulib-tool --update
 	eautoreconf
 }
