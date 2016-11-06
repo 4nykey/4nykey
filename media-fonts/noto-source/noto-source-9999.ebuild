@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}"
 else
 	inherit vcs-snapshot
-	MY_PV="0345032"
+	MY_PV="ace2685"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -31,7 +31,7 @@ HOMEPAGE="https://github.com/googlei18n/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="interpolate"
+IUSE="clean-as-you-go interpolate"
 
 DEPEND="
 	${PYTHON_DEPS}
@@ -56,6 +56,7 @@ src_prepare() {
 src_compile() {
 	emake \
 		FONTMAKE="fontmake -o ${FONT_SUFFIX}" \
-		INTERPOLATE="$(usex interpolate 'fontmake -o ufo -i -m' '')" \
+		$(usex interpolate '' 'INTERPOLATE=') \
+		$(usex clean-as-you-go '' 'RM=true') \
 		-f ${MY_MK}/Makefile
 }
