@@ -12,8 +12,12 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
 else
-	SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.zip"
-	DEPEND="app-arch/unzip"
+	inherit vcs-snapshot
+	MY_PV="66d847e"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
+	SRC_URI="
+		mirror://githubcl/${PN}/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
@@ -27,7 +31,6 @@ IUSE="brotli zopfli"
 DOCS=( README.md NEWS )
 
 DEPEND+="
-	>=dev-python/setuptools_scm-1.11.1[${PYTHON_USEDEP}]
 	>=dev-python/numpy-1.0.2[${PYTHON_USEDEP}]
 "
 RDEPEND="
