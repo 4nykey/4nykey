@@ -24,11 +24,8 @@ LICENSE="MIT"
 SLOT="0"
 IUSE="+cython"
 
-RDEPEND="
+DEPEND="
 	cython? ( dev-python/cython[${PYTHON_USEDEP}] )
-"
-DEPEND+="
-	${RDEPEND}
 "
 
 src_prepare() {
