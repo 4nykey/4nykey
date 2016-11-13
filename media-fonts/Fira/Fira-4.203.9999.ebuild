@@ -15,24 +15,27 @@ else
 	SRC_URI="
 		mirror://githubcl/carrois/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
-	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
-MY_MK="f9edc47e189d8495b647a4feac8ca240-1827636"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-8e4962a"
+MY_F="28cef3ca070463212a1be193bcac29b8-bfc8742"
 SRC_URI+="
 !binary? (
 	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
 	-> ${MY_MK}.tar.gz
+	mirror://githubcl/gist/${MY_F%-*}/tar.gz/${MY_F#*-}
+	-> ${MY_F}.tar.gz
 )
 "
+RESTRICT="primaryuri"
 
 DESCRIPTION="Firefox OS typeface"
 HOMEPAGE="https://carrois.com/typefaces/FiraSans"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="+binary doc"
+IUSE="clean-as-you-go +binary doc interpolate"
 
 DEPEND="
 	!binary? (
@@ -59,6 +62,7 @@ pkg_setup() {
 		)
 	else
 		python-any-r1_pkg_setup
+		FONT_S=( master_{o,t}tf )
 	fi
 	use doc && DOCS+=" Fira_[MS]*_*/PDF/*.pdf"
 	font-r1_pkg_setup
@@ -67,17 +71,52 @@ pkg_setup() {
 src_prepare() {
 	default
 	use binary && return
-	unpack ${MY_MK}.tar.gz
-	local _m=MonoUFO_beta3206 _s=SansUFO_beta${PV%.9999}
-	unpack "${S}"/Fira_UFO_Sources/Fira{${_m},${_s//./}}.zip
+	unpack ${MY_F}.tar.gz ${MY_MK}.tar.gz
+
+	local _m=${PN}MonoUFO_beta3206 _s=${PN}SansUFO_beta${PV%.9999} _d
+	_s=${_s//./}
+	unpack "${S}"/Fira_UFO_Sources/${PN}{${_m#${PN}},${_s#${PN}}}.zip
+	for _d in "${S}"/{${_m},${_s}}/*.ufo; do
+		mv -f "${_d}" "${_d// /}"
+	done
+	eapply "${FILESDIR}"/${P%.9999}-overlap.diff
+
+	sed \
+		-e '/^[^#]/s:\(.*\) \(.*\):s_\\<\1\\>_uni\2_g:' \
+		${MY_F}/Fira-glyphsubst > "${S}"/1.sed
+	sed -f "${FILESDIR}"/0.sed -f "${S}"/1.sed \
+		-i "${S}"/{${_m},${_s}}/${PN}*.ufo/features.fea
+	sed \
+		-e 's:breve\.cy:brevecy:g' \
+		-i "${S}"/${_s}/${PN}*.ufo/features.fea
+	sed -f "${FILESDIR}"/2.sed \
+		-i "${S}"/${_m}/${PN}*.ufo/{glyphs/contents,lib}.plist
+	sed '/key.*-/s:-:.:' -i "${S}"/${_m}/${PN}*.ufo/glyphs/contents.plist
+	sed '/string.*-/s:-:.:' -i "${S}"/${_m}/${PN}*.ufo/lib.plist
+	sed '/\-\(cy\|greek\)/s:-\(cy\|greek\):.\1:' -i "${S}"/${_m}/${PN}*.ufo/glyphs/*.glif
+	sed \
+		-e 's:\<uni037F\>:Yot:' \
+		-e '/\<uniF6C3\>/d' \
+		-i "${S}"/${_m}/${PN}*.ufo/features.fea
+
+	mkdir -p src ${PN}{Mono,Sans,SansItalic}/master_ufo
+	echo 'familyName = "Fira Mono";' > src/FiraMono.glyphs
+	echo 'familyName = "Fira Sans";' > src/FiraSans.glyphs
+	echo 'familyName = "Fira Sans";' > src/FiraSansItalic.glyphs
+	mv ${_m}/FiraMono*.ufo FiraMono/master_ufo/
+	cp ${MY_F}/FiraMono.designspace FiraMono/master_ufo/
+	mv ${_s}/FiraSans*.ufo FiraSans/master_ufo/
+	mv FiraSans/master_ufo/FiraSans*Italic.ufo FiraSansItalic/master_ufo/
+	cp ${MY_F}/FiraSans.designspace FiraSans/master_ufo/
+	cp ${MY_F}/FiraSans-Italic.designspace FiraSansItalic/master_ufo/
+
 }
 
 src_compile() {
 	use binary && return
-	local _t _u
-	for _u in Fira{Sans,Mono}UFO_*/*.ufo; do
-	for _t in ${FONT_SUFFIX}; do
-		fontforge -script ${MY_MK}/ffgen.py "${_u}" ${_t} || die
-	done
-	done
+	emake \
+		FONTMAKE="fontmake -o ${FONT_SUFFIX}" \
+		$(usex interpolate '' 'INTERPOLATE=') \
+		$(usex clean-as-you-go '' 'RM=true') \
+		-f ${MY_MK}/Makefile
 }

@@ -1,0 +1,20 @@
+--- a/FiraMonoUFO_beta3206/FiraMono-Bold.ufo/glyphs/uni0496.glif
++++ b/FiraMonoUFO_beta3206/FiraMono-Bold.ufo/glyphs/uni0496.glif
+@@ -12,7 +12,6 @@
+       <point x="611" y="123" type="line"/>
+     </contour>
+     <component base="uni0416"/>
+-    <component base="descStraight-cy.case" xOffset="583" xScale="0" yScale="0"/>
+   </outline>
+   <lib>
+     <dict>
+--- a/FiraMonoUFO_beta3206/FiraMono-Regular.ufo/glyphs/uni0496.glif
++++ b/FiraMonoUFO_beta3206/FiraMono-Regular.ufo/glyphs/uni0496.glif
+@@ -12,7 +12,6 @@
+       <point x="610" y="78" type="line"/>
+     </contour>
+     <component base="uni0416"/>
+-    <component base="descStraight-cy.case" xOffset="560" xScale="0" yScale="0"/>
+   </outline>
+   <lib>
+     <dict>
