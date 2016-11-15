@@ -1,9 +1,6 @@
-/feature \(calt\|ccmp\) {/,/} \(calt\|ccmp\)\;/d
-/feature \(calt\|ccmp\)\;/d
 /^sub .*\<[tT]commaaccent\>/d
 /^sub .*\<micro\>/d
 /^sub .*\<\(glottalstopreversed\|equal\|minus\|plus\)\(inf\|sup\)erior\>/d
-s_\<\(breve\|caron\|cedilla\|circumflex\|dblgrave\|dieresis\|dotaccent\|hungarumlaut\|macron\|ogonek\|ring\)comb\>_\1cmb_g
 s_\(Upsilondieresishook\|kappa\|beta\|phi\|pi\)Symbol_\1symbolgreek_g
 s_\<colonsign\>_colonmonetary_g
 s_\<euro\>_Euro_g

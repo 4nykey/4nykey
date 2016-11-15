@@ -19,7 +19,7 @@ else
 fi
 inherit python-any-r1 font-r1
 MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-8e4962a"
-MY_F="28cef3ca070463212a1be193bcac29b8-bfc8742"
+MY_F="28cef3ca070463212a1be193bcac29b8-4ce7076"
 SRC_URI+="
 !binary? (
 	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
@@ -88,6 +88,7 @@ src_prepare() {
 		-i "${S}"/{${_m},${_s}}/${PN}*.ufo/features.fea
 	sed \
 		-e 's:breve\.cy:brevecy:g' \
+		-e 's:\<uni03A9\><:Omega<:g' \
 		-i "${S}"/${_s}/${PN}*.ufo/features.fea
 	sed -f "${FILESDIR}"/2.sed \
 		-i "${S}"/${_m}/${PN}*.ufo/{glyphs/contents,lib}.plist
