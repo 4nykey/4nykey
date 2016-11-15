@@ -1,11 +1,10 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
-EAPI=5
+EAPI=6
 
 VALA_MIN_API_VERSION="0.32"
-VALA_MAX_API_VERSION="${VALA_MIN_API_VERSION}"
 VALA_USE_DEPEND="vapigen"
 inherit versionator vala autotools gnome2
 if [[ ${PV} = *9999* ]]; then
@@ -55,7 +54,7 @@ src_prepare() {
 }
 
 src_configure() {
-	local myconf="
+	local myconf=(
 		$(use_enable vala)
 		$(use_enable introspection)
 		$(use_enable applet)
@@ -63,6 +62,6 @@ src_configure() {
 		$(use_enable gnome-shell gnome-shell-extension)
 		$(use_enable ayatana unity)
 		$(use_enable zsh-completion)
-	"
-	gnome2_src_configure ${myconf}
+	)
+	gnome2_src_configure "${myconf[@]}"
 }

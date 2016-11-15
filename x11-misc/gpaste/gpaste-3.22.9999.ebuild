@@ -1,12 +1,12 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
-EAPI=5
+EAPI=6
 
-VALA_MIN_API_VERSION="0.30"
+VALA_MIN_API_VERSION="0.32"
 VALA_USE_DEPEND="vapigen"
-inherit bash-completion-r1 versionator vala autotools gnome2
+inherit versionator vala autotools gnome2
 if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	SRC_URI=""
@@ -24,24 +24,27 @@ GMAJOR="$(get_version_component_range -2)"
 EGIT_REPO_URI="https://github.com/Keruspe/GPaste.git"
 EGIT_BRANCH="${PN}-${GMAJOR}"
 
-LICENSE="GPL-3"
+LICENSE="BSD-2"
 SLOT="0"
-IUSE="applet ayatana bash-completion gnome-shell vala zsh-completion"
+IUSE="applet ayatana bash-completion gnome-shell introspection vala zsh-completion"
+REQUIRED_USE="gnome-shell? ( introspection )"
 
 RDEPEND="
-	>=dev-libs/glib-2.44:2
-	=x11-libs/gtk+-${GMAJOR}*:3[introspection]
+	>=dev-libs/glib-2.50:2
+	=x11-libs/gtk+-${GMAJOR}*:3
 	=gnome-base/gnome-control-center-${GMAJOR}*:2
 	>=x11-libs/gdk-pixbuf-2.26
 	sys-apps/dbus
 	vala? ( $(vala_depend) )
 	ayatana? ( dev-libs/libappindicator:3 )
 	gnome-shell? ( media-libs/clutter )
+	introspection? ( >=dev-libs/gobject-introspection-1.50 )
 "
 DEPEND="
 	${RDEPEND}
 	dev-util/intltool
 	virtual/pkgconfig
+	dev-libs/appstream-glib
 "
 
 src_prepare() {
@@ -51,20 +54,14 @@ src_prepare() {
 }
 
 src_configure() {
-	local myconf="
+	local myconf=(
 		$(use_enable vala)
+		$(use_enable introspection)
 		$(use_enable applet)
-		$(use_enable ayatana unity)
+		$(use_enable bash-completion)
 		$(use_enable gnome-shell gnome-shell-extension)
-	"
-	gnome2_src_configure ${myconf}
-}
-
-src_install() {
-	default
-	use bash-completion && dobashcomp data/completions/${PN}*
-	if use zsh-completion; then
-		insinto /usr/share/zsh/site-functions
-		doins data/completions/_${PN}*
-	fi
+		$(use_enable ayatana unity)
+		$(use_enable zsh-completion)
+	)
+	gnome2_src_configure "${myconf[@]}"
 }
