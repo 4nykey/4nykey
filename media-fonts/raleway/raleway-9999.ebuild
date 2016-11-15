@@ -4,17 +4,16 @@
 
 EAPI=6
 
-FONT_TYPES="otf ttf"
+FONT_TYPES="otf"
 PYTHON_COMPAT=( python2_7 )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/cyrealtype/${PN}"
+	EGIT_REPO_URI="https://github.com/impallari/${PN}"
 else
 	inherit vcs-snapshot
-	MY_PV="a48dcf5"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="v.${PV}"
+	MY_PV="8b4fbc9"
 	SRC_URI="
-		mirror://githubcl/cyrealtype/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/impallari/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -46,9 +45,9 @@ DEPEND="
 
 pkg_setup() {
 	if use binary; then
-		FONT_S=( fonts/{o,t}tf )
+		FONT_S=( fonts/v${PV//.} )
 	else
-		FONT_S=( master_{o,t}tf )
+		FONT_S=( master_otf )
 		python-any-r1_pkg_setup
 	fi
 	font-r1_pkg_setup
@@ -56,7 +55,10 @@ pkg_setup() {
 
 src_prepare() {
 	default
-	use binary || unpack ${MY_MK}.tar.gz
+	use binary && return
+	unpack ${MY_MK}.tar.gz
+	local _g
+	for _g in "${S}"/source/*.glyphs; do mv -f "${_g}" "${_g// /}"; done
 }
 
 src_compile() {
