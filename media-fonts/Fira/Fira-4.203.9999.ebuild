@@ -11,14 +11,14 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/carrois/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="131a598"
+	MY_PV="b7b7a1b"
 	SRC_URI="
 		mirror://githubcl/carrois/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-8e4962a"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-f363b48"
 MY_F="28cef3ca070463212a1be193bcac29b8-4ce7076"
 SRC_URI+="
 !binary? (
@@ -41,7 +41,7 @@ DEPEND="
 	!binary? (
 		${PYTHON_DEPS}
 		$(python_gen_any_dep '
-			media-gfx/fontforge[python,${PYTHON_USEDEP}]
+			dev-util/fontmake[${PYTHON_USEDEP}]
 		')
 		app-arch/unzip
 	)
@@ -100,24 +100,17 @@ src_prepare() {
 		-e '/\<uniF6C3\>/d' \
 		-i "${S}"/${_m}/${PN}*.ufo/features.fea
 
-	mkdir -p src ${PN}{Mono,Sans,SansItalic}/master_ufo
-	echo 'familyName = "Fira Mono";' > src/FiraMono.glyphs
-	echo 'familyName = "Fira Sans";' > src/FiraSans.glyphs
-	echo 'familyName = "Fira Sans";' > src/FiraSansItalic.glyphs
-	mv ${_m}/FiraMono*.ufo FiraMono/master_ufo/
-	cp ${MY_F}/FiraMono.designspace FiraMono/master_ufo/
-	mv ${_s}/FiraSans*.ufo FiraSans/master_ufo/
-	mv FiraSans/master_ufo/FiraSans*Italic.ufo FiraSansItalic/master_ufo/
-	cp ${MY_F}/FiraSans.designspace FiraSans/master_ufo/
-	cp ${MY_F}/FiraSans-Italic.designspace FiraSansItalic/master_ufo/
+	mv ${MY_F}/FiraMono.designspace ${_m}/
+	mv ${MY_F}/FiraSans*.designspace ${_s}/
 
 }
 
 src_compile() {
 	use binary && return
 	emake \
+		SRCDIR="${S}" \
 		FONTMAKE="fontmake -o ${FONT_SUFFIX}" \
 		$(usex interpolate '' 'INTERPOLATE=') \
 		$(usex clean-as-you-go '' 'RM=true') \
-		-f ${MY_MK}/Makefile
+		-f ${MY_MK}/Makefile.ds
 }
