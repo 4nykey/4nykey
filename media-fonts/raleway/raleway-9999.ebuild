@@ -49,7 +49,7 @@ pkg_setup() {
 	if use binary; then
 		FONT_S=( fonts/v${PV//.} )
 	else
-		FONT_S=( master_otf )
+		FONT_S=( master_{o,t}tf )
 		python-any-r1_pkg_setup
 	fi
 	font-r1_pkg_setup
