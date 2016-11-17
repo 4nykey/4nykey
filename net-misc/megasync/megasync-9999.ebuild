@@ -5,23 +5,22 @@
 EAPI=6
 
 inherit autotools versionator gnome2 qmake-utils
-MY_PN="MEGAsync"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/meganz/${MY_PN}.git"
+	EGIT_REPO_URI="https://github.com/meganz/${PN}.git"
 	SRC_URI=
 else
-	MY_P="${MY_PN}-$(replace_all_version_separators '_')_Linux"
-	MY_SDK="d7412bb"
+	inherit vcs-snapshot
+	MY_PV="2e03def"
+	MY_SDK="meganz-sdk-2c9286c"
 	SRC_URI="
-		mirror://githubcl/meganz/${MY_P%-*}/tar.gz/v${MY_P##*-}
-		-> ${MY_P}.tar.gz
-		mirror://githubcl/meganz/sdk/tar.gz/${MY_SDK}
-		-> meganz-sdk-${MY_SDK}.tar.gz
+		mirror://githubcl/meganz/${PN}/tar.gz/${MY_PV}
+		-> ${P}.tar.gz
+		mirror://githubcl/meganz/sdk/tar.gz/${MY_SDK##*-}
+		-> ${MY_SDK}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
-	S="${WORKDIR}/${MY_P}"
 fi
 
 DESCRIPTION="Easy automated syncing with MEGA Cloud Drive"
@@ -52,7 +51,7 @@ src_prepare() {
 	local _sdk="${S}/src/MEGASync/mega"
 	if [[ -n ${PV%%*9999} ]]; then
 		rm -r "${_sdk}"
-		mv -f "${WORKDIR}"/sdk-${MY_SDK} "${_sdk}"
+		mv -f "${WORKDIR}"/${MY_SDK} "${_sdk}"
 	fi
 	default
 	cd "${_sdk}"
