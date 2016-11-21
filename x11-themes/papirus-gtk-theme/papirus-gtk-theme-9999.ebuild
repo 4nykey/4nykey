@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/PapirusDevelopmentTeam/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="f28e934"
+	MY_PV="a9a72aa"
 	SRC_URI="
 		mirror://githubcl/PapirusDevelopmentTeam/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -39,5 +39,5 @@ src_prepare() {
 src_install() {
 	default
 	insinto /usr/share/themes
-	doins -r papirus
+	doins -r papirus318
 }

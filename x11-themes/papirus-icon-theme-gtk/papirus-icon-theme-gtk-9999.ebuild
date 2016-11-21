@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/PapirusDevelopmentTeam/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="95db67d"
+	MY_PV="d80011a"
 	SRC_URI="
 		mirror://githubcl/PapirusDevelopmentTeam/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
