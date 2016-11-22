@@ -43,18 +43,12 @@ DEPEND+="
 	${RDEPEND}
 "
 
-pkg_setup() {
-	use doc || return
-	HTML_DOCS=( doc/${PN}.html doc/img )
-	DOCS=( doc/${PN}.pdf )
-	PATCHES=( "${FILESDIR}"/${PN}-lessfonts.diff )
-}
-
 src_prepare() {
 	default
 	[[ -n ${PV%%*9999} ]] && return
-	AUTORECONF=true autotools_run_tool ./bootstrap \
-		--no-git --no-bootstrap-sync --force --gnulib-srcdir=".gnulib"
+	eapply "${FILESDIR}"/${PN}-lessfonts.diff
+	AUTORECONF=true \
+	autotools_run_tool ./bootstrap --no-git --force --gnulib-srcdir=".gnulib"
 	eautoreconf
 	use doc && cp "${DISTDIR}"/ttfautohintGUI.png "${S}"/doc/img/
 }
@@ -69,10 +63,16 @@ src_configure() {
 
 src_compile() {
 	default
-	emake -C frontend ${PN}.1 $(usex qt4 ${PN}GUI.1)
+	emake ${PN}.1 $(usex qt4 ${PN}GUI.1 '') -C frontend
 }
 
 src_install() {
 	default
 	doman frontend/*.1
+	local _d="${ED}/usr/share/doc/${PF}"
+	if [[ -f "${_d}"/${PN}.html ]]; then
+		cd "${_d}"
+		mkdir -p html
+		mv -f *.{js,html} img html/
+	fi
 }
