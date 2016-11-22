@@ -30,7 +30,6 @@ jpeg jpeg2k pdf png postscript readline +screen sdl svg tiff truetype xfig
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-aalib.diff
-	"${FILESDIR}"/${PN}-parallel_make.diff
 	"${FILESDIR}"/${PN}-poppler.diff
 	"${FILESDIR}"/${PN}-string.diff
 )
@@ -70,6 +69,7 @@ DEPEND="
 
 src_prepare() {
 	default
+	[[ ${PV} = *9999* ]] || eapply "${FILESDIR}"/${PN}-parallel_make.diff
 	sed \
 		-e "s:esyscmd.*:${ESVN_WC_REVISION:--1}):" \
 		-e '/LIBS/s:GraphicsMagick.*`:pkg-config GraphicsMagick --libs`:' \
