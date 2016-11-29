@@ -4,4 +4,8 @@
 	<maintainer type="person">
 		<email>4nykey@gmail.com</email>
 	</maintainer>
+	<use>
+		<flag name="konsole">Install konsole theme</flag>
+		<flag name="kvantum">Install kvantum theme</flag>
+	</use>
 </pkgmetadata>

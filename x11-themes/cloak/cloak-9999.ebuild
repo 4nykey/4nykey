@@ -7,12 +7,12 @@ EAPI=6
 MY_P="Cloak-3.20"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/killhellokitty/${MY_P}.git"
+	EGIT_REPO_URI="https://github.com/matyilona/${MY_P}.git"
 else
 	inherit vcs-snapshot
 	MY_PV="180ef76"
 	SRC_URI="
-		mirror://githubcl/killhellokitty/${MY_P}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/matyilona/${MY_P}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
