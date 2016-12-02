@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}"
 else
 	inherit vcs-snapshot
-	MY_PV="ace2685"
+	MY_PV="76a1cfe"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -20,7 +20,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-8e4962a"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-ce43005"
 SRC_URI+="
 	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
 	-> ${MY_MK}.tar.gz
