@@ -5,7 +5,6 @@
 EAPI=6
 
 FONT_TYPES="otf"
-S="${WORKDIR}"
 inherit font-r1 unpacker
 
 DESCRIPTION="A serif typeface predominantly based off Dwiggins Electra"

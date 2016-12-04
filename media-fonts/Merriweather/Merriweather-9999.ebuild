@@ -14,7 +14,7 @@ else
 	MY_PV="0de0a11"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
-		mirror://githubcl/alexeiva/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/EbenSorkin/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -55,6 +55,7 @@ src_prepare() {
 }
 
 src_compile() {
+	use binary && return
 	local g
 	for g in "${S}"/sources/${PN}*.glyphs; do
 		fontmake \

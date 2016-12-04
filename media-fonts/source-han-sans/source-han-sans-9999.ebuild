@@ -69,6 +69,7 @@ pkg_setup() {
 	else
 		PATCHES=( "${FILESDIR}"/${P}-cmds.diff )
 	fi
+	font-r1_pkg_setup
 }
 
 src_compile() {

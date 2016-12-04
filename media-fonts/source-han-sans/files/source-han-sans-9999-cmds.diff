@@ -11,7 +11,7 @@ index 5152caf..f912190 100644
  # Simplified Chinese
  
 -makeotf -f cidfont.ps.CN -ff features.CN -fi cidfontinfo.CN -mf ../FontMenuNameDB.SUBSET -r -nS -cs 25 -ch ../UniSourceHanSansCN-UTF32-H
-+if use l10n_zh-CN; then makeotf -f ${x}/cidfont.ps.CN -ff ${x}/features.CN -fi ${x}/cidfontinfo.CN -mf "${S}"/FontMenuNameDB.SUBSET -r -nS -cs 25 -ch "${S}"/UniSourceHanSansCN-UTF32-H || die; fi
++if use l10n_zh-CN; then makeotf -f ${x}/cidfont.ps.CN -ff ${x}/features.CN -fi ${x}/cidfontinfo.CN -mf "${S}"/FontMenuNameDB.SUBSET -r -nS -cs 25 -ch "${S}"/UniSourceHanSansCN-UTF32-H -ci "${S}"/SourceHanSans_CN_sequences.txt || die; fi
  
  # Traditional Chinese (TW)
  
