@@ -208,7 +208,8 @@ font-r1_src_install() {
 	font-r1_xfont_config
 	font-r1_fontconfig
 
-	[[ -n ${DOCS} ]] && { dodoc ${DOCS} || die "docs installation failed" ; }
+	[[ "$(declare -p DOCS)" =~ "declare -a" ]] || DOCS=( ${DOCS} )
+	[[ -n ${DOCS} ]] && { dodoc "${DOCS[@]}" || die "docs installation failed" ; }
 
 	# install common docs
 	local commondoc
