@@ -32,6 +32,7 @@ RDEPEND="
 	dev-python/booleanOperations[${PYTHON_USEDEP}]
 	dev-python/MutatorMath[${PYTHON_USEDEP}]
 	dev-python/ufoNormalizer[${PYTHON_USEDEP}]
+	dev-python/robofab[${PYTHON_USEDEP}]
 	>=dev-python/fonttools-2.5[${PYTHON_USEDEP}]
 "
 PATCHES=(
