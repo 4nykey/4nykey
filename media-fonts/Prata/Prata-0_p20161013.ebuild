@@ -1,1 +1,0 @@
-Prata-9999.ebuild
