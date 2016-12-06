@@ -33,11 +33,14 @@ DOCS=( C{ONTRIBUTORS,HANGES}.txt README.md )
 
 src_prepare() {
 	default
-	sed -e '/MAKE.*getconf/d' -i "${S}"/Bootstrap.mak
+	sed \
+		-e '/MAKE.*getconf/d' \
+		-e 's:--to=:--no-curl --no-zlib &:' \
+		-i "${S}"/Bootstrap.mak
 }
 
 src_compile() {
-	local _pm="${PN}${SLOT} --cc=gcc --os=linux --verbose"
+	local _pm="${PN}${SLOT} --cc=$(tc-get-compiler-type) --os=linux --verbose"
 	declare -x CC="$(tc-getCC)"
 	if has_version ${CATEGORY}/${PN}:${SLOT}; then
 		${_pm} embed
@@ -52,7 +55,9 @@ src_compile() {
 			verbose=1
 	fi
 	${_pm} gmake
-	sed -e '/ALL_LDFLAGS/s:-\<s\> ::' -i *.make || die
+	sed \
+		-e 's: -\(O3\|\<s\>\)::g' \
+		-i *.make
 	emake verbose=1
 }
 
