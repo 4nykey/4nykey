@@ -40,6 +40,7 @@ DEPEND+="
 		')
 		>=net-libs/nodejs-6.0[npm]
 		media-gfx/ttfautohint
+		dev-util/otfcc
 	)
 "
 
