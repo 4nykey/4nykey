@@ -7,7 +7,7 @@ EAPI=6
 PYTHON_COMPAT=( python2_7 )
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/be5invis/${MY_PN}.git"
+	EGIT_REPO_URI="https://github.com/be5invis/${PN}.git"
 	REQUIRED_USE="!binary"
 else
 	inherit vcs-snapshot
@@ -55,6 +55,6 @@ pkg_setup() {
 src_compile() {
 	use binary && return
 	npm install
-	emake fw
-	mv "${S}"/build/${PN}*.ttf "${FONT_S}"/
+	emake fw fonts-hooky fonts-hooky-term fonts-zshaped fonts-zshaped-term
+	FONT_S=( $(find dist -type d -name "[01][0-9].${PN}*") )
 }
