@@ -1,11 +1,11 @@
 --- a/Lib/fontmake/font_project.py
 +++ b/Lib/fontmake/font_project.py
-@@ -197,7 +197,7 @@ class FontProject:
+@@ -279,7 +279,7 @@ class FontProject:
                      GLYPHS_PREFIX + "Don't use Production Names")
              otf = otf_compiler(
                  ufo, featureCompilerClass=fea_compiler,
 -                mtiFeaFiles=mti_paths[name] if mti_paths is not None else None,
 +                mtiFeaFiles=mti_paths[name] if mti_paths is not None and name in mti_paths else None,
+                 kernWriter=kern_writer_class, markWriter=mark_writer_class,
                  glyphOrder=ufo.lib.get(PUBLIC_PREFIX + 'glyphOrder'),
                  useProductionNames=use_production_names,
-                 convertCubics=False, optimizeCff=subroutinize)
