@@ -244,11 +244,11 @@ font-r1_pkg_postinst() {
 	fi
 
 	if has_version media-libs/fontconfig && [[ ${ROOT} == / ]]; then
-		ebegin "Updating global fontcache"
-		fc-cache -fs
+		ebegin "Updating fontconfig cache for ${FONT_PN}"
+		fc-cache -s "${EROOT}"usr/share/fonts/${FONT_PN}
 		eend $?
 	else
-		einfo "Skipping fontcache update (media-libs/fontconfig is not installed or ROOT != /)"
+		einfo "Skipping cache update (media-libs/fontconfig is not installed or ROOT != /)"
 	fi
 }
 
@@ -263,10 +263,10 @@ font-r1_pkg_postrm() {
 		| xargs -0 chmod -v 0644 2>/dev/null
 
 	if has_version media-libs/fontconfig && [[ ${ROOT} == / ]]; then
-		ebegin "Updating global fontcache"
-		fc-cache -fs
+		ebegin "Updating fontconfig cache for ${FONT_PN}"
+		fc-cache -s "${EROOT}"usr/share/fonts/${FONT_PN}
 		eend $?
 	else
-		einfo "Skipping fontcache update (media-libs/fontconfig is not installed or ROOT != /)"
+		einfo "Skipping cache update (media-libs/fontconfig is not installed or ROOT != /)"
 	fi
 }
