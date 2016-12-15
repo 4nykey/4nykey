@@ -4,7 +4,7 @@
 
 EAPI=6
 
-inherit autotools
+inherit autotools pax-utils
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="git://wimlib.net/${PN}"
@@ -24,7 +24,7 @@ HOMEPAGE="https://wimlib.net/"
 
 LICENSE="|| ( GPL-3+ LGPL-3+ ) CC0-1.0"
 SLOT="0"
-IUSE="cpu_flags_x86_ssse3 fuse ntfs openssl yasm"
+IUSE="cpu_flags_x86_ssse3 fuse ntfs openssl threads yasm"
 REQUIRED_USE="cpu_flags_x86_ssse3? ( !openssl )"
 
 RDEPEND="
@@ -52,7 +52,14 @@ src_configure() {
 		$(use_with fuse)
 		$(use_enable cpu_flags_x86_ssse3 ssse3-sha1)
 		$(use_with openssl libcrypto)
+		$(use_enable threads multithreaded-compression)
 	)
+	has test ${FEATURES} && myeconfargs+=( --enable-test-support )
 	ac_cv_prog_NASM="$(usex yasm yasm nasm)" \
 		econf "${myeconfargs[@]}"
+}
+
+src_compile() {
+	emake
+	pax-mark m "${S}"/.libs/wimlib-imagex
 }
