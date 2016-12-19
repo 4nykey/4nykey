@@ -18,7 +18,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-ce43005"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-355c7d9"
 MY_F="28cef3ca070463212a1be193bcac29b8-4ce7076"
 SRC_URI+="
 !binary? (
@@ -79,7 +79,6 @@ src_prepare() {
 	for _d in "${S}"/{${_m},${_s}}/*.ufo; do
 		mv -f "${_d}" "${_d// /}"
 	done
-	eapply "${FILESDIR}"/${P%.9999}-overlap.diff
 
 	sed \
 		-e '/^[^#]/s:\(.*\) \(.*\):s_\\<\1\\>_uni\2_g:' \
@@ -111,6 +110,6 @@ src_compile() {
 		SRCDIR="${S}" \
 		FONTMAKE="fontmake -o ${FONT_SUFFIX}" \
 		$(usex interpolate '' 'INTERPOLATE=') \
-		$(usex clean-as-you-go '' 'RM=true') \
+		$(usex clean-as-you-go 'RM=rm -rf' '') \
 		-f ${MY_MK}/Makefile.ds
 }
