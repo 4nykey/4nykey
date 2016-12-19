@@ -15,7 +15,7 @@ else
 		mirror://githubcl/open-eid/${PN}/tar.gz/v${MY_PV} -> ${P}.tar.gz
 	"
 	# submodules not included in github releases
-	MY_QC="qt-common-445b4be"
+	MY_QC="qt-common-719160d"
 	SRC_URI="${SRC_URI}
 		mirror://githubcl/open-eid/${MY_QC%-*}/tar.gz/${MY_QC##*-} -> ${MY_QC}.tar.gz
 	"
@@ -25,7 +25,7 @@ fi
 inherit cmake-utils
 
 DESCRIPTION="Estonian ID card digital signature desktop tools"
-HOMEPAGE="http://id.ee"
+HOMEPAGE="https://open-eid.github.io"
 
 LICENSE="LGPL-2.1 Nokia-Qt-LGPL-Exception-1.1"
 SLOT="0"
