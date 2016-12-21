@@ -14,14 +14,19 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/NDISCOVER/${FONT_PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="27e0ea4"
+	MY_PV="0fa17d8"
 	SRC_URI="
 		mirror://githubcl/NDISCOVER/${FONT_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
-	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-355c7d9"
+SRC_URI+="
+	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
+	-> ${MY_MK}.tar.gz
+"
+RESTRICT="primaryuri"
 
 DESCRIPTION="A geometric sans serif font family"
 HOMEPAGE="https://github.com/NDISCOVER/${FONT_PN^}"
@@ -35,20 +40,29 @@ DEPEND="
 		dev-util/fontmake[${PYTHON_USEDEP}]
 	')
 "
-FONT_S=( instance_{o,t}tf )
+FONT_S=( master_{o,t}tf )
 
 pkg_setup() {
 	python-any-r1_pkg_setup
 	font-r1_pkg_setup
 }
 
-src_compile() {
-	local _g
-	for _g in "${S}"/Source/${PN^}*.glyphs; do
-		fontmake \
-			--glyphs-path "${_g}" \
-			--masters-as-instances \
-			-o ${FONT_SUFFIX} \
-			|| die
+src_prepare() {
+	default
+	unpack ${MY_MK}.tar.gz
+	mkdir src
+	local _s _d
+	for _s in "${S}"/Source/${PN^}*Final*.glyphs; do
+		_d="${_s##*/}"
+		ln -s "${_s}" src/"${_d// /}"
 	done
+	sed \
+		-e 's:sub zedescender-cy by zedescender-cy.loclBSH\;\\012::' \
+		-i src/*.glyphs
+}
+
+src_compile() {
+	emake \
+		FONTMAKE="fontmake -o ${FONT_SUFFIX}" \
+		-f ${MY_MK}/Makefile
 }
