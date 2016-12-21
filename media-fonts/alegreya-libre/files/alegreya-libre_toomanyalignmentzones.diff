@@ -1,0 +1,40 @@
+diff --git a/Alegreya italic.glyphs b/Alegreya italic.glyphs
+index a021bd1..3af0cfc 100644
+--- a/Alegreya italic.glyphs	
++++ b/Alegreya italic.glyphs	
+@@ -281,7 +281,6 @@ alignmentZones = (
+ "{730, 12}",
+ "{636, 12}",
+ "{586, 12}",
+-"{497, 12}",
+ "{452, 12}",
+ "{-12, 12}",
+ "{-105, 12}",
+@@ -354,7 +353,6 @@ alignmentZones = (
+ "{730, 12}",
+ "{647, 12}",
+ "{586, 12}",
+-"{504, 12}",
+ "{472, 12}",
+ "{-12, 12}",
+ "{-95, 12}",
+diff --git a/Alegreya.glyphs b/Alegreya.glyphs
+index a6a8d3d..6aa6ef2 100644
+--- a/Alegreya.glyphs
++++ b/Alegreya.glyphs
+@@ -273,7 +273,6 @@ alignmentZones = (
+ "{730, 12}",
+ "{637, 12}",
+ "{586, 12}",
+-"{497, 12}",
+ "{452, 12}",
+ "{-12, 12}",
+ "{-105, 12}",
+@@ -350,7 +349,6 @@ alignmentZones = (
+ "{730, 12}",
+ "{647, 12}",
+ "{586, 12}",
+-"{503, 12}",
+ "{472, 12}",
+ "{-12, 12}",
+ "{-95, 12}",
