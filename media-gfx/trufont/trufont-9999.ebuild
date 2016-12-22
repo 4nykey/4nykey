@@ -39,3 +39,9 @@ DEPEND="
 	${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
 "
+
+src_prepare() {
+	default
+	# no egg-info for PyQt5
+	sed -e '/\<pyqt5\>/d' -i setup.py
+}
