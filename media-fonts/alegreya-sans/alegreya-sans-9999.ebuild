@@ -12,7 +12,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_BRANCH="dev"
 else
 	inherit vcs-snapshot
-	MY_PV="3a0a3c2"
+	MY_PV="edcfe06"
 	SRC_URI="
 		mirror://githubcl/huertatipografica/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -40,6 +40,7 @@ DEPEND="
 	')
 "
 FONT_S=( master_{o,t}tf )
+DOCS="*.txt"
 
 pkg_setup() {
 	python-any-r1_pkg_setup
