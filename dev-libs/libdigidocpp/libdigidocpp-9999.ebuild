@@ -20,7 +20,7 @@ fi
 inherit cmake-utils
 
 DESCRIPTION="DigiDoc digital signature library"
-HOMEPAGE="http://id.ee"
+HOMEPAGE="https://open-eid.github.io"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
