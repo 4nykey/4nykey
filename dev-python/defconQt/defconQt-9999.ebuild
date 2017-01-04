@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -38,3 +38,9 @@ DEPEND="
 	${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
 "
+
+src_prepare() {
+	default
+	# no egg-info for PyQt5
+	sed -e '/\<pyqt5\>/d' -i setup.py
+}
