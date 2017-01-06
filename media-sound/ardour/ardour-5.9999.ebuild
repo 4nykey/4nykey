@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -74,7 +74,6 @@ DEPEND="
 
 PATCHES=(
 	"${FILESDIR}"/${PN}${SLOT}-revision.diff
-	"${FILESDIR}"/${PN}${SLOT}-lv2.diff
 )
 DOCS=( README TRANSLATORS doc/monitor_modes.pdf )
 
