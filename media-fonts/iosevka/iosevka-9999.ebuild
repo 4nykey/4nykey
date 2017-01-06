@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -26,7 +26,7 @@ fi
 inherit python-any-r1 font-r1
 
 DESCRIPTION="Spatial efficient monospace font family for programming"
-HOMEPAGE="https://be5invis.github.io/${PN^}"
+HOMEPAGE="https://be5invis.github.io/Iosevka"
 
 LICENSE="OFL-1.1"
 SLOT="0"
