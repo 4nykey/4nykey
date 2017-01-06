@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -12,15 +12,14 @@ if [[ ${PV} == *9999* ]]; then
 	REQUIRED_USE="!binary"
 else
 	inherit vcs-snapshot
+	MY_PV="29355e8"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 	binary? (
-		http://www.ponomar.net/files/PonomarUnicode-1.1.zip
-		http://www.ponomar.net/files/FedorovskUnicode-3.0.zip
-		http://www.ponomar.net/files/MenaionUnicode-2.0.zip
-		http://www.ponomar.net/files/PomorskyUnicode-0.75.zip
+		http://www.ponomar.net/files/fonts-churchslavonic.zip
 	)
 	!binary? (
-		mirror://githubcl/typiconman/${PN}/tar.gz/v${PV} -> ${P}.tar.gz
+		mirror://githubcl/typiconman/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	)
 	"
 	RESTRICT="primaryuri"
@@ -49,6 +48,7 @@ DEPEND="
 pkg_setup() {
 	if use binary; then
 		S="${WORKDIR}"
+		DOCS="fonts-churchslavonic.pdf"
 	else
 		python-any-r1_pkg_setup
 		PATCHES=( "${FILESDIR}"/${PN}_generate.diff )

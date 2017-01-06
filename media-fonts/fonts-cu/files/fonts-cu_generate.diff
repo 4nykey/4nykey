@@ -1,5 +1,3 @@
-diff --git a/Ponomar/hp-generate.py b/Ponomar/hp-generate.py
-index 2308651..bccccf9 100644
 --- a/Ponomar/hp-generate.py
 +++ b/Ponomar/hp-generate.py
 @@ -14,7 +14,12 @@ fontforge.setPrefs ("ClearInstrsBigChanges",False )
@@ -16,15 +14,3 @@ index 2308651..bccccf9 100644
  
  ## Evidently, this can break Evince, so it may need to be commented out. Not sure about that, though
  font.head_optimized_for_cleartype = True
-@@ -28,11 +33,6 @@ font.sfnt_names = tuple( ttnames )
- font.generate( base_name + ".otf", flags=( "opentype", "PfEd-colors", "PfEd-lookups"), layer="Fore" )
- 
- woff_meta = base_name + "-WOFF-metadata.xml"
--f = file( woff_meta, 'r')
--lines = f.readlines()
--f.close()
--font.woffMetadata = "".join( lines )
--font.generate( base_name + ".woff", flags=( "opentype"), layer="TTFLayer" )
- 
- # Append the TT suffix
- for i in range( 0, len( ttnames )):
