@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 else
 	inherit vcs-snapshot
-	MY_PV="43ca240"
+	MY_PV="e31a61b"
 	SRC_URI="
 		${EGIT_REPO_URI}/snapshot/${MY_PV}.tar.gz -> ${P}.tar.gz
 	"
@@ -21,17 +21,14 @@ fi
 DESCRIPTION="A linux framebuffer PDF viewer"
 HOMEPAGE="http://repo.or.cz/fbpdf.git"
 
-LICENSE="BSD"
+LICENSE="ISC"
 SLOT="0"
 IUSE="djvu mupdf poppler"
 REQUIRED_USE="|| ( djvu mupdf poppler )"
 
 RDEPEND="
 	djvu? ( app-text/djvu )
-	mupdf? (
-		app-text/mupdf
-		dev-lang/mujs
-	)
+	mupdf? ( >app-text/mupdf-1.10 )
 	poppler? ( app-text/poppler[cxx] )
 "
 DEPEND="

@@ -1,14 +1,12 @@
-diff --git a/Makefile b/Makefile
-index 611e70a..d86c516 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -11,14 +11,13 @@ clean:
+@@ -11,14 +11,14 @@ clean:
  
  # pdf support using mupdf
  fbpdf: fbpdf.o mupdf.o draw.o
--	$(CC) -o $@ $^ $(LDFLAGS) -lmupdf -lmujs -lfreetype \
--			-ljbig2dec -ljpeg -lz -lopenjpeg -lm -lcrypto
-+	$(CC) -o $@ $^ $(LDFLAGS) `pkg-config --libs mupdf` -lmujs
+-	$(CC) -o $@ $^ $(LDFLAGS) -lmupdf -lmupdfthird -lcrypto -lm
++	$(CC) -o $@ $^ $(LDFLAGS) `pkg-config --libs mupdf`
+ 
  # djvu support
  fbdjvu: fbpdf.o djvulibre.o draw.o
 -	$(CC) -o $@ $^ $(LDFLAGS) -ldjvulibre -ljpeg -lm -lstdc++ -lpthread
