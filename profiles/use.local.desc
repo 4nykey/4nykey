@@ -22,8 +22,9 @@ dev-qt/aseman-qt-tools:sensors - Pull in dev-qt/qtsensors
 dev-qt/aseman-qt-tools:webengine - Pull in dev-qt/qtwebengine
 dev-qt/aseman-qt-tools:widgets - Pull in dev-qt/qtwidgets
 dev-scheme/sortsmill-core-guile:atomic-ops - Disabling this will sacrifice thread-safety in some operations
-media-fonts/Fira:clean-as-you-go - Clean intermediate ufos after they were built (useful when PORTAGE_TMPDIR resides on a tmpfs)
-media-fonts/Fira:interpolate - Interpolate to get more font weights (significantly increases build time and diskspace requirements)
+media-fonts/fira:clean-as-you-go - Clean intermediate ufos after they were built (useful when PORTAGE_TMPDIR resides on a tmpfs)
+media-fonts/fira:interpolate - Interpolate to get more font weights (significantly increases build time and diskspace requirements)
+media-fonts/iosevka:autohint - Autohint fonts with media-gfx/ttfautohint
 media-fonts/noto:emoji - Install additional emoji fonts
 media-fonts/noto:pipeline - Install WIP fonts created from glyphs
 media-fonts/noto-emoji:zopfli - Optimize using app-arch/zopfli
@@ -97,6 +98,8 @@ x11-misc/gxneur:gconf - Enable GConf as configuration backend
 x11-misc/xneur:aspell - Enable spellchecking using app-text/aspell
 x11-misc/xneur:enchant - Enable spell checking using app-text/enchant
 x11-misc/xneur:keylogger - Enable keyboard logger
+x11-themes/arc-kde:konsole - Install konsole theme
+x11-themes/arc-kde:kvantum - Install kvantum theme
 x11-themes/candra:gdm - Install gnome-base/gdm theme
 x11-themes/cloak:cinnamon - Install gnome-extra/cinnamon theme
 x11-themes/cloak:firefox - Install firefox theme
@@ -105,7 +108,3 @@ x11-themes/cloak:openbox - Install openbox theme
 x11-themes/cloak:xfce - Install xfwm4 theme
 x11-themes/nouvegray-icon-theme:extras - Install extras
 x11-themes/nouvegray-icon-theme:smplayer - Install media-video/smplayer theme
-x11-themes/papirus-suite:libreoffice - Install libreoffice theme
-x11-themes/papirus-suite:sddm - Install sddm theme
-x11-themes/papirus-suite:smplayer - Install smplayer theme
-x11-themes/papirus-suite:vlc - Install vlc theme
