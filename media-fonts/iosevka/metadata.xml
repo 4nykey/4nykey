@@ -4,4 +4,7 @@
 	<maintainer type="person">
 		<email>4nykey@gmail.com</email>
 	</maintainer>
+	<use>
+		<flag name="autohint">Autohint fonts with <pkg>media-gfx/ttfautohint</pkg></flag>
+	</use>
 </pkgmetadata>
