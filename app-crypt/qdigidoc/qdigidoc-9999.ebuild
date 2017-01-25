@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -15,7 +15,7 @@ else
 		mirror://githubcl/open-eid/${PN}/tar.gz/v${MY_PV} -> ${P}.tar.gz
 	"
 	# submodules not included in github releases
-	MY_QC="qt-common-2085525"
+	MY_QC="qt-common-719160d"
 	SRC_URI="${SRC_URI}
 		mirror://githubcl/open-eid/${MY_QC%-*}/tar.gz/${MY_QC##*-} -> ${MY_QC}.tar.gz
 	"
@@ -48,7 +48,7 @@ DEPEND="
 	${DEPEND}
 	dev-util/cmake-openeid
 "
-DOCS=( AUTHORS README.md RELEASE-NOTES.txt )
+DOCS=( AUTHORS {README,RELEASE-NOTES}.md )
 
 src_prepare() {
 	[[ -n ${PV%%*9999} ]] && mv "${WORKDIR}"/${MY_QC}/* "${S}"/common/
