@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlei18n/noto-fonts"
 else
 	inherit vcs-snapshot
-	MY_PV="492dcd2"
+	MY_PV="44412f1"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}-fonts/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -36,6 +36,6 @@ RDEPEND="
 FONT_S=( hinted )
 
 pkg_setup() {
-	use binary && use pipeline && FONT_S+=( alpha/from-pipeline/unhinted )
+	use binary && use pipeline && FONT_S+=( alpha/from-pipeline/unhinted/s{ans,erif} )
 	font-r1_pkg_setup
 }
