@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -20,7 +20,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-8e4962a"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-8c41cf6"
 SRC_URI+="
 	!binary? (
 		mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
@@ -59,6 +59,7 @@ src_prepare() {
 	use binary && return
 	unpack ${MY_MK}.tar.gz
 	ln -s "4. Glyphs Source Files" src
+	rm -f src/*_BACKUP.glyphs
 }
 
 src_compile() {
