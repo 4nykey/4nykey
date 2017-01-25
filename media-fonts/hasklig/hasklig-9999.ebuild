@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -15,10 +15,10 @@ else
 	MY_PV="${PV//_/-}"
 	SRC_URI="
 		binary? (
-			https://github.com/i-tu/${PN}/releases/download/v${MY_PV}/${PN}-${MY_PV}.zip
+			https://github.com/i-tu/${PN}/releases/download/${MY_PV}/${PN}-${MY_PV}.zip
 		)
 		!binary? (
-			mirror://githubcl/i-tu/${PN}/tar.gz/v${MY_PV} -> ${P}.tar.gz
+			mirror://githubcl/i-tu/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		)
 	"
 	RESTRICT="primaryuri"
@@ -53,9 +53,6 @@ pkg_setup() {
 	if use binary; then
 		S="${WORKDIR}"
 	else
-		PATCHES=(
-			"${FILESDIR}"/${PN}-ftversion.diff
-		)
 		python-any-r1_pkg_setup
 	fi
 	font-r1_pkg_setup
