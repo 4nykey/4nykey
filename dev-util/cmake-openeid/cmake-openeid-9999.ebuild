@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="${PV/_/-}"
-	MY_PV="b33c174"
+	MY_PV="a7fd613"
 	SRC_URI="
 		mirror://githubcl/open-eid/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -20,7 +20,7 @@ else
 fi
 
 DESCRIPTION="Open-EID CMake modules"
-HOMEPAGE="http://id.ee"
+HOMEPAGE="https://open-eid.github.io"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
