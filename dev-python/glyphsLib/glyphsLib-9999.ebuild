@@ -35,5 +35,4 @@ DEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
 "
 PATCHES=(
-	"${FILESDIR}"/${PN}-caret_int.diff
 )
