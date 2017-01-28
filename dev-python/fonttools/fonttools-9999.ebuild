@@ -28,7 +28,7 @@ HOMEPAGE="https://github.com/${PN}/${PN}"
 LICENSE="BSD"
 SLOT="0"
 IUSE="brotli zopfli"
-DOCS=( README.md NEWS )
+DOCS=( {README,NEWS}.rst )
 
 DEPEND+="
 	>=dev-python/numpy-1.0.2[${PYTHON_USEDEP}]
