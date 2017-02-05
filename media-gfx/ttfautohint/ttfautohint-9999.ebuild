@@ -1,10 +1,10 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
 EAPI=6
 
-inherit autotools
+inherit autotools qmake-utils
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="git://repo.or.cz/${PN}.git"
@@ -54,10 +54,12 @@ src_prepare() {
 }
 
 src_configure() {
-	local myeconfargs=(
+	local _q="$(qt4_get_bindir)" \
+	myeconfargs=(
 		$(use_with doc)
 		$(use_with qt4 qt)
 	)
+	QMAKE="${_q}/qmake" MOC="${_q}/moc" UIC="${_q}/uic" RCC="${_q}/rcc" \
 	econf "${myeconfargs[@]}"
 }
 
