@@ -27,14 +27,19 @@ HOMEPAGE="https://github.com/${PN}/${PN}"
 
 LICENSE="BSD"
 SLOT="0"
-IUSE="brotli zopfli"
+IUSE="brotli test zopfli"
 DOCS=( {README,NEWS}.rst )
 
-DEPEND+="
-	>=dev-python/numpy-1.0.2[${PYTHON_USEDEP}]
-"
 RDEPEND="
-	${DEPEND}
+	>=dev-python/numpy-1.0.2[${PYTHON_USEDEP}]
 	brotli? ( app-arch/brotli[${PYTHON_USEDEP}] )
 	zopfli? ( dev-python/py-zopfli[${PYTHON_USEDEP}] )
 "
+DEPEND="
+	${RDEPEND}
+	test? ( dev-python/pytest-runner[${PYTHON_USEDEP}] )
+"
+
+python_test() {
+	esetup.py test || die
+}

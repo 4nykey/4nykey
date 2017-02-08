@@ -26,21 +26,26 @@ HOMEPAGE="https://github.com/adrientetar/${PN}"
 
 LICENSE="|| ( GPL-3 LGPL-3 )"
 SLOT="0"
-IUSE=""
+IUSE="test"
 
 RDEPEND="
-	dev-python/fonttools[${PYTHON_USEDEP}]
+	>=dev-python/PyQt5-5.7[widgets,${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.3.1[${PYTHON_USEDEP}]
 	dev-python/ufoLib[${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
-	dev-python/PyQt5[widgets,${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
+	test? ( dev-python/pytest-runner[${PYTHON_USEDEP}] )
 "
 
 src_prepare() {
 	default
 	# no egg-info for PyQt5
 	sed -e '/\<pyqt5\>/d' -i setup.py
+}
+
+python_test() {
+	esetup.py test || die
 }

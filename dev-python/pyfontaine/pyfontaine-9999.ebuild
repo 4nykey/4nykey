@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -12,8 +12,10 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="b20d185"
+	MY_FC="fontconfig-d162a4a"
 	SRC_URI="
 		mirror://githubcl/davelab6/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/freedesktop/${MY_FC%-*}/tar.gz/${MY_FC##*-} -> ${MY_FC}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -32,8 +34,19 @@ RDEPEND="
 	dev-python/tabulate[${PYTHON_USEDEP}]
 	dev-python/fonttools[${PYTHON_USEDEP}]
 	icu? ( dev-python/pyicu[${PYTHON_USEDEP}] )
+	dev-python/nose[${PYTHON_USEDEP}]
+	dev-python/python-dateutil[${PYTHON_USEDEP}]
+	dev-python/pyparsing[${PYTHON_USEDEP}]
+	dev-python/numpy[${PYTHON_USEDEP}]
+	dev-python/matplotlib[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
 "
+
+src_prepare() {
+	default
+	[[ -n ${PV%%*9999} ]] && \
+	mv "${WORKDIR}"/${MY_FC}/* "${S}"/fontaine/charsets/fontconfig
+}

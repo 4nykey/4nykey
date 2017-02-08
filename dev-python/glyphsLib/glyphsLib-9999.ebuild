@@ -25,14 +25,19 @@ HOMEPAGE="https://github.com/googlei18n/${PN}"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE=""
+IUSE="test"
 
 RDEPEND="
+	>=dev-python/fonttools-3.6.1[${PYTHON_USEDEP}]
+	dev-python/defcon[${PYTHON_USEDEP}]
 	dev-python/MutatorMath[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
+	test? ( dev-python/pytest-runner[${PYTHON_USEDEP}] )
 "
-PATCHES=(
-)
+
+python_test() {
+	esetup.py test || die
+}

@@ -25,14 +25,23 @@ HOMEPAGE="https://github.com/googlei18n/${PN}"
 
 LICENSE="MIT"
 SLOT="0"
-IUSE=""
+IUSE="test"
 
-DEPEND="
-	>dev-python/fonttools-3.0[${PYTHON_USEDEP}]
-	dev-python/compreffor[${PYTHON_USEDEP}]
+RDEPEND="
+	>=dev-python/fonttools-3.6.1[${PYTHON_USEDEP}]
 	dev-python/ufoLib[${PYTHON_USEDEP}]
+	dev-python/defcon[${PYTHON_USEDEP}]
+	dev-python/cu2qu[${PYTHON_USEDEP}]
+	dev-python/compreffor[${PYTHON_USEDEP}]
 "
-RDEPEND="${DEPEND}"
+DEPEND="
+	${RDEPEND}
+	test? ( dev-python/pytest-runner[${PYTHON_USEDEP}] )
+"
 PATCHES=(
 	"${FILESDIR}"/${PN}-heightfallback.diff
 )
+
+python_test() {
+	esetup.py test || die
+}

@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/eosrei/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="b953192"
+	MY_PV="4fd834f"
 	SRC_URI="
 		mirror://githubcl/eosrei/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"

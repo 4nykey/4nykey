@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -25,12 +25,17 @@ HOMEPAGE="https://github.com/typesupply/${PN}"
 
 LICENSE="MIT"
 SLOT="0"
-IUSE=""
+IUSE="test"
 
 RDEPEND="
-	dev-python/fonttools
-	dev-python/ufoLib
+	>=dev-python/fonttools-3.6.1[${PYTHON_USEDEP}]
+	dev-python/ufoLib[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
+	test? ( dev-python/pytest-runner[${PYTHON_USEDEP}] )
 "
+
+python_test() {
+	esetup.py test || die
+}

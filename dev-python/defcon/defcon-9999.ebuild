@@ -25,13 +25,18 @@ HOMEPAGE="https://github.com/typesupply/${PN}"
 
 LICENSE="MIT"
 SLOT="0"
-IUSE=""
+IUSE="test"
 
 RDEPEND="
-	dev-python/fonttools[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.4.0[${PYTHON_USEDEP}]
 	dev-python/ufoLib[${PYTHON_USEDEP}]
 	dev-python/compositor[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
+	test? ( dev-python/pytest-runner[${PYTHON_USEDEP}] )
 "
+
+python_test() {
+	esetup.py test || die
+}

@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -13,7 +13,7 @@ else
 	inherit vcs-snapshot
 	MY_PV="b3ccd1b"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
-	MY_ZP="zopfli-e0e937e"
+	MY_ZP="zopfli-6818a08"
 	SRC_URI="
 		mirror://githubcl/anthrotype/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://githubcl/google/${MY_ZP%-*}/tar.gz/${MY_ZP##*-} -> ${MY_ZP}.tar.gz
@@ -38,4 +38,8 @@ DEPEND="
 src_prepare() {
 	[[ -n ${PV%%*9999} ]] && mv "${WORKDIR}"/${MY_ZP}/src "${S}"/${MY_ZP%-*}
 	distutils-r1_src_prepare
+}
+
+python_test() {
+	esetup.py test || die
 }

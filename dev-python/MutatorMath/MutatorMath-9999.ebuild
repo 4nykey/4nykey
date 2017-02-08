@@ -25,13 +25,18 @@ HOMEPAGE="https://github.com/LettError/${PN}"
 
 LICENSE="BSD"
 SLOT="0"
-IUSE=""
+IUSE="test"
 
 RDEPEND="
+	dev-python/ufoLib[${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
 	dev-python/fontMath[${PYTHON_USEDEP}]
-	dev-python/ufoLib[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
+	test? ( dev-python/pytest-runner[${PYTHON_USEDEP}] )
 "
+
+python_test() {
+	esetup.py test || die
+}

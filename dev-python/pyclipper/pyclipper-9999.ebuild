@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -22,10 +22,15 @@ HOMEPAGE="https://github.com/greginvm/${PN}"
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="+cython"
+IUSE="+cython test"
 
 DEPEND="
 	cython? ( dev-python/cython[${PYTHON_USEDEP}] )
+	test? (
+		dev-python/pytest-runner[${PYTHON_USEDEP}]
+		dev-python/unittest2[${PYTHON_USEDEP}]
+		dev-python/sympy[${PYTHON_USEDEP}]
+	)
 "
 
 src_prepare() {
@@ -41,4 +46,8 @@ src_prepare() {
 		-e '/setuptools_scm/d' \
 		-e "s:use_scm_version=True:version=\"${_v}\":" \
 		-i "${S}"/setup.py
+}
+
+python_test() {
+	esetup.py test || die
 }
