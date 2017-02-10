@@ -20,7 +20,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-8c41cf6"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-cdfa52d"
 SRC_URI+="
 	!binary? (
 		mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
@@ -65,6 +65,6 @@ src_prepare() {
 src_compile() {
 	use binary && return
 	emake \
-		FONTMAKE="fontmake -o ${FONT_SUFFIX}" \
-		-f ${MY_MK}/Makefile
+		-f ${MY_MK}/Makefile \
+		${FONT_SUFFIX}
 }

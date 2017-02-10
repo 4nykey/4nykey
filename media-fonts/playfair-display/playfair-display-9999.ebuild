@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -17,7 +17,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-ce43005"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-cdfa52d"
 SRC_URI+="
 	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
 	-> ${MY_MK}.tar.gz
@@ -59,7 +59,7 @@ src_prepare() {
 
 src_compile() {
 	emake \
-		SRCDIR="${S}/Glyphs" \
-		FONTMAKE="fontmake -o ${FONT_SUFFIX}" \
-		-f ${MY_MK}/Makefile
+		-f ${MY_MK}/Makefile \
+		SRCDIR="Glyphs" \
+		${FONT_SUFFIX}
 }

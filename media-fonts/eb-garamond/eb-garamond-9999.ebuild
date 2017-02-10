@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -9,20 +9,12 @@ FONT_TYPES="otf ttf"
 inherit python-any-r1 font-r1
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://bitbucket.org/georgd/${PN}.git"
-	DEPEND="
-		${PYTHON_DEPS}
-		$(python_gen_any_dep '
-			media-gfx/fontforge[${PYTHON_USEDEP}]
-		')
-		media-gfx/ttfautohint
-	"
+	EGIT_REPO_URI="https://github.com/georgd/${PN}.git"
 else
 	inherit vcs-snapshot
 	MY_PV="3590428"
 	SRC_URI="
-		https://bitbucket.org/georgd/${PN}/get/${MY_PV}.tar.gz
-		-> ${P}.tar.gz
+		mirror://githubcl/georgd/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -34,6 +26,13 @@ HOMEPAGE="http://www.georgduffner.at/ebgaramond"
 LICENSE="OFL-1.1"
 SLOT="0"
 
+DEPEND="
+	${PYTHON_DEPS}
+	$(python_gen_any_dep '
+		media-gfx/fontforge[${PYTHON_USEDEP}]
+	')
+	font_types_ttf? ( media-gfx/ttfautohint )
+"
 FONT_S=( build )
 DOCS="Changes specimen/Specimen.pdf"
 

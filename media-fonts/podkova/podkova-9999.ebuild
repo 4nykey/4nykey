@@ -12,14 +12,14 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/cyrealtype/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="726cfa7"
+	MY_PV="56ba282"
 	SRC_URI="
 		mirror://githubcl/cyrealtype/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-8c41cf6"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-cdfa52d"
 SRC_URI+="
 	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
 	-> ${MY_MK}.tar.gz
@@ -61,7 +61,7 @@ src_prepare() {
 src_compile() {
 	use binary && return
 	emake \
-		SRCDIR="source" \
-		FONTMAKE="fontmake -o ${FONT_SUFFIX}" \
-		-f ${MY_MK}/Makefile
+		-f ${MY_MK}/Makefile \
+		SRCDIR="sources" \
+		${FONT_SUFFIX}
 }

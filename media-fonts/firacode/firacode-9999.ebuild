@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -10,11 +10,12 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/tonsky/${PN}"
 else
+	inherit vcs-snapshot
 	SRC_URI="mirror://githubcl/tonsky/${PN}/tar.gz/${PV} -> ${P}.tar.gz"
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-ce43005"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-cdfa52d"
 SRC_URI+="
 !binary? (
 	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
@@ -59,8 +60,7 @@ src_prepare() {
 src_compile() {
 	use binary && return
 	emake \
-		SRCDIR="${S}" \
-		FONTMAKE="fontmake -o ${FONT_SUFFIX}" \
-		RM=true \
-		-f ${MY_MK}/Makefile
+		-f ${MY_MK}/Makefile \
+		SRCDIR="." \
+		${FONT_SUFFIX}
 }

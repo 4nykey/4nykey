@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/alexeiva/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="271166e"
+	MY_PV="9fe3b99"
 	SRC_URI="
 		mirror://githubcl/alexeiva/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -44,6 +44,12 @@ pkg_setup() {
 		FONT_S=( master_{o,t}tf )
 	fi
 	font-r1_pkg_setup
+}
+
+src_prepare() {
+	default
+	use binary && return
+	rm -f sources/'Arvo Italic source.glyphs'
 }
 
 src_compile() {

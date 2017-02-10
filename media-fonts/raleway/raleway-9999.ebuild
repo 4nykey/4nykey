@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -19,7 +19,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-f363b48"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-cdfa52d"
 SRC_URI+="
 	!binary? (
 		mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
@@ -34,7 +34,7 @@ HOMEPAGE="http://www.impallari.com/projects/overview/matt-mcinerneys-raleway-fam
 LICENSE="OFL-1.1"
 SLOT="0"
 IUSE="+binary"
-REQUIRED_USE="binary? ( !font_types_ttf )"
+REQUIRED_USE="binary? ( !font_types_${FONT_TYPES_EXCLUDE} )"
 
 DEPEND="
 	!binary? (
@@ -66,7 +66,7 @@ src_prepare() {
 src_compile() {
 	use binary && return
 	emake \
-		SRCDIR="${S}/source" \
-		FONTMAKE="fontmake -o ${FONT_SUFFIX}" \
-		-f ${MY_MK}/Makefile
+		-f ${MY_MK}/Makefile \
+		SRCDIR="source" \
+		${FONT_SUFFIX}
 }

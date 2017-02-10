@@ -35,7 +35,7 @@ HOMEPAGE="https://github.com/google/roboto"
 LICENSE="Apache-2.0"
 SLOT="0"
 IUSE="+binary"
-REQUIRED_USE="binary? ( !font_types_otf )"
+REQUIRED_USE="binary? ( !font_types_${FONT_TYPES_EXCLUDE} )"
 
 DEPEND="
 	binary? (

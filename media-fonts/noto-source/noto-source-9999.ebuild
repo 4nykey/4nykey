@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}"
 else
 	inherit vcs-snapshot
-	MY_PV="76a1cfe"
+	MY_PV="b3eaf63"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -20,7 +20,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-ce43005"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-cdfa52d"
 SRC_URI+="
 	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
 	-> ${MY_MK}.tar.gz
@@ -55,8 +55,8 @@ src_prepare() {
 
 src_compile() {
 	emake \
-		FONTMAKE="fontmake -o ${FONT_SUFFIX}" \
+		-f ${MY_MK}/Makefile \
 		$(usex interpolate '' 'INTERPOLATE=') \
-		$(usex clean-as-you-go '' 'RM=true') \
-		-f ${MY_MK}/Makefile
+		$(usex clean-as-you-go 'RM=rm -rf' '') \
+		${FONT_SUFFIX}
 }
