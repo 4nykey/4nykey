@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -15,10 +15,17 @@ else
 	SRC_URI="
 		mirror://githubcl/etunni/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
-	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-cf5cbff"
+SRC_URI+="
+!binary? (
+	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
+	-> ${MY_MK}.tar.gz
+)
+"
+RESTRICT="primaryuri"
 
 DESCRIPTION="A serif typeface with soft shapes and terminal forms shaped like curls"
 HOMEPAGE="https://github.com/etunni/${PN}"
@@ -49,16 +56,15 @@ pkg_setup() {
 
 src_prepare() {
 	default
-	use binary || \
-	sed \
-		-e 's:color = (:colorObject = (:' \
-		-i "${S}"/sources/${PN^}*.glyphs
+	use binary && return
+	unpack ${MY_MK}.tar.gz
+	sed -e '/color = (/d' -i "${S}"/sources/${PN^}*.glyphs
 }
 
 src_compile() {
 	use binary && return
-	fontmake \
-		--glyphs-path "${S}"/sources/${PN^}.glyphs \
-		-o ${FONT_SUFFIX} \
-		|| die
+	emake \
+		-f ${MY_MK}/Makefile \
+		SRCDIR="sources" \
+		${FONT_SUFFIX}
 }

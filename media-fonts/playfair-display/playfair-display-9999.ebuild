@@ -17,7 +17,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-cdfa52d"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-cf5cbff"
 SRC_URI+="
 	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
 	-> ${MY_MK}.tar.gz
@@ -52,6 +52,7 @@ pkg_setup() {
 
 src_prepare() {
 	default
+	use binary && return
 	unpack ${MY_MK}.tar.gz
 	local _g
 	for _g in "${S}"/Glyphs/*.glyphs; do mv -f "${_g}" "${_g// /}"; done

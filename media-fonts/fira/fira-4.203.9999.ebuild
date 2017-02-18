@@ -18,7 +18,9 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-cdfa52d"
+MY_PV="${PV%.9999}"
+MY_PV="${MY_PV%_p*}"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-cf5cbff"
 MY_F="28cef3ca070463212a1be193bcac29b8-4ce7076"
 SRC_URI+="
 !binary? (
@@ -73,7 +75,7 @@ src_prepare() {
 	use binary && return
 	unpack ${MY_F}.tar.gz ${MY_MK}.tar.gz
 
-	local _m=${PN^}MonoUFO_beta3206 _s=${PN^}SansUFO_beta${PV%.9999} _d
+	local _m=${PN^}MonoUFO_beta3206 _s=${PN^}SansUFO_beta${MY_PV} _d
 	_s=${_s//./}
 	unpack "${S}"/Fira_UFO_Sources/${PN^}{${_m#${PN^}},${_s#${PN^}}}.zip
 	for _d in "${S}"/{${_m},${_s}}/*.ufo; do
@@ -110,6 +112,6 @@ src_compile() {
 		-f ${MY_MK}/Makefile.ds \
 		SRCDIR="." \
 		$(usex interpolate '' 'INTERPOLATE=') \
-		$(usex clean-as-you-go 'RM=rm -rf' '') \
+		$(usex clean-as-you-go 'CLEAN=y' '') \
 		${FONT_SUFFIX}
 }

@@ -20,7 +20,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-cdfa52d"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-cf5cbff"
 SRC_URI+="
 	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
 	-> ${MY_MK}.tar.gz
@@ -57,6 +57,6 @@ src_compile() {
 	emake \
 		-f ${MY_MK}/Makefile \
 		$(usex interpolate '' 'INTERPOLATE=') \
-		$(usex clean-as-you-go 'RM=rm -rf' '') \
+		$(usex clean-as-you-go 'CLEAN=y' '') \
 		${FONT_SUFFIX}
 }

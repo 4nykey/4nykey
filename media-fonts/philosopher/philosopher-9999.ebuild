@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -15,10 +15,17 @@ else
 	SRC_URI="
 		mirror://githubcl/alexeiva/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
-	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-cf5cbff"
+SRC_URI+="
+!binary? (
+	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
+	-> ${MY_MK}.tar.gz
+)
+"
+RESTRICT="primaryuri"
 
 DESCRIPTION="A font that takes inspiration from Agfa Rotis and ITC Binary"
 HOMEPAGE="https://github.com/alexeiva/${PN}"
@@ -46,13 +53,16 @@ pkg_setup() {
 	font-r1_pkg_setup
 }
 
+src_prepare() {
+	default
+	use binary || unpack ${MY_MK}.tar.gz
+}
+
 src_compile() {
 	use binary && return
-	local g
-	for g in "${S}"/sources/${PN^}*.glyphs; do
-		fontmake \
-			--glyphs-path "${g}" \
-			-o ${FONT_SUFFIX} \
-			|| die
-	done
+	emake \
+		-f ${MY_MK}/Makefile \
+		SRCDIR="sources" \
+		INTERPOLATE= \
+		${FONT_SUFFIX}
 }

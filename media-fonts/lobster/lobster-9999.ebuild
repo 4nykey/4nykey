@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -17,9 +17,16 @@ else
 		mirror://githubcl/impallari/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	KEYWORDS="~amd64 ~x86"
-	RESTRICT="primaryuri"
 fi
 inherit python-any-r1 font-r1
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-cf5cbff"
+SRC_URI+="
+!binary? (
+	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
+	-> ${MY_MK}.tar.gz
+)
+"
+RESTRICT="primaryuri"
 
 DESCRIPTION="A bold condensed script font with ligatures and alternates"
 HOMEPAGE="http://www.impallari.com/lobster"
@@ -47,10 +54,15 @@ pkg_setup() {
 	font-r1_pkg_setup
 }
 
+src_prepare() {
+	default
+	use binary || unpack ${MY_MK}.tar.gz
+}
+
 src_compile() {
 	use binary && return
-	fontmake \
-		--glyphs-path "${S}"/sources/${PN^}.glyphs \
-		-o ${FONT_SUFFIX} \
-		|| die
+	emake \
+		-f ${MY_MK}/Makefile \
+		SRCDIR="sources" \
+		${FONT_SUFFIX}
 }

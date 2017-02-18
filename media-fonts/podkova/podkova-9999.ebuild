@@ -19,10 +19,12 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-cdfa52d"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-cf5cbff"
 SRC_URI+="
+!binary? (
 	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
 	-> ${MY_MK}.tar.gz
+)
 "
 RESTRICT="primaryuri"
 
@@ -55,7 +57,7 @@ pkg_setup() {
 
 src_prepare() {
 	default
-	unpack ${MY_MK}.tar.gz
+	use binary || unpack ${MY_MK}.tar.gz
 }
 
 src_compile() {
