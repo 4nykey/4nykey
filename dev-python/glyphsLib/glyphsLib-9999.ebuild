@@ -28,7 +28,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.6.1[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.7.0[${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
 	dev-python/MutatorMath[${PYTHON_USEDEP}]
 "
