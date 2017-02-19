@@ -60,11 +60,10 @@ src_prepare() {
 }
 
 src_configure() {
-	local mycmakeargs=()
-	[[ -n ${PV%%*9999} ]] && mycmakeargs=( -DBREAKPAD='' )
-	mycmakeargs+=(
+	local mycmakeargs=(
 		-DENABLE_KDE=$(usex kde)
 		-DENABLE_NAUTILUS_EXTENSION=$(usex nautilus)
 	)
+	[[ -n ${PV%%*9999} ]] && mycmakeargs+=( -DBREAKPAD='' )
 	cmake-utils_src_configure
 }
