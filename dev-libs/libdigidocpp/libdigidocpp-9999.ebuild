@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -51,6 +51,7 @@ src_prepare() {
 	sed \
 		-e "s:doc/${PN}:doc/${PF}:" \
 		-e 's:\${CMAKE_SOURCE_DIR}/cmake/modules:/usr/share/cmake/openeid:' \
+		-e 's:set_ex\(( [^ ]\+\) "$ENV{[^}]\+}" \(.*)\):set_env\1 \2:' \
 		-i CMakeLists.txt
 	use test || sed -i CMakeLists.txt -e '/add_subdirectory(test)/d'
 	sed \
