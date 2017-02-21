@@ -1,10 +1,10 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI="5"
+EAPI=6
 
-inherit versionator toolchain-funcs flag-o-matic unpacker
+inherit versionator toolchain-funcs flag-o-matic
 
 export CBUILD=${CBUILD:-${CHOST}}
 export CTARGET=${CTARGET:-${CHOST}}
@@ -18,13 +18,13 @@ MY_PV="$(replace_version_separator 3 '-')"
 MY_P="${P}_x86"
 DESCRIPTION="Linux-like environment for Windows"
 HOMEPAGE="http://cygwin.com/"
-BASE_URI="mirror://cygwin/x86/release/"
 # few headers are missing from binary pkg, so source tarball is needed
 # for headers-only variant as well
+SRC_URI="mirror://cygwin/x86/release/${PN}/"
 SRC_URI="
-	${BASE_URI}${PN}/${PN}-${MY_PV}-src.tar.xz -> ${MY_P}-src.tar.xz
+	${SRC_URI}${PN}-${MY_PV}-src.tar.xz -> ${MY_P}-src.tar.xz
 	crosscompile_opts_headers-only? (
-		${BASE_URI}${PN}/${PN}-devel/${PN}-devel-${MY_PV}.tar.xz ->
+		${SRC_URI}${PN}-devel/${PN}-devel-${MY_PV}.tar.xz ->
 		${MY_P}.tar.xz
 	)
 "
@@ -34,10 +34,6 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE="crosscompile_opts_headers-only"
 RESTRICT="strip primaryuri"
-
-DEPEND="
-	$(unpacker_src_uri_depends)
-"
 
 S="${WORKDIR}/newlib-${PN}"
 
@@ -50,6 +46,9 @@ pkg_setup() {
 		die "Invalid configuration; do not emerge this directly"
 	fi
 	just_headers && return
+	PATCHES=(
+		"${FILESDIR}"/${PN}-2.4.0-dont_regen_devices.cc.diff
+	)
 	CHOST=${CTARGET} strip-unsupported-flags
 	filter-flags -march=*
 	strip-flags
@@ -58,10 +57,11 @@ pkg_setup() {
 src_unpack() {
 	default
 	local _p="newlib-${PN}-$(get_version_component_range -3)"
-	unpacker "${WORKDIR}"/${PN}-${MY_PV}.src/${_p}.tar.bz2
+	unpack "${WORKDIR}"/${PN}-${MY_PV}.src/${_p}.tar.bz2
 }
 
 src_prepare() {
+	default
 	just_headers && return
 	sed \
 		-e '/INSTALL_LICENSE="install-license"/d' \
@@ -72,7 +72,6 @@ src_prepare() {
 		-e 's:install-man install-ldif::' \
 		-e 's:\$(DESTDIR)\$(bindir):$(DESTDIR)$(tooldir)/bin:' \
 		-i winsup/cygwin/Makefile.in
-	epatch "${FILESDIR}"/${PN}*.diff
 }
 
 src_configure() {
@@ -96,7 +95,7 @@ src_install() {
 		# gcc (+cxx) <-> cygwin
 		doins -r "${WORKDIR}"/newlib-${PN}/newlib/libc/include "${WORKDIR}"/usr/{lib,include}
 	else
-		emake -j1 \
+		emake \
 			DESTDIR="${D}" \
 			tooldir="${EPREFIX}/usr/${CTARGET}/usr" \
 			install
