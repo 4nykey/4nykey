@@ -65,5 +65,6 @@ src_compile() {
 	emake \
 		-f ${MY_MK}/Makefile \
 		SRCDIR="sources" \
+		INTERPOLATE= \
 		${FONT_SUFFIX}
 }
