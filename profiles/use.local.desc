@@ -24,7 +24,6 @@ dev-qt/aseman-qt-tools:widgets - Pull in dev-qt/qtwidgets
 dev-scheme/sortsmill-core-guile:atomic-ops - Disabling this will sacrifice thread-safety in some operations
 media-fonts/fira:clean-as-you-go - Clean intermediate ufos after they were built (useful when PORTAGE_TMPDIR resides on a tmpfs)
 media-fonts/fira:interpolate - Interpolate to get more font weights (significantly increases build time and diskspace requirements)
-media-fonts/iosevka:autohint - Autohint fonts with media-gfx/ttfautohint
 media-fonts/noto:emoji - Install additional emoji fonts
 media-fonts/noto:pipeline - Install WIP fonts created from glyphs
 media-fonts/noto-emoji:zopfli - Optimize using app-arch/zopfli

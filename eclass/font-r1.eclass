@@ -12,16 +12,28 @@ inherit eutils
 EXPORT_FUNCTIONS pkg_setup src_install pkg_postinst pkg_postrm
 
 # @ECLASS-VARIABLE: FONT_TYPES
-# @REQUIRED
-# @DESCRIPTION:
-# Space delimited list of font formats available for install.
-FONT_TYPES=${FONT_TYPES:-ttf}
-
-# @ECLASS-VARIABLE: FONT_TYPES_EXCLUDE
 # @DEFAULT_UNSET
 # @DESCRIPTION:
-# Space delimited list of font formats that shouldn't be installed by default.
-FONT_TYPES_EXCLUDE=${FONT_TYPES_EXCLUDE:-}
+# An array of font formats available for install.
+FONT_TYPES=( ${FONT_TYPES[@]:-} )
+FONT_TYPES=( ${FONT_TYPES[@]/#/font_types_} )
+FONT_TYPES=( ${FONT_TYPES[@]/font_types_+/+font_types_} )
+
+# @ECLASS-VARIABLE: FONT_VARIANTS
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# An array of available font variants.
+FONT_VARIANTS=( ${FONT_VARIANTS[@]:-} )
+FONT_VARIANTS=( ${FONT_VARIANTS[@]/#/font_variants_} )
+FONT_VARIANTS=( ${FONT_VARIANTS[@]/font_variants_+/+font_variants_} )
+
+# @ECLASS-VARIABLE: FONT_CHARS
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# An array of available character variations.
+FONT_CHARS=( ${FONT_CHARS[@]:-} )
+FONT_CHARS=( ${FONT_CHARS[@]/#/font_chars_} )
+FONT_CHARS=( ${FONT_CHARS[@]/font_chars_+/+font_chars_} )
 
 # @ECLASS-VARIABLE: FONT_SUFFIX
 # @DEFAULT_UNSET
@@ -59,13 +71,13 @@ FONT_CONF=( "" )
 # COPYRIGHT README{,.txt} NEWS AUTHORS BUGS ChangeLog FONTLOG.txt
 DOCS=${DOCS:-}
 
-IUSE="X $(printf +font_types_%s' ' ${FONT_TYPES})"
-if [[ -n ${FONT_TYPES_EXCLUDE} ]]; then
-	for _f in  ${FONT_TYPES_EXCLUDE}; do
-		IUSE="${IUSE/+font_types_${_f}/font_types_${_f}}"
-	done
-fi
-REQUIRED_USE=" || ( $(printf font_types_%s' ' ${FONT_TYPES}) )"
+IUSE="
+X
+${FONT_TYPES[@]}
+${FONT_VARIANTS[@]}
+${FONT_CHARS[@]}
+"
+[[ ${#FONT_TYPES[@]} -ge 1 ]] && REQUIRED_USE="|| ( ${FONT_TYPES[@]/+} )"
 
 DEPEND="X? (
 		x11-apps/mkfontdir
@@ -177,9 +189,10 @@ font-r1_pkg_setup() {
 	[[ -e "${EROOT}/${FONTDIR}/fonts.cache-1" ]] && rm -f "${EROOT}/${FONTDIR}/fonts.cache-1"
 
 	local _t
-	for _t in ${FONT_TYPES}; do
+	for _t in ${FONT_TYPES[@]/*_}; do
 		use font_types_${_t} && FONT_SUFFIX+=" ${_t}"
 	done
+	FONT_SUFFIX=${FONT_SUFFIX:-ttf}
 }
 
 # @FUNCTION: font-r1_font_install

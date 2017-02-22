@@ -1,2 +1,7 @@
+base_one - Alternative 1
+dotted_zero - Dotted zero
+empty_dollar - Alternative dollar sign
 hooky - Hooky l and i chars
+no_contextual_alternates - Disable contextual alternates
 zshaped - Z-shaped l and i chars
+zstyle_l - Z-shaped l
