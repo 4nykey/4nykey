@@ -4,8 +4,7 @@
 
 EAPI=6
 
-FONT_TYPES="otf ttf"
-FONT_TYPES_EXCLUDE="ttf"
+FONT_TYPES=( +otf ttf )
 PYTHON_COMPAT=( python2_7 )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -34,7 +33,7 @@ HOMEPAGE="http://www.impallari.com/projects/overview/matt-mcinerneys-raleway-fam
 LICENSE="OFL-1.1"
 SLOT="0"
 IUSE="+binary"
-REQUIRED_USE="binary? ( !font_types_${FONT_TYPES_EXCLUDE} )"
+REQUIRED_USE="binary? ( !font_types_ttf )"
 
 DEPEND="
 	!binary? (
@@ -68,5 +67,6 @@ src_compile() {
 	emake \
 		-f ${MY_MK}/Makefile \
 		SRCDIR="source" \
+		FAMILY="${PN^}" \
 		${FONT_SUFFIX}
 }

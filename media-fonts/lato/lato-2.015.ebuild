@@ -1,10 +1,9 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
 EAPI=6
 
-FONT_TYPES="ttf"
 LICENSE="OFL-1.1"
 MY_PN="${PN^}${PV%.*}${LICENSE%-*}"
 inherit font-r1 unpacker

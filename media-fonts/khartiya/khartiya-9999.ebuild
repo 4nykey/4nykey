@@ -1,11 +1,11 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
 EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
-FONT_TYPES="pfb otf ttf"
+FONT_TYPES=( pfb otf +ttf )
 if [[ -z ${PV%%*9999} ]]; then
 	REQUIRED_USE="!binary"
 	SRC_URI="mirror://gcarchive/${PN}/source-archive.zip -> ${P}.zip"

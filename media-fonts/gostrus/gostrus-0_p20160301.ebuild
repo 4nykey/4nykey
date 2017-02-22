@@ -1,12 +1,11 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
 EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
-FONT_TYPES="otf ttf"
-FONT_TYPES_EXCLUDE="otf"
+FONT_TYPES=( otf +ttf )
 inherit python-any-r1 font-r1
 
 MY_PN="${PN}-type-a"
@@ -27,7 +26,7 @@ LICENSE="OFL-1.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="+binary"
-REQUIRED_USE="binary? ( !font_types_${FONT_TYPES_EXCLUDE} )"
+REQUIRED_USE="binary? ( !font_types_otf )"
 
 DEPEND="
 	app-arch/unzip

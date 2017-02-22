@@ -1,10 +1,9 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
 EAPI=6
 
-FONT_TYPES="ttf"
 inherit font-r1
 
 DESCRIPTION="A slightly squared sans serif typeface aimed to look unique"

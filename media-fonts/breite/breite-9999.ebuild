@@ -1,10 +1,10 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
 EAPI=6
 
-FONT_TYPES="otf"
+FONT_SUFFIX="otf"
 inherit font-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -27,9 +27,4 @@ LICENSE="OFL-1.1"
 SLOT="0"
 IUSE=""
 
-DEPEND="
-	${RDEPEND}
-	media-gfx/fontforge
-	media-gfx/ttfautohint
-"
 FONT_S=( Output )

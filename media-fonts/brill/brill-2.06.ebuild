@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -23,4 +23,4 @@ IUSE=""
 DEPEND="
 	$(unpacker_src_uri_depends)
 "
-DOCS="Brill_Typeface_User_Guide_${PV}.pdf"
+DOCS="00_Brill_Fonts_Read_Me_First.txt Brill_Typeface_User_Guide_${PV}.pdf"

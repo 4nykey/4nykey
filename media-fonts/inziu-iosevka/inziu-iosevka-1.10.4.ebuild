@@ -4,8 +4,7 @@
 
 EAPI=6
 
-FONT_TYPES="ttc ttf"
-FONT_TYPES_EXCLUDE="ttf"
+FONT_TYPES=( +ttc ttf )
 inherit check-reqs font-r1
 
 DESCRIPTION="A CJK monospaced font, a composite of Iosevka, M+ and Source Han Sans"

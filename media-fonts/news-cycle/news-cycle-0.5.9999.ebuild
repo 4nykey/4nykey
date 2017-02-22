@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -10,7 +10,7 @@ MY_MK="f9edc47e189d8495b647a4feac8ca240-1827636"
 if [[ -z ${PV%%*9999} ]]; then
 	EBZR_REPO_URI="lp:${MY_PN}"
 	inherit bzr
-	FONT_TYPES="otf ttf"
+	FONT_TYPES=( otf +ttf )
 else
 	MY_P="${MY_PN}-${PV}"
 	SRC_URI="https://launchpad.net/${MY_PN}/trunk/${PV}/+download/${MY_P}.zip"

@@ -4,7 +4,7 @@
 
 EAPI=6
 
-FONT_VARIANTS=( cc slab term )
+FONT_VARIANTS=( cc +default slab term )
 FONT_CHARS=( hooky zshaped )
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
@@ -49,9 +49,6 @@ LICENSE="OFL-1.1"
 SLOT="0"
 IUSE="
 +binary
-+font_variants_default
-${FONT_VARIANTS[@]/#/font_variants_}
-${FONT_CHARS[@]/#/font_chars_}
 "
 
 DEPEND+="

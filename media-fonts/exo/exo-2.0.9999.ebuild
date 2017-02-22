@@ -4,7 +4,7 @@
 
 EAPI=6
 
-FONT_TYPES="otf ttf"
+FONT_TYPES=( otf +ttf )
 PYTHON_COMPAT=( python2_7 )
 inherit versionator
 SLOT="$(get_version_component_range 1-2)"

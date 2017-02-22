@@ -1,11 +1,11 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
 EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
-FONT_TYPES="otf ttc"
+FONT_TYPES=( +otf ttc )
 inherit python-any-r1
 if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI="mirror://gcarchive/${PN}/source-archive.zip -> ${P}.zip"

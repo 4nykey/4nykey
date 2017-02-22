@@ -4,8 +4,7 @@
 
 EAPI=6
 
-FONT_TYPES="otf ttf"
-FONT_TYPES_EXCLUDE="otf"
+FONT_TYPES=( otf +ttf )
 PYTHON_COMPAT=( python2_7 )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3

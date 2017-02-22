@@ -5,7 +5,7 @@
 EAPI=6
 
 MY_PN="The-${PN}-Font"
-FONT_TYPES="otf ttf"
+FONT_TYPES=( otf +ttf )
 PYTHON_COMPAT=( python2_7 )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3

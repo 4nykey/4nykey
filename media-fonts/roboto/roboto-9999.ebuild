@@ -4,8 +4,7 @@
 
 EAPI=6
 
-FONT_TYPES="otf ttf"
-FONT_TYPES_EXCLUDE="otf"
+FONT_TYPES=( otf +ttf )
 PYTHON_COMPAT=( python2_7 )
 MY_PN="${PN}-hinted"
 if [[ ${PV} == *9999* ]]; then
@@ -35,7 +34,7 @@ HOMEPAGE="https://github.com/google/roboto"
 LICENSE="Apache-2.0"
 SLOT="0"
 IUSE="+binary"
-REQUIRED_USE="binary? ( !font_types_${FONT_TYPES_EXCLUDE} )"
+REQUIRED_USE="binary? ( !font_types_otf )"
 
 DEPEND="
 	binary? (
