@@ -72,7 +72,7 @@ src_compile() {
 	use font_variants_cc && _t+=( r-sans-cc )
 	use font_variants_slab && _t+=( r-slab )
 	use font_variants_term && _t+=( r-term )
-	for _v in ${FONT_CHARS[@]}; do
+	for _v in ${FONT_CHARS[@]/font_chars_}; do
 		if use font_chars_${_v}; then
 			_t+=( r-${_v} )
 			use font_variants_term && _t+=( r-${_v}-term )
