@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -12,7 +12,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="05aeefd"
+	MY_PV="20d8d7a"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/${PN}/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -30,10 +30,10 @@ IUSE=""
 
 RDEPEND="
 	dev-python/defconQt[${PYTHON_USEDEP}]
-	dev-python/booleanOperations[${PYTHON_USEDEP}]
 	dev-python/extractor[${PYTHON_USEDEP}]
 	dev-python/ufo2ft[${PYTHON_USEDEP}]
-	dev-python/husl[${PYTHON_USEDEP}]
+	dev-python/booleanOperations[${PYTHON_USEDEP}]
+	dev-python/hsluv[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
