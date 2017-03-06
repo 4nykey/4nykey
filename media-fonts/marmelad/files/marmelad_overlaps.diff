@@ -1,0 +1,18 @@
+--- a/sources/Marmelad-Regular.glyphs
++++ b/sources/Marmelad-Regular.glyphs
+@@ -22370,15 +22370,6 @@ nodes = (
+ "377 192 OFFCURVE",
+ "377 73 CURVE SMOOTH"
+ );
+-},
+-{
+-closed = 0;
+-nodes = (
+-"2164.344 187.727 LINE",
+-"2166.412 191.863 OFFCURVE",
+-"2174.341 218.289 OFFCURVE",
+-"2179.539 218.289 CURVE"
+-);
+ }
+ );
+ width = 500;

@@ -1,0 +1,22 @@
+--- a/sources/Lora-Italic.glyphs
++++ b/sources/Lora-Italic.glyphs
+@@ -36158,8 +36158,8 @@ components = (
+ name = y;
+ },
+ {
+-name = cyrbreve;
+-transform = "{1, 0, 0, 1, 95, 0}";
++name = "brevecomb-cy";
++transform = "{1, 0, 0, 1, 10, 0}";
+ }
+ );
+ layerId = UUID0;
+@@ -36171,7 +36171,7 @@ components = (
+ name = "u-cy";
+ },
+ {
+-name = cyrbreve;
++name = "brevecomb-cy";
+ transform = "{1, 0, 0, 1, 110, 0}";
+ }
+ );

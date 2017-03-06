@@ -1,11 +1,9 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
 FONT_TYPES=( otf +ttf )
-PYTHON_COMPAT=( python2_7 )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/carrois/${PN}.git"
@@ -17,15 +15,12 @@ else
 	"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font-r1
+inherit fontmake
 MY_PV="${PV%.9999}"
 MY_PV="${MY_PV%_p*}"
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-cf5cbff"
 MY_F="28cef3ca070463212a1be193bcac29b8-4ce7076"
 SRC_URI+="
 !binary? (
-	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
-	-> ${MY_MK}.tar.gz
 	mirror://githubcl/gist/${MY_F%-*}/tar.gz/${MY_F#*-}
 	-> ${MY_F}.tar.gz
 )
@@ -37,43 +32,40 @@ HOMEPAGE="https://carrois.com/typefaces/FiraSans"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="clean-as-you-go +binary doc interpolate"
+IUSE="clean-as-you-go doc interpolate"
 
 DEPEND="
-	!binary? (
-		${PYTHON_DEPS}
-		$(python_gen_any_dep '
-			dev-util/fontmake[${PYTHON_USEDEP}]
-		')
-		app-arch/unzip
-	)
+	!binary? ( app-arch/unzip )
 "
 RDEPEND="
 	!media-fonts/fira-mono
 	!media-fonts/fira-sans
 "
-DOCS+=" Fira_*/Fira_*_Version_Log.rtf"
+DOCS="Fira_*/Fira_*_Version_Log.rtf"
 
 pkg_setup() {
 	if use binary; then
-		local _s="${PV//./_}" _m="3_2"
+		local _s="${MY_PV//./_}" _m="3_2"
 		_s=${_s%_p*}
-		FONT_S=(
+		FONTDIR_BIN=(
 		Fira_Sans_${_s:0:3}/Fonts/FiraSans_{OTF,WEB}_${_s//_/}/{Compressed,Condensed,Normal}/{Roman,Italic}
 		Fira_Mono_${_m}/Fonts/FiraMono_{OTF,WEB}_${_m//_/}
 		)
 	else
-		python-any-r1_pkg_setup
-		FONT_S=( master_{o,t}tf )
+		myemakeargs=(
+			SRCDIR=.
+			$(usex interpolate '' 'INTERPOLATE=')
+			$(usex clean-as-you-go 'CLEAN=y' '')
+		)
 	fi
 	use doc && DOCS+=" Fira_[MS]*_*/PDF/*.pdf"
-	font-r1_pkg_setup
+	fontmake_pkg_setup
 }
 
 src_prepare() {
-	default
+	fontmake_src_prepare
 	use binary && return
-	unpack ${MY_F}.tar.gz ${MY_MK}.tar.gz
+	unpack ${MY_F}.tar.gz
 
 	local _m=${PN^}MonoUFO_beta3206 _s=${PN^}SansUFO_beta${MY_PV} _d
 	_s=${_s//./}
@@ -103,15 +95,6 @@ src_prepare() {
 
 	mv ${MY_F}/FiraMono.designspace ${_m}/
 	mv ${MY_F}/FiraSans*.designspace ${_s}/
+	mv -f ${MY_MK}/Makefile{.ds,}
 
-}
-
-src_compile() {
-	use binary && return
-	emake \
-		-f ${MY_MK}/Makefile.ds \
-		SRCDIR="." \
-		$(usex interpolate '' 'INTERPOLATE=') \
-		$(usex clean-as-you-go 'CLEAN=y' '') \
-		${FONT_SUFFIX}
 }
