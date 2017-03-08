@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
 
 EAPI=6
 
@@ -9,7 +8,6 @@ cs de el en_GB es fr it nn pl pt pt_PT ru sv zh
 "
 PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE='threads(+)'
-MY_PV="${PV//_/-}"
 EGIT_REPO_URI="https://git.ardour.org/${PN}/${PN}.git"
 inherit gnome2 python-any-r1 waf-utils l10n git-r3
 if [[ -n ${PV%%*9999} ]]; then
@@ -24,7 +22,7 @@ HOMEPAGE="http://ardour.org/"
 
 LICENSE="GPL-2"
 SLOT="${PV%%.*}"
-IUSE="alsa bindist bundled-libs +c++0x custom-cflags debug doc jack lv2 nls phone-home sanitize sse vst wiimote"
+IUSE="alsa bindist bundled-libs +c++0x custom-cflags debug doc jack hid lv2 nls phone-home sanitize sse vst wiimote"
 REQUIRED_USE="
 	|| ( alsa jack )
 	${PYTHON_REQUIRED_USE}
@@ -52,6 +50,7 @@ RDEPEND="
 	!bundled-libs? (
 		media-libs/libltc
 		media-libs/qm-dsp
+		hid? ( dev-libs/hidapi )
 	)
 	media-libs/liblo
 	wiimote? (
@@ -73,7 +72,6 @@ DEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PN}${SLOT}-revision.diff
 )
 DOCS=( README TRANSLATORS doc/monitor_modes.pdf )
 
@@ -114,18 +112,17 @@ src_configure() {
 		$(usex bundled-libs '' '--use-external-libs')
 		$(usex doc '--docs' '')
 	)
-	MY_PV="${MY_PV}" waf-utils_src_configure "${wafargs[@]}"
+	waf-utils_src_configure "${wafargs[@]}"
 }
 
 src_compile() {
-	MY_PV="${MY_PV}" \
 	"${WAF_BINARY}" \
 		--jobs=$(makeopts_jobs) --verbose \
 		build $(usex nls i18n '') || die
 }
 
 src_install() {
-	MY_PV="${MY_PV}" waf-utils_src_install
+	waf-utils_src_install
 	newicon gtk2_ardour/icons/${PN}-app-icon_osx.png ${PN}${SLOT}.png
 	domenu build/gtk2_ardour/${PN}${SLOT}.desktop
 	insinto /usr/share/mime/packages
