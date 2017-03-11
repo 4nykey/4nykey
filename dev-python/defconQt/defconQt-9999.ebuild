@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -30,7 +29,7 @@ IUSE="test"
 
 RDEPEND="
 	>=dev-python/PyQt5-5.7[widgets,${PYTHON_USEDEP}]
-	>=dev-python/fonttools-3.3.1[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.8.0[${PYTHON_USEDEP}]
 	dev-python/ufoLib[${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
 "
