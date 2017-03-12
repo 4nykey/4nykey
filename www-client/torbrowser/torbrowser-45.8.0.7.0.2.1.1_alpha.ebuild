@@ -1,9 +1,10 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 WANT_AUTOCONF="2.1"
+# Kill gtk3 support since gtk+-3.20 breaks it hard prior to 48.0
+#MOZCONFIG_OPTIONAL_GTK3=1
 MOZCONFIG_OPTIONAL_WIFI=1
 MOZCONFIG_OPTIONAL_JIT="enabled"
 
@@ -11,7 +12,7 @@ inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils mozconfig-v6
 
 MY_PN="firefox"
 MOZ_PV="$(get_version_component_range -3)esr"
-PATCH="${MY_PN}-${PV%%.*}.0-patches-08"
+PATCH="${MY_PN}-${PV%%.*}.0-patches-12"
 
 # see https://gitweb.torproject.org/builders/tor-browser-bundle.git/tree/gitian/versions?h=maint-4.0
 # https://dist.torproject.org/torbrowser
@@ -159,14 +160,8 @@ src_configure() {
 	mozconfig_init
 	mozconfig_config
 
-	# We want rpath support to prevent unneeded hacks on different libc variants
-	append-ldflags -Wl,-rpath="${MOZILLA_FIVE_HOME}"
-
 	# Add full relro support for hardened
 	use hardened && append-ldflags "-Wl,-z,relro,-z,now"
-
-	# Only available on mozilla-overlay for experimentation -- Removed in Gentoo repo per bug 571180
-	#use egl && mozconfig_annotate 'Enable EGL as GL provider' --with-gl-provider=EGL
 
 	# Setup api key for location services
 	echo -n "${_google_api_key}" > "${S}"/google-api-key
