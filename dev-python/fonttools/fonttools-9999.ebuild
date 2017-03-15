@@ -28,6 +28,9 @@ LICENSE="BSD"
 SLOT="0"
 IUSE="brotli test zopfli"
 DOCS=( {README,NEWS}.rst )
+PATCHES=(
+	"${FILESDIR}"/${PN}-glyphclass.diff
+)
 
 RDEPEND="
 	>=dev-python/numpy-1.0.2[${PYTHON_USEDEP}]
