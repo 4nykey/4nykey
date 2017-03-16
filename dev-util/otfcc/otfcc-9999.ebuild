@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -49,6 +48,6 @@ src_compile() {
 }
 
 src_install() {
-	dobin bin/Release-${ARCH/amd/x}/${PN}*
+	dobin bin/release-${ARCH/amd/x}/${PN}*
 	einstalldocs
 }
