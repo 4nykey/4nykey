@@ -1,6 +1,5 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -10,7 +9,8 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/${PN}/${MY_PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="aa9762b"
+	MY_PV="v${PV//_/-}"
+	[[ -z ${PV%%*_p*} ]] && MY_PV="5dfb023"
 	SRC_URI="
 		mirror://githubcl/${PN}/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
