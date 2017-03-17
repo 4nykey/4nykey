@@ -1,10 +1,10 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
-FONT_VARIANTS=( cc +default slab term )
+FONT_TYPES=( ttc +ttf )
+FONT_VARIANTS=( cc +default slab term type )
 FONT_CHARS=( hooky zshaped )
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
@@ -15,22 +15,29 @@ else
 	SRC_URI="https://github.com/be5invis/${PN^}/releases/download/v${PV}/"
 	SRC_URI="
 	binary? (
+	font_types_ttf? (
 		font_variants_default? ( ${SRC_URI}/01-${P}.zip )
 		font_variants_term? ( ${SRC_URI}/02-${PN}-term-${PV}.zip )
-		font_variants_cc? ( ${SRC_URI}/03-${PN}-cc-${PV}.zip )
+		font_variants_type? ( ${SRC_URI}/03-${PN}-type-${PV}.zip )
+		font_variants_cc? ( ${SRC_URI}/04-${PN}-cc-${PV}.zip )
 		font_variants_slab? (
-			${SRC_URI}/04-${PN}-slab-${PV}.zip
-			font_variants_term? ( ${SRC_URI}/05-${PN}-term-slab-${PV}.zip )
-			font_variants_cc? ( ${SRC_URI}/06-${PN}-cc-slab-${PV}.zip )
+			${SRC_URI}/05-${PN}-slab-${PV}.zip
+			font_variants_term? ( ${SRC_URI}/06-${PN}-term-slab-${PV}.zip )
+			font_variants_type? ( ${SRC_URI}/07-${PN}-type-slab-${PV}.zip )
+			font_variants_cc? ( ${SRC_URI}/08-${PN}-cc-slab-${PV}.zip )
 		)
 		font_chars_hooky? (
-			${SRC_URI}/07-${PN}-hooky-${PV}.zip
-			font_variants_term? ( ${SRC_URI}/08-${PN}-hooky-term-${PV}.zip )
+			${SRC_URI}/09-${PN}-hooky-${PV}.zip
+			font_variants_term? ( ${SRC_URI}/10-${PN}-hooky-term-${PV}.zip )
 		)
 		font_chars_zshaped? (
-			${SRC_URI}/09-${PN}-zshaped-${PV}.zip
-			font_variants_term? ( ${SRC_URI}/10-${PN}-zshaped-term-${PV}.zip )
+			${SRC_URI}/11-${PN}-zshaped-${PV}.zip
+			font_variants_term? ( ${SRC_URI}/12-${PN}-zshaped-term-${PV}.zip )
 		)
+	)
+	font_types_ttc? (
+			${SRC_URI}/iosevka-pack-${PV}.zip
+	)
 	)
 	!binary? (
 		mirror://githubcl/be5invis/${PN}/tar.gz/v${PV} -> ${P}.tar.gz
@@ -50,6 +57,10 @@ SLOT="0"
 IUSE="
 +binary
 "
+REQUIRED_USE+="
+?? ( ${FONT_TYPES[@]/#+/} )
+|| ( ${FONT_VARIANTS[@]/#+/} )
+"
 
 DEPEND+="
 	!binary? (
@@ -57,6 +68,7 @@ DEPEND+="
 		>=net-libs/nodejs-6.0[npm]
 		media-gfx/ttfautohint
 		dev-util/otfcc
+		font_types_ttc? ( dev-util/otfcc-ttcize )
 	)
 "
 
@@ -65,8 +77,20 @@ pkg_setup() {
 	font-r1_pkg_setup
 }
 
+src_prepare() {
+	default
+	use binary || npm install
+}
+
 src_compile() {
 	use binary && return
+
+	if use font_types_ttc; then
+		emake ttc
+		FONT_S=( dist/ttc )
+		return
+	fi
+
 	local _t _v
 	use font_variants_default && _t+=( r-sans )
 	use font_variants_cc && _t+=( r-sans-cc )
@@ -82,7 +106,6 @@ src_compile() {
 		use font_variants_cc && _t+=( r-slab-cc )
 		use font_variants_term && _t+=( r-slab-term )
 	fi
-	npm install
 	emake ${_t[@]/#/fonts-}
 	FONT_S=( $(find dist -type d -name "[01][0-9]-${PN}*") )
 }
