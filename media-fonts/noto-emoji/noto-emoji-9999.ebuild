@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -11,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="v${PV//./-}-license-apache"
-	MY_PV="2dc2c4b"
+	MY_PV="09e5d14"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -26,9 +25,10 @@ HOMEPAGE="https://github.com/googlei18n/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="zopfli"
+IUSE="+binary zopfli"
 
 DEPEND="
+!binary? (
 	${PYTHON_DEPS}
 	$(python_gen_any_dep '
 		dev-python/nototools[${PYTHON_USEDEP}]
@@ -38,22 +38,28 @@ DEPEND="
 	zopfli? ( app-arch/zopfli )
 	!zopfli? ( media-gfx/optipng )
 	x11-libs/cairo
+)
 "
-FONT_S+=( fonts )
 
 pkg_setup() {
-	python-any-r1_pkg_setup
+	if use binary; then
+		FONT_S=( fonts )
+	else
+		python-any-r1_pkg_setup
+	fi
 	font-r1_pkg_setup
 }
 
 src_prepare() {
 	default
+	use binary && return
 	sed \
 		-e 's:CFLAGS =:CFLAGS +=:' \
 		-i Makefile
 }
 
 src_compile() {
+	use binary && return
 	addpredict /dev/dri
 	tc-export CC
 	emake \
