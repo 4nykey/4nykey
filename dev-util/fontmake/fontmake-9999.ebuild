@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -28,7 +27,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.7.0[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.9.0[${PYTHON_USEDEP}]
 	dev-python/cu2qu[${PYTHON_USEDEP}]
 	dev-python/glyphsLib[${PYTHON_USEDEP}]
 	dev-python/ufo2ft[${PYTHON_USEDEP}]
@@ -40,7 +39,10 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
-	test? ( media-gfx/fontdiff )
+	test? (
+		media-gfx/fontdiff
+		dev-python/mock[${PYTHON_USEDEP}]
+	)
 "
 PATCHES=(
 	"${FILESDIR}"/${PN}-mti_paths.diff
