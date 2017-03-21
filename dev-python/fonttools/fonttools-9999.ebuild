@@ -26,16 +26,23 @@ HOMEPAGE="https://github.com/${PN}/${PN}"
 
 LICENSE="BSD"
 SLOT="0"
-IUSE="brotli test zopfli"
+IUSE="brotli gtk qt5 test zopfli"
 DOCS=( {README,NEWS}.rst )
 PATCHES=(
 	"${FILESDIR}"/${PN}-glyphclass.diff
 )
 
+# Lib/fonttools.egg-info/PKG-INFO: Optional Requirements
 RDEPEND="
-	>=dev-python/numpy-1.0.2[${PYTHON_USEDEP}]
 	brotli? ( app-arch/brotli[${PYTHON_USEDEP}] )
 	zopfli? ( dev-python/py-zopfli[${PYTHON_USEDEP}] )
+	dev-python/unicodedata2[${PYTHON_USEDEP}]
+	sci-libs/scipy[${PYTHON_USEDEP}]
+	dev-python/munkres[${PYTHON_USEDEP}]
+	dev-python/sympy[${PYTHON_USEDEP}]
+	qt5? ( dev-python/PyQt5[${PYTHON_USEDEP}] )
+	dev-python/reportlab[${PYTHON_USEDEP}]
+	gtk? ( dev-python/pygobject:3[${PYTHON_USEDEP}] )
 "
 DEPEND="
 	${RDEPEND}
