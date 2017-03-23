@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
 
 EAPI=6
 
@@ -11,9 +10,10 @@ if [[ ${PV} = *9999* ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="${PV/_/-}"
-	MY_PV="${MY_PV/rc/RC}"
+	MY_PV="v${MY_PV/rc/RC}"
+	[[ -z ${PV%%*_p*} ]] && MY_PV="6dca891"
 	SRC_URI="
-		mirror://githubcl/open-eid/${MY_PN}/tar.gz/v${MY_PV}
+		mirror://githubcl/open-eid/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
@@ -37,19 +37,19 @@ RDEPEND="
 	app-misc/esteidcerts
 	dev-libs/opensc
 "
-CMAKE_IN_SOURCE_BUILD='y'
 DOCS=( README.md RELEASE-NOTES.txt )
 
 src_compile() {
 	emake \
+		-f Makefile.Linux \
 		CC="$(tc-getCC)" \
 		CPPFLAGS="${CFLAGS}" \
-		plugin
+		plugin{,lt,lv}
 }
 
 src_install() {
 	insinto "/usr/$(get_libdir)/${PLUGINS_DIR}"
-	doins npesteid-firefox-plugin.so
+	doins npesteid-firefox-plugin*.so
 	einstalldocs
 }
 
