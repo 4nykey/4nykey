@@ -46,6 +46,7 @@ media-gfx/sortsmill-tools:truetype-debugger - Enable truetype debugger in editor
 media-libs/chromaprint:tools - Build additional tools
 media-sound/ardour:bundled-libs - Use bundled libs instead of system installed
 media-sound/ardour:c++0x - Compile using the C++11 standard
+media-sound/ardour:hid - Add support for dev-libs/hidapi
 media-sound/ardour:lv2 - Add support for Ladspa V2
 media-sound/ardour:phone-home - Contact ardour.org at startup for new announcements
 media-sound/ardour:sanitize - Turn on AddressSanitizer (requires GCC >= 4.8 or clang >= 3.1)
@@ -69,7 +70,7 @@ media-sound/deadbeef:zip - Build vfs_zip plugin
 media-sound/flactag:gcrypt - Use libgcrypt for low-level crypto
 media-sound/jack-audio-connection-kit:celt - Support CELT low delay audio codec (media-libs/celt)
 media-sound/jack-audio-connection-kit:classic - Force enable standard JACK (jackd) even if D-Bus JACK (jackdbus) is enabled too
-media-sound/jack-audio-connection-kit:opus - Support media-libs/opus
+media-sound/jack-audio-connection-kit:opus - Build Opus netjack2
 media-sound/morituri:alac - Add support for Apple Lossless Audio Codec files
 media-sound/picard:acoustid - Use media-libs/chromaprint for acoustic fingerprinting
 media-video/flowblade:frei0r - Additional video filters (media-plugins/frei0r-plugins)
@@ -80,7 +81,6 @@ sys-block/f3:extras - Compile the extra applications
 www-client/midori:granite - Enable support for the elementary library dev-libs/granite
 www-client/midori:zeitgeist - Add support for Zeitgeist event tracking system
 www-client/torbrowser:custom-optimization - Fine-tune custom compiler optimizations (-Os, -O0, -O1, -O2, -O3)
-www-client/torbrowser:gstreamer-0 - Use gstreamer:0.10 instead of gstreamer:1 for media support
 www-client/torbrowser:hwaccel - Use hardware-accelerated rendering
 www-client/torbrowser:jemalloc3 - Enable or disable jemalloc3 (forced-on when supported prior to 38.0)
 www-client/torbrowser:system-cairo - Use the system-wide x11-libs/cairo instead of bundled.
@@ -90,7 +90,6 @@ www-client/torbrowser:system-jpeg - Use the system-wide media-libs/libjpeg-turbo
 www-client/torbrowser:system-libevent - Use the system-wide dev-libs/libevent instead of bundled.
 www-client/torbrowser:system-libvpx - Use the system-wide media-libs/libvpx instead of bundled.
 www-client/torbrowser:system-sqlite - Use the system-wide dev-db/sqlite installation with secure-delete enabled
-www-client/xombrero:gtk3 - Enable support for GTK+3
 x11-misc/gpaste:applet - Enable gpaste-applet
 x11-misc/gpaste:gnome-shell - Install gnome-shell extension
 x11-misc/gxneur:gconf - Enable GConf as configuration backend

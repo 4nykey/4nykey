@@ -1,12 +1,13 @@
 cc - A variant with several symbols enwiden to be compatible with most CJK typefaces
-default - Default sans typeface
+default - The default variant with ligatures and semantic full-width glyphs
 halfloose - Halfloose width
 halftight - Halftight width
 large - Large height (16px)
 loose - Loose width
 slab - Slab serif typeface
 small - Small height (14px)
-term - A variant with no ligatures
+term - A variant without ligatures and full-width glyphs
 tight - Tight width
+type - A variant for better typesetting layout
 xtralarge - Xtralarge height (17px)
 xtrasmall - Xtrasmall height (13px)
