@@ -69,6 +69,8 @@ src_install() {
 
 	insinto /usr/share/${PN}
 	doins ${_e}
+	dosym ../../${PN}/${_e} /usr/share/chromium/extensions/${_e}
+	dosym ../../${PN}/${_e} /usr/share/google-chrome/extensions/${_e}
 
 	einstalldocs
 }
