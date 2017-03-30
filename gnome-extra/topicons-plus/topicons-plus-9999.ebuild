@@ -1,18 +1,17 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
-EAPI=5
+EAPI=6
 
 inherit gnome2-utils
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/phocean/${PN}"
-	SRC_URI=""
 else
 	inherit vcs-snapshot
 	KEYWORDS="~amd64 ~x86"
 	MY_PV="c2788be"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/phocean/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -26,21 +25,23 @@ LICENSE="GPL-2+"
 SLOT="0"
 IUSE=""
 
-BDEPEND="
+DEPEND="
 	app-eselect/eselect-gnome-shell-extensions
 "
-HDEPEND="
-	${BDEPEND}
+RDEPEND="
+	${DEPEND}
+	gnome-base/gnome-shell
 "
 
 src_compile() { :; }
 
 src_install() {
-	insinto /usr/share/gnome-shell/extensions/TopIcons@phocean.net
+	local _u=$(awk -F'"' '/uuid/ {print $4}' metadata.json)
+	insinto /usr/share/gnome-shell/extensions/${_u}
 	doins *.js*
 	insinto /usr/share/glib-2.0/schemas
 	doins schemas/*.xml
-	dodoc README*
+	einstalldocs
 }
 
 pkg_preinst() {

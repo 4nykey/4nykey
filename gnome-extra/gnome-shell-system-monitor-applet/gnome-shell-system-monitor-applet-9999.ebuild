@@ -1,9 +1,8 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
 
-EAPI="5"
-PLOCALES="zh_CN sl ru ro pt_BR pt pl it fr fa es_MX es_ES de cs"
+EAPI=6
+PLOCALES="ar ca cs de es_ES es_MX fa fr it pl pt pt_BR ro ru sk zh_CN"
 
 inherit gnome2-utils l10n
 if [[ -z ${PV%%*9999} ]]; then
@@ -12,11 +11,12 @@ if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI=""
 else
 	inherit vcs-snapshot
-	MY_PV="8b31f07"
+	MY_PV="9c1bf9a"
 	SRC_URI="
 		mirror://githubcl/paradoxxxzero/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
 	"
+	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
 
@@ -25,31 +25,39 @@ HOMEPAGE="https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet"
 
 LICENSE="GPL-3"
 SLOT="0"
-IUSE=""
+IUSE="nls"
 
-BDEPEND="
+DEPEND="
 	app-eselect/eselect-gnome-shell-extensions
 "
-HDEPEND="
-	${BDEPEND}
+RDEPEND="
+	${DEPEND}
+	gnome-base/gnome-shell
 	dev-python/pygtk
 	gnome-base/libgtop[introspection]
 	net-misc/networkmanager[introspection]
 "
+DEPEND="
+	${DEPEND}
+	nls? ( sys-devel/gettext )
+"
 
-my_loc() {
-	mv locale/${1}/LC_MESSAGES/system-monitor.mo ${1}.mo
-	MOPREFIX="system-monitor" domo ${1}.mo
+src_compile() {
+	use nls || return
+	my_loc() {
+		msgfmt po/${1}/system-monitor.po -o ${1}.mo
+	}
+	l10n_for_each_locale_do my_loc
 }
 
 src_install() {
-	cd system-monitor@paradoxxx.zero.gmail.com
-	insinto /usr/share/gnome-shell/extensions/system-monitor@paradoxxx.zero.gmail.com
-	doins *.*
+	local _d="system-monitor@paradoxxx.zero.gmail.com"
+	insinto /usr/share/gnome-shell/extensions/${_d}
+	doins ${_d}/*.{js,json,css}
 	insinto /usr/share/glib-2.0/schemas
-	doins schemas/*gschema.xml
-	l10n_for_each_locale_do my_loc
-	dodoc README*
+	doins ${_d}/schemas/*gschema.xml
+	einstalldocs
+	use nls && MOPREFIX="${_d%@*}" domo *.mo
 }
 
 pkg_preinst() {
@@ -58,7 +66,6 @@ pkg_preinst() {
 
 pkg_postinst() {
 	gnome2_schemas_update
-
 	ebegin "Updating list of installed extensions"
 	eselect gnome-shell-extensions update
 	eend $?

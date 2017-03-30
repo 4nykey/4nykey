@@ -1,8 +1,7 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
 
-EAPI=5
+EAPI=6
 
 inherit gnome2-utils
 if [[ -z ${PV%%*9999} ]]; then
@@ -15,20 +14,22 @@ else
 	SRC_URI="
 		mirror://githubcl/rgcjonas/${PN}/tar.gz/v${PV} -> ${P}.tar.gz
 	"
+	RESTRICT="primaryuri"
 fi
 
 DESCRIPTION="Adds AppIndicator support to gnome shell"
 HOMEPAGE="https://github.com/rgcjonas/gnome-shell-extension-appindicator"
 
-LICENSE="undetermined"
+LICENSE="GPL-2+"
 SLOT="0"
 IUSE=""
 
-BDEPEND="
+DEPEND="
 	app-eselect/eselect-gnome-shell-extensions
 "
-HDEPEND="
-	${BDEPEND}
+RDEPEND="
+	${DEPEND}
+	gnome-base/gnome-shell
 "
 
 src_compile() { :; }
@@ -40,15 +41,12 @@ src_install() {
 }
 
 pkg_postinst() {
-	gnome2_schemas_update
-
 	ebegin "Updating list of installed extensions"
 	eselect gnome-shell-extensions update
 	eend $?
 }
 
 pkg_postrm() {
-	gnome2_schemas_update
 	ebegin "Updating list of installed extensions"
 	eselect gnome-shell-extensions update
 	eend $?

@@ -1,6 +1,5 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -25,13 +24,15 @@ LICENSE="MIT"
 SLOT="0"
 IUSE=""
 
-BDEPEND="
+DEPEND="
 	app-eselect/eselect-gnome-shell-extensions
 "
-HDEPEND="
-	${BDEPEND}
+RDEPEND="
+	${DEPEND}
+	gnome-base/gnome-shell
 	x11-apps/xprop
 "
+DOCS=( Changelog Readme.md )
 
 src_compile() { :; }
 

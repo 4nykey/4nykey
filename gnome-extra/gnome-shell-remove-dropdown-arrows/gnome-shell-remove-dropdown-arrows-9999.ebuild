@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -8,6 +7,7 @@ inherit gnome2-utils
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/mpdeimos/${PN}.git"
+	EGIT_BRANCH=master
 	SRC_URI=""
 else
 	inherit vcs-snapshot
@@ -25,14 +25,13 @@ LICENSE="GPL-3"
 SLOT="0"
 IUSE=""
 
-HDEPEND="
+DEPEND="
 	app-eselect/eselect-gnome-shell-extensions
 "
-BDEPEND="
-	${RDEPEND}
+RDEPEND="
+	${DEPEND}
+	gnome-base/gnome-shell
 "
-AUTOTOOLS_AUTORECONF=1
-AUTOTOOLS_IN_SOURCE_BUILD=1
 
 src_compile() { :; }
 

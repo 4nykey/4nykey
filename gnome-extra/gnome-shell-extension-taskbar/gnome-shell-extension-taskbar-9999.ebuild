@@ -1,8 +1,7 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
-EAPI=5
+EAPI=6
 
 inherit gnome2-utils
 if [[ -z ${PV%%*9999} ]]; then
@@ -25,11 +24,12 @@ LICENSE="GPL-3"
 SLOT="0"
 IUSE=""
 
-BDEPEND="
+DEPEND="
 	app-eselect/eselect-gnome-shell-extensions
 "
-HDEPEND="
-	${BDEPEND}
+RDEPEND="
+	${DEPEND}
+	gnome-base/gnome-shell
 "
 
 src_compile() { :; }
@@ -48,7 +48,6 @@ pkg_preinst() {
 
 pkg_postinst() {
 	gnome2_schemas_update
-
 	ebegin "Updating list of installed extensions"
 	eselect gnome-shell-extensions update
 	eend $?

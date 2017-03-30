@@ -1,6 +1,5 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -11,9 +10,11 @@ if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI=""
 else
 	inherit vcs-snapshot
+	MY_PV="3d31211"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
-		https://bitbucket.org/mathematicalcoffee/${PN}-gnome-shell-extension/get/6774bac.tar.gz
-		-> ${P}.tar.gz
+		https://bitbucket.org/mathematicalcoffee/${PN}-gnome-shell-extension/get/${MY_PV}.tar.bz2
+		-> ${P}.tar.bz2
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -26,11 +27,12 @@ LICENSE="GPL-3"
 SLOT="0"
 IUSE=""
 
-BDEPEND="
+DEPEND="
 	app-eselect/eselect-gnome-shell-extensions
 "
-HDEPEND="
-	${BDEPEND}
+RDEPEND="
+	${DEPEND}
+	gnome-base/gnome-shell
 "
 DOCS=( Readme.md )
 
@@ -38,9 +40,9 @@ src_compile() { :; }
 
 src_install() {
 	einstalldocs
-	local _ext="${PN}@mathematical.coffee.gmail.com"
-	cd ${_ext}
-	insinto /usr/share/gnome-shell/extensions/${_ext}
+	local _u=$(awk -F= '/^EXTENSION.*=/ {printf $2}' Makefile)
+	cd ${_u}
+	insinto /usr/share/gnome-shell/extensions/${_u}
 	doins *.js*
 	insinto /usr/share/glib-2.0/schemas
 	doins schemas/*.xml
@@ -52,7 +54,6 @@ pkg_preinst() {
 
 pkg_postinst() {
 	gnome2_schemas_update
-
 	ebegin "Updating list of installed extensions"
 	eselect gnome-shell-extensions update
 	eend $?
