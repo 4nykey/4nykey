@@ -35,6 +35,10 @@ RDEPEND="
 	${DEPEND}
 	app-misc/esteidcerts
 "
+DEPEND="
+	${DEPEND}
+	dev-qt/linguist-tools
+"
 
 src_prepare() {
 	default
@@ -44,19 +48,19 @@ src_prepare() {
 }
 
 src_configure() {
-	cd "${S}"/host-qt
+	cd "${S}"/src
 	rm -f GNUmakefile
 	eqmake5
 }
 
 src_compile() {
-	emake -C host-qt
+	emake -C src
 }
 
 src_install() {
 	local _j=org.hwcrypto.native.json _e=fmpfihjoladdfajbnkdfocnbcehjpogi.json
 	exeinto /usr/libexec
-	doexe host-qt/${PN}
+	doexe src/${PN}
 
 	insinto /etc/opt/chrome/native-messaging-hosts
 	doins linux/${_j}
