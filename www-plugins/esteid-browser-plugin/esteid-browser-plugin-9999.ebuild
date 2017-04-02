@@ -34,7 +34,7 @@ DEPEND="
 "
 RDEPEND="
 	${DEPEND}
-	app-misc/esteidcerts
+	dev-libs/libdigidoc
 	dev-libs/opensc
 "
 DOCS=( README.md RELEASE-NOTES.txt )

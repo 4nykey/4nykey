@@ -33,7 +33,7 @@ DEPEND="
 "
 RDEPEND="
 	${DEPEND}
-	app-misc/esteidcerts
+	dev-libs/libdigidoc
 "
 DEPEND="
 	${DEPEND}
