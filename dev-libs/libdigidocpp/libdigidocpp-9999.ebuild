@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -45,13 +44,12 @@ RDEPEND="
 	${RDEPEND}
 	app-misc/esteidcerts
 "
-DOCS=( AUTHORS README.md RELEASE-NOTES.txt )
+DOCS=( AUTHORS README.md RELEASE-NOTES.md )
 
 src_prepare() {
 	sed \
 		-e "s:doc/${PN}:doc/${PF}:" \
 		-e 's:\${CMAKE_SOURCE_DIR}/cmake/modules:/usr/share/cmake/openeid:' \
-		-e 's:set_ex\(( [^ ]\+\) "$ENV{[^}]\+}" \(.*)\):set_env\1 \2:' \
 		-i CMakeLists.txt
 	use test || sed -i CMakeLists.txt -e '/add_subdirectory(test)/d'
 	sed \
