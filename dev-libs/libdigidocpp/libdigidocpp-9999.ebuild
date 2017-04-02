@@ -40,10 +40,6 @@ DEPEND="
 	apidocs? ( app-doc/doxygen )
 	dev-util/cmake-openeid
 "
-RDEPEND="
-	${RDEPEND}
-	app-misc/esteidcerts
-"
 DOCS=( AUTHORS README.md RELEASE-NOTES.md )
 
 src_prepare() {

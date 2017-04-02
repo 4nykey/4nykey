@@ -1,6 +1,5 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -11,8 +10,10 @@ else
 	inherit vcs-snapshot
 	MY_PV="${PV/_/-}"
 	MY_PV="${MY_PV/rc/RC}"
+	MY_C="certs-5415bae"
 	SRC_URI="
 		mirror://githubcl/open-eid/${PN}/tar.gz/v${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/open-eid/${MY_C%-*}/tar.gz/${MY_C##*-} -> ${MY_C}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -42,6 +43,8 @@ DEPEND="
 DOCS=( AUTHORS README.md RELEASE-NOTES.txt )
 
 src_prepare() {
+	default
+	[[ -n ${PV%%*9999} ]] && mv "${WORKDIR}"/${MY_C}/* "${S}"/etc/certs
 	sed \
 		-e "s:doc/${PN}:doc/${PF}:" \
 		-e 's:\${CMAKE_SOURCE_DIR}/cmake/modules:/usr/share/cmake/openeid:' \
