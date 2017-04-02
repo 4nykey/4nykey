@@ -3,7 +3,7 @@
 
 EAPI=6
 
-FONT_TYPES=( +otf ttf )
+FONT_TYPES=( otf +ttf )
 myemakeargs=( SRCDIR=. )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_BRANCH="dev"
 else
 	inherit vcs-snapshot
-	MY_PV="8860773"
+	MY_PV="8b5f590"
 	SRC_URI="
 		mirror://githubcl/huertatipografica/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -24,9 +24,8 @@ HOMEPAGE="https://github.com/huertatipografica/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-REQUIRED_USE="binary? ( !font_types_ttf )"
 
-DOCS="*.txt"
 PATCHES=(
 	"${FILESDIR}"/${PN}_toomanyalignmentzones.diff
 )
+FONTDIR_BIN=( fonts/{o,t}tf )
