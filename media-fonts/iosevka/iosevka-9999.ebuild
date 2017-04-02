@@ -85,8 +85,10 @@ src_prepare() {
 src_compile() {
 	use binary && return
 
+	emake build/targets.mk
+
 	if use font_types_ttc; then
-		emake ttc
+		emake -f utility/makefile.standard.mk ttc
 		FONT_S=( dist/ttc )
 		return
 	fi
@@ -106,6 +108,8 @@ src_compile() {
 		use font_variants_cc && _t+=( r-slab-cc )
 		use font_variants_term && _t+=( r-slab-term )
 	fi
-	emake ${_t[@]/#/fonts-}
+
+	emake -f utility/makefile.standard.mk ${_t[@]/#/fonts-}
+
 	FONT_S=( $(find dist -type d -name "[01][0-9]-${PN}*") )
 }
