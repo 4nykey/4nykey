@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -15,7 +14,7 @@ else
 		mirror://githubcl/open-eid/${PN}/tar.gz/v${MY_PV} -> ${P}.tar.gz
 	"
 	# submodules not included in github releases
-	MY_QC="qt-common-719160d"
+	MY_QC="qt-common-1ef1eb5"
 	SRC_URI="${SRC_URI}
 		mirror://githubcl/open-eid/${MY_QC%-*}/tar.gz/${MY_QC##*-} -> ${MY_QC}.tar.gz
 	"
@@ -35,7 +34,6 @@ DEPEND="
 	dev-libs/libdigidocpp
 	sys-apps/pcsc-lite
 	dev-libs/opensc
-	dev-qt/linguist-tools:5
 	dev-qt/qtwidgets:5
 	dev-qt/qtprintsupport:5
 "
@@ -46,6 +44,7 @@ RDEPEND="
 "
 DEPEND="
 	${DEPEND}
+	dev-qt/linguist-tools:5
 	dev-util/cmake-openeid
 "
 DOCS=( AUTHORS {README,RELEASE-NOTES}.md )
