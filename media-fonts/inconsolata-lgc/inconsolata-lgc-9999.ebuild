@@ -16,18 +16,19 @@ if [[ -z ${PV%%*9999} ]]; then
 	REQUIRED_USE="!binary"
 else
 	inherit vcs-snapshot
-	MY_PV="LGC-${PV}"
+	MY_PV="${PV%_p*}"
+	MY_P="${MY_PN/-}-OT-${MY_PV}"
 	SRC_URI="
 	binary? (
 		font_types_otf? (
-			https://github.com/MihailJP/${MY_PN}/releases/download/${MY_PV}/${MY_PN/-}-OT-${PV}.tar.xz
+			https://github.com/MihailJP/${MY_PN}/releases/download/LGC-${MY_PV}/${MY_P}.tar.xz
 		)
 		font_types_ttf? (
-			https://github.com/MihailJP/${MY_PN}/releases/download/${MY_PV}/${MY_PN/-}-${PV}.tar.xz
+			https://github.com/MihailJP/${MY_PN}/releases/download/LGC-${MY_PV}/${MY_P/-OT}.tar.xz
 		)
 	)
 	!binary? (
-		mirror://githubcl/MihailJP/${MY_PN}/tar.gz/${MY_PV}
+		mirror://githubcl/glebd/${MY_PN}/tar.gz/0cdee8c
 		-> ${P}.tar.gz
 	)
 	"
@@ -40,3 +41,12 @@ HOMEPAGE="https://github.com/MihailJP/${MY_PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
+
+pkg_setup() {
+	if use binary; then
+		S="${WORKDIR}"
+		FONTDIR_BIN=( ${MY_P} ${MY_P/-OT} )
+		DOCS="*/ChangeLog */README"
+	fi
+	fontmake_pkg_setup
+}
