@@ -1,6 +1,5 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
 
 EAPI=6
 
@@ -40,36 +39,39 @@ BDEPEND="
 	nls? ( sys-devel/gettext )
 "
 
-rmloc() {
-	rm -f "${S}"/po/${1}.po
-}
-
 src_prepare() {
+	rmloc() {
+		rm -f "${S}"/po/${1}.po
+	}
 	use nls && l10n_for_each_disabled_locale_do rmloc
 	default
+	sed \
+		-e 's:-march=[^ ]\+::' \
+		-e 's:-O[0-9]\+ ::' \
+		-i Makefile
 }
 
 src_compile() {
-	local _arc="$(usex amd64 '64' '')"
-	local _tgt="libskype${_arc}.so libskypenet${_arc}.so "
+	local _tgt="libskype.so libskypenet.so " _pc="$(tc-getPKG_CONFIG)"
 	if use dbus; then
-		_tgt+="libskype_dbus${_arc}.so"
-		local _dfl="$(pkg-config dbus-1 --cflags) -DSKYPE_DBUS"
+		_tgt+="libskype_dbus.so"
+		local _dfl="$(${_pc} dbus-1 --cflags) -DSKYPE_DBUS"
 	fi
 	if use nls; then
 		CFLAGS+=" -DENABLE_NLS"
 		emake locales
 	fi
 	emake \
+		LINUX32_COMPILER="$(tc-getCC) ${CFLAGS} ${LDFLAGS}" \
 		LINUX64_COMPILER="$(tc-getCC) ${CFLAGS} ${LDFLAGS}" \
-		LIBPURPLE_CFLAGS="$(pkg-config purple --cflags) -DPURPLE_PLUGINS" \
-		GLIB_CFLAGS="$(pkg-config glib-2.0 --cflags)" \
+		LIBPURPLE_CFLAGS="$(${_pc} purple --cflags) -DPURPLE_PLUGINS" \
+		GLIB_CFLAGS="$(${_pc} glib-2.0 --cflags)" \
 		DBUS_CFLAGS="${_dfl}" \
 		${_tgt}
 }
 
 src_install() {
-	insinto "$(pkg-config purple --variable=plugindir)"
+	insinto "$($(tc-getPKG_CONFIG) purple --variable=plugindir)"
 	doins *.so
 	insinto /usr/share/pixmaps/pidgin/emotes/skype
 	doins theme
