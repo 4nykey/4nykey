@@ -1,6 +1,5 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -10,6 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="49a8ef0"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="V${PV}"
 	SRC_URI="
 		mirror://githubcl/tsujan/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
