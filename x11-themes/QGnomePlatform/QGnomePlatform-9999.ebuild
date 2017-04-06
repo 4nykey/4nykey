@@ -1,6 +1,5 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -10,6 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="36e03a0"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/MartinBriza/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -18,7 +18,7 @@ else
 fi
 inherit qmake-utils
 
-DESCRIPTION="QPlatformTheme for a better Qt application inclusion in GNOME"
+DESCRIPTION="A Qt Platform Theme aimed to accommodate GNOME settings"
 HOMEPAGE="https://github.com/MartinBriza/QGnomePlatform"
 
 LICENSE="LGPL-2.1"
