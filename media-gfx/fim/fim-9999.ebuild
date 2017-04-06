@@ -1,6 +1,5 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -10,9 +9,8 @@ if [[ ${PV} = *9999* ]]; then
 	ESVN_REPO_URI="http://svn.savannah.nongnu.org/svn/fbi-improved/trunk"
 	KEYWORDS=""
 else
-	MY_P="${P/_/-}"
-	MY_P="${MY_P/pre/trunk}"
-	SRC_URI="mirror://nongnu/fbi-improved/${MY_P}.tar.bz2"
+	MY_P="${P/_pre*/-trunk}"
+	SRC_URI="mirror://nongnu/fbi-improved/${MY_P}.tar.bz2 -> ${P}.tar.bz2"
 	RESTRICT="primaryuri"
 	KEYWORDS="~x86 ~amd64"
 	S="${WORKDIR}/${MY_P}"
@@ -69,7 +67,6 @@ DEPEND="
 
 src_prepare() {
 	default
-	[[ ${PV} = *9999* ]] || eapply "${FILESDIR}"/${PN}-parallel_make.diff
 	sed \
 		-e "s:esyscmd.*:${ESVN_WC_REVISION:--1}):" \
 		-e '/LIBS/s:GraphicsMagick.*`:pkg-config GraphicsMagick --libs`:' \
