@@ -1,10 +1,9 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
-VALA_MIN_API_VERSION="0.32"
+VALA_MIN_API_VERSION="0.36"
 VALA_USE_DEPEND="vapigen"
 inherit versionator vala autotools gnome2
 if [[ ${PV} = *9999* ]]; then
@@ -20,25 +19,31 @@ fi
 DESCRIPTION="Clipboard management system"
 HOMEPAGE="https://github.com/Keruspe/GPaste"
 
-GMAJOR="$(get_version_component_range -2)"
+MY_GNOME="$(get_version_component_range 2)"
+MY_GNOME="$(get_major_version).$((${MY_GNOME}+${MY_GNOME}%2))"
 EGIT_REPO_URI="https://github.com/Keruspe/GPaste.git"
-EGIT_BRANCH="${PN}-${GMAJOR}"
+EGIT_BRANCH="${PN}-${MY_GNOME}"
+
+# until gnome-3.24 is ready
+EGIT_BRANCH=""
+VALA_MIN_API_VERSION="0.34"
+KEYWORDS=""
 
 LICENSE="BSD-2"
 SLOT="0"
-IUSE="applet ayatana bash-completion gnome-shell introspection vala zsh-completion"
+IUSE="bash-completion gnome-shell introspection vala zsh-completion"
 REQUIRED_USE="gnome-shell? ( introspection )"
 
 RDEPEND="
-	>=dev-libs/glib-2.46:2
-	=x11-libs/gtk+-${GMAJOR}*:3
-	=gnome-base/gnome-control-center-${GMAJOR}*:2
+	>=dev-libs/glib-2.52:2
+	x11-libs/gtk+:3
+	=gnome-base/gnome-control-center-${MY_GNOME}*:2
 	>=x11-libs/gdk-pixbuf-2.26
 	sys-apps/dbus
 	vala? ( $(vala_depend) )
-	ayatana? ( dev-libs/libappindicator:3 )
 	gnome-shell? ( media-libs/clutter )
-	introspection? ( >=dev-libs/gobject-introspection-1.48 )
+	introspection? ( >=dev-libs/gobject-introspection-1.52 )
+	>=dev-libs/gjs-1.48
 "
 DEPEND="
 	${RDEPEND}
@@ -57,10 +62,8 @@ src_configure() {
 	local myconf=(
 		$(use_enable vala)
 		$(use_enable introspection)
-		$(use_enable applet)
 		$(use_enable bash-completion)
 		$(use_enable gnome-shell gnome-shell-extension)
-		$(use_enable ayatana unity)
 		$(use_enable zsh-completion)
 	)
 	gnome2_src_configure "${myconf[@]}"
