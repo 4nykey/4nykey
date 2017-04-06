@@ -60,7 +60,7 @@ src_compile() {
 src_install() {
 	local _j=org.hwcrypto.native.json _e=fmpfihjoladdfajbnkdfocnbcehjpogi.json
 	exeinto /usr/libexec
-	doexe src/${PN}
+	doexe src/web-eid
 
 	insinto /etc/opt/chrome/native-messaging-hosts
 	doins linux/${_j}
