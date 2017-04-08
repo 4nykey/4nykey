@@ -1,11 +1,9 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
-MULTILIB_COMPAT=( abi_x86_32 )
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
@@ -17,7 +15,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-single-r1 multilib-build
+inherit python-single-r1
 
 DESCRIPTION="Adobe Font Development Kit for OpenType"
 HOMEPAGE="http://www.adobe.com/devnet/opentype/afdko.html"
@@ -35,10 +33,13 @@ RDEPEND="
 	dev-python/robofab[${PYTHON_USEDEP}]
 	>=dev-python/fonttools-2.5[${PYTHON_USEDEP}]
 "
+SRC_URI+="https://patch-diff.githubusercontent.com/raw/adobe-type-tools/afdko/pull/161.patch"
 PATCHES=(
 	"${FILESDIR}"/${PN}-makeotf.diff
 	"${FILESDIR}"/${PN}-paths.diff
 	"${FILESDIR}"/${PN}-inc.diff
+	"${DISTDIR}"/161.patch
+	"${FILESDIR}"/${PN}-stdint.diff
 )
 DOCS=( "FDK/Technical Documentation" )
 
@@ -58,7 +59,7 @@ src_compile() {
 	local _d
 	find -path '*/linux/gcc/release/Makefile' | while read _d; do
 		emake -C "${_d%/Makefile}" \
-			XFLAGS="${CFLAGS_x86} ${CFLAGS} -D__NO_STRING_INLINES" || die
+			XFLAGS="${CFLAGS} -D__NO_STRING_INLINES" || die
 	done
 	find -path '*exe/linux/release/*' -exec mv -f {} "FDK/Tools/linux" \;
 }
