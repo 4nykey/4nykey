@@ -1,0 +1,74 @@
+--- a/COMMANDS.txt
++++ b/COMMANDS.txt
+@@ -8,47 +8,71 @@
+ 
+ ### Command lines for building the region-specific subset OTFs
+ ### Executed in {ExtraLight,Light,Regular,Medium,SemiBold,Bold,Heavy}
++for d in "${S}"/{ExtraLight,Light,Regular,Medium,SemiBold,Bold,Heavy}; do
+ 
+ # Simplified Chinese
+ 
++if use font_types_otf; then
++if use l10n_zh-CN; then cd "${d}" && \
+ makeotf -f cidfont.ps.CN -omitMacNames -ff features.CN -fi cidfontinfo.CN -mf ../FontMenuNameDB.SUBSET -r -nS -cs 25 -ch ../UniSourceHanSerifCN-UTF32-H -ci ../SourceHanSerif_CN_sequences.txt
++[[ $? -eq 0 ]] || die; fi
+ 
+ # Traditional Chinese (TW)
+ 
++if use l10n_zh-TW; then cd "${d}" && \
+ makeotf -f cidfont.ps.TW -omitMacNames -ff features.TW -fi cidfontinfo.TW -mf ../FontMenuNameDB.SUBSET -r -nS -cs 2 -ch ../UniSourceHanSerifTW-UTF32-H -ci ../SourceHanSerif_TW_sequences.txt
++[[ $? -eq 0 ]] || die; fi
+ 
+ # Japanese
+ 
++if use l10n_ja; then cd "${d}" && \
+ makeotf -f cidfont.ps.JP -omitMacNames -ff features.JP -fi cidfontinfo.JP -mf ../FontMenuNameDB.SUBSET -r -nS -cs 1 -ch ../UniSourceHanSerifJP-UTF32-H -ci ../SourceHanSerif_JP_sequences.txt
++[[ $? -eq 0 ]] || die; fi
+ 
+ # Korean
+ 
++if use l10n_ko; then cd "${d}" && \
+ makeotf -f cidfont.ps.KR -omitMacNames -ff features.KR -fi cidfontinfo.KR -mf ../FontMenuNameDB.SUBSET -r -nS -cs 3 -ch ../UniSourceHanSerifKR-UTF32-H -ci ../SourceHanSerif_KR_sequences.txt
++[[ $? -eq 0 ]] || die; fi
+ 
++find -type f -name "${MY_PN}*-*.otf" -exec mv {} "${S}" \;
++
++elif use font_types_ttc; then
+ ### Command lines for building the language-specific OTFs
+ ### Executed in {ExtraLight,Light,Regular,Medium,SemiBold,Bold,Heavy}/OTC
+ 
+ # Simplified Chinese
+ 
++cd "${d}"/OTC
+ makeotf -f cidfont.ps.OTC.SC -omitMacNames -ff features.OTC.SC -fi cidfontinfo.OTC.SC -mf ../../FontMenuNameDB -r -nS -cs 25 -ch ../../UniSourceHanSerifCN-UTF32-H -ci ../../SourceHanSerif_CN_sequences.txt
++[[ $? -eq 0 ]] || die
+ 
+ # Traditional Chinese (TW)
+ 
+ makeotf -f cidfont.ps.OTC.TC -omitMacNames -ff features.OTC.TC -fi cidfontinfo.OTC.TC -mf ../../FontMenuNameDB -r -nS -cs 2 -ch ../../UniSourceHanSerifTW-UTF32-H -ci ../../SourceHanSerif_TW_sequences.txt
++[[ $? -eq 0 ]] || die
+ 
+ # Japanese
+ 
+ makeotf -f cidfont.ps.OTC.J -omitMacNames -ff features.OTC.J -fi cidfontinfo.OTC.J -mf ../../FontMenuNameDB -r -nS -cs 1 -ch ../../UniSourceHanSerifJP-UTF32-H -ci ../../SourceHanSerif_JP_sequences.txt
++[[ $? -eq 0 ]] || die
+ 
+ # Korean
+ 
+ makeotf -f cidfont.ps.OTC.K -omitMacNames -ff features.OTC.K -fi cidfontinfo.OTC.K -mf ../../FontMenuNameDB -r -nS -cs 3 -ch ../../UniSourceHanSerifKR-UTF32-H -ci ../../SourceHanSerif_KR_sequences.txt
++[[ $? -eq 0 ]] || die
+ 
+ ### Command line for building the OTCs (replace $dir with the face name)
+ ### Executed in {ExtraLight,Light,Regular,Medium,SemiBold,Bold,Heavy}/OTC
+ 
++dir=$(basename "${d}")
+ otf2otc -t 'CFF '=0 -o SourceHanSerif-$dir.ttc SourceHanSerif-$dir.otf SourceHanSerifK-$dir.otf SourceHanSerifSC-$dir.otf SourceHanSerifTC-$dir.otf
++[[ $? -eq 0 ]] || die
++mv -f ${MY_PN}-$dir.ttc "${S}"
++fi
++done
+ 
++return
+ ### Command lines for building the Super OTC
+ 
+ # Command lines for copying the CFF from the Japanese OTF to temporary
