@@ -1,6 +1,5 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -16,7 +15,10 @@ KEYWORDS="~amd64 ~x86"
 IUSE="cjk emoji +monospace +sans +serif"
 
 RDEPEND="
-	cjk? ( media-fonts/source-han-sans )
+	cjk? (
+		sans? ( media-fonts/source-han-sans )
+		serif? ( media-fonts/source-han-serif )
+	)
 	emoji? ( media-fonts/source-emoji )
 	monospace? ( media-fonts/source-code-pro )
 	serif? ( media-fonts/source-serif-pro )
