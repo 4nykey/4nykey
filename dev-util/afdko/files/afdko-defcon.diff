@@ -1,0 +1,11 @@
+https://github.com/typesupply/defcon/commit/8a4170d59c18cdf93d347d79fa323e6b4349f399
+--- a/FDK/Tools/SharedData/FDKScripts/CheckOutlinesUFO.py
++++ b/FDK/Tools/SharedData/FDKScripts/CheckOutlinesUFO.py
+@@ -926,6 +926,7 @@ def run(args):
+ 	lastHadMsg = 0
+ 	seenGlyphCount = 0
+ 	processedGlyphCount = 0
++	glyphList = list(glyphList)
+ 	glyphList.sort()
+ 	for glyphName in glyphList:
+ 		changed = 0
