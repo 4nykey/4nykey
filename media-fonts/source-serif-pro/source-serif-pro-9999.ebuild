@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -27,6 +26,13 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
+MY_MK="3c71e576827753fc395f44f4c2d91131-740f886"
+SRC_URI+="
+	!binary? (
+		mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
+		-> ${MY_MK}.tar.gz
+	)
+"
 
 DESCRIPTION="Serif typeface designed to complement Source Sans Pro"
 HOMEPAGE="http://adobe-fonts.github.io/${PN}"
@@ -54,7 +60,6 @@ pkg_setup() {
 	if use binary; then
 		FONT_S=( {O,T}TF )
 	else
-		FONT_S=( target/{O,T}TF )
 		python-any-r1_pkg_setup
 	fi
 
@@ -63,14 +68,12 @@ pkg_setup() {
 
 src_prepare() {
 	default
-	use binary && return
-	local _t
-	for _t in ${FONT_TYPES}; do
-		use font_types_${_t} || sed -e "/\.\<${_t}\>/d" -i build.sh
-	done
+	use binary || unpack ${MY_MK}.tar.gz
 }
 
 src_compile() {
 	use binary && return
-	sh ./build.sh || die
+	emake \
+		${FONT_SUFFIX} \
+		-f ${MY_MK}/Makefile
 }
