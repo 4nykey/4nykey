@@ -1,9 +1,9 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
+PYTHON_COMPAT=( python2_7 )
 FONT_SUFFIX=otf
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
@@ -23,7 +23,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit font-r1
+inherit python-any-r1 font-r1
 
 DESCRIPTION="An monospaced font for mixed Latin and Japanese text"
 HOMEPAGE="http://adobe-fonts.github.io/${PN}"
@@ -33,7 +33,12 @@ SLOT="0"
 IUSE="+binary"
 
 DEPEND="
-	!binary? ( dev-util/afdko )
+	!binary? (
+		${PYTHON_DEPS}
+		$(python_gen_any_dep '
+			dev-util/afdko[${PYTHON_USEDEP}]
+		')
+	)
 "
 
 pkg_setup() {
@@ -45,12 +50,19 @@ pkg_setup() {
 	if use binary; then
 		FONT_S=( OTF )
 	else
+		python-any-r1_pkg_setup
 		FONT_S=( Bold ExtraLight Heavy Light Medium Normal Regular )
 	fi
 	font-r1_pkg_setup
 }
 
+src_prepare() {
+	default
+	use binary || \
+	sed -e 's:\<exit\>:die:' -i commands.sh
+}
+
 src_compile() {
 	use binary && return
-	/bin/sh "${S}"/commands.sh
+	source "${S}"/commands.sh
 }
