@@ -25,7 +25,6 @@ EGIT_REPO_URI="https://github.com/Keruspe/GPaste.git"
 EGIT_BRANCH="${PN}-${MY_GNOME}"
 
 # until gnome-3.24 is ready
-EGIT_BRANCH=""
 VALA_MIN_API_VERSION="0.34"
 KEYWORDS=""
 
