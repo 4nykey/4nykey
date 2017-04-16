@@ -2,17 +2,16 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
+VIRTUALX_REQUIRED="pgo"
 WANT_AUTOCONF="2.1"
-# Kill gtk3 support since gtk+-3.20 breaks it hard prior to 48.0
-#MOZCONFIG_OPTIONAL_GTK3=1
+MOZCONFIG_OPTIONAL_GTK2ONLY=1
 MOZCONFIG_OPTIONAL_WIFI=1
-MOZCONFIG_OPTIONAL_JIT="enabled"
 
 inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils mozconfig-v6.${PV%%.*} multilib pax-utils autotools fdo-mime
 
 MY_PN="firefox"
 MOZ_PV="$(get_version_component_range -3)esr"
-PATCH="${MY_PN}-${PV%%.*}.0-patches-12"
+PATCH="${MY_PN}-${PV%%.*}.0-patches-08"
 
 # see https://gitweb.torproject.org/builders/tor-browser-bundle.git/tree/gitian/versions?h=maint-4.0
 # https://dist.torproject.org/torbrowser
@@ -36,26 +35,33 @@ SLOT="0"
 # BSD license applies to torproject-related code like the patches
 # icons are under CCPL-Attribution-3.0
 LICENSE="BSD CC-BY-3.0 MPL-2.0 GPL-2 LGPL-2.1"
-IUSE="hardened +hwaccel selinux test"
+IUSE="hardened hwaccel jack nsplugin pgo rust selinux test"
 
-BASE_SRC_URI="https://dist.torproject.org/${PN}/${TOR_PV}"
+SRC_URI="https://dist.torproject.org/${PN}/${TOR_PV}"
+PATCH_URIS=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c}/mozilla/patchsets/${PATCH}.tar.xz )
 SRC_URI="
 	https://gitweb.torproject.org/tor-browser.git/snapshot/${GIT_TAG}.tar.gz
 	-> ${GIT_TAG}.tar.gz
-	https://dev.gentoo.org/~anarchy/mozilla/patchsets/${PATCH}.tar.xz
-	https://dev.gentoo.org/~axs/mozilla/patchsets/${PATCH}.tar.xz
-	https://dev.gentoo.org/~polynomial-c/mozilla/patchsets/${PATCH}.tar.xz
 	x86? (
-		${BASE_SRC_URI}/tor-browser-linux32-${TOR_PV}_en-US.tar.xz
+		${SRC_URI}/tor-browser-linux32-${TOR_PV}_en-US.tar.xz
 	)
 	amd64? (
-		${BASE_SRC_URI}/tor-browser-linux64-${TOR_PV}_en-US.tar.xz
+		${SRC_URI}/tor-browser-linux64-${TOR_PV}_en-US.tar.xz
 	)
+	${PATCH_URIS[@]}
 "
 RESTRICT="primaryuri"
 
+RDEPEND="
+	jack? ( virtual/jack )
+	>=dev-libs/nss-3.28.4
+	>=dev-libs/nspr-4.13.1
+	selinux? ( sec-policy/selinux-mozilla )
+"
 DEPEND="
 	${RDEPEND}
+	pgo? ( >=sys-devel/gcc-4.5 )
+	rust? ( dev-lang/rust )
 	>=dev-lang/yasm-1.1
 	virtual/opengl
 "
@@ -77,11 +83,21 @@ pkg_setup() {
 		XDG_SESSION_COOKIE \
 		XAUTHORITY
 
+	if use pgo; then
+		einfo
+		ewarn "You will do a double build for profile guided optimization."
+		ewarn "This will result in your build taking at least twice as long as before."
+	fi
+
+	if use rust; then
+		einfo
+		ewarn "This is very experimental, should only be used by those developing firefox."
+	fi
 }
 
 pkg_pretend() {
 	# Ensure we have enough disk space to compile
-	if use debug || use test ; then
+	if use pgo || use debug || use test ; then
 		CHECKREQS_DISK_BUILD="8G"
 	else
 		CHECKREQS_DISK_BUILD="4G"
@@ -90,16 +106,14 @@ pkg_pretend() {
 }
 
 src_prepare() {
+	eapply --directory="${WORKDIR}/firefox" "${FILESDIR}"/1002_add_gentoo_preferences.patch
+
 	# Apply gentoo firefox patches
-	rm -fv "${WORKDIR}"/firefox/80{04,12}*.patch
 	eapply "${WORKDIR}/firefox"
 
 	# Revert "Change the default Firefox profile directory to be TBB-relative"
 	# https://gitweb.torproject.org/tor-browser.git/commit/?id=72dfe790235d714da084b45d341d3cb46a88cd60
 	eapply -R "${FILESDIR}"/${P%%.*}-profiledir.patch
-
-	# Allow user to apply any additional patches without modifing ebuild
-	eapply_user
 
 	# Enable gnomebreakpad
 	if use debug ; then
@@ -132,11 +146,17 @@ src_prepare() {
 	sed '/^MOZ_DEV_EDITION=1/d' \
 		-i "${S}"/browser/branding/aurora/configure.sh || die
 
-	eautoreconf
+	# Allow user to apply any additional patches without modifing ebuild
+	eapply_user
+
+	# Autotools configure is now called old-configure.in
+	# This works because there is still a configure.in that happens to be for the
+	# shell wrapper configure script
+	eautoreconf old-configure.in
 
 	# Must run autoconf in js/src
 	cd "${S}"/js/src || die
-	eautoconf
+	eautoconf old-configure.in
 
 	# Need to update jemalloc's configure
 	cd "${S}"/memory/jemalloc/src || die
@@ -160,20 +180,33 @@ src_configure() {
 	mozconfig_init
 	mozconfig_config
 
+	# enable JACK, bug 600002
+	mozconfig_use_enable jack
+
 	# Add full relro support for hardened
 	use hardened && append-ldflags "-Wl,-z,relro,-z,now"
+
+	# Only available on mozilla-overlay for experimentation -- Removed in Gentoo repo per bug 571180
+	#use egl && mozconfig_annotate 'Enable EGL as GL provider' --with-gl-provider=EGL
 
 	# Setup api key for location services
 	echo -n "${_google_api_key}" > "${S}"/google-api-key
 	mozconfig_annotate '' --with-google-api-keyfile="${S}/google-api-key"
 
 	mozconfig_annotate '' --enable-extensions="${MEXTENSIONS}"
-	mozconfig_annotate '' --disable-mailnews
+
+	mozconfig_use_enable rust
+
+	# Allow for a proper pgo build
+	if use pgo; then
+		echo "mk_add_options PROFILE_GEN_SCRIPT='EXTRA_TEST_ARGS=10 \$(MAKE) -C \$(MOZ_OBJDIR) pgo-profile-run'" >> "${S}"/.mozconfig
+	fi
 
 	# Other ff-specific settings
 	mozconfig_annotate '' --with-default-mozilla-five-home=${MOZILLA_FIVE_HOME}
 
 	echo "mk_add_options MOZ_OBJDIR=${BUILD_OBJ_DIR}" >> "${S}"/.mozconfig
+	echo "mk_add_options XARGS=/usr/bin/xargs" >> "${S}"/.mozconfig
 
 	# Rename the install directory and the executable
 	mozconfig_annotate 'torbrowser' --libdir="${EPREFIX}"/usr/$(get_libdir)/${PN}
@@ -184,8 +217,6 @@ src_configure() {
 
 	mozconfig_annotate 'torbrowser' --without-system-nspr
 	mozconfig_annotate 'torbrowser' --without-system-nss
-	mozconfig_annotate 'torbrowser' --enable-bundled-fonts
-	mozconfig_annotate 'torbrowser' --enable-tree-freetype
 
 	# Finalize and report settings
 	mozconfig_final
@@ -195,13 +226,39 @@ src_configure() {
 	fi
 
 	# workaround for funky/broken upstream configure...
+	SHELL="${SHELL:-${EPREFIX%/}/bin/bash}" \
 	emake -f client.mk configure
 }
 
 src_compile() {
-	CC="$(tc-getCC)" CXX="$(tc-getCXX)" LD="$(tc-getLD)" \
-	MOZ_MAKE_FLAGS="${MAKEOPTS}" SHELL="${SHELL:-${EPREFIX%/}/bin/bash}" \
-	emake -f client.mk realbuild
+	if use pgo; then
+		addpredict /root
+		addpredict /etc/gconf
+		# Reset and cleanup environment variables used by GNOME/XDG
+		gnome2_environment_reset
+
+		# Firefox tries to use dri stuff when it's run, see bug 380283
+		shopt -s nullglob
+		cards=$(echo -n /dev/dri/card* | sed 's/ /:/g')
+		if test -z "${cards}"; then
+			cards=$(echo -n /dev/ati/card* /dev/nvidiactl* | sed 's/ /:/g')
+			if test -n "${cards}"; then
+				# Binary drivers seem to cause access violations anyway, so
+				# let's use indirect rendering so that the device files aren't
+				# touched at all. See bug 394715.
+				export LIBGL_ALWAYS_INDIRECT=1
+			fi
+		fi
+		shopt -u nullglob
+		[[ -n "${cards}" ]] && addpredict "${cards}"
+
+		MOZ_MAKE_FLAGS="${MAKEOPTS}" SHELL="${SHELL:-${EPREFIX%/}/bin/bash}" \
+		virtx emake -f client.mk profiledbuild || die "virtx emake failed"
+	else
+		MOZ_MAKE_FLAGS="${MAKEOPTS}" SHELL="${SHELL:-${EPREFIX%/}/bin/bash}" \
+		emake -f client.mk realbuild
+	fi
+
 }
 
 src_install() {
@@ -226,11 +283,17 @@ src_install() {
 		"${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
 		|| die
 
+	if use nsplugin; then
+		echo "pref(\"plugin.load_flash_only\", false);" >> \
+			"${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
+			|| die
+	fi
+
 	echo "pref(\"general.useragent.locale\", \"en-US\");" \
 		>> "${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/000-tor-browser.js" \
 		|| die
 
-	MOZ_MAKE_FLAGS="${MAKEOPTS}" \
+	MOZ_MAKE_FLAGS="${MAKEOPTS}" SHELL="${SHELL:-${EPREFIX%/}/bin/bash}" \
 	emake DESTDIR="${D}" install
 
 	# Install icons and .desktop for menu entry
@@ -252,9 +315,7 @@ src_install() {
 	fi
 
 	# Required in order to use plugins and even run torbrowser on hardened.
-	pax-mark m "${ED}"${MOZILLA_FIVE_HOME}/plugin-container
-	# Required in order for jit to work on hardened, as of torbroser-31
-	use jit && pax-mark pm "${ED}"${MOZILLA_FIVE_HOME}/{torbrowser,torbrowser-bin}
+	pax-mark m "${ED}"${MOZILLA_FIVE_HOME}/{${PN},${PN}-bin,plugin-container}
 
 	# revdep-rebuild entry
 	insinto /etc/revdep-rebuild

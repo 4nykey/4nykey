@@ -4,7 +4,7 @@
 EAPI=6
 WANT_AUTOCONF="2.1"
 # Kill gtk3 support since gtk+-3.20 breaks it hard prior to 48.0
-#MOZCONFIG_OPTIONAL_GTK3=1
+[[ ${PV%%.*} -ge 48 ]] && MOZCONFIG_OPTIONAL_GTK3=1
 MOZCONFIG_OPTIONAL_WIFI=1
 MOZCONFIG_OPTIONAL_JIT="enabled"
 
