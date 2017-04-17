@@ -77,6 +77,7 @@ pkg_setup() {
 		XDG_SESSION_COOKIE \
 		XAUTHORITY
 
+	append-cppflags "-DTOR_BROWSER_DATA_IN_HOME_DIR"
 }
 
 pkg_pretend() {
@@ -90,13 +91,11 @@ pkg_pretend() {
 }
 
 src_prepare() {
-	# Apply gentoo firefox patches
-	rm -fv "${WORKDIR}"/firefox/80{04,12}*.patch
-	eapply "${WORKDIR}/firefox"
+	eapply "${FILESDIR}"/${PN}-profiledir.patch
 
-	# Revert "Change the default Firefox profile directory to be TBB-relative"
-	# https://gitweb.torproject.org/tor-browser.git/commit/?id=72dfe790235d714da084b45d341d3cb46a88cd60
-	eapply -R "${FILESDIR}"/${P%%.*}-profiledir.patch
+	# Apply gentoo firefox patches
+	rm -f "${WORKDIR}"/firefox/80{04,12}*.patch
+	eapply "${WORKDIR}/firefox"
 
 	# Allow user to apply any additional patches without modifing ebuild
 	eapply_user
@@ -181,11 +180,10 @@ src_configure() {
 	mozconfig_annotate 'torbrowser' --with-app-basename=torbrowser
 	mozconfig_annotate 'torbrowser' --disable-tor-browser-update
 	mozconfig_annotate 'torbrowser' --with-tor-browser-version=${TOR_PV}
+	mozconfig_annotate 'torbrowser' --disable-tor-browser-data-outside-app-dir
 
 	mozconfig_annotate 'torbrowser' --without-system-nspr
 	mozconfig_annotate 'torbrowser' --without-system-nss
-	mozconfig_annotate 'torbrowser' --enable-bundled-fonts
-	mozconfig_annotate 'torbrowser' --enable-tree-freetype
 
 	# Finalize and report settings
 	mozconfig_final

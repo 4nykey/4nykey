@@ -93,6 +93,7 @@ pkg_setup() {
 		einfo
 		ewarn "This is very experimental, should only be used by those developing firefox."
 	fi
+	append-cppflags "-DTOR_BROWSER_DATA_IN_HOME_DIR"
 }
 
 pkg_pretend() {
@@ -107,13 +108,10 @@ pkg_pretend() {
 
 src_prepare() {
 	eapply --directory="${WORKDIR}/firefox" "${FILESDIR}"/1002_add_gentoo_preferences.patch
+	eapply "${FILESDIR}"/${PN}-profiledir.patch
 
 	# Apply gentoo firefox patches
 	eapply "${WORKDIR}/firefox"
-
-	# Revert "Change the default Firefox profile directory to be TBB-relative"
-	# https://gitweb.torproject.org/tor-browser.git/commit/?id=72dfe790235d714da084b45d341d3cb46a88cd60
-	eapply -R "${FILESDIR}"/${P%%.*}-profiledir.patch
 
 	# Enable gnomebreakpad
 	if use debug ; then
@@ -214,6 +212,7 @@ src_configure() {
 	mozconfig_annotate 'torbrowser' --with-app-basename=torbrowser
 	mozconfig_annotate 'torbrowser' --disable-tor-browser-update
 	mozconfig_annotate 'torbrowser' --with-tor-browser-version=${TOR_PV}
+	mozconfig_annotate 'torbrowser' --disable-tor-browser-data-outside-app-dir
 
 	mozconfig_annotate 'torbrowser' --without-system-nspr
 	mozconfig_annotate 'torbrowser' --without-system-nss
@@ -228,6 +227,7 @@ src_configure() {
 	# workaround for funky/broken upstream configure...
 	SHELL="${SHELL:-${EPREFIX%/}/bin/bash}" \
 	emake -f client.mk configure
+	pax-mark E "${BUILD_OBJ_DIR}"/_virtualenv/bin/${EPYTHON}
 }
 
 src_compile() {
