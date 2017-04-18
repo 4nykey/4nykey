@@ -37,7 +37,7 @@ RDEPEND="
 	dev-libs/libdigidoc
 	dev-libs/opensc
 "
-DOCS=( README.md RELEASE-NOTES.txt )
+DOCS=( README.md RELEASE-NOTES.md )
 
 src_compile() {
 	emake \
