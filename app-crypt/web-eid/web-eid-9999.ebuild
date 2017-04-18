@@ -6,21 +6,20 @@ EAPI=6
 inherit qmake-utils
 if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/${PN%-*}/${PN}.git"
+	EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
 else
 	inherit vcs-snapshot
 	MY_PV="${PV/_/-}"
 	MY_PV="${MY_PV/rc/RC}"
 	SRC_URI="
-		mirror://githubcl/${PN%-*}/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/${PN}/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
 
 DESCRIPTION="Web eID native host component"
-HOMEPAGE="http://${PN%-*}.github.io"
-RESTRICT="primaryuri"
+HOMEPAGE="https://web-eid.com"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
@@ -40,13 +39,6 @@ DEPEND="
 	dev-qt/linguist-tools
 "
 
-src_prepare() {
-	default
-	sed \
-		-e "s:/usr/lib/${PN}:${EROOT}usr/libexec/${PN}:" \
-		-i linux/{,firefox/}org.hwcrypto.native.json
-}
-
 src_configure() {
 	cd "${S}"/src
 	rm -f GNUmakefile
@@ -59,8 +51,7 @@ src_compile() {
 
 src_install() {
 	local _j=org.hwcrypto.native.json _e=fmpfihjoladdfajbnkdfocnbcehjpogi.json
-	exeinto /usr/libexec
-	doexe src/web-eid
+	dobin src/web-eid
 
 	insinto /etc/opt/chrome/native-messaging-hosts
 	doins linux/${_j}
@@ -80,5 +71,5 @@ src_install() {
 }
 
 pkg_postinst() {
-	elog "To install browser extension visit https://web-eid.com"
+	elog "To install browser extension visit ${HOMEPAGE}"
 }
