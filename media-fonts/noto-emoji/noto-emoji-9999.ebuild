@@ -9,12 +9,10 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}"
 else
 	inherit vcs-snapshot
-	MY_PV="v${PV//./-}-license-apache"
-	MY_PV="09e5d14"
-	SRC_URI="
-		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV}
-		-> ${P}.tar.gz
-	"
+	MY_PV="color-emoji-binary"
+	MY_PV="v${PV//./-}-${MY_PV}"
+	[[ -z ${PV%%*_p*} ]] && MY_PV="09e5d14"
+	SRC_URI="mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
