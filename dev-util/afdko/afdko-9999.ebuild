@@ -5,18 +5,26 @@ EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
 MULTILIB_COMPAT=( abi_x86_32 )
+inherit vcs-snapshot
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
-	inherit vcs-snapshot
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${PV} -> ${P}.tar.gz
 	"
-	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-single-r1 multilib-build
+MY_R="robofab-62229c4"
+MY_U="ufoNormalizer-1ed0111"
+SRC_URI+="
+	mirror://githubcl/robofab-developers/${MY_R%-*}/tar.gz/${MY_R##*-}
+	-> ${MY_R}.tar.gz
+	mirror://githubcl/unified-font-object/${MY_U%-*}/tar.gz/${MY_U##*-}
+	-> ${MY_U}.tar.gz
+"
+RESTRICT="primaryuri"
 
 DESCRIPTION="Adobe Font Development Kit for OpenType"
 HOMEPAGE="http://www.adobe.com/devnet/opentype/afdko.html"
@@ -30,19 +38,25 @@ RDEPEND="
 	${PYTHON_DEPS}
 	dev-python/booleanOperations[${PYTHON_USEDEP}]
 	dev-python/MutatorMath[${PYTHON_USEDEP}]
-	dev-python/ufoNormalizer[${PYTHON_USEDEP}]
-	dev-python/robofab[${PYTHON_USEDEP}]
 	>=dev-python/fonttools-2.5[${PYTHON_USEDEP}]
 "
-PATCHES=(
-	"${FILESDIR}"/${PN}-makeotf.diff
-	"${FILESDIR}"/${PN}-paths.diff
-	"${FILESDIR}"/${PN}-inc.diff
-	"${FILESDIR}"/${PN}-defcon.diff
-)
-DOCS=( "FDK/Technical Documentation" )
+
+src_unpack() {
+	[[ ${PV} == *9999* ]] && git-r3_src_unpack
+	vcs-snapshot_src_unpack
+	mv -f \
+		"${MY_U}"/normalization/ufonormalizer.py \
+		"${MY_R}"/Lib/robofab \
+		"${S}"/FDK/Tools/SharedData/FDKScripts/
+}
 
 src_prepare() {
+	local PATCHES=(
+		"${FILESDIR}"/${PN}-makeotf.diff
+		"${FILESDIR}"/${PN}-paths.diff
+		"${FILESDIR}"/${PN}-inc.diff
+		"${FILESDIR}"/${PN}-defcon.diff
+	)
 	rm -f "${S}"/FDK/Tools/linux/{AFDKOPython,setFDKPaths,ttx,ufonormalizer}
 	rm -rf "${S}"/FDK/Tools/linux/Python
 	local _d="${EROOT}usr/share/${PN}/SharedData/FDKScripts"
@@ -64,6 +78,7 @@ src_compile() {
 }
 
 src_install() {
+	local DOCS=( "FDK/Technical Documentation" )
 	default
 	dobin "${S}"/FDK/Tools/linux/*
 
