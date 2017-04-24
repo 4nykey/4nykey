@@ -1,1 +1,0 @@
-freetype-py-9999.ebuild
