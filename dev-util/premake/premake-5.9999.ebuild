@@ -9,8 +9,8 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/${PN}/${MY_PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="v${PV//_/-}"
-	[[ -z ${PV%%*_p*} ]] && MY_PV="5dfb023"
+	MY_PV="43c5e0a"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV//_/-}"
 	SRC_URI="
 		mirror://githubcl/${PN}/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -40,21 +40,17 @@ src_prepare() {
 }
 
 src_compile() {
-	local _pm="${PN}${SLOT} --cc=$(tc-get-compiler-type) --os=linux --verbose"
+	local _m="${S}/bin/release/${PN}${SLOT}" \
+		_o="--cc=$(tc-get-compiler-type) --os=linux --verbose"
 	declare -x CC="$(tc-getCC)"
-	if has_version ${CATEGORY}/${PN}:${SLOT}; then
-		${_pm} embed
-	else
-		_pm="${S}/bin/release/${_pm}"
-		emake \
-			-f Bootstrap.mak \
-			CC="${CC} ${CFLAGS} ${LDFLAGS}" \
-			linux
-		emake \
-			-C build/bootstrap \
-			verbose=1
-	fi
-	${_pm} gmake
+	emake \
+		-f Bootstrap.mak \
+		CC="${CC} ${CFLAGS} ${LDFLAGS}" \
+		linux
+	emake \
+		-C build/bootstrap \
+		verbose=1
+	MAKE=${_m} MAKEOPTS="${_o}" emake gmake
 	sed \
 		-e 's: -\(O3\|\<s\>\)::g' \
 		-i *.make
