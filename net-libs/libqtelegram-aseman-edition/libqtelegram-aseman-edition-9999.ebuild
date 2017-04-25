@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	"
 else
 	inherit vcs-snapshot
-	MY_PV="1865e02"
+	MY_PV="70c437d"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}-stable"
 	SRC_URI="
 		mirror://githubcl/Aseman-Land/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -50,7 +50,7 @@ src_prepare() {
 
 src_configure() {
 	. "${S}"/init || die
-	eqmake5 CONFIG+=typeobjects
+	eqmake5 CONFIG+=typeobjects OPENSSL_INCLUDE_PATH='.'
 }
 
 src_install() {
