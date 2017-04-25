@@ -30,11 +30,9 @@ DEPEND="
 "
 
 src_configure() {
-	premake5 \
-		--cc=$(tc-get-compiler-type) \
-		--os=linux \
-		--verbose \
-		gmake
+	MAKE=premake5 \
+	MAKEOPTS="--cc=$(tc-get-compiler-type) --os=linux --verbose" \
+		emake gmake
 	sed \
 		-e 's: -\(O3\|\<s\>\)::g' \
 		-i build/gmake/*.make
