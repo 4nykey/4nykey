@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -11,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/khaledhosny/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="11e7fa6"
+	MY_PV="983ab6c"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/khaledhosny/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -39,7 +38,6 @@ DEPEND="
 		')
 	)
 "
-RDEPEND="${DEPEND}"
 DOCS="*.linuxlibertine.txt"
 
 pkg_setup() {
