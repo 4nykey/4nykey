@@ -31,9 +31,10 @@ DEPEND="
 	dev-qt/qtdbus:5
 	dev-qt/qtprintsupport:5
 "
-RDEPEND="${DEPEND}"
-PATCHES=(
-)
+RDEPEND="
+	${DEPEND}
+	dev-qt/qtimageformats:5
+"
 
 src_configure() {
 	eqmake5 \
