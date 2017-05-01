@@ -3,15 +3,17 @@
 
 EAPI=6
 
+inherit toolchain-funcs
 if [[ -z ${PV%%*9999} ]]; then
-	EGIT_REPO_URI="https://github.com/rbrito/pkg-${PN}.git"
+	EGIT_REPO_URI="https://github.com/jpenney/${PN}-fork.git"
+	EGIT_BRANCH="feature/portability-updates"
 	inherit git-r3
 else
 	inherit vcs-snapshot
-	MY_PV="26cef03"
+	MY_PV="da61574"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="upstream/${PV}"
 	SRC_URI="
-		mirror://githubcl/rbrito/pkg-${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/jpenney/${PN}-fork/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -26,23 +28,19 @@ IUSE=""
 
 DEPEND="
 	dev-lang/ocaml[ocamlopt]
+	dev-ml/ocaml-make
 "
 RDEPEND=""
 
 src_prepare() {
 	local PATCHES=(
-		"${S}"/debian/patches
 		"${FILESDIR}"/${PN}_stdint.diff
 	)
 	default
-	sed -e 's:-ccopt "-save-temps"::' -i makefile
 }
 
 src_compile() {
-	emake depend
-	emake \
-		SSEOPT="-ccopt \"${CFLAGS} ${LDFLAGS}\"" \
-		${PN}
+	emake CC="$(tc-getCC)" CFLAGS="${CFLAGS}"
 }
 
 src_install() {
