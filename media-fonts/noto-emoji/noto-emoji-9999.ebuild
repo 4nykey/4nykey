@@ -32,7 +32,7 @@ DEPEND="
 		dev-python/nototools[${PYTHON_USEDEP}]
 	')
 	media-gfx/pngquant
-	media-gfx/imagemagick
+	virtual/imagemagick-tools[png]
 	zopfli? ( app-arch/zopfli )
 	!zopfli? ( media-gfx/optipng )
 	x11-libs/cairo

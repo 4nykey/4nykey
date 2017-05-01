@@ -1,6 +1,5 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -33,7 +32,7 @@ IUSE="+binary"
 DEPEND="
 	!binary? (
 		media-gfx/inkscape
-		media-gfx/imagemagick
+		virtual/imagemagick-tools[png]
 		media-gfx/potrace
 		dev-util/svgo
 		dev-python/scfbuild
@@ -41,7 +40,7 @@ DEPEND="
 "
 
 pkg_setup() {
-	local _fc="fontconfig/56-emojione-color.conf"
+	local _fc="fontconfig/56-${PN%-*}.conf"
 	if use binary; then
 		S="${WORKDIR}/${MY_P}"
 		FONT_CONF="${S}/${_fc}"
