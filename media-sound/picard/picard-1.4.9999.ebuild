@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-PYTHON_COMPAT=( python3_{4,5,6} )
+PYTHON_COMPAT=( python2_7 )
 DISTUTILS_SINGLE_IMPL=1
 PLOCALES="
 af ar ast bg ca cs cy da de el en_CA en_GB en eo es et fa fi fo fr_CA fr fy gl
@@ -13,6 +13,7 @@ inherit eutils distutils-r1 l10n
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/metabrainz/picard.git"
+	EGIT_BRANCH="1.4.x"
 else
 	inherit vcs-snapshot
 	SRC_URI="
@@ -31,8 +32,8 @@ IUSE="+acoustid nls"
 
 RDEPEND="
 	${PYTHON_DEPS}
-	dev-python/PyQt5[${PYTHON_USEDEP}]
-	dev-qt/qtgui:5
+	dev-python/PyQt4[X,${PYTHON_USEDEP}]
+	dev-qt/qtgui:4[accessibility]
 	media-libs/mutagen[${PYTHON_USEDEP}]
 	acoustid? ( >=media-libs/chromaprint-1.0[tools] )
 	dev-python/python-discid[${PYTHON_USEDEP}]
@@ -41,7 +42,7 @@ DEPEND="
 	${RDEPEND}
 	nls? ( sys-devel/gettext )
 "
-
+RESTRICT="test" # doesn't work with ebuilds
 DOCS=( {AUTHORS,HACKING,NEWS}.txt {CONTRIBUTING,README}.md )
 
 python_prepare_all() {
@@ -62,8 +63,4 @@ python_install() {
 		--disable-autoupdate \
 		--skip-build \
 		$(usex nls "" "--disable-locales")
-}
-
-python_test() {
-	esetup.py test
 }
