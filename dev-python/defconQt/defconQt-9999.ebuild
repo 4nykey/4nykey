@@ -39,12 +39,12 @@ DEPEND="
 	test? ( dev-python/pytest-runner[${PYTHON_USEDEP}] )
 "
 
-src_prepare() {
-	default
+python_prepare_all() {
 	# no egg-info for PyQt5
 	sed -e '/\<pyqt5\>/d' -i setup.py
+	distutils-r1_python_prepare_all
 }
 
 python_test() {
-	esetup.py test || die
+	esetup.py test
 }

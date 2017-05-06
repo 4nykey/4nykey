@@ -36,11 +36,11 @@ DEPEND="
 	test? ( dev-python/pytest-runner[${PYTHON_USEDEP}] )
 "
 
-src_prepare() {
-	default
+python_prepare_all() {
 	use cython && rm -f "${S}"/src/cython/_compreffor.cpp
+	distutils-r1_python_prepare_all
 }
 
 python_test() {
-	esetup.py test || die
+	esetup.py test
 }

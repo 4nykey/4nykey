@@ -36,16 +36,16 @@ DEPEND="
 	test? ( dev-python/pytest-runner[${PYTHON_USEDEP}] )
 "
 
-src_prepare() {
-	default
+python_prepare_all() {
 	local _v="${PV%_p*}"
 	[[ -z ${PV%%*9999} ]] && _v="$(git describe --tags)"
 	sed \
 		-e '/setuptools_scm/d' \
 		-e "s:use_scm_version=True:version=\"${_v}\":" \
 		-i "${S}"/setup.py
+	distutils-r1_python_prepare_all
 }
 
 python_test() {
-	esetup.py test || die
+	esetup.py test
 }

@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -33,8 +32,7 @@ DEPEND="
 	)
 "
 
-src_prepare() {
-	default
+python_prepare_all() {
 	if use cython; then
 		touch "${S}"/dev
 	else
@@ -46,8 +44,9 @@ src_prepare() {
 		-e '/setuptools_scm/d' \
 		-e "s:use_scm_version=True:version=\"${_v}\":" \
 		-i "${S}"/setup.py
+	distutils-r1_python_prepare_all
 }
 
 python_test() {
-	esetup.py test || die
+	esetup.py test
 }

@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -11,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/davelab6/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="b20d185"
+	MY_PV="9a13ac3"
 	MY_FC="fontconfig-d162a4a"
 	SRC_URI="
 		mirror://githubcl/davelab6/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -45,8 +44,8 @@ DEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
 "
 
-src_prepare() {
-	default
+python_prepare_all() {
+	distutils-r1_python_prepare_all
 	[[ -n ${PV%%*9999} ]] && \
 	mv "${WORKDIR}"/${MY_FC}/* "${S}"/fontaine/charsets/fontconfig
 }

@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -35,11 +34,11 @@ DEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
 "
 
-src_prepare() {
+python_prepare_all() {
 	[[ -n ${PV%%*9999} ]] && mv "${WORKDIR}"/${MY_ZP}/src "${S}"/${MY_ZP%-*}
-	distutils-r1_src_prepare
+	distutils-r1_python_prepare_all
 }
 
 python_test() {
-	esetup.py test || die
+	esetup.py test
 }
