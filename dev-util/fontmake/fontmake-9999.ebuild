@@ -44,12 +44,9 @@ DEPEND="
 		dev-python/mock[${PYTHON_USEDEP}]
 	)
 "
-PATCHES=(
-	"${FILESDIR}"/${PN}-mti_paths.diff
-)
 
-src_prepare() {
-	default
+python_prepare_all() {
+	distutils-r1_python_prepare_all
 	has test $FEATURES || return
 	sed \
 		-e 's:fontmake:${EPYTHON} -m &:g' \
