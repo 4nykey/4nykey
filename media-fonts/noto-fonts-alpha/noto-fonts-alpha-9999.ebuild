@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}"
 else
 	inherit vcs-snapshot
-	MY_PV="6a21e63"
+	MY_PV="28c49d2"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -17,24 +17,11 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit fontmake
+inherit font-r1
 
-DESCRIPTION="A WIP versions of the noto fonts"
+DESCRIPTION="Alpha versions of Noto fonts"
 HOMEPAGE="https://github.com/googlei18n/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="clean-as-you-go interpolate"
-
-pkg_setup() {
-	myemakeargs=(
-		$(usex interpolate '' 'INTERPOLATE=')
-		$(usex clean-as-you-go 'CLEAN=y' '')
-	)
-	fontmake_pkg_setup
-}
-
-src_prepare() {
-	fontmake_src_prepare
-	ln -s "${S}"/src/NotoSansDevanagari/NotoSansDevanagari{,UI}-MM.glyphs
-}
+FONT_S=( from-pipeline/unhinted/{o,t}tf/s{ans,erif} )

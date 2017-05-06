@@ -24,13 +24,16 @@ HOMEPAGE="http://www.google.com/get/noto"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="cjk emoji pipeline"
+IUSE="+binary cjk emoji pipeline"
 
 DEPEND=""
 RDEPEND="
 	cjk? ( media-fonts/noto-cjk )
 	emoji? ( media-fonts/noto-emoji )
-	pipeline? ( media-fonts/noto-source )
+	pipeline? (
+		binary? ( media-fonts/noto-fonts-alpha )
+		!binary? ( media-fonts/noto-source )
+	)
 	!media-fonts/croscorefonts
 "
 FONT_S=( hinted )
