@@ -14,7 +14,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	REQUIRED_USE="!binary"
 else
 	inherit vcs-snapshot
-	MY_PV="a67044d"
+	MY_PV="1689ebf"
 	SRC_URI="
 	binary? (
 		http://www.ndiscovered.com/downloads/${PN}${SLOT%.*}/${PN^^}_${SLOT%.*}_OTF.zip
@@ -34,20 +34,13 @@ HOMEPAGE="http://www.ndiscovered.com/${FONT_PN%.*}"
 LICENSE="OFL-1.1"
 
 pkg_setup() {
-	use binary && S="${WORKDIR}"
+	if use binary; then
+		S="${WORKDIR}"
+	else
+		myemakeargs=( SRCDIR=Source )
+		PATCHES=(
+			"${FILESDIR}"/${PN}${SLOT}_italic.diff
+		)
+	fi
 	fontmake_pkg_setup
-}
-
-src_prepare() {
-	fontmake_src_prepare
-	use binary && return
-	mkdir src
-	local _s _d
-	for _s in "${S}"/Source/${PN^}*Final*.glyphs; do
-		_d="${_s##*/}"
-		ln -s "${_s}" src/"${_d// /}"
-	done
-	sed \
-		-e 's:sub zedescender-cy by zedescender-cy.loclBSH\;\\012::' \
-		-i src/*.glyphs
 }

@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_BRANCH="dev"
 else
 	inherit vcs-snapshot
-	MY_PV="8b5f590"
+	MY_PV="d49e882"
 	SRC_URI="
 		mirror://githubcl/huertatipografica/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"

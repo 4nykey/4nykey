@@ -29,6 +29,6 @@ LICENSE="OFL-1.1"
 SLOT="0"
 
 src_prepare() {
-	fontmake_src_prepare
 	rm -f sources/'Arvo Italic source.glyphs'
+	fontmake_src_prepare
 }

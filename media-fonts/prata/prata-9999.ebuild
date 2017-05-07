@@ -13,7 +13,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/cyrealtype/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="6cbd1ae"
+	MY_PV="db5f379"
 	SRC_URI="
 		mirror://githubcl/cyrealtype/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"

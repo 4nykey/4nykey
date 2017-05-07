@@ -4,7 +4,10 @@
 EAPI=6
 
 FONT_TYPES=( otf +ttf )
-myemakeargs=( SRCDIR=sources )
+myemakeargs=(
+	SRCDIR=sources
+	INTERPOLATE=
+)
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/etunni/${PN}.git"

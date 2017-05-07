@@ -4,13 +4,16 @@
 EAPI=6
 
 FONT_TYPES=( otf +ttf )
-myemakeargs=( SRCDIR=sources )
+myemakeargs=(
+	SRCDIR=sources
+	INTERPOLATE=
+)
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/etunni/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="bb84431"
+	MY_PV="08bf768"
 	SRC_URI="
 		mirror://githubcl/etunni/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
