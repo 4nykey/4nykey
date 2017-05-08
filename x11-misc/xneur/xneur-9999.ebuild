@@ -1,6 +1,5 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -12,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	SRC_URI="
 		https://launchpad.net/ubuntu/+archive/primary/+files/${PN}_${PV}.orig.tar.gz
-		https://github.com/AndrewCrewKuznetsov/xneur-devel/raw/master/dists/${PV}/${PN}_${PV}.orig.tar.gz
+		mirror://githubraw/AndrewCrewKuznetsov/xneur-devel/master/dists/${PV}/${PN}_${PV}.orig.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"

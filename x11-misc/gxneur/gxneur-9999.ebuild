@@ -1,6 +1,5 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
 
 EAPI=6
 
@@ -12,11 +11,10 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/AndrewCrewKuznetsov/xneur-devel.git"
 	SRC_URI=""
 	S="${WORKDIR}/${P}/${PN}"
-	AUTOTOOLS_AUTORECONF="1"
 else
 	SRC_URI="
 		https://launchpad.net/ubuntu/+archive/primary/+files/${PN}_${PV}.orig.tar.gz
-		https://github.com/AndrewCrewKuznetsov/xneur-devel/raw/master/dists/${PV}/${PN}_${PV}.orig.tar.gz
+		mirror://githubraw/AndrewCrewKuznetsov/xneur-devel/master/dists/${PV}/${PN}_${PV}.orig.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -49,7 +47,8 @@ DEPEND="
 "
 
 src_prepare() {
-	[[ -z ${PV%%*9999} ]] && eautoreconf
+	sed -e '/\(README\|TODO\)/d' -i Makefile.am
+	eautoreconf
 	gnome2_src_prepare
 }
 
@@ -60,5 +59,4 @@ src_configure() {
 		$(use_enable nls)
 	"
 	gnome2_src_configure ${myconf}
-	[[ -z ${PV%%*9999} ]] && emake clean
 }
