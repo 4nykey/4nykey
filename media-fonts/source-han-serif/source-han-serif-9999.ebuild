@@ -79,7 +79,7 @@ pkg_setup() {
 			DOCS="*.pdf"
 		fi
 	else
-		PATCHES=( "${FILESDIR}"/${P}-cmds.diff )
+		PATCHES=( "${FILESDIR}"/${PN}_cmds.diff )
 	fi
 	font-r1_pkg_setup
 }
