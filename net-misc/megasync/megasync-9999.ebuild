@@ -11,6 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="2e03def"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}_Linux"
 	MY_SDK="meganz-sdk-bba5661"
 	SRC_URI="
 		mirror://githubcl/meganz/${PN}/tar.gz/${MY_PV}
