@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -31,8 +30,8 @@ LICENSE_URL="https://raw.githubusercontent.com/meganz/MEGAsync/master/LICENCE.md
 SLOT="0"
 IUSE="examples nautilus qt5"
 
-DEPEND=""
 RDEPEND="
+	dev-libs/libsodium
 	dev-libs/libuv
 	dev-libs/crypto++
 	dev-db/sqlite:3
@@ -42,7 +41,10 @@ RDEPEND="
 	!qt5? ( dev-qt/qtgui:4 )
 	qt5? ( dev-qt/qtwidgets:5 )
 	nautilus? ( >=gnome-base/nautilus-3 )
-	examples? ( sys-libs/readline )
+	examples? ( sys-libs/readline:0 )
+"
+DEPEND="
+	${RDEPEND}
 "
 DOCS=( CREDITS.md README.md )
 PATCHES=( "${FILESDIR}"/${PN}-qmake.diff )
@@ -64,7 +66,6 @@ src_configure() {
 		--with-sqlite \
 		--with-cryptopp \
 		--with-curl \
-		--without-sodium \
 		--without-freeimage
 	popd > /dev/null
 
