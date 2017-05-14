@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>4nykey@gmail.com</email>
+	</maintainer>
+	<use>
+		<flag name="freeimage">Enable support for image I/O via media-libs/freeimage</flag>
+		<flag name="fuse">Build FUSE-based example client</flag>
+		<flag name="libuv">Support asynchronous I/O via dev-libs/libuv</flag>
+		<flag name="qt">Install QT bindings</flag>
+		<flag name="sodium">Use dev-libs/libsodium for cryptography</flag>
+	</use>
+</pkgmetadata>

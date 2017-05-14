@@ -35,20 +35,3 @@
          INSTALLS += desktop
  
          HICOLOR = $$DESKTOP_DESTDIR/share/icons/hicolor
---- a/src/MEGASync/mega/contrib/QtCreator/MEGACli/MEGACli.pro
-+++ b/src/MEGASync/mega/contrib/QtCreator/MEGACli/MEGACli.pro
-@@ -29,3 +29,5 @@ else {
- SOURCES += ../../../examples/megacli.cpp
- HEADERS += ../../../examples/megacli.h
- include(../../../bindings/qt/sdk.pri)
-+target.path = $$PREFIX/usr/bin
-+INSTALLS += target
---- a/src/MEGASync/mega/contrib/QtCreator/MEGASimplesync/MEGASimplesync.pro
-+++ b/src/MEGASync/mega/contrib/QtCreator/MEGASimplesync/MEGASimplesync.pro
-@@ -13,4 +13,6 @@ CONFIG += console
- 
- SOURCES += ../../../examples/megasimplesync.cpp
- include(../../../bindings/qt/sdk.pri)
-+target.path = $$PREFIX/usr/bin
-+INSTALLS += target
- 
