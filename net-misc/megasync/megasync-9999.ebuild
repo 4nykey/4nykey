@@ -42,7 +42,6 @@ DEPEND="
 src_prepare() {
 	local PATCHES=(
 		"${FILESDIR}"/${PN}-qmake.diff
-		"${FILESDIR}"/${PN}-sdk.diff
 	)
 	cp -r "${EROOT}"usr/share/meganz-sdk/bindings "${S}"/src/MEGASync/mega/
 	default

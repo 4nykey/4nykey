@@ -56,6 +56,9 @@ pkg_setup() {
 }
 
 src_prepare() {
+	local PATCHES=(
+		"${FILESDIR}"/${PN}_qt.diff
+	)
 	default
 	eautoreconf
 }

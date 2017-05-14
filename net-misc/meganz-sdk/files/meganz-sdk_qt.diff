@@ -1,5 +1,5 @@
---- a/src/MEGASync/mega/bindings/qt/sdk.pri
-+++ b/src/MEGASync/mega/bindings/qt/sdk.pri
+--- a/bindings/qt/sdk.pri
++++ b/bindings/qt/sdk.pri
 @@ -2,7 +2,7 @@
  MEGASDK_BASE_PATH = $$PWD/../../
  
