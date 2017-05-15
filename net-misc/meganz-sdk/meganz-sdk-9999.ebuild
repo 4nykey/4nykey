@@ -24,9 +24,10 @@ HOMEPAGE="https://github.com/meganz/sdk"
 
 LICENSE="BSD-2"
 SLOT="0"
-IUSE="+sqlite +examples freeimage fuse hardened inotify libuv qt sodium"
+IUSE="+sqlite examples freeimage fuse hardened inotify libuv +megacmd qt sodium"
 REQUIRED_USE="
 	examples? ( sqlite )
+	megacmd? ( sqlite )
 	fuse? ( examples )
 "
 
@@ -39,6 +40,7 @@ DEPEND="
 	net-misc/curl
 	sqlite? ( dev-db/sqlite:3 )
 	!sqlite? ( sys-libs/db:*[cxx] )
+	megacmd? ( sys-libs/readline:0 )
 	examples? (
 		sys-libs/readline:0
 		fuse? ( sys-fs/fuse )
@@ -73,7 +75,7 @@ src_configure() {
 		$(use_with !sqlite db) \
 		$(use_with sqlite) \
 		$(use_enable examples) \
-		$(use_enable examples megacmd) \
+		$(use_enable megacmd) \
 		$(use_with freeimage) \
 		$(use_with fuse)
 }
