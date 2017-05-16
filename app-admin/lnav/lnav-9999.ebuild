@@ -1,12 +1,11 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
 inherit toolchain-funcs autotools
 if [[ -z ${PV%%*9999} ]]; then
-	EGIT_REPO_URI="https://github.com/tstack/lnav.git"
+	EGIT_REPO_URI="https://github.com/tstack/${PN}.git"
 	inherit git-r3
 else
 	inherit vcs-snapshot
