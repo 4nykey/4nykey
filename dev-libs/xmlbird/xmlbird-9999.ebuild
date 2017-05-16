@@ -1,6 +1,5 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -11,8 +10,10 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 else
 	inherit vcs-snapshot
+	MY_PV="58c28cb"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
-		mirror://githubcl/johanmattssonm/${PN}/tar.gz/v${PV} -> ${P}.tar.gz
+		mirror://githubcl/johanmattssonm/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -48,6 +49,7 @@ src_configure() {
 		--valac "${VALAC}" \
 		--cflags "${CFLAGS}" \
 		--ldflags "${LDFLAGS}" \
+		--libdir "/$(get_libdir)" \
 		|| die
 }
 
@@ -58,7 +60,6 @@ src_compile() {
 src_install() {
 	"${PYTHON}" ./install.py \
 		--dest "${D}" \
-		--libdir "/$(get_libdir)" \
 		|| die
 	einstalldocs
 }
