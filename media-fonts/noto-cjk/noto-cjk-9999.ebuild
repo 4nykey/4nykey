@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	SANS_WEIGHTS=( Black Bold DemiLight Light Medium Regular Thin )
 	SERIF_WEIGHTS=( Black Bold ExtraLight Light Medium Regular SemiBold )
-	MY_PV="daf5dd0"
+	MY_PV="9beb8b8"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="mirror://githubraw/googlei18n/${PN}/${MY_PV}/Noto"
 	SRC_URI="
