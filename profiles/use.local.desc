@@ -43,7 +43,6 @@ media-gfx/fontview:gtk3 - Use GTK+3 instead of GTK+2
 media-gfx/sortsmill-tools:editor - Build sortsmill-editor and related programs
 media-gfx/sortsmill-tools:legacy - Install legacy Python modules
 media-gfx/sortsmill-tools:truetype-debugger - Enable truetype debugger in editor
-media-libs/chromaprint:tools - Build additional tools
 media-sound/ardour:bundled-libs - Use bundled libs instead of system installed
 media-sound/ardour:c++0x - Compile using the C++11 standard
 media-sound/ardour:hid - Add support for dev-libs/hidapi
@@ -76,13 +75,23 @@ media-sound/picard:acoustid - Use media-libs/chromaprint for acoustic fingerprin
 media-video/flowblade:frei0r - Additional video filters (media-plugins/frei0r-plugins)
 media-video/flowblade:gmic - Additional image filters (media-gfx/gmic)
 media-video/flowblade:swh - Additional audio filters (media-plugins/swh-plugins)
+net-misc/meganz-sdk:freeimage - Enable support for image I/O via media-libs/freeimage
+net-misc/meganz-sdk:fuse - Build FUSE-based example client
+net-misc/meganz-sdk:libuv - Support asynchronous I/O via dev-libs/libuv
+net-misc/meganz-sdk:megacmd - Build mega-cmd client
+net-misc/meganz-sdk:qt - Install QT bindings
+net-misc/meganz-sdk:sodium - Use dev-libs/libsodium for cryptography
 net-misc/megasync:nautilus - Install the gnome-base/nautilus extension
 sys-block/f3:extras - Compile the extra applications
 www-client/midori:granite - Enable support for the elementary library dev-libs/granite
 www-client/midori:zeitgeist - Add support for Zeitgeist event tracking system
 www-client/torbrowser:custom-optimization - Fine-tune custom compiler optimizations (-Os, -O0, -O1, -O2, -O3)
+www-client/torbrowser:gtk2 - Use the cairo-gtk2 rendering engine
 www-client/torbrowser:hwaccel - Use hardware-accelerated rendering
+www-client/torbrowser:jemalloc - Enable or disable jemalloc
 www-client/torbrowser:jemalloc3 - Enable or disable jemalloc3 (forced-on when supported prior to 38.0)
+www-client/torbrowser:pgo - Add support for profile-guided optimization using gcc-4.5, for faster binaries. This option will double the compile time.
+www-client/torbrowser:rust - Enable support for using rust compiler (experimental)
 www-client/torbrowser:system-cairo - Use the system-wide x11-libs/cairo instead of bundled.
 www-client/torbrowser:system-harfbuzz - Use the system-wide media-libs/harfbuzz and media-gfx/graphite2 instead of bundled.
 www-client/torbrowser:system-icu - Use the system-wide dev-libs/icu instead of bundled.
