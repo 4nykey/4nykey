@@ -18,7 +18,7 @@ else
 	inherit vcs-snapshot
 	SRC_URI="
 		http://ftp.musicbrainz.org/pub/musicbrainz/picard/${P}.tar.gz
-		mirror://githubcl/metabrainz/${PN}/release-${PV} -> ${P}.tar.gz
+		mirror://githubcl/metabrainz/${PN}/tar.gz/release-${PV} -> ${P}.tar.gz
 	"
 	KEYWORDS="~amd64 ~x86"
 fi
@@ -42,7 +42,7 @@ DEPEND="
 	${RDEPEND}
 	nls? ( sys-devel/gettext )
 "
-RESTRICT="test" # doesn't work with ebuilds
+RESTRICT="primaryuri test" # doesn't work with ebuilds
 DOCS=( {AUTHORS,HACKING,NEWS}.txt {CONTRIBUTING,README}.md )
 
 python_prepare_all() {

@@ -17,9 +17,10 @@ else
 	inherit vcs-snapshot
 	SRC_URI="
 		http://ftp.musicbrainz.org/pub/musicbrainz/picard/${P}.tar.gz
-		mirror://githubcl/metabrainz/${PN}/release-${PV} -> ${P}.tar.gz
+		mirror://githubcl/metabrainz/${PN}/tar.gz/release-${PV} -> ${P}.tar.gz
 	"
 	KEYWORDS="~amd64 ~x86"
+	RESTRICT="primaryuri"
 fi
 
 DESCRIPTION="A cross-platform music tagger"
@@ -31,8 +32,7 @@ IUSE="+acoustid nls"
 
 RDEPEND="
 	${PYTHON_DEPS}
-	dev-python/PyQt5[${PYTHON_USEDEP}]
-	dev-qt/qtgui:5
+	dev-python/PyQt5[${PYTHON_USEDEP},gui]
 	media-libs/mutagen[${PYTHON_USEDEP}]
 	acoustid? ( >=media-libs/chromaprint-1.0[tools] )
 	dev-python/python-discid[${PYTHON_USEDEP}]
