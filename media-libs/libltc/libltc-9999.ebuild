@@ -1,10 +1,9 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
-EAPI=5
+EAPI=6
 
-inherit autotools-utils
+inherit autotools
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/x42/libltc.git"
@@ -20,19 +19,19 @@ HOMEPAGE="https://github.com/x42/libltc"
 
 LICENSE="LGPL-3"
 SLOT="0"
-IUSE="doc"
+IUSE="apidocs"
 
 RDEPEND=""
 DEPEND="
 	${RDEPEND}
-	doc? ( app-doc/doxygen )
+	apidocs? ( app-doc/doxygen )
 "
-AUTOTOOLS_AUTORECONF="1"
-AUTOTOOLS_IN_SOURCE_BUILD="1"
 
-pkg_setup() {
-	if use doc; then
-		MAKEOPTS+=" all dox"
-		HTML_DOCS=(doc/html/)
-	fi
+src_prepare() {
+	default
+	eautoreconf
+}
+
+src_compile() {
+	emake all $(usex apidocs dox '')
 }
