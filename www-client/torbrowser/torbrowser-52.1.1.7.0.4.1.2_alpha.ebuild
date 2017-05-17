@@ -144,6 +144,9 @@ src_prepare() {
 	sed '/^MOZ_DEV_EDITION=1/d' \
 		-i "${S}"/browser/branding/aurora/configure.sh || die
 
+	grep -rl 'param lto-partitions' --include=moz.build | xargs \
+		sed -e 's:param lto-partitions=1:lto-partition=one:' -i
+
 	# Allow user to apply any additional patches without modifing ebuild
 	eapply_user
 
