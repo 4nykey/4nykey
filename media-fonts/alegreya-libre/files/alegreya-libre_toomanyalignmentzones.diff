@@ -1,5 +1,5 @@
---- a/Alegreya italic.glyphs	
-+++ b/Alegreya italic.glyphs	
+--- a/sources/Alegreya italic.glyphs	
++++ b/sources/Alegreya italic.glyphs	
 @@ -281,7 +281,6 @@ alignmentZones = (
  "{730, 12}",
  "{636, 12}",
@@ -16,8 +16,8 @@
  "{472, 12}",
  "{-12, 12}",
  "{-95, 12}",
---- a/Alegreya.glyphs
-+++ b/Alegreya.glyphs
+--- a/sources/Alegreya.glyphs
++++ b/sources/Alegreya.glyphs
 @@ -273,7 +273,6 @@ alignmentZones = (
  "{730, 12}",
  "{637, 12}",

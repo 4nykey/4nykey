@@ -4,14 +4,14 @@
 EAPI=6
 
 FONT_TYPES=( otf +ttf )
-myemakeargs=( SRCDIR=. )
+myemakeargs=( SRCDIR=sources )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/huertatipografica/${PN}.git"
 	EGIT_BRANCH="dev"
 else
 	inherit vcs-snapshot
-	MY_PV="d49e882"
+	MY_PV="064532e"
 	SRC_URI="
 		mirror://githubcl/huertatipografica/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"

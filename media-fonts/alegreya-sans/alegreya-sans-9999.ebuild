@@ -3,16 +3,16 @@
 
 EAPI=6
 
-FONT_TYPES=( +otf ttf )
-FONTDIR_BIN=( otf )
-myemakeargs=( SRCDIR=glyphs )
+FONT_TYPES=( otf +ttf )
+FONTDIR_BIN=( fonts/{o,t}tf )
+myemakeargs=( SRCDIR=sources )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/huertatipografica/${PN}.git"
 	EGIT_BRANCH="dev"
 else
 	inherit vcs-snapshot
-	MY_PV="d3d6ce3"
+	MY_PV="988427b"
 	SRC_URI="
 		mirror://githubcl/huertatipografica/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -25,6 +25,5 @@ HOMEPAGE="https://github.com/huertatipografica/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-REQUIRED_USE="binary? ( !font_types_ttf )"
 
 DOCS="*.txt"
