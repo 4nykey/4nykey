@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -95,6 +94,7 @@ src_install() {
 		# gcc (+cxx) <-> cygwin
 		doins -r "${WORKDIR}"/newlib-${PN}/newlib/libc/include "${WORKDIR}"/usr/{lib,include}
 	else
+		dodir /usr/${CTARGET}/usr/lib
 		emake \
 			DESTDIR="${D}" \
 			tooldir="${EPREFIX}/usr/${CTARGET}/usr" \
