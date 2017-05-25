@@ -11,7 +11,7 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="6fb5633"
+	MY_PV="9525723"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -68,12 +68,6 @@ src_prepare() {
 		-e "s:\$AFDKO_Python \"\${AFDKO_Scripts}/:/usr/bin/env ${EPYTHON} \"${_d}/:" \
 		-i "${S}"/FDK/Tools/linux/*
 	default
-	cd "${S}"/FDK/Tools/Programs/public/lib/build
-	local _d
-	for _d in {name,var}read; do
-		cp -a dynarr ${_d}
-		sed -e "s:dynarr:${_d}:g" -i ${_d}/linux/gcc/release/Makefile
-	done
 }
 
 src_compile() {
