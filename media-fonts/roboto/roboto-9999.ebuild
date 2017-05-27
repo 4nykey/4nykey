@@ -26,7 +26,7 @@ inherit python-any-r1 font-r1
 MY_D=(
 	typesupply/feaTools-8fc73f8
 	robofab-developers/robofab-62229c4
-	googlei18n/ufo2ft-v0.3.4
+	googlei18n/ufo2ft-6184b14
 )
 SRC_URI+="
 !binary? ( $(for _d in ${MY_D[@]}; do
@@ -41,8 +41,11 @@ HOMEPAGE="https://github.com/google/roboto"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE="+binary"
-REQUIRED_USE="binary? ( !font_types_otf )"
+IUSE="+binary test"
+REQUIRED_USE="
+	binary? ( !font_types_otf )
+	test? ( font_types_ttf )
+"
 
 DEPEND="
 	binary? (
@@ -88,9 +91,16 @@ src_prepare() {
 		sed -e 's:\(proj\.buildOTF =\).*:\1False:' -i scripts/build-v2.py
 	use font_types_ttf || \
 		sed -e '/proj\.generateTTFs()/d' -i scripts/build-v2.py
+	sed -e "s:\<2016\>:$(date +%Y):" -i scripts/run_general_tests.py
 }
 
 src_compile() {
 	use binary && return
 	default
+}
+
+src_test() {
+	use binary && return
+	local -x PYTHONPATH="${PYTHONPATH}:${S}/scripts/lib"
+	emake test-coverage test-general
 }
