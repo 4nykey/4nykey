@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="08f66a7"
+	MY_PV="d8f3d16"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -32,7 +32,20 @@ RDEPEND="
 	dev-python/pillow[${PYTHON_USEDEP}]
 	dev-python/pyclipper[${PYTHON_USEDEP}]
 	dev-python/ufoLib[${PYTHON_USEDEP}]
+	dev-python/freetype-py[${PYTHON_USEDEP}]
+	media-libs/harfbuzz
 "
 DEPEND="
 	${RDEPEND}
 "
+
+python_prepare_all() {
+	sed -e "s:HB_SHAPE_PATH,:'/usr/bin/hb-shape',:" \
+		-i "${S}"/nototools/render.py
+	distutils-r1_python_prepare_all
+}
+
+python_test() {
+	cd tests
+	./run_tests || die
+}
