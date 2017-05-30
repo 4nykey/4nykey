@@ -3,9 +3,9 @@
 
 EAPI=6
 
-inherit gnome2
+inherit toolchain-funcs gnome2 meson
 if [[ -z ${PV%%*9999} ]]; then
-	inherit git-r3 autotools
+	inherit git-r3
 	EGIT_REPO_URI="https://git.gnome.org/browse/frogr"
 	SRC_URI=""
 else
@@ -17,7 +17,7 @@ HOMEPAGE="https://wiki.gnome.org/Apps/Frogr"
 
 LICENSE="GPL-3"
 SLOT="0"
-IUSE="debug gstreamer nls"
+IUSE="debug gstreamer"
 
 DEPEND="
 	x11-libs/gtk+:3
@@ -33,16 +33,16 @@ RDEPEND="
 "
 
 src_prepare() {
-	mkdir -p "${S}"/m4
-	gnome2_src_prepare
-	[[ -z ${PV%%*9999} ]] && eautoreconf
+	sed \
+		-e '/compiler\.find_library/ s:libgcrypt:gcrypt:' \
+		-i meson.build
+	default
 }
 
 src_configure() {
-	local myconf="
-		$(use_enable debug)
-		$(use_enable gstreamer video)
-		$(use_enable nls)
-	"
-	gnome2_src_configure ${myconf}
+	tc-export CC PKG_CONFIG
+	local emesonargs=(
+		-Denable-video=$(usex gstreamer true false)
+	)
+	meson_src_configure
 }
