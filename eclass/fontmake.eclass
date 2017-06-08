@@ -6,25 +6,28 @@
 # 4nykey@gmail.com
 # @BLURB: An eclass to build fonts from sources using dev-util/fontmake
 
-# @VARIABLE: myemakeargs
+# @VARIABLE: FONT_SRCDIR
 # @DEFAULT_UNSET
 # @DESCRIPTION:
-# Optional emake defines as a bash array
+# Directory containing the sources, 'sources' if unset
+FONT_SRCDIR=${FONT_SRCDIR:-sources}
 
 # @VARIABLE: FONTDIR_BIN
 # @DEFAULT_UNSET
 # @DESCRIPTION:
-# An array of dirs to search for prebuilt fonts in
-FONTDIR_BIN=( ${FONTDIR_BIN[@]:-fonts} )
+# An array of dirs to search for prebuilt fonts in,
+# 'fonts fonts/otf fonts/ttf' by default
+FONTDIR_BIN=( ${FONTDIR_BIN[@]:-fonts fonts/otf fonts/ttf} )
 
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python2_7 python3_{4,5,6} )
 IUSE="+binary"
+FONT_TYPES=( ${FONT_TYPES[@]:-otf +ttf} )
 
 inherit python-any-r1 font-r1
 
 EXPORT_FUNCTIONS pkg_setup src_prepare src_compile
 
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-c49fb69"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-7b770b1"
 SRC_URI+="
 !binary? (
 	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
@@ -52,6 +55,10 @@ fontmake_pkg_setup() {
 		FONT_S=( master_{o,t}tf )
 		python-any-r1_pkg_setup
 	fi
+	has interpolate ${IUSE} && \
+		MAKEOPTS+=" $(usex interpolate '' 'INTERPOLATE=')"
+	has clean-as-you-go ${IUSE} && \
+		MAKEOPTS+=" CLEAN=$(usev clean-as-you-go)"
 	font-r1_pkg_setup
 }
 
@@ -65,7 +72,7 @@ fontmake_src_prepare() {
 fontmake_src_compile() {
 	use binary && return
 	emake \
+		SRCDIR="${FONT_SRCDIR}" \
 		-f ${MY_MK}/Makefile \
-		"${myemakeargs[@]}" \
 		${FONT_SUFFIX}
 }
