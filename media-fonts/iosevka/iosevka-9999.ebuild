@@ -5,7 +5,6 @@ EAPI=6
 
 FONT_TYPES=( ttc +ttf )
 FONT_VARIANTS=( cc +default slab term type )
-FONT_CHARS=( hooky zshaped )
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/be5invis/${PN}.git"
@@ -25,14 +24,6 @@ else
 			font_variants_term? ( ${SRC_URI}/06-${PN}-term-slab-${PV}.zip )
 			font_variants_type? ( ${SRC_URI}/07-${PN}-type-slab-${PV}.zip )
 			font_variants_cc? ( ${SRC_URI}/08-${PN}-cc-slab-${PV}.zip )
-		)
-		font_chars_hooky? (
-			${SRC_URI}/09-${PN}-hooky-${PV}.zip
-			font_variants_term? ( ${SRC_URI}/10-${PN}-hooky-term-${PV}.zip )
-		)
-		font_chars_zshaped? (
-			${SRC_URI}/11-${PN}-zshaped-${PV}.zip
-			font_variants_term? ( ${SRC_URI}/12-${PN}-zshaped-term-${PV}.zip )
 		)
 	)
 	font_types_ttc? (
@@ -73,7 +64,10 @@ DEPEND+="
 "
 
 pkg_setup() {
-	use binary && S="${WORKDIR}"
+	if use binary; then
+		S="${WORKDIR}"
+		use font_types_ttf && FONT_S=ttf
+	fi
 	font-r1_pkg_setup
 }
 
@@ -111,5 +105,5 @@ src_compile() {
 
 	emake -f utility/standard.mk ${_t[@]/#/fonts-}
 
-	FONT_S=( $(find dist -type d -name "[01][0-9]-${PN}*") )
+	FONT_S=( $(find -type d -path "./dist/[0-9][0-9]-${PN}*/ttf") )
 }

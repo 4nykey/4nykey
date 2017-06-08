@@ -9,13 +9,10 @@ inherit font-r1
 
 DESCRIPTION="A CJK monospaced font, a composite of Iosevka, M+ and Source Han Sans"
 HOMEPAGE="https://be5invis.github.io/${PN^}"
+SRC_URI="https://github.com/be5invis/Iosevka/releases/download/v${PV}/"
 SRC_URI="
-	font_types_ttc? (
-		http://7xpdnl.dl1.z0.glb.clouddn.com/${P}.7z
-	)
-	font_types_ttf? (
-		http://7xpdnl.dl1.z0.glb.clouddn.com/${PN}-ttfs-${PV}.7z
-	)
+	font_types_ttc? ( ${SRC_URI}${P}.7z )
+	font_types_ttf? ( ${SRC_URI}${PN}-ttfs-${PV}.7z )
 "
 RESTRICT="primaryuri"
 
