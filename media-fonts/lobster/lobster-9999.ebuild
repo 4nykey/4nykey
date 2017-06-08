@@ -4,12 +4,7 @@
 EAPI=6
 
 MY_PN="The-${PN^}-Font"
-FONT_TYPES=( otf +ttf )
-FONTDIR_BIN=( fonts/{o,t}tf )
-myemakeargs=(
-	SRCDIR=sources
-	INTERPOLATE=
-)
+MAKEOPTS+=" INTERPOLATE="
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/impallari/${MY_PN}"

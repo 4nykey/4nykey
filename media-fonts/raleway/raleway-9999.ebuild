@@ -4,11 +4,8 @@
 EAPI=6
 
 FONT_TYPES=( +otf ttf )
-FONTDIR_BIN=( fonts/v${PV//.} )
-myemakeargs=(
-	SRCDIR=source
-	FAMILY=${PN^}
-)
+FONTDIR_BIN=( fonts/v4020 )
+FONT_SRCDIR='source'
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/impallari/${PN}"
@@ -27,3 +24,4 @@ HOMEPAGE="http://www.impallari.com/projects/overview/matt-mcinerneys-raleway-fam
 
 LICENSE="OFL-1.1"
 SLOT="0"
+REQUIRED_USE="binary? ( !font_types_ttf )"

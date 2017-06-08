@@ -4,11 +4,7 @@
 EAPI=6
 
 MY_PN="${PN^}-Cyrillic"
-FONT_TYPES=( otf +ttf )
-myemakeargs=(
-	SRCDIR=sources
-	INTERPOLATE=
-)
+MAKEOPTS+=" INTERPOLATE="
 PATCHES=(
 	"${FILESDIR}"/${PN}_overlaps.diff
 )

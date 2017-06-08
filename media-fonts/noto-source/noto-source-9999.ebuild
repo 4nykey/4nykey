@@ -3,7 +3,7 @@
 
 EAPI=6
 
-FONT_TYPES=( otf +ttf )
+FONT_SRCDIR=src
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}"
@@ -25,14 +25,6 @@ HOMEPAGE="https://github.com/googlei18n/${PN}"
 LICENSE="OFL-1.1"
 SLOT="0"
 IUSE="clean-as-you-go interpolate"
-
-pkg_setup() {
-	myemakeargs=(
-		$(usex interpolate '' 'INTERPOLATE=')
-		$(usex clean-as-you-go 'CLEAN=y' '')
-	)
-	fontmake_pkg_setup
-}
 
 src_prepare() {
 	fontmake_src_prepare

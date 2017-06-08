@@ -3,8 +3,6 @@
 
 EAPI=6
 
-FONT_TYPES=( otf +ttf )
-myemakeargs=( SRCDIR=sources )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/cyrealtype/${PN}.git"

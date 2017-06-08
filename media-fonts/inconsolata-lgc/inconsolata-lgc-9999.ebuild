@@ -3,12 +3,8 @@
 
 EAPI=6
 
-FONT_TYPES=( otf +ttf )
 MY_PN="Inconsolata-LGC"
-myemakeargs=(
-	SRCDIR=.
-	INTERPOLATE=
-)
+MAKEOPTS+=" INTERPOLATE= glyphs=InconsolataLGCT.glyphs"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/glebd/${MY_PN}.git"

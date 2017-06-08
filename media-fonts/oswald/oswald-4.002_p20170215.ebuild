@@ -1,1 +1,1 @@
-oswald-4.0.9999.ebuild
+oswald-9999.ebuild

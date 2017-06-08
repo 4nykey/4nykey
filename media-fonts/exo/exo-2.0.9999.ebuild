@@ -5,6 +5,7 @@ EAPI=6
 
 FONT_TYPES=( +otf ttf )
 FONTDIR_BIN=( . )
+FONT_SRCDIR=Source
 inherit versionator
 SLOT="$(get_version_component_range 1-2)"
 FONT_PN="${PN}-${SLOT}"
@@ -37,7 +38,6 @@ pkg_setup() {
 	if use binary; then
 		S="${WORKDIR}"
 	else
-		myemakeargs=( SRCDIR=Source )
 		PATCHES=(
 			"${FILESDIR}"/${PN}${SLOT}_italic.diff
 		)

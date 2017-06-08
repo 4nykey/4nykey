@@ -3,9 +3,8 @@
 
 EAPI=6
 
-FONT_TYPES=( otf +ttf )
 FONTDIR_BIN=( distr/{o,t}tf )
-myemakeargs=( SRCDIR=. )
+MAKEOPTS+=" glyphs=FiraCode.glyphs"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/tonsky/${PN}"

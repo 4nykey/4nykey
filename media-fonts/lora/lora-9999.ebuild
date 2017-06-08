@@ -4,12 +4,8 @@
 EAPI=6
 
 MY_PN="${PN^}-Cyrillic"
-FONT_TYPES=( otf +ttf )
+MAKEOPTS+=" INTERPOLATE="
 FONTDIR_BIN=( fonts/{OTF,ttf} )
-myemakeargs=(
-	SRCDIR=sources
-	INTERPOLATE=
-)
 PATCHES=(
 	"${FILESDIR}"/${PN}_cyrbreve.diff
 )

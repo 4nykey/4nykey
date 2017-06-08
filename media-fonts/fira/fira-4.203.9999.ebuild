@@ -3,7 +3,7 @@
 
 EAPI=6
 
-FONT_TYPES=( otf +ttf )
+FONT_SRCDIR=.
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/carrois/${PN}.git"
@@ -18,7 +18,7 @@ fi
 inherit fontmake
 MY_PV="${PV%.9999}"
 MY_PV="${MY_PV%_p*}"
-MY_F="28cef3ca070463212a1be193bcac29b8-4ce7076"
+MY_F="28cef3ca070463212a1be193bcac29b8-09ea32e"
 SRC_URI+="
 !binary? (
 	mirror://githubcl/gist/${MY_F%-*}/tar.gz/${MY_F#*-}
@@ -51,12 +51,6 @@ pkg_setup() {
 		Fira_Sans_${_s:0:3}/Fonts/FiraSans_{OTF,WEB}_${_s//_/}/{Compressed,Condensed,Normal}/{Roman,Italic}
 		Fira_Mono_${_m}/Fonts/FiraMono_{OTF,WEB}_${_m//_/}
 		)
-	else
-		myemakeargs=(
-			SRCDIR=.
-			$(usex interpolate '' 'INTERPOLATE=')
-			$(usex clean-as-you-go 'CLEAN=y' '')
-		)
 	fi
 	use doc && DOCS+=" Fira_[MS]*_*/PDF/*.pdf"
 	fontmake_pkg_setup
@@ -70,9 +64,7 @@ src_prepare() {
 	local _m=${PN^}MonoUFO_beta3206 _s=${PN^}SansUFO_beta${MY_PV} _d
 	_s=${_s//./}
 	unpack "${S}"/Fira_UFO_Sources/${PN^}{${_m#${PN^}},${_s#${PN^}}}.zip
-	for _d in "${S}"/{${_m},${_s}}/*.ufo; do
-		mv -f "${_d}" "${_d// /}"
-	done
+	renamexm -s'/ //g' {${_m},${_s}}/*.ufo
 
 	sed \
 		-e '/^[^#]/s:\(.*\) \(.*\):s_\\<\1\\>_uni\2_g:' \
@@ -93,8 +85,8 @@ src_prepare() {
 		-e '/\<uniF6C3\>/d' \
 		-i "${S}"/${_m}/${PN^}*.ufo/features.fea
 
-	mv ${MY_F}/FiraMono.designspace ${_m}/
-	mv ${MY_F}/FiraSans*.designspace ${_s}/
-	mv -f ${MY_MK}/Makefile{.ds,}
-
+	mkdir -p {mono,sans,italic}/master_ufo
+	mv ${MY_F}/${PN^}Mono.designspace "${_m}"/${PN^}Mono*.ufo mono/master_ufo
+	mv ${MY_F}/${PN^}Sans-Italic.designspace "${_s}"/${PN^}Sans-*Italic.ufo italic/master_ufo
+	mv ${MY_F}/${PN^}Sans.designspace "${_s}"/${PN^}Sans-*.ufo sans/master_ufo
 }
