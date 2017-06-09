@@ -1,6 +1,5 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -10,11 +9,9 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="git://wimlib.net/${PN}"
 else
 	inherit vcs-snapshot
-	SRC_URI="https://wimlib.net/downloads/${P}.tar.gz"
-	SRC_URI="
-		https://wimlib.net/git/?p=wimlib;a=snapshot;h=refs/tags/v${PV};sf=tgz
-		-> ${P}.tar.gz
-	"
+	MY_PV="${PV/_/-}"
+	MY_PV="${MY_PV^^}"
+	SRC_URI="https://wimlib.net/downloads/${PN}-${MY_PV}.tar.gz -> ${P}.tar.gz"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
