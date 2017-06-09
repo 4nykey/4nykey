@@ -1,8 +1,7 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
-EAPI=5
+EAPI=6
 
 MY_PN="cmake"
 if [[ -z ${PV%%*9999} ]]; then
@@ -10,8 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/open-eid/${MY_PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="${PV/_/-}"
-	MY_PV="a7fd613"
+	MY_PV="8c3940e"
 	SRC_URI="
 		mirror://githubcl/open-eid/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -28,8 +26,6 @@ IUSE=""
 
 RDEPEND=""
 DEPEND=""
-
-DOCS="README*"
 
 src_install() {
 	insinto /usr/share/cmake/${PN#*-}
