@@ -111,6 +111,7 @@ src_prepare() {
 	eapply "${FILESDIR}"/${PN}-profiledir.patch
 
 	# Apply gentoo firefox patches
+	rm -f "${WORKDIR}"/firefox/1006_fix_hardened_pie_detection.patch
 	eapply "${WORKDIR}/firefox"
 
 	# Enable gnomebreakpad
