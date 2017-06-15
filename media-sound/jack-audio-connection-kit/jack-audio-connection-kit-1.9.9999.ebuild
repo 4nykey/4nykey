@@ -11,7 +11,9 @@ if [[ ${PV} = *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/jackaudio/jack2.git"
 else
 	inherit vcs-snapshot
-	MY_PV="2d1d323"
+	MY_PV="${PV/_/-}"
+	MY_PV="v${MY_PV^^}"
+	[[ -z ${PV%%*_p*} ]] && MY_PV="2d1d323"
 	SRC_URI="mirror://githubcl/jackaudio/jack2/tar.gz/${MY_PV} -> ${P}.tar.gz"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
