@@ -3,7 +3,9 @@
 
 EAPI=6
 
-inherit gnome2 qmake-utils
+CMAKE_USE_DIR="${S}/src/MEGAShellExtDolphin"
+CMAKE_IN_SOURCE_BUILD=y
+inherit gnome2 cmake-utils qmake-utils
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/meganz/${PN}.git"
@@ -27,13 +29,16 @@ HOMEPAGE="https://github.com/meganz/MEGAsync"
 LICENSE="EULA"
 LICENSE_URL="https://raw.githubusercontent.com/meganz/MEGAsync/master/LICENCE.md"
 SLOT="0"
-IUSE="nautilus qt5"
+IUSE="dolphin nautilus qt5 thunar"
+REQUIRED_USE="dolphin? ( qt5 )"
 
 RDEPEND="
 	net-misc/meganz-sdk[libuv,qt,sodium,sqlite]
 	!qt5? ( dev-qt/qtgui:4 )
 	qt5? ( dev-qt/qtwidgets:5 )
+	dolphin? ( kde-apps/dolphin )
 	nautilus? ( >=gnome-base/nautilus-3 )
+	thunar? ( xfce-base/thunar )
 "
 DEPEND="
 	${RDEPEND}
@@ -45,13 +50,17 @@ src_prepare() {
 	)
 	cp -r "${EROOT}"usr/share/meganz-sdk/bindings "${S}"/src/MEGASync/mega/
 	default
+	use dolphin && mv -f src/MEGAShellExtDolphin/CMakeLists{_kde5,}.txt
 }
 
 src_configure() {
 	cd src
 	eqmake$(usex qt5 5 4) \
+		$(usex dolphin 'CONFIG+=with_dol' '') \
 		$(usex nautilus 'CONFIG+=with_ext' '') \
+		$(usex thunar 'CONFIG+=with_thu' '') \
 		'CONFIG-=with_tools'
+	use dolphin && cmake-utils_src_configure
 }
 
 src_compile() {
@@ -59,10 +68,12 @@ src_compile() {
 	$(usex qt5 $(qt5_get_bindir) $(qt4_get_bindir))/lrelease \
 		MEGASync/MEGASync.pro
 	emake
+	use dolphin && cmake-utils_src_compile
 }
 
 src_install() {
 	local DOCS=( CREDITS.md README.md )
 	einstalldocs
 	emake -C src INSTALL_ROOT="${D}" install
+	use dolphin && cmake-utils_src_install
 }
