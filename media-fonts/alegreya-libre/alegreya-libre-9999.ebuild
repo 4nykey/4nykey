@@ -6,10 +6,10 @@ EAPI=6
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/huertatipografica/${PN}.git"
-	EGIT_BRANCH="dev"
 else
 	inherit vcs-snapshot
-	MY_PV="064532e"
+	MY_PV="af2cf4e"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV/_/-}"
 	SRC_URI="
 		mirror://githubcl/huertatipografica/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
