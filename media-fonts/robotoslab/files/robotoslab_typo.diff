@@ -1,0 +1,11 @@
+--- a/sources/RobotoSlab.designspace
++++ b/sources/RobotoSlab.designspace
+@@ -42,7 +42,7 @@
+     <instances>
+         <!-- instances that map directly to masters -->
+         <instance familyname="RobotoSlab"
+-                  filename="instances/RobotoSlab-Light.ufo"
++                  filename="instances/RobotoSlab-Thin.ufo"
+                   name="Thin"
+                   stylename="Thin">
+             <location>
