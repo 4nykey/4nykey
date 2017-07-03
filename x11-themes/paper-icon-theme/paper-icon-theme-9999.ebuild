@@ -1,10 +1,9 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
-EAPI=5
+EAPI=6
 
-inherit gnome2 autotools-utils
+inherit gnome2 autotools
 if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI=""
 	EGIT_REPO_URI="https://github.com/snwh/${PN}.git"
@@ -12,6 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="ae82c98"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/snwh/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -30,5 +30,8 @@ DEPEND=""
 RDEPEND="
 	${DEPEND}
 "
-AUTOTOOLS_AUTORECONF=1
-AUTOTOOLS_IN_SOURCE_BUILD=1
+
+src_prepare() {
+	default
+	eautoreconf
+}

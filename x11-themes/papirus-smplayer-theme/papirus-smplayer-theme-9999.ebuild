@@ -1,6 +1,5 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -11,6 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="760a52b"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV//.}"
 	SRC_URI="
 		mirror://githubcl/PapirusDevelopmentTeam/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -32,20 +32,19 @@ RDEPEND="
 	media-video/smplayer[qt5?]
 	!>=x11-themes/smplayer-themes-16.5.3
 "
-DOCS=( AUTHORS README.md )
 
 src_compile() {
 	local d _rcc="$(usex qt5 $(qt5_get_bindir) $(qt4_get_bindir))/rcc -binary"
-	for d in Papirus{,Dark}; do
-		${_rcc} src/${d}.qrc -o ${d}.rcc
+	for d in *Papirus*; do
+		${_rcc} src/${d}.qrc -o ${d}.rcc || die
 	done
 }
 
 src_install() {
-	local d
-	for d in Papirus{,Dark}; do
-		insinto /usr/share/smplayer/themes/${d}
-		doins ${d}.rcc
+	local d DOCS=( README.md )
+	for d in *.rcc; do
+		insinto /usr/share/smplayer/themes/${d%.*}
+		doins ${d}
 	done
 	einstalldocs
 }

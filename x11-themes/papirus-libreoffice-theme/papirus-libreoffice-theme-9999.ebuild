@@ -1,6 +1,5 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -10,6 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="b2b9e7b"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV//.}"
 	SRC_URI="
 		mirror://githubcl/PapirusDevelopmentTeam/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -28,7 +28,6 @@ RDEPEND="
 	${DEPEND}
 	|| ( app-office/libreoffice app-office/libreoffice-bin )
 "
-DOCS=( AUTHORS README.md )
 
 src_prepare() {
 	default
@@ -36,7 +35,8 @@ src_prepare() {
 }
 
 src_install() {
-	default
+	local DOCS=( AUTHORS README.md )
 	insinto /usr/$(get_libdir)/libreoffice/share/config
 	doins images_papirus*.zip
+	einstalldocs
 }

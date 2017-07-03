@@ -1,6 +1,5 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -12,6 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="8f30100"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV//.}"
 	SRC_URI="
 		mirror://githubcl/PapirusDevelopmentTeam/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -31,7 +31,7 @@ RDEPEND="
 	x11-themes/gtk-engines-murrine
 	x11-libs/gdk-pixbuf:2
 "
-DOCS=( AUTHORS README.md )
+DOCS=( README.md )
 
 src_prepare() {
 	default
@@ -40,9 +40,3 @@ src_prepare() {
 }
 
 src_configure() { :; }
-
-src_install() {
-	default
-	insinto /usr/share/icons
-	doins -r Papirus*
-}
