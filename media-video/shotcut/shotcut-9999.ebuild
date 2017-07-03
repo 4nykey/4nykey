@@ -21,7 +21,7 @@ else
 fi
 
 DESCRIPTION="A free, open source, cross-platform video editor"
-HOMEPAGE="http://www.shotcut.org"
+HOMEPAGE="https://www.shotcut.org"
 
 LICENSE="GPL-3"
 SLOT="0"
