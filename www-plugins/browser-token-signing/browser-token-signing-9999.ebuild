@@ -3,17 +3,16 @@
 
 EAPI=6
 
-MY_PN="browser-token-signing"
 if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/open-eid/${MY_PN}.git"
+	EGIT_REPO_URI="https://github.com/open-eid/${PN}.git"
 else
 	inherit vcs-snapshot
 	MY_PV="${PV/_/-}"
 	MY_PV="v${MY_PV/rc/RC}"
 	[[ -z ${PV%%*_p*} ]] && MY_PV="6dca891"
 	SRC_URI="
-		mirror://githubcl/open-eid/${MY_PN}/tar.gz/${MY_PV}
+		mirror://githubcl/open-eid/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
@@ -21,7 +20,7 @@ else
 fi
 inherit nsplugins
 
-DESCRIPTION="Estonian ID card browser plugin"
+DESCRIPTION="NPAPI plugin for signing hashes with PKCS#11 tokens from JavaScript"
 HOMEPAGE="https://open-eid.github.io"
 
 LICENSE="LGPL-2.1"
