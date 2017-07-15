@@ -41,11 +41,12 @@ DEPEND="
 "
 
 src_unpack() {
+	cp "${DISTDIR}"/regular2oblique_converter.pe "${S}"/
 	if [[ -z ${PV%%*9999} ]]; then
+		unpack ${MY_MP}.tar.xz
 		wget --no-verbose http://www.rs.tus.ac.jp/yyusa/${PN}/${PN}_generator.sh
 		EGIT_CHECKOUT_DIR="${S}/${MY_IN}" git-r3_src_unpack
 		cvs_src_unpack
-		unpack ${MY_MP}.tar.xz
 	else
 		cp "${DISTDIR}"/${PN}_generator-${PV}.sh "${S}"/${PN}_generator.sh
 		unpack ${MY_IN}.tar.gz ${MY_MI}.zip
@@ -90,7 +91,7 @@ src_compile() {
 	eend $? || die
 
 	ebegin "Building ${PN^} oblique"
-	fontforge -script "${DISTDIR}"/regular2oblique_converter.pe \
-		Ricty*.ttf
+	fontforge -script regular2oblique_converter.pe \
+		Ricty*.${FONT_SUFFIX}
 	eend $? || die
 }
