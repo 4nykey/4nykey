@@ -1,6 +1,5 @@
-# Copyright 1999-2007 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
 
 EAPI=6
 
@@ -10,18 +9,20 @@ cs fr ru sk uk zh_CN zh_TW
 inherit l10n cmake-utils
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/Dushistov/${PN}.git"
+	EGIT_REPO_URI="https://github.com/dushistov/${PN}.git"
 else
 	inherit vcs-snapshot
+	MY_PV="82a06b8"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
-		mirror://sourceforge/${PN}/${P/_beta/-beta}-Source.tar.bz2
-		-> ${P}.tar.bz2
+		mirror://githubcl/dushistov/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	KEYWORDS="~x86 ~amd64"
+	RESTRICT="primaryuri"
 fi
 
-DESCRIPTION="sdcv - console version of StarDict program"
-HOMEPAGE="http://sdcv.sourceforge.net"
+DESCRIPTION="A console version of StarDict"
+HOMEPAGE="http://dushistov.github.io/${PN}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -38,7 +39,7 @@ DEPEND="
 "
 
 CMAKE_IN_SOURCE_BUILD=1
-DOCS="AUTHORS NEWS README* doc/DICTFILE_FORMAT"
+DOCS=( AUTHORS NEWS README.org doc/DICTFILE_FORMAT )
 
 rmloc() {
 	rm -f "${S}"/po/${1}.po
