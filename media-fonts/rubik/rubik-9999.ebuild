@@ -3,12 +3,13 @@
 
 EAPI=6
 
+FONTDIR_BIN=( fonts/otf sources/hinted_ttfs )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="668c670"
+	MY_PV="2e360a2"
 	SRC_URI="
 		mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
