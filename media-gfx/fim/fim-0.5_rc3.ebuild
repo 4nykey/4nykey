@@ -28,9 +28,7 @@ jpeg jpeg2k pdf png postscript readline +screen sdl svg tiff truetype xfig
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-aalib.diff
 	"${FILESDIR}"/${PN}-poppler.diff
-	"${FILESDIR}"/${PN}-string.diff
 )
 
 DEPEND="
@@ -73,6 +71,7 @@ src_prepare() {
 		-e '/LIBS/s:GraphicsMagick.*`:pkg-config GraphicsMagick --libs`:' \
 		-e '/CXXFLAGS/s:GraphicsMagick.*`:pkg-config GraphicsMagick --cflags`:'\
 		-e 's:imlib2-config --libs.*`:pkg-config imlib2 x11 --libs`:' \
+		-e '/LIBSDL_CONFIG_FLAGS=/s:static-::' \
 		-i configure.ac
 	sed \
 		-e 's:htmldir = \$(docdir)$:&/html:' \
