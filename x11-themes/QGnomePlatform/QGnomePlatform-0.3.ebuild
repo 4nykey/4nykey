@@ -1,1 +1,0 @@
-QGnomePlatform-9999.ebuild
