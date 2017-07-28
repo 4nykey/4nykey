@@ -11,7 +11,7 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="9525723"
+	MY_PV="b99ecb8"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz

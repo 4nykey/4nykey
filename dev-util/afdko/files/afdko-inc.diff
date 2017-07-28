@@ -21,9 +21,9 @@
 --- a/FDK/Tools/Programs/public/lib/source/absfont/absfont_draw.c
 +++ b/FDK/Tools/Programs/public/lib/source/absfont/absfont_draw.c
 @@ -8,6 +8,7 @@
- #include "absfont.h"
  
  #include <stdio.h>
+ #include <stdlib.h>
 +#include <time.h>
  #ifdef _WIN32
  #include <time.h>
