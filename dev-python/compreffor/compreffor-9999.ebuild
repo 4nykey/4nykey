@@ -24,22 +24,17 @@ HOMEPAGE="https://github.com/googlei18n/${PN}"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE="+cython test"
+IUSE="cython test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.5.0[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.13.1[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
-	cython? ( >=dev-python/cython-0.24[${PYTHON_USEDEP}] )
+	cython? ( >=dev-python/cython-0.26[${PYTHON_USEDEP}] )
 	test? ( dev-python/pytest-runner[${PYTHON_USEDEP}] )
 "
-
-python_prepare_all() {
-	use cython && rm -f "${S}"/src/cython/_compreffor.cpp
-	distutils-r1_python_prepare_all
-}
 
 python_test() {
 	esetup.py test
