@@ -27,7 +27,7 @@ REQUIRED_USE="cpu_flags_x86_ssse3? ( !openssl )"
 RDEPEND="
 	dev-libs/libxml2:2
 	ntfs? ( sys-fs/ntfs3g )
-	fuse? ( sys-fs/fuse )
+	fuse? ( sys-fs/fuse:0 )
 	openssl? ( dev-libs/openssl:0 )
 "
 DEPEND="
