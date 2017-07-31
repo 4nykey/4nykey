@@ -28,7 +28,6 @@ jpeg jpeg2k pdf png postscript readline +screen sdl svg tiff truetype xfig
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-aalib.diff
 	"${FILESDIR}"/${PN}-poppler.diff
 	"${FILESDIR}"/${PN}-string.diff
 )
