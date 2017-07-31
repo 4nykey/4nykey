@@ -1,6 +1,5 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -10,6 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="8778dc2"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV//.}"
 	SRC_URI="
 		mirror://githubcl/PapirusDevelopmentTeam/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -19,7 +19,7 @@ fi
 DESCRIPTION="Arc KDE customization"
 HOMEPAGE="https://github.com/PapirusDevelopmentTeam/${PN}"
 
-LICENSE="GPL-3"
+LICENSE="GPL-3 CC-BY-SA-4.0"
 SLOT="0"
 IUSE="konsole kvantum"
 
@@ -34,6 +34,8 @@ DOCS=( AUTHORS README.md )
 src_prepare() {
 	default
 	rm -f "${S}"/Makefile
+	find -mindepth 2 -name AUTHORS | xargs cat >> AUTHORS
+	find -mindepth 2 -regex '.*\(LICENSE\|AUTHORS\)' -delete
 }
 
 src_install() {
