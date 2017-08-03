@@ -1,6 +1,5 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -10,10 +9,11 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://bitbucket.org/${PN%%-*}/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="21e476e"
+	MY_PV="da5ac31"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
-		https://bitbucket.org/${PN%%-*}/${PN}/get/${MY_PV}.tar.gz
-		-> ${P}.tar.gz
+		https://bitbucket.org/${PN%%-*}/${PN}/get/${MY_PV}.tar.bz2
+		-> ${P}.tar.bz2
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
