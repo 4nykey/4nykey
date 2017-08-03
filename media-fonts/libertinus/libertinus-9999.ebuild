@@ -32,8 +32,8 @@ DEPEND="
 		${PYTHON_DEPS}
 		$(python_gen_any_dep '
 			|| (
-			media-gfx/sortsmill-tools[python,${PYTHON_USEDEP}]
 			media-gfx/fontforge[python,${PYTHON_USEDEP}]
+			dev-python/sortsmill-ffcompat[${PYTHON_USEDEP}]
 			)
 		')
 	)
@@ -50,7 +50,7 @@ src_prepare() {
 	# force rebuild
 	touch "${S}"/Makefile
 	# strip flag that fontforge doesn't understand
-	has_version media-gfx/sortsmill-tools || \
+	has_version dev-python/sortsmill-ffcompat || \
 		sed -e 's:, "no-mac-names"::' -i "${S}"/tools/build.py
 }
 
