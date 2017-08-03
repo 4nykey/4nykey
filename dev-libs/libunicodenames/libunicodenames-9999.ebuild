@@ -1,22 +1,19 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
-inherit autotools
-MY_GL="gnulib-3bafb58"
+inherit autotools ltprune
 if [[ -z ${PV%%*9999} ]]; then
-	inherit git-r3 mercurial
-	EHG_REPO_URI="https://bitbucket.org/sortsmill/${PN}.git"
-	EGIT_REPO_URI="git://git.savannah.gnu.org/gnulib.git"
+	inherit mercurial
+	EHG_REPO_URI="https://bitbucket.org/sortsmill/${PN}"
 else
 	inherit vcs-snapshot
 	MY_PV="a1882b0"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="${P}"
 	SRC_URI="
-		https://bitbucket.org/sortsmill/${PN}/get/${MY_PV}.tar.gz
-		-> ${P}.tar.gz
-		http://git.savannah.gnu.org/cgit/gnulib.git/snapshot/${MY_GL}.tar.gz
+		https://bitbucket.org/sortsmill/${PN}/get/${MY_PV}.tar.bz2
+		-> ${P}.tar.bz2
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -27,22 +24,32 @@ HOMEPAGE="https://bitbucket.org/sortsmill/${PN}"
 
 LICENSE="GPL-3 LGPL-3"
 SLOT="0"
-IUSE=""
+IUSE="static-libs nls"
 
-DEPEND=""
-RDEPEND="${DEPEND}"
-
-src_unpack() {
-	if [[ -z ${PV%%*9999} ]]; then
-		mercurial_src_unpack
-		EGIT_CHECKOUT_DIR="${WORKDIR}/${MY_GL}" git-r3_src_unpack
-	else
-		vcs-snapshot_src_unpack
-	fi
-}
+RDEPEND=""
+DEPEND="
+	${RDEPEND}
+	virtual/yacc
+	sys-apps/gawk
+	net-misc/wget
+	sys-apps/help2man
+	nls? ( sys-devel/gettext )
+"
 
 src_prepare() {
 	default
-	autotools_run_tool "${WORKDIR}"/${MY_GL}/gnulib-tool --update
 	eautoreconf
+}
+
+src_configure() {
+	local myeconfargs=(
+		$(use_enable static-libs static)
+		$(use_enable nls)
+	)
+	econf "${myeconfargs[@]}"
+}
+
+src_install() {
+	default
+	prune_libtool_files
 }
