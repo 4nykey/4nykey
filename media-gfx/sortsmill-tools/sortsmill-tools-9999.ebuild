@@ -1,91 +1,88 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://bitbucket.org/${PN%%-*}/${PN}.git"
+	EGIT_BRANCH="Tools3"
 else
 	inherit vcs-snapshot
-	MY_PV="296ed30"
+	MY_PV="0c7dfb0"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
-		https://bitbucket.org/${PN%%-*}/${PN}/get/${MY_PV}.tar.gz
-		-> ${P}.tar.gz
+		https://bitbucket.org/${PN%%-*}/${PN}/get/${MY_PV}.tar.bz2
+		-> ${P}.tar.bz2
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit autotools python-single-r1
+inherit autotools ltprune
 
 DESCRIPTION="A font editing system derived from FontForge"
 HOMEPAGE="https://bitbucket.org/${PN%%-*}/${PN}"
 
 LICENSE="GPL-3"
 SLOT="0"
-IUSE="editor gif jpeg legacy nls python tiff truetype-debugger unicode"
-REQUIRED_USE="truetype-debugger? ( editor )"
+IUSE="gif jpeg nls static-libs tiff xi xkbui X"
+REQUIRED_USE="
+xi? ( X )
+xkbui? ( X )
+"
 
-DEPEND="
-	dev-util/sortsmill-tig
-	dev-scheme/sortsmill-core-guile
-	dev-libs/sortsmill-core
-	dev-libs/gmp:0
-	sci-libs/gsl
-	sys-libs/zlib
-	media-libs/freetype:2
-	editor? (
-		x11-libs/cairo
-		x11-libs/pango
-		x11-libs/libXcursor
-	)
-	dev-libs/libunistring
-	python? (
-		${PYTHON_DEPS}
-		dev-python/gmpy:0[${PYTHON_USEDEP}]
-	)
+RDEPEND="
 	gif? ( media-libs/giflib )
 	tiff? ( media-libs/tiff:0 )
 	jpeg? ( virtual/jpeg:0 )
-	unicode? ( dev-libs/libunicodenames )
-"
-RDEPEND="
-	${DEPEND}
+	X? (
+		x11-libs/libX11
+		x11-libs/cairo
+		x11-libs/pango
+		x11-libs/libXcursor
+		xi? ( x11-libs/libXi )
+		xkbui? ( x11-libs/libxkbui )
+	)
+	dev-libs/libunistring
+	dev-libs/gmp:0
+	sci-libs/gsl
+	dev-libs/sortsmill-core
+	dev-scheme/sortsmill-core-guile
+	media-libs/libpng:0
+	dev-libs/libxml2:2
+	media-libs/freetype:2
+	dev-libs/libunicodenames
 "
 DEPEND="
-	${DEPEND}
+	${RDEPEND}
+	dev-util/sortsmill-tig
+	virtual/yacc
+	sys-apps/help2man
 	dev-util/intltool
+	sys-devel/m4
 	nls? ( sys-devel/gettext )
 "
 
-pkg_setup() {
-	use python && python-single-r1_pkg_setup
+src_prepare() {
+	default
+	eautoreconf
 }
 
 src_configure() {
 	local myeconfargs=(
-		$(use_enable editor programs)
-		$(use_enable python python-api)
-		--disable-python-compatibility
-		$(use_enable legacy legacy-sortsmill-tools)
-		$(use_enable truetype-debugger freetype-debugger)
-		--enable-tile-path
-		$(use_with gif giflib)
-		$(use_with jpeg libjpeg)
-		$(use_with tiff libtiff)
-		$(use_with unicode libunicodenames)
+		$(use_enable X gui)
+		$(use_with xi)
+		$(use_with xkbui)
+		$(use_with gif)
+		$(use_with jpeg)
+		$(use_with tiff)
+		$(use_enable static-libs static)
+		$(use_enable nls)
 	)
-	FREETYPE_SOURCE=$(usex truetype-debugger \
-		"${EPREFIX}/usr/include/freetype2/internal4fontforge" "") \
-		econf "${myeconfargs[@]}"
+	econf "${myeconfargs[@]}"
 }
 
-src_prepare() {
+src_install() {
 	default
-	rm -f "${S}"/m4/glib-gettext.m4
-	sed -e '/fontforge\.xml\.in/d' \
-		-i "${S}"/data/Makefile.am
-	eautoreconf
+	prune_libtool_files
 }

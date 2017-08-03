@@ -5,8 +5,7 @@
 		<email>4nykey@gmail.com</email>
 	</maintainer>
 	<use>
-		<flag name="editor">Build sortsmill-editor and related programs</flag>
-		<flag name="legacy">Install legacy Python modules</flag>
-		<flag name="truetype-debugger">Enable truetype debugger in editor</flag>
+		<flag name="xi">Build with the Xi X library</flag>
+		<flag name="xkbui">Build with the xkbui X library</flag>
 	</use>
 </pkgmetadata>
