@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/${PN}/${MY_PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="43c5e0a"
+	MY_PV="bf1ea24"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV//_/-}"
 	SRC_URI="
 		mirror://githubcl/${PN}/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -20,11 +20,10 @@ fi
 inherit toolchain-funcs
 
 DESCRIPTION="A makefile generation tool"
-HOMEPAGE="http://${PN}.github.io"
+HOMEPAGE="https://${PN}.github.io"
 
 LICENSE="BSD"
 SLOT="${PV%%.*}"
-KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RDEPEND=""
