@@ -1,22 +1,19 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
-EAPI=5
+EAPI=6
 
-inherit eutils readme.gentoo
+inherit readme.gentoo-r1
 
-case ${PV} in
-9999*)
+if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="git://github.com/zsh-users/${PN}.git"
 	inherit git-r3
-	;;
-*)
-	SRC_URI="mirror://githubcl/zsh-users/${PN}/tar.gz/${PV} -> ${P}.tar.gz"
+else
+	inherit vcs-snapshot
+	SRC_URI="mirror://githubcl/zsh-users/${PN}/tar.gz/${PV/_/-} -> ${P}.tar.gz"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
-	;;
-esac
+fi
 
 DESCRIPTION="Fish shell like syntax highlighting for zsh"
 HOMEPAGE="https://github.com/zsh-users/zsh-syntax-highlighting"
@@ -36,12 +33,13 @@ For testing, you can also execute the above command in your zsh."
 
 src_prepare() {
 	sed -e 's:COPYING.md::' -i Makefile
-	epatch_user
+	default
 }
 
 src_install() {
-	einstall \
+	emake \
 		SHARE_DIR="${ED}/usr/share/zsh/site-contrib/${PN}" \
-		DOC_DIR="${ED}/usr/share/doc/${PF}"
+		DOC_DIR="${ED}/usr/share/doc/${PF}" \
+		install
 	readme.gentoo_create_doc
 }
