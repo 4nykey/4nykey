@@ -13,7 +13,7 @@ if [[ ${PV} == *9999* ]]; then
 else
 	SRC_URI="
 		binary? (
-			https://github.com/google/${PN}/releases/download/v${PV}/${PN}-hinted.zip
+			https://github.com/google/${PN}/releases/download/v${PV}/${PN}-unhinted.zip
 			-> ${P}.zip
 		)
 		!binary? (
@@ -79,6 +79,7 @@ pkg_setup() {
 src_unpack() {
 	[[ ${PV} == *9999* ]] && git-r3_src_unpack
 	vcs-snapshot_src_unpack
+	use binary && return
 	MY_D=( ${MY_D[@]/*\//${WORKDIR}/} )
 	MY_D=( ${MY_D[@]/%//Lib/*} )
 	mv -f ${MY_D[@]} "${S}"/scripts/lib/
@@ -92,6 +93,8 @@ src_prepare() {
 	use font_types_ttf || \
 		sed -e '/proj\.generateTTFs()/d' -i scripts/build-v2.py
 	sed -e "s:\<2016\>:$(date +%Y):" -i scripts/run_general_tests.py
+	sed -e '/tangent[0-9] != None/s:!=:is not:g' \
+		-i scripts/lib/fontbuild/curveFitPen.py
 }
 
 src_compile() {
