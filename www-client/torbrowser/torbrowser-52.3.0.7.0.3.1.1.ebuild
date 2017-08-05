@@ -7,11 +7,11 @@ WANT_AUTOCONF="2.1"
 MOZCONFIG_OPTIONAL_GTK2ONLY=1
 MOZCONFIG_OPTIONAL_WIFI=1
 
-inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils mozconfig-v6.${PV%%.*} multilib pax-utils autotools fdo-mime
+inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils mozconfig-v6.${PV%%.*} multilib pax-utils autotools xdg-utils
 
 MY_PN="firefox"
 MOZ_PV="$(get_version_component_range -3)esr"
-PATCH="${MY_PN}-${PV%%.*}.0-patches-08"
+PATCH="${MY_PN}-${PV%%.*}.2-patches-01"
 
 # see https://gitweb.torproject.org/builders/tor-browser-bundle.git/tree/gitian/versions?h=maint-4.0
 # https://dist.torproject.org/torbrowser
@@ -109,6 +109,8 @@ pkg_pretend() {
 src_prepare() {
 	eapply --directory="${WORKDIR}/firefox" "${FILESDIR}"/1002_add_gentoo_preferences.patch
 	eapply "${FILESDIR}"/${PN}-profiledir.patch
+	eapply -l "${FILESDIR}"/${PN}-cargo.patch
+	rm -f media/libstagefright/binding/mp4parse_capi/build.rs
 
 	# Apply gentoo firefox patches
 	rm -f "${WORKDIR}"/firefox/1006_fix_hardened_pie_detection.patch
@@ -351,7 +353,7 @@ pkg_postinst() {
 	elog "in the connection settings to match your setup."
 
 	# Update mimedb for the new .desktop file
-	fdo-mime_desktop_database_update
+	fdo-xdg_desktop_database_update
 	gnome2_icon_cache_update
 }
 
