@@ -353,7 +353,7 @@ pkg_postinst() {
 	elog "in the connection settings to match your setup."
 
 	# Update mimedb for the new .desktop file
-	fdo-xdg_desktop_database_update
+	xdg_desktop_database_update
 	gnome2_icon_cache_update
 }
 
