@@ -3,7 +3,7 @@
 
 EAPI=6
 
-inherit versionator toolchain-funcs flag-o-matic
+inherit toolchain-funcs flag-o-matic vcs-snapshot
 
 export CBUILD=${CBUILD:-${CHOST}}
 export CTARGET=${CTARGET:-${CHOST}}
@@ -13,18 +13,17 @@ if [[ ${CTARGET} == ${CHOST} ]] ; then
 	fi
 fi
 
-MY_PV="$(replace_version_separator 3 '-')"
-MY_P="${P}_x86"
 DESCRIPTION="Linux-like environment for Windows"
 HOMEPAGE="http://cygwin.com/"
-# few headers are missing from binary pkg, so source tarball is needed
-# for headers-only variant as well
-SRC_URI="mirror://cygwin/x86/release/${PN}/"
+MY_P="${P}_x86"
 SRC_URI="
-	${SRC_URI}${PN}-${MY_PV}-src.tar.xz -> ${MY_P}-src.tar.xz
+	!crosscompile_opts_headers-only? (
+		mirror://githubcl/${PN}/${PN}/tar.gz/${PN}-${PV//./_}-release
+		-> ${P}.tar.gz
+	)
 	crosscompile_opts_headers-only? (
-		${SRC_URI}${PN}-devel/${PN}-devel-${MY_PV}.tar.xz ->
-		${MY_P}.tar.xz
+		mirror://cygwin/x86/release/${PN}/${PN}-devel/${PN}-devel-${PV}-1.tar.xz
+		-> ${MY_P}.tar.xz
 	)
 "
 
@@ -34,8 +33,6 @@ KEYWORDS="~amd64"
 IUSE="crosscompile_opts_headers-only"
 RESTRICT="strip primaryuri"
 
-S="${WORKDIR}/newlib-${PN}"
-
 just_headers() {
 	use crosscompile_opts_headers-only && [[ ${CHOST} != ${CTARGET} ]]
 }
@@ -44,19 +41,13 @@ pkg_setup() {
 	if [[ ${CBUILD} == ${CHOST} ]] && [[ ${CHOST} == ${CTARGET} ]] ; then
 		die "Invalid configuration; do not emerge this directly"
 	fi
-	just_headers && return
+	just_headers && S="${WORKDIR}"/${MY_P} && return
 	PATCHES=(
 		"${FILESDIR}"/${PN}-2.4.0-dont_regen_devices.cc.diff
 	)
 	CHOST=${CTARGET} strip-unsupported-flags
 	filter-flags -march=*
 	strip-flags
-}
-
-src_unpack() {
-	default
-	local _p="newlib-${PN}-$(get_version_component_range -3)"
-	unpack "${WORKDIR}"/${PN}-${MY_PV}.src/${_p}.tar.bz2
 }
 
 src_prepare() {
@@ -90,12 +81,13 @@ src_compile() {
 src_install() {
 	if just_headers ; then
 		insinto /usr/${CTARGET}/usr
-		# install prebuilt libs because of circular dep
-		# gcc (+cxx) <-> cygwin
-		doins -r "${WORKDIR}"/newlib-${PN}/newlib/libc/include "${WORKDIR}"/usr/{lib,include}
+		# install prebuilt libs because of circular dep gcc(+cxx) <-> cygwin
+		doins -r "${S}"/{include,lib}
 	else
 		dodir /usr/${CTARGET}/usr/lib
+		# parallel install may overwrite winsup headers with newlib ones
 		emake \
+			-j1 \
 			DESTDIR="${D}" \
 			tooldir="${EPREFIX}/usr/${CTARGET}/usr" \
 			install
