@@ -3,7 +3,7 @@
 
 EAPI=6
 
-inherit toolchain-funcs flag-o-matic unpacker
+inherit toolchain-funcs flag-o-matic
 
 export CBUILD=${CBUILD:-${CHOST}}
 export CTARGET=${CTARGET:-${CHOST}}
@@ -15,17 +15,17 @@ fi
 
 DESCRIPTION="MinGW-w64 Windows API for Cygwin"
 HOMEPAGE="http://cygwin.com/"
-BASE_URI="mirror://cygwin/x86_64/release"
 MY_H="${PN}-headers-${PV}-1"
 MY_R="${PN}-runtime-${PV}-1"
 MY_P="${P}-x64"
+SRC_URI="mirror://cygwin/x86_64/release"
 SRC_URI="
 	!crosscompile_opts_headers-only? (
-		${BASE_URI}/${PN}-runtime/${MY_R}-src.tar.xz -> ${MY_P}_src.tar.xz
+		${SRC_URI}/${PN}-runtime/${MY_R}-src.tar.xz -> ${MY_P}_src.tar.xz
 	)
 	crosscompile_opts_headers-only? (
-		${BASE_URI}/${PN}-headers/${MY_H}.tar.xz -> ${MY_P}_inc.tar.xz
-		${BASE_URI}/${PN}-runtime/${MY_R}.tar.xz -> ${MY_P}_lib.tar.xz
+		${SRC_URI}/${PN}-headers/${MY_H}.tar.xz -> ${MY_P}_inc.tar.xz
+		${SRC_URI}/${PN}-runtime/${MY_R}.tar.xz -> ${MY_P}_lib.tar.xz
 	)
 "
 
@@ -50,12 +50,13 @@ pkg_setup() {
 	CHOST=${CTARGET} strip-unsupported-flags
 	filter-flags -m*=*
 	strip-flags
+	unset AR RANLIB
 }
 
 src_unpack() {
 	mkdir -p "${S}"
 	default
-	just_headers || unpacker "${WORKDIR}"/${MY_R}.src/mingw-w64-${PV}.tar.bz2
+	just_headers || unpack "${WORKDIR}"/${MY_R}.src/mingw-w64-${PV}.tar.bz2
 }
 
 src_configure() {
