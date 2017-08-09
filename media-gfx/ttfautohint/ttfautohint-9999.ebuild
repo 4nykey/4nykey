@@ -21,16 +21,13 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-SRC_URI+="
-	doc? ( https://www.freetype.org/ttfautohint/doc/img/ttfautohintGUI.png )
-"
 
 DESCRIPTION="A library for automated hinting of truetype fonts"
 HOMEPAGE="https://www.freetype.org/ttfautohint/index.html"
 
 LICENSE="|| ( FTL GPL-2+ )"
 SLOT="0"
-IUSE="-doc qt4"
+IUSE="qt4"
 
 RDEPEND="
 	media-libs/harfbuzz
@@ -39,36 +36,12 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	sys-apps/help2man
-	doc? (
-		media-gfx/inkscape
-		app-text/pandoc
-		virtual/latex-base
-		media-libs/fontconfig
-		media-fonts/noto
-		|| (
-			media-fonts/noto-fonts-alpha
-			media-fonts/noto-source
-		)
-		media-fonts/freefont
-	)
 "
 
 src_prepare() {
 	default
 	[[ -n ${PV%%*9999} ]] && sed \
 		-e "s:m4_esyscmd.*VERSION]):${PV//_/-}:" -i configure.ac
-
-	if use doc; then
-	local \
-	_n="$(fc-match -f %{file} $(awk -F= '/noto_font_file=/ {print $2}' configure.ac))" \
-	_a="$(fc-match -f %{file} $(awk -F= '/noto_font_alpha_file=/ {print $2}' configure.ac))"
-	sed \
-		-e "s:\(noto_font_file=\).*:\1${_n}:" \
-		-e "s:\(noto_font_alpha_file=\).*:\1${_a}:" \
-		-i configure.ac
-	cp "${DISTDIR}"/ttfautohintGUI.png "${S}"/doc/img/
-	sed -e 's:\.ttf::' -i doc/template.tex
-	fi
 
 	AUTORECONF=true \
 	autotools_run_tool ./bootstrap --no-bootstrap-sync --no-git --skip-po \
@@ -79,7 +52,7 @@ src_prepare() {
 src_configure() {
 	local _q="$(qt4_get_bindir)" \
 	myeconfargs=(
-		$(use_with doc)
+		--without-doc
 		$(use_with qt4 qt)
 	)
 	QMAKE="${_q}/qmake" MOC="${_q}/moc" UIC="${_q}/uic" RCC="${_q}/rcc" \
@@ -94,10 +67,4 @@ src_compile() {
 src_install() {
 	default
 	doman frontend/*.1
-	local _d="${ED}/usr/share/doc/${PF}"
-	if [[ -f "${_d}"/${PN}.html ]]; then
-		cd "${_d}"
-		mkdir -p html
-		mv -f *.{js,html} img html/
-	fi
 }
