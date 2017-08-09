@@ -8,7 +8,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlei18n/noto-fonts"
 else
 	inherit vcs-snapshot
-	MY_P="${PN}-fonts-60aa0da"
+	MY_P="${PN}-fonts-1293ec3"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${MY_P%-*}/tar.gz/${MY_P##*-}
 		-> ${MY_P}.tar.gz
@@ -36,4 +36,4 @@ RDEPEND="
 	)
 	!media-fonts/croscorefonts
 "
-FONT_S=( hinted )
+FONT_S=( unhinted hinted )

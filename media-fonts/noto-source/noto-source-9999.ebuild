@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}"
 else
 	inherit vcs-snapshot
-	MY_PV="6a21e63"
+	MY_PV="76318fd"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -25,8 +25,3 @@ HOMEPAGE="https://github.com/googlei18n/${PN}"
 LICENSE="OFL-1.1"
 SLOT="0"
 IUSE="clean-as-you-go interpolate"
-
-src_prepare() {
-	fontmake_src_prepare
-	ln -s "${S}"/src/NotoSansDevanagari/NotoSansDevanagari{,UI}-MM.glyphs
-}
