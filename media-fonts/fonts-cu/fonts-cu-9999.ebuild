@@ -11,7 +11,7 @@ if [[ ${PV} == *9999* ]]; then
 	REQUIRED_USE="!binary"
 else
 	inherit vcs-snapshot
-	MY_PV="29355e8"
+	MY_PV="5f897fd"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 	binary? (
@@ -21,13 +21,20 @@ else
 		mirror://githubcl/typiconman/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	)
 	"
-	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
+MY_MK="f9edc47e189d8495b647a4feac8ca240-1827636"
+SRC_URI+="
+!binary? (
+	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
+	-> ${MY_MK}.tar.gz
+)
+"
+RESTRICT="primaryuri"
 inherit python-any-r1 font-r1
 
 DESCRIPTION="Unicode OpenType fonts for Church Slavonic"
-HOMEPAGE="http://ponomar.net/cu_support/fonts.html"
+HOMEPAGE="http://sci.ponomar.net/fonts.html"
 
 LICENSE="|| ( GPL-3 OFL-1.1 )"
 SLOT="0"
@@ -56,15 +63,28 @@ pkg_setup() {
 	font-r1_pkg_setup
 }
 
+src_prepare() {
+	default
+	use binary || unpack ${MY_MK}.tar.gz
+}
+
 src_compile() {
 	use binary && return
-	local _s
+	local _s _t
 
 	# for consistency
 	sed -e '/Layer:/s:\<TTF\>:&Layer:' -i "${S}"/*/*.sfd
 
 	for _s in */*.sfd; do
-		fontforge -script Ponomar/hp-generate.py ${_s} || die
+		if [[ -n ${_s##Svobodny*} ]]; then
+			fontforge -script Ponomar/hp-generate.py ${_s} || die
+		fi
+	done
+
+	for _s in Svobodny/Svobodny*.sfd; do
+		for _t in ${FONT_SUFFIX}; do
+			fontforge -script ${MY_MK}/ffgen.py "${_s}" ${_t} || die
+		done
 	done
 
 	use font_types_ttf || return
