@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -26,7 +25,7 @@ SRC_URI+="
 inherit python-any-r1 font-r1
 
 DESCRIPTION="Open Source Modern DIN"
-HOMEPAGE="http://gidole.github.io"
+HOMEPAGE="https://gidole.github.io"
 
 LICENSE="MIT OFL-1.1"
 SLOT="0"

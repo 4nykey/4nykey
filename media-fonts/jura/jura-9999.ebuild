@@ -18,7 +18,7 @@ fi
 inherit fontmake
 
 DESCRIPTION="A family of sans-serif fonts in the Eurostile vein"
-HOMEPAGE="http://danieljohnson.name/fonts/jura https://github.com/ossobuffo/jura"
+HOMEPAGE="https://github.com/ossobuffo/${PN}"
 
 LICENSE="GPL-3 OFL-1.1"
 SLOT="0"

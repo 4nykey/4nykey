@@ -26,7 +26,7 @@ fi
 inherit python-any-r1 font-r1
 
 DESCRIPTION="An monospaced font for mixed Latin and Japanese text"
-HOMEPAGE="http://adobe-fonts.github.io/${PN}"
+HOMEPAGE="https://github.com/adobe-fonts/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"

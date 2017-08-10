@@ -1,6 +1,5 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -22,7 +21,7 @@ fi
 inherit python-any-r1 latex-package font-r1
 
 DESCRIPTION="Istok is a sans serif typeface"
-HOMEPAGE="http://istok.sourceforge.net"
+HOMEPAGE="https://sourceforge.net/projects/${PN}"
 SRC_URI+="
 	!binary? ( mirror://sourceforge/${PN}/${PN}-src-${MY_PV}.tar.xz )
 "

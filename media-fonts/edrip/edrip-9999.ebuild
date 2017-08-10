@@ -1,6 +1,5 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -33,7 +32,7 @@ fi
 inherit font-r1
 
 DESCRIPTION="A contrast sans-serif font based on the Teams font"
-HOMEPAGE="http://code.google.com/p/edrip"
+HOMEPAGE="https://code.google.com/p/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"

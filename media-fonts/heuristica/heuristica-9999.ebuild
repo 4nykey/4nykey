@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -30,7 +29,7 @@ fi
 inherit python-any-r1 latex-package font-r1
 
 DESCRIPTION="A font based on Adobe Utopia"
-HOMEPAGE="http://heuristica.sourceforge.net"
+HOMEPAGE="https://sourceforge.net/projects/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"

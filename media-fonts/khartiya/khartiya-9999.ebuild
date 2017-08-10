@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -30,7 +29,7 @@ fi
 inherit python-any-r1 latex-package font-r1
 
 DESCRIPTION="Khartiya is extended Bitstream Charter font"
-HOMEPAGE="http://code.google.com/p/khartiya"
+HOMEPAGE="https://code.google.com/p/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"

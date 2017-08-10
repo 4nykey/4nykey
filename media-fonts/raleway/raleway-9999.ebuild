@@ -20,7 +20,7 @@ fi
 inherit fontmake
 
 DESCRIPTION="An elegant sans-serif typeface"
-HOMEPAGE="http://www.impallari.com/projects/overview/matt-mcinerneys-raleway-family"
+HOMEPAGE="https://github.com/impallari/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"

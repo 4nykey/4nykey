@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -35,7 +34,7 @@ SRC_URI+="
 "
 
 DESCRIPTION="A monochrome emoji font designed to harmonize with other Source fonts"
-HOMEPAGE="http://adobe-fonts.github.io/${PN}"
+HOMEPAGE="https://github.com/adobe-fonts/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"

@@ -64,7 +64,7 @@ fi
 inherit font-r1
 
 DESCRIPTION="Noto CJK fonts"
-HOMEPAGE="http://www.google.com/get/noto/help/cjk"
+HOMEPAGE="https://www.google.com/get/noto/help/cjk"
 
 LICENSE="OFL-1.1"
 SLOT="0"

@@ -1,6 +1,5 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -8,7 +7,7 @@ S="${WORKDIR}/TTF"
 inherit font-r1
 
 DESCRIPTION="Free-use OpenType font"
-HOMEPAGE="http://01.org/clearsans"
+HOMEPAGE="https://01.org/clear-sans"
 SRC_URI="https://01.org/sites/default/files/downloads/clear-sans/${P}.zip"
 
 LICENSE="Apache-2.0"

@@ -18,7 +18,7 @@ fi
 inherit fontmake
 
 DESCRIPTION="A sans-serif typeface similar to the one often used in elementary classrooms"
-HOMEPAGE="http://danieljohnson.name/fonts/${PN}"
+HOMEPAGE="https://github.com/ossobuffo/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"

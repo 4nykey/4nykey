@@ -1,6 +1,5 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -25,7 +24,7 @@ fi
 inherit python-any-r1 latex-package font-r1
 
 DESCRIPTION="Liberastika fonts are fork of Liberation Sans"
-HOMEPAGE="http://lib-ka.sourceforge.net"
+HOMEPAGE="https://sourceforge.net/projects/lib-ka"
 
 LICENSE="GPL-2-with-font-exception"
 SLOT="0"

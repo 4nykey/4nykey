@@ -1,23 +1,19 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
 LICENSE="OFL-1.1"
 MY_PN="${PN^}${PV%.*}${LICENSE%-*}"
-inherit font-r1 unpacker
+inherit font-r1
 
 DESCRIPTION="A sanserif typeface family with classical proportions"
-HOMEPAGE="http://www.latofonts.com"
-SRC_URI="
-	http://www.latofonts.com/download/${MY_PN}.zip
-	-> ${P}.zip
-"
+HOMEPAGE="https://www.latofonts.com"
+SRC_URI="http://www.latofonts.com/download/${MY_PN}.zip -> ${P}.zip"
 RESTRICT="primaryuri"
 
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
-DEPEND="$(unpacker_src_uri_depends)"
+DEPEND="app-arch/unzip"
 S="${WORKDIR}/${MY_PN}"

@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -32,7 +31,7 @@ fi
 inherit latex-package font-r1
 
 DESCRIPTION="Cyrillic version of Computer Modern fonts"
-HOMEPAGE="http://code.google.com/p/cyrillic-modern"
+HOMEPAGE="https://code.google.com/p/cyrillic-modern"
 
 LICENSE="OFL-1.1"
 SLOT="0"

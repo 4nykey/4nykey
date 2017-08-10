@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -29,7 +28,7 @@ fi
 inherit python-any-r1 font-r1
 
 DESCRIPTION="A free family of scalable outline unicode fonts"
-HOMEPAGE="http://www.gnu.org/software/freefont"
+HOMEPAGE="https://www.gnu.org/software/freefont"
 
 LICENSE="GPL-3"
 SLOT="0"

@@ -20,7 +20,7 @@ fi
 inherit font-r1
 
 DESCRIPTION="A font family that aims to support all the world's languages"
-HOMEPAGE="http://www.google.com/get/noto"
+HOMEPAGE="https://www.google.com/get/noto"
 
 LICENSE="OFL-1.1"
 SLOT="0"

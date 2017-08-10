@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -25,7 +24,7 @@ SRC_URI+="
 inherit font-r1
 
 DESCRIPTION="A free and open-source text type family"
-HOMEPAGE="http://github.com/skosch/${PN}"
+HOMEPAGE="https://github.com/skosch/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"

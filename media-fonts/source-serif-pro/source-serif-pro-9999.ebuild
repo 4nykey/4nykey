@@ -35,7 +35,7 @@ SRC_URI+="
 "
 
 DESCRIPTION="Serif typeface designed to complement Source Sans Pro"
-HOMEPAGE="http://adobe-fonts.github.io/${PN}"
+HOMEPAGE="https://adobe-fonts.github.io/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"

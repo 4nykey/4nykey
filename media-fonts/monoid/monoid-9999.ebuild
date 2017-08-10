@@ -1,6 +1,5 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -22,7 +21,7 @@ fi
 inherit python-any-r1 font-r1
 
 DESCRIPTION="Customisable coding font with alternates, ligatures and contextual positioning"
-HOMEPAGE="http://larsenwork.com/monoid"
+HOMEPAGE="https://larsenwork.com/monoid"
 
 LICENSE="MIT OFL-1.1"
 SLOT="0"
