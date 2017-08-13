@@ -9,14 +9,12 @@
 		<flag name="wma">Add support for decoding Windows Media Audio files</flag>
 		<flag name="tta">Add support for decoding True Audio input files</flag>
 		<flag name="sid">Build with SID (Commodore 64 Audio) support</flag>
-		<flag name="pth">Use GNU Portable Threads lib</flag>
 		<flag name="network">Enable HTTP streaming vfs plugin</flag>
 		<flag name="midi">Enables MIDI support</flag>
 		<flag name="mac">Add support for decoding Monkey's Audio files</flag>
 		<flag name="gtk3">Enable support for GTK+3</flag>
 		<flag name="gme">Add support for playing various video game music formats</flag>
 		<flag name="dumb">Enable media-libs/dumb module library support</flag>
-		<flag name="cover">Enable cover art plugin</flag>
 		<flag name="alac">Add support for Apple Lossless Audio Codec files</flag>
 		<flag name="adplug">Enable the AdPlug decoder plugin</flag>
 	</use>

@@ -1,50 +1,49 @@
-# Copyright 2010 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
 
-EAPI="5"
+EAPI=6
 
-inherit autotools-utils gnome2
+GNOME2_EAUTORECONF="yes"
+inherit gnome2 ltprune
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/Alexey-Yakovenko/${PN}.git"
+	EGIT_SUBMODULES=( )
 	SRC_URI=""
 else
+	inherit vcs-snapshot
+	MY_PV="031637d"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
-		mirror://githubcl/Alexey-Yakovenko/${PN}/tar.gz/${PV}
+		mirror://githubcl/Alexey-Yakovenko/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~x86 ~amd64"
 fi
 
-DESCRIPTION="DeaDBeeF - Ultimate Music Player For GNU/Linux"
-HOMEPAGE="http://deadbeef.sourceforge.net"
+DESCRIPTION="A music player for *nix-like systems and OSX"
+HOMEPAGE="https://github.com/Alexey-Yakovenko/${PN}"
 LICENSE="GPL-2 LGPL-2.1"
 
 SLOT="0"
 IUSE="
 alsa oss pulseaudio gtk network sid mad mac adplug vorbis ffmpeg flac sndfile
-wavpack cdda gme libnotify musepack midi tta dts aac mms libsamplerate X cover
-zip nls threads pth gtk3 dumb shorten alac wma
+wavpack cdda gme libnotify musepack midi tta dts aac mms libsamplerate X imlib
+zip nls threads gtk3 dumb shorten alac wma
 "
 
-# come bundled
 RDEPEND="
 	adplug? ( media-libs/adplug )
 	dts? ( media-libs/libdca )
 	mac? ( media-sound/mac )
 	gme? ( media-libs/game-music-emu )
 	mms? ( media-libs/libmms )
-	sid? ( media-sound/sidplay )
 	tta? ( media-sound/ttaenc )
 	midi? ( media-sound/wildmidi )
 	dumb? ( media-libs/dumb )
 	shorten? ( media-sound/shorten )
 	alac? ( media-sound/alac_decoder )
-"
-# real deps
-RDEPEND="
 	alsa? ( media-libs/alsa-lib )
 	ffmpeg? ( virtual/ffmpeg )
 	mad? ( media-libs/libmad )
@@ -54,40 +53,38 @@ RDEPEND="
 	sndfile? ( media-libs/libsndfile )
 	network? ( net-misc/curl )
 	cdda? ( dev-libs/libcdio media-libs/libcddb )
-	gtk? ( x11-libs/gtkglext )
+	gtk? ( x11-libs/gtk+:2 dev-libs/jansson )
 	gtk3? ( x11-libs/gtk+:3 )
 	X? ( x11-libs/libX11 )
 	pulseaudio? ( media-sound/pulseaudio )
-	cover? ( media-libs/imlib2 )
+	imlib? ( media-libs/imlib2[jpeg,png] )
 	libsamplerate? ( media-libs/libsamplerate )
 	musepack? ( media-sound/musepack-tools )
 	aac? ( media-libs/faad2 )
 	libnotify? ( x11-libs/libnotify sys-apps/dbus )
 	zip? ( sys-libs/zlib dev-libs/libzip )
-	pth? ( dev-libs/pth )
 	gme? ( sys-libs/zlib )
 	midi? ( media-sound/timidity-freepats )
 "
 DEPEND="
 	${RDEPEND}
+	sys-devel/gettext
+	dev-util/intltool
 	oss? ( virtual/libc )
+	mac? ( dev-lang/yasm )
 "
-
-AUTOTOOLS_AUTORECONF="1"
-AUTOTOOLS_IN_SOURCE_BUILD="1"
-AUTOTOOLS_PRUNE_LIBTOOL_FILES="modules"
 
 src_prepare() {
 	sed -i "${S}"/plugins/wildmidi/wildmidiplug.c \
 		-e 's,#define DEFAULT_TIMIDITY_CONFIG ",&/usr/share/timidity/freepats/timidity.cfg:,'
 	eautopoint --force
-	autotools-utils_src_prepare
+	gnome2_src_prepare
 }
 
 src_configure() {
-	local myconf="
+	local myconf=(
 		$(use_enable nls)
-		$(use_enable threads threads $(usex pth pth posix))
+		$(use_enable threads)
 		$(use_enable alsa)
 		$(use_enable oss)
 		$(use_enable pulseaudio pulse)
@@ -95,9 +92,9 @@ src_configure() {
 		$(use_enable gtk3)
 		$(use_enable network vfs-curl)
 		$(use_enable network lfm)
-		$(use_enable cover artwork)
+		$(use_enable imlib artwork)
 		$(use_enable sid)
-		$(use_enable mad)
+		$(use_enable mad libmad)
 		$(use_enable mac ffap)
 		$(use_enable adplug)
 		$(use_enable X hotkeys)
@@ -121,11 +118,13 @@ src_configure() {
 		$(use_enable shorten shn)
 		$(use_enable alac)
 		$(use_enable wma)
-	"
-	gnome2_src_configure ${myconf}
+	)
+	use imlib && myconf+=( $(use_enable network artwork-network) )
+	gnome2_src_configure "${myconf[@]}"
 }
 
 src_install() {
-	autotools-utils_src_install
+	default
+	prune_libtool_files --modules
 	docompress -x /usr/share/doc/${PF}
 }
