@@ -10,7 +10,7 @@ inherit toolchain-funcs font-r1
 DESCRIPTION="A bitmapped Unicode font based on classic system fonts"
 HOMEPAGE="http://pelulamu.net/${PN}/"
 SRC_URI="
-	!binary? ( ${HOMEPAGE}${P}-src.tar.gz )
+	${HOMEPAGE}${P}-src.tar.gz
 	binary? (
 		unicode? (
 			font_types_otf? ( ${HOMEPAGE}${PN}-16-full.otf )
@@ -61,30 +61,21 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	!binary? (
+		dev-lang/perl
 		media-gfx/fontforge
 		font_types_pcf? ( x11-apps/bdftopcf )
 		unicode? (
 			media-fonts/unifont[utils]
 		)
 	)
+	utils? ( dev-lang/perl )
 "
-
-pkg_setup() {
-	if use binary; then
-		S="${WORKDIR}"
-	else
-		S="${WORKDIR}/${P}-src"
-		DOCS=( ${PN}.txt )
-	fi
-	font-r1_pkg_setup
-}
+S="${WORKDIR}/${P}-src"
+DOCS=( ${PN}.txt )
 
 src_unpack() {
-	if use binary; then
-		cp "${DISTDIR}"/* "${S}"
-	else
-		default
-	fi
+	unpack ${P}-src.tar.gz
+	use binary && cp -L "${DISTDIR}"/*.*f "${S}"
 }
 
 src_prepare() {
@@ -98,8 +89,9 @@ src_prepare() {
 }
 
 src_compile() {
+	use utils && emake CC="$(tc-getCC) ${CFLAGS}" bm2uns
 	use binary && return
-	local _s _v _t=( $(usex utils bm2uns '') )
+	local _s _v _t=( )
 	for _s in ${FONT_SUFFIX}; do
 		_s=${_s/otf/ttf}
 		_t+=(
@@ -115,5 +107,5 @@ src_compile() {
 
 src_install() {
 	font-r1_src_install
-	use !binary && use utils && dobin bm2uns
+	use utils && dobin bm2uns
 }
