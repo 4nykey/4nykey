@@ -1,12 +1,17 @@
+alt - Based on the more peculiar glyph forms of the reference fonts
 cc - A variant with several symbols enwiden to be compatible with most CJK typefaces
 default - The default variant with ligatures and semantic full-width glyphs
+fantasy - Based on fonts used in fantasy games
 halfloose - Halfloose width
 halftight - Halftight width
 large - Large height (16px)
 loose - Loose width
+mcr - Based on retrofuturistic MCR-like 8x8 fonts 
 slab - Slab serif typeface
 small - Small height (14px)
+tall - Double-height version
 term - A variant without ligatures and full-width glyphs
+thin - Based on system fonts with 1-pixel-wide lines
 tight - Tight width
 type - A variant for better typesetting layout
 xtralarge - Xtralarge height (17px)

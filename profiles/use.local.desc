@@ -15,6 +15,7 @@ dev-python/compreffor:cython - Generate cpp sources with dev-python/cython
 dev-python/fonttools:brotli - Enable brotli support, needed for WOFF2
 dev-python/fonttools:zopfli - Enable zopfli compression support
 dev-python/pyclipper:cython - Generate cpp sources with dev-python/cython
+dev-python/sortsmill-ffcompat:cython - Regenerate c sources with dev-python/cython
 dev-qt/aseman-qt-tools:keychain - Pull in dev-libs/qtkeychain
 dev-qt/aseman-qt-tools:multimedia - Pull in dev-qt/qtmultimedia
 dev-qt/aseman-qt-tools:positioning - Pull in dev-qt/qtpositioning
@@ -22,6 +23,7 @@ dev-qt/aseman-qt-tools:sensors - Pull in dev-qt/qtsensors
 dev-qt/aseman-qt-tools:webengine - Pull in dev-qt/qtwebengine
 dev-qt/aseman-qt-tools:widgets - Pull in dev-qt/qtwidgets
 dev-scheme/sortsmill-core-guile:atomic-ops - Disabling this will sacrifice thread-safety in some operations
+dev-util/ots:graphite - Sanitize Graphite tables
 media-fonts/fira:clean-as-you-go - Clean intermediate ufos after they were built (useful when PORTAGE_TMPDIR resides on a tmpfs)
 media-fonts/fira:interpolate - Interpolate to get more font weights (significantly increases build time and diskspace requirements)
 media-fonts/noto:emoji - Install additional emoji fonts
@@ -34,15 +36,15 @@ media-fonts/source-pro:emoji - Install emoji fonts
 media-fonts/source-pro:monospace - Install monospace fonts
 media-fonts/source-pro:sans - Install sans fonts
 media-fonts/source-pro:serif - Install serif fonts
+media-fonts/unscii:utils - Install bm2uns util to convert a bitmap image to unscii art
 media-gfx/fim:archive - Enable archive support using app-arch/libarchive
 media-gfx/fim:dia - Enable DIA file support via app-office/dia
 media-gfx/fim:graphicsmagick - Enable GraphicsMagick library support
 media-gfx/fim:screen - Add experimental support for running under screen
 media-gfx/fim:xfig - Enable FIG file support via media-gfx/xfig
 media-gfx/fontview:gtk3 - Use GTK+3 instead of GTK+2
-media-gfx/sortsmill-tools:editor - Build sortsmill-editor and related programs
-media-gfx/sortsmill-tools:legacy - Install legacy Python modules
-media-gfx/sortsmill-tools:truetype-debugger - Enable truetype debugger in editor
+media-gfx/sortsmill-tools:xi - Build with the Xi X library
+media-gfx/sortsmill-tools:xkbui - Build with the xkbui X library
 media-sound/ardour:bundled-libs - Use bundled libs instead of system installed
 media-sound/ardour:c++0x - Compile using the C++11 standard
 media-sound/ardour:hid - Add support for dev-libs/hidapi
@@ -54,14 +56,12 @@ media-sound/ardour:vst - Enable VST plugin support
 media-sound/ardour:wiimote - Enable support for Wii remote
 media-sound/deadbeef:adplug - Enable the AdPlug decoder plugin
 media-sound/deadbeef:alac - Add support for Apple Lossless Audio Codec files
-media-sound/deadbeef:cover - Enable cover art plugin
 media-sound/deadbeef:dumb - Enable media-libs/dumb module library support
 media-sound/deadbeef:gme - Add support for playing various video game music formats
 media-sound/deadbeef:gtk3 - Enable support for GTK+3
 media-sound/deadbeef:mac - Add support for decoding Monkey's Audio files
 media-sound/deadbeef:midi - Enables MIDI support
 media-sound/deadbeef:network - Enable HTTP streaming vfs plugin
-media-sound/deadbeef:pth - Use GNU Portable Threads lib
 media-sound/deadbeef:sid - Build with SID (Commodore 64 Audio) support
 media-sound/deadbeef:tta - Add support for decoding True Audio input files
 media-sound/deadbeef:wma - Add support for decoding Windows Media Audio files
