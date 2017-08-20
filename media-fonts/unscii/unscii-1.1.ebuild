@@ -3,7 +3,7 @@
 
 EAPI=6
 
-FONT_TYPES=( otf pcf +ttf )
+FONT_TYPES=( otf +pcf ttf )
 FONT_VARIANTS=( alt fantasy mcr tall thin )
 inherit toolchain-funcs font-r1
 
@@ -62,7 +62,8 @@ DEPEND="
 	${RDEPEND}
 	!binary? (
 		dev-lang/perl
-		media-gfx/fontforge
+		font_types_otf? ( media-gfx/fontforge )
+		font_types_ttf? ( media-gfx/fontforge )
 		font_types_pcf? ( x11-apps/bdftopcf )
 		unicode? (
 			media-fonts/unifont[utils]
