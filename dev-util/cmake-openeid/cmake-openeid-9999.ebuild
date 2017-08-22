@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/open-eid/${MY_PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="8c3940e"
+	MY_PV="cdf4da3"
 	SRC_URI="
 		mirror://githubcl/open-eid/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
