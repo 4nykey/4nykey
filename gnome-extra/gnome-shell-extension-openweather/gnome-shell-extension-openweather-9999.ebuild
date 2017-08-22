@@ -3,7 +3,8 @@
 
 EAPI=6
 
-inherit autotools gnome2
+GNOME2_EAUTORECONF="yes"
+inherit gnome2
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/jenslody/${PN}.git"
@@ -11,7 +12,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	KEYWORDS="~amd64 ~x86"
-	MY_PV="723d186"
+	MY_PV="e4f0e05"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/jenslody/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -20,7 +21,7 @@ else
 fi
 
 DESCRIPTION="An extension for displaying weather informations in GNOME Shell"
-HOMEPAGE="https://github.com/jenslody/gnome-shell-extension-openweather"
+HOMEPAGE="https://github.com/jenslody/${PN}"
 
 LICENSE="GPL-3+"
 SLOT="0"
@@ -33,11 +34,6 @@ RDEPEND="
 	${DEPEND}
 	gnome-base/gnome-shell
 "
-
-src_prepare() {
-	eautoreconf
-	gnome2_src_prepare
-}
 
 src_configure() {
 	local _v=$(sed -e '/^\(Version\|Release\):/!d; s:[^0-9.]::g' \

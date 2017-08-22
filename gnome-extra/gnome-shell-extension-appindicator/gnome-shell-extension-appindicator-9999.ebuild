@@ -3,7 +3,6 @@
 
 EAPI=6
 
-inherit gnome2-utils
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/rgcjonas/${PN}.git"
@@ -18,7 +17,7 @@ else
 fi
 
 DESCRIPTION="Adds AppIndicator support to gnome shell"
-HOMEPAGE="https://github.com/rgcjonas/gnome-shell-extension-appindicator"
+HOMEPAGE="https://github.com/rgcjonas/${PN}"
 
 LICENSE="GPL-2+"
 SLOT="0"

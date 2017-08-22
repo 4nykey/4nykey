@@ -1,0 +1,35 @@
+--- a/gnome-extra/gnome-shell-system-monitor-applet/gnome-shell-system-monitor-applet-9999.ebuild
++++ b/gnome-extra/gnome-shell-system-monitor-applet/gnome-shell-system-monitor-applet-9999.ebuild
+@@ -39,25 +39,17 @@ RDEPEND="
+ "
+ DEPEND="
+ 	${DEPEND}
+-	nls? ( sys-devel/gettext )
++	sys-devel/gettext
+ "
+ 
+-src_compile() {
+-	use nls || return
+-	my_loc() {
+-		msgfmt po/${1}/system-monitor.po -o ${1}.mo
+-	}
+-	l10n_for_each_locale_do my_loc
++src_prepare() {
++	default
++	my_loc() { rm -rf po/${1}; }
++	l10n_for_each_disabled_locale_do my_loc
+ }
+ 
+-src_install() {
+-	local _d="system-monitor@paradoxxx.zero.gmail.com"
+-	insinto /usr/share/gnome-shell/extensions/${_d}
+-	doins ${_d}/*.{js,json,css}
+-	insinto /usr/share/glib-2.0/schemas
+-	doins ${_d}/schemas/*gschema.xml
+-	einstalldocs
+-	use nls && MOPREFIX="${_d%@*}" domo *.mo
++src_compile() {
++	emake _build
+ }
+ 
+ pkg_preinst() {

@@ -12,9 +12,9 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="9c1bf9a"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
-		mirror://githubcl/paradoxxxzero/${PN}/tar.gz/${MY_PV}
-		-> ${P}.tar.gz
+		mirror://githubcl/paradoxxxzero/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -51,7 +51,7 @@ src_compile() {
 }
 
 src_install() {
-	local _d="system-monitor@paradoxxx.zero.gmail.com"
+	local _d="$(awk '/UUID =/ {print $3}' Makefile)"
 	insinto /usr/share/gnome-shell/extensions/${_d}
 	doins ${_d}/*.{js,json,css}
 	insinto /usr/share/glib-2.0/schemas
