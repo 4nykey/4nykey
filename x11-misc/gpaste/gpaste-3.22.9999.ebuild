@@ -5,7 +5,8 @@ EAPI=6
 
 VALA_MIN_API_VERSION="0.32"
 VALA_USE_DEPEND="vapigen"
-inherit versionator vala autotools gnome2
+GNOME2_EAUTORECONF="yes"
+inherit versionator vala gnome2
 if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	SRC_URI=""
@@ -48,7 +49,6 @@ DEPEND="
 
 src_prepare() {
 	use vala && vala_src_prepare
-	eautoreconf
 	gnome2_src_prepare
 }
 

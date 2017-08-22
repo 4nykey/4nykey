@@ -4,11 +4,15 @@
 EAPI=6
 
 VALA_MIN_API_VERSION="0.36"
-VALA_MAX_API_VERSION="${VALA_MIN_API_VERSION}"
 VALA_USE_DEPEND="vapigen"
-inherit versionator vala autotools gnome2
+GNOME2_EAUTORECONF="yes"
+inherit versionator vala gnome2
+MY_GNOME="$(get_version_component_range 2)"
+MY_GNOME="$(get_major_version).$((${MY_GNOME}+${MY_GNOME}%2))"
 if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
+	EGIT_REPO_URI="https://github.com/Keruspe/GPaste.git"
+	EGIT_BRANCH="${PN}-${MY_GNOME}"
 	SRC_URI=""
 else
 	inherit vcs-snapshot
@@ -19,14 +23,6 @@ fi
 
 DESCRIPTION="Clipboard management system"
 HOMEPAGE="https://github.com/Keruspe/GPaste"
-
-MY_GNOME="$(get_version_component_range 2)"
-MY_GNOME="$(get_major_version).$((${MY_GNOME}+${MY_GNOME}%2))"
-EGIT_REPO_URI="https://github.com/Keruspe/GPaste.git"
-EGIT_BRANCH="${PN}-${MY_GNOME}"
-
-# until gnome-3.24 is ready
-KEYWORDS=""
 
 LICENSE="BSD-2"
 SLOT="0"
@@ -53,7 +49,6 @@ DEPEND="
 
 src_prepare() {
 	use vala && vala_src_prepare
-	eautoreconf
 	gnome2_src_prepare
 }
 
