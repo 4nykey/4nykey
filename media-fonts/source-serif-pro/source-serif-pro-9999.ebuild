@@ -10,12 +10,12 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/adobe-fonts/${PN}"
 else
 	inherit vcs-snapshot
-	MY_PV="03b7185"
+	MY_PV="6158260"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		binary? (
-			mirror://githubcl/adobe-fonts/${PN}/tar.gz/${MY_PV}R
-			-> ${P}R.tar.gz
+			mirror://githubcl/adobe-fonts/${PN}/tar.gz/${PV%_p*}R
+			-> ${P%_p*}R.tar.gz
 		)
 		!binary? (
 			mirror://githubcl/adobe-fonts/${PN}/tar.gz/${MY_PV}
@@ -26,7 +26,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
-MY_MK="3c71e576827753fc395f44f4c2d91131-740f886"
+MY_MK="3c71e576827753fc395f44f4c2d91131-1163820"
 SRC_URI+="
 	!binary? (
 		mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
@@ -53,8 +53,8 @@ DEPEND="
 pkg_setup() {
 	if [[ ${PV} == *9999* ]]; then
 		EGIT_BRANCH="$(usex binary release master)"
-	else
-		S="${WORKDIR}/${P}$(usex binary R '')"
+	elif use binary; then
+		S="${WORKDIR}/${P%_p*}R"
 	fi
 
 	if use binary; then
