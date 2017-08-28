@@ -19,7 +19,7 @@ else
 fi
 
 DESCRIPTION="Native client and extension for signing with your eID on the web"
-HOMEPAGE="http://open-eid.github.io"
+HOMEPAGE="https://open-eid.github.io"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
