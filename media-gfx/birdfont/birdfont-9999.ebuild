@@ -3,7 +3,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 python3_{4,5} )
+PYTHON_COMPAT=( python2_7 python3_{4,5,6} )
 PLOCALES="
 cs de el es fi fr he id it nb nl oc pl pt pt_BR ru sk sr sv tr uk
 "
@@ -60,20 +60,18 @@ pkg_setup() {
 src_prepare() {
 	default
 	vala_src_prepare
-	sed \
-		-e "s:pkg-config:$(tc-getPKG_CONFIG):" \
-		-i configure dodo.py || die
 }
 
 src_configure() {
 	"${PYTHON}" ./configure \
-		--prefix "${EPREFIX}/usr" \
-		--cc "$(tc-getCC)" \
-		--gtk $(usex gtk True False) \
-		--gee gee-0.8 \
-		--valac "${VALAC}" \
-		--cflags "${CFLAGS} ${CPPFLAGS}" \
-		--ldflags "${LDFLAGS}" \
+		--prefix="${EPREFIX}/usr" \
+		--cc="$(tc-getCC)" \
+		--pkg-config="$(tc-getPKG_CONFIG)" \
+		--gtk=$(usex gtk True False) \
+		--gee=gee-0.8 \
+		--valac="${VALAC}" \
+		--cflags="${CFLAGS} ${CPPFLAGS}" \
+		--ldflags="${LDFLAGS}" \
 		|| die
 }
 
