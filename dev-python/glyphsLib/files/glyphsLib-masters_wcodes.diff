@@ -1,0 +1,17 @@
+--- a/Lib/glyphsLib/builder.py
++++ b/Lib/glyphsLib/builder.py
+@@ -309,6 +309,14 @@ def generate_base_fonts(data, family_name):
+         ufo.info.styleMapFamilyName = styleMapFamilyName
+         ufo.info.styleMapStyleName = styleMapStyleName
+ 
++        from glyphsLib.interpolation import WEIGHT_CODES, WIDTH_CODES
++        if not width: width=None
++        if not weight: weight=None
++        if ufo.info.openTypeOS2WidthClass is None:
++            ufo.info.openTypeOS2WidthClass = WIDTH_CODES[width]
++        if ufo.info.openTypeOS2WeightClass is None:
++            ufo.info.openTypeOS2WeightClass = WEIGHT_CODES[weight]
++
+         set_blue_values(ufo, master.pop('alignmentZones', []))
+         set_family_user_data(ufo, user_data)
+         set_master_user_data(ufo, master.pop('userData', {}))
