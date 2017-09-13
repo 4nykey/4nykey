@@ -7,7 +7,7 @@ PLOCALES="ar ca cs de es_ES es_MX fa fr it pl pt pt_BR ro ru sk zh_CN"
 inherit gnome2-utils l10n
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="git://github.com/paradoxxxzero/${PN}.git"
+	EGIT_REPO_URI="https://github.com/paradoxxxzero/${PN}.git"
 	SRC_URI=""
 else
 	inherit vcs-snapshot
