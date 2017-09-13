@@ -61,7 +61,7 @@ RDEPEND="
 DEPEND="
 	${DEPEND}
 	sys-devel/flex
-	sys-devel/bison
+	virtual/yacc
 "
 
 src_prepare() {
