@@ -51,7 +51,7 @@ src_prepare() {
 	if use test; then
 		mv "${WORKDIR}"/${MY_T}/* third_party/${MY_T%-*}
 	else
-		sed -e '/noinst_PROGRAMS =/d' -i Makefile.am
+		sed -e '/noinst_PROGRAMS [+]*=/d' -i Makefile.am
 	fi
 	eautoreconf
 	append-cppflags "-I${EROOT}usr/include/woff2 -I${EROOT}usr/include/brotli"
