@@ -6,7 +6,7 @@ EAPI=6
 inherit readme.gentoo-r1
 
 if [[ -z ${PV%%*9999} ]]; then
-	EGIT_REPO_URI="git://github.com/zsh-users/${PN}.git"
+	EGIT_REPO_URI="https://github.com/zsh-users/${PN}.git"
 	inherit git-r3
 else
 	inherit vcs-snapshot
