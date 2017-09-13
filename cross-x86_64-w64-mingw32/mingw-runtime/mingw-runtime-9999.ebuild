@@ -7,7 +7,7 @@ export CBUILD=${CBUILD:-${CHOST}}
 export CTARGET=${CTARGET:-${CHOST}}
 if [[ ${CTARGET} == ${CHOST} ]] ; then
 	if [[ ${CATEGORY/cross-} != ${CATEGORY} ]] ; then
-		export CTARGET=${CATEGORY/cross-}
+		export CTARGET=${CATEGORY#cross-}
 	fi
 fi
 
@@ -16,7 +16,7 @@ MY_PN="mingw-w64"
 inherit flag-o-matic autotools
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="git://git.code.sf.net/p/${MY_PN}/${MY_PN}"
+	EGIT_REPO_URI="https://git.code.sf.net/p/${MY_PN}/${MY_PN}"
 else
 	KEYWORDS="~amd64"
 	SRC_URI="mirror://sourceforge/${MY_PN}/${MY_PN}/${MY_PN}-release/${MY_PN}-v${PV}.tar.bz2"
@@ -24,7 +24,7 @@ else
 fi
 
 DESCRIPTION="Free Win32 runtime and import library definitions"
-HOMEPAGE="http://mingw-w64.sourceforge.net/"
+HOMEPAGE="https://mingw-w64.org"
 
 LICENSE="BSD"
 SLOT="0"
@@ -44,6 +44,7 @@ pkg_setup() {
 	just_headers && return
 	CHOST=${CTARGET} strip-unsupported-flags
 	filter-flags -m*=*
+	unset AR RANLIB
 }
 
 src_prepare() {
