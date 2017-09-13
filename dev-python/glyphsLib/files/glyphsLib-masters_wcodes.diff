@@ -15,3 +15,13 @@
          set_blue_values(ufo, master.pop('alignmentZones', []))
          set_family_user_data(ufo, user_data)
          set_master_user_data(ufo, master.pop('userData', {}))
+--- a/Lib/glyphsLib/interpolation.py
++++ b/Lib/glyphsLib/interpolation.py
+@@ -46,6 +46,7 @@ WEIGHT_CODES = {
+     'ExtraLight': 250,
+     'UltraLight': 250,
+     'Light': 300,
++    'SemiLight': 350,
+     None: 400,  # default value normally omitted in source
+     'Normal': 400,
+     'Regular': 400,
