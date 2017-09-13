@@ -7,16 +7,12 @@ inherit toolchain-funcs wxwidgets
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}.git"
-	EGIT_SUBMODULES=(
-		src/third_party/raqm/libraqm
-	)
+	EGIT_SUBMODULES=( )
 else
 	MY_PV="a0581ed"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
-	MY_R="libraqm-59d68d5"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
-		mirror://githubcl/HOST-Oman/${MY_R%-*}/tar.gz/${MY_R##*-} -> ${MY_R}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -32,6 +28,7 @@ IUSE="gtk3"
 
 RDEPEND="
 	dev-libs/fribidi
+	dev-libs/libraqm
 	media-libs/freetype:2
 	media-libs/harfbuzz
 	!gtk3? ( x11-libs/wxGTK:3.0 )
@@ -51,11 +48,8 @@ pkg_setup() {
 src_prepare() {
 	default
 	sed \
-		-e '/\(freetype\|fribidi\|harfbuzz\|wxWidgets\|ucdn\)/d' \
-		-i "${S}"/src/fontview/fontview.gyp "${S}"/src/third_party/raqm/raqm.gyp
-
-	[[ -z ${PV%%*9999} ]] && return
-	mv "${WORKDIR}"/${MY_R}/* "${S}"/src/third_party/raqm/libraqm/
+		-e '/\(freetype\|fribidi\|harfbuzz\|raqm\|wxWidgets\|ucdn\)/d' \
+		-i "${S}"/src/fontview/fontview.gyp
 }
 
 src_configure() {
@@ -65,14 +59,14 @@ src_configure() {
 }
 
 src_compile() {
-	local _pc="$(tc-getPKG_CONFIG)"
+	local _pc="$(tc-getPKG_CONFIG)" _d="fribidi freetype2 harfbuzz raqm"
 	emake \
 		CXX=$(tc-getCXX) \
 		CC=$(tc-getCC) \
 		LIBS="$(${WX_CONFIG} --libs) \
-			$(${_pc} --libs fribidi freetype2 harfbuzz)" \
+			$(${_pc} --libs ${_d})" \
 		CPPFLAGS="$(${WX_CONFIG} --cppflags) \
-			$(${_pc} --cflags fribidi freetype2 harfbuzz)" \
+			$(${_pc} --cflags ${_d})" \
 		V=1
 }
 
