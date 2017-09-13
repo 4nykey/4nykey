@@ -78,10 +78,13 @@ ${FONT_CHARS[@]}
 "
 [[ ${#FONT_TYPES[@]} -ge 1 ]] && REQUIRED_USE="|| ( ${FONT_TYPES[@]/+} )"
 
-DEPEND="X? (
+DEPEND="
+	X? (
 		x11-apps/mkfontdir
 		media-fonts/encodings
-	)"
+	)
+	sys-apps/findutils
+"
 RDEPEND=""
 RESTRICT+=" strip binchecks"
 
@@ -155,13 +158,13 @@ font-r1_font_install() {
 
 	insinto "${FONTDIR}"
 
-	for dir in "${FONT_S[@]}"; do
-	if [[ -d "${S}/${dir}" ]]; then
-		for suffix in ${FONT_SUFFIX}; do
-			find "${S}/${dir}" -mindepth 1 -maxdepth 1 -! -size 0 -type f \
-				-ipath "*.${suffix}" -print0 | xargs -0 --no-run-if-empty doins
-		done
-	fi
+	for suffix in ${FONT_SUFFIX}; do
+		find "${FONT_S[@]}" -mindepth 1 -maxdepth 1 -! -size 0 -type f \
+			-ipath "*.${suffix}" -exec doins {} + 2>/dev/null
+
+		find "${ED}${FONTDIR}" -mindepth 1 -maxdepth 1 -! -size 0 -type f \
+			-ipath "*.${suffix}" -exec false {} + && die \
+			"No ${suffix} fonts were installed in ${FONTDIR}"
 	done
 }
 

@@ -16,11 +16,6 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-MY_MK="f9edc47e189d8495b647a4feac8ca240-1827636"
-SRC_URI+="
-	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
-	-> ${MY_MK}.tar.gz
-"
 inherit font-r1
 
 DESCRIPTION="A free and open-source text type family"

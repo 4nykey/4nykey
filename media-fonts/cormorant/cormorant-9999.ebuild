@@ -27,6 +27,6 @@ FONTDIR_BIN=( '1. TrueType Font Files' '2. OpenType Files' )
 src_prepare() {
 	fontmake_src_prepare
 	use binary && return
-	ln -s "4. Glyphs Source Files" src
+	ln -s "4. Glyphs Source Files" sources
 	rm -f src/*_BACKUP.glyphs
 }
