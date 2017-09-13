@@ -1,48 +1,58 @@
-# Copyright 1999-2007 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
 
-EAPI="4"
-inherit toolchain-funcs git-r3
+EAPI=6
+
+if [[ -z ${PV%%*9999} ]]; then
+	EGIT_REPO_URI="https://git.joeyh.name/git/${PN}.git"
+	inherit git-r3
+else
+	inherit vcs-snapshot
+	SRC_URI="
+		https://git.joeyh.name/index.cgi/${PN}.git/snapshot/${P}.tar.gz
+	"
+	RESTRICT="primaryuri"
+	KEYWORDS="~amd64 ~x86"
+fi
+inherit toolchain-funcs
 
 DESCRIPTION="A collection of unix tools that nobody thought to write 30 years ago"
-HOMEPAGE="http://www.kitenet.net/~joey/code/moreutils.html"
-EGIT_REPO_URI="git://git.kitenet.net/moreutils"
+HOMEPAGE="https://joeyh.name/code/${PN}"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
-IUSE="doc"
+IUSE=""
 
 RDEPEND="
 	dev-lang/perl
+	dev-perl/IPC-Run
+	dev-perl/Time-Duration
+	dev-perl/TimeDate
 "
 DEPEND="
 	${RDEPEND}
-	doc? (
-		=app-text/docbook-xml-dtd-4.4*
-		app-text/docbook2X
-	)
+	app-text/docbook-xml-dtd:4.4
+	app-text/docbook2X
 "
-
-src_prepare() {
-	sed -i *.docbook \
-		-e 's#file://.*4\.4#file:///usr/share/sgml/docbook/xml-dtd-4.4#'
-	use doc || sed -i Makefile -e '/man1/d; s:$(MANS)::'
-}
 
 src_compile() {
 	emake \
 		CC="$(tc-getCC)" \
 		CFLAGS="${CFLAGS}" \
-		DOCBOOK2XMAN="docbook2man.pl" \
-		|| die "emake failed"
+		DOCBOOK2XMAN="docbook2man.pl"
 }
 
 src_install() {
 	emake \
 		DESTDIR="${D}" \
+		PREFIX="${EPREFIX}/usr" \
 		INSTALL_BIN="install" \
-		install || die "emake install failed"
-	dodoc README
+		install
+
+	mv "${ED}"usr/share/man/man1/{,${PN}_}parallel.1
+	mv "${ED}"usr/bin/{,${PN}_}parallel
+}
+
+pkg_postinst() {
+	eselect editor update
 }
