@@ -24,7 +24,7 @@ else
 fi
 
 DESCRIPTION="A cross-platform music tagger"
-HOMEPAGE="http://picard.musicbrainz.org/"
+HOMEPAGE="https://picard.musicbrainz.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
