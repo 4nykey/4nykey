@@ -22,7 +22,7 @@ else
 fi
 
 DESCRIPTION="A console version of StarDict"
-HOMEPAGE="http://dushistov.github.io/${PN}"
+HOMEPAGE="https://dushistov.github.io/${PN}"
 
 LICENSE="GPL-2"
 SLOT="0"
