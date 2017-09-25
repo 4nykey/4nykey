@@ -7,11 +7,11 @@ WANT_AUTOCONF="2.1"
 MOZCONFIG_OPTIONAL_GTK2ONLY=1
 MOZCONFIG_OPTIONAL_WIFI=1
 
-inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils mozconfig-v6.${PV%%.*} multilib pax-utils autotools xdg-utils
+inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils mozconfig-v6.${PV%%.*} pax-utils xdg-utils autotools
 
 MY_PN="firefox"
 MOZ_PV="$(get_version_component_range -3)esr"
-PATCH="${MY_PN}-${PV%%.*}.2-patches-01"
+PATCH="${MY_PN}-${PV%%.*}.2-patches-03"
 
 # see https://gitweb.torproject.org/builders/tor-browser-bundle.git/tree/gitian/versions?h=maint-4.0
 # https://dist.torproject.org/torbrowser
@@ -35,7 +35,7 @@ SLOT="0"
 # BSD license applies to torproject-related code like the patches
 # icons are under CCPL-Attribution-3.0
 LICENSE="BSD CC-BY-3.0 MPL-2.0 GPL-2 LGPL-2.1"
-IUSE="hardened hwaccel jack nsplugin pgo rust selinux test"
+IUSE="hardened hwaccel jack pgo rust selinux test"
 
 SRC_URI="https://dist.torproject.org/${PN}/${TOR_PV}"
 PATCH_URIS=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c}/mozilla/patchsets/${PATCH}.tar.xz )
@@ -61,7 +61,7 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	pgo? ( >=sys-devel/gcc-4.5 )
-	rust? ( dev-lang/rust )
+	rust? ( virtual/rust )
 	>=dev-lang/yasm-1.1
 	virtual/opengl
 "
@@ -88,11 +88,6 @@ pkg_setup() {
 		ewarn "You will do a double build for profile guided optimization."
 		ewarn "This will result in your build taking at least twice as long as before."
 	fi
-
-	if use rust; then
-		einfo
-		ewarn "This is very experimental, should only be used by those developing firefox."
-	fi
 	append-cppflags "-DTOR_BROWSER_DATA_IN_HOME_DIR"
 }
 
@@ -107,13 +102,14 @@ pkg_pretend() {
 }
 
 src_prepare() {
-	eapply --directory="${WORKDIR}/firefox" "${FILESDIR}"/1002_add_gentoo_preferences.patch
+	eapply --directory="${WORKDIR}/firefox" \
+		"${FILESDIR}"/1002_add_gentoo_preferences.patch
 	eapply "${FILESDIR}"/${PN}-profiledir.patch
-	eapply -l "${FILESDIR}"/${PN}-cargo.patch
+	eapply --ignore-whitespace "${FILESDIR}"/${PN}-cargo.patch
 	rm -f media/libstagefright/binding/mp4parse_capi/build.rs
 
 	# Apply gentoo firefox patches
-	rm -f "${WORKDIR}"/firefox/1006_fix_hardened_pie_detection.patch
+	rm -f "${WORKDIR}"/firefox/2003_fix_sandbox_prlimit64.patch
 	eapply "${WORKDIR}/firefox"
 
 	# Enable gnomebreakpad
@@ -288,12 +284,6 @@ src_install() {
 	echo "pref(\"extensions.autoDisableScopes\", 3);" >> \
 		"${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
 		|| die
-
-	if use nsplugin; then
-		echo "pref(\"plugin.load_flash_only\", false);" >> \
-			"${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
-			|| die
-	fi
 
 	echo "pref(\"general.useragent.locale\", \"en-US\");" \
 		>> "${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/000-tor-browser.js" \
