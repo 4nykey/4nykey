@@ -12,7 +12,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	KEYWORDS="~amd64 ~x86"
-	MY_PV="e4f0e05"
+	MY_PV="cf30519"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/jenslody/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
