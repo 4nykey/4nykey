@@ -46,7 +46,7 @@ rmloc() {
 }
 
 src_prepare() {
-	default
+	cmake-utils_src_prepare
 	use nls && l10n_for_each_disabled_locale_do rmloc
 }
 

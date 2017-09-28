@@ -43,7 +43,7 @@ DEPEND="
 DOCS=( AUTHORS README.md RELEASE-NOTES.txt )
 
 src_prepare() {
-	default
+	cmake-utils_src_prepare
 	[[ -n ${PV%%*9999} ]] && mv "${WORKDIR}"/${MY_SC}/* "${S}"/${MY_SC%-*}/
 	sed \
 		-e 's:\${CMAKE_SOURCE_DIR}/cmake/modules:/usr/share/cmake/openeid:' \

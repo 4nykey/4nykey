@@ -1,13 +1,13 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
+VALA_MAX_API_VERSION="0.34"
 inherit eutils pax-utils vala gnome2 cmake-utils
 
 if [[ -z ${PV%%*9999} ]]; then
-	EBZR_REPO_URI="lp:${PN}"
+	EBZR_REPO_URI="lp:~${PN}/${PN}/snapcraft"
 	inherit bzr
 	SRC_URI=
 else
@@ -51,8 +51,8 @@ PATCHES=(
 )
 
 src_prepare() {
-	gnome2_src_prepare
 	vala_src_prepare
+	cmake-utils_src_prepare
 	sed -i -e '/^install/s:COPYING:HACKING TODO TRANSLATE:' CMakeLists.txt || die
 }
 
