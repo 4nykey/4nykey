@@ -1,6 +1,5 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
@@ -38,7 +37,7 @@ src_unpack() {
 	if [[ -z ${PV%%*9999} ]]; then
 		git-r3_src_unpack
 		EGIT_CHECKOUT_DIR="${WORKDIR}/${MY_PS}" \
-		EGIT_REPO_URI="git://github.com/clark15b/${MY_PS%-*}" \
+		EGIT_REPO_URI="https://github.com/clark15b/${MY_PS%-*}" \
 			git-r3_src_unpack
 	else
 		vcs-snapshot_src_unpack
