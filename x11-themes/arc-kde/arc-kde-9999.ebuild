@@ -17,7 +17,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 DESCRIPTION="Arc KDE customization"
-HOMEPAGE="https://github.com/PapirusDevelopmentTeam/${PN}"
+HOMEPAGE="https://git.io/${PN}"
 
 LICENSE="GPL-3 CC-BY-SA-4.0"
 SLOT="0"
@@ -34,7 +34,7 @@ DOCS=( AUTHORS README.md )
 src_prepare() {
 	default
 	rm -f "${S}"/Makefile
-	find -mindepth 2 -name AUTHORS | xargs cat >> AUTHORS
+	find -mindepth 2 -name AUTHORS -exec cat {} + >> AUTHORS
 	find -mindepth 2 -regex '.*\(LICENSE\|AUTHORS\)' -delete
 }
 
