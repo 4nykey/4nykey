@@ -4,8 +4,8 @@
 EAPI=6
 
 PLOCALES="be de es he ro ru uk"
-
-inherit l10n autotools gnome2
+GNOME2_EAUTORECONF="yes"
+inherit l10n gnome2
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/AndrewCrewKuznetsov/xneur-devel.git"
@@ -48,7 +48,6 @@ DEPEND="
 
 src_prepare() {
 	sed -e '/\(README\|TODO\)/d' -i Makefile.am
-	eautoreconf
 	gnome2_src_prepare
 }
 

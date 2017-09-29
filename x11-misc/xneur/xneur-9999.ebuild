@@ -19,7 +19,7 @@ fi
 inherit l10n autotools
 
 DESCRIPTION="An utility for keyboard layout switching"
-HOMEPAGE="http://www.xneur.ru/"
+HOMEPAGE="https://xneur.ru"
 
 LICENSE="GPL-2"
 SLOT="0"
