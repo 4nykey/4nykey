@@ -22,7 +22,7 @@ else
 fi
 
 DESCRIPTION="A non-linear PyGTK/MLT video editor"
-HOMEPAGE="http://jliljebl.github.io/flowblade"
+HOMEPAGE="https://jliljebl.github.io/flowblade"
 
 LICENSE="GPL-3"
 SLOT="0"
