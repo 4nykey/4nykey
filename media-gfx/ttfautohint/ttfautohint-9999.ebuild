@@ -10,7 +10,7 @@ if [[ ${PV} == *9999* ]]; then
 	MY_G="${P}/.gnulib"
 else
 	inherit vcs-snapshot
-	MY_G="gnulib-f88e6fc"
+	MY_G="gnulib-aae6a4"
 	MY_PV="7fa4bca"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
