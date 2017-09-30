@@ -6,9 +6,9 @@ EAPI=6
 VALA_MIN_API_VERSION="0.36"
 VALA_USE_DEPEND="vapigen"
 GNOME2_EAUTORECONF="yes"
-inherit versionator vala gnome2
-MY_GNOME="$(get_version_component_range 2)"
-MY_GNOME="$(get_major_version).$((${MY_GNOME}+${MY_GNOME}%2))"
+inherit vala gnome2
+MY_GNOME="${PV:2:2}"
+MY_GNOME="${PV%%.*}.$((MY_GNOME+MY_GNOME%2))"
 if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/Keruspe/GPaste.git"
@@ -16,7 +16,7 @@ if [[ ${PV} = *9999* ]]; then
 	SRC_URI=""
 else
 	inherit vcs-snapshot
-	SRC_URI="mirror://githubcl/Keruspe/GPaste/tar.gz/v${PV} -> ${P}.tar.gz"
+	SRC_URI="https://www.imagination-land.org/files/${PN}/${P}.tar.xz"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
