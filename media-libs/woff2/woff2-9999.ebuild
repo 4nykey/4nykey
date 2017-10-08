@@ -3,7 +3,7 @@
 
 EAPI=6
 
-inherit toolchain-funcs flag-o-matic
+inherit cmake-utils
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/google/${PN}.git"
@@ -11,6 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="36e6555"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="mirror://githubcl/google/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -32,25 +33,8 @@ DEPEND="
 "
 
 DOCS="CONTRIBUTING.md README.md"
-PATCHES=( "${FILESDIR}"/${PN}-makefile.diff )
 
 src_prepare() {
-	default
-	mkdir -p ${PN}
-	mv src/*.h ${PN}/
-	append-cxxflags "-I${EROOT}usr/include/brotli -I${PN}"
-}
-
-src_compile() {
-	tc-export CXX AR
-	emake \
-		BROTLI=. BROTLIOBJ= ENCOBJ= DECOBJ= COMMONOBJ= \
-		LIBS="$($(tc-getPKG_CONFIG) libbrotlienc libbrotlidec --libs)"
-}
-
-src_install() {
-	dobin ${PN}_*
-	dolib.a lib${PN}.a
-	doheader -r ${PN}
-	einstalldocs
+	sed -e '/^set(CMAKE_SKIP_BUILD_RPATH/,/^endif()/d' -i CMakeLists.txt
+	cmake-utils_src_prepare
 }
