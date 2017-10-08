@@ -40,9 +40,7 @@ RDEPEND="
 "
 DOCS=(
 	README
-	docs/DesignDoc.md
-	docs/HowToFix.md
-	docs/HowToTest.md
+	docs/{DesignDoc,HowToFix,HowToTest}.md
 )
 PATCHES=( "${FILESDIR}"/${PN}-systemlibs.diff )
 
