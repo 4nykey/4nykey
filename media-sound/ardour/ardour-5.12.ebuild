@@ -9,7 +9,7 @@ cs de el en_GB es fr it nn pl pt pt_PT ru sv zh
 PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE='threads(+)'
 EGIT_REPO_URI="https://git.ardour.org/${PN}/${PN}.git"
-inherit gnome2 python-any-r1 waf-utils l10n git-r3
+inherit gnome2 python-any-r1 waf-utils l10n git-r3 toolchain-funcs
 if [[ -n ${PV%%*9999} ]]; then
 	EGIT_COMMIT="${PV}"
 	SRC_URI="https://community.ardour.org/srctar/Ardour-${PV}.0.tar.bz2"
@@ -22,7 +22,7 @@ HOMEPAGE="http://ardour.org/"
 
 LICENSE="GPL-2"
 SLOT="${PV%%.*}"
-IUSE="alsa bindist bundled-libs +c++0x custom-cflags debug doc jack hid lv2 nls phone-home sanitize sse vst wiimote"
+IUSE="alsa bindist bundled-libs +c++0x debug doc jack hid lv2 nls phone-home sanitize sse vst wiimote"
 REQUIRED_USE="
 	|| ( alsa jack )
 	${PYTHON_REQUIRED_USE}
@@ -83,9 +83,6 @@ src_prepare() {
 	sed \
 		-e 's:AudioEditing:X-&:' \
 		-i gtk2_ardour/ardour.desktop.in
-	use custom-cflags && sed \
-		-e 's:\(prepend_opt_flags = \)True:\1False:' \
-		-i wscript
 	use nls && l10n_for_each_disabled_locale_do my_lcmsg
 }
 
@@ -98,6 +95,7 @@ src_configure() {
 		--noconfirm
 		--versioned
 		--freedesktop
+		--keepflags
 		--with-backends="$(usev alsa),$(usev jack)"
 		$(usex lv2 '' '--no-lrdf')
 		$(my_use lv2)
@@ -106,12 +104,13 @@ src_configure() {
 		$(my_use phone-home)
 		$(my_use sse fpu-optimization)
 		$(usex bindist '--freebie' '')
-		$(usex debug '' '--optimize')
+		$(usex debug '--debug-symbols --rt-alloc-debug' '')
 		$(usex c++0x '--cxx11' '')
 		$(usex sanitize '--address-sanitizer' '')
 		$(usex bundled-libs '' '--use-external-libs')
 		$(usex doc '--docs' '')
 	)
+	PKGCONFIG="$(tc-getPKG_CONFIG)" \
 	waf-utils_src_configure "${wafargs[@]}"
 }
 
