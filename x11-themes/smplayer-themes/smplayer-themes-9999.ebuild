@@ -13,7 +13,7 @@ else
 fi
 
 DESCRIPTION="Icon themes for smplayer"
-HOMEPAGE="http://www.smplayer.eu/"
+HOMEPAGE="https://www.smplayer.info"
 
 LICENSE="CC-BY-2.5 CC-BY-SA-2.5 CC-BY-SA-3.0 CC0-1.0 GPL-2 GPL-3+ LGPL-3"
 SLOT="0"
@@ -23,7 +23,8 @@ DEPEND="
 	qt5? ( dev-qt/qtcore:5 )
 "
 RDEPEND="
-	media-video/smplayer[qt5?]
+	!qt5? ( <media-video/smplayer-17[-qt5] )
+	qt5? ( media-video/smplayer[qt5(+)] )
 	!x11-themes/papirus-suite[smplayer]
 "
 DOCS=( Changelog README.txt )
