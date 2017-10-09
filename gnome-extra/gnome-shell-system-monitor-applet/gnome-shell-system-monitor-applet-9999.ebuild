@@ -11,9 +11,10 @@ if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI=""
 else
 	inherit vcs-snapshot
-	MY_PV="9c1bf9a"
+	MY_PV="60778e8"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
+		mirror://githubcl/victortrac/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://githubcl/paradoxxxzero/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
