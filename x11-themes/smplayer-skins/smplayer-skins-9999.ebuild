@@ -1,8 +1,7 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
-EAPI=5
+EAPI=6
 
 inherit qmake-utils
 if [[ -z ${PV%%*9999} ]]; then
@@ -14,7 +13,7 @@ else
 fi
 
 DESCRIPTION="Skins for SMPlayer"
-HOMEPAGE="http://smplayer.sourceforge.net/"
+HOMEPAGE="https://www.smplayer.info"
 
 LICENSE="CC-BY-2.5 CC-BY-SA-2.5 CC-BY-SA-3.0 GPL-2 LGPL-3"
 SLOT="0"
@@ -24,16 +23,18 @@ DEPEND="
 	qt5? ( dev-qt/qtcore:5 )
 "
 RDEPEND="
-	media-video/smplayer[qt5?]
+	!qt5? ( <media-video/smplayer-17[-qt5] )
+	qt5? ( media-video/smplayer[qt5(+)] )
 "
 
 src_prepare() {
+	default
 	sed \
 		-e "s:rcc -binary:$(usex qt5 $(qt5_get_bindir) $(qt4_get_bindir))/&:" \
 		-i themes/Makefile
 }
 
 src_install() {
-	einstall DESTDIR="${D}" PREFIX="${EPREFIX}/usr"
+	emake install DESTDIR="${D}" PREFIX=/usr
 	dodoc Changelog README.txt
 }
