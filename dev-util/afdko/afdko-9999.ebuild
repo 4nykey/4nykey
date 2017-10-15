@@ -19,7 +19,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-single-r1 multilib-build
-MY_R="robofab-62229c4"
+MY_R="robofab-7fa069c"
 MY_U="ufoNormalizer-1ed0111"
 SRC_URI+="
 	mirror://githubcl/robofab-developers/${MY_R%-*}/tar.gz/${MY_R##*-}
@@ -59,6 +59,7 @@ src_prepare() {
 		"${FILESDIR}"/${PN}-paths.diff
 		"${FILESDIR}"/${PN}-inc.diff
 		"${FILESDIR}"/${PN}-defcon.diff
+		"${FILESDIR}"/${PN}-ufo3.diff
 	)
 	rm -f "${S}"/FDK/Tools/linux/{AFDKOPython,setFDKPaths,ttx,ufonormalizer}
 	rm -rf "${S}"/FDK/Tools/linux/Python

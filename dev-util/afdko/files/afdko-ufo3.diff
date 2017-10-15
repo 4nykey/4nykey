@@ -1,0 +1,40 @@
+--- a/FDK/Tools/SharedData/FDKScripts/CheckOutlinesUFO.py
++++ b/FDK/Tools/SharedData/FDKScripts/CheckOutlinesUFO.py
+@@ -100,7 +100,7 @@ class FontFile(object):
+ 		self.dFont = None
+ 		self.useHashMap = False
+ 		self.ufoFontHashData = None
+-		self.ufoFormat = 2
++		self.ufoFormat = 3
+ 		self.saveToDefaultLayer = 0
+ 
+ 	def open(self, useHashMap):
+@@ -173,7 +173,7 @@ class FontFile(object):
+ 		I also set glyphSet.ufoFormatVersion so that the glif files will be set to format 1.
+ 		"""
+ 		from ufoLib import UFOWriter
+-		writer = UFOWriter(self.dFont.path, formatVersion=2)
++		writer = UFOWriter(self.dFont.path, formatVersion=3)
+ 		if self.saveToDefaultLayer:
+ 			self.dFont.save()
+ 		else:
+@@ -183,7 +183,7 @@ class FontFile(object):
+ 			writer.layerContents[kProcessedGlyphsLayerName] = kProcessedGlyphsLayer
+ 			glyphSet = writer.getGlyphSet(layerName=kProcessedGlyphsLayerName, defaultLayer=False)
+ 			writer.writeLayerContents(layers.layerOrder)
+-			glyphSet.ufoFormatVersion = 2
++			glyphSet.ufoFormatVersion = 3
+ 			layer.save(glyphSet)
+ 			layer.dirty = False
+ 
+--- a/FDK/Tools/SharedData/FDKScripts/makeInstancesUFO.py
++++ b/FDK/Tools/SharedData/FDKScripts/makeInstancesUFO.py
+@@ -396,7 +396,7 @@ def run(args):
+ 	if not dsPath:
+ 		return
+ 
+-	version = 2
++	version = 3
+ 	if len(newInstancesList) == 1:
+ 		logMsg.log("Building 1 instance...")
+ 	else:
