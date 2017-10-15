@@ -9,16 +9,13 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/unified-font-object/${PN}.git"
 else
-	if [[ -z ${PV%%*_p*} ]]; then
-		inherit vcs-snapshot
-		MY_PV="5526dc8"
-		SRC_URI="
-			mirror://githubcl/unified-font-object/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
-		"
-	else
-		SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.zip"
-		DEPEND="app-arch/unzip"
-	fi
+	inherit vcs-snapshot
+	MY_PV="627f997"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
+	SRC_URI="
+		mirror://githubcl/unified-font-object/${PN}/tar.gz/${MY_PV}
+		-> ${P}.tar.gz
+	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
