@@ -45,6 +45,7 @@ media-gfx/fim:xfig - Enable FIG file support via media-gfx/xfig
 media-gfx/fontview:gtk3 - Use GTK+3 instead of GTK+2
 media-gfx/sortsmill-tools:xi - Build with the Xi X library
 media-gfx/sortsmill-tools:xkbui - Build with the xkbui X library
+media-libs/aubio:double-precision - Compile in double precision mode.
 media-sound/ardour:bundled-libs - Use bundled libs instead of system installed
 media-sound/ardour:c++0x - Compile using the C++11 standard
 media-sound/ardour:hid - Add support for dev-libs/hidapi
@@ -70,7 +71,6 @@ media-sound/flactag:gcrypt - Use libgcrypt for low-level crypto
 media-sound/jack-audio-connection-kit:celt - Support CELT low delay audio codec (media-libs/celt)
 media-sound/jack-audio-connection-kit:classic - Force enable standard JACK (jackd) even if D-Bus JACK (jackdbus) is enabled too
 media-sound/jack-audio-connection-kit:opus - Build Opus netjack2
-media-sound/morituri:alac - Add support for Apple Lossless Audio Codec files
 media-sound/picard:acoustid - Use media-libs/chromaprint for acoustic fingerprinting
 media-video/flowblade:frei0r - Additional video filters (media-plugins/frei0r-plugins)
 media-video/flowblade:gmic - Additional image filters (media-gfx/gmic)
@@ -78,7 +78,6 @@ media-video/flowblade:swh - Additional audio filters (media-plugins/swh-plugins)
 net-misc/meganz-sdk:freeimage - Enable support for image I/O via media-libs/freeimage
 net-misc/meganz-sdk:fuse - Build FUSE-based example client
 net-misc/meganz-sdk:libuv - Support asynchronous I/O via dev-libs/libuv
-net-misc/meganz-sdk:megacmd - Build mega-cmd client
 net-misc/meganz-sdk:qt - Install QT bindings
 net-misc/meganz-sdk:sodium - Use dev-libs/libsodium for cryptography
 net-misc/megasync:dolphin - Install the kde-apps/dolphin extension
@@ -106,6 +105,10 @@ x11-misc/gxneur:gconf - Enable GConf as configuration backend
 x11-misc/xneur:aspell - Enable spellchecking using app-text/aspell
 x11-misc/xneur:enchant - Enable spell checking using app-text/enchant
 x11-misc/xneur:keylogger - Enable keyboard logger
+x11-themes/adapta-gtk-theme:cinnamon - Install Cinnamon theme
+x11-themes/adapta-gtk-theme:mate - Install MATE theme
+x11-themes/adapta-gtk-theme:openbox - Install Openbox theme
+x11-themes/adapta-gtk-theme:xfce - Install Xfce4 theme
 x11-themes/arc-kde:konsole - Install konsole theme
 x11-themes/arc-kde:kvantum - Install kvantum theme
 x11-themes/candra:gdm - Install gnome-base/gdm theme
