@@ -14,7 +14,10 @@ else
 	MY_PV="${PV/_/-}"
 	MY_PV="v${MY_PV^^}"
 	[[ -z ${PV%%*_p*} ]] && MY_PV="2d1d323"
-	SRC_URI="mirror://githubcl/jackaudio/jack2/tar.gz/${MY_PV} -> ${P}.tar.gz"
+	SRC_URI="
+		mirror://githubcl/jackaudio/jack2/tar.gz/${MY_PV} -> ${P}.tar.gz
+		https://github.com/jackaudio/jack2/commit/f7bccdc.patch
+	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
@@ -70,6 +73,7 @@ src_prepare() {
 		-e '/example-clients/s:bld\.recurse:print:' \
 		-i wscript
 	default
+	[[ ${PV} = *9999* ]] || eapply "${DISTDIR}"/f7bccdc.patch
 	multilib_copy_sources
 }
 
