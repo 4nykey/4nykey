@@ -54,7 +54,7 @@ RDEPEND="
 	network? ( net-misc/curl )
 	cdda? ( dev-libs/libcdio media-libs/libcddb )
 	gtk? ( x11-libs/gtk+:2 dev-libs/jansson )
-	gtk3? ( x11-libs/gtk+:3 )
+	gtk3? ( x11-libs/gtk+:3 dev-libs/jansson )
 	X? ( x11-libs/libX11 )
 	pulseaudio? ( media-sound/pulseaudio )
 	imlib? ( media-libs/imlib2[jpeg,png] )
