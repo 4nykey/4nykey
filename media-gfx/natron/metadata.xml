@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>4nykey@gmail.com</email>
+	</maintainer>
+	<use>
+		<flag name="c++11">Build using the C++11 standard</flag>
+		<flag name="system-libs">Use system libraries instead of the ones included in the upstream distribution</flag>
+	</use>
+</pkgmetadata>
