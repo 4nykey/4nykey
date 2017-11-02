@@ -27,12 +27,17 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.13[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.18[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
-	test? ( dev-python/pytest-runner[${PYTHON_USEDEP}] )
+	test? (
+		dev-python/pytest-runner[${PYTHON_USEDEP}]
+		dev-python/coverage[${PYTHON_USEDEP}]
+		dev-python/defcon[${PYTHON_USEDEP}]
+		dev-python/ufoLib[${PYTHON_USEDEP}]
+	)
 "
 
 python_test() {

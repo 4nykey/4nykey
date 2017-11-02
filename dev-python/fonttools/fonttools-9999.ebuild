@@ -51,8 +51,7 @@ python_test() {
 }
 
 pkg_postinst() {
-	has_version sci-libs/scipy && \
-	has_version dev-python/munkres && \
+	has_version sci-libs/scipy || has_version dev-python/munkres && \
 	has_version dev-python/sympy && \
 	return
 	elog "These optional features require extra dependencies:"
