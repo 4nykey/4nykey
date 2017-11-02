@@ -8,22 +8,23 @@ MOZCONFIG_OPTIONAL_GTK2ONLY=1
 MOZCONFIG_OPTIONAL_WIFI=1
 
 inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils mozconfig-v6.${PV%%.*} pax-utils xdg-utils autotools
+inherit eapi7-ver
 
 MY_PN="firefox"
-MOZ_PV="$(get_version_component_range -3)esr"
-PATCH="${MY_PN}-${PV%%.*}.2-patches-03"
+MOZ_PV="$(ver_cut 1-3)esr"
+PATCH="${MY_PN}-${PV%%.*}.2-patches-02"
 
-# see https://gitweb.torproject.org/builders/tor-browser-bundle.git/tree/gitian/versions?h=maint-4.0
 # https://dist.torproject.org/torbrowser
-TOR_PV="$(version_format_string '$4.$5.$6')"
+TOR_PV="$(ver_cut 4-6)"
 if [[ -z ${PV%%*_alpha} ]]; then
-	TOR_PV="$(version_format_string '$4.$5a$6')"
+	TOR_PV="$(ver_rs 2 a ${TOR_PV})"
 else
 	KEYWORDS="~amd64 ~x86"
 fi
 TOR_PV="${TOR_PV%.0}"
 # https://gitweb.torproject.org/tor-browser.git/refs/tags
-GIT_TAG="$(version_format_string 'tor-browser-${MOZ_PV}-$4.$5-$7-build$8')"
+GIT_TAG="$(ver_cut 4-5)-$(ver_cut 7-8)"
+GIT_TAG="tor-browser-${MOZ_PV}-$(ver_rs 3 '-build' ${GIT_TAG})"
 
 DESCRIPTION="The Tor Browser"
 HOMEPAGE="
@@ -35,7 +36,7 @@ SLOT="0"
 # BSD license applies to torproject-related code like the patches
 # icons are under CCPL-Attribution-3.0
 LICENSE="BSD CC-BY-3.0 MPL-2.0 GPL-2 LGPL-2.1"
-IUSE="hardened hwaccel jack pgo rust selinux test"
+IUSE="eme-free hardened hwaccel jack pgo rust selinux test"
 
 SRC_URI="https://dist.torproject.org/${PN}/${TOR_PV}"
 PATCH_URIS=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c}/mozilla/patchsets/${PATCH}.tar.xz )
@@ -109,7 +110,6 @@ src_prepare() {
 	rm -f media/libstagefright/binding/mp4parse_capi/build.rs
 
 	# Apply gentoo firefox patches
-	rm -f "${WORKDIR}"/firefox/2003_fix_sandbox_prlimit64.patch
 	eapply "${WORKDIR}/firefox"
 
 	# Enable gnomebreakpad
@@ -182,6 +182,8 @@ src_configure() {
 
 	# enable JACK, bug 600002
 	mozconfig_use_enable jack
+
+	use eme-free && mozconfig_annotate '+eme-free' --disable-eme
 
 	# Add full relro support for hardened
 	use hardened && append-ldflags "-Wl,-z,relro,-z,now"
