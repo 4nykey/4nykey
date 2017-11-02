@@ -22,3 +22,16 @@ HOMEPAGE="https://github.com/EbenSorkin/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
+
+DEPEND="
+	!binary? ( dev-lang/perl )
+"
+
+src_prepare() {
+	fontmake_src_prepare
+	use binary && return
+	perl -00pe \
+		's:(.*)glyphname = i\.cy.*?(glyphname =.*):\1\2:s; \
+		s:color = \(.+?\)\;::g' \
+		-i "${S}"/sources/${PN^}*.glyphs
+}
