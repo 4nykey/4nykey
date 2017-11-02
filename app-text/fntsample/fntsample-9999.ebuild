@@ -3,12 +3,15 @@
 
 EAPI=6
 
-inherit autotools
+inherit cmake-utils
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://git.code.sf.net/p/${PN}/code"
+	EGIT_REPO_URI="https://github.com/eugmes/${PN}.git"
 else
-	SRC_URI="mirror://sourceforge/${PN}/${PV}/${P}.tar.gz"
+	inherit vcs-snapshot
+	MY_PV="dfb5c3f"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="release/${PV}"
+	SRC_URI="mirror://githubcl/eugmes/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
@@ -32,12 +35,9 @@ DEPEND="
 	app-i18n/unicode-data
 "
 
-src_prepare() {
-	default
-	eautoreconf
-}
-
 src_configure() {
-	econf \
-		--with-unicode-blocks="/usr/share/unicode-data/Blocks.txt"
+	local mycmakeargs=(
+		-DUNICODE_BLOCKS=/usr/share/unicode-data/Blocks.txt
+	)
+	cmake-utils_src_configure
 }
