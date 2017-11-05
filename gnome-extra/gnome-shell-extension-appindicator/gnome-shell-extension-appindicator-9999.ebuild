@@ -9,11 +9,13 @@ if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI=""
 else
 	inherit vcs-snapshot
-	KEYWORDS="~amd64 ~x86"
+	MY_PV="87db22d"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
-		mirror://githubcl/ubuntu/${PN}/tar.gz/${PV} -> ${P}.tar.gz
+		mirror://githubcl/ubuntu/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
+	KEYWORDS="~amd64 ~x86"
 fi
 
 DESCRIPTION="Adds AppIndicator support to gnome shell"
@@ -37,7 +39,7 @@ src_install() {
 	local _u=$(awk -F'"' '/uuid/ {print $4}' metadata.json)
 	insinto /usr/share/gnome-shell/extensions/${_u}
 	doins -r interfaces-xml *.js{,on}
-	dodoc README.md
+	dodoc {AUTHORS,README}.md
 }
 
 pkg_postinst() {
