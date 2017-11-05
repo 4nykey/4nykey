@@ -23,8 +23,7 @@ HOMEPAGE="https://open-eid.github.io"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-IUSE="apidocs c++0x doc test"
-REQUIRED_USE="apidocs? ( doc )"
+IUSE="apidocs test"
 
 RDEPEND="
 	dev-libs/libdigidoc
@@ -39,27 +38,24 @@ DEPEND="
 	test? ( dev-libs/boost )
 	apidocs? ( app-doc/doxygen )
 	dev-util/cmake-openeid
+	dev-util/xxdi
 "
 DOCS=( AUTHORS README.md RELEASE-NOTES.md )
 
 src_prepare() {
 	sed \
-		-e "s:doc/${PN}:doc/${PF}:" \
 		-e 's:\${CMAKE_SOURCE_DIR}/cmake/modules:/usr/share/cmake/openeid:' \
 		-i CMakeLists.txt
 	use test || sed -i CMakeLists.txt -e '/add_subdirectory(test)/d'
-	sed \
-		-e 's:NOT CERTS_LOCATION:INSTALL_CERTS AND &:' \
-		-e '/INSTALL_RPATH/d' \
-		-i src/CMakeLists.txt
+	sed -e 's:xxd -i:xxdi.pl:' -i src/CMakeLists.txt
 	rm -rf src/{minizip,openssl}
 	cmake-utils_src_prepare
 }
 
 src_configure() {
 	local mycmakeargs=(
-		-DINSTALL_DOC=$(usex doc)
-		-DDISABLE_CXX11=$(usex !c++0x)
+		-DCMAKE_DISABLE_FIND_PACKAGE_Doxygen=$(usex !apidocs)
+		-DCMAKE_DISABLE_FIND_PACKAGE_SWIG=yes
 		-DCMAKE_INSTALL_SYSCONFDIR="${EROOT}etc"
 	)
 	cmake-utils_src_configure
