@@ -12,7 +12,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI=""
 else
 	inherit vcs-snapshot
-	MY_PV="031637d"
+	MY_PV="1aae735"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/Alexey-Yakovenko/${PN}/tar.gz/${MY_PV}
@@ -75,8 +75,11 @@ DEPEND="
 "
 
 src_prepare() {
-	sed -i "${S}"/plugins/wildmidi/wildmidiplug.c \
-		-e 's,#define DEFAULT_TIMIDITY_CONFIG ",&/usr/share/timidity/freepats/timidity.cfg:,'
+	local _t=/usr/share/timidity/freepats/timidity.cfg
+	sed \
+		-e "s,#define DEFAULT_TIMIDITY_CONFIG \",&${_t}:," \
+		-i plugins/wildmidi/wildmidiplug.c
+	mkdir -p plugins/gtkui/temp
 	eautopoint --force
 	gnome2_src_prepare
 }
