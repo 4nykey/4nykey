@@ -5,13 +5,13 @@ EAPI=6
 
 PYTHON_COMPAT=( python3_{4,5,6} )
 PYTHON_REQ_USE="xml(+)"
-inherit distutils-r1
+inherit distutils-r1 virtualx
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="4333ede"
+	MY_PV="07ff00b"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/${PN}/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -25,7 +25,7 @@ HOMEPAGE="http://trufont.github.io/"
 
 LICENSE="|| ( GPL-3 LGPL-3 )"
 SLOT="0"
-IUSE=""
+IUSE="test"
 
 RDEPEND="
 	dev-python/defconQt[${PYTHON_USEDEP}]
@@ -37,10 +37,18 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
+	test? (
+		>=dev-python/flake8-3.4.1[${PYTHON_USEDEP}]
+		dev-python/pytest[${PYTHON_USEDEP}]
+	)
 "
 
-src_prepare() {
-	default
+python_prepare_all() {
 	# no egg-info for PyQt5
 	sed -e '/\<pyqt5\>/d' -i setup.py
+	distutils-r1_python_prepare_all
+}
+
+python_test() {
+	virtx esetup.py test
 }
