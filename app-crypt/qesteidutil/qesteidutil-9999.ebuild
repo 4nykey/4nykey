@@ -14,14 +14,14 @@ else
 		mirror://githubcl/open-eid/${PN}/tar.gz/v${MY_PV} -> ${P}.tar.gz
 	"
 	# submodules not included in github releases
-	MY_QC="qt-common-b862284"
+	MY_QC="qt-common-80ea96c"
 	SRC_URI="${SRC_URI}
 		mirror://githubcl/open-eid/${MY_QC%-*}/tar.gz/${MY_QC##*-} -> ${MY_QC}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit cmake-utils
+inherit cmake-utils xdg-utils
 
 DESCRIPTION="Smart card manager UI application"
 HOMEPAGE="https://open-eid.github.io"
@@ -56,4 +56,12 @@ src_configure() {
 	local mycmakeargs=()
 	[[ -n ${PV%%*9999} ]] && mycmakeargs=( -DBREAKPAD='' )
 	cmake-utils_src_configure
+}
+
+pkg_postinst() {
+	xdg_desktop_database_update
+}
+
+pkg_postrm() {
+	xdg_desktop_database_update
 }

@@ -14,21 +14,21 @@ else
 		mirror://githubcl/open-eid/${PN}/tar.gz/v${MY_PV} -> ${P}.tar.gz
 	"
 	# submodules not included in github releases
-	MY_QC="qt-common-b862284"
+	MY_QC="qt-common-81b04ff"
 	SRC_URI="${SRC_URI}
 		mirror://githubcl/open-eid/${MY_QC%-*}/tar.gz/${MY_QC##*-} -> ${MY_QC}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit cmake-utils
+inherit cmake-utils xdg-utils
 
 DESCRIPTION="Estonian ID card digital signature desktop tools"
 HOMEPAGE="https://open-eid.github.io"
 
 LICENSE="LGPL-2.1 Nokia-Qt-LGPL-Exception-1.1"
 SLOT="0"
-IUSE="kde nautilus"
+IUSE="nautilus"
 
 DEPEND="
 	dev-libs/libdigidocpp
@@ -60,9 +60,18 @@ src_prepare() {
 
 src_configure() {
 	local mycmakeargs=(
-		-DENABLE_KDE=$(usex kde)
 		-DENABLE_NAUTILUS_EXTENSION=$(usex nautilus)
 	)
 	[[ -n ${PV%%*9999} ]] && mycmakeargs+=( -DBREAKPAD='' )
 	cmake-utils_src_configure
+}
+
+pkg_postinst() {
+	xdg_desktop_database_update
+	xdg_mimeinfo_database_update
+}
+
+pkg_postrm() {
+	xdg_desktop_database_update
+	xdg_mimeinfo_database_update
 }
