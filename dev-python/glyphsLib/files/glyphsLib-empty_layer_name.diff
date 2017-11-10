@@ -1,0 +1,11 @@
+--- a/Lib/glyphsLib/builder/builders.py
++++ b/Lib/glyphsLib/builder/builders.py
+@@ -123,7 +123,7 @@ class UFOBuilder(object):
+ 
+                 assoc_id = layer.associatedMasterId
+                 if assoc_id != layer.layerId:
+-                    if layer_name is not None:
++                    if layer_name:
+                         supplementary_layer_data.append(
+                             (assoc_id, glyph_name, layer_name, layer))
+                     continue

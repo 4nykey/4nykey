@@ -40,7 +40,3 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-masters_wcodes.diff
 	"${FILESDIR}"/${PN}-empty_layer_name.diff
 )
-
-python_test() {
-	esetup.py test
-}
