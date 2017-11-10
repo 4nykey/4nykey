@@ -12,7 +12,7 @@ inherit eapi7-ver
 
 MY_PN="firefox"
 MOZ_PV="$(ver_cut 1-3)esr"
-PATCH="${MY_PN}-${PV%%.*}.2-patches-02"
+PATCH="${MY_PN}-${PV%%.*}.4-patches-02"
 
 # https://dist.torproject.org/torbrowser
 TOR_PV="$(ver_cut 4-6)"
@@ -110,6 +110,7 @@ src_prepare() {
 	rm -f media/libstagefright/binding/mp4parse_capi/build.rs
 
 	# Apply gentoo firefox patches
+	rm -f "${WORKDIR}"/firefox/2003_fix_sandbox_prlimit64.patch
 	eapply "${WORKDIR}/firefox"
 
 	# Enable gnomebreakpad
