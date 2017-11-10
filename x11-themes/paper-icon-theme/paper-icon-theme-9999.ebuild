@@ -3,7 +3,8 @@
 
 EAPI=6
 
-inherit gnome2 autotools
+GNOME2_EAUTORECONF="yes"
+inherit gnome2
 if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI=""
 	EGIT_REPO_URI="https://github.com/snwh/${PN}.git"
@@ -30,8 +31,3 @@ DEPEND=""
 RDEPEND="
 	${DEPEND}
 "
-
-src_prepare() {
-	default
-	eautoreconf
-}

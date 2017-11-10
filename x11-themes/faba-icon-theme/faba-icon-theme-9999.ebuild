@@ -3,7 +3,8 @@
 
 EAPI=6
 
-inherit autotools gnome2
+GNOME2_EAUTORECONF="yes"
+inherit gnome2
 MY_M="faba-mono-icons-2006c52"
 if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI=""
@@ -24,7 +25,7 @@ fi
 DESCRIPTION="A sexy and modern icon theme with Tango influences"
 HOMEPAGE="https://snwh.org/moka#${PN}"
 
-LICENSE="CC-BY-SA-4.0"
+LICENSE="|| ( LGPL-3+ CC-BY-SA-4.0 )"
 SLOT="0"
 IUSE=""
 
@@ -53,6 +54,5 @@ src_prepare() {
 	sed \
 		-e "s:AM_SILENT_RULES.*:&\nAC_CONFIG_SUBDIRS(${MY_M%-*}):" \
 		-i configure.ac
-	default
-	eautoreconf
+	gnome2_src_prepare
 }
