@@ -11,7 +11,7 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="b99ecb8"
+	MY_PV="c2d0a36"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -58,7 +58,7 @@ src_prepare() {
 		"${FILESDIR}"/${PN}-makeotf.diff
 		"${FILESDIR}"/${PN}-paths.diff
 		"${FILESDIR}"/${PN}-inc.diff
-		"${FILESDIR}"/${PN}-defcon.diff
+		"${FILESDIR}"/${PN}-ar.diff
 		"${FILESDIR}"/${PN}-ufo3.diff
 	)
 	rm -f "${S}"/FDK/Tools/linux/{AFDKOPython,setFDKPaths,ttx,ufonormalizer}

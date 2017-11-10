@@ -1,31 +1,42 @@
+--- a/FDK/Tools/Programs/public/lib/source/ufowrite/ufowrite.c
++++ b/FDK/Tools/Programs/public/lib/source/ufowrite/ufowrite.c
+@@ -561,7 +561,7 @@ static void writeMetaInfo(ufwCtx h)
+     writeLine(h, "\t<key>creator</key>");
+     writeLine(h, "\t<string>com.adobe.type.tx</string>");
+     writeLine(h, "\t<key>formatVersion</key>");
+-    writeLine(h, "\t<integer>2</integer>");
++    writeLine(h, "\t<integer>3</integer>");
+     writeLine(h, "</dict>");
+     writeLine(h, "</plist>");
+     
 --- a/FDK/Tools/SharedData/FDKScripts/CheckOutlinesUFO.py
 +++ b/FDK/Tools/SharedData/FDKScripts/CheckOutlinesUFO.py
-@@ -100,7 +100,7 @@ class FontFile(object):
- 		self.dFont = None
- 		self.useHashMap = False
- 		self.ufoFontHashData = None
--		self.ufoFormat = 2
-+		self.ufoFormat = 3
- 		self.saveToDefaultLayer = 0
+@@ -115,7 +115,7 @@ class FontFile(object):
+         self.defcon_font = None
+         self.use_hash_map = False
+         self.ufo_font_hash_data = None
+-        self.ufo_format = 2
++        self.ufo_format = 3
+         self.save_to_default_layer = False
  
- 	def open(self, useHashMap):
-@@ -173,7 +173,7 @@ class FontFile(object):
- 		I also set glyphSet.ufoFormatVersion so that the glif files will be set to format 1.
- 		"""
- 		from ufoLib import UFOWriter
--		writer = UFOWriter(self.dFont.path, formatVersion=2)
-+		writer = UFOWriter(self.dFont.path, formatVersion=3)
- 		if self.saveToDefaultLayer:
- 			self.dFont.save()
- 		else:
-@@ -183,7 +183,7 @@ class FontFile(object):
- 			writer.layerContents[kProcessedGlyphsLayerName] = kProcessedGlyphsLayer
- 			glyphSet = writer.getGlyphSet(layerName=kProcessedGlyphsLayerName, defaultLayer=False)
- 			writer.writeLayerContents(layers.layerOrder)
--			glyphSet.ufoFormatVersion = 2
-+			glyphSet.ufoFormatVersion = 3
- 			layer.save(glyphSet)
- 			layer.dirty = False
+     def open(self, use_hash_map):
+@@ -199,7 +199,7 @@ class FontFile(object):
+         that the glif files will be set to format 1.
+         """
+         from ufoLib import UFOWriter
+-        writer = UFOWriter(self.defcon_font.path, formatVersion=2)
++        writer = UFOWriter(self.defcon_font.path, formatVersion=3)
+         if self.save_to_default_layer:
+             self.defcon_font.save()
+         else:
+@@ -211,7 +211,7 @@ class FontFile(object):
+             glyph_set = writer.getGlyphSet(
+                 layerName=PROCD_GLYPHS_LAYER_NAME, defaultLayer=False)
+             writer.writeLayerContents(layers.layerOrder)
+-            glyph_set.ufoFormatVersion = 2
++            glyph_set.ufoFormatVersion = 3
+             layer.save(glyph_set)
+             layer.dirty = False
  
 --- a/FDK/Tools/SharedData/FDKScripts/makeInstancesUFO.py
 +++ b/FDK/Tools/SharedData/FDKScripts/makeInstancesUFO.py
@@ -38,3 +49,14 @@
  	if len(newInstancesList) == 1:
  		logMsg.log("Building 1 instance...")
  	else:
+--- a/FDK/Tools/SharedData/FDKScripts/robofab/objects/objectsRF.py
++++ b/FDK/Tools/SharedData/FDKScripts/robofab/objects/objectsRF.py
+@@ -373,7 +373,7 @@
+ 		return reverseMap
+ 		
+ 
+-	def save(self, destDir=None, doProgress=False, formatVersion=2):
++	def save(self, destDir=None, doProgress=False, formatVersion=3):
+ 		"""Save the Font in UFO format."""
+ 		# XXX note that when doing "save as" by specifying the destDir argument
+ 		# _all_ glyphs get loaded into memory. This could be optimized by either

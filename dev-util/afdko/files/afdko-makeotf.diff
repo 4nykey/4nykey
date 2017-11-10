@@ -1,12 +1,11 @@
 --- a/FDK/Tools/SharedData/FDKScripts/MakeOTF.py
 +++ b/FDK/Tools/SharedData/FDKScripts/MakeOTF.py
-@@ -2489,8 +2489,5 @@ def main():
- 	print "Done."
- 		
- if __name__=='__main__':
--	try:
--		main()
+@@ -2595,8 +2595,6 @@ def main():
+ 		if makeOTFParams.saveOptions == 'true':
+ 			saveOptionsFile(makeOTFParams) # this always saves options to kDefaultOptionsFile; may also save to user-specified option file.
+ 		runMakeOTF(makeOTFParams)
 -	except (MakeOTFOptionsError, MakeOTFTXError, MakeOTFRunError):
 -		pass
-+	main()
- 
+ 	except:
+ 		import traceback
+ 		traceback.print_exc()
