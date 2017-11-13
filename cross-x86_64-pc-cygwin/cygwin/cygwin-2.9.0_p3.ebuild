@@ -3,7 +3,7 @@
 
 EAPI=6
 
-inherit toolchain-funcs flag-o-matic vcs-snapshot
+inherit toolchain-funcs flag-o-matic vcs-snapshot eapi7-ver
 
 export CBUILD=${CBUILD:-${CHOST}}
 export CTARGET=${CTARGET:-${CHOST}}
@@ -14,16 +14,26 @@ if [[ ${CTARGET} == ${CHOST} ]] ; then
 fi
 
 DESCRIPTION="Linux-like environment for Windows"
-HOMEPAGE="http://cygwin.com/"
-MY_P="${P}_x86_64"
+HOMEPAGE="https://cygwin.com/"
+MY_ARCH="${CTARGET%-pc-cygwin}"
+MY_ARCH="${MY_ARCH/i686/x86}"
+MY_PV="05cfd1a"
+MY_PB="${P}-${MY_ARCH}"
+MY_PVB="$(ver_cut 1-3)"
+if [[ -n ${PV%%*_p*} ]]; then
+	MY_PV="${PN}-$(ver_cut 1-3 ${PV//./_})-release"
+	MY_PVB+="-1"
+else
+	MY_PVB+="-$(ver_cut 5)"
+fi
 SRC_URI="
 	!crosscompile_opts_headers-only? (
-		mirror://githubcl/${PN}/${PN}/tar.gz/${PN}-${PV//./_}-release
+		mirror://githubcl/${PN}/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
 	)
 	crosscompile_opts_headers-only? (
-		mirror://cygwin/x86_64/release/${PN}/${PN}-devel/${PN}-devel-${PV}-1.tar.xz
-		-> ${MY_P}.tar.xz
+		mirror://cygwin/${MY_ARCH}/release/${PN}/${PN}-devel/${PN}-devel-${MY_PVB}.tar.xz
+		-> ${MY_PB}.tar.xz
 	)
 "
 
@@ -41,7 +51,7 @@ pkg_setup() {
 	if [[ ${CBUILD} == ${CHOST} ]] && [[ ${CHOST} == ${CTARGET} ]] ; then
 		die "Invalid configuration; do not emerge this directly"
 	fi
-	just_headers && S="${WORKDIR}"/${MY_P} && return
+	just_headers && S="${WORKDIR}"/${MY_PB} && return
 	PATCHES=(
 		"${FILESDIR}"/${PN}-2.4.0-dont_regen_devices.cc.diff
 	)

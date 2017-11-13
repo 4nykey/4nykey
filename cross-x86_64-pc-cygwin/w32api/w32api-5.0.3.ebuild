@@ -15,17 +15,21 @@ fi
 
 DESCRIPTION="MinGW-w64 Windows API for Cygwin"
 HOMEPAGE="http://cygwin.com/"
+MY_ARCH="${CTARGET%-pc-cygwin}"
+MY_ARCH="${MY_ARCH/i686/x86}"
 MY_H="${PN}-headers-${PV}-1"
 MY_R="${PN}-runtime-${PV}-1"
-MY_P="${P}-x64"
-SRC_URI="mirror://cygwin/x86_64/release"
+MY_PB="${P}-${MY_ARCH}"
+MY_PN="mingw-w64"
+MY_P="${MY_PN}-v${PV}"
+SRC_URI="mirror://cygwin/${MY_ARCH}/release"
 SRC_URI="
 	!crosscompile_opts_headers-only? (
-		${SRC_URI}/${PN}-runtime/${MY_R}-src.tar.xz -> ${MY_P}_src.tar.xz
+		mirror://sourceforge/${MY_PN}/${MY_PN}/${MY_PN}-release/${MY_P}.tar.bz2
 	)
 	crosscompile_opts_headers-only? (
-		${SRC_URI}/${PN}-headers/${MY_H}.tar.xz -> ${MY_P}_inc.tar.xz
-		${SRC_URI}/${PN}-runtime/${MY_R}.tar.xz -> ${MY_P}_lib.tar.xz
+		${SRC_URI}/${PN}-headers/${MY_H}.tar.xz -> ${MY_PB}_inc.tar.xz
+		${SRC_URI}/${PN}-runtime/${MY_R}.tar.xz -> ${MY_PB}_lib.tar.xz
 	)
 "
 
@@ -34,7 +38,7 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE="crosscompile_opts_headers-only"
 RESTRICT="strip primaryuri"
-S="${WORKDIR}/mingw-w64"
+S="${WORKDIR}"
 
 DEPEND=""
 
@@ -47,23 +51,25 @@ pkg_setup() {
 		die "Invalid configuration; do not emerge this directly"
 	fi
 	just_headers && return
+	S="${WORKDIR}/${MY_P}"
 	CHOST=${CTARGET} strip-unsupported-flags
 	filter-flags -m*=*
 	strip-flags
 	unset AR RANLIB
 }
 
-src_unpack() {
-	mkdir -p "${S}"
-	default
-	just_headers || unpack "${WORKDIR}"/${MY_R}.src/mingw-w64-${PV}.tar.bz2
-}
-
 src_configure() {
 	just_headers && return
+	local _l
+	if [[ -z ${MY_ARCH#*_64} ]]; then
+		_l="--enable-lib64 --disable-lib32"
+	else
+		_l="--disable-lib64 --enable-lib32"
+	fi
 	econf \
 		--enable-w32api \
 		--host=${CTARGET} \
+		${_l} \
 		--with-sysroot="${EPREFIX}/usr/${CTARGET}"
 }
 
@@ -75,7 +81,7 @@ src_compile() {
 src_install() {
 	if just_headers ; then
 		insinto /usr/${CTARGET}/usr
-		doins -r "${WORKDIR}"/usr/{lib,include}
+		doins -r usr/{lib,include}
 	else
 		emake \
 			DESTDIR="${D}usr/${CTARGET}" \
