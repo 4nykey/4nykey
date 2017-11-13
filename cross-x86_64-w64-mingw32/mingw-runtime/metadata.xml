@@ -4,4 +4,12 @@
 	<maintainer type="person">
 		<email>4nykey@gmail.com</email>
 	</maintainer>
+	<use>
+		<flag name="idl">Install idl files.</flag>
+		<flag name="libraries">Build extra libraries.</flag>
+		<flag name="tools">Build extra tools.</flag>
+	</use>
+	<upstream>
+		<remote-id type="sourceforge">mingw-w64</remote-id>
+	</upstream>
 </pkgmetadata>
