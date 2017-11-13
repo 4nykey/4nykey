@@ -1,0 +1,1 @@
+../../cross-x86_64-pc-cygwin/cygwin/cygwin-2.9.0_p3.ebuild
