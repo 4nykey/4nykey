@@ -6,7 +6,7 @@ EAPI=6
 inherit toolchain-funcs gnome2 meson
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://git.gnome.org/browse/frogr"
+	EGIT_REPO_URI="https://git.gnome.org/browse/${PN}"
 	SRC_URI=""
 else
 	KEYWORDS="~amd64 ~x86"

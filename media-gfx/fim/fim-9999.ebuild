@@ -6,7 +6,7 @@ EAPI=6
 inherit autotools
 if [[ ${PV} = *9999* ]]; then
 	inherit subversion
-	ESVN_REPO_URI="http://svn.savannah.nongnu.org/svn/fbi-improved/trunk"
+	ESVN_REPO_URI="https://svn.savannah.nongnu.org/svn/fbi-improved/trunk"
 	KEYWORDS=""
 else
 	MY_P="${P/_pre*/-trunk}"

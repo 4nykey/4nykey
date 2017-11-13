@@ -3,10 +3,11 @@
 
 EAPI=6
 
+GNOME2_EAUTORECONF="yes"
 inherit gnome2
 if [[ -z ${PV%%*9999} ]]; then
-	inherit git-r3 autotools
-	EGIT_REPO_URI="https://git.gnome.org/browse/frogr"
+	inherit git-r3
+	EGIT_REPO_URI="https://git.gnome.org/browse/${PN}"
 	SRC_URI=""
 else
 	KEYWORDS="~amd64 ~x86"
@@ -31,12 +32,6 @@ DEPEND="
 RDEPEND="
 	${DEPEND}
 "
-
-src_prepare() {
-	mkdir -p "${S}"/m4
-	gnome2_src_prepare
-	[[ -z ${PV%%*9999} ]] && eautoreconf
-}
 
 src_configure() {
 	local myconf="
