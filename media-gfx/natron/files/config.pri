@@ -12,9 +12,3 @@ pyside {
 CONFIG(notests) {
 	SUBDIRS -= Tests
 }
-CONFIG(system-libs) {
-	SUBDIRS -= ceres gflags glog hoedown
-	PKGCONFIG += libglog gflags eigen3
-	INCLUDEPATH += /usr/include/ceres /usr/include/ceres/internal /usr/include/hoedown
-	LIBS += -lceres -lhoedown
-}

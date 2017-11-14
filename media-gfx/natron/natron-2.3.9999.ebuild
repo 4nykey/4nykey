@@ -46,7 +46,7 @@ HOMEPAGE="https://natron.fr"
 
 LICENSE="GPL-2+ doc? ( CC-BY-SA-4.0 )"
 SLOT="0"
-IUSE="c++11 debug doc -qt5 openmp pch system-libs test"
+IUSE="c++11 debug doc -qt5 openmp pch test"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 RDEPEND="
@@ -57,16 +57,9 @@ RDEPEND="
 	x11-libs/cairo[static-libs]
 	dev-python/pyside:0[X,opengl,${PYTHON_USEDEP}]
 	dev-python/shiboken:0[${PYTHON_USEDEP}]
-	system-libs? (
-		sci-libs/ceres-solver[c++11?,gflags,openmp?]
-		app-text/hoedown
-	)
 "
 DEPEND="
 	${DEPEND}
-	system-libs? (
-		dev-cpp/eigen:3[c++11?,openmp?]
-	)
 	doc? ( dev-python/sphinx )
 "
 RDEPEND="
@@ -101,18 +94,6 @@ src_prepare() {
 	sed \
 		-e '/INCLUDEPATH.*OSMESA_INCLUDES/d' \
 		-i global.pri
-
-	use system-libs || return
-
-	local _d='ceres\|Eigen3\|gflags\|glog\|hoedown'
-	sed \
-		-e "/^\(${_d}\)\.depends/d" \
-		-e "/\.depends =/ s:\<\(${_d}\)\>::g" \
-		-i Project.pro
-	sed \
-		-e "s: static-\(${_d}\)::g" \
-		-i libs.pri App/App.pro Renderer/Renderer.pro Tests/Tests.pro
-	sed -e "/INCLUDEPATH.*libs\/\(${_d}\)/d" -i libs.pri
 }
 
 src_configure() {
@@ -125,7 +106,6 @@ src_configure() {
 		CONFIG$(usex pch - +)=nopch
 		CONFIG$(usex debug - +)=noassertions
 		CONFIG$(usex test - +)=notests
-		CONFIG$(usex system-libs + -)=system-libs
 	)
 	eqmake4 -r "${qmakeargs[@]}"
 }
@@ -147,7 +127,7 @@ src_install() {
 
 src_test() {
 	cd "${S}"/Tests
-	./Tests
+	./Tests || die
 }
 
 pkg_postinst() {
