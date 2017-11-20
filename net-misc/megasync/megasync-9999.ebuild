@@ -14,7 +14,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="2e03def"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}_Linux"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}_OSX"
 	SRC_URI="
 		mirror://githubcl/meganz/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -34,8 +34,14 @@ REQUIRED_USE="dolphin? ( qt5 )"
 
 RDEPEND="
 	net-misc/meganz-sdk[libuv,qt,sodium,sqlite]
-	!qt5? ( dev-qt/qtgui:4 )
-	qt5? ( dev-qt/qtwidgets:5 )
+	qt5? (
+		dev-qt/qtsvg:5
+		dev-qt/qtdbus:5
+	)
+	!qt5? (
+		dev-qt/qtsvg:4
+		dev-qt/qtdbus:4
+	)
 	dolphin? ( kde-apps/dolphin )
 	nautilus? ( >=gnome-base/nautilus-3 )
 	thunar? ( xfce-base/thunar )
@@ -47,7 +53,6 @@ DEPEND="
 src_prepare() {
 	local PATCHES=(
 		"${FILESDIR}"/${PN}-qmake.diff
-		"${FILESDIR}"/${PN}-sdk.diff
 	)
 	cp -r "${EROOT}"usr/share/meganz-sdk/bindings "${S}"/src/MEGASync/mega/
 	cmake-utils_src_prepare
