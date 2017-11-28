@@ -7,17 +7,21 @@
 # @BLURB: An eclass to build fonts from sources using dev-util/fontmake
 
 # @VARIABLE: FONT_SRCDIR
-# @DEFAULT_UNSET
 # @DESCRIPTION:
-# Directory containing the sources, 'sources' if unset
+# The path of a directory containing the sources, relative to ${S}.
+# 'sources' if unset
 FONT_SRCDIR=${FONT_SRCDIR:-sources}
 
-# @VARIABLE: FONTDIR_BIN
+# @VARIABLE: EMAKE_EXTRA_ARGS
 # @DEFAULT_UNSET
 # @DESCRIPTION:
-# An array of dirs to search for prebuilt fonts in,
-# 'fonts fonts/otf fonts/ttf' by default
-FONTDIR_BIN=( ${FONTDIR_BIN[@]:-fonts fonts/otf fonts/ttf} )
+# An array containing additional arguments for emake.
+
+# @VARIABLE: FONTDIR_BIN
+# @DESCRIPTION:
+# An array containing paths relative to ${S}, where to search for prebuilt
+# fonts. By default: 'fonts fonts/otf fonts/ttf'
+FONTDIR_BIN=( "${FONTDIR_BIN[@]:-fonts fonts/otf fonts/ttf}" )
 
 PYTHON_COMPAT=( python2_7 python3_{4,5,6} )
 IUSE="+binary"
@@ -55,10 +59,6 @@ fontmake_pkg_setup() {
 		FONT_S=( master_{o,t}tf )
 		python-any-r1_pkg_setup
 	fi
-	has interpolate ${IUSE} && \
-		MAKEOPTS+=" $(usex interpolate '' 'INTERPOLATE=')"
-	has clean-as-you-go ${IUSE} && \
-		MAKEOPTS+=" CLEAN=$(usex clean-as-you-go clean '')"
 	font-r1_pkg_setup
 }
 
@@ -71,9 +71,16 @@ fontmake_src_prepare() {
 
 fontmake_src_compile() {
 	use binary && return
-	emake \
-		--no-builtin-rules \
-		SRCDIR="${FONT_SRCDIR}" \
-		-f ${MY_MK}/Makefile \
+
+	local myemakeargs=(
+		--no-builtin-rules
+		-f ${MY_MK}/Makefile
+		SRCDIR="${FONT_SRCDIR}"
+		$(in_iuse interpolate && usex interpolate '' 'INTERPOLATE=')
+		$(in_iuse clean-as-you-go && usex clean-as-you-go 'CLEAN=clean' '')
+		"${EMAKE_EXTRA_ARGS[@]}"
 		${FONT_SUFFIX}
+	)
+
+	emake "${myemakeargs[@]}"
 }
