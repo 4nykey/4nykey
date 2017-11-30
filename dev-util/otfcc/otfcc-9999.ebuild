@@ -6,6 +6,7 @@ EAPI=6
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/caryll/${PN}.git"
+	EGIT_BRANCH=releases
 else
 	inherit vcs-snapshot
 	SRC_URI="
