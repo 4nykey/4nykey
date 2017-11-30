@@ -4,13 +4,13 @@
 EAPI=6
 
 MY_PN="The-${PN^}-Font"
-MAKEOPTS+=" INTERPOLATE="
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/impallari/${MY_PN}"
+	EGIT_REPO_URI="https://github.com/googlefonts/${MY_PN}"
 else
 	inherit vcs-snapshot
-	MY_PV="e8be3a0"
+	MY_PV="2cb4569"
 	SRC_URI="
 		mirror://githubcl/impallari/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"

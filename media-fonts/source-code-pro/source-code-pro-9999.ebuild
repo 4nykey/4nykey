@@ -9,8 +9,8 @@ if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-fonts/${PN}"
 else
-	inherit versionator vcs-snapshot
-	MY_PVB="$(get_version_component_range -2)R-ro/$(get_version_component_range 3-4)R-it"
+	inherit vcs-snapshot eapi7-ver
+	MY_PVB="$(ver_cut 1-2)R-ro/$(ver_cut 3-4)R-it"
 	MY_PV="3592ef6"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${MY_PVB//R}"
 	SRC_URI="

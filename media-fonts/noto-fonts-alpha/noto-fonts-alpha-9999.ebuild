@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}"
 else
 	inherit vcs-snapshot
-	MY_PV="5ce7689"
+	MY_PV="1bfcda0"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -27,6 +27,9 @@ SLOT="0"
 
 src_prepare() {
 	default
-	find -type f -path './from-pipeline/unhinted/[ot]tf/*.[ot]tf' \
-		-execdir mv --target-directory="${S}" {} +
+	local _s
+	for _s in ${FONT_SUFFIX}; do
+		find -type f -path "./from-pipeline/unhinted/${_s}/*.${_s}" \
+			-exec mv --target-directory="${S}" {} +
+	done
 }

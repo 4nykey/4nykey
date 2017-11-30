@@ -4,7 +4,9 @@
 EAPI=6
 
 MY_PN="Inconsolata-LGC"
-MAKEOPTS+=" INTERPOLATE= glyphs=InconsolataLGCT.glyphs"
+EMAKE_EXTRA_ARGS=(
+	glyphs=InconsolataLGCT.glyphs
+)
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/glebd/${MY_PN}.git"
@@ -37,6 +39,7 @@ HOMEPAGE="https://github.com/MihailJP/${MY_PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
+IUSE="interpolate"
 
 pkg_setup() {
 	if use binary; then

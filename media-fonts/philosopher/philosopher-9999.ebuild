@@ -3,7 +3,6 @@
 
 EAPI=6
 
-MAKEOPTS+=" INTERPOLATE="
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/alexeiva/${PN}.git"
@@ -22,3 +21,4 @@ HOMEPAGE="https://github.com/alexeiva/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
+IUSE="interpolate"

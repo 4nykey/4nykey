@@ -4,7 +4,6 @@
 EAPI=6
 
 MY_PN="${PN^}-Cyrillic"
-MAKEOPTS+=" INTERPOLATE="
 PATCHES=(
 	"${FILESDIR}"/${PN}_overlaps.diff
 )

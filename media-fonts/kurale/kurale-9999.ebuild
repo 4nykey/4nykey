@@ -3,7 +3,6 @@
 
 EAPI=6
 
-MAKEOPTS+=" INTERPOLATE="
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/etunni/${PN}.git"
@@ -22,8 +21,3 @@ HOMEPAGE="https://github.com/etunni/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-
-src_prepare() {
-	fontmake_src_prepare
-	sed -e '/color = (/d' -i "${S}"/sources/${PN^}*.glyphs
-}

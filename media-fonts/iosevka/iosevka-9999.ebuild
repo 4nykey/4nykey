@@ -56,7 +56,7 @@ REQUIRED_USE+="
 DEPEND+="
 	!binary? (
 		${PYTHON_DEPS}
-		>=net-libs/nodejs-6.0[npm]
+		>=net-libs/nodejs-8.4[npm]
 		media-gfx/ttfautohint
 		dev-util/otfcc
 		font_types_ttc? ( dev-util/otfcc-ttcize )

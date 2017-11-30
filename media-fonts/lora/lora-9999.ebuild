@@ -4,7 +4,6 @@
 EAPI=6
 
 MY_PN="${PN^}-Cyrillic"
-MAKEOPTS+=" INTERPOLATE="
 FONTDIR_BIN=( fonts/{OTF,ttf} )
 PATCHES=(
 	"${FILESDIR}"/${PN}_cyrbreve.diff
@@ -28,3 +27,4 @@ HOMEPAGE="https://github.com/cyrealtype/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
+IUSE="interpolate"

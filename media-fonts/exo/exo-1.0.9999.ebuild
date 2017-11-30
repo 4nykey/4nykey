@@ -4,8 +4,7 @@
 EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
-inherit versionator
-SLOT="$(get_version_component_range 1-2)"
+SLOT="${PV:0:3}"
 FONT_PN="${PN}-${SLOT}"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
