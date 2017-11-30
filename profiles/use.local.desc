@@ -47,7 +47,6 @@ media-gfx/fim:screen - Add experimental support for running under screen
 media-gfx/fim:xfig - Enable FIG file support via media-gfx/xfig
 media-gfx/fontview:gtk3 - Use GTK+3 instead of GTK+2
 media-gfx/natron:c++11 - Build using the C++11 standard
-media-gfx/natron:system-libs - Use system libraries instead of the ones included in the upstream distribution
 media-gfx/sortsmill-tools:xi - Build with the Xi X library
 media-gfx/sortsmill-tools:xkbui - Build with the xkbui X library
 media-libs/aubio:double-precision - Compile in double precision mode.
