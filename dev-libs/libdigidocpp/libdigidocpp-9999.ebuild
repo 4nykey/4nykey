@@ -38,7 +38,10 @@ DEPEND="
 	test? ( dev-libs/boost )
 	apidocs? ( app-doc/doxygen )
 	dev-util/cmake-openeid
-	dev-util/xxdi
+	|| (
+		dev-util/xxdi
+		app-editors/vim-core
+	)
 "
 DOCS=( AUTHORS README.md RELEASE-NOTES.md )
 
@@ -47,7 +50,8 @@ src_prepare() {
 		-e 's:\${CMAKE_SOURCE_DIR}/cmake/modules:/usr/share/cmake/openeid:' \
 		-i CMakeLists.txt
 	use test || sed -i CMakeLists.txt -e '/add_subdirectory(test)/d'
-	sed -e 's:xxd -i:xxdi.pl:' -i src/CMakeLists.txt
+	has_version app-editors/vim-core || sed \
+		-e 's:xxd -i \(tslcert.\.crt\):xxdi.pl \1 >:' -i src/CMakeLists.txt
 	rm -rf src/{minizip,openssl}
 	cmake-utils_src_prepare
 }
