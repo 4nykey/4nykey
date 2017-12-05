@@ -22,3 +22,4 @@ HOMEPAGE="https://github.com/cyrealtype/${PN}"
 LICENSE="OFL-1.1"
 SLOT="0"
 REQUIRED_USE="binary? ( !font_types_otf )"
+PATCHES=( "${FILESDIR}"/${PN}-florin.diff )
