@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python2_7 python3_{4,5,6} )
 PLOCALES="
 cs de el es fi fr he id it nb nl oc pl pt pt_BR ru sk sr sv tr uk
 "
-inherit python-any-r1 vala l10n toolchain-funcs
+inherit python-any-r1 vala l10n toolchain-funcs xdg-utils
 if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/johanmattssonm/${PN}.git"
 	inherit git-r3
@@ -89,4 +89,14 @@ src_install() {
 		--skip-command-line-tools=$(usex gtk '0' '1') \
 		|| die
 	einstalldocs
+}
+
+pkg_postinst() {
+	xdg_desktop_database_update
+	xdg_mimeinfo_database_update
+}
+
+pkg_postrm() {
+	xdg_desktop_database_update
+	xdg_mimeinfo_database_update
 }
