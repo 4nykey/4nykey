@@ -38,7 +38,6 @@ DEPEND="
 "
 PATCHES=(
 	"${FILESDIR}"/${PN}-masters_wcodes.diff
-	"${FILESDIR}"/${PN}-empty_layer_name.diff
 	"${FILESDIR}"/${PN}-names.diff
 )
 
