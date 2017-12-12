@@ -1,13 +1,12 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI="mirror://gcarchive/${PN}/source-archive.zip -> ${P}.zip"
 	S="${WORKDIR}/${PN}/trunk"
 else
-	SRC_URI="http://${PN}.googlecode.com/files/${PN}-src-${PV}.tar.xz"
+	SRC_URI="mirror://gcarchive/${PN}/${PN}-src-${PV}.tar.xz"
 	KEYWORDS="~amd64 ~x86"
 	S="${WORKDIR}"
 fi
