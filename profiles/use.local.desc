@@ -13,19 +13,16 @@ cross-x86_64-w64-mingw32/mingw-runtime:idl - Install idl files.
 cross-x86_64-w64-mingw32/mingw-runtime:libraries - Build extra libraries.
 cross-x86_64-w64-mingw32/mingw-runtime:tools - Build extra tools.
 dev-libs/seexpr:llvm - Enable LLVM backend
-dev-libs/sortsmill-core:atomic-ops - Disabling this will sacrifice thread-safety in some operations
 dev-python/compreffor:cython - Generate cpp sources with dev-python/cython
 dev-python/fonttools:brotli - Enable brotli support, needed for WOFF2
 dev-python/fonttools:zopfli - Enable zopfli compression support
 dev-python/pyclipper:cython - Generate cpp sources with dev-python/cython
-dev-python/sortsmill-ffcompat:cython - Regenerate c sources with dev-python/cython
 dev-qt/aseman-qt-tools:keychain - Pull in dev-libs/qtkeychain
 dev-qt/aseman-qt-tools:multimedia - Pull in dev-qt/qtmultimedia
 dev-qt/aseman-qt-tools:positioning - Pull in dev-qt/qtpositioning
 dev-qt/aseman-qt-tools:sensors - Pull in dev-qt/qtsensors
 dev-qt/aseman-qt-tools:webengine - Pull in dev-qt/qtwebengine
 dev-qt/aseman-qt-tools:widgets - Pull in dev-qt/qtwidgets
-dev-scheme/sortsmill-core-guile:atomic-ops - Disabling this will sacrifice thread-safety in some operations
 dev-util/ots:graphite - Sanitize Graphite tables
 media-fonts/fira:clean-as-you-go - Clean intermediate ufos after they were built (useful when PORTAGE_TMPDIR resides on a tmpfs)
 media-fonts/fira:interpolate - Interpolate to get more font weights (significantly increases build time and diskspace requirements)
@@ -47,8 +44,6 @@ media-gfx/fim:screen - Add experimental support for running under screen
 media-gfx/fim:xfig - Enable FIG file support via media-gfx/xfig
 media-gfx/fontview:gtk3 - Use GTK+3 instead of GTK+2
 media-gfx/natron:c++11 - Build using the C++11 standard
-media-gfx/sortsmill-tools:xi - Build with the Xi X library
-media-gfx/sortsmill-tools:xkbui - Build with the xkbui X library
 media-libs/aubio:double-precision - Compile in double precision mode.
 media-sound/ardour:bundled-libs - Use bundled libs instead of system installed
 media-sound/ardour:c++0x - Compile using the C++11 standard
