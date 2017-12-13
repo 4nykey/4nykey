@@ -91,16 +91,12 @@ src_compile() {
 	use font_variants_default && _t+=( r-sans )
 	use font_variants_cc && _t+=( r-sans-cc )
 	use font_variants_slab && _t+=( r-slab )
-	use font_variants_term && _t+=( r-term )
-	for _v in ${FONT_CHARS[@]/font_chars_}; do
-		if use font_chars_${_v}; then
-			_t+=( r-${_v} )
-			use font_variants_term && _t+=( r-${_v}-term )
-		fi
-	done
+	use font_variants_term && _t+=( r-sans-term )
+	use font_variants_type && _t+=( r-sans-type )
 	if use font_variants_slab; then
 		use font_variants_cc && _t+=( r-slab-cc )
 		use font_variants_term && _t+=( r-slab-term )
+		use font_variants_type && _t+=( r-slab-type )
 	fi
 
 	emake -f utility/standard.mk ${_t[@]/#/fonts-}
