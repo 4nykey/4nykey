@@ -12,6 +12,11 @@
 # 'sources' if unset
 FONT_SRCDIR=${FONT_SRCDIR:-sources}
 
+# @VARIABLE: FONTMAKE_EXTRA_ARGS
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# An array containing additional arguments for fontmake.
+
 # @VARIABLE: EMAKE_EXTRA_ARGS
 # @DEFAULT_UNSET
 # @DESCRIPTION:
@@ -21,11 +26,11 @@ FONT_SRCDIR=${FONT_SRCDIR:-sources}
 # @DESCRIPTION:
 # An array containing paths relative to ${S}, where to search for prebuilt
 # fonts. By default: 'fonts fonts/otf fonts/ttf'
-FONTDIR_BIN=( "${FONTDIR_BIN[@]:-fonts fonts/otf fonts/ttf}" )
+FONTDIR_BIN=( ${FONTDIR_BIN[@]:-fonts fonts/otf fonts/ttf} )
 
 PYTHON_COMPAT=( python2_7 python3_{4,5,6} )
 IUSE="+binary"
-FONT_TYPES=( ${FONT_TYPES[@]:-otf +ttf} )
+MY_FONT_TYPES=( ${MY_FONT_TYPES[@]:-otf +ttf} )
 
 inherit python-any-r1 font-r1
 
@@ -72,15 +77,16 @@ fontmake_src_prepare() {
 fontmake_src_compile() {
 	use binary && return
 
+	local _f=( fontmake "${FONTMAKE_EXTRA_ARGS[@]}" )
 	local myemakeargs=(
 		--no-builtin-rules
 		-f ${MY_MK}/Makefile
 		SRCDIR="${FONT_SRCDIR}"
+		FONTMAKE="${_f[@]}"
 		$(in_iuse interpolate && usex interpolate '' 'INTERPOLATE=')
 		$(in_iuse clean-as-you-go && usex clean-as-you-go 'CLEAN=clean' '')
 		"${EMAKE_EXTRA_ARGS[@]}"
-		${FONT_SUFFIX}
 	)
 
-	emake "${myemakeargs[@]}"
+	emake "${myemakeargs[@]}" ${FONT_SUFFIX}
 }

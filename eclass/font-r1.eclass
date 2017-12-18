@@ -10,29 +10,29 @@ inherit eutils
 
 EXPORT_FUNCTIONS pkg_setup src_install pkg_postinst pkg_postrm
 
-# @ECLASS-VARIABLE: FONT_TYPES
+# @ECLASS-VARIABLE: MY_FONT_TYPES
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # An array of font formats available for install.
-FONT_TYPES=( ${FONT_TYPES[@]:-} )
-FONT_TYPES=( ${FONT_TYPES[@]/#/font_types_} )
-FONT_TYPES=( ${FONT_TYPES[@]/font_types_+/+font_types_} )
+MY_FONT_TYPES=( ${MY_FONT_TYPES[@]:-} )
+MY_FONT_TYPES=( ${MY_FONT_TYPES[@]/#/font_types_} )
+MY_FONT_TYPES=( ${MY_FONT_TYPES[@]/font_types_+/+font_types_} )
 
-# @ECLASS-VARIABLE: FONT_VARIANTS
+# @ECLASS-VARIABLE: MY_FONT_VARIANTS
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # An array of available font variants.
-FONT_VARIANTS=( ${FONT_VARIANTS[@]:-} )
-FONT_VARIANTS=( ${FONT_VARIANTS[@]/#/font_variants_} )
-FONT_VARIANTS=( ${FONT_VARIANTS[@]/font_variants_+/+font_variants_} )
+MY_FONT_VARIANTS=( ${MY_FONT_VARIANTS[@]:-} )
+MY_FONT_VARIANTS=( ${MY_FONT_VARIANTS[@]/#/font_variants_} )
+MY_FONT_VARIANTS=( ${MY_FONT_VARIANTS[@]/font_variants_+/+font_variants_} )
 
-# @ECLASS-VARIABLE: FONT_CHARS
+# @ECLASS-VARIABLE: MY_FONT_CHARS
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # An array of available character variations.
-FONT_CHARS=( ${FONT_CHARS[@]:-} )
-FONT_CHARS=( ${FONT_CHARS[@]/#/font_chars_} )
-FONT_CHARS=( ${FONT_CHARS[@]/font_chars_+/+font_chars_} )
+MY_FONT_CHARS=( ${MY_FONT_CHARS[@]:-} )
+MY_FONT_CHARS=( ${MY_FONT_CHARS[@]/#/font_chars_} )
+MY_FONT_CHARS=( ${MY_FONT_CHARS[@]/font_chars_+/+font_chars_} )
 
 # @ECLASS-VARIABLE: FONT_SUFFIX
 # @DEFAULT_UNSET
@@ -72,11 +72,11 @@ DOCS=${DOCS:-}
 
 IUSE="
 X
-${FONT_TYPES[@]}
-${FONT_VARIANTS[@]}
-${FONT_CHARS[@]}
+${MY_FONT_TYPES[@]}
+${MY_FONT_VARIANTS[@]}
+${MY_FONT_CHARS[@]}
 "
-[[ ${#FONT_TYPES[@]} -ge 1 ]] && REQUIRED_USE="|| ( ${FONT_TYPES[@]/+} )"
+[[ ${#MY_FONT_TYPES[@]} -ge 1 ]] && REQUIRED_USE="|| ( ${MY_FONT_TYPES[@]/+} )"
 
 DEPEND="
 	X? (
@@ -144,7 +144,7 @@ font-r1_pkg_setup() {
 	[[ -e "${EROOT}/${FONTDIR}/fonts.cache-1" ]] && rm -f "${EROOT}/${FONTDIR}/fonts.cache-1"
 
 	local _t
-	for _t in ${FONT_TYPES[@]/*_}; do
+	for _t in ${MY_FONT_TYPES[@]/*_}; do
 		use font_types_${_t} && FONT_SUFFIX+=" ${_t}"
 	done
 	FONT_SUFFIX=${FONT_SUFFIX:-ttf}
@@ -154,17 +154,17 @@ font-r1_pkg_setup() {
 # @DESCRIPTION:
 # The main font install function.
 font-r1_font_install() {
-	local dir suffix
+	local _s
 
 	insinto "${FONTDIR}"
 
-	for suffix in ${FONT_SUFFIX}; do
+	for _s in ${FONT_SUFFIX}; do
 		find "${FONT_S[@]}" -mindepth 1 -maxdepth 1 -! -size 0 -type f \
-			-ipath "*.${suffix}" -exec doins {} + 2>/dev/null
+			-ipath "*.${_s}" -exec doins {} + 2>/dev/null
 
 		find "${ED}${FONTDIR}" -mindepth 1 -maxdepth 1 -! -size 0 -type f \
-			-ipath "*.${suffix}" -exec false {} + && die \
-			"No ${suffix} fonts were installed in ${FONTDIR}"
+			-ipath "*.${_s}" -exec false {} + && die \
+			"No ${_s} fonts were installed in ${FONTDIR}"
 	done
 }
 
