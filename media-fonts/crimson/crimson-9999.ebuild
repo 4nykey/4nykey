@@ -3,7 +3,7 @@
 
 EAPI=6
 
-FONT_TYPES=( otf +ttf )
+MY_FONT_TYPES=( otf +ttf )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/skosch/${PN}.git"

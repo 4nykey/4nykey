@@ -6,12 +6,13 @@ EAPI=6
 PYTHON_COMPAT=( python2_7 )
 SLOT="${PV:0:3}"
 FONT_PN="${PN}-${SLOT}"
+MY_FONT_TYPES=( otf +ttf )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/NDISCOVER/${FONT_PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="668e8b4"
+	MY_PV="e1dedf7"
 	SRC_URI="
 		mirror://githubcl/NDISCOVER/${FONT_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -29,28 +30,36 @@ DESCRIPTION="A geometric sans serif font family"
 HOMEPAGE="https://github.com/NDISCOVER/${FONT_PN^}"
 
 LICENSE="OFL-1.1"
-IUSE=""
+IUSE="+binary"
 
 DEPEND="
-	${PYTHON_DEPS}
-	$(python_gen_any_dep '
-		media-gfx/fontforge[${PYTHON_USEDEP}]
-	')
+	!binary? (
+		${PYTHON_DEPS}
+		$(python_gen_any_dep '
+			media-gfx/fontforge[${PYTHON_USEDEP}]
+		')
+	)
 "
 
 pkg_setup() {
-	python-any-r1_pkg_setup
+	if use binary; then
+		FONT_S=( fonts )
+	else
+		python-any-r1_pkg_setup
+	fi
 	font-r1_pkg_setup
 }
 
 src_prepare() {
 	default
+	use binary && return
 	unpack ${MY_MK}.tar.gz
 }
 
 src_compile() {
+	use binary && return
 	local _s
-	for _s in "${S}"/src/${PN^}*.sfd; do
+	for _s in "${S}"/sources/sfd/${PN^}*.sfd; do
 		if [[ -n ${_s#*-OTF.sfd} ]]; then
 			fontforge -script ${MY_MK}/ffgen.py "${_s}" otf
 		else

@@ -4,7 +4,7 @@
 EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
-FONT_TYPES=( +otf ttc )
+MY_FONT_TYPES=( +otf ttc )
 inherit python-any-r1
 if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI="mirror://gcarchive/${PN}/source-archive.zip -> ${P}.zip"

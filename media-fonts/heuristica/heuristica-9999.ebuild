@@ -4,7 +4,7 @@
 EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
-FONT_TYPES=( pfb otf +ttf )
+MY_FONT_TYPES=( pfb otf +ttf )
 if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI="mirror://gcarchive/evristika/source-archive.zip -> ${P}.zip"
 	S="${WORKDIR}/evristika/trunk"

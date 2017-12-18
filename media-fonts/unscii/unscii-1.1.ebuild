@@ -3,8 +3,8 @@
 
 EAPI=6
 
-FONT_TYPES=( otf +pcf ttf )
-FONT_VARIANTS=( alt fantasy mcr tall thin )
+MY_FONT_TYPES=( otf +pcf ttf )
+MY_FONT_VARIANTS=( alt fantasy mcr tall thin )
 inherit toolchain-funcs font-r1
 
 DESCRIPTION="A bitmapped Unicode font based on classic system fonts"
@@ -99,7 +99,7 @@ src_compile() {
 			${PN}-8.${_s}
 			${PN}-16$(usex unicode '-full' '').${_s}
 		)
-		for _v in "${FONT_VARIANTS[@]}"; do
+		for _v in "${MY_FONT_VARIANTS[@]}"; do
 			has ${_v} ${USE} && _t+=( ${PN}-8-${_v#font_variants_}.${_s} )
 		done
 	done

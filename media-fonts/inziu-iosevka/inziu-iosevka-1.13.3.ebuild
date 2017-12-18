@@ -3,8 +3,8 @@
 
 EAPI=6
 
-FONT_TYPES=( ttc +ttf )
-FONT_VARIANTS=( cc slab )
+MY_FONT_TYPES=( ttc +ttf )
+MY_FONT_VARIANTS=( cc slab )
 inherit font-r1
 
 DESCRIPTION="A CJK monospaced font, a composite of Iosevka, M+ and Source Han Sans"
@@ -22,7 +22,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="l10n_ja l10n_ko l10n_zh-CN l10n_zh-TW"
 REQUIRED_USE="
 || ( l10n_ja l10n_ko l10n_zh-CN l10n_zh-TW )
-?? ( ${FONT_TYPES[@]/#+/} )
+?? ( ${MY_FONT_TYPES[@]/#+/} )
 "
 
 DEPEND="

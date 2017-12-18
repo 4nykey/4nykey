@@ -1,11 +1,10 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
-FONT_TYPES=( otf +ttf )
-inherit font-r1 unpacker
+MY_FONT_TYPES=( otf +ttf )
+inherit font-r1
 
 DESCRIPTION="A sans serif typeface inspired from the classical grotesques"
 HOMEPAGE="https://hanken.co/product/${PN}"
@@ -19,6 +18,6 @@ LICENSE="OFL-1.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
-DEPEND="$(unpacker_src_uri_depends)"
+DEPEND="app-arch/unzip"
 S="${WORKDIR}"
 FONT_S=( OTF TTF )

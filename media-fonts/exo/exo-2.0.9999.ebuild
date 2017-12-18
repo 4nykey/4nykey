@@ -3,7 +3,7 @@
 
 EAPI=6
 
-FONT_TYPES=( +otf ttf )
+MY_FONT_TYPES=( +otf ttf )
 FONTDIR_BIN=( . )
 FONT_SRCDIR=Source
 SLOT="${PV:0:3}"
@@ -17,7 +17,7 @@ else
 	MY_PV="1689ebf"
 	SRC_URI="
 	binary? (
-		http://www.ndiscovered.com/downloads/${PN}${SLOT%.*}/${PN^^}_${SLOT%.*}_OTF.zip
+		http://ndiscovered.com/archives/${FONT_PN%.*}.zip
 	)
 	!binary? (
 		mirror://githubcl/NDISCOVER/${FONT_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz

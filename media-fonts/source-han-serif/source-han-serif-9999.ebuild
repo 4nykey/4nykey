@@ -3,7 +3,7 @@
 
 EAPI=6
 
-FONT_TYPES=( +otf ttc )
+MY_FONT_TYPES=( +otf ttc )
 MY_PN="SourceHanSerif"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -41,7 +41,7 @@ SLOT="0"
 IUSE="+binary l10n_ja l10n_ko l10n_zh-CN l10n_zh-TW"
 REQUIRED_USE="
 || ( l10n_ja l10n_ko l10n_zh-CN l10n_zh-TW )
-?? ( ${FONT_TYPES[@]/#+/} )
+?? ( ${MY_FONT_TYPES[@]/#+/} )
 "
 
 DEPEND="

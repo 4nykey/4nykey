@@ -3,7 +3,7 @@
 
 EAPI=6
 
-FONT_TYPES=( otf +ttf )
+MY_FONT_TYPES=( otf +ttf )
 PYTHON_COMPAT=( python2_7 )
 inherit vcs-snapshot
 if [[ ${PV} == *9999* ]]; then

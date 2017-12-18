@@ -4,8 +4,8 @@
 EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
-FONT_VARIANTS="loose halfloose halftight tight xtrasmall small large xtralarge"
-FONT_CHARS="empty_dollar dotted_zero base_one zstyle_l no_contextual_alternates"
+MY_FONT_VARIANTS="loose halfloose halftight tight xtrasmall small large xtralarge"
+MY_FONT_CHARS="empty_dollar dotted_zero base_one zstyle_l no_contextual_alternates"
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/larsenwork/${PN}.git"

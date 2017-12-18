@@ -3,7 +3,7 @@
 
 EAPI=6
 
-FONT_TYPES=( +otf ttf )
+MY_FONT_TYPES=( +otf ttf )
 FONTDIR_BIN=( fonts/v4020 )
 FONT_SRCDIR='source'
 if [[ -z ${PV%%*9999} ]]; then

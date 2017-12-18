@@ -3,9 +3,9 @@
 
 EAPI=6
 
-FONT_TYPES=( otf +ttf )
+MY_FONT_TYPES=( otf +ttf )
 S="${WORKDIR}/${PN}-fonts-${PV%_*}"
-inherit font-r1 unpacker
+inherit font-r1
 
 DESCRIPTION="A futuristic font with focus on legibility"
 HOMEPAGE="https://fontlibrary.org/en/font/${PN}"
@@ -17,7 +17,5 @@ LICENSE="OFL-1.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
-DEPEND="
-	$(unpacker_src_uri_depends)
-"
+DEPEND="app-arch/unzip"
 FONT_S=( otf ttf )

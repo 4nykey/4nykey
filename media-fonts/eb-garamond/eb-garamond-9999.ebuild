@@ -4,7 +4,7 @@
 EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
-FONT_TYPES=( otf +ttf )
+MY_FONT_TYPES=( otf +ttf )
 inherit python-any-r1 font-r1
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3

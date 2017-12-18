@@ -3,7 +3,7 @@
 
 EAPI=6
 
-FONT_TYPES=( ttc +otf )
+MY_FONT_TYPES=( ttc +otf )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}"
@@ -71,7 +71,7 @@ SLOT="0"
 IUSE="l10n_ja l10n_ko l10n_zh-CN l10n_zh-TW"
 REQUIRED_USE="
 || ( ${IUSE} )
-?? ( ${FONT_TYPES[@]/#+/} )
+?? ( ${MY_FONT_TYPES[@]/#+/} )
 "
 
 src_unpack() {

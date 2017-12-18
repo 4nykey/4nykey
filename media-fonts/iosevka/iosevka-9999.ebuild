@@ -3,8 +3,8 @@
 
 EAPI=6
 
-FONT_TYPES=( ttc +ttf )
-FONT_VARIANTS=( cc +default slab term type )
+MY_FONT_TYPES=( ttc +ttf )
+MY_FONT_VARIANTS=( cc +default slab term type )
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/be5invis/${PN}.git"
@@ -49,14 +49,14 @@ IUSE="
 +binary
 "
 REQUIRED_USE+="
-?? ( ${FONT_TYPES[@]/#+/} )
-|| ( ${FONT_VARIANTS[@]/#+/} )
+?? ( ${MY_FONT_TYPES[@]/#+/} )
+|| ( ${MY_FONT_VARIANTS[@]/#+/} )
 "
 
 DEPEND+="
 	!binary? (
 		${PYTHON_DEPS}
-		>=net-libs/nodejs-8.4[npm]
+		net-libs/nodejs[npm]
 		media-gfx/ttfautohint
 		dev-util/otfcc
 		font_types_ttc? ( dev-util/otfcc-ttcize )
