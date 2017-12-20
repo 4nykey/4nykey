@@ -56,7 +56,8 @@ src_prepare() {
 	)
 	cp -r "${EROOT}"usr/share/meganz-sdk/bindings "${S}"/src/MEGASync/mega/
 	cmake-utils_src_prepare
-	use dolphin && mv -f src/MEGAShellExtDolphin/CMakeLists{_kde5,}.txt
+	mv -f src/MEGAShellExtDolphin/CMakeLists{_kde5,}.txt
+	rm -f src/MEGAShellExtDolphin/megasync-plugin.moc
 }
 
 src_configure() {
