@@ -38,7 +38,6 @@ DEPEND="
 "
 PATCHES=(
 	"${FILESDIR}"/${PN}-masters_wcodes.diff
-	"${FILESDIR}"/${PN}-names.diff
 )
 
 python_test() {
