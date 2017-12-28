@@ -1,19 +1,17 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
-EAPI=5
+EAPI=6
 
-USE_RUBY="ruby20 ruby21 ruby22"
+USE_RUBY="ruby22 ruby23 ruby24"
 RUBY_FAKEGEM_EXTRADOC="README.md"
-RUBY_FAKEGEM_GEMSPEC="${PN}.gemspec"
 inherit ruby-fakegem
-if [[ "${PV%9999}" != "${PV}" ]]; then
+if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/defunkt/gist.git"
+	EGIT_CHECKOUT_DIR="${WORKDIR}/all/${P}"
 	SRC_URI=""
 else
-	inherit vcs-snapshot
 	SRC_URI="mirror://githubcl/defunkt/${PN}/tar.gz/v${PV} -> ${P}.tar.gz"
 	KEYWORDS="~amd64"
 fi
@@ -31,9 +29,9 @@ ruby_add_rdepend "
 "
 
 all_ruby_prepare() {
-	mkdir -p all
-	mv ${P} all/
-	sed -e '/git ls-files/d' -i "${WORKDIR}"/all/${P}/gist.gemspec
+	sed -e '/git ls-files/d' -i ${PN}.gemspec
+	[[ -z ${PV%%*9999} ]] && \
+	RUBY_FAKEGEM_VERSION="$(awk -F\' '/VERSION = / {print $2}' build/gist)"
 }
 
 all_ruby_install() {
