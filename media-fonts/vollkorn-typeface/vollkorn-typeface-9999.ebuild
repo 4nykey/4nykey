@@ -6,21 +6,14 @@ EAPI=6
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/FAlthausen/${PN}.git"
-	REQUIRED_USE="binary? ( !font_types_otf )"
 else
 	inherit vcs-snapshot
-	MY_PV="3c1909a"
+	MY_PV="d3bab60"
 	MY_PB="${PN%-*}-${PV%_p*}"
 	SRC_URI="
-	binary? (
-		http://${PN}.com/download/${MY_PB/./-}.zip
-	)
-	!binary? (
 		mirror://githubcl/FAlthausen/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
-	)
 	"
 	KEYWORDS="~amd64 ~x86"
-	FONTDIR_BIN=( {PS-O,T}TF )
 fi
 inherit fontmake
 
@@ -29,9 +22,5 @@ HOMEPAGE="http://vollkorn-typeface.com"
 
 LICENSE="OFL-1.1"
 SLOT="0"
+REQUIRED_USE="binary? ( !font_types_otf )"
 DOCS=( Fontlog.txt )
-
-pkg_setup() {
-	[[ -n ${PV%%*9999} ]] && use binary && S="${WORKDIR}"
-	fontmake_pkg_setup
-}
