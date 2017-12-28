@@ -17,7 +17,7 @@ else
 fi
 
 DESCRIPTION="A program for making font samples that show Unicode coverage of the font"
-HOMEPAGE="https://sourceforge.net/projects/${PN}"
+HOMEPAGE="https://github.com/eugmes/${PN}"
 
 LICENSE="GPL-3+"
 SLOT="0"
@@ -28,11 +28,11 @@ RDEPEND="
 	media-libs/freetype:2
 	x11-libs/cairo
 	x11-libs/pango
+	app-i18n/unicode-data
 "
 DEPEND="
 	${RDEPEND}
 	virtual/pkgconfig
-	app-i18n/unicode-data
 "
 
 src_configure() {
