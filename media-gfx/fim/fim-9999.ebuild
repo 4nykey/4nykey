@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -64,6 +64,7 @@ DEPEND="
 	sys-devel/flex
 	virtual/yacc
 "
+DOCS=( doc/FIM.TXT )
 
 src_prepare() {
 	default
@@ -75,9 +76,8 @@ src_prepare() {
 		-e '/LIBSDL_CONFIG_FLAGS=/s:static-::' \
 		-i configure.ac
 	sed \
-		-e 's:htmldir = \$(docdir)$:&/html:' \
-		-e 's:\(MAN2HTML=\).*:\1man2html:' \
-		-i doc/Makefile.am
+		-e '/SUBDIRS = /s:\<doc\>::' \
+		-i Makefile.am
 	eautoreconf
 }
 
