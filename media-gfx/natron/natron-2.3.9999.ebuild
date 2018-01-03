@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -12,7 +12,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	MY_PV="9ddf069"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
-	MY_OFX='openfx-276eddf'
+	MY_OFX='openfx-3056fd6'
 	MY_SEQ='SequenceParsing-4b5e605'
 	MY_TIN='tinydir-60f0905'
 	MY_MCK='google-mock-17945db'
@@ -46,7 +46,7 @@ HOMEPAGE="https://natron.fr"
 
 LICENSE="GPL-2+ doc? ( CC-BY-SA-4.0 )"
 SLOT="0"
-IUSE="c++11 debug doc -qt5 openmp pch test"
+IUSE="c++11 debug doc openmp pch test"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 RDEPEND="
@@ -59,13 +59,14 @@ RDEPEND="
 	dev-python/shiboken:0[${PYTHON_USEDEP}]
 "
 DEPEND="
-	${DEPEND}
+	${RDEPEND}
 	doc? ( dev-python/sphinx )
 "
 RDEPEND="
 	${RDEPEND}
 	media-plugins/openfx-io
 	media-plugins/openfx-misc
+	media-plugins/openfx-arena
 "
 
 src_unpack() {
