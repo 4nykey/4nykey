@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -11,8 +11,8 @@ else
 	inherit vcs-snapshot
 	MY_PV="1e07155"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="Natron-${PV}"
-	MY_OFX='openfx-276eddf'
-	MY_SUP='openfx-supportext-f2aa65e'
+	MY_OFX='openfx-3056fd6'
+	MY_SUP='openfx-supportext-d3c4874'
 	MY_SEQ='SequenceParsing-4b5e605'
 	MY_TIN='tinydir-60f0905'
 	SRC_URI="
