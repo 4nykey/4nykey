@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -24,7 +24,7 @@ HOMEPAGE="https://github.com/meganz/sdk"
 
 LICENSE="BSD-2"
 SLOT="0"
-IUSE="+sqlite examples freeimage fuse hardened inotify libuv qt sodium"
+IUSE="+sqlite examples freeimage fuse hardened inotify libuv qt"
 REQUIRED_USE="
 	examples? ( sqlite )
 	fuse? ( examples )
@@ -45,7 +45,7 @@ DEPEND="
 	)
 	freeimage? ( media-libs/freeimage )
 	libuv? ( dev-libs/libuv )
-	sodium? ( dev-libs/libsodium )
+	dev-libs/libsodium
 "
 RDEPEND="
 	${DEPEND}
@@ -68,12 +68,10 @@ src_configure() {
 		--enable-chat \
 		$(use_enable inotify) \
 		$(use_enable hardened gcc-hardening) \
-		$(use_with sodium) \
 		$(use_with libuv) \
 		$(use_with !sqlite db) \
 		$(use_with sqlite) \
 		$(use_enable examples) \
-		--disable-megacmd \
 		$(use_with freeimage) \
 		$(use_with fuse)
 }

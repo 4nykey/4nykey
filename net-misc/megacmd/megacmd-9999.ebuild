@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -28,7 +28,7 @@ SLOT="0"
 IUSE=""
 
 DEPEND="
-	net-misc/meganz-sdk[-megacmd(-)]
+	net-misc/meganz-sdk[-megacmd(-),sodium(+),sqlite]
 	dev-libs/libpcre:3[cxx]
 	sys-libs/readline:0
 "

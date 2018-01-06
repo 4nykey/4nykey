@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -33,7 +33,7 @@ IUSE="dolphin nautilus qt5 thunar"
 REQUIRED_USE="dolphin? ( qt5 )"
 
 RDEPEND="
-	net-misc/meganz-sdk[libuv,qt,sodium,sqlite]
+	net-misc/meganz-sdk[libuv,qt,sodium(+),sqlite]
 	qt5? (
 		dev-qt/qtsvg:5
 		dev-qt/qtdbus:5

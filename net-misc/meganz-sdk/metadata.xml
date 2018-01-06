@@ -9,6 +9,5 @@
 		<flag name="fuse">Build FUSE-based example client</flag>
 		<flag name="libuv">Support asynchronous I/O via dev-libs/libuv</flag>
 		<flag name="qt">Install QT bindings</flag>
-		<flag name="sodium">Use dev-libs/libsodium for cryptography</flag>
 	</use>
 </pkgmetadata>
