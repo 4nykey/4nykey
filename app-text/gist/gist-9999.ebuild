@@ -1,10 +1,12 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
 USE_RUBY="ruby22 ruby23 ruby24"
 RUBY_FAKEGEM_EXTRADOC="README.md"
+RUBY_FAKEGEM_RECIPE_TEST="rspec3"
+RUBY_FAKEGEM_TASK_DOC="man"
 inherit ruby-fakegem
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -14,18 +16,22 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	SRC_URI="mirror://githubcl/defunkt/${PN}/tar.gz/v${PV} -> ${P}.tar.gz"
 	KEYWORDS="~amd64"
+	RESTRICT="primaryuri"
 fi
+RESTRICT+=" test"
 
 DESCRIPTION="Upload code to gist.github.com"
 HOMEPAGE="http://defunkt.io/gist"
 
 LICENSE="MIT"
 SLOT="0"
-IUSE=""
+IUSE="test"
 
 ruby_add_rdepend "
-	dev-ruby/json:2
-	dev-ruby/webmock:2
+	dev-ruby/webmock:*
+"
+ruby_add_bdepend "
+	doc? ( app-text/ronn )
 "
 
 all_ruby_prepare() {
