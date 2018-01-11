@@ -8,22 +8,3 @@
  
  compile_translations()
  
---- a/scripts/translations.py
-+++ b/scripts/translations.py
-@@ -23,13 +23,12 @@ try:
- except ImportError:
-     from run import run
- 
-+import os
- def compile_translations ():
--    for f_name in glob.glob('po/*.po'):
--        lang = f_name.replace ("po/", "").replace (".po", "")
--        lang = lang.replace ("\\", "/")
-+    for lang in os.environ['LINGUAS'].split():
-         build_path = "build/locale/" + lang + "/LC_MESSAGES/"
-         target = build_path + "birdfont.mo"
-         run ("mkdir -p " + build_path);
--        f_name = f_name.replace ("\\", "/")
-+        f_name = 'po/' + lang + '.po'
-         run ("msgfmt --output=%s %s" % (target, f_name));
-         
