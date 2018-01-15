@@ -1,1 +1,0 @@
-skype4pidgin-9999.ebuild
