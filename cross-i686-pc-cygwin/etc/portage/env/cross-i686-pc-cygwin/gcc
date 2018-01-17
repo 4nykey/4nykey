@@ -1,1 +1,0 @@
-EXTRA_ECONF="--with-newlib --disable-shared"
