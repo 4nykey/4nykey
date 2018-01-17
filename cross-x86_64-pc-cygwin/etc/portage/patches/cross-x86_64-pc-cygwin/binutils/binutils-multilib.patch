@@ -1,0 +1,11 @@
+--- a/ld/configure.tgt
++++ b/ld/configure.tgt
+@@ -383,7 +383,7 @@ x86_64-*-pe | x86_64-*-pep) targ_emul=i3
+ x86_64-*-cygwin)	targ_emul=i386pep ;
+ 			targ_extra_emuls=i386pe
+ 			targ_extra_ofiles="deffilep.o pep-dll.o pe-dll.o"
+-			test "$targ" != "$host" && LIB_PATH='${tooldir}/lib/w32api' ;;
++			test "$targ" != "$host" && LIB_PATH='${tooldir}/lib64:${tooldir}/lib32:${tooldir}/lib64/w32api:${tooldir}/lib32/w32api' ;;
+ x86_64-*-mingw*)	targ_emul=i386pep ;
+ 			targ_extra_emuls=i386pe
+ 			targ_extra_ofiles="deffilep.o pep-dll.o pe-dll.o" ;;

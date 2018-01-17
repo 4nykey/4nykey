@@ -6,7 +6,7 @@ cp -r etc/portage/* /etc/portage/
 
 emerge cross-x86_64-pc-cygwin/binutils -1a
 
-USE="crosscompile_opts_headers-only" \
+USE="headers-only" \
     emerge cross-x86_64-pc-cygwin/cygwin cross-x86_64-pc-cygwin/w32api -1a
 
 emerge cross-x86_64-pc-cygwin/gcc -1a
