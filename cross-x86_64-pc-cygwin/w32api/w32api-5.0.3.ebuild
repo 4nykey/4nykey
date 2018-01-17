@@ -1,9 +1,10 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
-inherit toolchain-funcs flag-o-matic
+MULTILIB_COMPAT=( abi_x86_{32,64} )
+inherit flag-o-matic vcs-snapshot multilib-build
 
 export CBUILD=${CBUILD:-${CHOST}}
 export CTARGET=${CTARGET:-${CHOST}}
@@ -15,35 +16,38 @@ fi
 
 DESCRIPTION="MinGW-w64 Windows API for Cygwin"
 HOMEPAGE="http://cygwin.com/"
-MY_ARCH="${CTARGET%-pc-cygwin}"
-MY_ARCH="${MY_ARCH/i686/x86}"
 MY_H="${PN}-headers-${PV}-1"
 MY_R="${PN}-runtime-${PV}-1"
-MY_PB="${P}-${MY_ARCH}"
 MY_PN="mingw-w64"
 MY_P="${MY_PN}-v${PV}"
-SRC_URI="mirror://cygwin/${MY_ARCH}/release"
 SRC_URI="
-	!crosscompile_opts_headers-only? (
+	!headers-only? (
 		mirror://sourceforge/${MY_PN}/${MY_PN}/${MY_PN}-release/${MY_P}.tar.bz2
 	)
-	crosscompile_opts_headers-only? (
-		${SRC_URI}/${PN}-headers/${MY_H}.tar.xz -> ${MY_PB}_inc.tar.xz
-		${SRC_URI}/${PN}-runtime/${MY_R}.tar.xz -> ${MY_PB}_lib.tar.xz
+	headers-only? (
+		mirror://cygwin/x86_64/release/${PN}-headers/${MY_H}.tar.xz
+		abi_x86_32? (
+			mirror://cygwin/x86/release/${PN}-runtime/${MY_R}.tar.xz
+			-> ${MY_R}-x86.tar.xz
+		)
+		abi_x86_64? (
+			mirror://cygwin/x86_64/release/${PN}-runtime/${MY_R}.tar.xz
+			-> ${MY_R}-amd64.tar.xz
+		)
 	)
 "
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="crosscompile_opts_headers-only"
+IUSE="headers-only"
 RESTRICT="strip primaryuri"
 S="${WORKDIR}"
 
 DEPEND=""
 
 just_headers() {
-	use crosscompile_opts_headers-only && [[ ${CHOST} != ${CTARGET} ]]
+	use headers-only && [[ ${CHOST} != ${CTARGET} ]]
 }
 
 pkg_setup() {
@@ -60,17 +64,14 @@ pkg_setup() {
 
 src_configure() {
 	just_headers && return
-	local _l
-	if [[ -z ${MY_ARCH#*_64} ]]; then
-		_l="--enable-lib64 --disable-lib32"
-	else
-		_l="--disable-lib64 --enable-lib32"
-	fi
-	econf \
-		--enable-w32api \
-		--host=${CTARGET} \
-		${_l} \
+	local myeconfargs=(
+		--enable-w32api
+		--host=${CTARGET}
 		--with-sysroot="${EPREFIX}/usr/${CTARGET}"
+		$(use_enable abi_x86_32 lib32)
+		$(use_enable abi_x86_64 lib64)
+	)
+	econf "${myeconfargs[@]}"
 }
 
 src_compile() {
@@ -79,12 +80,20 @@ src_compile() {
 }
 
 src_install() {
-	if just_headers ; then
-		insinto /usr/${CTARGET}/usr
-		doins -r usr/{lib,include}
+	if just_headers; then
+		local _a
+		for _a in ${MULTILIB_ABIS}; do
+			insinto /usr/${CTARGET}/usr/$(get_abi_LIBDIR ${_a})
+			doins -r ${MY_R}-${_a}/lib/${PN}
+			insinto /usr/${CTARGET}/usr
+			doins -r ${MY_R}-${_a}/include
+		done
+		doins -r ${MY_H}/include
 	else
 		emake \
 			DESTDIR="${D}usr/${CTARGET}" \
+			lib32dir="/usr/${LIBDIR_x86}/${PN}" \
+			lib64dir="/usr/${LIBDIR_amd64}/${PN}" \
 			install
 	fi
 }
