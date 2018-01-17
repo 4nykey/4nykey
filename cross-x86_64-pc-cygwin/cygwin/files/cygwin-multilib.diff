@@ -1,0 +1,30 @@
+--- a/winsup/cygwin/Makefile.in
++++ b/winsup/cygwin/Makefile.in
+@@ -584,12 +584,12 @@ install: install-libs install-headers in
+ uninstall: uninstall-libs uninstall-headers uninstall-man
+ 
+ install-libs: $(TARGET_LIBS)
+-	@$(MKDIRP) $(DESTDIR)$(bindir)
+-	$(INSTALL_PROGRAM) $(TEST_DLL_NAME) $(DESTDIR)$(bindir)/$(DLL_NAME); \
++	@$(MKDIRP) $(DESTDIR)$(tooldir)/bin/$(ABI)
++	$(INSTALL_PROGRAM) $(TEST_DLL_NAME) $(DESTDIR)$(tooldir)/bin/$(ABI)/$(DLL_NAME); \
+ 	for i in $^; do \
+-	    $(INSTALL_DATA) $$i $(DESTDIR)$(tooldir)/lib/`basename $$i` ; \
++	    $(INSTALL_DATA) $$i $(DESTDIR)$(tooldir)/$(libdir)/`basename $$i` ; \
+ 	done
+-	cd $(DESTDIR)$(tooldir)/lib && ln -sf libcygwin.a libg.a
++	cd $(DESTDIR)$(tooldir)/$(libdir) && ln -sf libcygwin.a libg.a
+ 
+ install-headers:
+ 	cd $(srcdir); \
+--- a/newlib/Makefile.in
++++ b/newlib/Makefile.in
+@@ -380,7 +380,7 @@ SUBDIRS = libc libm \
+ 	$(DOCDIR) . $(EXTRA_DIRS)
+ 
+ tooldir = $(exec_prefix)/$(host_alias)
+-toollibdir = $(tooldir)/lib$(MULTISUBDIR)
++toollibdir = $(tooldir)/$(libdir)
+ AR_FLAGS = rc
+ noinst_DATA = stmp-targ-include $(am__append_1) $(am__append_2)
+ @USE_LIBTOOL_TRUE@toollib_LTLIBRARIES = libm.la \
