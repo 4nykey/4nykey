@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -83,6 +83,7 @@ src_prepare() {
 	sed -e 's:AudioEditing:X-&:' -i gtk2_ardour/ardour.desktop.in
 	sed -e 's:USE_EXTERNAL_LIBS:CANT_&:' -i libs/zita-resampler/wscript
 	use nls && l10n_for_each_disabled_locale_do my_lcmsg
+	grep -rl '/\<lib\>' | xargs sed -e "s:/\<lib\>:/$(get_libdir):g" -i
 }
 
 src_configure() {
