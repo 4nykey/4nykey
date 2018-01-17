@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -13,7 +13,8 @@ fi
 
 MY_PN="mingw-w64"
 
-inherit flag-o-matic autotools
+MULTILIB_COMPAT=( abi_x86_{32,64} )
+inherit flag-o-matic autotools multilib-build
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://git.code.sf.net/p/${MY_PN}/${MY_PN}"
@@ -26,25 +27,14 @@ fi
 DESCRIPTION="Free Win32 runtime and import library definitions"
 HOMEPAGE="https://mingw-w64.org"
 
-LICENSE="BSD"
+LICENSE="ZPL GPL-2+ LGPL-2.1+ MIT"
 SLOT="0"
-IUSE="crosscompile_opts_headers-only idl libraries tools"
+IUSE="headers-only idl libraries tools"
+REQUIRED_USE="headers-only? ( !libraries !tools )"
 RESTRICT="strip"
 
-is_crosscompile() {
-	[[ ${CHOST} != ${CTARGET} ]]
-}
 just_headers() {
-	use crosscompile_opts_headers-only && [[ ${CHOST} != ${CTARGET} ]]
-}
-crt_with() {
-	just_headers && echo --without-$1 || echo --with-$1
-}
-crt_use_enable() {
-	just_headers && echo --without-$2 || use_enable "$@"
-}
-crt_use_with() {
-	just_headers && echo --without-$2 || use_with "$@"
+	use headers-only && [[ ${CHOST} != ${CTARGET} ]]
 }
 
 pkg_setup() {
@@ -53,59 +43,73 @@ pkg_setup() {
 	fi
 	just_headers && return
 	CHOST=${CTARGET} strip-unsupported-flags
-	filter-flags -m*=*
-	unset AR RANLIB
+	filter-flags -march=*
+	unset AR NM RANLIB
 }
 
 src_prepare() {
+	local PATCHES=( )
+	[[ -n ${PV%%*9999} ]] && PATCHES+=( "${FILESDIR}"/${PN}-pseh.diff )
 	default
+	just_headers && return
+	sed \
+		-e "s:\(libx8632suffx=\)lib.*:\1${LIBDIR_x86}:" \
+		-e "s:\(libx8664suffx=\)lib.*:\1${LIBDIR_amd64}:" \
+		-i mingw-w64-crt/configure.ac
 	eautoreconf
 }
 
 src_configure() {
+	local myeconfargs=(
+		--host=${CTARGET}
+		--prefix="${EPREFIX}/usr/${CTARGET}/usr"
+		--with-headers
+		--with$(just_headers && echo 'out')-crt
+		$(use_enable idl)
+		$(use_enable abi_x86_32 lib32)
+		$(use_enable abi_x86_64 lib64)
+		--enable-wildcard
+		--enable-secure-api
+	)
+
+	# don't use headers from previously installed version
 	if ! just_headers; then
-		mkdir "${WORKDIR}/headers"
-		pushd "${WORKDIR}/headers" > /dev/null
-		"${S}/configure" \
-			--host=${CTARGET} \
+		mkdir -p "${WORKDIR}"/headers
+		cd "${WORKDIR}"/headers
+		ECONF_SOURCE="${S}" \
+			econf "${myeconfargs[@]}" \
 			--prefix="${T}/tmproot" \
-			--with-headers \
-			--without-crt \
-			|| die
-		popd > /dev/null
-		append-cppflags "-I${T}/tmproot/include"
+			--without-crt
 	fi
 
-	econf \
-		--host=${CTARGET} \
-		--prefix=/usr/${CTARGET}/usr \
-		--with-headers \
-		--enable-sdk \
-		$(crt_with crt) \
-		$(crt_use_enable idl) \
-		$(crt_use_with libraries all) \
-		$(crt_use_with tools all) \
-		--enable-lib64 \
-		--enable-lib32
+	cd "${S}"
+	econf "${myeconfargs[@]}" \
+		$(use_with libraries libraries all) \
+		$(use_with tools tools all) \
+		--with-sysroot="${T}/tmproot"
 }
 
 src_compile() {
-	if ! just_headers; then
-		emake -C "${WORKDIR}/headers" install
-	fi
+	just_headers || emake -C "${WORKDIR}/headers" install
 	default
 }
 
 src_install() {
 	default
 	env -uRESTRICT CHOST=${CTARGET} prepallstrip
-	rm -rf "${ED}/usr/share"
 
-	is_crosscompile || return
+	[[ ${CHOST} != ${CTARGET} ]] || return
 	# gcc is configured to look at specific hard-coded paths for mingw #419601
 	dosym usr /usr/${CTARGET}/mingw
 	dosym usr/include /usr/${CTARGET}/include
 	just_headers && return
-	dosym usr/lib /usr/${CTARGET}/lib
-	dosym usr/lib32 /usr/${CTARGET}/lib32
+	if use abi_x86_32; then
+		use abi_x86_64 || dosym usr/${LIBDIR_x86} /usr/${CTARGET}/lib
+		dosym usr/${LIBDIR_x86} /usr/${CTARGET}/lib32
+	fi
+	if use abi_x86_64; then
+		dosym usr/${LIBDIR_amd64} /usr/${CTARGET}/lib
+		use abi_x86_32 && dosym ../${LIBDIR_x86} /usr/${CTARGET}/usr/${LIBDIR_amd64}/32
+		dosym usr/${LIBDIR_amd64} /usr/${CTARGET}/lib64
+	fi
 }
