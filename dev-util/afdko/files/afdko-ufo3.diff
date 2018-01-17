@@ -49,14 +49,3 @@
  	if len(newInstancesList) == 1:
  		logMsg.log("Building 1 instance...")
  	else:
---- a/FDK/Tools/SharedData/FDKScripts/robofab/objects/objectsRF.py
-+++ b/FDK/Tools/SharedData/FDKScripts/robofab/objects/objectsRF.py
-@@ -373,7 +373,7 @@
- 		return reverseMap
- 		
- 
--	def save(self, destDir=None, doProgress=False, formatVersion=2):
-+	def save(self, destDir=None, doProgress=False, formatVersion=3):
- 		"""Save the Font in UFO format."""
- 		# XXX note that when doing "save as" by specifying the destDir argument
- 		# _all_ glyphs get loaded into memory. This could be optimized by either
