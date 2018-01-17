@@ -1,11 +1,11 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
 MY_IN="Inconsolata-LGC-8adfef7" #20160404 https://github.com/MihailJP/Inconsolata-LGC
 MY_MI="migu-1m-20150712"        #20150712 https://osdn.net/pkg/mix-mplus-ipa/migu
-MY_MP="mplus-TESTFLIGHT-062"    #20160930 https://osdn.net/rel/mplus-fonts/TESTFLIGHT
+MY_MP="mplus-TESTFLIGHT-063"    #20171025 https://osdn.net/rel/mplus-fonts/TESTFLIGHT
 S="${WORKDIR}"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3 cvs
@@ -28,9 +28,6 @@ RESTRICT="primaryuri bindist"
 
 DESCRIPTION="A monotype font combining Inconsolata and Migu 1M"
 HOMEPAGE="http://www.rs.tus.ac.jp/yyusa/ricty.html"
-SRC_URI+="
-	http://www.rs.tus.ac.jp/yyusa/${PN}/regular2oblique_converter.pe
-"
 
 LICENSE="OFL-1.1 IPAfont"
 SLOT="0"
@@ -41,7 +38,6 @@ DEPEND="
 "
 
 src_unpack() {
-	cp "${DISTDIR}"/regular2oblique_converter.pe "${S}"/
 	if [[ -z ${PV%%*9999} ]]; then
 		unpack ${MY_MP}.tar.xz
 		wget --no-verbose http://www.rs.tus.ac.jp/yyusa/${PN}/${PN}_generator.sh
@@ -88,10 +84,5 @@ src_compile() {
 	sh ./${PN}_generator.sh -a \
 		${MY_IN}/Inconsolata-LGC{,-Bold}.sfd \
 		${MY_MI}/migu-1m-{regular,bold}.ttf
-	eend $? || die
-
-	ebegin "Building ${PN^} oblique"
-	fontforge -script regular2oblique_converter.pe \
-		Ricty*.${FONT_SUFFIX}
 	eend $? || die
 }
