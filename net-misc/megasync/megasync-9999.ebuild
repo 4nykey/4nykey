@@ -29,11 +29,11 @@ HOMEPAGE="https://github.com/meganz/MEGAsync"
 LICENSE="EULA"
 LICENSE_URL="https://raw.githubusercontent.com/meganz/MEGAsync/master/LICENCE.md"
 SLOT="0"
-IUSE="dolphin nautilus qt5 thunar"
+IUSE="dolphin mediainfo nautilus qt5 thunar"
 REQUIRED_USE="dolphin? ( qt5 )"
 
 RDEPEND="
-	net-misc/meganz-sdk[libuv,qt,sodium(+),sqlite]
+	net-misc/meganz-sdk[libuv,mediainfo?,qt,sodium(+),sqlite]
 	qt5? (
 		dev-qt/qtsvg:5
 		dev-qt/qtdbus:5
@@ -45,6 +45,7 @@ RDEPEND="
 	dolphin? ( kde-apps/dolphin )
 	nautilus? ( >=gnome-base/nautilus-3 )
 	thunar? ( xfce-base/thunar )
+	mediainfo? ( media-libs/libmediainfo )
 "
 DEPEND="
 	${RDEPEND}
@@ -58,15 +59,19 @@ src_prepare() {
 	cmake-utils_src_prepare
 	mv -f src/MEGAShellExtDolphin/CMakeLists{_kde5,}.txt
 	rm -f src/MEGAShellExtDolphin/megasync-plugin.moc
+	use mediainfo || sed -e '/CONFIG += USE_MEDIAINFO/d' \
+		-i src/MEGASync/MEGASync.pro
 }
 
 src_configure() {
 	cd src
-	eqmake$(usex qt5 5 4) \
-		$(usex dolphin 'CONFIG+=with_dol' '') \
-		$(usex nautilus 'CONFIG+=with_ext' '') \
-		$(usex thunar 'CONFIG+=with_thu' '') \
-		'CONFIG-=with_tools'
+	local eqmakeargs=(
+		CONFIG$(usex nautilus + -)=with_ext
+		CONFIG$(usex thunar + -)=with_thu
+		CONFIG-=with_updater
+		CONFIG-=with_tools
+	)
+	eqmake$(usex qt5 5 4) "${eqmakeargs[@]}"
 	use dolphin && cmake-utils_src_configure
 }
 
