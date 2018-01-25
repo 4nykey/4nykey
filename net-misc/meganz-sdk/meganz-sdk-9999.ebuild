@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/${PN%-*}/${PN#*-}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="bba5661"
+	MY_PV="b72f462"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/${PN%-*}/${PN#*-}/tar.gz/${MY_PV}
@@ -24,7 +24,7 @@ HOMEPAGE="https://github.com/meganz/sdk"
 
 LICENSE="BSD-2"
 SLOT="0"
-IUSE="+sqlite examples freeimage fuse hardened inotify libuv qt"
+IUSE="examples freeimage fuse hardened inotify libuv mediainfo qt +sqlite"
 REQUIRED_USE="
 	examples? ( sqlite )
 	fuse? ( examples )
@@ -46,6 +46,7 @@ DEPEND="
 	freeimage? ( media-libs/freeimage )
 	libuv? ( dev-libs/libuv )
 	dev-libs/libsodium
+	mediainfo? ( media-libs/libmediainfo )
 "
 RDEPEND="
 	${DEPEND}
@@ -64,16 +65,19 @@ src_prepare() {
 }
 
 src_configure() {
-	econf \
-		--enable-chat \
-		$(use_enable inotify) \
-		$(use_enable hardened gcc-hardening) \
-		$(use_with libuv) \
-		$(use_with !sqlite db) \
-		$(use_with sqlite) \
-		$(use_enable examples) \
-		$(use_with freeimage) \
+	local myeconfargs=(
+		--enable-chat
+		$(use_enable inotify)
+		$(use_enable hardened gcc-hardening)
+		$(use_with libuv)
+		$(use_with !sqlite db)
+		$(use_with sqlite)
+		$(use_enable examples)
+		$(use_with freeimage)
 		$(use_with fuse)
+		$(use_with mediainfo libmediainfo)
+	)
+	econf "${myeconfargs[@]}"
 }
 
 src_install() {
