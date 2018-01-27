@@ -11,14 +11,13 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="c2d0a36"
+	MY_PV="a9c6859"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	KEYWORDS="~amd64 ~x86"
 fi
-SRC_URI+="https://github.com/adobe-type-tools/afdko/commit/49527cd.patch"
 RESTRICT="primaryuri"
 inherit multilib-build
 
@@ -51,13 +50,11 @@ FDK/FDKReleaseNotes.txt
 
 python_prepare_all() {
 	mv -f afdko FDK
-	eapply -R "${DISTDIR}"/49527cd.patch
 	local PATCHES=(
 		"${FILESDIR}"/${PN}-makeotf.diff
 		"${FILESDIR}"/${PN}-inc.diff
 		"${FILESDIR}"/${PN}-ar.diff
 		"${FILESDIR}"/${PN}-ufo3.diff
-		"${FILESDIR}"/${PN}-gsub.diff #ae4a57f
 		"${FILESDIR}"/${PN}-setup.diff
 	)
 	distutils-r1_python_prepare_all
