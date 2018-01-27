@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -11,7 +11,7 @@ if [[ ${PV} == *9999* ]]; then
 else
 	inherit vcs-snapshot eapi7-ver
 	MY_PVB="$(ver_cut 1-2)R-ro/$(ver_cut 3-4)R-it"
-	MY_PV="ff3bdec"
+	MY_PV="d975556"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${MY_PVB//R}"
 	SRC_URI="
 		binary? (
