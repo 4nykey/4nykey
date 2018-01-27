@@ -55,7 +55,6 @@ REQUIRED_USE+="
 
 DEPEND+="
 	!binary? (
-		${PYTHON_DEPS}
 		net-libs/nodejs[npm]
 		media-gfx/ttfautohint
 		dev-util/otfcc
