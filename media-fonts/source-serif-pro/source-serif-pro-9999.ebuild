@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -68,7 +68,9 @@ pkg_setup() {
 
 src_prepare() {
 	default
-	use binary || unpack ${MY_MK}.tar.gz
+	use binary && return
+	unpack ${MY_MK}.tar.gz
+	find -name familyVersion.fea -exec sed -e 's:FontRevision[^;]\+$:&;:' -i {} +
 }
 
 src_compile() {
