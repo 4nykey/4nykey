@@ -3,21 +3,25 @@
 
 EAPI=6
 
+MY_P="${PN}-1293ec3"
+inherit font-r1 vcs-snapshot
+
 DESCRIPTION="A font family that aims to support all the world's languages"
 HOMEPAGE="https://www.google.com/get/noto"
+SRC_URI="
+	mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_P##*-}
+	-> ${MY_P}.tar.gz
+"
+RESTRICT="primaryuri"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="+binary cjk emoji pipeline"
+KEYWORDS="~amd64 ~x86"
+IUSE=""
 
 DEPEND=""
 RDEPEND="
-	media-fonts/noto-fonts
-	cjk? ( media-fonts/noto-cjk )
-	emoji? ( media-fonts/noto-emoji )
-	pipeline? (
-		binary? ( media-fonts/noto-fonts-alpha )
-		!binary? ( media-fonts/noto-source )
-	)
 	!media-fonts/croscorefonts
 "
+S="${WORKDIR}/${MY_P}"
+FONT_S=( hinted )
