@@ -1,0 +1,29 @@
+--- a/setup.py
++++ b/setup.py
+@@ -103,18 +101,18 @@ def get_scripts():
+ def get_console_scripts():
+     script_entries = [
+         ('autohint', 'autohint:main'),
+-        ('buildcff2vf', 'buildCFF2VF:run'),
+-        ('buildmasterotfs', 'buildMasterOTFs:main'),
+-        ('comparefamily', 'CompareFamily:main'),
+-        ('checkoutlinesufo', 'CheckOutlinesUFO:main'),
++        ('buildCFF2VF', 'buildCFF2VF:run'),
++        ('buildMasterOTFs', 'buildMasterOTFs:main'),
++        ('compareFamily', 'CompareFamily:main'),
++        ('checkOutlinesUFO', 'CheckOutlinesUFO:main'),
+         ('copycffcharstrings', 'copyCFFCharstrings:run'),
+-        ('kerncheck', 'kernCheck:run'),
++        ('kernCheck', 'kernCheck:run'),
+         ('makeotf', 'MakeOTF:main'),
+-        ('makeinstances', 'makeInstances:main'),
+-        ('makeinstancesufo', 'makeInstancesUFO:main'),
++        ('makeInstances', 'makeInstances:main'),
++        ('makeInstancesUFO', 'makeInstancesUFO:main'),
+         ('otc2otf', 'otc2otf:main'),
+         ('otf2otc', 'otf2otc:main'),
+-        ('stemhist', 'StemHist:main'),
++        ('stemHist', 'StemHist:main'),
+         ('ttxn', 'ttxn:main'),
+         ('charplot', 'ProofPDF:charplot'),
+         ('digiplot', 'ProofPDF:digiplot'),

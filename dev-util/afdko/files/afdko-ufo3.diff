@@ -1,5 +1,5 @@
---- a/FDK/Tools/Programs/public/lib/source/ufowrite/ufowrite.c
-+++ b/FDK/Tools/Programs/public/lib/source/ufowrite/ufowrite.c
+--- a/afdko/Tools/Programs/public/lib/source/ufowrite/ufowrite.c
++++ b/afdko/Tools/Programs/public/lib/source/ufowrite/ufowrite.c
 @@ -561,7 +561,7 @@ static void writeMetaInfo(ufwCtx h)
      writeLine(h, "\t<key>creator</key>");
      writeLine(h, "\t<string>com.adobe.type.tx</string>");
@@ -9,8 +9,8 @@
      writeLine(h, "</dict>");
      writeLine(h, "</plist>");
      
---- a/FDK/Tools/SharedData/FDKScripts/CheckOutlinesUFO.py
-+++ b/FDK/Tools/SharedData/FDKScripts/CheckOutlinesUFO.py
+--- a/afdko/Tools/SharedData/FDKScripts/CheckOutlinesUFO.py
++++ b/afdko/Tools/SharedData/FDKScripts/CheckOutlinesUFO.py
 @@ -115,7 +115,7 @@ class FontFile(object):
          self.defcon_font = None
          self.use_hash_map = False
@@ -38,8 +38,8 @@
              layer.save(glyph_set)
              layer.dirty = False
  
---- a/FDK/Tools/SharedData/FDKScripts/makeInstancesUFO.py
-+++ b/FDK/Tools/SharedData/FDKScripts/makeInstancesUFO.py
+--- a/afdko/Tools/SharedData/FDKScripts/makeInstancesUFO.py
++++ b/afdko/Tools/SharedData/FDKScripts/makeInstancesUFO.py
 @@ -396,7 +396,7 @@ def run(args):
  	if not dsPath:
  		return

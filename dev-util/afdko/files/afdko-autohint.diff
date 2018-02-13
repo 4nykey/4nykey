@@ -1,0 +1,11 @@
+--- a/afdko/Tools/SharedData/FDKScripts/autohint.py
++++ b/afdko/Tools/SharedData/FDKScripts/autohint.py
+@@ -1062,6 +1062,8 @@ def hintFile(options):
+ 
+ 	# temp file names for input and output bez files, and for the fontinfo file.
+ 	tempBaseName = os.path.join(tempfile.gettempdir(), "fdkautohint")
++	import string, random
++	tempBaseName += ''.join(random.choice(string.ascii_letters+string.digits) for _ in range(6))
+ 	tempBez = tempBaseName + ".bez"
+ 	tempBezNew = tempBez + ".new"
+ 	tempFI = tempBaseName + ".fi"

@@ -1,5 +1,5 @@
---- a/FDK/Tools/Programs/public/lib/config/linux/gcc/gcc.mak
-+++ b/FDK/Tools/Programs/public/lib/config/linux/gcc/gcc.mak
+--- a/afdko/Tools/Programs/public/lib/config/linux/gcc/gcc.mak
++++ b/afdko/Tools/Programs/public/lib/config/linux/gcc/gcc.mak
 @@ -28,7 +28,7 @@ default: $(LIB_TARGET)
  
  $(LIB_TARGET): $(LIB_OBJS)
@@ -9,8 +9,8 @@
  
  clean:
  	if [ "$(LIB_OBJS)" ]; then \
---- a/FDK/Tools/Programs/public/lib/config/linux/gcc/gcc_tx.mak
-+++ b/FDK/Tools/Programs/public/lib/config/linux/gcc/gcc_tx.mak
+--- a/afdko/Tools/Programs/public/lib/config/linux/gcc/gcc_tx.mak
++++ b/afdko/Tools/Programs/public/lib/config/linux/gcc/gcc_tx.mak
 @@ -32,7 +32,7 @@ default: $(TARGETS)
  
  $(LIB_TARGET): $(LIB_OBJS)

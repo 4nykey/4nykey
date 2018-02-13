@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="a9c6859"
+	MY_PV="4c089b2"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -32,11 +32,11 @@ RDEPEND="
 	>=dev-python/fonttools-3.19.1[${PYTHON_USEDEP}]
 	dev-python/booleanOperations[${PYTHON_USEDEP}]
 	dev-python/fontMath[${PYTHON_USEDEP}]
-	dev-python/robofab[${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
 	dev-python/MutatorMath[${PYTHON_USEDEP}]
 	dev-python/ufoLib[${PYTHON_USEDEP}]
 	dev-python/ufoNormalizer[${PYTHON_USEDEP}]
+	dev-python/fontPens[${PYTHON_USEDEP}]
 	dev-python/setuptools[${PYTHON_USEDEP}]
 "
 DEPEND="
@@ -49,15 +49,23 @@ FDK/FDKReleaseNotes.txt
 )
 
 python_prepare_all() {
-	mv -f afdko FDK
 	local PATCHES=(
-		"${FILESDIR}"/${PN}-makeotf.diff
 		"${FILESDIR}"/${PN}-inc.diff
 		"${FILESDIR}"/${PN}-ar.diff
 		"${FILESDIR}"/${PN}-ufo3.diff
-		"${FILESDIR}"/${PN}-setup.diff
+		"${FILESDIR}"/${PN}-scripts.diff
+		"${FILESDIR}"/${PN}-autohint.diff
 	)
+	sed \
+		-e '/sys\.exit(1)/d' \
+		-e '/setup_requires=.*wheel/d' \
+		-e '/cmdclass=.*bdist_wheel/d' \
+		-i setup.py
+	sed \
+		-e '/^[ ]\+except (MakeOTFOptionsError.*):$/,/^[ ]\+pass$/d' \
+		-i afdko/Tools/SharedData/FDKScripts/MakeOTF.py
 	distutils-r1_python_prepare_all
+	mv -f afdko FDK
 	mkdir -p afdko/Tools html
 	mv -f FDK/__init__.py afdko/
 	mv -f FDK/Tools/{linux,SharedData,__init__.py} afdko/Tools/
@@ -74,4 +82,9 @@ src_compile() {
 	done
 	find -path '*exe/linux/release/*' -execdir mv -f -t "${S}"/afdko/Tools/linux {} +
 	distutils-r1_src_compile
+}
+
+python_install() {
+	distutils-r1_python_install
+	find "${ED}"/$(python_get_sitedir)/${PN}/Tools/linux -type f -delete
 }
