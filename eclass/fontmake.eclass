@@ -36,7 +36,7 @@ inherit python-any-r1 font-r1
 
 EXPORT_FUNCTIONS pkg_setup src_prepare src_compile
 
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-3adf97e"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-e11a9b9"
 SRC_URI+="
 !binary? (
 	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
@@ -77,15 +77,17 @@ fontmake_src_prepare() {
 fontmake_src_compile() {
 	use binary && return
 
-	local _f=( fontmake "${FONTMAKE_EXTRA_ARGS[@]}" )
 	local myemakeargs=(
+		"${EMAKE_EXTRA_ARGS[@]}"
 		--no-builtin-rules
 		-f ${MY_MK}/Makefile
 		SRCDIR="${FONT_SRCDIR}"
-		FONTMAKE="${_f[@]}"
 		$(in_iuse interpolate && usex interpolate '' 'INTERPOLATE=')
 		$(in_iuse clean-as-you-go && usex clean-as-you-go 'CLEAN=clean' '')
-		"${EMAKE_EXTRA_ARGS[@]}"
+	)
+	[[ "${#FONTMAKE_EXTRA_ARGS[@]}" -ge 1 ]] && \
+	myemakeargs+=(
+		FONTMAKE="fontmake ${FONTMAKE_EXTRA_ARGS[@]}"
 	)
 
 	emake "${myemakeargs[@]}" ${FONT_SUFFIX}
