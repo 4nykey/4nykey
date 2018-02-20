@@ -1,14 +1,14 @@
 --- a/COMMANDS.txt
 +++ b/COMMANDS.txt
-@@ -18,22 +18,35 @@
+@@ -18,69 +18,110 @@
  
  ### Command lines for building the region-specific subset OTFs
  ### Executed in {ExtraLight,Light,Normal,Regular,Medium,Bold,Heavy}
++if use font_types_otf; then
 +for d in "${S}"/{ExtraLight,Light,Normal,Regular,Medium,Bold,Heavy}; do
  
  # Simplified Chinese
  
-+if use font_types_otf; then
 +if use l10n_zh-CN; then cd "${d}" && \
  makeotf -f cidfont.ps.CN -ff features.CN -fi cidfontinfo.CN -mf ../FontMenuNameDB.SUBSET -r -nS -cs 25 -ch ../UniSourceHanSansCN-UTF32-H
 +[[ $? -eq 0 ]] || die; fi
@@ -31,48 +31,121 @@
  makeotf -f cidfont.ps.KR -ff features.KR -fi cidfontinfo.KR -mf ../FontMenuNameDB.SUBSET -r -nS -cs 3 -ch ../UniSourceHanSansKR-UTF32-H -ci ../SourceHanSans_KR_sequences.txt
 +[[ $? -eq 0 ]] || die; fi
 +find -type f -name "${MY_PN}*-*.otf" -exec mv {} "${S}" \;
++done
 +elif use font_types_ttc; then
-+cd "${d}"/OTC
  
  ### Command lines for building the language-specific OTFs
  ### Executed in {ExtraLight,Light,Normal,Regular,Medium,Bold,Heavy}/OTC
-@@ -41,18 +54,23 @@
++for d in "${S}"/{ExtraLight,Light,Normal,Regular,Medium,Bold,Heavy}/OTC; do
+ 
  # Simplified Chinese
  
++cd "${d}" && \
  makeotf -f cidfont.ps.OTC.SC -ff features.OTC.SC -fi cidfontinfo.OTC.SC -mf ../../FontMenuNameDB -r -nS -cs 25 -ch ../../UniSourceHanSansCN-UTF32-H
 +[[ $? -eq 0 ]] || die
  
  # Traditional Chinese (TW)
  
++cd "${d}" && \
  makeotf -f cidfont.ps.OTC.TC -ff features.OTC.TC -fi cidfontinfo.OTC.TC -mf ../../FontMenuNameDB -r -nS -cs 2 -ch ../../UniSourceHanSansTW-UTF32-H -ci ../../SourceHanSans_TWHK_sequences.txt
 +[[ $? -eq 0 ]] || die
  
  # Japanese
  
++cd "${d}" && \
  makeotf -f cidfont.ps.OTC.J -ff features.OTC.J -fi cidfontinfo.OTC.J -mf ../../FontMenuNameDB -r -nS -cs 1 -ch ../../UniSourceHanSansJP-UTF32-H -ci ../../SourceHanSans_JP_sequences.txt
 +[[ $? -eq 0 ]] || die
  
  # Korean
  
++cd "${d}" && \
  makeotf -f cidfont.ps.OTC.K -ff features.OTC.K -fi cidfontinfo.OTC.K -mf ../../FontMenuNameDB -r -nS -cs 3 -ch ../../UniSourceHanSansKR-UTF32-H -ci ../../SourceHanSans_KR_sequences.txt
 +[[ $? -eq 0 ]] || die
-+if false; then
++done
  
  ### Command lines for building the language-specific half-width (HW) OTFs
  ### Executed in {Regular,Bold}/OTC
-@@ -76,8 +94,15 @@
- ### Command line for building the OTCs (replace $dir with the face name)
- ### Executed in {ExtraLight,Light,Normal,Medium,Heavy}/OTC
++for d in "${S}"/{Regular,Bold}/OTC; do
  
-+fi
-+dir=$(basename "${d}")
- otf2otc -t 'CFF '=0 -o SourceHanSans-$dir.ttc SourceHanSans-$dir.otf SourceHanSansK-$dir.otf SourceHanSansSC-$dir.otf SourceHanSansTC-$dir.otf
+ # Simplified Chinese
+ 
++cd "${d}" && \
+ makeotf -f cidfont.ps.OTC.HW.SC -ff features.OTC.SC -fi cidfontinfo.OTC.HW.SC -mf ../../FontMenuNameDB.HW -r -nS -cs 25 -ch ../../UniSourceHanSansHWCN-UTF32-H
 +[[ $? -eq 0 ]] || die
-+mv -f ${MY_PN}-$dir.ttc "${S}"
-+fi
+ 
+ # Traditional Chinese (TW)
+ 
++cd "${d}" && \
+ makeotf -f cidfont.ps.OTC.HW.TC -ff features.OTC.TC -fi cidfontinfo.OTC.HW.TC -mf ../../FontMenuNameDB.HW -r -nS -cs 2 -ch ../../UniSourceHanSansHWTW-UTF32-H -ci ../../SourceHanSans_TWHK_sequences.txt
++[[ $? -eq 0 ]] || die
+ 
+ # Japanese
+ 
++cd "${d}" && \
+ makeotf -f cidfont.ps.OTC.HW.J -ff features.OTC.J -fi cidfontinfo.OTC.HW.J -mf ../../FontMenuNameDB.HW -r -nS -cs 1 -ch ../../UniSourceHanSansHWJP-UTF32-H -ci ../../SourceHanSans_JP_sequences.txt
++[[ $? -eq 0 ]] || die
+ 
+ # Korean
+ 
++cd "${d}" && \
+ makeotf -f cidfont.ps.OTC.HW.K -ff features.OTC.K -fi cidfontinfo.OTC.HW.K -mf ../../FontMenuNameDB.HW -r -nS -cs 3 -ch ../../UniSourceHanSansHWKR-UTF32-H -ci ../../SourceHanSans_KR_sequences.txt
++[[ $? -eq 0 ]] || die
 +done
  
-+return
- ### Executed in {Regular,Bold}/OTC
+ ### Command line for building the OTCs (replace $dir with the face name)
+ ### Executed in {ExtraLight,Light,Normal,Medium,Heavy}/OTC
++for dir in {ExtraLight,Light,Normal,Medium,Heavy}; do
  
++cd "${S}"/${dir}/OTC && \
+ otf2otc -t 'CFF '=0 -o SourceHanSans-$dir.ttc SourceHanSans-$dir.otf SourceHanSansK-$dir.otf SourceHanSansSC-$dir.otf SourceHanSansTC-$dir.otf
++[[ $? -eq 0 ]] || die
++done
+ 
+ ### Executed in {Regular,Bold}/OTC
++for dir in {Regular,Bold}; do
+ 
++cd "${S}"/${dir}/OTC && \
  otf2otc -t 'CFF '=0 -o SourceHanSans-$dir.ttc SourceHanSans-$dir.otf SourceHanSansK-$dir.otf SourceHanSansSC-$dir.otf SourceHanSansTC-$dir.otf SourceHanSansHW-$dir.otf SourceHanSansHWK-$dir.otf SourceHanSansHWSC-$dir.otf SourceHanSansHWTC-$dir.otf
++[[ $? -eq 0 ]] || die
++done
+ 
+ ### Command lines for building the Super OTC
+ 
+@@ -88,7 +129,9 @@ otf2otc -t 'CFF '=0 -o SourceHanSans-$di
+ # (tmp) copies of the Simplified Chinese, Traditional Chinese, and
+ # Korean OTFs (replace $dir with the face name)
+ # Executed in {ExtraLight,Light,Normal,Medium,Heavy}/OTC
++for dir in {ExtraLight,Light,Normal,Medium,Heavy}; do
+ 
++cd "${S}"/${dir}/OTC
+ sfntedit -x CFF=CFF.J SourceHanSans-$dir.otf
+ cp SourceHanSans-$dir.otf SourceHanSans-$dir.otf.tmp
+ cp SourceHanSansK-$dir.otf SourceHanSansK-$dir.otf.tmp
+@@ -101,9 +144,12 @@ sfntedit -d DSIG SourceHanSans-$dir.otf.
+ sfntedit -d DSIG SourceHanSansK-$dir.otf.tmp
+ sfntedit -d DSIG SourceHanSansSC-$dir.otf.tmp
+ sfntedit -d DSIG SourceHanSansTC-$dir.otf.tmp
++done
+ 
+ # Executed in {Regular,Bold}/OTC
++for dir in {Regular,Bold}; do
+ 
++cd "${S}"/${dir}/OTC
+ sfntedit -x CFF=CFF.J SourceHanSans-$dir.otf
+ cp SourceHanSans-$dir.otf SourceHanSans-$dir.otf.tmp
+ cp SourceHanSansK-$dir.otf SourceHanSansK-$dir.otf.tmp
+@@ -128,10 +174,14 @@ sfntedit -d DSIG SourceHanSansHW-$dir.ot
+ sfntedit -d DSIG SourceHanSansHWK-$dir.otf.tmp
+ sfntedit -d DSIG SourceHanSansHWSC-$dir.otf.tmp
+ sfntedit -d DSIG SourceHanSansHWTC-$dir.otf.tmp
++done
+ 
+ # Command line for building the Super OTC
+ # Executed in the root directory
+ 
++cd "${S}" && \
+ otf2otc -o SourceHanSans.ttc ExtraLight/OTC/SourceHanSans-ExtraLight.otf.tmp ExtraLight/OTC/SourceHanSansK-ExtraLight.otf.tmp ExtraLight/OTC/SourceHanSansSC-ExtraLight.otf.tmp ExtraLight/OTC/SourceHanSansTC-ExtraLight.otf.tmp Light/OTC/SourceHanSans-Light.otf.tmp Light/OTC/SourceHanSansK-Light.otf.tmp Light/OTC/SourceHanSansSC-Light.otf.tmp Light/OTC/SourceHanSansTC-Light.otf.tmp Normal/OTC/SourceHanSans-Normal.otf.tmp Normal/OTC/SourceHanSansK-Normal.otf.tmp Normal/OTC/SourceHanSansSC-Normal.otf.tmp Normal/OTC/SourceHanSansTC-Normal.otf.tmp Regular/OTC/SourceHanSans-Regular.otf.tmp Regular/OTC/SourceHanSansK-Regular.otf.tmp Regular/OTC/SourceHanSansSC-Regular.otf.tmp Regular/OTC/SourceHanSansTC-Regular.otf.tmp Regular/OTC/SourceHanSansHW-Regular.otf.tmp Regular/OTC/SourceHanSansHWK-Regular.otf.tmp Regular/OTC/SourceHanSansHWSC-Regular.otf.tmp Regular/OTC/SourceHanSansHWTC-Regular.otf.tmp Medium/OTC/SourceHanSans-Medium.otf.tmp Medium/OTC/SourceHanSansK-Medium.otf.tmp Medium/OTC/SourceHanSansSC-Medium.otf.tmp Medium/OTC/SourceHanSansTC-Medium.otf.tmp Bold/OTC/SourceHanSans-Bold.otf.tmp Bold/OTC/SourceHanSansK-Bold.otf.tmp Bold/OTC/SourceHanSansSC-Bold.otf.tmp Bold/OTC/SourceHanSansTC-Bold.otf.tmp Bold/OTC/SourceHanSansHW-Bold.otf.tmp Bold/OTC/SourceHanSansHWK-Bold.otf.tmp Bold/OTC/SourceHanSansHWSC-Bold.otf.tmp Bold/OTC/SourceHanSansHWTC-Bold.otf.tmp Heavy/OTC/SourceHanSans-Heavy.otf.tmp Heavy/OTC/SourceHanSansK-Heavy.otf.tmp Heavy/OTC/SourceHanSansSC-Heavy.otf.tmp Heavy/OTC/SourceHanSansTC-Heavy.otf.tmp
++[[ $? -eq 0 ]] || die
++fi
+ 
+ # EOF
