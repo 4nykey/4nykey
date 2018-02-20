@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -21,7 +21,7 @@ HOMEPAGE="http://lnav.org"
 
 LICENSE="BSD-2"
 SLOT="0"
-IUSE="unicode"
+IUSE="doc unicode"
 
 RDEPEND="
 	app-arch/bzip2
@@ -34,6 +34,7 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
+	doc? ( dev-python/sphinx )
 "
 
 src_prepare() {
@@ -51,4 +52,13 @@ src_configure() {
 
 src_compile() {
 	emake AR="$(tc-getAR)"
+	use doc && emake -C docs html
+}
+
+src_install() {
+	local DOCS=(
+		AUTHORS NEWS README
+		$(usex doc docs/build/html '')
+	)
+	default
 }
