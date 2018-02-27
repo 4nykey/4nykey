@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -16,12 +16,12 @@ else
 	MY_PV="b083be9"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	MY_D="dtl-33a68d8"
-	MY_C="cairo-1.15.4"
+	MY_C="cairo-1.15.10"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://githubcl/cubicdaiya/${MY_D%-*}/tar.gz/${MY_D##*-}
 		-> ${MY_D}.tar.gz
-		http://cairographics.org/snapshots/${MY_C}.tar.xz
+		https://cairographics.org/snapshots/${MY_C}.tar.xz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -37,8 +37,8 @@ IUSE=""
 
 RDEPEND="
 	dev-libs/fribidi
-	media-libs/freetype:2
-	media-libs/harfbuzz[icu]
+	>=media-libs/freetype-2.9:2
+	>=media-libs/harfbuzz-1.7.4[icu]
 	dev-libs/expat
 "
 DEPEND="
