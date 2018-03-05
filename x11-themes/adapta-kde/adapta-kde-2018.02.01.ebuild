@@ -1,0 +1,1 @@
+adapta-kde-9999.ebuild
