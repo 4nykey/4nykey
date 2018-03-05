@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -8,7 +8,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/caryll/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="f6502ac"
+	MY_PV="b23979a"
 	SRC_URI="
 		mirror://githubcl/caryll/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -30,12 +30,17 @@ DEPEND="
 	${RDEPEND}
 "
 
-src_compile() {
+src_prepare() {
+	default
 	sed -e 's:\r::g' -i bin/_startup
+	npm install
 }
 
 src_install() {
-	npm set prefix "${ED}"/usr
-	npm install -g
+	local _d="$(get_libdir)/node_modules/${PN}"
+	insinto /usr/${_d}
+	doins -r "${S}"/.
+	fperms +x /usr/${_d}/bin/_startup
+	dosym ../${_d}/bin/_startup /usr/bin/${PN}
 	einstalldocs
 }
