@@ -57,10 +57,12 @@ pkg_setup() {
 }
 
 src_prepare() {
-	local PATCHES=(
-		"${FILESDIR}"/${PN}_qt.diff
-	)
 	default
+	use qt && sed \
+		-e '/SOURCES += src\// s:+:-:' \
+		-e '/!exists.*config.h/ s:!::' \
+		-e 's:-lsqlite3 -lrt:-lmega &:' \
+		-i bindings/qt/sdk.pri
 	eautoreconf
 }
 
