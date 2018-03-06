@@ -9,12 +9,12 @@ if [[ ${PV} = *9999* ]]; then
 	ESVN_REPO_URI="https://svn.savannah.nongnu.org/svn/fbi-improved/trunk"
 	KEYWORDS=""
 else
+	inherit vcs-snapshot
 	MY_P="${P/_pre*/-trunk}"
 	MY_P="${MY_P/_/-}"
 	SRC_URI="mirror://nongnu/fbi-improved/${MY_P}.tar.bz2 -> ${P}.tar.bz2"
 	RESTRICT="primaryuri"
 	KEYWORDS="~x86 ~amd64"
-	S="${WORKDIR}/${MY_P}"
 fi
 
 DESCRIPTION="Fbi IMproved is a framebuffer image viewer"
@@ -57,7 +57,6 @@ RDEPEND="
 	xfig? ( media-gfx/xfig )
 	dia? ( app-office/dia )
 	screen? ( app-misc/screen )
-	media-fonts/terminus-font
 "
 DEPEND="
 	${DEPEND}
@@ -79,6 +78,7 @@ src_prepare() {
 		-e '/SUBDIRS = /s:\<doc\>::' \
 		-i Makefile.am
 	eautoreconf
+	sed -e 's:\(FIM_DEFAULT_CONSOLEFONT\)o:\1:' -i src/FontServer.cpp
 }
 
 src_configure() {
@@ -109,8 +109,6 @@ src_configure() {
 		$(use_enable screen)
 		--disable-option-checking
 		--docdir=/usr/share/doc/${PF}
-		--with-default-consolefont=/usr/share/consolefonts/ter-114n.psf.gz
-		--disable-hardcoded-font
 		--disable-matrices-rendering
 		--enable-fimrc
 		--enable-history
