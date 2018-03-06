@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -7,15 +7,15 @@ GNOME2_EAUTORECONF="yes"
 inherit gnome2 ltprune
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/Alexey-Yakovenko/${PN}.git"
+	EGIT_REPO_URI="https://github.com/DeaDBeeF-Player/${PN}.git"
 	EGIT_SUBMODULES=( )
 	SRC_URI=""
 else
 	inherit vcs-snapshot
-	MY_PV="1aae735"
+	MY_PV="d2fc9ef"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
-		mirror://githubcl/Alexey-Yakovenko/${PN}/tar.gz/${MY_PV}
+		mirror://githubcl/DeaDBeeF-Player/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
@@ -23,14 +23,14 @@ else
 fi
 
 DESCRIPTION="A music player for *nix-like systems and OSX"
-HOMEPAGE="https://github.com/Alexey-Yakovenko/${PN}"
+HOMEPAGE="https://github.com/DeaDBeeF-Player/${PN}"
 LICENSE="GPL-2 LGPL-2.1"
 
 SLOT="0"
 IUSE="
 alsa oss pulseaudio gtk network sid mad mac adplug vorbis ffmpeg flac sndfile
 wavpack cdda gme libnotify musepack midi tta dts aac mms libsamplerate X imlib
-zip nls threads gtk3 dumb shorten alac wma
+zip nls threads gtk3 dumb shorten alac wma opus
 "
 
 RDEPEND="
@@ -65,6 +65,7 @@ RDEPEND="
 	zip? ( sys-libs/zlib dev-libs/libzip )
 	gme? ( sys-libs/zlib )
 	midi? ( media-sound/timidity-freepats )
+	opus? ( media-libs/opusfile )
 "
 DEPEND="
 	${RDEPEND}
@@ -121,6 +122,7 @@ src_configure() {
 		$(use_enable shorten shn)
 		$(use_enable alac)
 		$(use_enable wma)
+		$(use_enable opus)
 	)
 	use imlib && myconf+=( $(use_enable network artwork-network) )
 	gnome2_src_configure "${myconf[@]}"
