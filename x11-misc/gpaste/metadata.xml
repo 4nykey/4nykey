@@ -6,6 +6,5 @@
 	</maintainer>
 	<use>
 		<flag name="gnome-shell">Install gnome-shell extension</flag>
-		<flag name="applet">Enable gpaste-applet</flag>
 	</use>
 </pkgmetadata>
