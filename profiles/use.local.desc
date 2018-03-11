@@ -62,6 +62,7 @@ media-sound/deadbeef:gtk3 - Enable support for GTK+3
 media-sound/deadbeef:mac - Add support for decoding Monkey's Audio files
 media-sound/deadbeef:midi - Enables MIDI support
 media-sound/deadbeef:network - Enable HTTP streaming vfs plugin
+media-sound/deadbeef:opus - Enable Opus audio codec support
 media-sound/deadbeef:sid - Build with SID (Commodore 64 Audio) support
 media-sound/deadbeef:tta - Add support for decoding True Audio input files
 media-sound/deadbeef:wma - Add support for decoding Windows Media Audio files
@@ -77,9 +78,10 @@ media-video/flowblade:swh - Additional audio filters (media-plugins/swh-plugins)
 net-misc/meganz-sdk:freeimage - Enable support for image I/O via media-libs/freeimage
 net-misc/meganz-sdk:fuse - Build FUSE-based example client
 net-misc/meganz-sdk:libuv - Support asynchronous I/O via dev-libs/libuv
+net-misc/meganz-sdk:mediainfo - Use media-libs/libmediainfo for media files
 net-misc/meganz-sdk:qt - Install QT bindings
-net-misc/meganz-sdk:sodium - Use dev-libs/libsodium for cryptography
 net-misc/megasync:dolphin - Install the kde-apps/dolphin extension
+net-misc/megasync:mediainfo - Use media-libs/libmediainfo for media files
 net-misc/megasync:nautilus - Install the gnome-base/nautilus extension
 net-misc/megasync:thunar - Install the xfce-base/thunar extension
 sys-block/f3:extras - Compile the extra applications
@@ -109,13 +111,7 @@ x11-themes/adapta-gtk-theme:cinnamon - Install Cinnamon theme
 x11-themes/adapta-gtk-theme:mate - Install MATE theme
 x11-themes/adapta-gtk-theme:openbox - Install Openbox theme
 x11-themes/adapta-gtk-theme:xfce - Install Xfce4 theme
+x11-themes/adapta-kde:konsole - Install konsole theme
+x11-themes/adapta-kde:kvantum - Install kvantum theme
 x11-themes/arc-kde:konsole - Install konsole theme
 x11-themes/arc-kde:kvantum - Install kvantum theme
-x11-themes/candra:gdm - Install gnome-base/gdm theme
-x11-themes/cloak:cinnamon - Install gnome-extra/cinnamon theme
-x11-themes/cloak:firefox - Install firefox theme
-x11-themes/cloak:gdm - Install gnome-base/gdm theme
-x11-themes/cloak:openbox - Install openbox theme
-x11-themes/cloak:xfce - Install xfwm4 theme
-x11-themes/nouvegray-icon-theme:extras - Install extras
-x11-themes/nouvegray-icon-theme:smplayer - Install media-video/smplayer theme
