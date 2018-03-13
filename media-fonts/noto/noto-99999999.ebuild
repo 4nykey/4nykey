@@ -19,5 +19,4 @@ RDEPEND="
 		binary? ( media-fonts/noto-fonts-alpha )
 		!binary? ( media-fonts/noto-source )
 	)
-	!media-fonts/croscorefonts
 "
