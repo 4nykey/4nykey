@@ -8,11 +8,84 @@ MOZCONFIG_OPTIONAL_GTK2ONLY=1
 MOZCONFIG_OPTIONAL_WIFI=1
 
 inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils mozconfig-v6.${PV%%.*} pax-utils xdg-utils autotools
-inherit eapi7-ver
+inherit eapi7-ver cargo
+CRATES="
+abort_on_panic-1.0.0
+afl-0.3.2
+aho-corasick-0.6.4
+ansi_term-0.11.0
+atty-0.2.8
+bitflags-1.0.1
+bitreader-0.3.1
+byteorder-0.5.3
+byteorder-1.2.1
+cbindgen-0.5.2
+cc-1.0.8
+cfg-if-0.1.2
+clap-2.31.1
+dtoa-0.4.2
+env_logger-0.5.6
+fuchsia-zircon-0.3.3
+fuchsia-zircon-sys-0.3.3
+humantime-1.1.1
+itoa-0.3.4
+kernel32-sys-0.2.2
+lazy_static-1.0.0
+libc-0.2.39
+log-0.3.9
+log-0.4.1
+memchr-2.0.1
+mp4parse-0.10.0
+mp4parse_capi-0.10.0
+num-traits-0.2.1
+proc-macro2-0.2.3
+quick-error-1.2.1
+quote-0.3.15
+rand-0.4.2
+redox_syscall-0.1.37
+redox_termios-0.1.1
+regex-0.2.10
+regex-syntax-0.5.3
+remove_dir_all-0.3.0
+rustc_version-0.2.2
+semver-0.9.0
+semver-parser-0.7.0
+serde-1.0.33
+serde_derive-1.0.21
+serde_derive_internals-0.17.0
+serde_json-1.0.11
+standalone-quote-0.5.0
+standalone-syn-0.13.0
+strsim-0.7.0
+syn-0.11.11
+synom-0.11.3
+tempdir-0.3.6
+termcolor-0.3.5
+termion-1.5.1
+test-assembler-0.1.5
+textwrap-0.9.0
+thread_local-0.3.5
+toml-0.4.5
+ucd-util-0.1.1
+unicode-width-0.1.4
+unicode-xid-0.0.4
+unicode-xid-0.1.0
+unreachable-1.0.0
+utf8-ranges-1.0.0
+vec_map-0.8.0
+void-1.0.2
+winapi-0.2.8
+winapi-0.3.4
+winapi-build-0.1.1
+winapi-i686-pc-windows-gnu-0.4.0
+winapi-x86_64-pc-windows-gnu-0.4.0
+wincolor-0.1.6
+xdg-2.1.0
+"
 
 MY_PN="firefox"
 MOZ_PV="$(ver_cut 1-3)esr"
-PATCH="${MY_PN}-${PV%%.*}.4-patches-02"
+PATCH="${MY_PN}-${PV%%.*}.5-patches-02"
 
 # https://dist.torproject.org/torbrowser
 TOR_PV="$(ver_cut 4-6)"
@@ -50,6 +123,7 @@ SRC_URI="
 		${SRC_URI}/tor-browser-linux64-${TOR_PV}_en-US.tar.xz
 	)
 	${PATCH_URIS[@]}
+	rust? ( $(cargo_crate_uris ${CRATES}) )
 "
 RESTRICT="primaryuri"
 
@@ -103,15 +177,17 @@ pkg_pretend() {
 }
 
 src_prepare() {
+	local PATCHES=(
+		"${FILESDIR}"/${PN}-profiledir.patch
+		"${WORKDIR}"/firefox
+	)
+
 	eapply --directory="${WORKDIR}/firefox" \
 		"${FILESDIR}"/1002_add_gentoo_preferences.patch
-	eapply "${FILESDIR}"/${PN}-profiledir.patch
-	eapply --ignore-whitespace "${FILESDIR}"/${PN}-cargo.patch
-	rm -f media/libstagefright/binding/mp4parse_capi/build.rs
 
-	# Apply gentoo firefox patches
-	rm -f "${WORKDIR}"/firefox/2003_fix_sandbox_prlimit64.patch
-	eapply "${WORKDIR}/firefox"
+	rm -f \
+		"${WORKDIR}"/firefox/2007_fix_nvidia_latest.patch \
+		"${WORKDIR}"/firefox/2003_fix_sandbox_prlimit64.patch
 
 	# Enable gnomebreakpad
 	if use debug ; then
@@ -144,11 +220,16 @@ src_prepare() {
 	sed '/^MOZ_DEV_EDITION=1/d' \
 		-i "${S}"/browser/branding/aurora/configure.sh || die
 
-	grep -rl 'param lto-partitions' --include=moz.build | xargs \
-		sed -e 's:param lto-partitions=1:lto-partition=one:' -i
-
-	# Allow user to apply any additional patches without modifing ebuild
-	eapply_user
+	default
+	if use rust; then
+		find -type f -name Cargo.lock -delete
+		eapply --ignore-whitespace "${FILESDIR}"/${PN}-cargo.patch
+		sed -e '/mp4parse_capi =/s:= .*:= "0.10.0":' \
+			-i toolkit/library/rust/shared/Cargo.toml
+		sed -e '/cbindgen/,/\[/s:0.4.3:0.5.2:' \
+			-i "${ECARGO_VENDOR}"/mp4parse_capi-0.10.0/Cargo.toml
+		mv -f "${ECARGO_VENDOR}"/* third_party/rust/
+	fi
 
 	# Autotools configure is now called old-configure.in
 	# This works because there is still a configure.in that happens to be for the
@@ -274,7 +355,7 @@ src_install() {
 	# Pax mark xpcshell for hardened support, only used for startupcache creation.
 	pax-mark m "${BUILD_OBJ_DIR}"/dist/bin/xpcshell
 
-	# Add an emty default prefs for mozconfig-3.eclass
+	# Add an empty default prefs for mozconfig-3.eclass
 	touch "${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
 		|| die
 
