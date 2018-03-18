@@ -1,0 +1,11 @@
+--- a/src/wl/sys/wl_cfg80211_hybrid.h
++++ b/src/wl/sys/wl_cfg80211_hybrid.h
+@@ -119,7 +119,7 @@
+ struct wl_cfg80211_event_loop {
+ 	s32(*handler[WLC_E_LAST]) (struct wl_cfg80211_priv *wl, struct net_device *ndev,
+ 	                           const wl_event_msg_t *e, void *data);
+-};
++} __no_const;
+ 
+ struct wl_cfg80211_bss_info {
+ 	u16 band;
