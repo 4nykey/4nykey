@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -27,10 +27,18 @@ DEPEND="
 RDEPEND="${DEPEND}"
 DOCS=( {CHANGELOG,README,docs/how-it-works/en}.md )
 
+src_prepare() {
+	default
+	npm install
+}
+
 src_compile() { :; }
 
 src_install() {
-	npm set prefix "${ED}"/usr
-	npm install -g
+	local _d="/usr/$(get_libdir)/node_modules/${PN}"
+	insinto ${_d}
+	doins -r bin lib node_modules plugins package*.json .svgo.yml
+	fperms +x ${_d}/bin/${PN}
+	dosym ..${_d#/usr}/bin/${PN} /usr/bin/${PN}
 	einstalldocs
 }
