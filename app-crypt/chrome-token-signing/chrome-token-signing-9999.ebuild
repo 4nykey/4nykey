@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -10,9 +10,10 @@ if [[ ${PV} = *9999* ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="${PV/_/-}"
-	MY_PV="${MY_PV/rc/RC}"
+	MY_PV="v${MY_PV/rc/RC}"
+	[[ -z ${PV%%*_p*} ]] && MY_PV="1c9bebc"
 	SRC_URI="
-		mirror://githubcl/open-eid/${PN}/tar.gz/v${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/open-eid/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -38,6 +39,7 @@ DEPEND="
 	${DEPEND}
 	dev-qt/linguist-tools
 "
+PATCHES=( "${FILESDIR}"/${PN}_allow_disabling.diff )
 
 src_configure() {
 	cd "${S}"/host-linux
@@ -56,8 +58,8 @@ src_install() {
 		../../opt/chrome/native-messaging-hosts/ee.ria.esteid.json \
 		/etc/chromium/native-messaging-hosts/ee.ria.esteid.json
 	dosym \
-		../../../../opt/google/chrome/extensions/ckjefchnfjhjfedoccjbhjpbncimppeg.json \
-		/usr/share/chromium/extensions/ckjefchnfjhjfedoccjbhjpbncimppeg.json
+		../../../opt/chrome/policies/managed/ee.ria.chrome-token-signing.policy.json \
+		/etc/chromium/policies/managed/ee.ria.chrome-token-signing.policy.json
 
 	einstalldocs
 }
