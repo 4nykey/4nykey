@@ -4,14 +4,14 @@
 EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
-MULTILIB_COMPAT=( abi_x86_32 )
-inherit vcs-snapshot distutils-r1
+inherit python-single-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
+	EGIT_BRANCH="issuu-64bit-andfixes"
 else
 	inherit vcs-snapshot
-	MY_PV="4c089b2"
+	MY_PV="e1136ba"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -19,7 +19,6 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 RESTRICT="primaryuri"
-inherit multilib-build
 
 DESCRIPTION="Adobe Font Development Kit for OpenType"
 HOMEPAGE="http://www.adobe.com/devnet/opentype/afdko.html"
@@ -41,14 +40,16 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
+	${PYTHON_DEPS}
 "
 DOCS=(
 {README,NEWS}.rst
 html
-FDK/FDKReleaseNotes.txt
+pdf
+afdko/FDKReleaseNotes.txt
 )
 
-python_prepare_all() {
+src_prepare() {
 	local PATCHES=(
 		"${FILESDIR}"/${PN}-inc.diff
 		"${FILESDIR}"/${PN}-ar.diff
@@ -57,34 +58,45 @@ python_prepare_all() {
 		"${FILESDIR}"/${PN}-autohint.diff
 	)
 	sed \
-		-e '/sys\.exit(1)/d' \
-		-e '/setup_requires=.*wheel/d' \
-		-e '/cmdclass=.*bdist_wheel/d' \
-		-i setup.py
+		-e "/AFDKO_Python=/s:=.*:=${PYTHON}:" \
+		-e "/AFDKO_Scripts=/s:=.*\.\./:=${EROOT}usr/lib/${PN}/:" \
+		-i afdko/Tools/linux/setFDKPaths
 	sed \
 		-e '/^[ ]\+except (MakeOTFOptionsError.*):$/,/^[ ]\+pass$/d' \
 		-i afdko/Tools/SharedData/FDKScripts/MakeOTF.py
-	distutils-r1_python_prepare_all
-	mv -f afdko FDK
-	mkdir -p afdko/Tools html
-	mv -f FDK/__init__.py afdko/
-	mv -f FDK/Tools/{linux,SharedData,__init__.py} afdko/Tools/
-	mv -f FDK/*.html html/
+	rm -f afdko/Tools/linux/{ufonormalizer,AFDKOPython}
+	mkdir html pdf
+	mv -f afdko/{.,Technical\ Documentation}/*.html html/
+	mv -f afdko/Technical\ Documentation/*.pdf pdf/
+	default
 }
 
 src_compile() {
 	tc-export CC CPP AR
-	local _d _i
-	tc-is-gcc && _i=" -D__NO_STRING_INLINES"
+	local _d
 	find -path '*/linux/gcc/release/Makefile' | while read _d; do
 		emake -C "${_d%/Makefile}" \
-			XFLAGS="${CFLAGS_x86} ${CFLAGS}${_i}" || return
+			XFLAGS="${CFLAGS}" || return
 	done
 	find -path '*exe/linux/release/*' -execdir mv -f -t "${S}"/afdko/Tools/linux {} +
-	distutils-r1_src_compile
 }
 
-python_install() {
-	distutils-r1_python_install
-	find "${ED}"/$(python_get_sitedir)/${PN}/Tools/linux -type f -delete
+src_install() {
+	local _d="/usr/lib/${PN}"
+	insinto "${_d}"
+
+	doins -r afdko/Tools/SharedData
+	python_optimize "${ED}"${_d}/SharedData
+
+	exeinto "${_d}/bin"
+	doexe afdko/Tools/linux/*
+
+	dodir /etc/env.d
+	cat > "${T}"/10${PN} <<- EOF
+		PATH="${EPREFIX}${_d}/bin"
+		ROOTPATH="${EPREFIX}${_d}/bin"
+	EOF
+	doenvd "${T}"/10${PN}
+
+	einstalldocs
 }

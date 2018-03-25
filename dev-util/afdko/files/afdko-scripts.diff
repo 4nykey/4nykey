@@ -1,29 +1,13 @@
---- a/setup.py
-+++ b/setup.py
-@@ -103,18 +101,18 @@ def get_scripts():
- def get_console_scripts():
-     script_entries = [
-         ('autohint', 'autohint:main'),
--        ('buildcff2vf', 'buildCFF2VF:run'),
--        ('buildmasterotfs', 'buildMasterOTFs:main'),
--        ('comparefamily', 'CompareFamily:main'),
--        ('checkoutlinesufo', 'CheckOutlinesUFO:main'),
-+        ('buildCFF2VF', 'buildCFF2VF:run'),
-+        ('buildMasterOTFs', 'buildMasterOTFs:main'),
-+        ('compareFamily', 'CompareFamily:main'),
-+        ('checkOutlinesUFO', 'CheckOutlinesUFO:main'),
-         ('copycffcharstrings', 'copyCFFCharstrings:run'),
--        ('kerncheck', 'kernCheck:run'),
-+        ('kernCheck', 'kernCheck:run'),
-         ('makeotf', 'MakeOTF:main'),
--        ('makeinstances', 'makeInstances:main'),
--        ('makeinstancesufo', 'makeInstancesUFO:main'),
-+        ('makeInstances', 'makeInstances:main'),
-+        ('makeInstancesUFO', 'makeInstancesUFO:main'),
-         ('otc2otf', 'otc2otf:main'),
-         ('otf2otc', 'otf2otc:main'),
--        ('stemhist', 'StemHist:main'),
-+        ('stemHist', 'StemHist:main'),
-         ('ttxn', 'ttxn:main'),
-         ('charplot', 'ProofPDF:charplot'),
-         ('digiplot', 'ProofPDF:digiplot'),
+--- a/afdko/Tools/SharedData/FDKScripts/FDKUtils.py
++++ b/afdko/Tools/SharedData/FDKScripts/FDKUtils.py
+@@ -32,7 +32,9 @@ def findFDKDirs():
+     fdkToolsDir = None
+     _dir = os.path.dirname(__file__)
+ 
+-    while _dir:
++    fdkSharedDataDir = _dir
++    fdkToolsDir = os.path.join(fdkSharedDataDir.split('/usr/')[0],'usr/lib/afdko/bin')
++    while False:
+         if os.path.basename(_dir) == "Tools":
+             fdkScriptsDir = os.path.join(_dir, "SharedData", "FDKScripts")
+             if curSystem == "Darwin":
