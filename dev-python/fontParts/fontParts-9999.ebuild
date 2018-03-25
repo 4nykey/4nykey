@@ -28,7 +28,7 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
-	>=dev-python/fonttools-3.21.2[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.24.1[${PYTHON_USEDEP}]
 	dev-python/ufoLib[${PYTHON_USEDEP}]
 	dev-python/fontMath[${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
