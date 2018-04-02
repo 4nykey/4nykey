@@ -1,0 +1,43 @@
+--- a/aacgain/Makefile.am
++++ b/aacgain/Makefile.am
+@@ -23,4 +23,4 @@ aacgain_SOURCES = aacgain.cpp decoder.c syntax.c MP4MetaFile.cpp
+ # library search path
+ aacgain_LDADD = $(AACGAIN_EXT_LIBS) \
+ 	$(top_builddir)/mp3gain/libmp3gain.la \
+-	$(top_builddir)/mp3gain/mpglibDBL/libmpglib.la
++	-lmpg123
+--- a/aacgain/linux/Makefile.am.mp3gain
++++ b/aacgain/linux/Makefile.am.mp3gain
+@@ -4,7 +4,6 @@ INCLUDES = -I$(top_srcdir)/aacgain
+ 
+ libmp3gain_la_SOURCES =  mp3gain.c gain_analysis.c apetag.c id3tag.c rg_error.c
+ 
+-SUBDIRS = mpglibDBL
+ AM_CFLAGS = -DHAVE_MEMCPY -DAACGAIN
+ AM_CXXFLAGS = -DHAVE_MEMCPY -DAACGAIN
+-libmp3gain_la_LIBADD = $(top_builddir)/mp3gain/mpglibDBL/libmpglib.la
++libmp3gain_la_LIBADD = -lmpg123
+--- a/aacgain/linux/Makefile.am.topsrcdir
++++ b/aacgain/linux/Makefile.am.topsrcdir
+@@ -1 +1 @@
+-SUBDIRS = mp3gain aacgain
++SUBDIRS = faad2/libfaad mp4v2 mp3gain aacgain
+--- a/aacgain/linux/configure.ac
++++ b/aacgain/linux/configure.ac
+@@ -4,8 +4,7 @@ AC_PREREQ([2.59])
+ AC_INIT([aacgain], [1.9])
+ AM_INIT_AUTOMAKE([no-define foreign])
+ AC_CONFIG_SRCDIR([aacgain/aacgain.h])
+-AC_CONFIG_HEADERS([mp3gain/mpglibDBL/config.h])
+-AC_CONFIG_MACRO_DIR([m4])
++AC_CONFIG_SUBDIRS([faad2 mp4v2])
+ 
+ # Checks for programs.
+ AC_PROG_CXX
+@@ -37,5 +36,5 @@ AC_CHECK_FUNCS([floor ftruncate memmove memset pow sqrt strcasecmp strdup strerr
+ AC_CONFIG_FILES([Makefile
+                  aacgain/Makefile
+                  mp3gain/Makefile
+-                 mp3gain/mpglibDBL/Makefile])
++                 ])
+ AC_OUTPUT

@@ -1,0 +1,10 @@
+--- a/mp3gain/mp3gain.c
++++ b/mp3gain/mp3gain.c
+@@ -48,6 +48,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <math.h>
++#include <ctype.h>
+ #include "apetag.h"
+ #include "id3tag.h"
+ #ifdef AACGAIN
