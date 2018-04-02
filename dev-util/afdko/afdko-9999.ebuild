@@ -8,10 +8,9 @@ inherit python-single-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
-	EGIT_BRANCH="issuu-64bit-andfixes"
 else
 	inherit vcs-snapshot
-	MY_PV="e1136ba"
+	MY_PV="bb3b210"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
