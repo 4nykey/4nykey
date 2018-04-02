@@ -23,7 +23,7 @@ HOMEPAGE="https://open-eid.github.io"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-IUSE="apidocs test"
+IUSE="apidocs pdf test"
 
 RDEPEND="
 	dev-libs/libdigidoc
@@ -31,6 +31,7 @@ RDEPEND="
 	dev-libs/xml-security-c
 	dev-util/cppunit
 	sys-libs/zlib[minizip]
+	pdf? ( <app-text/podofo-0.9.5 )
 "
 DEPEND="
 	${RDEPEND}
@@ -59,6 +60,7 @@ src_prepare() {
 src_configure() {
 	local mycmakeargs=(
 		-DCMAKE_DISABLE_FIND_PACKAGE_Doxygen=$(usex !apidocs)
+		-DCMAKE_DISABLE_FIND_PACKAGE_PoDoFo=$(usex !pdf)
 		-DCMAKE_DISABLE_FIND_PACKAGE_SWIG=yes
 		-DCMAKE_INSTALL_SYSCONFDIR="${EROOT}etc"
 	)
