@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -40,10 +40,7 @@ src_prepare() {
 
 src_install() {
 	default
-	insinto /usr/share/color-schemes
-	doins color-schemes/Arc*.colors
 	insinto /usr/share/
-	doins -r plasma wallpapers $(usex kvantum Kvantum '')
-	insinto /usr/share/konsole
-	use konsole && doins konsole/Arc*.colorscheme
+	doins -r aurorae color-schemes plasma wallpapers \
+		$(usex kvantum Kvantum '') $(usev konsole)
 }
