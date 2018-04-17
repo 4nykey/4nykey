@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -9,12 +9,13 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="${PV/_/-}"
-	MY_PV="${MY_PV^^}"
+	MY_PV="v${MY_PV^^}"
+	[[ -z ${PV%%*_p*} ]] && MY_PV="a61ec08"
 	SRC_URI="
-		mirror://githubcl/open-eid/${PN}/tar.gz/v${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/open-eid/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	# submodules not included in github releases
-	MY_QC="qt-common-80ea96c"
+	MY_QC="qt-common-0f90707"
 	SRC_URI="${SRC_URI}
 		mirror://githubcl/open-eid/${MY_QC%-*}/tar.gz/${MY_QC##*-} -> ${MY_QC}.tar.gz
 	"
@@ -50,12 +51,6 @@ src_prepare() {
 		-e 's:find_package( Qt5.*:&\nfind_package( Threads ):' \
 		-i CMakeLists.txt
 	cmake-utils_src_prepare
-}
-
-src_configure() {
-	local mycmakeargs=()
-	[[ -n ${PV%%*9999} ]] && mycmakeargs=( -DBREAKPAD='' )
-	cmake-utils_src_configure
 }
 
 pkg_postinst() {
