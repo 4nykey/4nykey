@@ -4,7 +4,7 @@
 EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
-inherit qmake-utils python-single-r1 xdg-utils vcs-snapshot
+inherit qmake-utils python-single-r1 xdg-utils vcs-snapshot toolchain-funcs
 if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/MrKepzie/${PN}.git"
 	EGIT_BRANCH="RB-${PV%.*}"
@@ -68,6 +68,10 @@ RDEPEND="
 	media-plugins/openfx-misc
 	media-plugins/openfx-arena
 "
+
+pkg_pretend() {
+	use openmp && tc-check-openmp
+}
 
 src_unpack() {
 	[[ -z ${PV%%*9999} ]] && git-r3_src_unpack
