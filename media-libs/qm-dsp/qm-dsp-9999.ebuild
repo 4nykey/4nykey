@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -8,7 +8,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/c4dm/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="4d15479"
+	MY_PV="c514f43"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="mirror://githubcl/c4dm/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz"
 	RESTRICT="primaryuri"
@@ -33,13 +33,18 @@ DEPEND="
 
 src_prepare() {
 	tc-export CC CXX AR RANLIB
-	sed -e 's,:=,+=,; s,-O3,,' build/linux/Makefile.linux64 > Makefile
 	sed \
 		-e 's,-Iext/clapack.*/include,,' \
 		-e 's,C\(LAPACK\|BLAS\)_SRC := ,&#,' \
 		-i build/general/Makefile.inc
 	sed -e 's,clapack\.h,clapack/&,' -i hmm/hmm.c
 	default
+}
+
+src_compile() {
+	CFLAGS="${CFLAGS} -fPIC -DUSE_PTHREADS" \
+	CXXFLAGS="${CXXFLAGS} -fPIC -DUSE_PTHREADS" \
+	emake -f build/general/Makefile.inc
 }
 
 src_install() {
