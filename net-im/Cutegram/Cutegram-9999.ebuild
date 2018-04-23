@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -16,7 +16,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit qmake-utils
+inherit qmake-utils xdg-utils
 
 DESCRIPTION="Cutegram is a free and opensource telegram client"
 HOMEPAGE="http://aseman.co/en/products/cutegram"
@@ -43,4 +43,14 @@ src_configure() {
 
 src_install() {
 	emake INSTALL_ROOT="${ED}/usr" install
+}
+
+pkg_postinst() {
+	xdg_desktop_database_update
+	xdg_mimeinfo_database_update
+}
+
+pkg_postrm() {
+	xdg_desktop_database_update
+	xdg_mimeinfo_database_update
 }
