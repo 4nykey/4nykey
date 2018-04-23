@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -6,12 +6,13 @@ EAPI=6
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/Aseman-Land/${PN}.git"
+	EGIT_SUBMODULES=()
 	DEPEND="
 		>=dev-util/libqtelegram-code-generator-${PV}
 	"
 else
 	inherit vcs-snapshot
-	MY_PV="70c437d"
+	MY_PV="c8a34b0"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}-stable"
 	SRC_URI="
 		mirror://githubcl/Aseman-Land/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -46,10 +47,11 @@ src_prepare() {
 		-e 's:^\./::' \
 		-e "s:\$ASEMAN_SRC_PATH:${S}:g" \
 		-i "${S}"/init
+	. "${S}"/init || die
+	find telegram/ -type f | xargs fperms 0644
 }
 
 src_configure() {
-	. "${S}"/init || die
 	eqmake5 CONFIG+=typeobjects OPENSSL_INCLUDE_PATH='.'
 }
 
