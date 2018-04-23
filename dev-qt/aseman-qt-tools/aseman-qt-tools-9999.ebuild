@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -8,7 +8,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/Aseman-Land/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="fb538c7"
+	MY_PV="dad0158"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/Aseman-Land/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -28,20 +28,30 @@ IUSE="dbus keychain multimedia positioning sensors webengine webkit widgets"
 DEPEND="
 	dev-qt/qtdeclarative:5
 	widgets? ( dev-qt/qtwidgets:5 )
-	keychain? ( dev-libs/qtkeychain[qt5] )
+	keychain? ( dev-libs/qtkeychain[qt5(+)] )
 	multimedia? ( dev-qt/qtmultimedia:5[qml] )
 	sensors? ( dev-qt/qtsensors:5[qml] )
 	webkit? ( dev-qt/qtwebkit:5[qml] )
-	webengine? ( dev-qt/qtwebengine:5 )
+	webengine? ( dev-qt/qtwebengine:5[widgets] )
 	positioning? ( dev-qt/qtpositioning:5[qml] )
 	dbus? ( dev-qt/qtdbus:5 )
 "
 RDEPEND="${DEPEND}"
 
 src_configure() {
+	qtuse() {
+		echo QT$(usex ${1} + -)=${2:-${1}}
+	}
 	mkdir build
 	cd build
 	eqmake5 \
+		$(qtuse widgets) \
+		$(qtuse multimedia) \
+		$(qtuse dbus) \
+		$(qtuse sensors) \
+		$(qtuse positioning) \
+		$(qtuse webkit webkitwidgets) \
+		$(qtuse webengine webenginewidgets) \
 		DEFINES+="$(usex keychain '' DISABLE_KEYCHAIN)" \
 		"${S}"
 }
