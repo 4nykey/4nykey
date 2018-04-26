@@ -3,17 +3,10 @@
 
 EAPI=6
 
-if [[ -z ${PV%%*9999} ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="https://git.code.sf.net/p/${PN}/code"
-	S="${WORKDIR}/${P}/${PN}"
-else
-	SRC_URI="mirror://sourceforge/${PN}/${P//./_}-src.zip"
-	S="${WORKDIR}"
-	RESTRICT="primaryuri"
-	KEYWORDS="~amd64 ~x86"
-	DEPEND="app-arch/unzip"
-fi
+inherit git-r3
+EGIT_REPO_URI="https://git.code.sf.net/p/${PN}/code"
+EGIT_COMMIT="${PV}"
+S="${WORKDIR}/${P}/${PN}"
 inherit toolchain-funcs
 
 DESCRIPTION="A program to analyze and adjust MP3 files to same volume"
@@ -31,12 +24,8 @@ DEPEND="
 "
 
 src_unpack() {
-	if [[ -z ${PV%%*9999} ]]; then
-		git-r3_fetch
-		git-r3_checkout "${EGIT_REPO_URI}" '' '' ${PN}
-	else
-		default
-	fi
+	git-r3_fetch
+	git-r3_checkout "${EGIT_REPO_URI}" '' '' ${PN}
 	tc-export CC
 }
 
