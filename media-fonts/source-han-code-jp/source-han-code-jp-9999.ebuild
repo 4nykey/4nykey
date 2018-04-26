@@ -3,7 +3,6 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 )
 MY_FONT_TYPES=( +otf ttc )
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
@@ -23,7 +22,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font-r1
+inherit font-r1
 
 DESCRIPTION="An monospaced font for mixed Latin and Japanese text"
 HOMEPAGE="https://github.com/adobe-fonts/${PN}"
@@ -37,10 +36,8 @@ REQUIRED_USE="
 
 DEPEND="
 	!binary? (
-		${PYTHON_DEPS}
-		$(python_gen_any_dep '
-			dev-util/afdko[${PYTHON_USEDEP}]
-		')
+		dev-util/afdko
+		dev-python/opentype-svg
 	)
 "
 
@@ -50,11 +47,7 @@ pkg_setup() {
 	else
 		S="${WORKDIR}/${P}$(usex binary 'R' '')"
 	fi
-	if use binary; then
-		FONT_S=( OTC OTF )
-	else
-		python-any-r1_pkg_setup
-	fi
+	use binary && FONT_S=( OTC OTF )
 	font-r1_pkg_setup
 }
 
@@ -62,13 +55,14 @@ src_prepare() {
 	default
 	use binary && return
 	sed -e 's:\<exit\>:die:' -i commands*.sh
+	mv -f Regular/cidfontinfo.{I,i}t
 }
 
 src_compile() {
 	use binary && return
 	source "${S}"/commands.sh
 	if use font_types_ttc; then
-		source "${S}"/commands_superotc.sh
+		source "${S}"/commands_subroutinize_otc.sh
 	else
 		find -name '*.otf' -exec mv --target-directory="${FONT_S}" {} +
 	fi

@@ -1,9 +1,8 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 )
 FONT_SUFFIX=otf
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
@@ -24,14 +23,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font-r1
-MY_MK="3c71e576827753fc395f44f4c2d91131-740f886"
-SRC_URI+="
-	!binary? (
-		mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
-		-> ${MY_MK}.tar.gz
-	)
-"
+inherit font-r1
 
 DESCRIPTION="A monochrome emoji font designed to harmonize with other Source fonts"
 HOMEPAGE="https://github.com/adobe-fonts/${PN}"
@@ -41,21 +33,11 @@ SLOT="0"
 IUSE="+binary"
 
 DEPEND="
-	!binary? (
-		${PYTHON_DEPS}
-		$(python_gen_any_dep '
-			dev-util/afdko[${PYTHON_USEDEP}]
-		')
-	)
+	!binary? ( dev-util/afdko )
 "
 
 pkg_setup() {
-	if use binary; then
-		S="${WORKDIR}"
-	else
-		python-any-r1_pkg_setup
-	fi
-
+	use binary && S="${WORKDIR}"
 	font-r1_pkg_setup
 }
 
@@ -63,7 +45,7 @@ src_unpack() {
 	if [[ ${PV} == *9999* ]]; then
 		git-r3_src_unpack
 	elif use binary; then
-		cp "${DISTDIR}"/${P}.otf "${S}"/
+		mv "${DISTDIR}"/${P}.otf "${S}"/
 	else
 		default
 	fi
