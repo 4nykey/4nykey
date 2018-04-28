@@ -38,6 +38,10 @@ RDEPEND="
 DOCS=( README.md build/megacmd/megacmd.changes )
 
 src_prepare() {
+	local PATCHES=(
+		# untill feature/backups is merged
+		"${FILESDIR}"/${PN}-sdk_nobackups.diff
+	)
 	sed \
 		-e '/SUBDIRS.*sdk/d' \
 		-e '/sdk\/m4/d' \
