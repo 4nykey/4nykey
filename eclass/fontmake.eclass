@@ -36,7 +36,7 @@ inherit python-any-r1 font-r1
 
 EXPORT_FUNCTIONS pkg_setup src_prepare src_compile
 
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-e11a9b9"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-0fd776c"
 SRC_URI+="
 !binary? (
 	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
@@ -72,7 +72,7 @@ fontmake_src_prepare() {
 	default
 	use binary && return
 	unpack ${MY_MK}.tar.gz
-	find -name '* *.glyphs' -execdir renamexm -s'/ //g' {} \;
+	find -name '* *.glyphs' -execdir renamexm -s'/ //g' {} +
 }
 
 fontmake_src_compile() {

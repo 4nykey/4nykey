@@ -6,7 +6,7 @@
 # fonts@gentoo.org
 # @BLURB: Eclass to make font installation uniform
 
-inherit eutils
+[[ ${EAPI} -lt 6 ]] && inherit eutils
 
 EXPORT_FUNCTIONS pkg_setup src_install pkg_postinst pkg_postrm
 
@@ -117,7 +117,7 @@ font-r1_fontconfig() {
 	if [[ -n ${FONT_CONF[@]} ]]; then
 		insinto /etc/fonts/conf.avail/
 		for conffile in "${FONT_CONF[@]}"; do
-			[[ -e  ${conffile} ]] && doins ${conffile}
+			[[ -e ${conffile} ]] && doins ${conffile}
 		done
 	fi
 }
