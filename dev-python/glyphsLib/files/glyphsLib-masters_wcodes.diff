@@ -1,30 +1,19 @@
---- a/Lib/glyphsLib/interpolation.py
-+++ b/Lib/glyphsLib/interpolation.py
-@@ -46,6 +46,7 @@ WEIGHT_CODES = {
-     'ExtraLight': 250,
-     'UltraLight': 250,
-     'Light': 300,
-+    'SemiLight': 350,
-     None: 400,  # default value normally omitted in source
-     'Normal': 400,
-     'Regular': 400,
-@@ -65,6 +66,8 @@ WIDTH_CODES = {
-     'Condensed': 3,
-     'SemiCondensed': 4,
-     None: 5,  # default value normally omitted in source
-+    'Regular': 5,
-+    'SemiExtended': 6,
-     'Medium (normal)': 5,
-     'Semi Expanded': 6,
-     'Expanded': 7,
-@@ -106,6 +108,10 @@ def build_designspace(masters, master_dir, out_dir, instance_data):
-         'Masters must all have same family'
+--- a/Lib/glyphsLib/builder/masters.py
++++ b/Lib/glyphsLib/builder/masters.py
+@@ -66,12 +66,15 @@ def to_ufo_master_attributes(self, source, master):
+         if custom_value:
+             ufo.lib[GLYPHS_PREFIX + 'customValue' + number] = custom_value
  
-     for font in masters:
-+        font.info.openTypeOS2WeightClass = \
-+            WEIGHT_CODES[font.lib.get(GLYPHS_PREFIX + 'weight')]
-+        font.info.openTypeOS2WidthClass = \
-+            WIDTH_CODES[font.lib.get(GLYPHS_PREFIX + 'width')]
-         write_ufo(font, master_dir)
+-    if font_uses_new_axes(self.font):
++    if not self.minimize_glyphs_diffs or font_uses_new_axes(self.font):
+         # Set the OS/2 weightClass and widthClas according the this master's
+         # user location ("Axis Location" parameter)
+         for axis in get_axis_definitions(self.font):
+             if axis.tag in ('wght', 'wdth'):
+                 user_loc = axis.get_user_loc(master)
++                if axis.tag == 'wdth' and 0 < user_loc <= 9:
++                    from .axes import class_to_value
++                    user_loc = class_to_value(axis.tag, int(user_loc))
+                 axis.set_ufo_user_loc(ufo, user_loc)
  
-     # needed so that added masters and instances have correct relative paths
+     self.to_ufo_blue_values(ufo, master)
