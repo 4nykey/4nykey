@@ -7,6 +7,7 @@ MY_PN="${PN^}-Cyrillic"
 FONTDIR_BIN=( fonts/{OTF,ttf} )
 PATCHES=(
 	"${FILESDIR}"/${PN}-booleanops.diff
+	"${FILESDIR}"/${PN}-str2int.diff
 )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3

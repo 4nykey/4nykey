@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -48,4 +48,9 @@ pkg_setup() {
 		DOCS="*/ChangeLog */README"
 	fi
 	fontmake_pkg_setup
+}
+
+src_prepare() {
+	sed -e '/custom = Italic/d' -i InconsolataLGCT.glyphs
+	fontmake_src_prepare
 }

@@ -1,0 +1,122 @@
+--- a/sources/Rubik.glyphs
++++ b/sources/Rubik.glyphs
+@@ -391,10 +391,6 @@ name = hheaDescender;
+ value = -250;
+ },
+ {
+-name = underlinePosition;
+-value = -75;
+-},
+-{
+ name = typoLineGap;
+ value = 0;
+ },
+@@ -407,10 +403,6 @@ name = winDescent;
+ value = 307;
+ },
+ {
+-name = underlineThickness;
+-value = 50;
+-},
+-{
+ name = typoAscender;
+ value = 935;
+ },
+@@ -558,14 +550,6 @@ pixels = (
+ );
+ },
+ {
+-name = underlineThickness;
+-value = 50;
+-},
+-{
+-name = underlinePosition;
+-value = -75;
+-},
+-{
+ name = typoDescender;
+ value = -250;
+ },
+@@ -574,10 +558,6 @@ name = hheaDescender;
+ value = -250;
+ },
+ {
+-name = underlinePosition;
+-value = -75;
+-},
+-{
+ name = typoLineGap;
+ value = 0;
+ },
+@@ -590,10 +570,6 @@ name = winDescent;
+ value = 307;
+ },
+ {
+-name = underlineThickness;
+-value = 50;
+-},
+-{
+ name = typoAscender;
+ value = 935;
+ },
+--- a/sources/Rubik_Italic.glyphs
++++ b/sources/Rubik_Italic.glyphs
+@@ -395,10 +395,6 @@ name = hheaDescender;
+ value = -250;
+ },
+ {
+-name = underlinePosition;
+-value = -75;
+-},
+-{
+ name = typoLineGap;
+ value = 0;
+ },
+@@ -411,10 +407,6 @@ name = winDescent;
+ value = 307;
+ },
+ {
+-name = underlineThickness;
+-value = 50;
+-},
+-{
+ name = typoAscender;
+ value = 935;
+ },
+@@ -461,14 +453,6 @@ ascender = 750;
+ capHeight = 700;
+ customParameters = (
+ {
+-name = underlineThickness;
+-value = 50;
+-},
+-{
+-name = underlinePosition;
+-value = -75;
+-},
+-{
+ name = typoDescender;
+ value = -250;
+ },
+@@ -477,10 +461,6 @@ name = hheaDescender;
+ value = -250;
+ },
+ {
+-name = underlinePosition;
+-value = -75;
+-},
+-{
+ name = typoLineGap;
+ value = 0;
+ },
+@@ -493,10 +473,6 @@ name = winDescent;
+ value = 307;
+ },
+ {
+-name = underlineThickness;
+-value = 50;
+-},
+-{
+ name = typoAscender;
+ value = 935;
+ },

@@ -1,11 +1,9 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
-EMAKE_EXTRA_ARGS=(
-	glyphs=sources/RobotoSlab.designspace
-)
+FONT_SRCDIR=build
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}.git"
@@ -26,4 +24,12 @@ HOMEPAGE="https://github.com/googlefonts/${PN}"
 LICENSE="Apache-2.0"
 SLOT="0"
 REQUIRED_USE="!binary"
-PATCHES=( "${FILESDIR}"/${PN}_typo.diff )
+
+src_prepare() {
+	local PATCHES=( "${FILESDIR}"/${PN}_typo.diff ) \
+		_b=${FONT_SRCDIR}/${PN}
+	fontmake_src_prepare
+	mkdir -p ${_b}
+	ln -s "${S}"/sources ${_b}/master_ufo
+	ln -s "${S}"/sources ${FONT_SRCDIR}/instance_ufo
+}
