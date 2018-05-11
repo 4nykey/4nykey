@@ -6,28 +6,28 @@ EAPI=6
 inherit toolchain-funcs
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/MrKepzie/${PN}.git"
+	EGIT_REPO_URI="https://github.com/NatronGitHub/${PN}.git"
 else
 	inherit vcs-snapshot
 	MY_PV="1e07155"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="Natron-${PV}"
-	MY_OFX='openfx-3056fd6'
-	MY_SUP='openfx-supportext-d3c4874'
-	MY_SEQ='SequenceParsing-4b5e605'
-	MY_TIN='tinydir-60f0905'
+	MY_OFX='openfx-a85dc34'
+	MY_SUP='openfx-supportext-cbaffdf'
+	MY_SEQ='SequenceParsing-9e8b77a'
+	MY_TIN='tinydir-3aae922'
 	SRC_URI="
-		mirror://githubcl/MrKepzie/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
-		mirror://githubcl/devernay/${MY_OFX%-*}/tar.gz/${MY_OFX##*-} -> ${MY_OFX}.tar.gz
-		mirror://githubcl/devernay/${MY_SUP%-*}/tar.gz/${MY_SUP##*-} -> ${MY_SUP}.tar.gz
-		mirror://githubcl/MrKepzie/${MY_SEQ%-*}/tar.gz/${MY_SEQ##*-} -> ${MY_SEQ}.tar.gz
-		mirror://githubcl/MrKepzie/${MY_TIN%-*}/tar.gz/${MY_TIN##*-} -> ${MY_TIN}.tar.gz
+		mirror://githubcl/NatronGitHub/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/NatronGitHub/${MY_OFX%-*}/tar.gz/${MY_OFX##*-} -> ${MY_OFX}.tar.gz
+		mirror://githubcl/NatronGitHub/${MY_SUP%-*}/tar.gz/${MY_SUP##*-} -> ${MY_SUP}.tar.gz
+		mirror://githubcl/NatronGitHub/${MY_SEQ%-*}/tar.gz/${MY_SEQ##*-} -> ${MY_SEQ}.tar.gz
+		mirror://githubcl/NatronGitHub/${MY_TIN%-*}/tar.gz/${MY_TIN##*-} -> ${MY_TIN}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
 
 DESCRIPTION="A set of Readers/Writers plugins written using the OpenFX standard"
-HOMEPAGE="https://github.com/MrKepzie/${PN}"
+HOMEPAGE="https://github.com/NatronGitHub/${PN}"
 
 LICENSE="GPL-2"
 SLOT="0"
