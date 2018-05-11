@@ -6,37 +6,37 @@ EAPI=6
 PYTHON_COMPAT=( python2_7 )
 inherit qmake-utils python-single-r1 xdg-utils vcs-snapshot toolchain-funcs
 if [[ -z ${PV%%*9999} ]]; then
-	EGIT_REPO_URI="https://github.com/MrKepzie/${PN}.git"
+	EGIT_REPO_URI="https://github.com/NatronGitHub/${PN}.git"
 	EGIT_BRANCH="RB-${PV%.*}"
 	inherit git-r3
 else
 	MY_PV="9ddf069"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
-	MY_OFX='openfx-3056fd6'
-	MY_SEQ='SequenceParsing-4b5e605'
-	MY_TIN='tinydir-60f0905'
+	MY_OFX='openfx-a85dc34'
+	MY_SEQ='SequenceParsing-9e8b77a'
+	MY_TIN='tinydir-3aae922'
 	MY_MCK='google-mock-17945db'
 	MY_TST='google-test-50d6fc3'
 	SRC_URI="
-		mirror://githubcl/MrKepzie/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
-		mirror://githubcl/devernay/${MY_OFX%-*}/tar.gz/${MY_OFX##*-}
+		mirror://githubcl/NatronGitHub/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/NatronGitHub/${MY_OFX%-*}/tar.gz/${MY_OFX##*-}
 		-> ${MY_OFX}.tar.gz
-		mirror://githubcl/MrKepzie/${MY_SEQ%-*}/tar.gz/${MY_SEQ##*-}
+		mirror://githubcl/NatronGitHub/${MY_SEQ%-*}/tar.gz/${MY_SEQ##*-}
 		-> ${MY_SEQ}.tar.gz
-		mirror://githubcl/MrKepzie/${MY_TIN%-*}/tar.gz/${MY_TIN##*-}
+		mirror://githubcl/NatronGitHub/${MY_TIN%-*}/tar.gz/${MY_TIN##*-}
 		-> ${MY_TIN}.tar.gz
 		test? (
-			mirror://githubcl/MrKepzie/${MY_MCK%-*}/tar.gz/${MY_MCK##*-}
+			mirror://githubcl/NatronGitHub/${MY_MCK%-*}/tar.gz/${MY_MCK##*-}
 			-> ${MY_MCK}.tar.gz
-			mirror://githubcl/MrKepzie/${MY_TST%-*}/tar.gz/${MY_TST##*-}
+			mirror://githubcl/NatronGitHub/${MY_TST%-*}/tar.gz/${MY_TST##*-}
 			-> ${MY_TST}.tar.gz
 		)
 	"
 	KEYWORDS="~amd64 ~x86"
 fi
-MY_OC="OpenColorIO-Configs_${PN^}-v${PV%.*}"
+MY_OC="OpenColorIO-Configs_557b981"
 SRC_URI+="
-	mirror://githubcl/MrKepzie/${MY_OC%%_*}/tar.gz/${MY_OC#*_}
+	mirror://githubcl/NatronGitHub/${MY_OC%%_*}/tar.gz/${MY_OC#*_}
 	-> ${MY_OC}.tar.gz
 "
 RESTRICT="primaryuri"
