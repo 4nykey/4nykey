@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="db4cfca"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV/_beta/-beta.}"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/wdas/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -24,20 +24,18 @@ HOMEPAGE="https://www.disneyanimation.com/technology/seexpr.html"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE="python"
+IUSE="apidocs"
 REQUIRED_USE="
-	python? ( ${PYTHON_REQUIRED_USE} )
+	${PYTHON_REQUIRED_USE}
 "
 
 RDEPEND="
-	python? (
-		${PYTHON_DEPS}
-		dev-libs/boost[python,${PYTHON_USEDEP}]
-	)
+	${PYTHON_DEPS}
 	dev-python/PyQt4[X,${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
+	apidocs? ( app-doc/doxygen )
 	sys-devel/flex
 	virtual/yacc
 "
@@ -49,8 +47,12 @@ src_prepare() {
 		-e 's:pyqtconfig:sipconfig:' \
 		-e "s:pkg_cfg\['pyqt_sip_dir'\]:os.path.join(pkg_cfg['default_sip_dir'],'PyQt4'):" \
 		-i src/build/build-info
+	sed -e "s:\(share/doc/\)SeExpr:\1${PF}/html:" -i src/doc/CMakeLists.txt
 }
 
-python_configure() {
+src_configure() {
+	local mycmakeargs=(
+		-DCMAKE_DISABLE_FIND_PACKAGE_Doxygen=$(usex !apidocs)
+	)
 	cmake-utils_src_configure
 }
