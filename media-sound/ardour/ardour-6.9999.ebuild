@@ -8,7 +8,7 @@ cs de el en_GB es fr it nn pl pt pt_PT ru sv zh
 "
 PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE='threads(+)'
-EGIT_REPO_URI="https://git.ardour.org/${PN}/${PN}.git"
+EGIT_REPO_URI="https://github.com/${PN^}/${PN}.git"
 inherit gnome2 python-any-r1 waf-utils l10n git-r3 toolchain-funcs
 if [[ -n ${PV%%*9999} ]]; then
 	EGIT_COMMIT="${PV/_/-}"
@@ -22,7 +22,7 @@ HOMEPAGE="http://ardour.org/"
 
 LICENSE="GPL-2"
 SLOT="${PV%%.*}"
-IUSE="alsa bindist bundled-libs +c++0x debug doc jack hid lv2 nls phone-home sanitize sse vst wiimote"
+IUSE="alsa bindist bundled-libs +c++0x debug doc jack hid lv2 nls phone-home sanitize sse vst"
 REQUIRED_USE="
 	|| ( alsa jack )
 	${PYTHON_REQUIRED_USE}
@@ -53,10 +53,6 @@ RDEPEND="
 		hid? ( dev-libs/hidapi )
 	)
 	media-libs/liblo
-	wiimote? (
-		net-wireless/bluez
-		app-misc/cwiid
-	)
 	media-libs/taglib
 	media-libs/vamp-plugin-sdk
 	media-libs/rubberband
