@@ -19,9 +19,9 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_CRL="crl-344cbde"
-	MY_TGV="libtgvoip-6e0e102"
+	MY_TGV="libtgvoip-3d82d03"
 	MY_VAR="variant-550ac2f"
-	MY_DEB="${PN}_${PV}-1.debian"
+	MY_DEB="${PN}_1.2.17-1.debian"
 	SRC_URI="
 		mirror://githubcl/telegramdesktop/${MY_PN}/tar.gz/v${PV} -> ${P}.tar.gz
 		mirror://debian/pool/main/t/${PN}/${MY_DEB}.tar.xz
@@ -131,6 +131,7 @@ src_prepare() {
 		-Dqt_version=${_q%[-_]*}
 		-Dlinux_path_qt="${EROOT}usr/$(get_libdir)/qt5"
 		-Dlinux_path_xkbcommon="${EROOT}usr"
+		-Dlinux_path_opus_include="${EROOT}usr/include/opus"
 		-Dminizip_loc="$EROOT}usr/include/minizip"
 	)
 
@@ -138,8 +139,6 @@ src_prepare() {
 		debian/patches/Use-system-wide-font.patch \
 		debian/patches/Packed-resources.patch \
 		"${FILESDIR}"/${PN}-gyp.diff
-	sed -e "s:-msse2:$(${_p} --cflags opus):" \
-		-i Telegram/ThirdParty/libtgvoip/libtgvoip.gyp
 
 	cd "${S}"/Telegram/gyp
 	grep -rl 'libs_loc)/' | xargs sed -e '/<(libs_loc)\//d' -i
