@@ -27,15 +27,15 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
-	>=dev-python/fonttools-3.19.1[${PYTHON_USEDEP}]
+	dev-python/setuptools[${PYTHON_USEDEP}]
 	dev-python/booleanOperations[${PYTHON_USEDEP}]
-	dev-python/fontMath[${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
+	dev-python/fontMath[${PYTHON_USEDEP}]
+	dev-python/fontPens[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.25[${PYTHON_USEDEP}]
 	dev-python/MutatorMath[${PYTHON_USEDEP}]
 	dev-python/ufoLib[${PYTHON_USEDEP}]
 	dev-python/ufoNormalizer[${PYTHON_USEDEP}]
-	dev-python/fontPens[${PYTHON_USEDEP}]
-	dev-python/setuptools[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
