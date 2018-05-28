@@ -4,7 +4,7 @@
 EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
-inherit qmake-utils python-single-r1 xdg-utils vcs-snapshot toolchain-funcs
+inherit flag-o-matic qmake-utils python-single-r1 vcs-snapshot toolchain-funcs xdg
 if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/NatronGitHub/${PN}.git"
 	EGIT_BRANCH="RB-${PV%.*}"
@@ -79,6 +79,8 @@ src_unpack() {
 }
 
 src_prepare() {
+	use pch && append-flags -Winvalid-pch
+
 	default
 
 	if [[ -n ${PV%%*9999} ]]; then
@@ -133,14 +135,4 @@ src_install() {
 src_test() {
 	cd "${S}"/Tests
 	./Tests || die
-}
-
-pkg_postinst() {
-	xdg_desktop_database_update
-	xdg_mimeinfo_database_update
-}
-
-pkg_postrm() {
-	xdg_desktop_database_update
-	xdg_mimeinfo_database_update
 }
