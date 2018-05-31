@@ -9,9 +9,12 @@ app-arch/wimlib:yasm - Prefer dev-lang/yasm over dev-lang/nasm
 app-crypt/qdigidoc:nautilus - Build gnome-base/nautilus extension
 app-text/fbpdf:mupdf - Use app-text/mupdf for rendering
 app-text/fbpdf:poppler - Use app-text/poppler for rendering
+app-text/podofo:boost - Add support for boost
+app-text/podofo:tools - Build and install commandline tools.
 cross-x86_64-w64-mingw32/mingw-runtime:idl - Install idl files.
 cross-x86_64-w64-mingw32/mingw-runtime:libraries - Build extra libraries.
 cross-x86_64-w64-mingw32/mingw-runtime:tools - Build extra tools.
+dev-libs/libdigidocpp:pdf - Experimental PDF Signing/validating support
 dev-libs/seexpr:llvm - Enable LLVM backend
 dev-python/compreffor:cython - Generate cpp sources with dev-python/cython
 dev-python/fonttools:brotli - Enable brotli support, needed for WOFF2
@@ -43,6 +46,9 @@ media-gfx/fim:graphicsmagick - Enable GraphicsMagick library support
 media-gfx/fim:screen - Add experimental support for running under screen
 media-gfx/fim:xfig - Enable FIG file support via media-gfx/xfig
 media-gfx/fontview:gtk3 - Use GTK+3 instead of GTK+2
+media-gfx/gmic:cli - Build CLI interface
+media-gfx/gmic:krita - Build a plugin for krita
+media-gfx/gmic:opencv - Enable support for webcams using the OpenCV library
 media-gfx/natron:c++11 - Build using the C++11 standard
 media-libs/aubio:double-precision - Compile in double precision mode.
 media-sound/ardour:bundled-libs - Use bundled libs instead of system installed
@@ -53,7 +59,6 @@ media-sound/ardour:phone-home - Contact ardour.org at startup for new announceme
 media-sound/ardour:sanitize - Turn on AddressSanitizer (requires GCC >= 4.8 or clang >= 3.1)
 media-sound/ardour:sse - Build runtime checked assembler code
 media-sound/ardour:vst - Enable VST plugin support
-media-sound/ardour:wiimote - Enable support for Wii remote
 media-sound/deadbeef:adplug - Enable the AdPlug decoder plugin
 media-sound/deadbeef:alac - Add support for Apple Lossless Audio Codec files
 media-sound/deadbeef:dumb - Enable media-libs/dumb module library support
@@ -101,7 +106,6 @@ www-client/torbrowser:system-jpeg - Use the system-wide media-libs/libjpeg-turbo
 www-client/torbrowser:system-libevent - Use the system-wide dev-libs/libevent instead of bundled.
 www-client/torbrowser:system-libvpx - Use the system-wide media-libs/libvpx instead of bundled.
 www-client/torbrowser:system-sqlite - Use the system-wide dev-db/sqlite installation with secure-delete enabled
-x11-misc/gpaste:applet - Enable gpaste-applet
 x11-misc/gpaste:gnome-shell - Install gnome-shell extension
 x11-misc/gxneur:gconf - Enable GConf as configuration backend
 x11-misc/xneur:aspell - Enable spellchecking using app-text/aspell
