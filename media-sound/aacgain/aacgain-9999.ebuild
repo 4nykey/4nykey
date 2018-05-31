@@ -8,7 +8,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://git.code.sf.net/p/mp3gain/code"
 else
-	MY_MPG="mp3gain-1.6.1"
+	MY_MPG="mp3gain-1.6.2"
 	SRC_URI="
 		http://sbriesen.de/gentoo/distfiles/${P}.tar.xz
 		mirror://sourceforge/${MY_MPG%-*}/${MY_MPG//./_}-src.zip
