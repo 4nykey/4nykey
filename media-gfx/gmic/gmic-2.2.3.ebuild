@@ -20,12 +20,13 @@ LICENSE="|| ( CeCILL-C CeCILL-2 )"
 SLOT="0"
 IUSE="
 bash-completion +cli curl ffmpeg fftw gimp graphicsmagick jpeg krita
-opencv openexr openmp png qt5 static-libs tiff X zlib
+opencv openexr openmp png qt5 static-libs tiff v4l X zlib
 "
 REQUIRED_USE="
 || ( cli gimp krita )
 gimp? ( qt5 )
 krita? ( qt5 )
+v4l? ( fftw opencv qt5 )
 "
 
 DEPEND="
@@ -48,6 +49,7 @@ DEPEND="
 		x11-libs/libxcb
 	)
 	curl? ( net-misc/curl )
+	v4l? ( media-libs/opencv[gstreamer] )
 	sys-libs/zlib
 "
 RDEPEND="
@@ -86,7 +88,7 @@ src_prepare() {
 	sed \
 		-e '/CONFIG += openmp/d' \
 		-e '/QMAKE_[A-Z]\+FLAGS_RELEASE +=.* -s/d' \
-		-i gmic-qt/gmic_qt.pro
+		-i gmic-qt/gmic_qt.pro zart/zart.pro
 	ln -sf "${EROOT}"usr/include/CImg.h src/CImg.h
 	sed -e '/#include/s:"\./\(CImg\.h\)":<\1>:' -i src/gmic.h
 }
@@ -99,15 +101,19 @@ src_configure() {
 		GMIC_PATH="${S}"/src
 		PRERELEASE=
 		GMIC_DYNAMIC_LINKING=on
-		"${S}"/gmic-qt/gmic_qt.pro
 	)
 	for _t in cli gimp krita; do
 		if use ${_t}; then
 			mkdir -p "${S}"/build/${_t}
 			cd "${S}"/build/${_t}
-			eqmake5 HOST=${_t/cli/none} "${myqmakeargs[@]}"
+			eqmake5 HOST=${_t/cli/none} "${myqmakeargs[@]}" \
+				"${S}"/gmic-qt/gmic_qt.pro
 		fi
 	done
+	use v4l || return
+	mkdir -p "${S}"/build/zart
+	cd "${S}"/build/zart
+	eqmake5 "${myqmakeargs[@]}" "${S}"/zart/zart.pro
 }
 
 src_compile() {
@@ -135,6 +141,7 @@ src_compile() {
 	for _t in cli gimp krita; do
 		use ${_t} && emake -C "${S}"/build/${_t}
 	done
+	use v4l && emake -C "${S}"/build/zart
 }
 
 src_install() {
@@ -163,6 +170,7 @@ src_install() {
 	fi
 
 	use krita && dobin build/krita/gmic_krita_qt
+	use v4l && dobin build/zart/zart
 
 	einstalldocs
 }
