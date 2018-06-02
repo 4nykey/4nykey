@@ -19,7 +19,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_CRL="crl-344cbde"
-	MY_TGV="libtgvoip-3d82d03"
+	MY_TGV="libtgvoip-d2453dd"
 	MY_VAR="variant-550ac2f"
 	MY_DEB="${PN}_1.2.17-1.debian"
 	SRC_URI="

@@ -12,10 +12,10 @@
  <(minizip_loc)/ioapi.h
 --- a/Telegram/gyp/telegram_linux.gypi
 +++ b/Telegram/gyp/telegram_linux.gypi
-@@ -63,6 +63,7 @@
-     ],
+@@ -64,6 +64,7 @@
      'cflags_cc': [
        '-Wno-strict-overflow',
+       '-Wno-maybe-uninitialized',
 +      '<@(my_cflags)', '-include <(src_loc)/stdafx.h',
      ],
      'ldflags': [
