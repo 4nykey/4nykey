@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -14,7 +14,10 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
 else
 	inherit vcs-snapshot
-	SRC_URI="mirror://githubcl/${PN}/${PN}/tar.gz/${PV} -> ${P}.tar.gz"
+	SRC_URI="
+		mirror://githubcl/${PN}/${PN}/tar.gz/${PV} -> ${P}.tar.gz
+		https://github.com/${PN}/${PN}/commit/5690daf.patch
+	"
 	KEYWORDS="~amd64 ~x86"
 fi
 #scripts/get_waf.sh
@@ -65,6 +68,7 @@ src_prepare() {
 		-e '/bld\.path\.find_dir/ s:doc/web:&/html:' \
 		-i wscript
 	install "${DISTDIR}"/${MY_WAF} "${S}"/waf
+	[[ -n ${PV%%*9999} ]] && eapply "${DISTDIR}"/5690daf.patch
 }
 
 src_configure() {
