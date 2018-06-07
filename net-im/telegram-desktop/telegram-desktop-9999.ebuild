@@ -18,8 +18,8 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 else
 	inherit vcs-snapshot
-	MY_CRL="crl-344cbde"
-	MY_TGV="libtgvoip-d2453dd"
+	MY_CRL="crl-f893c36"
+	MY_TGV="libtgvoip-6ba1241"
 	MY_VAR="variant-550ac2f"
 	MY_DEB="${PN}_1.2.17-1.debian"
 	SRC_URI="
