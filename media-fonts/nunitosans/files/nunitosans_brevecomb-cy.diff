@@ -1,0 +1,11 @@
+--- a/sources/NunitoSans_Italic.glyphs
++++ b/sources/NunitoSans_Italic.glyphs
+@@ -118527,8 +118527,6 @@ position = "{247, 491}";
+ background = {
+ components = (
+ {
+-name = "brevecomb-cy";
+-transform = "{1, 0, 0, 1, -3, 0}";
+ }
+ );
+ };
