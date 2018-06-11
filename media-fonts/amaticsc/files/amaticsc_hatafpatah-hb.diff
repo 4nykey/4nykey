@@ -1,0 +1,14 @@
+--- a/sources/AmaticSC.glyphs
++++ b/sources/AmaticSC.glyphs
+@@ -111374,9 +111377,9 @@ nodes = (
+ "110 -72 OFFCURVE",
+ "115 -71 OFFCURVE",
+ "118 -65 CURVE",
+-"118 -59 OFFCURVE",
+-"83 -46 OFFCURVE",
+ "116 -52 LINE",
++"83 -46 OFFCURVE",
++"73 -52 OFFCURVE",
+ "46 -52 CURVE",
+ "38 -53 OFFCURVE",
+ "30 -52 OFFCURVE",
