@@ -1,0 +1,11 @@
+--- a/sources/Caveat.glyphs
++++ b/sources/Caveat.glyphs
+@@ -159797,7 +159797,7 @@ nodes = (
+ "366 350 CURVE SMOOTH",
+ "341 339 OFFCURVE",
+ "359 328 OFFCURVE",
+-"318 232 LINE",
++"318 232 CURVE",
+ "298 179 LINE",
+ "258 83 OFFCURVE",
+ "254 56 OFFCURVE",
