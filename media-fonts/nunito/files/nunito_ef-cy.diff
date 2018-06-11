@@ -1,0 +1,11 @@
+--- a/sources/Nunito.glyphs
++++ b/sources/Nunito.glyphs
+@@ -78563,8 +78563,6 @@ width = 642;
+ background = {
+ components = (
+ {
+-name = "ef-cy";
+-transform = "{1, 0, 0, 1, 7, 0}";
+ }
+ );
+ };
