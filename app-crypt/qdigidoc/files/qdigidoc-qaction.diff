@@ -1,0 +1,10 @@
+--- a/client/Application.cpp
++++ b/client/Application.cpp
+@@ -57,6 +57,7 @@
+ #include <QtWidgets/QMessageBox>
+ #include <QtWidgets/QProgressBar>
+ #include <QtWidgets/QProgressDialog>
++#include <QtWidgets/QAction>
+ 
+ #if defined(Q_OS_MAC)
+ #include <common/MacMenuBar.h>

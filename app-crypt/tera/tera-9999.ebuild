@@ -16,7 +16,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit cmake-utils
+inherit cmake-utils xdg
 
 DESCRIPTION="Time-stamping application"
 HOMEPAGE="https://open-eid.github.io"
@@ -35,8 +35,12 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	dev-qt/linguist-tools:5
+	dev-util/cmake-openeid
 "
 
-src_configure() {
-	BUILD_NUMBER=5 cmake-utils_src_configure
+src_prepare() {
+	sed \
+		-e "s:\${CMAKE_SOURCE_DIR}/cmake/modules:${EROOT}usr/share/cmake/openeid:" \
+		-i CMakeLists.txt
+	cmake-utils_src_prepare
 }
