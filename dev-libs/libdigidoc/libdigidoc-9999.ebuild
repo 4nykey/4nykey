@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -40,7 +40,7 @@ DEPEND="
 	apidocs? ( app-doc/doxygen )
 	dev-util/cmake-openeid
 "
-DOCS=( AUTHORS README.md RELEASE-NOTES.txt )
+DOCS=( AUTHORS RE{ADME,LEASE-NOTES}.md )
 
 src_prepare() {
 	default
