@@ -11,6 +11,7 @@ if [[ ${PV} == "9999" ]]; then
 else
 	SRC_URI="http://gmic.eu/files/source/${PN}_${PV}.tar.gz"
 	KEYWORDS="~amd64 ~x86"
+	RESTRICT="primaryuri"
 fi
 
 DESCRIPTION="GREYC's Magic Image Converter"
@@ -31,12 +32,12 @@ v4l? ( fftw opencv qt5 )
 
 DEPEND="
 	fftw? ( sci-libs/fftw:3.0[threads] )
-	gimp? ( >=media-gfx/gimp-2.4.0 )
+	gimp? ( media-gfx/gimp:2 )
 	krita? ( media-gfx/krita )
 	qt5? ( dev-qt/qtwidgets:5 )
 	graphicsmagick? ( media-gfx/graphicsmagick )
 	jpeg? ( virtual/jpeg:0 )
-	opencv? ( >=media-libs/opencv-2.3.1a-r1 )
+	opencv? ( media-libs/opencv )
 	openexr? (
 		media-libs/ilmbase
 		media-libs/openexr
@@ -73,16 +74,21 @@ pkg_pretend() {
 }
 
 src_prepare() {
+	local PATCHES=(
+		"${FILESDIR}"/${PN}-qt511.diff
+	)
 	default
 	unpack man/gmic.1.gz
 	sed \
 		-e "s:pkg-config:$(tc-getPKG_CONFIG):g" \
 		-e 's:$(LIBS):$(LDFLAGS) &:' \
 		-e '/-o use_lib[c]\?gmic/d' \
-		-e 's,^\(cli\|libc\):,& lib,' \
-		-e '/-o gmic_cli.o/s:gmic.cpp:gmic_cli.cpp:' \
-		-e '/-o gmic gmic_cli.cpp/s:gmic_cli.cpp \(gmic_cli.o.*\):\1 -L. -lgmic:' \
 		-e '/_libc:/s:libgmic\.o::' \
+		-e 's:\<_cli\>:gmic:' \
+		-e 's:\<_lib\>:libgmic$(SO):' \
+		-e 's:\<_libc\>:libcgmic$(SO):' \
+		-e '/-o gmic_cli.o/s:gmic.cpp:gmic_cli.cpp:' \
+		-e '/-o gmic gmic_cli.cpp/s:gmic_cli.cpp \(gmic_cli.o.*\):\1 libgmic$(SO):' \
 		-e '/libcgmic\$(SO)/s:libgmic\.o :libgmic$(SO) :' \
 		-i src/Makefile
 	sed \
@@ -132,10 +138,9 @@ src_compile() {
 		$(usex graphicsmagick '' 'MAGICK_CFLAGS= MAGICK_LIBS=')
 		$(usex openexr '' 'OPENEXR_CFLAGS= OPENEXR_LIBS=')
 		$(usex fftw '' 'FFTW_CFLAGS= FFTW_LIBS=')
-		libc
-		$(usev cli)
 	)
-	tc-env_build emake "${myemakeargs[@]}"
+	tc-env_build emake "${myemakeargs[@]}" lib
+	tc-env_build emake "${myemakeargs[@]}" libc $(usev cli)
 
 	use qt5 || return
 	for _t in cli gimp krita; do
@@ -161,11 +166,10 @@ src_install() {
 	fi
 
 	if use gimp; then
-		local _p="$(tc-getPKG_CONFIG)"
-		local _d="$(${_p} gimp-2.0 --variable=gimplibdir)/plug-ins"
-		exeinto "${_d}"
+		_l="$($(tc-getPKG_CONFIG) gimp-2.0 --variable=gimplibdir)/plug-ins"
+		exeinto "${_l}"
 		doexe build/gimp/gmic_gimp_qt
-		insinto "${_d}"
+		insinto "${_l}"
 		doins resources/gmic_film_cluts.gmz
 	fi
 
