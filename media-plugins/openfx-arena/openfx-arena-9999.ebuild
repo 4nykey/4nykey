@@ -11,8 +11,8 @@ else
 	inherit vcs-snapshot
 	MY_PV="1e07155"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="Natron-${PV}"
-	MY_OFX='openfx-a85dc34'
-	MY_SUP='openfx-supportext-cbaffdf'
+	MY_OFX='openfx-4fc7b53'
+	MY_SUP='openfx-supportext-e600cae'
 	MY_OIO="openfx-io-${PV}"
 	MY_SEQ='SequenceParsing-9e8b77a'
 	MY_TIN='tinydir-3aae922'

@@ -11,8 +11,8 @@ else
 	inherit vcs-snapshot
 	MY_PV="1e07155"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="Natron-${PV}"
-	MY_OFX='openfx-a85dc34'
-	MY_SUP='openfx-supportext-cbaffdf'
+	MY_OFX='openfx-4fc7b53'
+	MY_SUP='openfx-supportext-e600cae'
 	SRC_URI="
 		mirror://githubcl/NatronGitHub/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://githubcl/NatronGitHub/${MY_OFX%-*}/tar.gz/${MY_OFX##*-} -> ${MY_OFX}.tar.gz
