@@ -6,5 +6,6 @@
 	</maintainer>
 	<use>
 		<flag name="c++11">Build using the C++11 standard</flag>
+		<flag name="gmic">Install openfx-gmic</flag>
 	</use>
 </pkgmetadata>

@@ -12,7 +12,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	MY_PV="9ddf069"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
-	MY_OFX='openfx-a85dc34'
+	MY_OFX='openfx-4fc7b53'
 	MY_SEQ='SequenceParsing-9e8b77a'
 	MY_TIN='tinydir-3aae922'
 	MY_MCK='google-mock-17945db'
@@ -46,7 +46,7 @@ HOMEPAGE="https://natron.fr"
 
 LICENSE="GPL-2+ doc? ( CC-BY-SA-4.0 )"
 SLOT="0"
-IUSE="c++11 debug doc openmp pch test"
+IUSE="c++11 debug doc gmic openmp pch test"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 RDEPEND="
@@ -67,6 +67,7 @@ RDEPEND="
 	media-plugins/openfx-io
 	media-plugins/openfx-misc
 	media-plugins/openfx-arena
+	gmic? ( media-plugins/openfx-gmic )
 "
 
 pkg_pretend() {
