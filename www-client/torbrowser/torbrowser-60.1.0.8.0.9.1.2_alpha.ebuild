@@ -2,85 +2,14 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-VIRTUALX_REQUIRED="pgo"
 WANT_AUTOCONF="2.1"
-MOZCONFIG_OPTIONAL_GTK2ONLY=1
 MOZCONFIG_OPTIONAL_WIFI=1
 
-inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils mozconfig-v6.${PV%%.*} pax-utils xdg-utils autotools
-inherit eapi7-ver cargo
-CRATES="
-abort_on_panic-1.0.0
-afl-0.3.2
-aho-corasick-0.6.4
-ansi_term-0.11.0
-atty-0.2.8
-bitflags-1.0.1
-bitreader-0.3.1
-byteorder-1.2.1
-cbindgen-0.5.2
-cc-1.0.9
-cfg-if-0.1.2
-clap-2.31.2
-dtoa-0.4.2
-env_logger-0.5.6
-fuchsia-zircon-0.3.3
-fuchsia-zircon-sys-0.3.3
-humantime-1.1.1
-itoa-0.4.1
-lazy_static-1.0.0
-libc-0.2.40
-log-0.3.9
-log-0.4.1
-memchr-2.0.1
-mp4parse-0.10.1
-mp4parse_capi-0.10.1
-num-traits-0.2.2
-proc-macro2-0.2.3
-quick-error-1.2.1
-quote-0.3.15
-rand-0.4.2
-redox_syscall-0.1.37
-redox_termios-0.1.1
-regex-0.2.10
-regex-syntax-0.5.3
-remove_dir_all-0.5.0
-rustc_version-0.2.2
-semver-0.9.0
-semver-parser-0.7.0
-serde-1.0.36
-serde_derive-1.0.21
-serde_derive_internals-0.17.0
-serde_json-1.0.13
-standalone-quote-0.5.0
-standalone-syn-0.13.0
-strsim-0.7.0
-syn-0.11.11
-synom-0.11.3
-tempdir-0.3.7
-termcolor-0.3.6
-termion-1.5.1
-textwrap-0.9.0
-thread_local-0.3.5
-toml-0.4.5
-ucd-util-0.1.1
-unicode-width-0.1.4
-unicode-xid-0.0.4
-unicode-xid-0.1.0
-unreachable-1.0.0
-utf8-ranges-1.0.0
-vec_map-0.8.0
-void-1.0.2
-winapi-0.3.4
-winapi-i686-pc-windows-gnu-0.4.0
-winapi-x86_64-pc-windows-gnu-0.4.0
-wincolor-0.1.6
-xdg-2.1.0
-"
-MY_PN="firefox"
-MOZ_PV="$(ver_cut 1-3)esr"
-PATCH="${MY_PN}-${PV%%.*}.5-patches-02"
+inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils llvm \
+		mozconfig-v6.${PV%%.*} pax-utils xdg-utils autotools
+inherit eapi7-ver
 
+MOZ_PV="$(ver_cut 1-3)esr"
 # https://dist.torproject.org/torbrowser
 TOR_PV="$(ver_cut 4-6)"
 if [[ -z ${PV%%*_alpha} ]]; then
@@ -103,10 +32,11 @@ SLOT="0"
 # BSD license applies to torproject-related code like the patches
 # icons are under CCPL-Attribution-3.0
 LICENSE="BSD CC-BY-3.0 MPL-2.0 GPL-2 LGPL-2.1"
-IUSE="eme-free hardened hwaccel jack pgo rust selinux test"
+IUSE="eme-free +gmp-autoupdate hardened hwaccel jack +screenshot selinux test"
 
 SRC_URI="https://dist.torproject.org/${PN}/${TOR_PV}"
-PATCH_URIS=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c}/mozilla/patchsets/${PATCH}.tar.xz )
+PATCH="firefox-${PV%%.*}.0-patches-02"
+PATCH=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c}/mozilla/patchsets/${PATCH}.tar.xz )
 SRC_URI="
 	https://gitweb.torproject.org/tor-browser.git/snapshot/${GIT_TAG}.tar.gz
 	-> ${GIT_TAG}.tar.gz
@@ -116,29 +46,40 @@ SRC_URI="
 	amd64? (
 		${SRC_URI}/tor-browser-linux64-${TOR_PV}_en-US.tar.xz
 	)
-	${PATCH_URIS[@]}
-	rust? ( $(cargo_crate_uris ${CRATES}) )
+	${PATCH[@]}
 "
 RESTRICT="primaryuri"
 
 RDEPEND="
+	system-icu? ( >=dev-libs/icu-60.2 )
 	jack? ( virtual/jack )
-	>=dev-libs/nss-3.28.4
-	>=dev-libs/nspr-4.13.1
+	>=dev-libs/nss-3.36.4
+	>=dev-libs/nspr-4.19
 	selinux? ( sec-policy/selinux-mozilla )
 "
 DEPEND="
 	${RDEPEND}
-	pgo? ( >=sys-devel/gcc-4.5 )
-	rust? ( virtual/rust )
+	>=sys-devel/llvm-4.0.1
+	>=sys-devel/clang-4.0.1
 	>=dev-lang/yasm-1.1
 	virtual/opengl
 "
 
-QA_PRESTRIPPED="usr/lib*/${PN}/${MY_PN}/firefox"
-
 S="${WORKDIR}/${GIT_TAG}"
+
+QA_PRESTRIPPED="usr/lib*/${PN}/${PN}/${PN}"
+
 BUILD_OBJ_DIR="${WORKDIR}/tb"
+
+# allow GMP_PLUGIN_LIST to be set in an eclass or
+# overridden in the enviromnent (advanced hackers only)
+if [[ -z $GMP_PLUGIN_LIST ]]; then
+	GMP_PLUGIN_LIST=( gmp-gmpopenh264 gmp-widevinecdm )
+fi
+
+llvm_check_deps() {
+	has_version "sys-devel/clang:${LLVM_SLOT}"
+}
 
 pkg_setup() {
 	moz_pkgsetup
@@ -152,36 +93,30 @@ pkg_setup() {
 		XDG_SESSION_COOKIE \
 		XAUTHORITY
 
-	if use pgo; then
-		einfo
-		ewarn "You will do a double build for profile guided optimization."
-		ewarn "This will result in your build taking at least twice as long as before."
-	fi
 	append-cppflags "-DTOR_BROWSER_DATA_IN_HOME_DIR"
+	MOZILLA_FIVE_HOME="/usr/$(get_libdir)/${PN}/${PN}"
+
+	addpredict /proc/self/oom_score_adj
+
+	llvm_pkg_setup
 }
 
 pkg_pretend() {
 	# Ensure we have enough disk space to compile
-	if use pgo || use debug || use test ; then
-		CHECKREQS_DISK_BUILD="8G"
-	else
-		CHECKREQS_DISK_BUILD="4G"
-	fi
+	CHECKREQS_DISK_BUILD="4G"
+
 	check-reqs_pkg_setup
 }
 
 src_prepare() {
 	local PATCHES=(
-		"${FILESDIR}"/${PN}-profiledir.patch
 		"${WORKDIR}"/firefox
+		"${FILESDIR}"/${PN}-profiledir.patch
+		"${FILESDIR}"/${PN}-lto.patch
 	)
 
-	eapply --directory="${WORKDIR}/firefox" \
-		"${FILESDIR}"/1002_add_gentoo_preferences.patch
-
 	rm -f \
-		"${WORKDIR}"/firefox/2007_fix_nvidia_latest.patch \
-		"${WORKDIR}"/firefox/2003_fix_sandbox_prlimit64.patch
+		"${WORKDIR}"/firefox/2005_ffmpeg4.patch
 
 	# Enable gnomebreakpad
 	if use debug ; then
@@ -215,16 +150,6 @@ src_prepare() {
 		-i "${S}"/browser/branding/aurora/configure.sh || die
 
 	default
-	if use rust; then
-		eapply --ignore-whitespace "${FILESDIR}"/${PN}-cargo.patch
-		find -type f -name Cargo.lock -delete
-		sed -e 's:MOZ_CARGO_SUPPORTS_FROZEN:&_:' -i config/rules.mk
-		sed -e '/mp4parse_capi =/s:= .*:= "0.10.1":' \
-			-i toolkit/library/rust/shared/Cargo.toml
-		sed -e '/cbindgen/,/\[/s:0.4.3:0.5.2:' \
-			-i "${ECARGO_VENDOR}"/mp4parse_capi-0.10.1/Cargo.toml
-		mv -f "${ECARGO_VENDOR}"/* third_party/rust/
-	fi
 
 	# Autotools configure is now called old-configure.in
 	# This works because there is still a configure.in that happens to be for the
@@ -234,14 +159,9 @@ src_prepare() {
 	# Must run autoconf in js/src
 	cd "${S}"/js/src || die
 	eautoconf old-configure.in
-
-	# Need to update jemalloc's configure
-	cd "${S}"/memory/jemalloc/src || die
-	WANT_AUTOCONF= eautoconf
 }
 
 src_configure() {
-	MOZILLA_FIVE_HOME="/usr/$(get_libdir)/${PN}/${PN}"
 	MEXTENSIONS="default"
 	# Google API keys (see http://www.chromium.org/developers/how-tos/api-keys)
 	# Note: These are for Gentoo Linux use ONLY. For your own distribution, please
@@ -260,10 +180,14 @@ src_configure() {
 	# enable JACK, bug 600002
 	mozconfig_use_enable jack
 
+	# Enable/Disable eme support
 	use eme-free && mozconfig_annotate '+eme-free' --disable-eme
 
 	# Add full relro support for hardened
-	use hardened && append-ldflags "-Wl,-z,relro,-z,now"
+	if use hardened; then
+		append-ldflags "-Wl,-z,relro,-z,now"
+		mozconfig_use_enable hardened hardening
+	fi
 
 	# Only available on mozilla-overlay for experimentation -- Removed in Gentoo repo per bug 571180
 	#use egl && mozconfig_annotate 'Enable EGL as GL provider' --with-gl-provider=EGL
@@ -274,84 +198,39 @@ src_configure() {
 
 	mozconfig_annotate '' --enable-extensions="${MEXTENSIONS}"
 
-	mozconfig_use_enable rust
-
-	# Allow for a proper pgo build
-	if use pgo; then
-		echo "mk_add_options PROFILE_GEN_SCRIPT='EXTRA_TEST_ARGS=10 \$(MAKE) -C \$(MOZ_OBJDIR) pgo-profile-run'" >> "${S}"/.mozconfig
-	fi
-
-	# Other ff-specific settings
-	mozconfig_annotate '' --with-default-mozilla-five-home=${MOZILLA_FIVE_HOME}
-
 	echo "mk_add_options MOZ_OBJDIR=${BUILD_OBJ_DIR}" >> "${S}"/.mozconfig
 	echo "mk_add_options XARGS=/usr/bin/xargs" >> "${S}"/.mozconfig
 
 	# Rename the install directory and the executable
 	mozconfig_annotate 'torbrowser' --libdir="${EPREFIX}"/usr/$(get_libdir)/${PN}
-	mozconfig_annotate 'torbrowser' --with-app-name=torbrowser
-	mozconfig_annotate 'torbrowser' --with-app-basename=torbrowser
+	mozconfig_annotate 'torbrowser' --with-app-name=${PN}
+	mozconfig_annotate 'torbrowser' --with-app-basename=${PN}
 	mozconfig_annotate 'torbrowser' --disable-tor-browser-update
 	mozconfig_annotate 'torbrowser' --with-tor-browser-version=${TOR_PV}
 	mozconfig_annotate 'torbrowser' --disable-tor-browser-data-outside-app-dir
 
-	mozconfig_annotate 'torbrowser' --without-system-nspr
-	mozconfig_annotate 'torbrowser' --without-system-nss
-
 	# Finalize and report settings
 	mozconfig_final
 
-	if [[ $(gcc-major-version) -lt 4 ]]; then
-		append-cxxflags -fno-stack-protector
-	fi
-
 	# workaround for funky/broken upstream configure...
-	SHELL="${SHELL:-${EPREFIX%/}/bin/bash}" \
-	emake -f client.mk configure
-	pax-mark E "${BUILD_OBJ_DIR}"/_virtualenv/bin/${EPYTHON}
+	SHELL="${SHELL:-${EPREFIX}/bin/bash}" MOZ_NOSPAM=1 \
+	./mach configure || die
 }
 
 src_compile() {
-	if use pgo; then
-		addpredict /root
-		addpredict /etc/gconf
-		# Reset and cleanup environment variables used by GNOME/XDG
-		gnome2_environment_reset
-
-		# Firefox tries to use dri stuff when it's run, see bug 380283
-		shopt -s nullglob
-		cards=$(echo -n /dev/dri/card* | sed 's/ /:/g')
-		if test -z "${cards}"; then
-			cards=$(echo -n /dev/ati/card* /dev/nvidiactl* | sed 's/ /:/g')
-			if test -n "${cards}"; then
-				# Binary drivers seem to cause access violations anyway, so
-				# let's use indirect rendering so that the device files aren't
-				# touched at all. See bug 394715.
-				export LIBGL_ALWAYS_INDIRECT=1
-			fi
-		fi
-		shopt -u nullglob
-		[[ -n "${cards}" ]] && addpredict "${cards}"
-
-		MOZ_MAKE_FLAGS="${MAKEOPTS}" SHELL="${SHELL:-${EPREFIX%/}/bin/bash}" \
-		virtx emake -f client.mk profiledbuild || die "virtx emake failed"
-	else
-		MOZ_MAKE_FLAGS="${MAKEOPTS}" SHELL="${SHELL:-${EPREFIX%/}/bin/bash}" \
-		emake -f client.mk realbuild
-	fi
-
+	MOZ_MAKE_FLAGS="${MAKEOPTS}" SHELL="${SHELL:-${EPREFIX}/bin/bash}" MOZ_NOSPAM=1 \
+	./mach build --verbose || die
 }
 
 src_install() {
-	MOZILLA_FIVE_HOME="/usr/$(get_libdir)/${PN}/${PN}"
-
 	cd "${BUILD_OBJ_DIR}" || die
 
 	# Pax mark xpcshell for hardened support, only used for startupcache creation.
 	pax-mark m "${BUILD_OBJ_DIR}"/dist/bin/xpcshell
 
-	# Add an empty default prefs for mozconfig-3.eclass
-	touch "${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
+	# Add our default prefs for firefox
+	cp "${FILESDIR}"/gentoo-default-prefs.js-2 \
+		"${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
 		|| die
 
 	mozconfig_install_prefs \
@@ -359,27 +238,41 @@ src_install() {
 
 	# Augment this with hwaccel prefs
 	if use hwaccel ; then
-		cat "${FILESDIR}"/gentoo-hwaccel-prefs.js-1 >> \
+		printf 'pref("%s", true);\npref("%s", true);\n' \
+		layers.acceleration.force-enabled webgl.force-enabled >> \
 		"${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
 		|| die
+	fi
+
+	if ! use screenshot; then
+		echo "pref(\"extensions.screenshots.disabled\", true);" >> \
+			"${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
+			|| die
 	fi
 
 	echo "pref(\"extensions.autoDisableScopes\", 3);" >> \
 		"${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
 		|| die
 
-	echo "pref(\"general.useragent.locale\", \"en-US\");" \
-		>> "${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/000-tor-browser.js" \
+	local plugin
+	use gmp-autoupdate || use eme-free || for plugin in "${GMP_PLUGIN_LIST[@]}" ; do
+		echo "pref(\"media.${plugin}.autoupdate\", false);" >> \
+			"${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
+			|| die
+	done
+
+	echo 'pref("general.useragent.locale", "en-US");' \
+		>> "${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
 		|| die
 
-	MOZ_MAKE_FLAGS="${MAKEOPTS}" SHELL="${SHELL:-${EPREFIX%/}/bin/bash}" \
-	emake DESTDIR="${D}" install
+	cd "${S}"
+	MOZ_MAKE_FLAGS="${MAKEOPTS}" SHELL="${SHELL:-${EPREFIX}/bin/bash}" MOZ_NOSPAM=1 \
+	DESTDIR="${D}" ./mach install
 
 	# Install icons and .desktop for menu entry
-	local size sizes icon_path
-	sizes="16 24 32 48 256"
+	local size icon_path
 	icon_path="${S}/browser/branding/official"
-	for size in ${sizes}; do
+	for size in 16 48; do
 		newicon -s ${size} "${icon_path}/default${size}.png" ${PN}.png
 	done
 	# The 128x128 icon has a different name
@@ -388,35 +281,46 @@ src_install() {
 
 	# Add StartupNotify=true bug 237317
 	if use startup-notification ; then
-		echo "StartupNotify=true" \
-			>> "${ED}/usr/share/applications/${PN}-${PN}.desktop" \
+		echo "StartupNotify=true"\
+			 >> "${ED}/usr/share/applications/${PN}-${PN}.desktop" \
 			|| die
 	fi
 
 	# Required in order to use plugins and even run torbrowser on hardened.
 	pax-mark m "${ED}"${MOZILLA_FIVE_HOME}/{${PN},${PN}-bin,plugin-container}
 
-	# revdep-rebuild entry
-	insinto /etc/revdep-rebuild
-	echo "SEARCH_DIRS_MASK=${MOZILLA_FIVE_HOME}" >> ${T}/10${PN}
-	doins "${T}"/10${PN} || die
-
 	# Profile without the tor-launcher extension
 	# see: https://trac.torproject.org/projects/tor/ticket/10160
 	local profile_dir="${WORKDIR}/tor-browser_en-US/Browser/TorBrowser/Data/Browser/profile.default"
 
-	docompress -x "${EROOT}/usr/share/doc/${PF}/tor-launcher@torproject.org.xpi"
 	dodoc "${profile_dir}/extensions/tor-launcher@torproject.org.xpi"
+	docompress -x "${EROOT}/usr/share/doc/${PF}/tor-launcher@torproject.org.xpi"
 	rm "${profile_dir}/extensions/tor-launcher@torproject.org.xpi" || die "Failed to remove torlauncher extension"
 
-	insinto ${MOZILLA_FIVE_HOME}/browser/defaults/profile
-	doins -r "${profile_dir}"/{extensions,preferences,bookmarks.html}
+	insinto ${MOZILLA_FIVE_HOME}/browser
+	doins -r "${profile_dir}"/{extensions,bookmarks.html}
 
 	dodoc "${WORKDIR}/tor-browser_en-US/Browser/TorBrowser/Docs/ChangeLog.txt"
 }
 
 pkg_preinst() {
 	gnome2_icon_savelist
+
+	# if the apulse libs are available in MOZILLA_FIVE_HOME then apulse
+	# doesn't need to be forced into the LD_LIBRARY_PATH
+	if use pulseaudio && has_version ">=media-sound/apulse-0.1.9" ; then
+		einfo "APULSE found - Generating library symlinks for sound support"
+		local lib
+		pushd "${ED}"${MOZILLA_FIVE_HOME} &>/dev/null || die
+		for lib in ../apulse/libpulse{.so{,.0},-simple.so{,.0}} ; do
+			# a quickpkg rolled by hand will grab symlinks as part of the package,
+			# so we need to avoid creating them if they already exist.
+			if ! [ -L ${lib##*/} ]; then
+				ln -s "${lib}" ${lib##*/} || die
+			fi
+		done
+		popd &>/dev/null || die
+	fi
 }
 
 pkg_postinst() {
@@ -428,6 +332,21 @@ pkg_postinst() {
 	# Update mimedb for the new .desktop file
 	xdg_desktop_database_update
 	gnome2_icon_cache_update
+
+	if ! use gmp-autoupdate && ! use eme-free ; then
+		elog "USE='-gmp-autoupdate' has disabled the following plugins from updating or"
+		elog "installing into new profiles:"
+		local plugin
+		for plugin in "${GMP_PLUGIN_LIST[@]}"; do elog "\t ${plugin}" ; done
+		elog
+	fi
+
+	if use pulseaudio && has_version ">=media-sound/apulse-0.1.9"; then
+		elog "Apulse was detected at merge time on this system and so it will always be"
+		elog "used for sound.  If you wish to use pulseaudio instead please unmerge"
+		elog "media-sound/apulse."
+		elog
+	fi
 }
 
 pkg_postrm() {
