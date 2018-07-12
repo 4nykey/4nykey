@@ -43,7 +43,6 @@ KEYWORDS="~amd64"
 IUSE="headers-only"
 RESTRICT="strip primaryuri"
 S="${WORKDIR}"
-
 DEPEND=""
 
 just_headers() {
@@ -52,7 +51,7 @@ just_headers() {
 
 pkg_setup() {
 	if [[ ${CBUILD} == ${CHOST} ]] && [[ ${CHOST} == ${CTARGET} ]] ; then
-		die "Invalid configuration; do not emerge this directly"
+		die "Invalid configuration"
 	fi
 	just_headers && return
 	S="${WORKDIR}/${MY_P}"
@@ -62,20 +61,43 @@ pkg_setup() {
 	unset AR RANLIB
 }
 
+src_prepare() {
+	default
+	if ! just_headers; then
+		eapply "${FILESDIR}"/${PN}-wcstombs.diff
+		mkdir "${T}"/tmproot
+		cp -r "${EPREFIX}"/usr/${CTARGET}/usr/include "${T}"/tmproot
+		rm -rf "${T}"/tmproot/include/w32api
+	fi
+}
+
 src_configure() {
 	just_headers && return
 	local myeconfargs=(
-		--enable-w32api
 		--host=${CTARGET}
-		--with-sysroot="${EPREFIX}/usr/${CTARGET}"
+		--enable-w32api
+		--with-headers
 		$(use_enable abi_x86_32 lib32)
 		$(use_enable abi_x86_64 lib64)
 	)
-	econf "${myeconfargs[@]}"
+
+	# don't use headers from previously installed version
+	mkdir -p "${WORKDIR}"/headers
+	cd "${WORKDIR}"/headers
+	ECONF_SOURCE="${S}" \
+		econf "${myeconfargs[@]}" \
+		--prefix="${T}/tmproot" \
+		--without-crt
+
+	cd "${S}"
+	econf "${myeconfargs[@]}" \
+		--with-crt \
+		--with-sysroot="${T}/tmproot"
 }
 
 src_compile() {
 	just_headers && return
+	emake -C "${WORKDIR}/headers" install
 	default
 }
 
@@ -84,7 +106,7 @@ src_install() {
 		local _a
 		for _a in ${MULTILIB_ABIS}; do
 			insinto /usr/${CTARGET}/usr/$(get_abi_LIBDIR ${_a})
-			doins -r ${MY_R}-${_a}/lib/${PN}
+			doins -r ${MY_R}-${_a}/lib/${PN}/.
 			insinto /usr/${CTARGET}/usr
 			doins -r ${MY_R}-${_a}/include
 		done
@@ -92,8 +114,10 @@ src_install() {
 	else
 		emake \
 			DESTDIR="${D}usr/${CTARGET}" \
-			lib32dir="/usr/${LIBDIR_x86}/${PN}" \
-			lib64dir="/usr/${LIBDIR_amd64}/${PN}" \
+			lib32dir="/usr/${LIBDIR_x86}" \
+			lib64dir="/usr/${LIBDIR_amd64}" \
 			install
 	fi
+	use abi_x86_32 && dosym . /usr/${CTARGET}/usr/${LIBDIR_x86}/${PN}
+	use abi_x86_64 && dosym . /usr/${CTARGET}/usr/${LIBDIR_amd64}/${PN}
 }
