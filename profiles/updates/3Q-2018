@@ -1,0 +1,1 @@
+move cross-x86_64-w64-mingw32/mingw-runtime cross-x86_64-w64-mingw32/mingw64-runtime

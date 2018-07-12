@@ -1,1 +1,1 @@
-cross-x86_64-w64-mingw32/gcc            -fortran -hardened multilib -sanitize -vtv
+cross-x86_64-w64-mingw32/gcc            -hardened multilib -sanitize -vtv
