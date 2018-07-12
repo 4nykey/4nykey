@@ -9,7 +9,7 @@ emerge cross-x86_64-pc-cygwin/binutils -1a
 USE="headers-only" \
     emerge cross-x86_64-pc-cygwin/cygwin cross-x86_64-pc-cygwin/w32api -1a
 
-emerge cross-x86_64-pc-cygwin/gcc -1a
+USE="-* cxx multilib" emerge cross-x86_64-pc-cygwin/gcc -1a
 
 emerge cross-x86_64-pc-cygwin/cygwin cross-x86_64-pc-cygwin/w32api cross-x86_64-pc-cygwin/gcc -1a
 

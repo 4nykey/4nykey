@@ -1,1 +1,1 @@
-cross-x86_64-pc-cygwin/gcc      libssp -hardened multilib -sanitize
+cross-x86_64-pc-cygwin/gcc      cxx -hardened multilib -sanitize
