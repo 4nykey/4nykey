@@ -17,6 +17,20 @@
  
  install-headers:
  	cd $(srcdir); \
+@@ -749,9 +749,12 @@ libacl.a: ${LIB_NAME} sec_posixacl.o
+ ${EXTRALIBS}: lib%.a: %.o
+ 	$(AR) cru $@ $?
+ 
++ifeq ($(target_cpu),i686)
++WINDRESFLAGS=-F pe-i386
++endif
+ winver.o: mkvers.sh include/cygwin/version.h winver.rc $(DLL_OFILES)
+ 	@echo "Making version.cc and winver.o";\
+-	/bin/sh ${word 1,$^} ${word 2,$^} ${word 3,$^} $(WINDRES) ${CFLAGS} $(addprefix -I,${CCWRAP_SYSTEM_HEADERS} ${CCWRAP_DIRAFTER_HEADERS})
++	/bin/sh ${word 1,$^} ${word 2,$^} ${word 3,$^} '$(WINDRES) $(WINDRESFLAGS)' ${CFLAGS} $(addprefix -I,${CCWRAP_SYSTEM_HEADERS} ${CCWRAP_DIRAFTER_HEADERS})
+ 
+ version.cc: winver.o
+ 
 --- a/newlib/Makefile.in
 +++ b/newlib/Makefile.in
 @@ -380,7 +380,7 @@ SUBDIRS = libc libm \
@@ -28,3 +42,29 @@
  AR_FLAGS = rc
  noinst_DATA = stmp-targ-include $(am__append_1) $(am__append_2)
  @USE_LIBTOOL_TRUE@toollib_LTLIBRARIES = libm.la \
+--- a/winsup/cygwin/mkimport
++++ b/winsup/cygwin/mkimport
+@@ -56,7 +56,9 @@ for my $f (keys %text) {
+ 	$text{$f} = 0;
+     } else {
+ 	$text{$f} = 1;
+-	open my $as_fd, '|-', $as, '-o', "$dir/t-$f", "-";
++	my $asflags=' ';
++	if ($cpu eq 'i686') { $asflags = '--32' } else { $asflags = '--64' }
++	open my $as_fd, '|-', $as, $asflags, '-o', "$dir/t-$f", "-";
+ 	if ($is64bit) {
+ 	    print $as_fd <<EOF;
+ 	.text
+--- a/winsup/cygwin/speclib
++++ b/winsup/cygwin/speclib
+@@ -64,7 +64,9 @@ unlink $lib;
+ # this library is an import library.
+ my $iname_o = 'd000000.o';
+ $extract{$iname_o} = 1;
+-open my $as_fd, '|-', $as, '-R', '-o', $iname_o, "-";
++my $asflags=' ';
++if ($cpu eq 'i686') { $asflags = '--32' } else { $asflags = '--64' }
++open my $as_fd, '|-', $as, $asflags, '-R', '-o', $iname_o, "-";
+ print $as_fd <<EOF;
+ 	.section .idata\$7
+ .global $iname

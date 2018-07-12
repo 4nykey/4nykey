@@ -46,6 +46,9 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="headers-only"
 RESTRICT="strip primaryuri"
+HDEPEND="
+	virtual/perl-Getopt-Long
+"
 
 just_headers() {
 	use headers-only && [[ ${CHOST} != ${CTARGET} ]]
@@ -81,35 +84,24 @@ src_prepare() {
 		-e 's:install-man install-ldif::' \
 		-e 's:\$(DESTDIR)\$(bindir):$(DESTDIR)$(tooldir)/bin:' \
 		-i winsup/cygwin/Makefile.in
-
-	local _b="${WORKDIR}/bin/${CHOST_x86%%-*}-${CTARGET#*-}"
-	mkdir -p "${_b%/*}"
-	printf '#!/bin/sh\n%s-as --32 "${@}"\n' ${CTARGET} > \
-		"${_b}"-as
-	printf '#!/bin/sh\n%s-windres -F pe-i386 "${@}"\n' ${CTARGET} > \
-		"${_b}"-windres
-	chmod u+x "${_b}"-*
-	export PATH="${PATH}:${WORKDIR}/bin"
 }
 
 multilib_src_configure() {
 	just_headers && return
-	local _t="${CHOST%%-*}-${CTARGET#*-}" \
-	myeconfargs=(
+	local myeconfargs=(
 		--disable-werror
 		--with-cross-bootstrap
 		--infodir="${EPREFIX}/usr/${CTARGET}/usr/share/info"
 		--with-windows-headers="${EPREFIX}/usr/${CTARGET}/usr/include/w32api"
 		--with-windows-libs="${EPREFIX}/usr/${CTARGET}/usr/$(get_abi_LIBDIR)/w32api"
+		--enable-libssp
 		--disable-multilib
+		--target=${CHOST%%-*}-${CTARGET#*-}
 	)
 	ECONF_SOURCE="${S}" \
 	CC_FOR_TARGET="${CTARGET}-gcc $(get_abi_CFLAGS)" \
 	CXX_FOR_TARGET="${CTARGET}-g++ $(get_abi_CFLAGS)" \
-	WINDRES_FOR_TARGET="${_t}-windres" \
-	AS_FOR_TARGET="${_t}-as" \
-	econf "${myeconfargs[@]}" \
-		--target="${_t}"
+	econf "${myeconfargs[@]}"
 }
 
 multilib_src_compile() {
