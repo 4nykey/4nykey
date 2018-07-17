@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="cbc6d5c"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV/_}"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -32,7 +32,7 @@ RDEPEND="
 	dev-python/defcon[${PYTHON_USEDEP}]
 	dev-python/fontMath[${PYTHON_USEDEP}]
 	dev-python/fontPens[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-3.25[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.27[${PYTHON_USEDEP}]
 	dev-python/MutatorMath[${PYTHON_USEDEP}]
 	dev-python/ufoLib[${PYTHON_USEDEP}]
 	dev-python/ufoNormalizer[${PYTHON_USEDEP}]
@@ -42,16 +42,14 @@ DEPEND="
 	${PYTHON_DEPS}
 "
 DOCS=(
-{README,NEWS}.rst
+{README,NEWS}.md
 html
 pdf
-afdko/FDKReleaseNotes.txt
 )
 
 src_prepare() {
 	local PATCHES=(
 		"${FILESDIR}"/${PN}-ar.diff
-		"${FILESDIR}"/${PN}-ufo3.diff
 		"${FILESDIR}"/${PN}-scripts.diff
 		"${FILESDIR}"/${PN}-autohint.diff
 	)
@@ -59,9 +57,10 @@ src_prepare() {
 		-e "/AFDKO_Python=/s:=.*:=${PYTHON}:" \
 		-e "/AFDKO_Scripts=/s:=.*\.\./:=${EROOT}usr/lib/${PN}/:" \
 		-i afdko/Tools/linux/setFDKPaths
-	sed \
-		-e '/^[ ]\+except (MakeOTFOptionsError.*):$/,/^[ ]\+pass$/d' \
-		-i afdko/Tools/SharedData/FDKScripts/MakeOTF.py
+	grep -l 'from \. ' afdko/Tools/SharedData/FDKScripts/*.py | xargs \
+		sed '/import/s:from \. ::' -i
+	grep -l 'from \.[^ ]' afdko/Tools/SharedData/FDKScripts/*.py | xargs \
+		sed '/import/s:from \.:from :' -i
 	rm -f afdko/Tools/linux/{ufonormalizer,AFDKOPython}
 	mkdir html pdf
 	mv -f afdko/{.,Technical\ Documentation}/*.html html/
