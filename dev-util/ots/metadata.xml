@@ -6,5 +6,6 @@
 	</maintainer>
 	<use>
 		<flag name="graphite">Sanitize Graphite tables</flag>
+		<flag name="variations">Sanitize OpenType Variation tables</flag>
 	</use>
 </pkgmetadata>
