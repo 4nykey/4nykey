@@ -13,7 +13,7 @@ else
 	MY_PV="9ddf069"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	MY_OFX='openfx-4fc7b53'
-	MY_SEQ='SequenceParsing-9e8b77a'
+	MY_SEQ='SequenceParsing-19b3d6a'
 	MY_TIN='tinydir-3aae922'
 	MY_MCK='google-mock-17945db'
 	MY_TST='google-test-50d6fc3'
@@ -64,10 +64,10 @@ DEPEND="
 "
 RDEPEND="
 	${RDEPEND}
-	media-plugins/openfx-io
-	media-plugins/openfx-misc
-	media-plugins/openfx-arena
-	gmic? ( media-plugins/openfx-gmic )
+	~media-plugins/openfx-io-${PV}
+	~media-plugins/openfx-misc-${PV}
+	~media-plugins/openfx-arena-${PV}
+	gmic? ( ~media-plugins/openfx-gmic-${PV} )
 "
 
 pkg_pretend() {
