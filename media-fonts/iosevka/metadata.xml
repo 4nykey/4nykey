@@ -4,4 +4,51 @@
 	<maintainer type="person">
 		<email>4nykey@gmail.com</email>
 	</maintainer>
+	<use>
+		<flag name="font_variants_cc">
+			A variant with several symbols enwiden to be compatible with most CJK typefaces
+		</flag>
+		<flag name="font_variants_default">
+			The default variant with ligatures and semantic full-width glyphs
+		</flag>
+		<flag name="font_variants_term">
+			A variant without ligatures and full-width glyphs
+		</flag>
+		<flag name="font_variants_type">
+			A variant for better typesetting layout
+		</flag>
+		<flag name="font_variants_ss01">
+			A variant stylized after Andale Mono
+		</flag>
+		<flag name="font_variants_ss02">
+			A variant stylized after Anonymous Pro
+		</flag>
+		<flag name="font_variants_ss03">
+			A variant stylized after Consolas
+		</flag>
+		<flag name="font_variants_ss04">
+			A variant stylized after Menlo
+		</flag>
+		<flag name="font_variants_ss05">
+			A variant stylized after Fira Mono
+		</flag>
+		<flag name="font_variants_ss06">
+			A variant stylized after Liberation Mono
+		</flag>
+		<flag name="font_variants_ss07">
+			A variant stylized after Monaco
+		</flag>
+		<flag name="font_variants_ss08">
+			A variant stylized after Pragmata Pro
+		</flag>
+		<flag name="font_variants_ss09">
+			A variant stylized after Source Code Pro
+		</flag>
+		<flag name="font_variants_ss10">
+			A variant stylized after Envy Code R
+		</flag>
+		<flag name="font_variants_ss11">
+			A variant stylized after X Windows Fixed
+		</flag>
+	</use>
 </pkgmetadata>
