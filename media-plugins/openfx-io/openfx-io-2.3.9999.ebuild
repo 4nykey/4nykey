@@ -13,7 +13,7 @@ else
 	[[ -n ${PV%%*_p*} ]] && MY_PV="Natron-${PV}"
 	MY_OFX='openfx-4fc7b53'
 	MY_SUP='openfx-supportext-e600cae'
-	MY_SEQ='SequenceParsing-9e8b77a'
+	MY_SEQ='SequenceParsing-19b3d6a'
 	MY_TIN='tinydir-3aae922'
 	SRC_URI="
 		mirror://githubcl/NatronGitHub/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz

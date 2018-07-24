@@ -14,7 +14,7 @@ else
 	MY_OFX='openfx-4fc7b53'
 	MY_SUP='openfx-supportext-e600cae'
 	MY_OIO="openfx-io-${PV}"
-	MY_SEQ='SequenceParsing-9e8b77a'
+	MY_SEQ='SequenceParsing-19b3d6a'
 	MY_TIN='tinydir-3aae922'
 	# PNGVERSION in Extra/Makefile
 	MY_PNG="lodepng-a70c086"

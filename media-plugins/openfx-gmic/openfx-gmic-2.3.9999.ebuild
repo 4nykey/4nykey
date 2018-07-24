@@ -4,7 +4,7 @@
 EAPI=6
 
 inherit toolchain-funcs
-MY_GC="gmic-community-ccfb319"
+MY_GC="gmic-community-ddbd76f"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/NatronGitHub/${PN}.git"
@@ -30,7 +30,7 @@ SLOT="0"
 IUSE="openmp"
 
 RDEPEND="
-	>=media-gfx/gmic-2.3.1:=[curl,fftw,openmp?]
+	>=media-gfx/gmic-2.3.3:=[curl,fftw,openmp?]
 "
 DEPEND="${RDEPEND}"
 
