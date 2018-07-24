@@ -8,7 +8,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/caryll/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="b23979a"
+	MY_PV="cd96538"
 	SRC_URI="
 		mirror://githubcl/caryll/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
