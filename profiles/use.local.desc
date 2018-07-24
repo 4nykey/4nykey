@@ -11,9 +11,9 @@ app-text/fbpdf:mupdf - Use app-text/mupdf for rendering
 app-text/fbpdf:poppler - Use app-text/poppler for rendering
 app-text/podofo:boost - Add support for boost
 app-text/podofo:tools - Build and install commandline tools.
-cross-x86_64-w64-mingw32/mingw-runtime:idl - Install idl files.
-cross-x86_64-w64-mingw32/mingw-runtime:libraries - Build extra libraries.
-cross-x86_64-w64-mingw32/mingw-runtime:tools - Build extra tools.
+cross-x86_64-w64-mingw32/mingw64-runtime:idl - Install idl files.
+cross-x86_64-w64-mingw32/mingw64-runtime:libraries - Build extra libraries.
+cross-x86_64-w64-mingw32/mingw64-runtime:tools - Build extra tools.
 dev-libs/libdigidocpp:pdf - Experimental PDF Signing/validating support
 dev-libs/seexpr:llvm - Enable LLVM backend
 dev-python/compreffor:cython - Generate cpp sources with dev-python/cython
@@ -27,13 +27,32 @@ dev-qt/aseman-qt-tools:sensors - Pull in dev-qt/qtsensors
 dev-qt/aseman-qt-tools:webengine - Pull in dev-qt/qtwebengine
 dev-qt/aseman-qt-tools:widgets - Pull in dev-qt/qtwidgets
 dev-util/ots:graphite - Sanitize Graphite tables
+dev-util/ots:variations - Sanitize OpenType Variation tables
+media-fonts/amaticsc:interpolate - Interpolate sources
+media-fonts/caveat:interpolate - Interpolate sources
 media-fonts/fira:clean-as-you-go - Clean intermediate ufos after they were built (useful when PORTAGE_TMPDIR resides on a tmpfs)
 media-fonts/fira:interpolate - Interpolate to get more font weights (significantly increases build time and diskspace requirements)
+media-fonts/iosevka:font_variants_cc - A variant with several symbols enwiden to be compatible with most CJK typefaces
+media-fonts/iosevka:font_variants_default - The default variant with ligatures and semantic full-width glyphs
+media-fonts/iosevka:font_variants_ss01 - A variant stylized after Andale Mono
+media-fonts/iosevka:font_variants_ss02 - A variant stylized after Anonymous Pro
+media-fonts/iosevka:font_variants_ss03 - A variant stylized after Consolas
+media-fonts/iosevka:font_variants_ss04 - A variant stylized after Menlo
+media-fonts/iosevka:font_variants_ss05 - A variant stylized after Fira Mono
+media-fonts/iosevka:font_variants_ss06 - A variant stylized after Liberation Mono
+media-fonts/iosevka:font_variants_ss07 - A variant stylized after Monaco
+media-fonts/iosevka:font_variants_ss08 - A variant stylized after Pragmata Pro
+media-fonts/iosevka:font_variants_ss09 - A variant stylized after Source Code Pro
+media-fonts/iosevka:font_variants_ss10 - A variant stylized after Envy Code R
+media-fonts/iosevka:font_variants_ss11 - A variant stylized after X Windows Fixed
+media-fonts/iosevka:font_variants_term - A variant without ligatures and full-width glyphs
+media-fonts/iosevka:font_variants_type - A variant for better typesetting layout
 media-fonts/noto:emoji - Install additional emoji fonts
 media-fonts/noto:pipeline - Install WIP fonts created from glyphs
 media-fonts/noto-emoji:zopfli - Optimize using app-arch/zopfli
 media-fonts/noto-source:clean-as-you-go - Clean intermediate ufos after they were built (useful when PORTAGE_TMPDIR resides on a tmpfs)
 media-fonts/noto-source:interpolate - Interpolate to get more font weights (significantly increases build time and diskspace requirements)
+media-fonts/sarasa-gothic:font_variants_term - A variant without ligatures and full-width glyphs
 media-fonts/source-han-sans:monospace - Install monospace fonts
 media-fonts/source-pro:emoji - Install emoji fonts
 media-fonts/source-pro:monospace - Install monospace fonts
@@ -50,6 +69,7 @@ media-gfx/gmic:cli - Build CLI interface
 media-gfx/gmic:krita - Build a plugin for krita
 media-gfx/gmic:opencv - Enable support for webcams using the OpenCV library
 media-gfx/natron:c++11 - Build using the C++11 standard
+media-gfx/natron:gmic - Install openfx-gmic
 media-libs/aubio:double-precision - Compile in double precision mode.
 media-sound/ardour:bundled-libs - Use bundled libs instead of system installed
 media-sound/ardour:c++0x - Compile using the C++11 standard
@@ -94,11 +114,13 @@ www-client/midori:granite - Enable support for the elementary library dev-libs/g
 www-client/midori:zeitgeist - Add support for Zeitgeist event tracking system
 www-client/torbrowser:custom-optimization - Fine-tune custom compiler optimizations (-Os, -O0, -O1, -O2, -O3)
 www-client/torbrowser:eme-free - Disable EME (DRM plugin) cabability at build time
+www-client/torbrowser:gmp-autoupdate - Allow Gecko Media Plugins (binary blobs) to be automatically downloaded and kept up-to-date in user profiles
 www-client/torbrowser:gtk2 - Use the cairo-gtk2 rendering engine
 www-client/torbrowser:hwaccel - Use hardware-accelerated rendering
 www-client/torbrowser:jemalloc - Enable or disable jemalloc
 www-client/torbrowser:pgo - Add support for profile-guided optimization using gcc-4.5, for faster binaries. This option will double the compile time.
 www-client/torbrowser:rust - Enable support for using rust compiler (experimental)
+www-client/torbrowser:screenshot - Allow to disable screenshot extension in global profile
 www-client/torbrowser:system-cairo - Use the system-wide x11-libs/cairo instead of bundled.
 www-client/torbrowser:system-harfbuzz - Use the system-wide media-libs/harfbuzz and media-gfx/graphite2 instead of bundled.
 www-client/torbrowser:system-icu - Use the system-wide dev-libs/icu instead of bundled.
@@ -114,6 +136,7 @@ x11-misc/xneur:keylogger - Enable keyboard logger
 x11-themes/adapta-gtk-theme:cinnamon - Install Cinnamon theme
 x11-themes/adapta-gtk-theme:mate - Install MATE theme
 x11-themes/adapta-gtk-theme:openbox - Install Openbox theme
+x11-themes/adapta-gtk-theme:telegram - Install telegram-desktop theme
 x11-themes/adapta-gtk-theme:xfce - Install Xfce4 theme
 x11-themes/adapta-kde:konsole - Install konsole theme
 x11-themes/adapta-kde:kvantum - Install kvantum theme
