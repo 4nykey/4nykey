@@ -27,11 +27,11 @@ HOMEPAGE="https://www.freetype.org/ttfautohint/index.html"
 
 LICENSE="|| ( FTL GPL-2+ )"
 SLOT="0"
-IUSE="qt4"
+IUSE="qt5"
 
 RDEPEND="
 	media-libs/harfbuzz
-	qt4? ( dev-qt/qtgui:4 )
+	qt5? ( dev-qt/qtgui:5 )
 "
 DEPEND="
 	${RDEPEND}
@@ -50,10 +50,10 @@ src_prepare() {
 }
 
 src_configure() {
-	local _q="$(qt4_get_bindir)" \
+	local _q="$(qt5_get_bindir)" \
 	myeconfargs=(
 		--without-doc
-		$(use_with qt4 qt)
+		$(use_with qt5 qt)
 	)
 	QMAKE="${_q}/qmake" MOC="${_q}/moc" UIC="${_q}/uic" RCC="${_q}/rcc" \
 	econf "${myeconfargs[@]}"
@@ -61,7 +61,7 @@ src_configure() {
 
 src_compile() {
 	default
-	emake ${PN}.1 $(usex qt4 ${PN}GUI.1 '') -C frontend
+	emake ${PN}.1 $(usex qt5 ${PN}GUI.1 '') -C frontend
 }
 
 src_install() {
