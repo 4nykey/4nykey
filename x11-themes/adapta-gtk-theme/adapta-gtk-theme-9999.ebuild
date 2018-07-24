@@ -25,7 +25,7 @@ HOMEPAGE="https://github.com/adapta-project/${PN}"
 
 LICENSE="GPL-2 CC-BY-SA-4.0"
 SLOT="0"
-IUSE="cinnamon gnome mate openbox +threads xfce"
+IUSE="cinnamon gnome mate openbox telegram +threads xfce"
 
 RDEPEND="
 	x11-libs/gdk-pixbuf:2
@@ -36,6 +36,10 @@ DEPEND="
 	dev-lang/sassc
 	threads? ( sys-process/parallel )
 "
+RDEPEND="
+	${RDEPEND}
+	|| ( media-fonts/roboto media-fonts/noto )
+"
 
 src_prepare() {
 	sed -e '/ADAPTA_OPTION/s:disable:enable:' -i configure.ac
@@ -43,12 +47,15 @@ src_prepare() {
 }
 
 src_configure() {
-	econf \
-		$(use_enable gnome) \
-		$(use_enable cinnamon) \
-		$(use_enable mate) \
-		$(use_enable openbox) \
-		$(use_enable threads parallel) \
-		$(use_enable xfce) \
+	local myeconfargs=(
+		$(use_enable gnome)
+		$(use_enable cinnamon)
+		$(use_enable mate)
+		$(use_enable openbox)
+		$(use_enable telegram)
+		$(use_enable threads parallel)
+		$(use_enable xfce)
 		--enable-gtk_next
+	)
+	econf "${myeconfargs[@]}"
 }

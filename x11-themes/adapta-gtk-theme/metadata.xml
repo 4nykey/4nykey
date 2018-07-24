@@ -6,8 +6,9 @@
 	</maintainer>
 	<use>
 		<flag name="cinnamon">Install Cinnamon theme</flag>
-		<flag name="mate">Install MATE theme</flag>
 		<flag name="openbox">Install Openbox theme</flag>
+		<flag name="mate">Install MATE theme</flag>
+		<flag name="telegram">Install telegram-desktop theme</flag>
 		<flag name="xfce">Install Xfce4 theme</flag>
 	</use>
 </pkgmetadata>
