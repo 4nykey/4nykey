@@ -3,14 +3,12 @@
 
 EAPI=6
 
-FONT_SRCDIR=build
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}.git"
-	EGIT_BRANCH="mastering"
 else
 	inherit vcs-snapshot
-	MY_PV="bfd066e"
+	MY_PV="1731ace"
 	SRC_URI="
 		mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -23,13 +21,4 @@ HOMEPAGE="https://github.com/googlefonts/${PN}"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-REQUIRED_USE="!binary"
-
-src_prepare() {
-	local PATCHES=( "${FILESDIR}"/${PN}_typo.diff ) \
-		_b=${FONT_SRCDIR}/${PN}
-	fontmake_src_prepare
-	mkdir -p ${_b}
-	ln -s "${S}"/sources ${_b}/master_ufo
-	ln -s "${S}"/sources ${FONT_SRCDIR}/instance_ufo
-}
+REQUIRED_USE="binary? ( !font_types_otf )"
