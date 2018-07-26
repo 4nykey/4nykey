@@ -7,9 +7,10 @@ FONTDIR_BIN=( fonts/TTF )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}.git"
+	EGIT_REPO_URI="https://github.com/alexeiva/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="c244ab2"
+	MY_PV="3437281"
 	SRC_URI="
 		mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
