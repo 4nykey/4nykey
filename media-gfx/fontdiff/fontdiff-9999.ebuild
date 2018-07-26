@@ -8,7 +8,6 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}.git"
 	EGIT_SUBMODULES=(
-		cairo
 		src/third_party/dtl/dtl
 	)
 else
@@ -16,12 +15,10 @@ else
 	MY_PV="b083be9"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	MY_D="dtl-33a68d8"
-	MY_C="cairo-1.15.10"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://githubcl/cubicdaiya/${MY_D%-*}/tar.gz/${MY_D##*-}
 		-> ${MY_D}.tar.gz
-		https://cairographics.org/snapshots/${MY_C}.tar.xz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -39,6 +36,7 @@ RDEPEND="
 	dev-libs/fribidi
 	>=media-libs/freetype-2.9:2
 	>=media-libs/harfbuzz-1.7.4[icu]
+	x11-libs/cairo
 	dev-libs/expat
 "
 DEPEND="
@@ -48,14 +46,17 @@ DEPEND="
 "
 
 src_prepare() {
+	local PATCHES=(
+		"${FILESDIR}"/${PN}-cairo114.diff
+		"${FILESDIR}"/${PN}-hbicu.diff
+	)
 	default
 	if [[ -n ${PV%%*9999} ]]; then
 		mv "${WORKDIR}"/${MY_D}/* "${S}"/src/third_party/dtl/dtl
-		mv "${WORKDIR}"/${MY_C}/* "${S}"/src/third_party/cairo/cairo
 	fi
 	sed \
-		-e '/\/\(freetype\|icu\|expat\|harfbuzz\|pixman\)/d' \
-		-i "${S}"/src/{fontdiff/fontdiff,third_party/cairo/cairo}.gyp || die
+		-e '/\/\(freetype\|icu\|cairo\|expat\|harfbuzz\)/d' \
+		-i "${S}"/src/fontdiff/fontdiff.gyp || die
 }
 
 src_configure() {
@@ -66,7 +67,7 @@ src_configure() {
 
 src_compile() {
 	local _pc="$(tc-getPKG_CONFIG)" \
-		_d="expat freetype2 harfbuzz-icu icu-uc pixman-1 zlib"
+		_d="cairo expat freetype2 harfbuzz-icu icu-uc"
 	emake \
 		CXX=$(tc-getCXX) \
 		CC=$(tc-getCC) \
