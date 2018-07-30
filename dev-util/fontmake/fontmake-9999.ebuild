@@ -27,14 +27,13 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.21.1[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.28[${PYTHON_USEDEP}]
 	dev-python/cu2qu[${PYTHON_USEDEP}]
 	dev-python/glyphsLib[${PYTHON_USEDEP}]
 	dev-python/ufo2ft[${PYTHON_USEDEP}]
 	dev-python/MutatorMath[${PYTHON_USEDEP}]
 	dev-python/booleanOperations[${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
-	media-gfx/ttfautohint
 "
 DEPEND="
 	${RDEPEND}
