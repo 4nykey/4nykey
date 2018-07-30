@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -28,7 +28,9 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.13[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.28[${PYTHON_USEDEP}]
+	>=dev-python/lxml-4.2.1[${PYTHON_USEDEP}]
+	python_targets_python2_7? ( dev-python/singledispatch[python_targets_python2_7] )
 "
 DEPEND="
 	${RDEPEND}

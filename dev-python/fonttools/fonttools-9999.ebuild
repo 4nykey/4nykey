@@ -26,13 +26,13 @@ HOMEPAGE="https://github.com/${PN}/${PN}"
 
 LICENSE="BSD"
 SLOT="0"
-IUSE="brotli gtk png qt5 test unicode zopfli"
+IUSE="brotli gtk png qt5 scipy sympy test unicode zopfli"
 DOCS=( {README,NEWS}.rst )
 PATCHES=(
 	"${FILESDIR}"/${PN}-glyphclass.diff
 )
 
-# Lib/fonttools.egg-info/PKG-INFO: Optional Requirements
+# README.rst: Optional Requirements
 RDEPEND="
 	brotli? ( app-arch/brotli[python,${PYTHON_USEDEP}] )
 	zopfli? ( dev-python/py-zopfli[${PYTHON_USEDEP}] )
@@ -40,6 +40,11 @@ RDEPEND="
 	qt5? ( dev-python/PyQt5[${PYTHON_USEDEP}] )
 	png? ( dev-python/reportlab[${PYTHON_USEDEP}] )
 	gtk? ( dev-python/pygobject:3[${PYTHON_USEDEP}] )
+	scipy? ( || (
+		sci-libs/scipy[${PYTHON_USEDEP}]
+		dev-python/munkres[${PYTHON_USEDEP}]
+	) )
+	sympy? ( dev-python/sympy )
 "
 DEPEND="
 	${RDEPEND}
@@ -48,15 +53,4 @@ DEPEND="
 
 python_test() {
 	esetup.py test
-}
-
-pkg_postinst() {
-	has_version sci-libs/scipy || has_version dev-python/munkres && \
-	has_version dev-python/sympy && \
-	return
-	elog "These optional features require extra dependencies:"
-	optfeature \
-		"finding wrong contour/component order between different masters" \
-		sci-libs/scipy dev-python/munkres
-	optfeature "symbolic font statistics analysis" dev-python/sympy
 }

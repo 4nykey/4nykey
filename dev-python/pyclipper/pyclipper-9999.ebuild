@@ -11,9 +11,10 @@ if [[ -z ${PV%%*9999} ]]; then
 	REQUIRED_USE="cython"
 else
 	inherit vcs-snapshot
-	SRC_URI="mirror://githubcl/greginvm/${PN}/tar.gz/${PV} -> ${P}.tar.gz"
+	SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.zip"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	DEPEND="app-arch/unzip"
 fi
 
 DESCRIPTION="A Cython wrapper for the Clipper library"
@@ -21,14 +22,13 @@ HOMEPAGE="https://github.com/greginvm/${PN}"
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="+cython test"
+IUSE="cython test"
 
-DEPEND="
+DEPEND+="
 	cython? ( dev-python/cython[${PYTHON_USEDEP}] )
 	test? (
 		dev-python/pytest-runner[${PYTHON_USEDEP}]
-		dev-python/unittest2[${PYTHON_USEDEP}]
-		dev-python/sympy[${PYTHON_USEDEP}]
+		dev-python/funcsigs[python_targets_python2_7?,python_targets_python3_4?,python_targets_python3_5?]
 	)
 "
 

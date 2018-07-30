@@ -1,0 +1,11 @@
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -2,7 +2,7 @@ import importlib
+ import pytest
+ 
+ 
+-@pytest.fixture(scope="session", params=["defcon", "ufoLib2"])
++@pytest.fixture(scope="session", params=["defcon"])
+ def ufo_module(request):
+     return importlib.import_module(request.param)
+ 

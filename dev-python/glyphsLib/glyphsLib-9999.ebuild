@@ -27,14 +27,16 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.25[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.28[${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
-	dev-python/MutatorMath[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
-	dev-python/setuptools[${PYTHON_USEDEP}]
-	test? ( dev-python/pytest-runner[${PYTHON_USEDEP}] )
+	dev-python/setuptools_scm[${PYTHON_USEDEP}]
+	test? (
+		dev-python/pytest-runner[${PYTHON_USEDEP}]
+		dev-python/ufoNormalizer[${PYTHON_USEDEP}]
+	)
 "
 PATCHES=(
 	"${FILESDIR}"/${PN}-masters_wcodes.diff
@@ -42,4 +44,8 @@ PATCHES=(
 
 python_test() {
 	esetup.py test
+}
+
+pkg_setup() {
+	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
 }

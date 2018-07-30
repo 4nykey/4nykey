@@ -27,7 +27,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.13[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.28[${PYTHON_USEDEP}]
 	dev-python/ufoLib[${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
 	dev-python/cu2qu[${PYTHON_USEDEP}]
@@ -40,6 +40,7 @@ DEPEND="
 PATCHES=(
 	"${FILESDIR}"/${PN}-heightfallback.diff
 	"${FILESDIR}"/${PN}-exportedglyphs.diff
+	"${FILESDIR}"/${PN}-test.diff
 )
 
 python_test() {
