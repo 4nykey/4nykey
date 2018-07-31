@@ -1,0 +1,202 @@
+--- a/sources/Vollkorn.glyphs
++++ b/sources/Vollkorn.glyphs
+@@ -344618,7 +344618,7 @@ layers = (
+ {
+ anchors = (
+ {
+-name = _bottom;
++name = bottom;
+ position = "{79, 0}";
+ },
+ {
+@@ -344629,7 +344629,7 @@ position = "{85, 40}";
+ background = {
+ anchors = (
+ {
+-name = _bottom;
++name = bottom;
+ position = "{79, -36}";
+ },
+ {
+@@ -344694,7 +344694,7 @@ width = 156;
+ {
+ anchors = (
+ {
+-name = _bottom;
++name = bottom;
+ position = "{110, 0}";
+ },
+ {
+@@ -344705,7 +344705,7 @@ position = "{137, 75}";
+ background = {
+ anchors = (
+ {
+-name = _bottom;
++name = bottom;
+ position = "{110, -64}";
+ },
+ {
+@@ -344770,7 +344770,7 @@ width = 215;
+ {
+ anchors = (
+ {
+-name = _bottom;
++name = bottom;
+ position = "{-34, -64}";
+ },
+ {
+@@ -345032,7 +345032,7 @@ layers = (
+ {
+ anchors = (
+ {
+-name = _bottom;
++name = bottom;
+ position = "{79, 4}";
+ },
+ {
+@@ -345043,7 +345043,7 @@ position = "{85, 40}";
+ background = {
+ anchors = (
+ {
+-name = _bottom;
++name = bottom;
+ position = "{79, -36}";
+ },
+ {
+@@ -345108,7 +345108,7 @@ width = 156;
+ {
+ anchors = (
+ {
+-name = _bottom;
++name = bottom;
+ position = "{99, 11}";
+ },
+ {
+@@ -345119,7 +345119,7 @@ position = "{126, 75}";
+ background = {
+ anchors = (
+ {
+-name = _bottom;
++name = bottom;
+ position = "{99, -64}";
+ },
+ {
+@@ -345184,7 +345184,7 @@ width = 273;
+ {
+ anchors = (
+ {
+-name = _bottom;
++name = bottom;
+ position = "{-34, -64}";
+ },
+ {
+--- a/sources/VollkornItalic.glyphs
++++ b/sources/VollkornItalic.glyphs
+@@ -246880,7 +246880,7 @@ layers = (
+ {
+ anchors = (
+ {
+-name = _bottomleft;
++name = bottomleft;
+ position = "{54, 59}";
+ },
+ {
+@@ -246891,7 +246891,7 @@ position = "{75, 59}";
+ background = {
+ anchors = (
+ {
+-name = _bottomleft;
++name = bottomleft;
+ position = "{54, 59}";
+ },
+ {
+@@ -246952,7 +246952,7 @@ width = 135;
+ {
+ anchors = (
+ {
+-name = _bottomleft;
++name = bottomleft;
+ position = "{58, 52}";
+ },
+ {
+@@ -247014,7 +247014,7 @@ width = 168;
+ {
+ anchors = (
+ {
+-name = _bottomleft;
++name = bottomleft;
+ position = "{54, 59}";
+ },
+ {
+@@ -247026,7 +247026,7 @@ associatedMasterId = "9785DD90-0D66-4E3E-881E-09053C5F0A8A";
+ background = {
+ anchors = (
+ {
+-name = _bottomleft;
++name = bottomleft;
+ position = "{54, 59}";
+ },
+ {
+@@ -247556,7 +247556,7 @@ layers = (
+ {
+ anchors = (
+ {
+-name = _bottom;
++name = bottom;
+ position = "{39, 4}";
+ },
+ {
+@@ -247567,7 +247567,7 @@ position = "{52, 40}";
+ background = {
+ anchors = (
+ {
+-name = _bottom;
++name = bottom;
+ position = "{60, -39}";
+ },
+ {
+@@ -247635,7 +247635,7 @@ width = 173;
+ {
+ anchors = (
+ {
+-name = _bottom;
++name = bottom;
+ position = "{61, 11}";
+ },
+ {
+@@ -247646,7 +247646,7 @@ position = "{99, 75}";
+ background = {
+ anchors = (
+ {
+-name = _bottom;
++name = bottom;
+ position = "{53, -76}";
+ },
+ {
+@@ -247714,7 +247714,7 @@ width = 198;
+ {
+ anchors = (
+ {
+-name = _bottom;
++name = bottom;
+ position = "{60, -39}";
+ },
+ {
+@@ -247730,7 +247730,7 @@ associatedMasterId = "9785DD90-0D66-4E3E-881E-09053C5F0A8A";
+ background = {
+ anchors = (
+ {
+-name = _bottom;
++name = bottom;
+ position = "{60, -39}";
+ },
+ {
+@@ -247801,7 +247801,7 @@ width = 173;
+ {
+ anchors = (
+ {
+-name = _bottom;
++name = bottom;
+ position = "{53, -76}";
+ },
+ {

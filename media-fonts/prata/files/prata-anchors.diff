@@ -1,0 +1,13 @@
+--- a/sources/Prata_Regular.glyphs
++++ b/sources/Prata_Regular.glyphs
+@@ -23600,10 +23600,6 @@ name = _bottom;
+ position = "{136, 689}";
+ },
+ {
+-name = _topright;
+-position = "{219, 518}";
+-},
+-{
+ name = bottom;
+ position = "{147, 395}";
+ },

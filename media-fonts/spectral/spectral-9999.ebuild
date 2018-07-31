@@ -31,6 +31,8 @@ SLOT="0"
 DOCS=( contributors.txt )
 
 src_prepare() {
+	grep -rl 'name="_mid"' sources/spectral-*.ufo | xargs \
+		sed '/name="/s:\<_mid\>:mid:' -i
 	ln -s . sources/instance_ufo
 	fontmake_src_prepare
 }

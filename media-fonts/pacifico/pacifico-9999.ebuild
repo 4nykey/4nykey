@@ -22,3 +22,4 @@ HOMEPAGE="https://github.com/googlefonts/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
+PATCHES=( ${FILESDIR}/${PN}-anchors.diff )

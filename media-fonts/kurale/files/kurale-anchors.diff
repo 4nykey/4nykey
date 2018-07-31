@@ -1,0 +1,20 @@
+--- a/sources/Kurale.glyphs
++++ b/sources/Kurale.glyphs
+@@ -61723,7 +61723,7 @@ name = "_Lohit-Devanagari-DVAnchor2";
+ position = "{-134, 703}";
+ },
+ {
+-name = "_Lohit-Devanagari-DVAnchor3";
++name = "Lohit-Devanagari-DVAnchor3";
+ position = "{-134, 648}";
+ }
+ );
+@@ -61787,7 +61787,7 @@ name = _DVAnchor3;
+ position = "{-140, 648}";
+ },
+ {
+-name = "_Lohit-Devanagari-DVAnchor3";
++name = "Lohit-Devanagari-DVAnchor3";
+ position = "{-67, 648}";
+ }
+ );

@@ -1,0 +1,20 @@
+--- a/sources/Lobster.glyphs
++++ b/sources/Lobster.glyphs
+@@ -148758,7 +148758,7 @@ name = _bottom;
+ position = "{39, 0}";
+ },
+ {
+-name = _bottomright;
++name = bottomright;
+ position = "{39, 0}";
+ }
+ );
+@@ -148797,7 +148797,7 @@ width = 195;
+ {
+ anchors = (
+ {
+-name = _bottomright;
++name = bottomright;
+ position = "{-2, 0}";
+ }
+ );

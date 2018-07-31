@@ -3,6 +3,7 @@
 
 EAPI=6
 
+MY_FONT_TYPES=( otf +ttf )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}.git"
@@ -10,7 +11,7 @@ else
 	inherit vcs-snapshot
 	MY_PV="phase3-second-cleanup"
 	MY_PV="v${PV//./-}-${MY_PV}"
-	[[ -z ${PV%%*_p*} ]] && MY_PV="7368321"
+	[[ -z ${PV%%*_p*} ]] && MY_PV="449470a"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -27,8 +28,11 @@ LICENSE="OFL-1.1"
 SLOT="0"
 IUSE=""
 
-DEPEND=""
-RDEPEND="
-	!media-fonts/croscorefonts
-"
-FONT_S=( hinted )
+src_prepare() {
+	default
+	local _s
+	for _s in ${FONT_SUFFIX}; do
+		find -type f -path "./phaseIII_only/unhinted/${_s}/*.${_s}" \
+			-exec mv --target-directory="${FONT_S}" {} +
+	done
+}

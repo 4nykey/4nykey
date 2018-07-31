@@ -1,0 +1,136 @@
+--- a/sources/Montserrat-Italic.glyphs
++++ b/sources/Montserrat-Italic.glyphs
+@@ -248000,10 +248000,6 @@ name = _center;
+ position = "{381, 667}";
+ },
+ {
+-name = _top;
+-position = "{351, 517}";
+-},
+-{
+ name = top;
+ position = "{374, 630}";
+ }
+@@ -248015,10 +248011,6 @@ name = _center;
+ position = "{381, 667}";
+ },
+ {
+-name = _top;
+-position = "{351, 517}";
+-},
+-{
+ name = top;
+ position = "{374, 630}";
+ }
+@@ -248073,10 +248065,6 @@ name = _center;
+ position = "{388, 709}";
+ },
+ {
+-name = _top;
+-position = "{355, 547}";
+-},
+-{
+ name = top;
+ position = "{406, 800}";
+ }
+@@ -248088,10 +248076,6 @@ name = _center;
+ position = "{788, 709}";
+ },
+ {
+-name = _top;
+-position = "{755, 547}";
+-},
+-{
+ name = top;
+ position = "{806, 800}";
+ }
+@@ -248163,10 +248147,6 @@ name = _center;
+ position = "{384, 687}";
+ },
+ {
+-name = _top;
+-position = "{353, 532}";
+-},
+-{
+ name = top;
+ position = "{388, 713}";
+ }
+@@ -248178,10 +248158,6 @@ name = _center;
+ position = "{384, 687}";
+ },
+ {
+-name = _top;
+-position = "{353, 532}";
+-},
+-{
+ name = top;
+ position = "{388, 713}";
+ }
+--- a/sources/Montserrat.glyphs
++++ b/sources/Montserrat.glyphs
+@@ -233085,10 +233085,6 @@ name = _center;
+ position = "{300, 667}";
+ },
+ {
+-name = _top;
+-position = "{300, 517}";
+-},
+-{
+ name = top;
+ position = "{300, 630}";
+ }
+@@ -233100,10 +233096,6 @@ name = _center;
+ position = "{300, 666}";
+ },
+ {
+-name = _top;
+-position = "{300, 517}";
+-},
+-{
+ name = top;
+ position = "{300, 666}";
+ }
+@@ -233157,10 +233149,6 @@ name = _center;
+ position = "{300, 709}";
+ },
+ {
+-name = _top;
+-position = "{300, 547}";
+-},
+-{
+ name = top;
+ position = "{300, 800}";
+ }
+@@ -233172,10 +233160,6 @@ name = _center;
+ position = "{300, 701}";
+ },
+ {
+-name = _top;
+-position = "{300, 547}";
+-},
+-{
+ name = top;
+ position = "{300, 772}";
+ }
+@@ -233229,10 +233213,6 @@ name = _center;
+ position = "{300, 687}";
+ },
+ {
+-name = _top;
+-position = "{300, 532}";
+-},
+-{
+ name = top;
+ position = "{300, 713}";
+ }
+@@ -233244,10 +233224,6 @@ name = _center;
+ position = "{300, 687}";
+ },
+ {
+-name = _top;
+-position = "{300, 532}";
+-},
+-{
+ name = top;
+ position = "{300, 713}";
+ }

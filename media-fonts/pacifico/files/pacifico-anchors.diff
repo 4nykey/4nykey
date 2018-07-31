@@ -1,0 +1,13 @@
+--- a/sources/Pacifico.glyphs
++++ b/sources/Pacifico.glyphs
+@@ -114603,10 +114603,6 @@ name = _center;
+ position = "{309, 611}";
+ },
+ {
+-name = _top;
+-position = "{294, 460}";
+-},
+-{
+ name = top;
+ position = "{322, 688}";
+ }

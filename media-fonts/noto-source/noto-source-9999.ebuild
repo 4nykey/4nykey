@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}"
 else
 	inherit vcs-snapshot
-	MY_PV="16b67e2"
+	MY_PV="a63833f"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -27,7 +27,6 @@ SLOT="0"
 IUSE="clean-as-you-go interpolate"
 
 src_prepare() {
+	sed -e 's:\(name = \)_\(ogonek;\):\1\2:' -i src/NotoSansMono-MM.glyphs
 	fontmake_src_prepare
-	grep -rl '\<CondensedRegular\>' --include=*.plist src/ | xargs \
-		sed -e 's:\(Condensed\)Regular:\1:' -i
 }

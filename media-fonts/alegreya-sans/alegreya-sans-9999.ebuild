@@ -24,3 +24,8 @@ LICENSE="OFL-1.1"
 SLOT="0"
 
 DOCS="*.txt"
+
+src_prepare() {
+	sed -e 's:\<_\(topleft\)\>:\1:' -i sources/*.glyphs
+	fontmake_src_prepare
+}

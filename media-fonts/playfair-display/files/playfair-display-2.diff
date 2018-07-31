@@ -1,0 +1,11 @@
+--- a/sources/Playfair-2-Italic.glyphs
++++ b/sources/Playfair-2-Italic.glyphs
+@@ -42,7 +42,7 @@ value = 1;
+ date = "2017-10-31 16:21:11 +0000";
+ designer = "Claus Eggers Sørensen";
+ designerURL = "http://www.forthehearts.net";
+-familyName = "Playfair Display";
++familyName = "Playfair";
+ featurePrefixes = (
+ {
+ automatic = 1;

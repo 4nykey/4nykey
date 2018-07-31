@@ -23,3 +23,4 @@ HOMEPAGE="https://github.com/alexeiva/${PN}"
 LICENSE="OFL-1.1"
 SLOT="0"
 IUSE="interpolate"
+PATCHES=( ${FILESDIR}/${PN}-anchors.diff )

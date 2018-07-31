@@ -3,12 +3,13 @@
 
 EAPI=6
 
-MY_FONT_TYPES=( +otf ttf )
-FONTDIR_BIN=( fonts/v4020 )
+MY_FONT_TYPES=( otf +ttf )
+FONTDIR_BIN=( fonts/TTF )
 FONT_SRCDIR='source'
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/impallari/${PN}"
+	EGIT_REPO_URI="https://github.com/alexeiva/${PN}"
 else
 	inherit vcs-snapshot
 	MY_PV="98add57"
@@ -24,4 +25,4 @@ HOMEPAGE="https://github.com/impallari/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-REQUIRED_USE="binary? ( !font_types_ttf )"
+REQUIRED_USE="binary? ( !font_types_otf )"

@@ -1,0 +1,157 @@
+--- a/sources/Play.glyphs
++++ b/sources/Play.glyphs
+@@ -95780,10 +95780,6 @@ layers = (
+ {
+ anchors = (
+ {
+-name = _mark2;
+-position = "{209, 484}";
+-},
+-{
+ name = _top;
+ position = "{209, 484}";
+ },
+@@ -96058,10 +96054,6 @@ anchors = (
+ {
+ name = _mark0;
+ position = "{170, 0}";
+-},
+-{
+-name = _mark2;
+-position = "{170, 0}";
+ }
+ );
+ layerId = UUID0;
+@@ -96226,10 +96218,6 @@ anchors = (
+ {
+ name = _mark0;
+ position = "{145, 649}";
+-},
+-{
+-name = _mark2;
+-position = "{145, 649}";
+ }
+ );
+ layerId = UUID0;
+@@ -96452,14 +96440,6 @@ layers = (
+ {
+ anchors = (
+ {
+-name = _mark0;
+-position = "{221, 649}";
+-},
+-{
+-name = _mark2;
+-position = "{221, 649}";
+-},
+-{
+ name = _top;
+ position = "{221, 649}";
+ },
+@@ -96523,10 +96503,6 @@ anchors = (
+ {
+ name = _mark0;
+ position = "{221, 649}";
+-},
+-{
+-name = _mark2;
+-position = "{221, 649}";
+ }
+ );
+ layerId = UUID0;
+@@ -96572,14 +96548,6 @@ layers = (
+ {
+ anchors = (
+ {
+-name = _mark0;
+-position = "{218, 649}";
+-},
+-{
+-name = _mark2;
+-position = "{218, 649}";
+-},
+-{
+ name = _top;
+ position = "{218, 649}";
+ },
+@@ -96657,10 +96625,6 @@ anchors = (
+ {
+ name = _mark0;
+ position = "{184, 649}";
+-},
+-{
+-name = _mark2;
+-position = "{184, 649}";
+ }
+ );
+ layerId = UUID0;
+@@ -96768,14 +96732,6 @@ layers = (
+ {
+ anchors = (
+ {
+-name = _mark0;
+-position = "{228, 649}";
+-},
+-{
+-name = _mark2;
+-position = "{228, 649}";
+-},
+-{
+ name = _top;
+ position = "{228, 649}";
+ },
+@@ -96939,10 +96895,6 @@ layers = (
+ {
+ anchors = (
+ {
+-name = _mark2;
+-position = "{209, 649}";
+-},
+-{
+ name = _top;
+ position = "{209, 649}";
+ },
+@@ -97000,10 +96952,6 @@ anchors = (
+ {
+ name = _mark0;
+ position = "{170, 0}";
+-},
+-{
+-name = _mark2;
+-position = "{170, 0}";
+ }
+ );
+ layerId = UUID0;
+@@ -97045,10 +96993,6 @@ anchors = (
+ {
+ name = _mark0;
+ position = "{197, 0}";
+-},
+-{
+-name = _mark2;
+-position = "{197, 0}";
+ }
+ );
+ layerId = UUID0;
+@@ -97135,10 +97079,6 @@ anchors = (
+ {
+ name = _mark1;
+ position = "{249, 10}";
+-},
+-{
+-name = _mark4;
+-position = "{249, 10}";
+ }
+ );
+ layerId = UUID0;
+@@ -97210,10 +97150,6 @@ layers = (
+ {
+ anchors = (
+ {
+-name = _mark2;
+-position = "{209, 649}";
+-},
+-{
+ name = _top;
+ position = "{209, 649}";
+ },

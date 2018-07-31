@@ -5,13 +5,13 @@ EAPI=6
 
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/huertatipografica/${PN}.git"
+	EGIT_REPO_URI="https://github.com/huertatipografica/${PN%-*}.git"
 else
 	inherit vcs-snapshot
 	MY_PV="af2cf4e"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV/_/-}"
 	SRC_URI="
-		mirror://githubcl/huertatipografica/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/huertatipografica/${PN%-*}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	KEYWORDS="~amd64 ~x86"
 fi
@@ -23,6 +23,10 @@ HOMEPAGE="https://github.com/huertatipografica/${PN}"
 LICENSE="OFL-1.1"
 SLOT="0"
 
-PATCHES=(
-	"${FILESDIR}"/${PN}_toomanyalignmentzones.diff
-)
+src_prepare() {
+	local PATCHES=(
+		"${FILESDIR}"/${PN%-*}_toomanyalignmentzones.diff
+	)
+	sed -e 's:\<_top\(left\|right\)\>:top\1:' -i sources/*.glyphs
+	fontmake_src_prepare
+}

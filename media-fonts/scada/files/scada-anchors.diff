@@ -1,0 +1,76 @@
+--- a/sources/Scada-Italic.glyphs
++++ b/sources/Scada-Italic.glyphs
+@@ -38127,7 +38127,7 @@ layers = (
+ {
+ anchors = (
+ {
+-name = _bottom;
++name = bottom;
+ position = "{101, 0}";
+ },
+ {
+@@ -38154,7 +38154,7 @@ width = 215;
+ {
+ anchors = (
+ {
+-name = _bottom;
++name = bottom;
+ position = "{132, 0}";
+ },
+ {
+@@ -38188,7 +38188,7 @@ layers = (
+ {
+ anchors = (
+ {
+-name = _bottom;
++name = bottom;
+ position = "{111, 0}";
+ },
+ {
+@@ -38215,7 +38215,7 @@ width = 215;
+ {
+ anchors = (
+ {
+-name = _bottom;
++name = bottom;
+ position = "{133, 0}";
+ },
+ {
+--- a/sources/Scada.glyphs
++++ b/sources/Scada.glyphs
+@@ -38405,7 +38405,7 @@ layers = (
+ {
+ anchors = (
+ {
+-name = _bottom;
++name = bottom;
+ position = "{91, 0}";
+ },
+ {
+@@ -38432,7 +38432,7 @@ width = 215;
+ {
+ anchors = (
+ {
+-name = _bottom;
++name = bottom;
+ position = "{111, 0}";
+ },
+ {
+@@ -38466,7 +38466,7 @@ layers = (
+ {
+ anchors = (
+ {
+-name = _bottom;
++name = bottom;
+ position = "{91, 0}";
+ },
+ {
+@@ -38493,7 +38493,7 @@ width = 215;
+ {
+ anchors = (
+ {
+-name = _bottom;
++name = bottom;
+ position = "{111, 0}";
+ },
+ {
