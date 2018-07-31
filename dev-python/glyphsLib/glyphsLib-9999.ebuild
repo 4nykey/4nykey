@@ -29,13 +29,13 @@ IUSE="test"
 RDEPEND="
 	>=dev-python/fonttools-3.28[${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
+	dev-python/ufoNormalizer[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
 	dev-python/setuptools_scm[${PYTHON_USEDEP}]
 	test? (
 		dev-python/pytest-runner[${PYTHON_USEDEP}]
-		dev-python/ufoNormalizer[${PYTHON_USEDEP}]
 	)
 "
 PATCHES=(
