@@ -16,7 +16,7 @@
      'cflags_cc': [
        '-Wno-strict-overflow',
        '-Wno-maybe-uninitialized',
-+      '<@(my_cflags)', '-include <(src_loc)/stdafx.h',
++      '<@(my_cflags)',
      ],
      'ldflags': [
        '-Wl,-wrap,aligned_alloc',

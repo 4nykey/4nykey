@@ -18,10 +18,10 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 else
 	inherit vcs-snapshot
-	MY_CRL="crl-f893c36"
-	MY_TGV="libtgvoip-6ba1241"
+	MY_CRL="crl-9bc641f"
+	MY_TGV="libtgvoip-697eea9"
 	MY_VAR="variant-550ac2f"
-	MY_DEB="${PN}_1.2.17-1.debian"
+	MY_DEB="${PN}_1.3.10-1.debian"
 	SRC_URI="
 		mirror://githubcl/telegramdesktop/${MY_PN}/tar.gz/v${PV} -> ${P}.tar.gz
 		mirror://debian/pool/main/t/${PN}/${MY_DEB}.tar.xz
@@ -117,6 +117,18 @@ src_prepare() {
 		xkbcommon
 		$(usex gtk 'appindicator3-0.1' '')
 	)
+	local _f=(
+		$(${_p} --cflags ${_l[@]})
+		-I"${EROOT}"usr/include/range/v3
+		-I"${EROOT}"usr/include/gsl
+	)
+	local _d=(
+		TDESKTOP_DISABLE_UNITY_INTEGRATION
+		TDESKTOP_DISABLE_CRASH_REPORTS
+		TDESKTOP_DISABLE_AUTOUPDATE
+		$(usex gtk '' 'TDESKTOP_DISABLE_GTK_INTEGRATION')
+	)
+	_d=$(printf ',%s' "${_d[@]}")
 	_q=${_q#dev-qt/qtgui-}
 	local mygypargs=(
 		--format=cmake
@@ -126,18 +138,19 @@ src_prepare() {
 		-Dofficial_build_target=
 		-Duse_packed_resources=1
 		-Dnot_need_gtk="True"
-		-Dmy_cflags="$(${_p} --cflags ${_l[@]}) \
-			-I\"${EROOT}\"usr/include/range/v3 -I\"${EROOT}\"usr/include/gsl"
+		-Dmy_cflags="${_f[*]}"
 		-Dqt_version=${_q%[-_]*}
 		-Dlinux_path_qt="${EROOT}usr/$(get_libdir)/qt5"
 		-Dlinux_path_xkbcommon="${EROOT}usr"
 		-Dlinux_path_opus_include="${EROOT}usr/include/opus"
 		-Dminizip_loc="$EROOT}usr/include/minizip"
+		-Dbuild_defines="${_d:1}"
 	)
 
 	eapply \
 		debian/patches/Use-system-wide-font.patch \
 		debian/patches/Packed-resources.patch \
+		"${FILESDIR}"/gcc-if-constexpr-tmpfix.patch \
 		"${FILESDIR}"/${PN}-gyp.diff
 
 	cd "${S}"/Telegram/gyp
@@ -157,12 +170,9 @@ src_prepare() {
 		-e '/\<qt_loc\>/s:\(/include\):/../..\1/qt5:' \
 		-e "/linux_path_xkbcommon/s:\<lib\>:$(get_libdir):" \
 		-i qt.gypi
-	local _g=$(usex gtk "" "'TDESKTOP_DISABLE_GTK_INTEGRATION',")
 	sed \
 		-e '/-\<Werror\>/d' \
-		-e "s:QT_STATICPLUGIN',:TDESKTOP_DISABLE_UNITY_INTEGRATION',\
-		'TDESKTOP_DISABLE_CRASH_REPORTS','TDESKTOP_DISABLE_AUTOUPDATE',\
-		${_g}:" \
+		-e "/'QT_STATICPLUGIN',/d" \
 		-i settings_linux.gypi
 	_l=( ${_l[@]/%/\',} )
 	_l="${_l[@]/#/\'}"
@@ -170,7 +180,6 @@ src_prepare() {
 		-e "s%'pkgconfig_libs': \[%& ${_l}%" \
 		-e "/\<\(include\|library\)_dirs\>': \[/,/\]\,/d" \
 		-e '/-\(Ofast\|flto\|Wl,-\)/d' \
-		-e '/cmake_precompiled_header/d' \
 		-i telegram_linux.gypi
 	sed \
 		-ze "s%\(libraries': \[\).*\n#\([ ]\+'<!(\)pkg-config\( .*',\)%\1\n\2${_p}\3%" \
@@ -178,9 +187,13 @@ src_prepare() {
 	sed -e '/-static-libstdc++/d' -i qt.gypi utils.gyp
 
 	cd "${S}"
-	gyp "${mygypargs[@]}" Telegram/gyp/Telegram.gyp || die
+	set -- gyp "${mygypargs[@]}" Telegram/gyp/Telegram.gyp
+	einfo "${@}"
+	"${@}" || die "gyp failed"
+
 	cmake-utils_src_prepare
-	grep SKIP_BUILD_RPATH debian/CMakeLists.inj >> ${CMAKE_USE_DIR}/CMakeLists.txt
+
+	cat debian/CMakeLists.inj >> ${CMAKE_USE_DIR}/CMakeLists.txt
 }
 
 src_install() {
