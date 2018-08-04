@@ -10,10 +10,10 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_BRANCH="RB-${PV%.*}"
 	inherit git-r3
 else
-	MY_PV="9ddf069"
+	MY_PV="a0979fe"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	MY_OFX='openfx-4fc7b53'
-	MY_SEQ='SequenceParsing-19b3d6a'
+	MY_SEQ='SequenceParsing-15bbe60'
 	MY_TIN='tinydir-3aae922'
 	MY_MCK='google-mock-17945db'
 	MY_TST='google-test-50d6fc3'
