@@ -17,8 +17,10 @@ cross-x86_64-w64-mingw32/mingw64-runtime:tools - Build extra tools.
 dev-libs/libdigidocpp:pdf - Experimental PDF Signing/validating support
 dev-libs/seexpr:llvm - Enable LLVM backend
 dev-python/compreffor:cython - Generate cpp sources with dev-python/cython
-dev-python/fonttools:brotli - Enable brotli support, needed for WOFF2
-dev-python/fonttools:zopfli - Enable zopfli compression support
+dev-python/fonttools:brotli - Enable brotli compression support, required for WOFF2 web fonts
+dev-python/fonttools:scipy - Support finding wrong contour/component order between different masters
+dev-python/fonttools:sympy - Support for symbolic font statistics analysis
+dev-python/fonttools:zopfli - Enable zopfli compression support for WOFF web fonts
 dev-python/pyclipper:cython - Generate cpp sources with dev-python/cython
 dev-qt/aseman-qt-tools:keychain - Pull in dev-libs/qtkeychain
 dev-qt/aseman-qt-tools:multimedia - Pull in dev-qt/qtmultimedia
@@ -93,6 +95,7 @@ media-sound/deadbeef:tta - Add support for decoding True Audio input files
 media-sound/deadbeef:wma - Add support for decoding Windows Media Audio files
 media-sound/deadbeef:zip - Build vfs_zip plugin
 media-sound/flactag:gcrypt - Use libgcrypt for low-level crypto
+media-sound/flactag:scripts - Install additional scripts to /usr/bin
 media-sound/jack-audio-connection-kit:celt - Support CELT low delay audio codec (media-libs/celt)
 media-sound/jack-audio-connection-kit:classic - Force enable standard JACK (jackd) even if D-Bus JACK (jackdbus) is enabled too
 media-sound/jack-audio-connection-kit:opus - Build Opus netjack2
