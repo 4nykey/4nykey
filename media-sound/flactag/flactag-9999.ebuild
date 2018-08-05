@@ -1,6 +1,5 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
 
 EAPI=6
 
@@ -19,7 +18,7 @@ HOMEPAGE="http://software.gently.org.uk/flactag/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="gcrypt"
+IUSE="+scripts gcrypt"
 
 RDEPEND="
 	media-libs/musicbrainz:5
@@ -36,17 +35,32 @@ DEPEND="
 	app-text/xmlto
 	app-text/asciidoc
 "
-
-PATCHES=( "${FILESDIR}" )
+RDEPEND="
+	${RDEPEND}
+	scripts? (
+		app-cdr/cdrdao
+		app-cdr/cuetools
+		|| ( dev-libs/libcdio-paranoia media-sound/cdparanoia )
+	)
+"
 
 src_prepare() {
+	local PATCHES=(
+		"${FILESDIR}"/${PN}-libs.diff
+		"${FILESDIR}"/${PN}-man.diff
+	)
 	default
+	sed -e '/CDROM=/s:hdc:cdrom:' -i checkflac
+	sed -e 's:doc_DATA:html_DATA:' -i Makefile.am
+	use scripts || sed \
+		-e 's:dist_bin_SCRIPTS:doc_DATA:' \
+		-e 's:bin_SCRIPTS = :doc_DATA += :' \
+		-i Makefile.am
 	eautoreconf
 }
 
 src_configure() {
 	local myeconfargs=(
-		--docdir=/usr/share/doc/${PF}/html
 		$(use_with gcrypt libgcrypt)
 	)
 	econf "${myeconfargs[@]}"

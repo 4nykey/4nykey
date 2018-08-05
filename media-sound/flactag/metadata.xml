@@ -6,5 +6,6 @@
 	</maintainer>
 	<use>
 		<flag name="gcrypt">Use libgcrypt for low-level crypto</flag>
+		<flag name="scripts">Install additional scripts to /usr/bin</flag>
 	</use>
 </pkgmetadata>
