@@ -21,7 +21,7 @@ else
 	MY_CRL="crl-9bc641f"
 	MY_TGV="libtgvoip-697eea9"
 	MY_VAR="variant-550ac2f"
-	MY_DEB="${PN}_1.3.10-1.debian"
+	MY_DEB="${PN}_1.3.10-2.debian"
 	SRC_URI="
 		mirror://githubcl/telegramdesktop/${MY_PN}/tar.gz/v${PV} -> ${P}.tar.gz
 		mirror://debian/pool/main/t/${PN}/${MY_DEB}.tar.xz
