@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -33,7 +33,7 @@ IUSE="+acoustid nls"
 RDEPEND="
 	${PYTHON_DEPS}
 	dev-python/PyQt5[${PYTHON_USEDEP},gui]
-	media-libs/mutagen[${PYTHON_USEDEP}]
+	>=media-libs/mutagen-1.37[${PYTHON_USEDEP}]
 	acoustid? ( >=media-libs/chromaprint-1.0[tools] )
 	dev-python/python-discid[${PYTHON_USEDEP}]
 "
