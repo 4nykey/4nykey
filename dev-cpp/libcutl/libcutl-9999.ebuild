@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="dd5dbdd"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV/_beta/-b.}"
 	SRC_URI="
 		https://git.codesynthesis.com/cgit/${PN}/${PN}/snapshot/${MY_PV}.tar.gz
 		-> ${P}.tar.gz
@@ -17,7 +17,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit toolchain-funcs
+inherit toolchain-funcs multiprocessing
 
 DESCRIPTION="A collection of C++ libraries (successor of libcult)"
 HOMEPAGE="http://www.codesynthesis.com/projects/libcutl/"
@@ -30,7 +30,7 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	dev-util/build2
+	>=dev-util/build2-0.7.0
 	|| (
 		>=sys-devel/gcc-4.7
 		>=sys-devel/clang-3.5
@@ -40,17 +40,6 @@ DEPEND="
 PATCHES=(
 	"${FILESDIR}"/${PN}-1.10.0-fix-c++14.patch
 )
-
-src_prepare() {
-	default
-
-	# remove bundled libs
-	rm -r cutl/details/{boost,expat} || die
-
-	# ensure <regex> works on GCC 5 and below
-	# bug 630016
-	sed -e '/cxx.std =/s:=.*:= 14:' -i build/root.build
-}
 
 src_configure() {
 	local myconfigargs=(
@@ -65,16 +54,23 @@ src_configure() {
 		config.install.doc="data_root/share/doc/${PF}"
 	)
 
-	b --verbose 3 \
+	MAKE=b \
+	MAKEOPTS="--jobs $(makeopts_jobs) --verbose 3" \
+	emake \
 		"${myconfigargs[@]}" \
-		configure || die
+		configure
 }
 
 src_compile() {
-	b --verbose 3 || die
+	tc-is-gcc && export CCACHE_DISABLE=1
+	set -- b --jobs $(makeopts_jobs) --verbose 3
+	echo "${@}"
+	"${@}" || die "b failed"
 }
 
 src_install() {
-	b --verbose 3 install || die
+	MAKE=b \
+	MAKEOPTS="--jobs $(makeopts_jobs) --verbose 3" \
+	emake install
 	einstalldocs
 }
