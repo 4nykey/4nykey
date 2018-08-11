@@ -53,6 +53,8 @@ src_prepare() {
 	use test || sed -i CMakeLists.txt -e '/add_subdirectory(test)/d'
 	has_version app-editors/vim-core || sed \
 		-e 's:xxd -i \(tslcert.\.crt\):xxdi.pl \1 >:' -i src/CMakeLists.txt
+	sed \
+		-e 's:XERCESC_LIBRARIES:XercesC_LIBRARIES:' -i src/CMakeLists.txt
 	rm -rf src/{minizip,openssl}
 	cmake-utils_src_prepare
 }
