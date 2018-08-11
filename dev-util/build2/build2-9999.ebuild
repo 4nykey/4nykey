@@ -3,7 +3,7 @@
 
 EAPI=6
 
-inherit toolchain-funcs
+inherit toolchain-funcs multiprocessing
 MY_PN="${PN}-toolchain"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -47,7 +47,9 @@ src_prepare() {
 }
 
 src_compile() {
+	tc-is-gcc && export CCACHE_DISABLE=1
 	local myconfigargs=(
+		--jobs $(makeopts_jobs)
 		--verbose 3
 		config.cxx="$(tc-getCXX)"
 		config.cc.coptions="${CFLAGS}"
@@ -62,23 +64,23 @@ src_compile() {
 	)
 
 	cd ${PN}
-	./bootstrap.sh $(tc-getCXX) || die
+	./bootstrap.sh $(tc-getCXX) || die "bootstrap failed"
 
-	./build2/b-boot \
-		"${myconfigargs[@]}" \
-		config.bin.lib=static \
-		|| die
+	set -- ./build2/b-boot "${myconfigargs[@]}" config.bin.lib=static
+	echo ${@}
+	"${@}" || die "b-boot failed"
 
 	cd "${S}"
-	./build2/build2/b \
-		"${myconfigargs[@]}" \
-		config.bin.lib=shared \
-		configure || die
+	set -- ./build2/build2/b "${myconfigargs[@]}" config.bin.lib=shared configure
+	echo ${@}
+	"${@}" || die "b configure failed"
 
-	./build2/build2/b --verbose 3 || die
+	set -- ./build2/build2/b "${myconfigargs[@]}"
+	echo ${@}
+	"${@}" || die "b failed"
 }
 
 src_install() {
-	./build2/build2/b --verbose 3 install || die
+	./build2/build2/b --jobs $(makeopts_jobs) --verbose 2 install || die
 	einstalldocs
 }
