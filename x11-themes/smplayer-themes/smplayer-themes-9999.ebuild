@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -17,15 +17,12 @@ HOMEPAGE="https://www.smplayer.info"
 
 LICENSE="CC-BY-2.5 CC-BY-SA-2.5 CC-BY-SA-3.0 CC0-1.0 GPL-2 GPL-3+ LGPL-3"
 SLOT="0"
-IUSE="qt5"
+IUSE=""
 DEPEND="
-	!qt5? ( dev-qt/qtcore:4 )
-	qt5? ( dev-qt/qtcore:5 )
+	dev-qt/qtcore:5
 "
 RDEPEND="
-	!qt5? ( <media-video/smplayer-17[-qt5] )
-	qt5? ( media-video/smplayer[qt5(+)] )
-	!x11-themes/papirus-suite[smplayer]
+	media-video/smplayer
 "
 DOCS=( Changelog README.txt )
 
@@ -37,6 +34,6 @@ src_prepare() {
 		-e '/README/s:/\([^/]\+\)/$:/../../doc/$(PF)/\1_README.txt:' \
 		-i Makefile
 	sed \
-		-e "s:rcc -binary:$(usex qt5 $(qt5_get_bindir) $(qt4_get_bindir))/&:" \
+		-e "s:rcc -binary:$(qt5_get_bindir)/&:" \
 		-i themes/Makefile
 }

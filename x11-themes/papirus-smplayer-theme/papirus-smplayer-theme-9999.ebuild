@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -22,19 +22,18 @@ HOMEPAGE="https://github.com/PapirusDevelopmentTeam/${PN}"
 
 LICENSE="GPL-3"
 SLOT="0"
-IUSE="qt5"
+IUSE=""
 
 DEPEND="
-	!qt5? ( dev-qt/qtcore:4 )
-	qt5? ( dev-qt/qtcore:5 )
+	dev-qt/qtcore:5
 "
 RDEPEND="
-	media-video/smplayer[qt5?]
+	media-video/smplayer
 	!>=x11-themes/smplayer-themes-16.5.3
 "
 
 src_compile() {
-	local d _rcc="$(usex qt5 $(qt5_get_bindir) $(qt4_get_bindir))/rcc -binary"
+	local d _rcc="$(qt5_get_bindir)/rcc -binary"
 	for d in *Papirus*; do
 		${_rcc} src/${d}.qrc -o ${d}.rcc || die
 	done
