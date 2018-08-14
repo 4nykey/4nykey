@@ -42,10 +42,10 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-masters_wcodes.diff
 )
 
-python_test() {
-	esetup.py test
-}
-
 pkg_setup() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
+}
+
+python_test() {
+	esetup.py test
 }
