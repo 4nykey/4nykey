@@ -13,8 +13,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI=
 else
 	inherit vcs-snapshot
-	MY_PV="2e03def"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}_Linux"
+	MY_PV="d7e5bb4"
 	SRC_URI="
 		mirror://githubcl/meganz/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -29,19 +28,12 @@ HOMEPAGE="https://github.com/meganz/MEGAsync"
 LICENSE="EULA"
 LICENSE_URL="https://raw.githubusercontent.com/meganz/MEGAsync/master/LICENCE.md"
 SLOT="0"
-IUSE="dolphin mediainfo nautilus qt5 thunar"
-REQUIRED_USE="dolphin? ( qt5 )"
+IUSE="dolphin mediainfo nautilus thunar"
 
 RDEPEND="
 	net-misc/meganz-sdk[libuv,mediainfo?,qt,sodium(+),sqlite]
-	qt5? (
-		dev-qt/qtsvg:5
-		dev-qt/qtdbus:5
-	)
-	!qt5? (
-		dev-qt/qtsvg:4
-		dev-qt/qtdbus:4
-	)
+	dev-qt/qtsvg:5
+	dev-qt/qtdbus:5
 	dolphin? ( kde-apps/dolphin )
 	nautilus? ( >=gnome-base/nautilus-3 )
 	thunar? ( xfce-base/thunar )
@@ -49,7 +41,7 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	qt5? ( dev-qt/linguist-tools:5 )
+	dev-qt/linguist-tools:5
 "
 src_prepare() {
 	local PATCHES=(
@@ -71,13 +63,13 @@ src_configure() {
 		CONFIG-=with_updater
 		CONFIG-=with_tools
 	)
-	eqmake$(usex qt5 5 4) "${eqmakeargs[@]}"
+	eqmake5 "${eqmakeargs[@]}"
 	use dolphin && cmake-utils_src_configure
 }
 
 src_compile() {
 	cd src
-	$(usex qt5 $(qt5_get_bindir) $(qt4_get_bindir))/lrelease \
+	$(qt5_get_bindir)/lrelease \
 		MEGASync/MEGASync.pro
 	emake
 	use dolphin && cmake-utils_src_compile
