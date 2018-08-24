@@ -32,7 +32,7 @@ SLOT="0"
 # BSD license applies to torproject-related code like the patches
 # icons are under CCPL-Attribution-3.0
 LICENSE="BSD CC-BY-3.0 MPL-2.0 GPL-2 LGPL-2.1"
-IUSE="eme-free +gmp-autoupdate hardened hwaccel jack +screenshot selinux test"
+IUSE="eme-free +gmp-autoupdate hardened hwaccel jack -screenshot selinux test"
 
 SRC_URI="https://dist.torproject.org/${PN}/${TOR_PV}"
 PATCH="firefox-${PV%%.*}.0-patches-02"
@@ -53,8 +53,6 @@ RESTRICT="primaryuri"
 RDEPEND="
 	system-icu? ( >=dev-libs/icu-60.2 )
 	jack? ( virtual/jack )
-	>=dev-libs/nss-3.36.4
-	>=dev-libs/nspr-4.19
 	selinux? ( sec-policy/selinux-mozilla )
 "
 DEPEND="
@@ -163,10 +161,6 @@ src_prepare() {
 
 src_configure() {
 	MEXTENSIONS="default"
-	# Google API keys (see http://www.chromium.org/developers/how-tos/api-keys)
-	# Note: These are for Gentoo Linux use ONLY. For your own distribution, please
-	# get your own set of keys.
-	_google_api_key=AIzaSyDEAOvatFo0eTgsV_ZlEzx0ObmepsMzfAc
 
 	####################################
 	#
@@ -192,10 +186,6 @@ src_configure() {
 	# Only available on mozilla-overlay for experimentation -- Removed in Gentoo repo per bug 571180
 	#use egl && mozconfig_annotate 'Enable EGL as GL provider' --with-gl-provider=EGL
 
-	# Setup api key for location services
-	echo -n "${_google_api_key}" > "${S}"/google-api-key
-	mozconfig_annotate '' --with-google-api-keyfile="${S}/google-api-key"
-
 	mozconfig_annotate '' --enable-extensions="${MEXTENSIONS}"
 
 	echo "mk_add_options MOZ_OBJDIR=${BUILD_OBJ_DIR}" >> "${S}"/.mozconfig
@@ -208,6 +198,9 @@ src_configure() {
 	mozconfig_annotate 'torbrowser' --disable-tor-browser-update
 	mozconfig_annotate 'torbrowser' --with-tor-browser-version=${TOR_PV}
 	mozconfig_annotate 'torbrowser' --disable-tor-browser-data-outside-app-dir
+
+	mozconfig_annotate 'torbrowser' --without-system-nspr
+	mozconfig_annotate 'torbrowser' --without-system-nss
 
 	# Finalize and report settings
 	mozconfig_final
@@ -223,14 +216,16 @@ src_compile() {
 }
 
 src_install() {
+	local profile_dir="${WORKDIR}/tor-browser_en-US/Browser/TorBrowser/Data/Browser/profile.default"
 	cd "${BUILD_OBJ_DIR}" || die
+
+	cat "${profile_dir}"/bookmarks.html > \
+		dist/bin/browser/chrome/en-US/locale/browser/bookmarks.html
 
 	# Pax mark xpcshell for hardened support, only used for startupcache creation.
 	pax-mark m "${BUILD_OBJ_DIR}"/dist/bin/xpcshell
 
-	# Add our default prefs for firefox
-	cp "${FILESDIR}"/gentoo-default-prefs.js-2 \
-		"${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
+	touch "${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
 		|| die
 
 	mozconfig_install_prefs \
@@ -250,8 +245,8 @@ src_install() {
 			|| die
 	fi
 
-	echo "pref(\"extensions.autoDisableScopes\", 3);" >> \
-		"${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
+	sed -e '/extensions\.autoDisableScopes/s:\<0\>:3:' \
+		-i "${BUILD_OBJ_DIR}"/dist/bin/browser/defaults/preferences/000-tor-browser.js \
 		|| die
 
 	local plugin
@@ -260,10 +255,6 @@ src_install() {
 			"${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
 			|| die
 	done
-
-	echo 'pref("general.useragent.locale", "en-US");' \
-		>> "${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
-		|| die
 
 	cd "${S}"
 	MOZ_MAKE_FLAGS="${MAKEOPTS}" SHELL="${SHELL:-${EPREFIX}/bin/bash}" MOZ_NOSPAM=1 \
@@ -291,14 +282,13 @@ src_install() {
 
 	# Profile without the tor-launcher extension
 	# see: https://trac.torproject.org/projects/tor/ticket/10160
-	local profile_dir="${WORKDIR}/tor-browser_en-US/Browser/TorBrowser/Data/Browser/profile.default"
 
 	dodoc "${profile_dir}/extensions/tor-launcher@torproject.org.xpi"
-	docompress -x "${EROOT}/usr/share/doc/${PF}/tor-launcher@torproject.org.xpi"
-	rm "${profile_dir}/extensions/tor-launcher@torproject.org.xpi" || die "Failed to remove torlauncher extension"
+	rm "${profile_dir}/extensions/tor-launcher@torproject.org.xpi" || die \
+		"Failed to remove torlauncher extension"
 
 	insinto ${MOZILLA_FIVE_HOME}/browser
-	doins -r "${profile_dir}"/{extensions,bookmarks.html}
+	doins -r "${profile_dir}"/extensions
 
 	dodoc "${WORKDIR}/tor-browser_en-US/Browser/TorBrowser/Docs/ChangeLog.txt"
 }

@@ -243,10 +243,6 @@ src_prepare() {
 src_configure() {
 	MOZILLA_FIVE_HOME="/usr/$(get_libdir)/${PN}/${PN}"
 	MEXTENSIONS="default"
-	# Google API keys (see http://www.chromium.org/developers/how-tos/api-keys)
-	# Note: These are for Gentoo Linux use ONLY. For your own distribution, please
-	# get your own set of keys.
-	_google_api_key=AIzaSyDEAOvatFo0eTgsV_ZlEzx0ObmepsMzfAc
 
 	####################################
 	#
@@ -267,10 +263,6 @@ src_configure() {
 
 	# Only available on mozilla-overlay for experimentation -- Removed in Gentoo repo per bug 571180
 	#use egl && mozconfig_annotate 'Enable EGL as GL provider' --with-gl-provider=EGL
-
-	# Setup api key for location services
-	echo -n "${_google_api_key}" > "${S}"/google-api-key
-	mozconfig_annotate '' --with-google-api-keyfile="${S}/google-api-key"
 
 	mozconfig_annotate '' --enable-extensions="${MEXTENSIONS}"
 
@@ -343,9 +335,13 @@ src_compile() {
 }
 
 src_install() {
+	local profile_dir="${WORKDIR}/tor-browser_en-US/Browser/TorBrowser/Data/Browser/profile.default"
 	MOZILLA_FIVE_HOME="/usr/$(get_libdir)/${PN}/${PN}"
 
 	cd "${BUILD_OBJ_DIR}" || die
+
+	cat "${profile_dir}"/bookmarks.html > \
+		dist/bin/browser/chrome/en-US/locale/browser/bookmarks.html
 
 	# Pax mark xpcshell for hardened support, only used for startupcache creation.
 	pax-mark m "${BUILD_OBJ_DIR}"/dist/bin/xpcshell
@@ -404,14 +400,13 @@ src_install() {
 
 	# Profile without the tor-launcher extension
 	# see: https://trac.torproject.org/projects/tor/ticket/10160
-	local profile_dir="${WORKDIR}/tor-browser_en-US/Browser/TorBrowser/Data/Browser/profile.default"
 
 	docompress -x "${EROOT}/usr/share/doc/${PF}/tor-launcher@torproject.org.xpi"
 	dodoc "${profile_dir}/extensions/tor-launcher@torproject.org.xpi"
 	rm "${profile_dir}/extensions/tor-launcher@torproject.org.xpi" || die "Failed to remove torlauncher extension"
 
-	insinto ${MOZILLA_FIVE_HOME}/browser/defaults/profile
-	doins -r "${profile_dir}"/{extensions,preferences,bookmarks.html}
+	insinto ${MOZILLA_FIVE_HOME}/browser
+	doins -r "${profile_dir}"/{extensions,preferences}
 
 	dodoc "${WORKDIR}/tor-browser_en-US/Browser/TorBrowser/Docs/ChangeLog.txt"
 }
