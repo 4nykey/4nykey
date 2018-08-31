@@ -27,13 +27,15 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.28[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.29[${PYTHON_USEDEP}]
 	dev-python/cu2qu[${PYTHON_USEDEP}]
 	dev-python/glyphsLib[${PYTHON_USEDEP}]
 	dev-python/ufo2ft[${PYTHON_USEDEP}]
 	dev-python/MutatorMath[${PYTHON_USEDEP}]
-	dev-python/booleanOperations[${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
+	dev-python/ufoLib[${PYTHON_USEDEP}]
+	dev-python/booleanOperations[${PYTHON_USEDEP}]
+	dev-python/skia-pathops[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
