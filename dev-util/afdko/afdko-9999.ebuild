@@ -4,20 +4,19 @@
 EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
-inherit python-single-r1
+inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="cbc6d5c"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV/_}"
+	MY_PV="c02add7"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
+	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-RESTRICT="primaryuri"
 
 DESCRIPTION="Adobe Font Development Kit for OpenType"
 HOMEPAGE="http://www.adobe.com/devnet/opentype/afdko.html"
@@ -32,40 +31,26 @@ RDEPEND="
 	dev-python/defcon[${PYTHON_USEDEP}]
 	dev-python/fontMath[${PYTHON_USEDEP}]
 	dev-python/fontPens[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-3.27[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.29[${PYTHON_USEDEP}]
 	dev-python/MutatorMath[${PYTHON_USEDEP}]
+	dev-util/psautohint[${PYTHON_USEDEP}]
 	dev-python/ufoLib[${PYTHON_USEDEP}]
 	dev-python/ufoNormalizer[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
-	${PYTHON_DEPS}
 "
-DOCS=(
-{README,NEWS}.md
-html
-pdf
-)
+DOCS=( {README,NEWS}.md html pdf )
 
-src_prepare() {
+python_prepare_all() {
 	local PATCHES=(
-		"${FILESDIR}"/${PN}-ar.diff
-		"${FILESDIR}"/${PN}-scripts.diff
-		"${FILESDIR}"/${PN}-autohint.diff
+		"${FILESDIR}"/${PN}-nowheel.diff
 	)
-	sed \
-		-e "/AFDKO_Python=/s:=.*:=${PYTHON}:" \
-		-e "/AFDKO_Scripts=/s:=.*\.\./:=${EROOT}usr/lib/${PN}/:" \
-		-i afdko/Tools/linux/setFDKPaths
-	grep -l 'from \. ' afdko/Tools/SharedData/FDKScripts/*.py | xargs \
-		sed '/import/s:from \. ::' -i
-	grep -l 'from \.[^ ]' afdko/Tools/SharedData/FDKScripts/*.py | xargs \
-		sed '/import/s:from \.:from :' -i
-	rm -f afdko/Tools/linux/{ufonormalizer,AFDKOPython}
+	grep -rl '\$(AR) -' c | xargs sed -e 's:\(\$(AR) \)-:\1:' -i
 	mkdir html pdf
-	mv -f afdko/{.,Technical\ Documentation}/*.html html/
-	mv -f afdko/Technical\ Documentation/*.pdf pdf/
-	default
+	mv -f docs/*.html html
+	mv -f docs/*.pdf pdf
+	distutils-r1_python_prepare_all
 }
 
 src_compile() {
@@ -75,25 +60,6 @@ src_compile() {
 		emake -C "${_d%/Makefile}" \
 			XFLAGS="${CFLAGS}" || return
 	done
-	find -path '*exe/linux/release/*' -execdir mv -f -t "${S}"/afdko/Tools/linux {} +
-}
-
-src_install() {
-	local _d="/usr/lib/${PN}"
-	insinto "${_d}"
-
-	doins -r afdko/Tools/SharedData
-	python_optimize "${ED}"${_d}/SharedData
-
-	exeinto "${_d}/bin"
-	doexe afdko/Tools/linux/*
-
-	dodir /etc/env.d
-	cat > "${T}"/10${PN} <<- EOF
-		PATH="${EPREFIX}${_d}/bin"
-		ROOTPATH="${EPREFIX}${_d}/bin"
-	EOF
-	doenvd "${T}"/10${PN}
-
-	einstalldocs
+	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
+	distutils-r1_src_compile
 }

@@ -29,7 +29,7 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
-	>=dev-python/fonttools-3.28[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.29[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
