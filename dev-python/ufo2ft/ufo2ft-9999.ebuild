@@ -32,6 +32,8 @@ RDEPEND="
 	dev-python/defcon[${PYTHON_USEDEP}]
 	dev-python/cu2qu[${PYTHON_USEDEP}]
 	dev-python/compreffor[${PYTHON_USEDEP}]
+	dev-python/booleanOperations[${PYTHON_USEDEP}]
+	dev-python/skia-pathops[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
