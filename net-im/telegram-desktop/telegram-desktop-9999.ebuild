@@ -11,17 +11,18 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/telegramdesktop/${MY_PN}.git"
 	EGIT_BRANCH="dev"
 	EGIT_SUBMODULES=(
-		Telegram/ThirdParty/crl
-		Telegram/ThirdParty/libtgvoip
-		Telegram/ThirdParty/variant
+		'*'
+		-Telegram/ThirdParty/GSL
 	)
 	inherit git-r3
 else
 	inherit vcs-snapshot
-	MY_CRL="crl-9bc641f"
-	MY_TGV="libtgvoip-697eea9"
+	MY_CRL="crl-4291015"
+	MY_TGV="libtgvoip-6053cf5"
 	MY_VAR="variant-550ac2f"
-	MY_DEB="${PN}_1.3.10-2.debian"
+	MY_XXH="xxHash-7cc9639"
+	MY_CAT="Catch2-5ca44b6"
+	MY_DEB="${PN}_1.3.14-1.debian"
 	SRC_URI="
 		mirror://githubcl/telegramdesktop/${MY_PN}/tar.gz/v${PV} -> ${P}.tar.gz
 		mirror://debian/pool/main/t/${PN}/${MY_DEB}.tar.xz
@@ -31,6 +32,12 @@ else
 		-> ${MY_TGV}.tar.gz
 		mirror://githubcl/mapbox/${MY_VAR%-*}/tar.gz/${MY_VAR##*-}
 		-> ${MY_VAR}.tar.gz
+		mirror://githubcl/Cyan4973/${MY_XXH%-*}/tar.gz/${MY_XXH##*-}
+		-> ${MY_XXH}.tar.gz
+		test? (
+			mirror://githubcl/catchorg/${MY_CAT%-*}/tar.gz/${MY_CAT##*-}
+			-> ${MY_CAT}.tar.gz
+		)
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -69,7 +76,6 @@ DEPEND="
 	x11-libs/libxkbcommon[static-libs]
 	dev-cpp/range-v3
 	dev-cpp/ms-gsl
-	test? ( dev-cpp/catch )
 "
 RDEPEND="
 	${RDEPEND}
@@ -78,6 +84,7 @@ RDEPEND="
 
 pkg_setup() {
 	python-any-r1_pkg_setup
+	use test || EGIT_SUBMODULES+=( -Telegram/ThirdParty/Catch )
 }
 
 src_unpack() {
@@ -93,6 +100,8 @@ src_unpack() {
 		mv ${MY_CRL}/* "${S}"/Telegram/ThirdParty/crl/
 		mv ${MY_TGV}/* "${S}"/Telegram/ThirdParty/libtgvoip/
 		mv ${MY_VAR}/* "${S}"/Telegram/ThirdParty/variant/
+		mv ${MY_XXH}/* "${S}"/Telegram/ThirdParty/xxHash/
+		use test && mv ${MY_CAT}/* "${S}"/Telegram/ThirdParty/Catch/
 		mv ${MY_DEB} "${S}"/debian
 	fi
 }
@@ -154,9 +163,14 @@ src_prepare() {
 		"${FILESDIR}"/${PN}-gyp.diff
 
 	cd "${S}"/Telegram/gyp
+
+	use test || sed -e '/\<tests\>/d' -i Telegram.gyp
+	sed \
+		-e "s%target_name': 'tests_storage',%& 'libraries': ['crypto',],%" \
+		-i tests/tests.gyp
+
 	grep -rl 'libs_loc)/' | xargs sed -e '/<(libs_loc)\//d' -i
 	sed -e '/qt_static_plugins/d' -i telegram_sources.txt
-	use test || sed -e '/\<tests\>/d' -i Telegram.gyp
 	sed \
 		-e '/utils.gyp:Updater/d' \
 		-e '/\<\(AL_LIBTYPE_STATIC\|minizip_loc\)\>/d' \
@@ -194,6 +208,12 @@ src_prepare() {
 	cmake-utils_src_prepare
 
 	cat debian/CMakeLists.inj >> ${CMAKE_USE_DIR}/CMakeLists.txt
+
+	# until debian 1.3.15+ patches are there
+	printf '
+	add_precompiled_header(lib_base ../../Telegram/SourceFiles/base/base_pch.h)
+	add_precompiled_header(lib_storage ../../Telegram/SourceFiles/storage/storage_pch.h)
+	' >> ${CMAKE_USE_DIR}/CMakeLists.txt
 }
 
 src_install() {
@@ -207,6 +227,16 @@ src_install() {
 			telegram.png
 	done
 	einstalldocs
+}
+
+src_test () {
+	local _t
+	for _t in "${S}"/Telegram/gyp/tests/*.test; do
+		_t=$(basename "${_t}" .test)
+		ebegin Running ${_t}
+		"${CMAKE_BUILD_DIR}"/${_t}
+		eend $?
+	done
 }
 
 pkg_preinst() {
