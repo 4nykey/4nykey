@@ -62,6 +62,10 @@ DEPEND="
 	>=dev-lang/yasm-1.1
 	virtual/opengl
 "
+RDEPEND="
+	${RDEPEND}
+	>=net-vpn/tor-0.3.3.9
+"
 
 S="${WORKDIR}/${GIT_TAG}"
 
