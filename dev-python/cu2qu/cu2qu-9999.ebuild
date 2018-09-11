@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="43df1e6"
+	MY_PV="0130055"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -32,10 +32,10 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
+	dev-python/defcon[${PYTHON_USEDEP}]
 	test? (
 		dev-python/pytest-runner[${PYTHON_USEDEP}]
 		dev-python/coverage[${PYTHON_USEDEP}]
-		dev-python/defcon[${PYTHON_USEDEP}]
 		dev-python/ufoLib[${PYTHON_USEDEP}]
 	)
 "
