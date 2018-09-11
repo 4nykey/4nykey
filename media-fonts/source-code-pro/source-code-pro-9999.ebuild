@@ -3,7 +3,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python2_7 python3_{4,5,6} )
 MY_FONT_TYPES=( otf +ttf )
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
@@ -27,7 +27,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
-MY_MK="3c71e576827753fc395f44f4c2d91131-c8548da"
+MY_MK="3c71e576827753fc395f44f4c2d91131-06446b4"
 SRC_URI+="
 	!binary? (
 		mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
@@ -40,7 +40,7 @@ HOMEPAGE="https://adobe-fonts.github.io/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="+binary"
+IUSE="+autohint +binary"
 
 DEPEND="
 	!binary? (
@@ -75,7 +75,10 @@ src_prepare() {
 
 src_compile() {
 	use binary && return
-	emake \
-		${FONT_SUFFIX} \
+	local myemakeargs=(
+		$(usex autohint 'AUTOHINT=' '')
+		${FONT_SUFFIX}
 		-f ${MY_MK}/Makefile
+	)
+	emake "${myemakeargs[@]}"
 }

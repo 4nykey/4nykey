@@ -3,18 +3,19 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python2_7 python3_{4,5,6} )
 MY_FONT_TYPES=( otf +ttf )
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-fonts/${PN}"
 else
-	inherit vcs-snapshot
-	MY_PV="6158260"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
+	inherit vcs-snapshot eapi7-ver
+	MY_PVB="$(ver_cut 1-2)R-ro/$(ver_cut 3-4)R-it"
+	MY_PV="ccbaae2"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="${MY_PVB//R}"
 	SRC_URI="
 		binary? (
-			mirror://githubcl/adobe-fonts/${PN}/tar.gz/${PV%_p*}R
+			mirror://githubcl/adobe-fonts/${PN}/tar.gz/${MY_PVB}
 			-> ${P%_p*}R.tar.gz
 		)
 		!binary? (
@@ -26,7 +27,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
-MY_MK="3c71e576827753fc395f44f4c2d91131-c8548da"
+MY_MK="3c71e576827753fc395f44f4c2d91131-06446b4"
 SRC_URI+="
 	!binary? (
 		mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
@@ -39,7 +40,7 @@ HOMEPAGE="https://adobe-fonts.github.io/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="+binary"
+IUSE="+autohint +binary"
 
 DEPEND="
 	!binary? (
@@ -68,14 +69,15 @@ pkg_setup() {
 
 src_prepare() {
 	default
-	use binary && return
-	unpack ${MY_MK}.tar.gz
-	find -name familyVersion.fea -exec sed -e 's:FontRevision[^;]\+$:&;:' -i {} +
+	use binary || unpack ${MY_MK}.tar.gz
 }
 
 src_compile() {
 	use binary && return
-	emake \
-		${FONT_SUFFIX} \
+	local myemakeargs=(
+		$(usex autohint 'AUTOHINT=' '')
+		${FONT_SUFFIX}
 		-f ${MY_MK}/Makefile
+	)
+	emake "${myemakeargs[@]}"
 }

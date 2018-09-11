@@ -24,7 +24,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
-MY_MK="3c71e576827753fc395f44f4c2d91131-c8548da"
+MY_MK="3c71e576827753fc395f44f4c2d91131-06446b4"
 SRC_URI+="
 	!binary? (
 		mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
@@ -37,7 +37,7 @@ HOMEPAGE="https://github.com/i-tu/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="+binary"
+IUSE="+autohint +binary"
 REQUIRED_USE+="
 	binary? ( !font_types_ttf )
 "
@@ -68,7 +68,10 @@ src_prepare() {
 
 src_compile() {
 	use binary && return
-	emake \
-		${FONT_SUFFIX} \
+	local myemakeargs=(
+		$(usex autohint 'AUTOHINT=' '')
+		${FONT_SUFFIX}
 		-f ${MY_MK}/Makefile
+	)
+	emake "${myemakeargs[@]}"
 }
