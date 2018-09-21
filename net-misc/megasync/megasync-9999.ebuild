@@ -13,7 +13,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI=
 else
 	inherit vcs-snapshot
-	MY_PV="d7e5bb4"
+	MY_PV="eea22a0"
 	SRC_URI="
 		mirror://githubcl/meganz/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -31,7 +31,7 @@ SLOT="0"
 IUSE="dolphin mediainfo nautilus thunar"
 
 RDEPEND="
-	net-misc/meganz-sdk[libuv,mediainfo?,qt,sodium(+),sqlite]
+	net-misc/meganz-sdk:=[libuv,mediainfo?,qt,sodium(+),sqlite]
 	dev-qt/qtsvg:5
 	dev-qt/qtdbus:5
 	dolphin? ( kde-apps/dolphin )
