@@ -1,15 +1,15 @@
 --- a/Lib/glyphsLib/builder/masters.py
 +++ b/Lib/glyphsLib/builder/masters.py
-@@ -66,12 +66,15 @@ def to_ufo_master_attributes(self, source, master):
+@@ -64,12 +64,15 @@ def to_ufo_master_attributes(self, source, master):
          if custom_value:
-             ufo.lib[GLYPHS_PREFIX + 'customValue' + number] = custom_value
+             ufo.lib[GLYPHS_PREFIX + "customValue" + number] = custom_value
  
 -    if font_uses_new_axes(self.font):
 +    if not self.minimize_glyphs_diffs or font_uses_new_axes(self.font):
          # Set the OS/2 weightClass and widthClas according the this master's
          # user location ("Axis Location" parameter)
          for axis in get_axis_definitions(self.font):
-             if axis.tag in ('wght', 'wdth'):
+             if axis.tag in ("wght", "wdth"):
                  user_loc = axis.get_user_loc(master)
 +                if axis.tag == 'wdth' and 0 < user_loc <= 9:
 +                    from .axes import class_to_value
