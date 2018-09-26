@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -27,7 +27,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.29[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.30[${PYTHON_USEDEP}]
 	dev-python/cu2qu[${PYTHON_USEDEP}]
 	dev-python/glyphsLib[${PYTHON_USEDEP}]
 	dev-python/ufo2ft[${PYTHON_USEDEP}]
@@ -39,7 +39,7 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	dev-python/setuptools[${PYTHON_USEDEP}]
+	dev-python/setuptools_scm[${PYTHON_USEDEP}]
 	test? (
 		media-gfx/fontdiff
 		dev-python/mock[${PYTHON_USEDEP}]
@@ -47,6 +47,7 @@ DEPEND="
 "
 
 python_prepare_all() {
+	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
 	distutils-r1_python_prepare_all
 	has test $FEATURES || return
 	sed \
