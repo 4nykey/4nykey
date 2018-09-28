@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -10,7 +10,7 @@ if [[ ${PV} == *9999* ]]; then
 	MY_G="${P}/.gnulib"
 else
 	inherit vcs-snapshot
-	MY_G="gnulib-c2cb55b"
+	MY_G="gnulib-68df637"
 	MY_PV="7fa4bca"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
