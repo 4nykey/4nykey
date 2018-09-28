@@ -34,6 +34,7 @@ RDEPEND="
 	net-misc/meganz-sdk:=[libuv,qt,sodium(+),sqlite]
 	dev-qt/qtsvg:5
 	dev-qt/qtdbus:5
+	dev-qt/qtconcurrent:5
 	dolphin? ( kde-apps/dolphin )
 	nautilus? ( >=gnome-base/nautilus-3 )
 	thunar? ( xfce-base/thunar )
