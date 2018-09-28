@@ -1,11 +1,11 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE="threads(+)"
-inherit eutils python-single-r1 waf-utils multilib-minimal linux-info
+inherit python-single-r1 waf-utils multilib-minimal linux-info
 if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/jackaudio/jack2.git"
@@ -16,7 +16,6 @@ else
 	[[ -z ${PV%%*_p*} ]] && MY_PV="2d1d323"
 	SRC_URI="
 		mirror://githubcl/jackaudio/jack2/tar.gz/${MY_PV} -> ${P}.tar.gz
-		https://github.com/jackaudio/jack2/commit/f7bccdc.patch
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -27,7 +26,7 @@ HOMEPAGE="http://www.jackaudio.org"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="alsa celt classic dbus debug apidocs +examples libsamplerate opus pam readline sndfile"
+IUSE="alsa classic dbus debug apidocs +examples libsamplerate opus pam readline sndfile"
 
 REQUIRED_USE="
 	|| ( classic dbus )
@@ -36,7 +35,6 @@ REQUIRED_USE="
 
 DEPEND="
 	${PYTHON_DEPS}
-	celt? ( media-libs/celt:0[${MULTILIB_USEDEP}] )
 	opus? ( media-libs/opus[${MULTILIB_USEDEP},custom-modes] )
 	alsa? ( media-libs/alsa-lib[${MULTILIB_USEDEP}] )
 	dbus? (
@@ -73,7 +71,6 @@ src_prepare() {
 		-e '/example-clients/s:bld\.recurse:print:' \
 		-i wscript
 	default
-	[[ ${PV} = *9999* ]] || eapply "${DISTDIR}"/f7bccdc.patch
 	multilib_copy_sources
 }
 
@@ -85,11 +82,10 @@ multilib_src_configure() {
 		$(usex debug --debug "")
 		--doxygen=$(multilib_native_usex apidocs)
 		--alsa=$(usex alsa)
-		--celt=$(usex celt)
 		--opus=$(usex opus)
-		--samplerate=$(usex libsamplerate)
-		--sndfile=$(usex sndfile)
-		--readline=$(usex readline)
+		--readline=$(multilib_native_usex readline yes no)
+		--samplerate=$(multilib_native_usex libsamplerate yes no)
+		--sndfile=$(multilib_native_usex sndfile yes no)
 	)
 
 	WAF_BINARY="${BUILD_DIR}/waf" \

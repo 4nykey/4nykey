@@ -7,6 +7,5 @@
 	<use>
 		<flag name="opus">Build Opus netjack2</flag>
 		<flag name="classic">Force enable standard JACK (jackd) even if D-Bus JACK (jackdbus) is enabled too</flag>
-		<flag name="celt">Support CELT low delay audio codec (media-libs/celt)</flag>
 	</use>
 </pkgmetadata>
