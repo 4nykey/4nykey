@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -18,7 +18,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_CRL="crl-4291015"
-	MY_TGV="libtgvoip-6053cf5"
+	MY_TGV="libtgvoip-9b292fd"
 	MY_VAR="variant-550ac2f"
 	MY_XXH="xxHash-7cc9639"
 	MY_CAT="Catch2-5ca44b6"
