@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -13,7 +13,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI=
 else
 	inherit vcs-snapshot
-	MY_PV="eea22a0"
+	MY_PV="94f4884"
 	SRC_URI="
 		mirror://githubcl/meganz/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -28,16 +28,15 @@ HOMEPAGE="https://github.com/meganz/MEGAsync"
 LICENSE="EULA"
 LICENSE_URL="https://raw.githubusercontent.com/meganz/MEGAsync/master/LICENCE.md"
 SLOT="0"
-IUSE="dolphin mediainfo nautilus thunar"
+IUSE="dolphin nautilus thunar"
 
 RDEPEND="
-	net-misc/meganz-sdk:=[libuv,mediainfo?,qt,sodium(+),sqlite]
+	net-misc/meganz-sdk:=[libuv,qt,sodium(+),sqlite]
 	dev-qt/qtsvg:5
 	dev-qt/qtdbus:5
 	dolphin? ( kde-apps/dolphin )
 	nautilus? ( >=gnome-base/nautilus-3 )
 	thunar? ( xfce-base/thunar )
-	mediainfo? ( media-libs/libmediainfo )
 "
 DEPEND="
 	${RDEPEND}
@@ -51,7 +50,8 @@ src_prepare() {
 	cmake-utils_src_prepare
 	mv -f src/MEGAShellExtDolphin/CMakeLists{_kde5,}.txt
 	rm -f src/MEGAShellExtDolphin/megasync-plugin.moc
-	use mediainfo || sed -e '/CONFIG += USE_MEDIAINFO/d' \
+	sed \
+		-e "/USE_\(FFMPEG\|LIBRAW\|MEDIAINFO\)/s:+:-:" \
 		-i src/MEGASync/MEGASync.pro
 }
 

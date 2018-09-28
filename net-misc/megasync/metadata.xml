@@ -6,7 +6,6 @@
 	</maintainer>
 	<use>
 		<flag name="dolphin">Install the kde-apps/dolphin extension</flag>
-		<flag name="mediainfo">Use media-libs/libmediainfo for media files</flag>
 		<flag name="nautilus">Install the gnome-base/nautilus extension</flag>
 		<flag name="thunar">Install the xfce-base/thunar extension</flag>
 	</use>
