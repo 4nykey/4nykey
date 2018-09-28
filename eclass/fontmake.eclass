@@ -36,7 +36,7 @@ inherit python-any-r1 font-r1
 
 EXPORT_FUNCTIONS pkg_setup src_prepare src_compile
 
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-7be4d0f"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-fa4ddfa"
 SRC_URI+="
 !binary? (
 	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
@@ -52,7 +52,6 @@ DEPEND="
 		dev-util/fontmake[${PYTHON_USEDEP}]
 	')
 	autohint? ( media-gfx/ttfautohint )
-	sys-apps/rename
 )
 "
 
@@ -72,17 +71,19 @@ fontmake_src_prepare() {
 	default
 	use binary && return
 	unpack ${MY_MK}.tar.gz
-	find -name '* *.glyphs' -execdir renamexm -s'/ //g' {} +
+	local _g
+	find "${FONT_SRCDIR}" -name '* *.glyphs' -o -name '* *.designspace'| \
+		while read _g; do mv "${_g}" "${_g// }"; done
 }
 
 fontmake_src_compile() {
 	use binary && return
 
 	local myemakeargs=(
-		"${EMAKE_EXTRA_ARGS[@]}"
 		--no-builtin-rules
 		-f ${MY_MK}/Makefile
 		SRCDIR="${FONT_SRCDIR}"
+		"${EMAKE_EXTRA_ARGS[@]}"
 		$(in_iuse interpolate && usex interpolate '' 'INTERPOLATE=')
 		$(in_iuse clean-as-you-go && usex clean-as-you-go 'CLEAN=clean' '')
 	)
