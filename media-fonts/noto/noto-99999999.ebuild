@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -12,11 +12,13 @@ IUSE="+binary cjk emoji pipeline"
 
 DEPEND=""
 RDEPEND="
-	media-fonts/noto-fonts
-	cjk? ( media-fonts/noto-cjk )
-	emoji? ( media-fonts/noto-emoji )
+	!pipeline? (
+		media-fonts/noto-fonts
+	)
 	pipeline? (
 		binary? ( media-fonts/noto-fonts-alpha )
 		!binary? ( media-fonts/noto-source )
 	)
+	cjk? ( media-fonts/noto-cjk )
+	emoji? ( media-fonts/noto-emoji )
 "

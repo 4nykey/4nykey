@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -7,7 +7,7 @@ FONTDIR_BIN=( fonts/TTF )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}.git"
-	EGIT_REPO_URI="https://github.com/alexeiva/${PN}.git"
+	EGIT_REPO_URI="https://github.com/alexeiva/${PN^}Font.git"
 else
 	inherit vcs-snapshot
 	MY_PV="3437281"

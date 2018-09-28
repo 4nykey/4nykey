@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -23,5 +23,8 @@ SLOT="0"
 
 src_prepare() {
 	fontmake_src_prepare
-	sed -e 's:\\\\::g' -i FiraCode.glyphs || die
+	sed \
+		-e 's:\\\\::g' \
+		-e '/^name = /s:\<_\(topleft\|center\|bottomleft\|bottomright\)\>:\1:' \
+		-i FiraCode.glyphs || die
 }

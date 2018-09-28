@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -18,7 +18,7 @@ fi
 inherit fontmake
 MY_PV="${PV%.9999}"
 MY_PV="${MY_PV%_p*}"
-MY_F="28cef3ca070463212a1be193bcac29b8-09ea32e"
+MY_F="28cef3ca070463212a1be193bcac29b8-66c4288"
 SRC_URI+="
 !binary? (
 	mirror://githubcl/gist/${MY_F%-*}/tar.gz/${MY_F#*-}
@@ -32,7 +32,7 @@ HOMEPAGE="https://carrois.com/typefaces/FiraSans"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="clean-as-you-go doc interpolate"
+IUSE="clean-as-you-go doc +interpolate"
 
 DEPEND="
 	!binary? ( app-arch/unzip )

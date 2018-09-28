@@ -6,20 +6,20 @@ EAPI=6
 EMAKE_EXTRA_ARGS=( INTERPOLATE= )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/googlefonts/${PN}.git"
+	EGIT_REPO_URI="https://github.com/solmatas/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="df06a15"
+	MY_PV="34686a6"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v.${PV}"
 	SRC_URI="
-		mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/solmatas/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit fontmake
 
-DESCRIPTION="A modern style font, specifically designed for small sizes"
-HOMEPAGE="https://github.com/googlefonts/${PN}"
+DESCRIPTION="A contemporary slab serif typeface for text"
+HOMEPAGE="https://huertatipografica.com/en/fonts/bitter-ht"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-PATCHES=( ${FILESDIR}/${PN}-anchors.diff )

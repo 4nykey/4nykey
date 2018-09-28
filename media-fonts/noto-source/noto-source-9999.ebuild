@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}"
 else
 	inherit vcs-snapshot
-	MY_PV="a63833f"
+	MY_PV="d1ed5b6"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -24,7 +24,7 @@ HOMEPAGE="https://github.com/googlei18n/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="clean-as-you-go interpolate"
+IUSE="clean-as-you-go +interpolate"
 
 src_prepare() {
 	sed -e 's:\(name = \)_\(ogonek;\):\1\2:' -i src/NotoSansMono-MM.glyphs

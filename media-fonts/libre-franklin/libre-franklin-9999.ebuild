@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -25,9 +25,10 @@ LICENSE="OFL-1.1"
 SLOT="0"
 
 src_prepare() {
-	local PATCHES=(
-		"${FILESDIR}"/${PN}_sterling.diff
-	)
+	if use !binary; then
+		eapply "${FILESDIR}"/${PN}_sterling.diff
+		rm -rf sources/'For GX fonts'
+		mv -f sources/'For Single Fonts'/*.glyphs sources
+	fi
 	fontmake_src_prepare
-	mv -f sources/'For Single Fonts'/*.glyphs sources
 }

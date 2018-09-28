@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -11,7 +11,7 @@ else
 	inherit vcs-snapshot
 	MY_PV="phase3-second-cleanup"
 	MY_PV="v${PV//./-}-${MY_PV}"
-	[[ -z ${PV%%*_p*} ]] && MY_PV="449470a"
+	[[ -z ${PV%%*_p*} ]] && MY_PV="9176dad"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz

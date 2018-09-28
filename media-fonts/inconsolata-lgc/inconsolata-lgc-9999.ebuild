@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -6,6 +6,7 @@ EAPI=6
 MY_PN="Inconsolata-LGC"
 EMAKE_EXTRA_ARGS=(
 	glyphs=InconsolataLGCT.glyphs
+	INTERPOLATE=
 )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -39,7 +40,6 @@ HOMEPAGE="https://github.com/MihailJP/${MY_PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="interpolate"
 
 pkg_setup() {
 	if use binary; then
