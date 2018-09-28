@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/${PN%-*}/${PN#*-}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="b72f462"
+	MY_PV="f3a3b81"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/${PN%-*}/${PN#*-}/tar.gz/${MY_PV}
@@ -23,8 +23,9 @@ DESCRIPTION="MEGA C++ SDK"
 HOMEPAGE="https://github.com/meganz/sdk"
 
 LICENSE="BSD-2"
-SLOT="0"
-IUSE="examples freeimage fuse hardened inotify libuv mediainfo qt +sqlite"
+# grep 'define' include/mega/version.h|awk '{print $3}'|awk 'BEGIN{RS="";FS="\n"}{printf $1*10000+$2*100+$3}'
+SLOT="0/30401"
+IUSE="examples ffmpeg freeimage fuse hardened inotify libuv mediainfo qt raw +sqlite"
 REQUIRED_USE="
 	examples? ( sqlite )
 	fuse? ( examples )
@@ -47,6 +48,8 @@ DEPEND="
 	libuv? ( dev-libs/libuv )
 	dev-libs/libsodium
 	mediainfo? ( media-libs/libmediainfo )
+	ffmpeg? ( virtual/ffmpeg )
+	raw? ( media-libs/libraw )
 "
 RDEPEND="
 	${DEPEND}
@@ -61,7 +64,8 @@ src_prepare() {
 	use qt && sed \
 		-e '/SOURCES += src\// s:+:-:' \
 		-e '/!exists.*config.h/ s:!::' \
-		-e 's:-lsqlite3 -lrt:-lmega &:' \
+		-e 's:CONFIG(USE_MEGAAPI) {:&\nLIBS += -lmega:' \
+		-e '/^unix:!macx {/,/^}/d' \
 		-i bindings/qt/sdk.pri
 	eautoreconf
 }
@@ -78,6 +82,8 @@ src_configure() {
 		$(use_with freeimage)
 		$(use_with fuse)
 		$(use_with mediainfo libmediainfo)
+		$(use_with ffmpeg)
+		$(use_with raw libraw)
 	)
 	econf "${myeconfargs[@]}"
 }
