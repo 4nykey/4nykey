@@ -6,6 +6,7 @@ app-arch/wimlib:fuse - Support mounting WIMs via sys-fs/fuse
 app-arch/wimlib:ntfs - Support direct manipulation on a NTFS volume via sys-fs/ntfs3g
 app-arch/wimlib:openssl - Use SHA-1 implementation from libcrypto (dev-libs/openssl)
 app-arch/wimlib:yasm - Prefer dev-lang/yasm over dev-lang/nasm
+app-crypt/digidoc4-client:nautilus - Install gnome-base/nautilus extension
 app-crypt/qdigidoc:nautilus - Build gnome-base/nautilus extension
 app-text/fbpdf:mupdf - Use app-text/mupdf for rendering
 app-text/fbpdf:poppler - Use app-text/poppler for rendering
@@ -30,8 +31,6 @@ dev-qt/aseman-qt-tools:webengine - Pull in dev-qt/qtwebengine
 dev-qt/aseman-qt-tools:widgets - Pull in dev-qt/qtwidgets
 dev-util/ots:graphite - Sanitize Graphite tables
 dev-util/ots:variations - Sanitize OpenType Variation tables
-media-fonts/amaticsc:interpolate - Interpolate sources
-media-fonts/caveat:interpolate - Interpolate sources
 media-fonts/fira:clean-as-you-go - Clean intermediate ufos after they were built (useful when PORTAGE_TMPDIR resides on a tmpfs)
 media-fonts/fira:interpolate - Interpolate to get more font weights (significantly increases build time and diskspace requirements)
 media-fonts/iosevka:font_variants_cc - A variant with several symbols enwiden to be compatible with most CJK typefaces
@@ -96,7 +95,6 @@ media-sound/deadbeef:wma - Add support for decoding Windows Media Audio files
 media-sound/deadbeef:zip - Build vfs_zip plugin
 media-sound/flactag:gcrypt - Use libgcrypt for low-level crypto
 media-sound/flactag:scripts - Install additional scripts to /usr/bin
-media-sound/jack-audio-connection-kit:celt - Support CELT low delay audio codec (media-libs/celt)
 media-sound/jack-audio-connection-kit:classic - Force enable standard JACK (jackd) even if D-Bus JACK (jackdbus) is enabled too
 media-sound/jack-audio-connection-kit:opus - Build Opus netjack2
 media-sound/picard:acoustid - Use media-libs/chromaprint for acoustic fingerprinting
@@ -109,7 +107,6 @@ net-misc/meganz-sdk:libuv - Support asynchronous I/O via dev-libs/libuv
 net-misc/meganz-sdk:mediainfo - Use media-libs/libmediainfo for media files
 net-misc/meganz-sdk:qt - Install QT bindings
 net-misc/megasync:dolphin - Install the kde-apps/dolphin extension
-net-misc/megasync:mediainfo - Use media-libs/libmediainfo for media files
 net-misc/megasync:nautilus - Install the gnome-base/nautilus extension
 net-misc/megasync:thunar - Install the xfce-base/thunar extension
 sys-block/f3:extras - Compile the extra applications
@@ -118,13 +115,8 @@ www-client/midori:zeitgeist - Add support for Zeitgeist event tracking system
 www-client/torbrowser:custom-optimization - Fine-tune custom compiler optimizations (-Os, -O0, -O1, -O2, -O3)
 www-client/torbrowser:eme-free - Disable EME (DRM plugin) cabability at build time
 www-client/torbrowser:gmp-autoupdate - Allow Gecko Media Plugins (binary blobs) to be automatically downloaded and kept up-to-date in user profiles
-www-client/torbrowser:gtk2 - Use the cairo-gtk2 rendering engine
 www-client/torbrowser:hwaccel - Use hardware-accelerated rendering
-www-client/torbrowser:jemalloc - Enable or disable jemalloc
-www-client/torbrowser:pgo - Add support for profile-guided optimization using gcc-4.5, for faster binaries. This option will double the compile time.
-www-client/torbrowser:rust - Enable support for using rust compiler (experimental)
 www-client/torbrowser:screenshot - Allow to disable screenshot extension in global profile
-www-client/torbrowser:system-cairo - Use the system-wide x11-libs/cairo instead of bundled.
 www-client/torbrowser:system-harfbuzz - Use the system-wide media-libs/harfbuzz and media-gfx/graphite2 instead of bundled.
 www-client/torbrowser:system-icu - Use the system-wide dev-libs/icu instead of bundled.
 www-client/torbrowser:system-jpeg - Use the system-wide media-libs/libjpeg-turbo instead of bundled.
