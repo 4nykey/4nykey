@@ -1,8 +1,11 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 WANT_AUTOCONF="2.1"
+
+PYTHON_COMPAT=( python3_{5,6,7} )
+PYTHON_REQ_USE='ncurses,sqlite,ssl,threads'
 MOZCONFIG_OPTIONAL_WIFI=1
 
 inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils llvm \
@@ -35,7 +38,7 @@ LICENSE="BSD CC-BY-3.0 MPL-2.0 GPL-2 LGPL-2.1"
 IUSE="eme-free +gmp-autoupdate hardened hwaccel jack -screenshot selinux test"
 
 SRC_URI="https://dist.torproject.org/${PN}/${TOR_PV}"
-PATCH="firefox-${PV%%.*}.0-patches-02"
+PATCH="firefox-${PV%%.*}.0-patches-03"
 PATCH=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c}/mozilla/patchsets/${PATCH}.tar.xz )
 SRC_URI="
 	https://gitweb.torproject.org/tor-browser.git/snapshot/${GIT_TAG}.tar.gz
@@ -115,6 +118,8 @@ src_prepare() {
 		"${WORKDIR}"/firefox
 		"${FILESDIR}"/${PN}-profiledir.patch
 		"${FILESDIR}"/${PN}-lto.patch
+		"${FILESDIR}"/firefox-60.0-missing-errno_h-in-SandboxOpenedFiles_cpp.patch
+		"${FILESDIR}"/firefox-60.0-rust-1.29-comp.patch
 	)
 
 	rm -f \
@@ -166,6 +171,14 @@ src_prepare() {
 src_configure() {
 	MEXTENSIONS="default"
 
+	# Add information about TERM to output (build.log) to aid debugging
+	# blessings problems
+	if [[ -n "${TERM}" ]] ; then
+		einfo "TERM is set to: \"${TERM}\""
+	else
+		einfo "TERM is unset."
+	fi
+
 	####################################
 	#
 	# mozconfig, CFLAGS and CXXFLAGS setup
@@ -187,14 +200,20 @@ src_configure() {
 		mozconfig_use_enable hardened hardening
 	fi
 
-	# Only available on mozilla-overlay for experimentation -- Removed in Gentoo repo per bug 571180
-	#use egl && mozconfig_annotate 'Enable EGL as GL provider' --with-gl-provider=EGL
+	# Disable built-in ccache support to avoid sandbox violation, #665420
+	# Use FEATURES=ccache instead!
+	mozconfig_annotate '' --without-ccache
+	sed -i -e 's/ccache_stats = None/return None/' \
+		python/mozbuild/mozbuild/controller/building.py || \
+		die "Failed to disable ccache stats call"
 
 	mozconfig_annotate '' --enable-extensions="${MEXTENSIONS}"
 
 	echo "mk_add_options MOZ_OBJDIR=${BUILD_OBJ_DIR}" >> "${S}"/.mozconfig
 	echo "mk_add_options XARGS=/usr/bin/xargs" >> "${S}"/.mozconfig
 
+	# Default mozilla_five_home no longer valid option
+	sed '/with-default-mozilla-five-home=/d' -i "${S}"/.mozconfig
 	# Rename the install directory and the executable
 	mozconfig_annotate 'torbrowser' --libdir="${EPREFIX}"/usr/$(get_libdir)/${PN}
 	mozconfig_annotate 'torbrowser' --with-app-name=${PN}
@@ -323,9 +342,8 @@ pkg_postinst() {
 	elog "Torbrowser uses port 9150 to connect to Tor. You can change the port"
 	elog "in the connection settings to match your setup."
 
-	# Update mimedb for the new .desktop file
-	xdg_desktop_database_update
 	gnome2_icon_cache_update
+	xdg_desktop_database_update
 
 	if ! use gmp-autoupdate && ! use eme-free ; then
 		elog "USE='-gmp-autoupdate' has disabled the following plugins from updating or"
@@ -345,4 +363,5 @@ pkg_postinst() {
 
 pkg_postrm() {
 	gnome2_icon_cache_update
+	xdg_desktop_database_update
 }
