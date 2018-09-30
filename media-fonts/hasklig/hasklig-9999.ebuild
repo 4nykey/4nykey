@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -24,7 +24,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit python-any-r1 font-r1
-MY_MK="3c71e576827753fc395f44f4c2d91131-06446b4"
+MY_MK="3c71e576827753fc395f44f4c2d91131-6eee6fa"
 SRC_URI+="
 	!binary? (
 		mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
