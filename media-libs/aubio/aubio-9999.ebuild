@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -16,12 +16,11 @@ else
 	inherit vcs-snapshot
 	SRC_URI="
 		mirror://githubcl/${PN}/${PN}/tar.gz/${PV} -> ${P}.tar.gz
-		https://github.com/${PN}/${PN}/commit/5690daf.patch
 	"
 	KEYWORDS="~amd64 ~x86"
 fi
 #scripts/get_waf.sh
-MY_WAF="waf-2.0.1"
+MY_WAF="waf-2.0.11"
 SRC_URI="${SRC_URI} https://waf.io/${MY_WAF}"
 RESTRICT="primaryuri"
 
@@ -68,7 +67,6 @@ src_prepare() {
 		-e '/bld\.path\.find_dir/ s:doc/web:&/html:' \
 		-i wscript
 	install "${DISTDIR}"/${MY_WAF} "${S}"/waf
-	[[ -n ${PV%%*9999} ]] && eapply "${DISTDIR}"/5690daf.patch
 }
 
 src_configure() {
