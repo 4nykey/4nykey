@@ -1,1 +1,0 @@
-TelegramQML-9999.ebuild

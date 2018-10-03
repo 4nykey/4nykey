@@ -1,1 +1,0 @@
-libqtelegram-code-generator-9999.ebuild
