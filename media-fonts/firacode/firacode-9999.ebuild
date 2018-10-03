@@ -4,6 +4,7 @@
 EAPI=6
 
 FONTDIR_BIN=( distr/{o,t}tf )
+FONT_SRCDIR=.
 EMAKE_EXTRA_ARGS=( glyphs='FiraCode.glyphs' )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -20,11 +21,3 @@ HOMEPAGE="https://github.com/tonsky/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-
-src_prepare() {
-	fontmake_src_prepare
-	sed \
-		-e 's:\\\\::g' \
-		-e '/^name = /s:\<_\(topleft\|center\|bottomleft\|bottomright\)\>:\1:' \
-		-i FiraCode.glyphs || die
-}
