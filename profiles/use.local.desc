@@ -23,12 +23,6 @@ dev-python/fonttools:scipy - Support finding wrong contour/component order betwe
 dev-python/fonttools:sympy - Support for symbolic font statistics analysis
 dev-python/fonttools:zopfli - Enable zopfli compression support for WOFF web fonts
 dev-python/pyclipper:cython - Generate cpp sources with dev-python/cython
-dev-qt/aseman-qt-tools:keychain - Pull in dev-libs/qtkeychain
-dev-qt/aseman-qt-tools:multimedia - Pull in dev-qt/qtmultimedia
-dev-qt/aseman-qt-tools:positioning - Pull in dev-qt/qtpositioning
-dev-qt/aseman-qt-tools:sensors - Pull in dev-qt/qtsensors
-dev-qt/aseman-qt-tools:webengine - Pull in dev-qt/qtwebengine
-dev-qt/aseman-qt-tools:widgets - Pull in dev-qt/qtwidgets
 dev-util/ots:graphite - Sanitize Graphite tables
 dev-util/ots:variations - Sanitize OpenType Variation tables
 media-fonts/fira:clean-as-you-go - Clean intermediate ufos after they were built (useful when PORTAGE_TMPDIR resides on a tmpfs)
@@ -71,7 +65,6 @@ media-gfx/gmic:krita - Build a plugin for krita
 media-gfx/gmic:opencv - Enable support for webcams using the OpenCV library
 media-gfx/natron:c++11 - Build using the C++11 standard
 media-gfx/natron:gmic - Install openfx-gmic
-media-libs/aubio:double-precision - Compile in double precision mode.
 media-sound/ardour:bundled-libs - Use bundled libs instead of system installed
 media-sound/ardour:c++0x - Compile using the C++11 standard
 media-sound/ardour:hid - Add support for dev-libs/hidapi
@@ -112,6 +105,7 @@ net-misc/megasync:thunar - Install the xfce-base/thunar extension
 sys-block/f3:extras - Compile the extra applications
 www-client/midori:granite - Enable support for the elementary library dev-libs/granite
 www-client/midori:zeitgeist - Add support for Zeitgeist event tracking system
+www-client/torbrowser:clang - Use Clang compiler instead of GCC
 www-client/torbrowser:custom-optimization - Fine-tune custom compiler optimizations (-Os, -O0, -O1, -O2, -O3)
 www-client/torbrowser:eme-free - Disable EME (DRM plugin) cabability at build time
 www-client/torbrowser:gmp-autoupdate - Allow Gecko Media Plugins (binary blobs) to be automatically downloaded and kept up-to-date in user profiles
