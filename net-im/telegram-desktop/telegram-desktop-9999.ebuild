@@ -17,12 +17,12 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 else
 	inherit vcs-snapshot
+	MY_CAT="Catch2-5ca44b6"
 	MY_CRL="crl-4291015"
 	MY_TGV="libtgvoip-9b292fd"
 	MY_VAR="variant-550ac2f"
 	MY_XXH="xxHash-7cc9639"
-	MY_CAT="Catch2-5ca44b6"
-	MY_DEB="${PN}_1.3.14-1.debian"
+	MY_DEB="${PN}_1.4.0-1.debian"
 	SRC_URI="
 		mirror://githubcl/telegramdesktop/${MY_PN}/tar.gz/v${PV} -> ${P}.tar.gz
 		mirror://debian/pool/main/t/${PN}/${MY_DEB}.tar.xz
@@ -208,12 +208,6 @@ src_prepare() {
 	cmake-utils_src_prepare
 
 	cat debian/CMakeLists.inj >> ${CMAKE_USE_DIR}/CMakeLists.txt
-
-	# until debian 1.3.15+ patches are there
-	printf '
-	add_precompiled_header(lib_base ../../Telegram/SourceFiles/base/base_pch.h)
-	add_precompiled_header(lib_storage ../../Telegram/SourceFiles/storage/storage_pch.h)
-	' >> ${CMAKE_USE_DIR}/CMakeLists.txt
 }
 
 src_install() {
