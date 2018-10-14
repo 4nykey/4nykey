@@ -10,15 +10,12 @@ inherit python-any-r1 toolchain-funcs desktop xdg gnome2-utils cmake-utils
 if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/telegramdesktop/${MY_PN}.git"
 	EGIT_BRANCH="dev"
-	EGIT_SUBMODULES=(
-		'*'
-		-Telegram/ThirdParty/GSL
-	)
 	inherit git-r3
 else
 	inherit vcs-snapshot
 	MY_CAT="Catch2-5ca44b6"
 	MY_CRL="crl-4291015"
+	MY_GSL="GSL-d846fe5"
 	MY_TGV="libtgvoip-9b292fd"
 	MY_VAR="variant-550ac2f"
 	MY_XXH="xxHash-7cc9639"
@@ -28,6 +25,8 @@ else
 		mirror://debian/pool/main/t/${PN}/${MY_DEB}.tar.xz
 		mirror://githubcl/telegramdesktop/${MY_CRL%-*}/tar.gz/${MY_CRL##*-}
 		-> ${MY_CRL}.tar.gz
+		mirror://githubcl/Microsoft/${MY_GSL%-*}/tar.gz/${MY_GSL##*-}
+		-> ${MY_GSL}.tar.gz
 		mirror://githubcl/telegramdesktop/${MY_TGV%-*}/tar.gz/${MY_TGV##*-}
 		-> ${MY_TGV}.tar.gz
 		mirror://githubcl/mapbox/${MY_VAR%-*}/tar.gz/${MY_VAR##*-}
@@ -75,7 +74,6 @@ DEPEND="
 	virtual/pkgconfig
 	x11-libs/libxkbcommon[static-libs]
 	dev-cpp/range-v3
-	dev-cpp/ms-gsl
 "
 RDEPEND="
 	${RDEPEND}
@@ -98,6 +96,7 @@ src_unpack() {
 	else
 		vcs-snapshot_src_unpack
 		mv ${MY_CRL}/* "${S}"/Telegram/ThirdParty/crl/
+		mv ${MY_GSL}/* "${S}"/Telegram/ThirdParty/GSL/
 		mv ${MY_TGV}/* "${S}"/Telegram/ThirdParty/libtgvoip/
 		mv ${MY_VAR}/* "${S}"/Telegram/ThirdParty/variant/
 		mv ${MY_XXH}/* "${S}"/Telegram/ThirdParty/xxHash/
@@ -129,7 +128,6 @@ src_prepare() {
 	local _f=(
 		$(${_p} --cflags ${_l[@]})
 		-I"${EROOT}"usr/include/range/v3
-		-I"${EROOT}"usr/include/gsl
 	)
 	local _d=(
 		TDESKTOP_DISABLE_UNITY_INTEGRATION
