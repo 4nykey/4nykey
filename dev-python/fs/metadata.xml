@@ -4,9 +4,4 @@
 	<maintainer type="person">
 		<email>4nykey@gmail.com</email>
 	</maintainer>
-	<use>
-		<flag name="cython">
-			Use cython to build an (optional) optimized extension module
-		</flag>
-	</use>
 </pkgmetadata>

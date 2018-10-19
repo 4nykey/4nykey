@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -24,7 +24,7 @@ HOMEPAGE="https://github.com/googlei18n/${PN}"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE="test"
+IUSE="cython test"
 
 RDEPEND="
 	>=dev-python/fonttools-3.18[${PYTHON_USEDEP}]
@@ -33,12 +33,25 @@ DEPEND="
 	${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
+	cython? ( >=dev-python/cython-0.28.4[${PYTHON_USEDEP}] )
 	test? (
 		dev-python/pytest-runner[${PYTHON_USEDEP}]
 		dev-python/coverage[${PYTHON_USEDEP}]
 		dev-python/ufoLib[${PYTHON_USEDEP}]
 	)
 "
+
+python_prepare_all() {
+	sed \
+		-e '/__version__/s:\.5:.4:' \
+		-i "${S}"/Lib/cu2qu/cython.py
+	distutils-r1_python_prepare_all
+}
+
+pkg_setup() {
+	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
+	export CU2QU_WITH_CYTHON=$(usex cython)
+}
 
 python_test() {
 	esetup.py test
