@@ -14,8 +14,8 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_CAT="Catch2-5ca44b6"
-	MY_CRL="crl-4291015"
 	MY_GSL="GSL-d846fe5"
+	MY_CRL="crl-4291015"
 	MY_TGV="libtgvoip-9b292fd"
 	MY_VAR="variant-550ac2f"
 	MY_XXH="xxHash-7cc9639"
@@ -79,11 +79,6 @@ RDEPEND="
 	${RDEPEND}
 	media-fonts/open-sans
 "
-
-pkg_setup() {
-	python-any-r1_pkg_setup
-	use test || EGIT_SUBMODULES+=( -Telegram/ThirdParty/Catch )
-}
 
 src_unpack() {
 	if [[ -z ${PV%%*9999} ]]; then
