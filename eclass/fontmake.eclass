@@ -36,7 +36,7 @@ inherit python-any-r1 font-r1
 
 EXPORT_FUNCTIONS pkg_setup src_prepare src_compile
 
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-fa4ddfa"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-7f9cf67"
 SRC_URI+="
 !binary? (
 	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
