@@ -118,8 +118,8 @@ src_prepare() {
 		"${WORKDIR}"/firefox
 		"${FILESDIR}"/${PN}-profiledir.patch
 		"${FILESDIR}"/${PN}-lto.patch
+		"${FILESDIR}"/bug_1461221.patch
 		"${FILESDIR}"/firefox-60.0-missing-errno_h-in-SandboxOpenedFiles_cpp.patch
-		"${FILESDIR}"/firefox-60.0-rust-1.29-comp.patch
 	)
 
 	rm -f \
