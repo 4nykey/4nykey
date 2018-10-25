@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -11,8 +11,8 @@ else
 	MY_PV="${PV^^}"
 	MY_PV="v${MY_PV/_/-}"
 	[[ -z ${PV%%*_p*} ]] && MY_PV="a4da0d3"
-	MY_QC="qt-common-096c451"
-	MY_EX="digidoc-extensions-79a7ba4"
+	MY_QC="qt-common-6f959df"
+	MY_EX="digidoc-extensions-aa75281"
 	SRC_URI="${SRC_URI}
 		mirror://githubcl/open-eid/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://githubcl/open-eid/${MY_QC%-*}/tar.gz/${MY_QC##*-} -> ${MY_QC}.tar.gz
@@ -33,13 +33,15 @@ IUSE="nautilus"
 DEPEND="
 	dev-libs/libdigidocpp
 	sys-apps/pcsc-lite
-	dev-libs/opensc
+	net-nds/openldap
+	dev-libs/openssl
 	dev-qt/qtwidgets:5
 	dev-qt/qtprintsupport:5
 	dev-qt/qtsvg:5
 "
 RDEPEND="
 	${DEPEND}
+	dev-libs/opensc[pcsc-lite]
 	nautilus? ( gnome-base/nautilus )
 	!app-crypt/qdigidoc
 "
