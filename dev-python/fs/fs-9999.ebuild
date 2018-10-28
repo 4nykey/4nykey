@@ -15,8 +15,7 @@ else
 	MY_PV="627f997"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
-		mirror://githubcl/PyFilesystem/${MY_PN}/tar.gz/${MY_PV}
-		-> ${P}.tar.gz
+		mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
