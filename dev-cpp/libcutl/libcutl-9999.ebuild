@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -30,11 +30,7 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	>=dev-util/build2-0.7.0
-	|| (
-		>=sys-devel/gcc-4.7
-		>=sys-devel/clang-3.5
-	)
+	>=dev-util/build2-0.8.0
 "
 
 PATCHES=(
@@ -66,6 +62,12 @@ src_compile() {
 	set -- b --jobs $(makeopts_jobs) --verbose 3
 	echo "${@}"
 	"${@}" || die "b failed"
+}
+
+src_test() {
+	MAKE=b \
+	MAKEOPTS="--jobs $(makeopts_jobs)" \
+	emake test
 }
 
 src_install() {
