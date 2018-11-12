@@ -16,7 +16,7 @@ else
 	MY_CAT="Catch2-5ca44b6"
 	MY_GSL="GSL-d846fe5"
 	MY_CRL="crl-4291015"
-	MY_TGV="libtgvoip-9b292fd"
+	MY_TGV="libtgvoip-fb0a2b0"
 	MY_VAR="variant-550ac2f"
 	MY_XXH="xxHash-7cc9639"
 	MY_DEB="${PN}_1.4.0-1.debian"
@@ -80,6 +80,16 @@ RDEPEND="
 	media-fonts/open-sans
 "
 
+pkg_pretend() {
+	[[ -n ${TELEGRAM_API_ID} ]] && [[ -n ${TELEGRAM_API_HASH} ]] && return
+	ewarn "
+A sample API ID included with the code is limited on the server side.
+You can get your own key and provide it via TELEGRAM_API_ID and
+TELEGRAM_API_HASH environment variables.
+See https://core.telegram.org/api/obtaining_api_id
+"
+}
+
 src_unpack() {
 	if [[ -z ${PV%%*9999} ]]; then
 		git-r3_src_unpack
@@ -138,6 +148,8 @@ src_prepare() {
 		--generator-output=../..
 		-Gconfig=${CMAKE_USE_DIR##*/}
 		-Dofficial_build_target=
+		-Dapi_id=${TELEGRAM_API_ID:-17349}
+		-Dapi_hash=${TELEGRAM_API_HASH:-344583e45741c457fe1862106095a5eb}
 		-Duse_packed_resources=1
 		-Dnot_need_gtk="True"
 		-Dmy_cflags="${_f[*]}"
