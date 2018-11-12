@@ -48,9 +48,9 @@ src_prepare() {
 }
 
 myb() {
-	local _b="${1}"
-	shift
 	local myconfigargs=(
+		--jobs $(makeopts_jobs)
+		--verbose 2
 		config.c="$(tc-getCC)"
 		config.cxx="$(tc-getCXX)"
 		config.cc.coptions="${CFLAGS}"
@@ -64,9 +64,9 @@ myb() {
 		config.install.doc="data_root/share/doc/${PF}"
 	)
 
-	MAKE="${_b}" \
-	MAKEOPTS="--jobs $(makeopts_jobs) --verbose 2" \
-	emake "${@}" "${myconfigargs[@]}"
+	set -- "${@}" "${myconfigargs[@]}"
+	echo "${@}"
+	"${@}" || die "${@} failed"
 }
 
 src_compile() {
