@@ -1,0 +1,11 @@
+--- a/build2/build2/cc/module.cxx
++++ b/build2/build2/cc/module.cxx
+@@ -304,7 +304,7 @@ namespace build2
+       sys_lib_dirs_extra = lib_dirs.size ();
+       sys_inc_dirs_extra = inc_dirs.size ();
+ 
+-#ifndef _WIN32
++#if 0
+       // Add /usr/local/{include,lib}. We definitely shouldn't do this if we
+       // are cross-compiling. But even if the build and target are the same,
+       // it's possible the compiler uses some carefully crafted sysroot and by

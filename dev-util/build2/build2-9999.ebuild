@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -23,34 +23,35 @@ HOMEPAGE="https://build2.org"
 
 LICENSE="MIT"
 SLOT="0"
-IUSE=""
+IUSE="test"
 
 RDEPEND="
 	dev-db/sqlite:3
 "
 DEPEND="${RDEPEND}"
+PATCHES=(
+	"${FILESDIR}"/${PN}-nousrlocal.diff
+)
 
 src_prepare() {
 	local _pc="$(tc-getPKG_CONFIG)"
+
 	printf 'cxx.libs += %s\ncxx.poptions += %s\n' \
 		"$(${_pc} sqlite3 --libs)" "$(${_pc} sqlite3 --cflags)" >> \
 		libodb-sqlite/buildfile
+
 	sed \
 		-e 's:libsqlite3[/]\?::' \
 		-i buildfile build/bootstrap.build
 
-	sed \
-		-e '/-o build2\/b-boot/ s:"\$cxx" :&${CXXFLAGS} ${LDFLAGS} :' \
-		-i ${PN}/bootstrap.sh
-
 	default
 }
 
-src_compile() {
-	tc-is-gcc && export CCACHE_DISABLE=1
+myb() {
+	local _b="${1}"
+	shift
 	local myconfigargs=(
-		--jobs $(makeopts_jobs)
-		--verbose 3
+		config.c="$(tc-getCC)"
 		config.cxx="$(tc-getCXX)"
 		config.cc.coptions="${CFLAGS}"
 		config.cc.loptions="${LDFLAGS}"
@@ -63,24 +64,30 @@ src_compile() {
 		config.install.doc="data_root/share/doc/${PF}"
 	)
 
-	cd ${PN}
-	./bootstrap.sh $(tc-getCXX) || die "bootstrap failed"
+	MAKE="${_b}" \
+	MAKEOPTS="--jobs $(makeopts_jobs) --verbose 2" \
+	emake "${@}" "${myconfigargs[@]}"
+}
 
-	set -- ./build2/b-boot "${myconfigargs[@]}" config.bin.lib=static
-	echo ${@}
-	"${@}" || die "b-boot failed"
+src_compile() {
+	cd build2
+	emake -f bootstrap.gmake CXX=$(tc-getCXX)
+	tc-is-gcc && export CCACHE_DISABLE=1
+	myb ./build2/b-boot config.bin.lib=static update-for-install
 
 	cd "${S}"
-	set -- ./build2/build2/b "${myconfigargs[@]}" config.bin.lib=shared configure
-	echo ${@}
-	"${@}" || die "b configure failed"
+	myb ./build2/build2/b config.bin.lib=shared configure
+	myb ./build2/build2/b $(usex test '' 'update-for-install')
+}
 
-	set -- ./build2/build2/b "${myconfigargs[@]}"
-	echo ${@}
-	"${@}" || die "b failed"
+src_test() {
+	tc-is-gcc && export CCACHE_DISABLE=1
+	cd build2
+	myb ./build2/b --verbose 1 test
 }
 
 src_install() {
-	./build2/build2/b --jobs $(makeopts_jobs) --verbose 2 install || die
-	einstalldocs
+	myb ./build2/build2/b install
+	mkdir -p "${ED}"/usr/share/doc/${PF}/html
+	mv -f "${ED}"/usr/share/doc/${PF}/*.xhtml "${ED}"/usr/share/doc/${PF}/html
 }
