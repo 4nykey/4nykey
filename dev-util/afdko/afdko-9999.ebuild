@@ -1,16 +1,17 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 python3_{4,5,6} )
+PYTHON_COMPAT=( python2_7 python3_{4,5,6,7} )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="417f530"
+	MY_PV="e2f9bbd"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -28,13 +29,14 @@ IUSE=""
 RDEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
 	dev-python/booleanOperations[${PYTHON_USEDEP}]
+	dev-python/cu2qu[${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
 	dev-python/fontMath[${PYTHON_USEDEP}]
 	dev-python/fontPens[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-3.29.1[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.31[ufo,unicode,${PYTHON_USEDEP}]
 	dev-python/MutatorMath[${PYTHON_USEDEP}]
 	dev-util/psautohint[${PYTHON_USEDEP}]
-	dev-python/ufoLib[${PYTHON_USEDEP}]
+	dev-python/ufoProcessor[${PYTHON_USEDEP}]
 	dev-python/ufoNormalizer[${PYTHON_USEDEP}]
 "
 DEPEND="
@@ -47,6 +49,7 @@ python_prepare_all() {
 		"${FILESDIR}"/${PN}-nowheel.diff
 	)
 	grep -rl '\$(AR) -' c | xargs sed -e 's:\(\$(AR) \)-:\1:' -i
+	sed -e '/psautohint==/s:1\.8\.1:1.9.0:' -i requirements.txt
 	mkdir html pdf
 	mv -f docs/*.html html
 	mv -f docs/*.pdf pdf
@@ -60,6 +63,6 @@ src_compile() {
 		emake -C "${_d%/Makefile}" \
 			XFLAGS="${CFLAGS}" || return
 	done
-	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
+	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_p*}"
 	distutils-r1_src_compile
 }
