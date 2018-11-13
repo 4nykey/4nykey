@@ -1,9 +1,9 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 python3_{4,5,6} )
+PYTHON_COMPAT=( python2_7 python3_{4,5,6,7} )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -27,13 +27,13 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	dev-python/ufoLib[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.32[ufo,${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
 	dev-python/fontMath[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
-	test? ( dev-python/pytest-runner[${PYTHON_USEDEP}] )
+	test? ( dev-python/pytest[${PYTHON_USEDEP}] )
 "
 
 python_test() {

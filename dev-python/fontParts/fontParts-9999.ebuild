@@ -1,9 +1,9 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 python3_{4,5,6} )
+PYTHON_COMPAT=( python2_7 python3_{4,5,6,7} )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -25,15 +25,20 @@ HOMEPAGE="https://github.com/robofab-developers/${PN}"
 
 LICENSE="MIT"
 SLOT="0"
-IUSE=""
+IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.26[${PYTHON_USEDEP}]
-	dev-python/ufoLib[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.32[ufo,${PYTHON_USEDEP}]
 	dev-python/fontMath[${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
+	test? ( dev-python/fontPens[${PYTHON_USEDEP}] )
 "
+
+python_test() {
+	"${EPYTHON}" Lib/fontParts/fontshell/test.py || die \
+		"Tests failed with ${EPYTHON}"
+}

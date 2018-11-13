@@ -3,7 +3,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 python3_{4,5,6} )
+PYTHON_COMPAT=( python2_7 python3_{4,5,6,7} )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -27,8 +27,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.29.1[${PYTHON_USEDEP}]
-	dev-python/ufoLib[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.32[ufo,${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
 	dev-python/cu2qu[${PYTHON_USEDEP}]
 	dev-python/compreffor[${PYTHON_USEDEP}]
@@ -38,7 +37,7 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	dev-python/setuptools_scm[${PYTHON_USEDEP}]
-	test? ( dev-python/pytest-runner[${PYTHON_USEDEP}] )
+	test? ( dev-python/pytest[${PYTHON_USEDEP}] )
 "
 PATCHES=(
 	"${FILESDIR}"/${PN}-heightfallback.diff

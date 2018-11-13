@@ -8,14 +8,11 @@
 		<flag name="brotli">
 			Enable brotli compression support, required for WOFF2 web fonts
 		</flag>
+		<flag name="ufo">
+			Enable support for reading and writing UFO source files
+		</flag>
 		<flag name="zopfli">
 			Enable zopfli compression support for WOFF web fonts
-		</flag>
-		<flag name="scipy">
-			Support finding wrong contour/component order between different masters
-		</flag>
-		<flag name="sympy">
-			Support for symbolic font statistics analysis
 		</flag>
 	</use>
 </pkgmetadata>

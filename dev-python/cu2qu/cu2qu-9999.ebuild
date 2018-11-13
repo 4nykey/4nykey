@@ -3,7 +3,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 python3_{4,5,6} )
+PYTHON_COMPAT=( python2_7 python3_{4,5,6,7} )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -27,26 +27,18 @@ SLOT="0"
 IUSE="cython test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.18[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.32[ufo,${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
-	cython? ( >=dev-python/cython-0.28.4[${PYTHON_USEDEP}] )
+	cython? ( >=dev-python/cython-0.28.5[${PYTHON_USEDEP}] )
 	test? (
-		dev-python/pytest-runner[${PYTHON_USEDEP}]
+		dev-python/pytest[${PYTHON_USEDEP}]
 		dev-python/coverage[${PYTHON_USEDEP}]
-		dev-python/ufoLib[${PYTHON_USEDEP}]
 	)
 "
-
-python_prepare_all() {
-	sed \
-		-e '/__version__/s:\.5:.4:' \
-		-i "${S}"/Lib/cu2qu/cython.py
-	distutils-r1_python_prepare_all
-}
 
 pkg_setup() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"

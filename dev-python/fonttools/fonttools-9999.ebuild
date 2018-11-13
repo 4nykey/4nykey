@@ -3,7 +3,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 python3_{4,5,6} )
+PYTHON_COMPAT=( python2_7 python3_{4,5,6,7} )
 PYTHON_REQ_USE="xml(+)"
 
 inherit eutils distutils-r1
@@ -26,7 +26,7 @@ HOMEPAGE="https://github.com/${PN}/${PN}"
 
 LICENSE="BSD"
 SLOT="0"
-IUSE="brotli gtk png qt5 scipy sympy test unicode zopfli"
+IUSE="brotli gtk qt5 test +ufo unicode zopfli"
 DOCS=( {README,NEWS}.rst )
 PATCHES=(
 	"${FILESDIR}"/${PN}-glyphclass.diff
@@ -34,23 +34,37 @@ PATCHES=(
 
 # README.rst: Optional Requirements
 RDEPEND="
+	dev-python/lxml
 	brotli? ( app-arch/brotli[python,${PYTHON_USEDEP}] )
 	zopfli? ( dev-python/py-zopfli[${PYTHON_USEDEP}] )
-	unicode? ( dev-python/unicodedata2[${PYTHON_USEDEP}] )
+	ufo? (
+		>=dev-python/fs-2.1.1[${PYTHON_USEDEP}]
+		virtual/python-enum34[${PYTHON_USEDEP}]
+	)
+	unicode? (
+		$(python_gen_cond_dep \
+		'dev-python/unicodedata2[${PYTHON_USEDEP}]' \
+		python2_7 python3_4 python3_5 python3_6)
+	)
 	qt5? ( dev-python/PyQt5[${PYTHON_USEDEP}] )
-	png? ( dev-python/reportlab[${PYTHON_USEDEP}] )
 	gtk? ( dev-python/pygobject:3[${PYTHON_USEDEP}] )
-	scipy? ( || (
-		sci-libs/scipy[${PYTHON_USEDEP}]
-		dev-python/munkres[${PYTHON_USEDEP}]
-	) )
-	sympy? ( dev-python/sympy )
 "
 DEPEND="
 	${RDEPEND}
-	test? ( dev-python/pytest-runner[${PYTHON_USEDEP}] )
+	test? ( dev-python/pytest[${PYTHON_USEDEP}] )
 "
 
 python_test() {
-	esetup.py test
+	pytest || die "Tests failed with ${EPYTHON}"
+}
+
+pkg_postinst() {
+	optfeature \
+		"finding wrong contour/component order between different masters" \
+		sci-libs/scipy
+	optfeature \
+		"visualizing DesignSpaceDocument and resulting VariationModel" \
+		dev-python/matplotlib
+	optfeature "symbolic font statistics analysis" dev-python/sympy
+	optfeature "drawing glyphs as PNG images" dev-python/reportlab
 }
