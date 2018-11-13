@@ -8,7 +8,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/CatharsisFonts/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="60eea25"
+	MY_PV="e649592"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/CatharsisFonts/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -25,9 +25,6 @@ SLOT="0"
 FONTDIR_BIN=( '1. TrueType Font Files' '2. OpenType Files' )
 
 src_prepare() {
-	fontmake_src_prepare
-	use binary && return
-	eapply "${FILESDIR}"/${PN}-features.diff
 	ln -s "4. Glyphs Source Files" sources
-	rm -f src/*_BACKUP.glyphs
+	fontmake_src_prepare
 }
