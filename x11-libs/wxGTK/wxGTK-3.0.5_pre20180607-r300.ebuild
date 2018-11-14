@@ -15,7 +15,7 @@ SRC_URI="
 "
 RESTRICT=primaryuri
 
-KEYWORDS="~amd64 ~x86"
+#KEYWORDS="~amd64 ~x86"
 IUSE="+X debug gstreamer libnotify chm opengl sdl tiff webkit"
 
 SLOT="${PV:0:3}-gtk3"

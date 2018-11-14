@@ -2,8 +2,7 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<maintainer type="project">
-		<email>wxwidgets@gentoo.org</email>
-		<description>All modifications to this package must be approved by the wxwidgets herd.</description>
+		<email>4nykey@gmail.com</email>
 	</maintainer>
 	<use>
 		<flag name="gstreamer">
