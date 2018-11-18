@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -66,7 +66,10 @@ src_unpack() {
 
 src_prepare() {
 	default
-	sed -e "s:\<pkg-config\>:$(tc-getPKG_CONFIG):" -i Makefile.master
+	sed \
+		-e "s:\<pkg-config\>:$(tc-getPKG_CONFIG):" \
+		-e 's:--static::' \
+		-i Makefile.master
 	if [[ -n ${PV%%*9999} ]]; then
 		mv "${WORKDIR}"/${MY_OFX}/* "${S}"/OpenFX
 		mv "${WORKDIR}"/${MY_SUP}/* "${S}"/SupportExt
