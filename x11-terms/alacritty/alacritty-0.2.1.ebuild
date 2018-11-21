@@ -1,1 +1,0 @@
-alacritty-9999.ebuild
