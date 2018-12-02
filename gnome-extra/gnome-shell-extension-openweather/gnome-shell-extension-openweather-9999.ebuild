@@ -7,15 +7,16 @@ GNOME2_EAUTORECONF="yes"
 inherit gnome2
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/jenslody/${PN}.git"
+	EGIT_REPO_URI="https://gitlab.com/jenslody/${PN}.git"
 	SRC_URI=""
 else
 	inherit vcs-snapshot
 	KEYWORDS="~amd64 ~x86"
-	MY_PV="cf30519"
+	MY_PV="7ea4ce7"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
-		mirror://githubcl/jenslody/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		https://gitlab.com/jenslody/${PN}/-/archive/${MY_PV}/${PN}-${MY_PV}.tar.bz2
+		-> ${P}.tar.bz2
 	"
 	RESTRICT="primaryuri"
 fi

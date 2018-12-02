@@ -11,8 +11,10 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	KEYWORDS="~amd64 ~x86"
+	MY_PV="39b36ab"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
-		mirror://githubcl/zpydr/${PN}/tar.gz/${PV} -> ${P}.tar.gz
+		mirror://githubcl/zpydr/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 fi
