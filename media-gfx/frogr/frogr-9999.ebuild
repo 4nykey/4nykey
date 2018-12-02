@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -32,17 +32,9 @@ RDEPEND="
 	${DEPEND}
 "
 
-src_prepare() {
-	sed \
-		-e '/compiler\.find_library/ s:libgcrypt:gcrypt:' \
-		-i meson.build
-	default
-}
-
 src_configure() {
-	tc-export CC PKG_CONFIG
 	local emesonargs=(
-		-Denable-video=$(usex gstreamer true false)
+		$(meson_use gstreamer enable-video)
 	)
 	meson_src_configure
 }
