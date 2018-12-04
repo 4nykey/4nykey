@@ -11,7 +11,7 @@ else
 	MY_PV="${PV^^}"
 	MY_PV="v${MY_PV/_/-}"
 	[[ -z ${PV%%*_p*} ]] && MY_PV="a4da0d3"
-	MY_QC="qt-common-6f959df"
+	MY_QC="qt-common-9f79930"
 	MY_EX="digidoc-extensions-aa75281"
 	SRC_URI="${SRC_URI}
 		mirror://githubcl/open-eid/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -34,7 +34,7 @@ DEPEND="
 	dev-libs/libdigidocpp
 	sys-apps/pcsc-lite
 	net-nds/openldap
-	dev-libs/openssl
+	dev-libs/openssl:0
 	dev-qt/qtwidgets:5
 	dev-qt/qtprintsupport:5
 	dev-qt/qtsvg:5
