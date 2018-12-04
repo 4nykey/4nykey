@@ -23,8 +23,8 @@ DESCRIPTION="MEGA C++ SDK"
 HOMEPAGE="https://github.com/meganz/sdk"
 
 LICENSE="BSD-2"
-# grep 'define' include/mega/version.h|awk '{print $3}'|awk 'BEGIN{RS="";FS="\n"}{printf $1*10000+$2*100+$3}'
-SLOT="0/30401"
+# awk '/define/ {print $3}' include/mega/version.h|awk 'BEGIN{RS="";FS="\n"}{printf $1*10000+$2*100+$3}'
+SLOT="0/30404"
 IUSE="examples ffmpeg freeimage fuse hardened inotify libuv mediainfo qt raw +sqlite"
 REQUIRED_USE="
 	examples? ( sqlite )
