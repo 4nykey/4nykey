@@ -235,6 +235,7 @@ src_configure() {
 
 src_compile() {
 	MOZ_MAKE_FLAGS="${MAKEOPTS}" SHELL="${SHELL:-${EPREFIX}/bin/bash}" MOZ_NOSPAM=1 \
+	BUILD_VERBOSE_LOG=1 \
 	./mach build --verbose || die
 }
 
