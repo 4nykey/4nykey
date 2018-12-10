@@ -16,7 +16,7 @@ else
 	MY_CAT="Catch2-5ca44b6"
 	MY_GSL="GSL-d846fe5"
 	MY_CRL="crl-4291015"
-	MY_TGV="libtgvoip-fb0a2b0"
+	MY_TGV="libtgvoip-78e584c"
 	MY_VAR="variant-550ac2f"
 	MY_XXH="xxHash-7cc9639"
 	MY_DEB="${PN}_1.4.0-1.debian"
@@ -163,9 +163,14 @@ src_prepare() {
 
 	eapply \
 		debian/patches/Use-system-wide-font.patch \
+		"${FILESDIR}"/Packed-resources.patch \
 		debian/patches/Packed-resources.patch \
-		"${FILESDIR}"/gcc-if-constexpr-tmpfix.patch \
 		"${FILESDIR}"/${PN}-gyp.diff
+
+	if tc-is-gcc; then
+		local _v="$(gcc-major-version)"
+		[[ ${_v} -le 7 ]] && eapply "${FILESDIR}"/gcc-if-constexpr-tmpfix.patch
+	fi
 
 	cd "${S}"/Telegram/gyp
 
