@@ -38,7 +38,7 @@ LICENSE="BSD CC-BY-3.0 MPL-2.0 GPL-2 LGPL-2.1"
 IUSE="eme-free +gmp-autoupdate hardened hwaccel jack -screenshot selinux test"
 
 SRC_URI="https://dist.torproject.org/${PN}/${TOR_PV}"
-PATCH="firefox-${PV%%.*}.0-patches-03"
+PATCH="firefox-${PV%%.*}.0-patches-04"
 PATCH=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c}/mozilla/patchsets/${PATCH}.tar.xz )
 SRC_URI="
 	https://gitweb.torproject.org/tor-browser.git/snapshot/${GIT_TAG}.tar.gz
@@ -118,11 +118,10 @@ src_prepare() {
 		"${WORKDIR}"/firefox
 		"${FILESDIR}"/${PN}-profiledir.patch
 		"${FILESDIR}"/${PN}-lto.patch
-		"${FILESDIR}"/bug_1461221.patch
-		"${FILESDIR}"/firefox-60.0-missing-errno_h-in-SandboxOpenedFiles_cpp.patch
 	)
 
 	rm -f \
+		"${WORKDIR}"/firefox/2012_update-cc-to-honor-CC.patch \
 		"${WORKDIR}"/firefox/2005_ffmpeg4.patch
 
 	# Enable gnomebreakpad
