@@ -1,27 +1,27 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-PYTHON_COMPAT=( python3_{4,5,6} )
+PYTHON_COMPAT=( python3_{4,5,6,7} )
 DISTUTILS_SINGLE_IMPL=1
 PLOCALES="
 af ar ast bg ca cs cy da de el en_CA en_GB en eo es et fa fi fo fr_CA fr fy gl
 he hi hr hu id is it ja kn ko lt mr nb nds ne nl oc pa pl pt_BR pt ro ru sco sk
 sl sr sv ta te tr uk vi zh_CN zh_TW
 "
-inherit eutils distutils-r1 l10n
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/metabrainz/picard.git"
+	EGIT_REPO_URI="https://github.com/metabrainz/${PN}.git"
 else
 	inherit vcs-snapshot
+	MY_PV="release-${PV/_rc/dev}"
 	SRC_URI="
-		http://ftp.musicbrainz.org/pub/musicbrainz/picard/${P}.tar.gz
-		mirror://githubcl/metabrainz/${PN}/tar.gz/release-${PV} -> ${P}.tar.gz
+		mirror://githubcl/metabrainz/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	KEYWORDS="~amd64 ~x86"
 	RESTRICT="primaryuri"
 fi
+inherit eutils distutils-r1 l10n xdg
 
 DESCRIPTION="A cross-platform music tagger"
 HOMEPAGE="https://picard.musicbrainz.org/"
