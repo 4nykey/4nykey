@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python2_7 python3_{4,5,6,7} )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/greginvm/${PN}.git"
+	EGIT_REPO_URI="https://github.com/fonttools/${PN}.git"
 	REQUIRED_USE="cython"
 else
 	inherit vcs-snapshot
@@ -18,32 +18,29 @@ else
 fi
 
 DESCRIPTION="A Cython wrapper for the Clipper library"
-HOMEPAGE="https://github.com/greginvm/${PN}"
+HOMEPAGE="https://github.com/fonttools/${PN}"
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="cython test"
+IUSE="+cython test"
 
 DEPEND+="
 	cython? ( dev-python/cython[${PYTHON_USEDEP}] )
 	test? (
 		dev-python/pytest[${PYTHON_USEDEP}]
-		dev-python/funcsigs[python_targets_python2_7?,python_targets_python3_4?,python_targets_python3_5?]
+		$(python_gen_cond_dep 'dev-python/funcsigs[${PYTHON_USEDEP}]' \
+			python2_7 python3_4 python3_5)
 	)
 "
 
 python_prepare_all() {
 	if use cython; then
-		touch "${S}"/dev
+		touch dev
+		rm -f pyclipper/pyclipper.cpp
 	else
-		rm -f "${S}"/dev
+		rm -f dev
 	fi
-	local _v="${PV%_p*}"
-	[[ -z ${PV%%*9999} ]] && _v="$(git describe --tags)"
-	sed \
-		-e '/setuptools_scm/d' \
-		-e "s:use_scm_version=True:version=\"${_v}\":" \
-		-i "${S}"/setup.py
+	sed -e '/setuptools_scm_git_archive/d' -i setup.py
 	distutils-r1_python_prepare_all
 }
 
