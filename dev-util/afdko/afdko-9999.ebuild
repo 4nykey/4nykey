@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="e2f9bbd"
+	MY_PV="b6ce72f"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -33,7 +33,7 @@ RDEPEND="
 	dev-python/defcon[${PYTHON_USEDEP}]
 	dev-python/fontMath[${PYTHON_USEDEP}]
 	dev-python/fontPens[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-3.31[ufo,unicode,${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.34[ufo,unicode,${PYTHON_USEDEP}]
 	dev-python/MutatorMath[${PYTHON_USEDEP}]
 	dev-util/psautohint[${PYTHON_USEDEP}]
 	dev-python/ufoProcessor[${PYTHON_USEDEP}]
@@ -49,7 +49,7 @@ python_prepare_all() {
 		"${FILESDIR}"/${PN}-nowheel.diff
 	)
 	grep -rl '\$(AR) -' c | xargs sed -e 's:\(\$(AR) \)-:\1:' -i
-	sed -e '/psautohint==/s:1\.8\.1:1.9.0:' -i requirements.txt
+	sed -e 's:==:>=:' -i requirements.txt
 	mkdir html pdf
 	mv -f docs/*.html html
 	mv -f docs/*.pdf pdf
