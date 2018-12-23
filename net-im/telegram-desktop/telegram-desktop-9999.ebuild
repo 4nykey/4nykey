@@ -19,7 +19,7 @@ else
 	MY_TGV="libtgvoip-78e584c"
 	MY_VAR="variant-550ac2f"
 	MY_XXH="xxHash-7cc9639"
-	MY_DEB="${PN}_1.4.0-1.debian"
+	MY_DEB="${PN}_1.5.2-1.debian"
 	SRC_URI="
 		mirror://githubcl/telegramdesktop/${MY_PN}/tar.gz/v${PV} -> ${P}.tar.gz
 		mirror://debian/pool/main/t/${PN}/${MY_DEB}.tar.xz
@@ -37,6 +37,7 @@ else
 			mirror://githubcl/catchorg/${MY_CAT%-*}/tar.gz/${MY_CAT##*-}
 			-> ${MY_CAT}.tar.gz
 		)
+		https://github.com/telegramdesktop/tdesktop/commit/4e692e2.patch
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -163,9 +164,10 @@ src_prepare() {
 
 	eapply \
 		debian/patches/Use-system-wide-font.patch \
-		"${FILESDIR}"/Packed-resources.patch \
 		debian/patches/Packed-resources.patch \
 		"${FILESDIR}"/${PN}-gyp.diff
+
+	[[ -n ${PV%%*9999} ]] && eapply "${DISTDIR}"/4e692e2.patch
 
 	if tc-is-gcc; then
 		local _v="$(gcc-major-version)"
