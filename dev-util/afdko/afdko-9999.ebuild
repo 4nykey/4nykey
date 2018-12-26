@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="b6ce72f"
+	MY_PV="ab51531"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -24,7 +24,7 @@ HOMEPAGE="http://www.adobe.com/devnet/opentype/afdko.html"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE=""
+IUSE="test"
 
 RDEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
@@ -41,6 +41,12 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
+	test? (
+		dev-python/pytest[${PYTHON_USEDEP}]
+		python_targets_python2_7? (
+			dev-python/subprocess32[python_targets_python2_7]
+		)
+	)
 "
 DOCS=( {README,NEWS}.md html pdf )
 
@@ -49,10 +55,15 @@ python_prepare_all() {
 		"${FILESDIR}"/${PN}-nowheel.diff
 	)
 	grep -rl '\$(AR) -' c | xargs sed -e 's:\(\$(AR) \)-:\1:' -i
+	grep -rl 'import subprocess32' tests | xargs sed -i -e \
+	's%import subprocess32%import sys\nif int(sys.version[0])>2:\
+	import subprocess\nelse:\n\t&%'
 	sed -e 's:==:>=:' -i requirements.txt
+
 	mkdir html pdf
 	mv -f docs/*.html html
 	mv -f docs/*.pdf pdf
+
 	distutils-r1_python_prepare_all
 }
 
@@ -65,4 +76,8 @@ src_compile() {
 	done
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_p*}"
 	distutils-r1_src_compile
+}
+
+python_test() {
+	pytest -v || die
 }
