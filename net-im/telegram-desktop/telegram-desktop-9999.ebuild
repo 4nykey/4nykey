@@ -37,7 +37,6 @@ else
 			mirror://githubcl/catchorg/${MY_CAT%-*}/tar.gz/${MY_CAT##*-}
 			-> ${MY_CAT}.tar.gz
 		)
-		https://github.com/telegramdesktop/tdesktop/commit/4e692e2.patch
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -166,8 +165,6 @@ src_prepare() {
 		debian/patches/Use-system-wide-font.patch \
 		debian/patches/Packed-resources.patch \
 		"${FILESDIR}"/${PN}-gyp.diff
-
-	[[ -n ${PV%%*9999} ]] && eapply "${DISTDIR}"/4e692e2.patch
 
 	if tc-is-gcc; then
 		local _v="$(gcc-major-version)"
