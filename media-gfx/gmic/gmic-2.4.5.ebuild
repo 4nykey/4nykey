@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -59,7 +59,6 @@ RDEPEND="
 "
 DEPEND="
 	${DEPEND}
-	~media-libs/cimg-${PV}
 	virtual/pkgconfig
 "
 
@@ -74,9 +73,6 @@ pkg_pretend() {
 }
 
 src_prepare() {
-	local PATCHES=(
-		"${FILESDIR}"/${PN}-qt511.diff
-	)
 	default
 	unpack man/gmic.1.gz
 	sed \
@@ -95,8 +91,6 @@ src_prepare() {
 		-e '/CONFIG += openmp/d' \
 		-e '/QMAKE_[A-Z]\+FLAGS_RELEASE +=.* -s/d' \
 		-i gmic-qt/gmic_qt.pro zart/zart.pro
-	ln -sf "${EROOT}"usr/include/CImg.h src/CImg.h
-	sed -e '/#include/s:"\./\(CImg\.h\)":<\1>:' -i src/gmic.h
 }
 
 src_configure() {
