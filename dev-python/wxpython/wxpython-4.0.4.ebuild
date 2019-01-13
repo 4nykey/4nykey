@@ -1,16 +1,16 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_{4,5,6,7} )
+PYTHON_COMPAT=( python3_{5,6,7} )
 PYTHON_REQ_USE="threads(+)"
 
 MY_PN="wxPython"
 # ext/wxwidgets submodule commit and corresponding wxGTK version
-WXV="cd11d91:3.0.5_pre20180607"
+WXV="53103dd:3.0.5_pre20190103"
 # wafCurrentVersion from build.py
-WAF_BINARY="${WORKDIR}/waf-2.0.7"
+WAF_BINARY="${WORKDIR}/waf-2.0.8"
 inherit alternatives distutils-r1 eutils wxwidgets vcs-snapshot
 
 DESCRIPTION="A blending of the wxWindows C++ class library with Python"
@@ -45,7 +45,7 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	app-doc/doxygen
-	dev-python/sip[${PYTHON_USEDEP}]
+	~dev-python/sip-4.19.13[${PYTHON_USEDEP}]
 	test? (
 		dev-python/pytest-xdist[${PYTHON_USEDEP}]
 	)
@@ -91,7 +91,7 @@ python_prepare_all() {
 
 	SIP=bin/sip DOXYGEN=bin/doxygen \
 		${EPYTHON} "${S}"/build.py dox etg sip \
-		$(usex apidocs 'sphinx' '--nodoc')
+		$(usex apidocs 'sphinx' '--nodoc') || die
 }
 
 python_configure() {
