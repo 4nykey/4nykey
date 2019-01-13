@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -27,7 +27,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.32[ufo,${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.35[ufo,${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
 	dev-python/cu2qu[${PYTHON_USEDEP}]
 	dev-python/compreffor[${PYTHON_USEDEP}]
@@ -37,7 +37,7 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	dev-python/setuptools_scm[${PYTHON_USEDEP}]
-	test? ( dev-python/pytest[${PYTHON_USEDEP}] )
+	test? ( dev-python/pytest-runner[${PYTHON_USEDEP}] )
 "
 PATCHES=(
 	"${FILESDIR}"/${PN}-heightfallback.diff
