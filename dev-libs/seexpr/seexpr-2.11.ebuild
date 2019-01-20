@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -31,7 +31,6 @@ REQUIRED_USE="
 
 RDEPEND="
 	${PYTHON_DEPS}
-	dev-python/PyQt4[X,${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
@@ -43,10 +42,8 @@ DEPEND="
 src_prepare() {
 	cmake-utils_src_prepare
 	sed \
-		-e '/from PyQt4 import pyqtconfig/d' \
-		-e 's:pyqtconfig:sipconfig:' \
-		-e "s:pkg_cfg\['pyqt_sip_dir'\]:os.path.join(pkg_cfg['default_sip_dir'],'PyQt4'):" \
-		-i src/build/build-info
+		-e '/ADD_SUBDIRECTORY (src\/\(demos\|SeExprEditor\))/d' \
+		-i CMakeLists.txt
 	sed -e "s:\(share/doc/\)SeExpr:\1${PF}/html:" -i src/doc/CMakeLists.txt
 }
 
