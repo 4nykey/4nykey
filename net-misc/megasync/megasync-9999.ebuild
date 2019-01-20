@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -13,7 +13,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI=
 else
 	inherit vcs-snapshot
-	MY_PV="94f4884"
+	MY_PV="32150ce"
 	SRC_URI="
 		mirror://githubcl/meganz/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -31,7 +31,7 @@ SLOT="0"
 IUSE="dolphin nautilus thunar"
 
 RDEPEND="
-	net-misc/meganz-sdk:=[libuv,qt,sodium(+),sqlite]
+	>=net-misc/meganz-sdk-3.4.5:=[libuv,qt,sodium(+),sqlite]
 	dev-qt/qtsvg:5
 	dev-qt/qtdbus:5
 	dev-qt/qtconcurrent:5
