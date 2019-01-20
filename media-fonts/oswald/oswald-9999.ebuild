@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlefonts/${MY_PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="a300253"
+	MY_PV="5a5fff2"
 	SRC_URI="
 		mirror://githubcl/googlefonts/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -23,4 +23,3 @@ HOMEPAGE="https://github.com/googlefonts/${MY_PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-PATCHES=( "${FILESDIR}"/${PN}-heavy.diff )
