@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -45,11 +45,10 @@ DEPEND="
 	test? (
 		dev-python/mako[${PYTHON_USEDEP}]
 		dev-python/nose[${PYTHON_USEDEP}]
+		dev-python/mock[${PYTHON_USEDEP}]
+		dev-python/pyftpdlib[${PYTHON_USEDEP},test]
 	)
 "
-
-# Tries to access FUSE
-RESTRICT=test
 
 python_test() {
 	nosetests --verbose || die
