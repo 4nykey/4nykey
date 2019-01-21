@@ -1,0 +1,11 @@
+--- a/Lib/fontTools/misc/macCreatorType.py
++++ b/Lib/fontTools/misc/macCreatorType.py
+@@ -21,7 +21,7 @@ def getMacCreatorAndType(path):
+ 	if xattr is not None:
+ 		try:
+ 			finderInfo = xattr.getxattr(path, 'com.apple.FinderInfo')
+-		except (KeyError, IOError):
++		except (KeyError, IOError, TypeError):
+ 			pass
+ 		else:
+ 			fileType = Tag(finderInfo[:4])

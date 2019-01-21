@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -30,6 +30,7 @@ IUSE="brotli gtk qt5 test +ufo unicode zopfli"
 DOCS=( {README,NEWS}.rst )
 PATCHES=(
 	"${FILESDIR}"/${PN}-glyphclass.diff
+	"${FILESDIR}"/${PN}-xattr.diff
 )
 
 # README.rst: Optional Requirements
@@ -38,7 +39,7 @@ RDEPEND="
 	brotli? ( app-arch/brotli[python,${PYTHON_USEDEP}] )
 	zopfli? ( dev-python/py-zopfli[${PYTHON_USEDEP}] )
 	ufo? (
-		>=dev-python/fs-2.1.1[${PYTHON_USEDEP}]
+		>=dev-python/fs-2.2[${PYTHON_USEDEP}]
 		virtual/python-enum34[${PYTHON_USEDEP}]
 	)
 	unicode? (
@@ -55,7 +56,7 @@ DEPEND="
 "
 
 python_test() {
-	pytest || die "Tests failed with ${EPYTHON}"
+	pytest -v || die "Tests failed with ${EPYTHON}"
 }
 
 pkg_postinst() {
