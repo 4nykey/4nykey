@@ -19,7 +19,7 @@ else
 	MY_TGV="libtgvoip-59a975b"
 	MY_VAR="variant-550ac2f"
 	MY_XXH="xxHash-7cc9639"
-	MY_DEB="${PN}_1.5.2-1.debian"
+	MY_DEB="${PN}_1.5.4-1.debian"
 	SRC_URI="
 		mirror://githubcl/telegramdesktop/${MY_PN}/tar.gz/v${PV} -> ${P}.tar.gz
 		mirror://debian/pool/main/t/${PN}/${MY_DEB}.tar.xz
