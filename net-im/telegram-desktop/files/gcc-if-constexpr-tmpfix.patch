@@ -11,15 +11,15 @@
  					result.file.size = result.file.content.size();
  				} else {
 @@ -409,7 +410,8 @@ Document ParseDocument(
- 			result.width = data.vw.v;
- 			result.height = data.vh.v;
- 			result.file.location = ParseLocation(data.vlocation);
--			if constexpr (MTPDphotoCachedSize::Is<decltype(data)>()) {
-+			constexpr bool is = MTPDphotoCachedSize::Is<decltype(data)>();
-+			if constexpr (is) {
- 				result.file.content = data.vbytes.v;
- 				result.file.size = result.file.content.size();
- 			} else {
+ 		result.width = data.vw.v;
+ 		result.height = data.vh.v;
+ 		result.file.location = ParseLocation(data.vlocation);
+-		if constexpr (MTPDphotoCachedSize::Is<decltype(data)>()) {
++		constexpr bool is = MTPDphotoCachedSize::Is<decltype(data)>();
++		if constexpr (is) {
+ 			result.file.content = data.vbytes.v;
+ 			result.file.size = result.file.content.size();
+ 		} else {
 @@ -1017,7 +1019,8 @@ Message ParseMessage(
  	auto result = Message();
  	data.match([&](const auto &data) {
