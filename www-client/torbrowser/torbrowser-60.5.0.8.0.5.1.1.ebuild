@@ -1,11 +1,11 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 WANT_AUTOCONF="2.1"
 
 PYTHON_COMPAT=( python3_{5,6,7} )
-PYTHON_REQ_USE='ncurses,sqlite,ssl,threads'
+PYTHON_REQ_USE='ncurses,sqlite,ssl,threads(+)'
 MOZCONFIG_OPTIONAL_WIFI=1
 
 inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils llvm \
@@ -37,8 +37,8 @@ SLOT="0"
 LICENSE="BSD CC-BY-3.0 MPL-2.0 GPL-2 LGPL-2.1"
 IUSE="eme-free +gmp-autoupdate hardened hwaccel jack -screenshot selinux test"
 
-SRC_URI="https://dist.torproject.org/${PN}/${TOR_PV}"
-PATCH="firefox-${PV%%.*}.0-patches-04"
+SRC_URI="mirror://tor/dist/${PN}/${TOR_PV}"
+PATCH="firefox-${PV%%.*}.5-patches-01"
 PATCH=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c}/mozilla/patchsets/${PATCH}.tar.xz )
 SRC_URI="
 	https://gitweb.torproject.org/tor-browser.git/snapshot/${GIT_TAG}.tar.gz
@@ -120,9 +120,9 @@ src_prepare() {
 		"${FILESDIR}"/${PN}-lto.patch
 	)
 
-	rm -f \
-		"${WORKDIR}"/firefox/2012_update-cc-to-honor-CC.patch \
-		"${WORKDIR}"/firefox/2005_ffmpeg4.patch
+	sed \
+		-e '/Unknown option: %s/ s:raise InvalidOptionError:print:' \
+		-i python/mozbuild/mozbuild/configure/__init__.py
 
 	# Enable gnomebreakpad
 	if use debug ; then
@@ -207,6 +207,11 @@ src_configure() {
 		die "Failed to disable ccache stats call"
 
 	mozconfig_annotate '' --enable-extensions="${MEXTENSIONS}"
+
+	if use clang ; then
+		# https://bugzilla.mozilla.org/show_bug.cgi?id=1423822
+		mozconfig_annotate 'elf-hack is broken when using Clang' --disable-elf-hack
+	fi
 
 	echo "mk_add_options MOZ_OBJDIR=${BUILD_OBJ_DIR}" >> "${S}"/.mozconfig
 	echo "mk_add_options XARGS=/usr/bin/xargs" >> "${S}"/.mozconfig

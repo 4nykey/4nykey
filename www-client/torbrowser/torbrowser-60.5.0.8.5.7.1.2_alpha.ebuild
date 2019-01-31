@@ -1,11 +1,11 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 WANT_AUTOCONF="2.1"
 
 PYTHON_COMPAT=( python3_{5,6,7} )
-PYTHON_REQ_USE='ncurses,sqlite,ssl,threads'
+PYTHON_REQ_USE='ncurses,sqlite,ssl,threads(+)'
 MOZCONFIG_OPTIONAL_WIFI=1
 
 inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils llvm \
@@ -35,10 +35,10 @@ SLOT="0"
 # BSD license applies to torproject-related code like the patches
 # icons are under CCPL-Attribution-3.0
 LICENSE="BSD CC-BY-3.0 MPL-2.0 GPL-2 LGPL-2.1"
-IUSE="eme-free +gmp-autoupdate hardened hwaccel jack -screenshot selinux test"
+IUSE="hardened hwaccel jack -screenshot selinux test"
 
-SRC_URI="https://dist.torproject.org/${PN}/${TOR_PV}"
-PATCH="firefox-${PV%%.*}.0-patches-04"
+SRC_URI="mirror://tor/dist/${PN}/${TOR_PV}"
+PATCH="firefox-${PV%%.*}.5-patches-01"
 PATCH=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c}/mozilla/patchsets/${PATCH}.tar.xz )
 SRC_URI="
 	https://gitweb.torproject.org/tor-browser.git/snapshot/${GIT_TAG}.tar.gz
@@ -75,12 +75,6 @@ S="${WORKDIR}/${GIT_TAG}"
 QA_PRESTRIPPED="usr/lib*/${PN}/${PN}/${PN}"
 
 BUILD_OBJ_DIR="${WORKDIR}/tb"
-
-# allow GMP_PLUGIN_LIST to be set in an eclass or
-# overridden in the enviromnent (advanced hackers only)
-if [[ -z $GMP_PLUGIN_LIST ]]; then
-	GMP_PLUGIN_LIST=( gmp-gmpopenh264 gmp-widevinecdm )
-fi
 
 llvm_check_deps() {
 	has_version "sys-devel/clang:${LLVM_SLOT}"
@@ -120,9 +114,9 @@ src_prepare() {
 		"${FILESDIR}"/${PN}-lto.patch
 	)
 
-	rm -f \
-		"${WORKDIR}"/firefox/2012_update-cc-to-honor-CC.patch \
-		"${WORKDIR}"/firefox/2005_ffmpeg4.patch
+	sed \
+		-e '/Unknown option: %s/ s:raise InvalidOptionError:print:' \
+		-i python/mozbuild/mozbuild/configure/__init__.py
 
 	# Enable gnomebreakpad
 	if use debug ; then
@@ -190,9 +184,6 @@ src_configure() {
 	# enable JACK, bug 600002
 	mozconfig_use_enable jack
 
-	# Enable/Disable eme support
-	use eme-free && mozconfig_annotate '+eme-free' --disable-eme
-
 	# Add full relro support for hardened
 	if use hardened; then
 		append-ldflags "-Wl,-z,relro,-z,now"
@@ -208,6 +199,11 @@ src_configure() {
 
 	mozconfig_annotate '' --enable-extensions="${MEXTENSIONS}"
 
+	if use clang ; then
+		# https://bugzilla.mozilla.org/show_bug.cgi?id=1423822
+		mozconfig_annotate 'elf-hack is broken when using Clang' --disable-elf-hack
+	fi
+
 	echo "mk_add_options MOZ_OBJDIR=${BUILD_OBJ_DIR}" >> "${S}"/.mozconfig
 	echo "mk_add_options XARGS=/usr/bin/xargs" >> "${S}"/.mozconfig
 
@@ -220,6 +216,10 @@ src_configure() {
 	mozconfig_annotate 'torbrowser' --disable-tor-browser-update
 	mozconfig_annotate 'torbrowser' --with-tor-browser-version=${TOR_PV}
 	mozconfig_annotate 'torbrowser' --disable-tor-browser-data-outside-app-dir
+	mozconfig_annotate 'torbrowser' --with-branding=browser/branding/official
+	mozconfig_annotate 'torbrowser' --disable-maintenance-service
+	mozconfig_annotate 'torbrowser' --disable-webrtc
+	mozconfig_annotate 'torbrowser' --disable-eme
 
 	mozconfig_annotate 'torbrowser' --without-system-nspr
 	mozconfig_annotate 'torbrowser' --without-system-nss
@@ -272,13 +272,6 @@ src_install() {
 		-i "${BUILD_OBJ_DIR}"/dist/bin/browser/defaults/preferences/000-tor-browser.js \
 		|| die
 
-	local plugin
-	use gmp-autoupdate || use eme-free || for plugin in "${GMP_PLUGIN_LIST[@]}" ; do
-		echo "pref(\"media.${plugin}.autoupdate\", false);" >> \
-			"${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
-			|| die
-	done
-
 	cd "${S}"
 	MOZ_MAKE_FLAGS="${MAKEOPTS}" SHELL="${SHELL:-${EPREFIX}/bin/bash}" MOZ_NOSPAM=1 \
 	DESTDIR="${D}" ./mach install
@@ -286,11 +279,10 @@ src_install() {
 	# Install icons and .desktop for menu entry
 	local size icon_path
 	icon_path="${S}/browser/branding/official"
-	for size in 16 48; do
+	for size in 16 32 48 64 128 256 512; do
 		newicon -s ${size} "${icon_path}/default${size}.png" ${PN}.png
 	done
-	# The 128x128 icon has a different name
-	newicon -s 128 "${icon_path}/mozicon128.png" ${PN}.png
+	newicon -s scalable "${icon_path}/firefox.svg" ${PN}.svg
 	make_desktop_entry ${PN} "Tor Browser" ${PN} "Network;WebBrowser" "StartupWMClass=Torbrowser"
 
 	# Add StartupNotify=true bug 237317
@@ -306,7 +298,6 @@ src_install() {
 	# Profile without the tor-launcher extension
 	# see: https://trac.torproject.org/projects/tor/ticket/10160
 
-	dodoc "${profile_dir}/extensions/tor-launcher@torproject.org.xpi"
 	rm "${profile_dir}/extensions/tor-launcher@torproject.org.xpi" || die \
 		"Failed to remove torlauncher extension"
 
@@ -344,14 +335,6 @@ pkg_postinst() {
 
 	gnome2_icon_cache_update
 	xdg_desktop_database_update
-
-	if ! use gmp-autoupdate && ! use eme-free ; then
-		elog "USE='-gmp-autoupdate' has disabled the following plugins from updating or"
-		elog "installing into new profiles:"
-		local plugin
-		for plugin in "${GMP_PLUGIN_LIST[@]}"; do elog "\t ${plugin}" ; done
-		elog
-	fi
 
 	if use pulseaudio && has_version ">=media-sound/apulse-0.1.9"; then
 		elog "Apulse was detected at merge time on this system and so it will always be"
