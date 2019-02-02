@@ -32,10 +32,10 @@ IUSE="apidocs examples gtk3 libnotify opengl test"
 RDEPEND="
 	dev-lang/python-exec:2[${PYTHON_USEDEP}]
 	gtk3? (
-		>=x11-libs/wxGTK-${WXV#*:}:3.0-gtk3[libnotify=,opengl?,tiff,X]
+		>=x11-libs/wxGTK-${WXV#*:}:3.0-gtk3[gstreamer,webkit,libnotify=,opengl?,tiff,X]
 	)
 	!gtk3? (
-		>=x11-libs/wxGTK-${WXV#*:}:3.0[libnotify=,opengl?,tiff,X]
+		>=x11-libs/wxGTK-${WXV#*:}:3.0[gstreamer,webkit,libnotify=,opengl?,tiff,X]
 	)
 	dev-python/pypubsub[${PYTHON_USEDEP}]
 	dev-python/six[${PYTHON_USEDEP}]
