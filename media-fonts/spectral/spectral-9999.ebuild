@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -14,7 +14,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/productiontype/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="1d908f3"
+	MY_PV="748733e"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/productiontype/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -31,8 +31,6 @@ SLOT="0"
 DOCS=( contributors.txt )
 
 src_prepare() {
-	grep -rl 'name="_mid"' sources/spectral-*.ufo | xargs \
-		sed '/name="/s:\<_mid\>:mid:' -i
 	ln -s . sources/instance_ufo
 	fontmake_src_prepare
 }
