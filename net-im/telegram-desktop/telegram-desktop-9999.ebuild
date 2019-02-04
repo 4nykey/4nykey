@@ -19,7 +19,7 @@ else
 	MY_TGV="libtgvoip-59a975b"
 	MY_VAR="variant-550ac2f"
 	MY_XXH="xxHash-7cc9639"
-	MY_DEB="${PN}_1.5.4-1.debian"
+	MY_DEB="${PN}_1.5.8-1.debian"
 	SRC_URI="
 		mirror://githubcl/telegramdesktop/${MY_PN}/tar.gz/v${PV} -> ${P}.tar.gz
 		mirror://debian/pool/main/t/${PN}/${MY_DEB}.tar.xz
@@ -162,13 +162,14 @@ src_prepare() {
 	)
 
 	eapply \
+		"${FILESDIR}"/Packed-resources.patch \
 		debian/patches/Use-system-wide-font.patch \
 		debian/patches/Packed-resources.patch \
 		"${FILESDIR}"/${PN}-gyp.diff
 
 	if tc-is-gcc; then
-		local _v="$(gcc-major-version)"
-		[[ ${_v} -le 7 ]] && eapply "${FILESDIR}"/gcc-if-constexpr-tmpfix.patch
+		local _v="$(gcc-major-version)$(gcc-minor-version)"
+		[[ ${_v} -le 73 ]] && eapply "${FILESDIR}"/gcc-if-constexpr-tmpfix.patch
 	fi
 
 	cd "${S}"/Telegram/gyp
