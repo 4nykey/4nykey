@@ -19,7 +19,7 @@ else
 	MY_TGV="libtgvoip-59a975b"
 	MY_VAR="variant-550ac2f"
 	MY_XXH="xxHash-7cc9639"
-	MY_DEB="${PN}_1.5.8-1.debian"
+	MY_DEB="${PN}_1.5.11-1.debian"
 	SRC_URI="
 		mirror://githubcl/telegramdesktop/${MY_PN}/tar.gz/v${PV} -> ${P}.tar.gz
 		mirror://debian/pool/main/t/${PN}/${MY_DEB}.tar.xz
@@ -157,12 +157,11 @@ src_prepare() {
 		-Dlinux_path_qt="${EROOT}usr/$(get_libdir)/qt5"
 		-Dlinux_path_xkbcommon="${EROOT}usr"
 		-Dlinux_path_opus_include="${EROOT}usr/include/opus"
-		-Dminizip_loc="$EROOT}usr/include/minizip"
+		-Dminizip_loc="${EROOT}usr/include/minizip"
 		-Dbuild_defines="${_d:1}"
 	)
 
 	eapply \
-		"${FILESDIR}"/Packed-resources.patch \
 		debian/patches/Use-system-wide-font.patch \
 		debian/patches/Packed-resources.patch \
 		"${FILESDIR}"/${PN}-gyp.diff
