@@ -33,7 +33,7 @@ RDEPEND="
 	dev-python/defcon[${PYTHON_USEDEP}]
 	dev-python/fontMath[${PYTHON_USEDEP}]
 	dev-python/fontPens[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-3.35.1[ufo,unicode,${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.37[ufo,unicode,${PYTHON_USEDEP}]
 	dev-python/MutatorMath[${PYTHON_USEDEP}]
 	dev-util/psautohint[${PYTHON_USEDEP}]
 	dev-python/ufoProcessor[${PYTHON_USEDEP}]
@@ -59,6 +59,8 @@ python_prepare_all() {
 	's%import subprocess32%import sys\nif int(sys.version[0])>2:\
 	import subprocess\nelse:\n\t&%'
 	sed -e 's:==:>=:' -i requirements.txt
+	sed -i setup.py \
+		-e 's:scripts=\(_get_scripts()\),:data_files=[("bin",\1)],:'
 
 	mkdir html pdf
 	mv -f docs/*.html html
@@ -79,5 +81,10 @@ src_compile() {
 }
 
 python_test() {
+	local -x \
+	PYTHONPATH="${BUILD_DIR}/test/lib/python:${PYTHONPATH}" \
+	PATH="${BUILD_DIR}/test/scripts:${S}/c/build_all:${PATH}"
+	mkdir -p "${BUILD_DIR}/test/lib/python"
+	distutils_install_for_testing
 	pytest -v || die
 }
