@@ -8,9 +8,6 @@
 		<flag name="clang">Use Clang compiler instead of GCC</flag>
 		<flag name="custom-optimization">Fine-tune custom compiler
 			optimizations (-Os, -O0, -O1, -O2, -O3)</flag>
-		<flag name="eme-free">Disable EME (DRM plugin) cabability at build time</flag>
-		<flag name="gmp-autoupdate">Allow Gecko Media Plugins (binary blobs) to be automatically
-			downloaded and kept up-to-date in user profiles</flag>
 		<flag name="hwaccel">Use hardware-accelerated rendering</flag>
 		<flag name="screenshot">Allow to disable screenshot extension in global profile</flag>
 		<flag name="system-harfbuzz">Use the system-wide <pkg>media-libs/harfbuzz</pkg>
