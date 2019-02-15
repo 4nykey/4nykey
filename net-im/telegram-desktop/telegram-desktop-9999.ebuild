@@ -15,7 +15,7 @@ else
 	inherit vcs-snapshot
 	MY_CAT="Catch2-5ca44b6"
 	MY_GSL="GSL-d846fe5"
-	MY_CRL="crl-9b7c6b5"
+	MY_CRL="crl-40063ab"
 	MY_TGV="libtgvoip-59a975b"
 	MY_VAR="variant-550ac2f"
 	MY_XXH="xxHash-7cc9639"
