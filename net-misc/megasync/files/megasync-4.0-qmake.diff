@@ -37,7 +37,7 @@
          HICOLOR = $$DESKTOP_DESTDIR/share/icons/hicolor
 --- a/src/MEGA.pro
 +++ b/src/MEGA.pro
-@@ -17,9 +17,9 @@ win32 {
+@@ -17,8 +17,9 @@ win32 {
  unix:!macx {
      CONFIG(with_ext) {
          SUBDIRS += MEGAShellExtNautilus
@@ -45,6 +45,6 @@
 +    CONFIG(with_thu) {
          SUBDIRS += MEGAShellExtThunar
 -        SUBDIRS += MEGAShellExtDolphin
--        SUBDIRS += MEGAShellExtNemo
      }
  }
+ 
