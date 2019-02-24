@@ -29,7 +29,6 @@ SLOT="0"
 IUSE="brotli gtk qt5 test +ufo unicode zopfli"
 DOCS=( {README,NEWS}.rst )
 PATCHES=(
-	"${FILESDIR}"/${PN}-glyphclass.diff
 	"${FILESDIR}"/${PN}-xattr.diff
 )
 
