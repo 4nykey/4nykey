@@ -41,6 +41,7 @@ DEPEND="
 "
 PATCHES=(
 	"${FILESDIR}"/${PN}-masters_wcodes.diff
+	"${FILESDIR}"/${PN}-brackets.diff
 )
 
 pkg_setup() {

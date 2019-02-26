@@ -1,0 +1,30 @@
+--- a/Lib/glyphsLib/builder/builders.py
++++ b/Lib/glyphsLib/builder/builders.py
+@@ -194,6 +194,7 @@ class UFOBuilder(_LoggerMixin):
+                 "[" in layer.name
+                 and "]" in layer.name
+                 and ".background" not in layer.name
++                and self.minimize_glyphs_diffs
+             ):
+                 self.bracket_layers.append(layer)
+             else:
+--- a/tests/builder/designspace_gen_test.py
++++ b/tests/builder/designspace_gen_test.py
+@@ -226,7 +226,7 @@ def test_designspace_generation_on_disk(datadir, tmpdir):
+ def test_designspace_generation_bracket_roundtrip(datadir):
+     with open(str(datadir.join("BracketTestFont.glyphs"))) as f:
+         font = glyphsLib.load(f)
+-    designspace = to_designspace(font)
++    designspace = to_designspace(font,minimize_glyphs_diffs=True)
+ 
+     assert designspace.rules[0].name == "BRACKET.300.600"
+     assert designspace.rules[0].conditionSets == [
+@@ -289,7 +289,7 @@ def test_designspace_generation_bracket_unbalanced_brackets(datadir):
+     # Delete the "Other [600]" layer to unbalance bracket layers.
+     del font.glyphs["x"].layers["C5C3CA59-C2D0-46F6-B5D3-86541DE36ACB"]
+     with pytest.raises(ValueError) as excinfo:
+-        to_designspace(font)
++        to_designspace(font,minimize_glyphs_diffs=True)
+     assert "bracket layer(s) missing" in str(excinfo)
+ 
+     # Delete the other [600] layers to rebalance.
