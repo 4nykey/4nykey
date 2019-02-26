@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/alexeiva/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="c0fb9d7"
+	MY_PV="d99e30a"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/alexeiva/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -23,12 +23,4 @@ HOMEPAGE="https://github.com/impallari/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-
-src_prepare() {
-	if use !binary; then
-		eapply "${FILESDIR}"/${PN}_sterling.diff
-		rm -rf sources/'For GX fonts'
-		mv -f sources/'For Single Fonts'/*.glyphs sources
-	fi
-	fontmake_src_prepare
-}
+PATCHES=( "${FILESDIR}"/${PN}_sterling.diff )

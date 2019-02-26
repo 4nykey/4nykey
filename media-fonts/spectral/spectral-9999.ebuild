@@ -3,10 +3,7 @@
 
 EAPI=6
 
-EMAKE_EXTRA_ARGS=(
-	glyphs=sources/${PN}-build-italic.designspace
-	glyphs+=sources/${PN}-build-roman.designspace
-)
+FONT_SRCDIR=.
 FONTDIR_BIN=( fonts/desktop{,_otf} fonts/sc{,_otf} )
 MY_FONT_VARIANTS=( smallcaps )
 if [[ -z ${PV%%*9999} ]]; then
@@ -31,6 +28,7 @@ SLOT="0"
 DOCS=( contributors.txt )
 
 src_prepare() {
-	ln -s . sources/instance_ufo
+	ln -s . sources/master_ufo
+	sed -e 's:instances/:../instance_ufo/:' -i sources/*.designspace
 	fontmake_src_prepare
 }

@@ -1,6 +1,6 @@
---- a/sources/For Single Fonts/LibreFranklin Italics.glyphs	
-+++ b/sources/For Single Fonts/LibreFranklin Italics.glyphs	
-@@ -91312,8 +91312,6 @@ nodes = (
+--- a/sources/LibreFranklin Italics.glyphs	
++++ b/sources/LibreFranklin Italics.glyphs	
+@@ -91068,8 +91068,6 @@ nodes = (
  "359 333 OFFCURVE",
  "367 343 OFFCURVE",
  "379 343 CURVE SMOOTH",
@@ -9,7 +9,7 @@
  "474 343 LINE SMOOTH",
  "481 343 OFFCURVE",
  "481 341 OFFCURVE",
-@@ -91414,8 +91412,6 @@ nodes = (
+@@ -91170,8 +91168,6 @@ nodes = (
  "359 333 OFFCURVE",
  "367 343 OFFCURVE",
  "379 343 CURVE SMOOTH",
@@ -18,7 +18,7 @@
  "474 343 LINE SMOOTH",
  "481 343 OFFCURVE",
  "481 341 OFFCURVE",
-@@ -91518,8 +91514,6 @@ nodes = (
+@@ -91274,8 +91270,6 @@ nodes = (
  "194 356 OFFCURVE",
  "198 359 OFFCURVE",
  "204 359 CURVE SMOOTH",
@@ -27,7 +27,7 @@
  "364 359 LINE SMOOTH",
  "368 359 OFFCURVE",
  "369 360 OFFCURVE",
-@@ -91620,8 +91614,6 @@ nodes = (
+@@ -91376,8 +91370,6 @@ nodes = (
  "194 356 OFFCURVE",
  "198 359 OFFCURVE",
  "204 359 CURVE SMOOTH",
@@ -36,9 +36,9 @@
  "364 359 LINE SMOOTH",
  "368 359 OFFCURVE",
  "369 360 OFFCURVE",
---- a/sources/For Single Fonts/LibreFranklin Romans.glyphs	
-+++ b/sources/For Single Fonts/LibreFranklin Romans.glyphs	
-@@ -88552,8 +88552,6 @@ nodes = (
+--- a/sources/LibreFranklin Romans.glyphs	
++++ b/sources/LibreFranklin Romans.glyphs	
+@@ -88170,8 +88170,6 @@ nodes = (
  "349 339 OFFCURVE",
  "352 343 OFFCURVE",
  "360 343 CURVE SMOOTH",
@@ -47,7 +47,7 @@
  "458 343 LINE SMOOTH",
  "466 343 OFFCURVE",
  "470 347 OFFCURVE",
-@@ -88654,8 +88652,6 @@ nodes = (
+@@ -88272,8 +88270,6 @@ nodes = (
  "349 339 OFFCURVE",
  "352 343 OFFCURVE",
  "360 343 CURVE SMOOTH",
@@ -56,7 +56,7 @@
  "458 343 LINE SMOOTH",
  "466 343 OFFCURVE",
  "470 347 OFFCURVE",
-@@ -88758,8 +88754,6 @@ nodes = (
+@@ -88376,8 +88372,6 @@ nodes = (
  "181 357 OFFCURVE",
  "184 359 OFFCURVE",
  "189 359 CURVE SMOOTH",
@@ -65,7 +65,7 @@
  "350 359 LINE SMOOTH",
  "354 359 OFFCURVE",
  "356 361 OFFCURVE",
-@@ -88860,8 +88854,6 @@ nodes = (
+@@ -88478,8 +88472,6 @@ nodes = (
  "181 357 OFFCURVE",
  "184 359 OFFCURVE",
  "189 359 CURVE SMOOTH",

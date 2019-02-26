@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}"
 else
 	inherit vcs-snapshot
-	MY_PV="f8f3770"
+	MY_PV="deed4c6"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz

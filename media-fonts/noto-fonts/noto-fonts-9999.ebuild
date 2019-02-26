@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -11,7 +11,7 @@ else
 	inherit vcs-snapshot
 	MY_PV="phase3-second-cleanup"
 	MY_PV="v${PV//./-}-${MY_PV}"
-	[[ -z ${PV%%*_p*} ]] && MY_PV="9176dad"
+	[[ -z ${PV%%*_p*} ]] && MY_PV="576ccad"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -26,13 +26,16 @@ HOMEPAGE="https://www.google.com/get/noto"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE=""
+IUSE="autohint"
 
 src_prepare() {
 	default
-	local _s
-	for _s in ${FONT_SUFFIX}; do
-		find -type f -path "./phaseIII_only/unhinted/${_s}/*.${_s}" \
+	if use font_types_ttf; then
+		find -type f -path "./phaseIII_only/$(usex autohint hinted unhinted)/ttf/*.ttf" \
 			-exec mv --target-directory="${FONT_S}" {} +
-	done
+	fi
+	if use font_types_otf; then
+		find -type f -path "./phaseIII_only/unhinted/otf/*.otf" \
+			-exec mv --target-directory="${FONT_S}" {} +
+	fi
 }
