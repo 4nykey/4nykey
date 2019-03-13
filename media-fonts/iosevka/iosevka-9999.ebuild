@@ -132,8 +132,8 @@ src_compile() {
 
 	if use font_types_ttc; then
 
-		emake collection-fonts:${PN}
-		use font_variants_slab && emake collection-fonts:${PN}-slab
+		emake collection-fonts::${PN}
+		use font_variants_slab && emake collection-fonts::${PN}-slab
 		FONT_S=( dist/collections/${PN}{,-slab} )
 
 	elif use font_types_ttf; then
@@ -160,7 +160,7 @@ src_compile() {
 			use font_variants_ss${_s} && _t+=( ${PN}-ss${_s} )
 		done
 
-		emake ${_t[@]/#/${_v}:}
+		emake ${_t[@]/#/${_v}::}
 
 		FONT_S=( ${_t[@]/#/dist/} )
 		FONT_S=( ${FONT_S[@]/%//${_v}} )
