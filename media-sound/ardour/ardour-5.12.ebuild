@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -15,7 +15,9 @@ if [[ -n ${PV%%*9999} ]]; then
 	SRC_URI="https://community.ardour.org/srctar/Ardour-${PV}.0.tar.bz2"
 	KEYWORDS="~amd64 ~x86"
 fi
-SRC_URI=
+SRC_URI="
+	!bundled-libs? ( ${EGIT_REPO_URI%.git}/commit/5b03c41.patch )
+"
 
 DESCRIPTION="Digital Audio Workstation"
 HOMEPAGE="http://ardour.org/"
@@ -67,8 +69,6 @@ DEPEND="
 	doc? ( app-doc/doxygen )
 "
 
-PATCHES=(
-)
 DOCS=( README TRANSLATORS doc/monitor_modes.pdf )
 
 src_prepare() {
@@ -81,6 +81,9 @@ src_prepare() {
 		-i gtk2_ardour/ardour.desktop.in
 	use nls && l10n_for_each_disabled_locale_do my_lcmsg
 	grep -rl '/\<lib\>' | xargs sed -e "s:/\<lib\>:/$(get_libdir):g" -i
+
+	use !bundled-libs && has_version '>=media-sound/fluidsynth-2.0.0' || return
+	eapply "${DISTDIR}"/5b03c41.patch
 }
 
 src_configure() {
