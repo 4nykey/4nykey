@@ -166,11 +166,6 @@ src_prepare() {
 		debian/patches/Packed-resources.patch \
 		"${FILESDIR}"/${PN}-gyp.diff
 
-	if tc-is-gcc; then
-		local _v="$(gcc-major-version)$(gcc-minor-version)"
-		[[ ${_v} -le 73 ]] && eapply "${FILESDIR}"/gcc-if-constexpr-tmpfix.patch
-	fi
-
 	cd "${S}"/Telegram/gyp
 
 	use test || sed -e '/\<tests\>/d' -i Telegram.gyp
