@@ -77,7 +77,19 @@ QA_PRESTRIPPED="usr/lib*/${PN}/${PN}/${PN}"
 BUILD_OBJ_DIR="${WORKDIR}/tb"
 
 llvm_check_deps() {
-	has_version "sys-devel/clang:${LLVM_SLOT}"
+	if ! has_version "sys-devel/clang:${LLVM_SLOT}" ; then
+		ewarn "sys-devel/clang:${LLVM_SLOT} is missing! Cannot use LLVM slot ${LLVM_SLOT} ..."
+		return 1
+	fi
+
+	if use clang ; then
+		if ! has_version "=sys-devel/lld-${LLVM_SLOT}*" ; then
+			ewarn "=sys-devel/lld-${LLVM_SLOT}* is missing! Cannot use LLVM slot ${LLVM_SLOT} ..."
+			return 1
+		fi
+	fi
+
+	einfo "Will use LLVM slot ${LLVM_SLOT}!"
 }
 
 pkg_setup() {
@@ -199,6 +211,10 @@ src_configure() {
 
 	mozconfig_annotate '' --enable-extensions="${MEXTENSIONS}"
 
+	# allow elfhack to work in combination with unstripped binaries
+	# when they would normally be larger than 2GiB.
+	append-ldflags "-Wl,--compress-debug-sections=zlib"
+
 	if use clang ; then
 		# https://bugzilla.mozilla.org/show_bug.cgi?id=1423822
 		mozconfig_annotate 'elf-hack is broken when using Clang' --disable-elf-hack
@@ -274,14 +290,15 @@ src_install() {
 
 	cd "${S}"
 	MOZ_MAKE_FLAGS="${MAKEOPTS}" SHELL="${SHELL:-${EPREFIX}/bin/bash}" MOZ_NOSPAM=1 \
-	DESTDIR="${D}" ./mach install
+	DESTDIR="${D}" ./mach install || die
 
 	# Install icons and .desktop for menu entry
 	local size icon_path
 	icon_path="${S}/browser/branding/official"
-	for size in 16 32 48 64 128 256; do
+	for size in 16 32 48 64 128 256 512; do
 		newicon -s ${size} "${icon_path}/default${size}.png" ${PN}.png
 	done
+	newicon -s scalable "${icon_path}/firefox.svg" ${PN}.svg
 	make_desktop_entry ${PN} "Tor Browser" ${PN} "Network;WebBrowser" "StartupWMClass=Torbrowser"
 
 	# Add StartupNotify=true bug 237317
