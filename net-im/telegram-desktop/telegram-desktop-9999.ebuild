@@ -16,7 +16,7 @@ else
 	MY_CAT="Catch2-5ca44b6"
 	MY_GSL="GSL-d846fe5"
 	MY_CRL="crl-84072fb"
-	MY_TGV="libtgvoip-7b62334"
+	MY_TGV="libtgvoip-16711e2"
 	MY_VAR="variant-550ac2f"
 	MY_XXH="xxHash-7cc9639"
 	MY_DEB="${PN}_1.5.11-1.debian"
