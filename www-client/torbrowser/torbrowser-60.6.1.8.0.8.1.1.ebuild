@@ -8,6 +8,8 @@ PYTHON_COMPAT=( python3_{5,6,7} )
 PYTHON_REQ_USE='ncurses,sqlite,ssl,threads(+)'
 MOZCONFIG_OPTIONAL_WIFI=1
 
+LLVM_MAX_SLOT=8
+
 inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils llvm \
 		mozconfig-v6.${PV%%.*} pax-utils xdg-utils autotools
 inherit eapi7-ver
@@ -38,7 +40,7 @@ LICENSE="BSD CC-BY-3.0 MPL-2.0 GPL-2 LGPL-2.1"
 IUSE="hardened hwaccel jack -screenshot selinux test"
 
 SRC_URI="mirror://tor/dist/${PN}/${TOR_PV}"
-PATCH="firefox-${PV%%.*}.5-patches-01"
+PATCH="firefox-${PV%%.*}.6-patches-01"
 PATCH=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c}/mozilla/patchsets/${PATCH}.tar.xz )
 SRC_URI="
 	https://gitweb.torproject.org/tor-browser.git/snapshot/${GIT_TAG}.tar.gz
@@ -124,6 +126,7 @@ src_prepare() {
 		"${WORKDIR}"/firefox
 		"${FILESDIR}"/${PN}-profiledir.patch
 		"${FILESDIR}"/${PN}-lto.patch
+		"${FILESDIR}"/${PN}-rust_missing_docs.patch
 	)
 
 	sed \
