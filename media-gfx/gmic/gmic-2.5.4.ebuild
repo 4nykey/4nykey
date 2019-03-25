@@ -1,7 +1,7 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit bash-completion-r1 flag-o-matic qmake-utils toolchain-funcs
 
@@ -54,11 +54,10 @@ DEPEND="
 	sys-libs/zlib
 "
 RDEPEND="
-	${COMMON_DEPEND}
+	${DEPEND}
 	ffmpeg? ( media-video/ffmpeg:0 )
 "
-DEPEND="
-	${DEPEND}
+BDEPEND="
 	virtual/pkgconfig
 "
 
@@ -164,7 +163,7 @@ src_install() {
 		exeinto "${_l}"
 		doexe build/gimp/gmic_gimp_qt
 		insinto "${_l}"
-		doins resources/gmic_film_cluts.gmz
+		doins resources/gmic_cluts.gmz
 	fi
 
 	use krita && dobin build/krita/gmic_krita_qt
