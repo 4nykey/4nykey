@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>4nykey@gmail.com</email>
+	</maintainer>
+	<use>
+		<flag name="apfs">
+			Include APFS support
+		</flag>
+		<flag name="btrfs">
+			Include BTRFS support
+		</flag>
+		<flag name="e2fs">
+			Include EXT2/3/4 support
+		</flag>
+		<flag name="f2fs">
+			Include F2FS support
+		</flag>
+		<flag name="fuse">
+			Mount images via sys-fs/fuse
+		</flag>
+		<flag name="exfat">
+			Include exfat support
+		</flag>
+		<flag name="fat">
+			Include FAT16/FAT32 support
+		</flag>
+		<flag name="hfs">
+			Include HFS support
+		</flag>
+		<flag name="minix">
+			Include MINIX FS support
+		</flag>
+		<flag name="nilfs2">
+			Include NILFS2 support
+		</flag>
+		<flag name="ntfs">
+			Include NTFS support
+		</flag>
+		<flag name="reiser4">
+			Include ReiserFS4 support
+		</flag>
+		<flag name="reiserfs">
+			Include ReiserFS support
+		</flag>
+		<flag name="xfs">
+			Include XFS support
+		</flag>
+	</use>
+</pkgmetadata>
