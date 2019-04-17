@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-fonts/${PN}"
 else
-	SRC_URI="mirror://githubraw/adobe-fonts/${PN}/release/SubsetOTF/${MY_PN}"
+	SRC_URI="mirror://githubraw/adobe-fonts/${PN}/${PV}R/SubsetOTF/${MY_PN}"
 	SRC_URI="
 		binary? (
 		font_types_otf? (
@@ -39,17 +39,15 @@ HOMEPAGE="https://github.com/adobe-fonts/source-han-sans/"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="+binary l10n_ja l10n_ko l10n_zh-CN l10n_zh-HK l10n_zh-TW monospace"
+IUSE_L10N=( ja ko zh-CN zh-HK zh-TW )
+IUSE="+binary ${IUSE_L10N[@]/#/l10n_}"
 REQUIRED_USE="
-|| ( l10n_ja l10n_ko l10n_zh-CN l10n_zh-HK l10n_zh-TW )
+font_types_otf? ( || ( ${IUSE_L10N[@]/#/l10n_} ) )
 ?? ( ${MY_FONT_TYPES[@]/#+/} )
 "
 
 DEPEND="
 	!binary? ( dev-util/afdko )
-"
-RDEPEND="
-	l10n_ja? ( monospace? ( media-fonts/source-han-code-jp ) )
 "
 
 src_unpack() {
