@@ -40,7 +40,7 @@ LICENSE="BSD CC-BY-3.0 MPL-2.0 GPL-2 LGPL-2.1"
 IUSE="hardened hwaccel jack -screenshot selinux test"
 
 SRC_URI="mirror://tor/dist/${PN}/${TOR_PV}"
-PATCH="firefox-${PV%%.*}.6-patches-01"
+PATCH="firefox-60.6-patches-03"
 PATCH=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c}/mozilla/patchsets/${PATCH}.tar.xz )
 SRC_URI="
 	https://gitweb.torproject.org/tor-browser.git/snapshot/${GIT_TAG}.tar.gz
@@ -126,7 +126,6 @@ src_prepare() {
 		"${WORKDIR}"/firefox
 		"${FILESDIR}"/${PN}-profiledir.patch
 		"${FILESDIR}"/${PN}-lto.patch
-		"${FILESDIR}"/${PN}-rust_missing_docs.patch
 	)
 
 	sed \
