@@ -1,6 +1,6 @@
 --- a/COMMANDS.txt
 +++ b/COMMANDS.txt
-@@ -8,47 +8,71 @@
+@@ -8,46 +8,64 @@
  
  ### Command lines for building the region-specific subset OTFs
  ### Executed in {ExtraLight,Light,Regular,Medium,SemiBold,Bold,Heavy}
@@ -61,14 +61,24 @@
  ### Command line for building the OTCs (replace $dir with the face name)
  ### Executed in {ExtraLight,Light,Regular,Medium,SemiBold,Bold,Heavy}/OTC
  
+-otf2otc -t 'CFF '=0 -o SourceHanSerif-$dir.ttc SourceHanSerif-$dir.otf SourceHanSerifK-$dir.otf SourceHanSerifSC-$dir.otf SourceHanSerifTC-$dir.otf
 +dir=$(basename "${d}")
- otf2otc -t 'CFF '=0 -o SourceHanSerif-$dir.ttc SourceHanSerif-$dir.otf SourceHanSerifK-$dir.otf SourceHanSerifSC-$dir.otf SourceHanSerifTC-$dir.otf
-+[[ $? -eq 0 ]] || die
-+mv -f ${MY_PN}-$dir.ttc "${S}"
+ 
+ ### Command lines for building the Super OTC
+ 
+@@ -68,10 +86,15 @@ sfntedit -d DSIG SourceHanSerif-$dir.otf
+ sfntedit -d DSIG SourceHanSerifK-$dir.otf.tmp
+ sfntedit -d DSIG SourceHanSerifSC-$dir.otf.tmp
+ sfntedit -d DSIG SourceHanSerifTC-$dir.otf.tmp
 +fi
 +done
  
-+return
- ### Command lines for building the Super OTC
+ # Command line for building the Super OTC
+ # Executed in the root directory
++use font_types_ttc || return
  
- # Command lines for copying the CFF from the Japanese OTF to temporary
++cd "${S}"
+ otf2otc -o SourceHanSerif.ttc ExtraLight/OTC/SourceHanSerif-ExtraLight.otf.tmp ExtraLight/OTC/SourceHanSerifK-ExtraLight.otf.tmp ExtraLight/OTC/SourceHanSerifSC-ExtraLight.otf.tmp ExtraLight/OTC/SourceHanSerifTC-ExtraLight.otf.tmp Light/OTC/SourceHanSerif-Light.otf.tmp Light/OTC/SourceHanSerifK-Light.otf.tmp Light/OTC/SourceHanSerifSC-Light.otf.tmp Light/OTC/SourceHanSerifTC-Light.otf.tmp Regular/OTC/SourceHanSerif-Regular.otf.tmp Regular/OTC/SourceHanSerifK-Regular.otf.tmp Regular/OTC/SourceHanSerifSC-Regular.otf.tmp Regular/OTC/SourceHanSerifTC-Regular.otf.tmp Medium/OTC/SourceHanSerif-Medium.otf.tmp Medium/OTC/SourceHanSerifK-Medium.otf.tmp Medium/OTC/SourceHanSerifSC-Medium.otf.tmp Medium/OTC/SourceHanSerifTC-Medium.otf.tmp SemiBold/OTC/SourceHanSerif-SemiBold.otf.tmp SemiBold/OTC/SourceHanSerifK-SemiBold.otf.tmp SemiBold/OTC/SourceHanSerifSC-SemiBold.otf.tmp SemiBold/OTC/SourceHanSerifTC-SemiBold.otf.tmp Bold/OTC/SourceHanSerif-Bold.otf.tmp Bold/OTC/SourceHanSerifK-Bold.otf.tmp Bold/OTC/SourceHanSerifSC-Bold.otf.tmp Bold/OTC/SourceHanSerifTC-Bold.otf.tmp Heavy/OTC/SourceHanSerif-Heavy.otf.tmp Heavy/OTC/SourceHanSerifK-Heavy.otf.tmp Heavy/OTC/SourceHanSerifSC-Heavy.otf.tmp Heavy/OTC/SourceHanSerifTC-Heavy.otf.tmp
++[[ $? -eq 0 ]] || die
+ 
+ # EOF

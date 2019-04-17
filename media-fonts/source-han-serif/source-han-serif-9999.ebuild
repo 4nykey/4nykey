@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -9,8 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-fonts/${PN}"
 else
-	MY_OTC=( ${MY_PN}OTC_{EL-M,SB-H}.zip )
-	SRC_URI="mirror://githubraw/adobe-fonts/${PN}/release/SubsetOTF/${MY_PN}"
+	SRC_URI="mirror://githubraw/adobe-fonts/${PN}/${PV}R/SubsetOTF/${MY_PN}"
 	SRC_URI="
 		binary? (
 		font_types_otf? (
@@ -20,7 +19,8 @@ else
 			l10n_zh-TW? ( ${SRC_URI}TW.zip -> ${MY_PN}TW-${PV}.zip )
 		)
 		font_types_ttc? (
-			${MY_OTC[@]/#/mirror://githubraw/adobe-fonts/${PN}/release/OTC/}
+			https://github.com/adobe-fonts/${PN}/releases/download/${PV}R/${MY_PN}.ttc
+			-> ${MY_PN}-${PV}.ttc
 		)
 		)
 		!binary? (
@@ -38,9 +38,10 @@ HOMEPAGE="https://source.typekit.com/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="+binary l10n_ja l10n_ko l10n_zh-CN l10n_zh-TW"
+IUSE_L10N=( ja ko zh-CN zh-TW )
+IUSE="+binary ${IUSE_L10N[@]/#/l10n_}"
 REQUIRED_USE="
-|| ( l10n_ja l10n_ko l10n_zh-CN l10n_zh-TW )
+font_types_otf? ( || ( ${IUSE_L10N[@]/#/l10n_} ) )
 ?? ( ${MY_FONT_TYPES[@]/#+/} )
 "
 
@@ -52,6 +53,8 @@ src_unpack() {
 	if [[ ${PV} == *9999* ]]; then
 		EGIT_BRANCH="$(usex binary release master)"
 		git-r3_src_unpack
+	elif use binary && use font_types_ttc; then
+		cp "${DISTDIR}"/${A} "${WORKDIR}"
 	else
 		default
 	fi
@@ -69,7 +72,7 @@ pkg_setup() {
 			S="${WORKDIR}"
 			FONT_S=(
 				${FONT_S[@]/#/${MY_PN}}
-				${MY_OTC[@]/.zip}
+				.
 			)
 		else
 			FONT_S=(
