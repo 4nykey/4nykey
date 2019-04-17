@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -8,11 +8,12 @@ if [[ ${PV} = *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/open-eid/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="${PV/_/-}"
+	MY_PV="a7a2547"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV/_/-}"
 	MY_PV="${MY_PV/rc/RC}"
 	MY_C="certs-5415bae"
 	SRC_URI="
-		mirror://githubcl/open-eid/${PN}/tar.gz/v${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/open-eid/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://githubcl/open-eid/${MY_C%-*}/tar.gz/${MY_C##*-} -> ${MY_C}.tar.gz
 	"
 	RESTRICT="primaryuri"
@@ -26,8 +27,7 @@ HOMEPAGE="http://id.ee"
 LICENSE="LGPL-2.1"
 SLOT="0"
 
-IUSE="apidocs doc"
-REQUIRED_USE="apidocs? ( doc )"
+IUSE="apidocs"
 
 RDEPEND="
 	dev-libs/libxml2:2
@@ -43,23 +43,20 @@ DEPEND="
 DOCS=( AUTHORS RE{ADME,LEASE-NOTES}.md )
 
 src_prepare() {
-	default
+	local PATCHES=( "${FILESDIR}"/${PN}-inc.diff )
 	[[ -n ${PV%%*9999} ]] && mv "${WORKDIR}"/${MY_C}/* "${S}"/etc/certs
 	sed \
-		-e "s:doc/${PN}:doc/${PF}:" \
+		-e "/CMAKE_INSTALL_DOCDIR/s:${PN}:${PF}:" \
 		-e 's:\${CMAKE_SOURCE_DIR}/cmake/modules:/usr/share/cmake/openeid:' \
 		-i CMakeLists.txt
-	sed \
-		-e '/INSTALL_RPATH/d' \
-		-i libdigidoc/CMakeLists.txt
 	cmake-utils_src_prepare
 	append-cppflags '-DOF=_Z_OF'
 }
 
 src_configure() {
 	local mycmakeargs=(
-		-DINSTALL_DOC=$(usex doc)
 		-DCMAKE_INSTALL_SYSCONFDIR="${EROOT}"etc
+		-DCMAKE_DISABLE_FIND_PACKAGE_Doxygen=$(usex !apidocs)
 	)
 	cmake-utils_src_configure
 }

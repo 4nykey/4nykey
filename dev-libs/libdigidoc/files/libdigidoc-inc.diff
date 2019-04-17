@@ -1,0 +1,10 @@
+--- a/libdigidoc/DigiDocService.c
++++ b/libdigidoc/DigiDocService.c
+@@ -26,6 +26,7 @@
+ #include <libdigidoc/DigiDocObj.h>
+ #include <libdigidoc/DigiDocConvert.h>
+ #include <libdigidoc/DigiDocGen.h>
++#include <libdigidoc/DigiDocSAXParser.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <memory.h>
