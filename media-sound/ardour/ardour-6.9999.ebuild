@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -11,18 +11,19 @@ PYTHON_REQ_USE='threads(+)'
 EGIT_REPO_URI="https://github.com/${PN^}/${PN}.git"
 inherit gnome2 python-any-r1 waf-utils l10n git-r3 toolchain-funcs
 if [[ -n ${PV%%*9999} ]]; then
-	EGIT_COMMIT="${PV/_/-}"
-	SRC_URI="https://community.ardour.org/srctar/Ardour-${PV}.0.tar.bz2"
+	MY_PV="d686076"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
+	EGIT_COMMIT="${MY_PV/_/-}"
 	KEYWORDS="~amd64 ~x86"
 fi
-SRC_URI=
+SRC_URI=""
 
 DESCRIPTION="Digital Audio Workstation"
 HOMEPAGE="http://ardour.org/"
 
 LICENSE="GPL-2"
 SLOT="${PV%%.*}"
-IUSE="alsa bindist bundled-libs +c++0x debug doc jack hid lv2 nls phone-home sanitize sse vst"
+IUSE="alsa bindist bundled-libs +c++0x debug doc jack hid nls phone-home sanitize sse vst"
 REQUIRED_USE="
 	|| ( alsa jack )
 	${PYTHON_REQUIRED_USE}
@@ -39,11 +40,9 @@ RDEPEND="
 	dev-libs/libxml2:2
 	media-libs/libsamplerate
 	media-libs/lv2
-	lv2? (
-		media-libs/suil
-		media-libs/lilv
-		media-libs/liblrdf
-	)
+	media-libs/suil
+	media-libs/lilv
+	media-libs/liblrdf
 	net-misc/curl
 	media-libs/libsndfile
 	jack? ( virtual/jack )
@@ -77,7 +76,7 @@ src_prepare() {
 		rm -f {gtk2_ardour,gtk2_ardour/appdata,libs/ardour,libs/gtkmm2ext}/po/${1}.po
 	}
 	sed -e 's:AudioEditing:X-&:' -i gtk2_ardour/ardour.desktop.in
-	sed -e 's:USE_EXTERNAL_LIBS:CANT_&:' -i libs/zita-resampler/wscript
+	sed -e 's:USE_EXTERNAL_LIBS:CANT_&:' -i libs/zita-convolver/wscript
 	use nls && l10n_for_each_disabled_locale_do my_lcmsg
 	grep -rl '/\<lib\>' | xargs sed -e "s:/\<lib\>:/$(get_libdir):g" -i
 }
@@ -93,8 +92,6 @@ src_configure() {
 		--freedesktop
 		--keepflags
 		--with-backends="$(usev alsa),$(usev jack)"
-		$(usex lv2 '' '--no-lrdf')
-		$(my_use lv2)
 		$(my_use vst lxvst)
 		$(my_use nls)
 		$(my_use phone-home)
