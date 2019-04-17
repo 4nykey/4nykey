@@ -8,21 +8,24 @@ app-arch/wimlib:openssl - Use SHA-1 implementation from libcrypto (dev-libs/open
 app-arch/wimlib:yasm - Prefer dev-lang/yasm over dev-lang/nasm
 app-crypt/digidoc4-client:nautilus - Install gnome-base/nautilus extension
 app-crypt/qdigidoc:nautilus - Build gnome-base/nautilus extension
-app-text/fbpdf:mupdf - Use app-text/mupdf for rendering
-app-text/fbpdf:poppler - Use app-text/poppler for rendering
 app-text/podofo:boost - Add support for boost
 app-text/podofo:tools - Build and install commandline tools.
 cross-x86_64-w64-mingw32/mingw64-runtime:idl - Install idl files.
 cross-x86_64-w64-mingw32/mingw64-runtime:libraries - Build extra libraries.
 cross-x86_64-w64-mingw32/mingw64-runtime:tools - Build extra tools.
 dev-libs/libdigidocpp:pdf - Experimental PDF Signing/validating support
-dev-libs/seexpr:llvm - Enable LLVM backend
+dev-libs/xerces-c:iconv - Use iconv (virtual/libiconv) as message loader and transcoder (in general it would be possible to use iconv only as message loader and something else like icu or the native method as transcoder and vice-versa, but this is a less common case and hard to handle)
+dev-libs/xerces-c:threads - Enable threading support through pthread (or other libraries on AIX, IRIX, HPUX, Solars). Highly recommended
+dev-libs/xml-security-c:nss - Use dev-libs/nss for certain crypto operations (configureable at runtime)
+dev-libs/xml-security-c:xalan - Enable support for XSLT and XPath parsing by dev-libs/xalan-c
 dev-python/compreffor:cython - Generate cpp sources with dev-python/cython
+dev-python/cu2qu:cython - Use cython to build an (optional) optimized extension module
 dev-python/fonttools:brotli - Enable brotli compression support, required for WOFF2 web fonts
-dev-python/fonttools:scipy - Support finding wrong contour/component order between different masters
-dev-python/fonttools:sympy - Support for symbolic font statistics analysis
+dev-python/fonttools:ufo - Enable support for reading and writing UFO source files
 dev-python/fonttools:zopfli - Enable zopfli compression support for WOFF web fonts
 dev-python/pyclipper:cython - Generate cpp sources with dev-python/cython
+dev-python/wxpython:examples - Install interactive demo module browser and sample applets
+dev-python/wxpython:gtk3 - Build with GTK+3 instead of GTK+2
 dev-util/ots:graphite - Sanitize Graphite tables
 dev-util/ots:variations - Sanitize OpenType Variation tables
 media-fonts/fira:clean-as-you-go - Clean intermediate ufos after they were built (useful when PORTAGE_TMPDIR resides on a tmpfs)
@@ -48,11 +51,7 @@ media-fonts/noto-emoji:zopfli - Optimize using app-arch/zopfli
 media-fonts/noto-source:clean-as-you-go - Clean intermediate ufos after they were built (useful when PORTAGE_TMPDIR resides on a tmpfs)
 media-fonts/noto-source:interpolate - Interpolate to get more font weights (significantly increases build time and diskspace requirements)
 media-fonts/sarasa-gothic:font_variants_term - A variant without ligatures and full-width glyphs
-media-fonts/source-han-sans:monospace - Install monospace fonts
 media-fonts/source-pro:emoji - Install emoji fonts
-media-fonts/source-pro:monospace - Install monospace fonts
-media-fonts/source-pro:sans - Install sans fonts
-media-fonts/source-pro:serif - Install serif fonts
 media-fonts/unscii:utils - Install bm2uns util to convert a bitmap image to unscii art
 media-gfx/fim:archive - Enable archive support using app-arch/libarchive
 media-gfx/fim:dia - Enable DIA file support via app-office/dia
@@ -102,13 +101,22 @@ net-misc/meganz-sdk:qt - Install QT bindings
 net-misc/megasync:dolphin - Install the kde-apps/dolphin extension
 net-misc/megasync:nautilus - Install the gnome-base/nautilus extension
 net-misc/megasync:thunar - Install the xfce-base/thunar extension
-sys-block/f3:extras - Compile the extra applications
-www-client/midori:granite - Enable support for the elementary library dev-libs/granite
-www-client/midori:zeitgeist - Add support for Zeitgeist event tracking system
+sys-block/partclone:apfs - Include APFS support
+sys-block/partclone:btrfs - Include BTRFS support
+sys-block/partclone:e2fs - Include EXT2/3/4 support
+sys-block/partclone:exfat - Include exfat support
+sys-block/partclone:f2fs - Include F2FS support
+sys-block/partclone:fat - Include FAT16/FAT32 support
+sys-block/partclone:fuse - Mount images via sys-fs/fuse
+sys-block/partclone:hfs - Include HFS support
+sys-block/partclone:minix - Include MINIX FS support
+sys-block/partclone:nilfs2 - Include NILFS2 support
+sys-block/partclone:ntfs - Include NTFS support
+sys-block/partclone:reiser4 - Include ReiserFS4 support
+sys-block/partclone:reiserfs - Include ReiserFS support
+sys-block/partclone:xfs - Include XFS support
 www-client/torbrowser:clang - Use Clang compiler instead of GCC
 www-client/torbrowser:custom-optimization - Fine-tune custom compiler optimizations (-Os, -O0, -O1, -O2, -O3)
-www-client/torbrowser:eme-free - Disable EME (DRM plugin) cabability at build time
-www-client/torbrowser:gmp-autoupdate - Allow Gecko Media Plugins (binary blobs) to be automatically downloaded and kept up-to-date in user profiles
 www-client/torbrowser:hwaccel - Use hardware-accelerated rendering
 www-client/torbrowser:screenshot - Allow to disable screenshot extension in global profile
 www-client/torbrowser:system-harfbuzz - Use the system-wide media-libs/harfbuzz and media-gfx/graphite2 instead of bundled.
@@ -117,6 +125,9 @@ www-client/torbrowser:system-jpeg - Use the system-wide media-libs/libjpeg-turbo
 www-client/torbrowser:system-libevent - Use the system-wide dev-libs/libevent instead of bundled.
 www-client/torbrowser:system-libvpx - Use the system-wide media-libs/libvpx instead of bundled.
 www-client/torbrowser:system-sqlite - Use the system-wide dev-db/sqlite installation with secure-delete enabled
+x11-libs/wxGTK:chm - Enable support for Microsoft Compiled HTML Help files.
+x11-libs/wxGTK:gstreamer - Enable the wxMediaCtrl class for playing audio and video through gstreamer.
+x11-libs/wxGTK:sdl - Use Simple Directmedia Layer (media-libs/libsdl) for audio.
 x11-misc/gpaste:gnome-shell - Install gnome-shell extension
 x11-misc/gxneur:gconf - Enable GConf as configuration backend
 x11-misc/xneur:aspell - Enable spellchecking using app-text/aspell
