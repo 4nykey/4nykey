@@ -4,7 +4,7 @@
 EAPI=6
 
 MY_FONT_TYPES=( ttc +ttf )
-MY_FONT_VARIANTS=( gothic +mono term ui )
+MY_FONT_VARIANTS=( sans +monospace term ui )
 inherit font-r1
 
 DESCRIPTION="A CJK programming font based on Iosevka and Source Han Sans"
@@ -19,10 +19,10 @@ RESTRICT="primaryuri"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE_L10N=( ja ko zh-CN zh-TW )
+IUSE_L10N=( ja zh-CN zh-HK zh-TW )
 IUSE="${IUSE_L10N[@]/#/l10n_}"
 REQUIRED_USE="
-|| ( l10n_ja l10n_ko l10n_zh-CN l10n_zh-TW )
+font_types_ttf? ( || ( ${IUSE} ) )
 ?? ( ${MY_FONT_TYPES[@]/#+/} )
 "
 DEPEND="
@@ -34,12 +34,14 @@ src_prepare() {
 	default
 	use font_types_ttc && return
 	rm -f \
+		${PN%-*}-monoT-*.ttf \
+		${PN%-*}*-cl-*.ttf \
 		$(usex !l10n_ja "${PN%-*}*-j-*.ttf") \
-		$(usex !l10n_ko "${PN%-*}*-cl-*.ttf") \
 		$(usex !l10n_zh-CN "${PN%-*}*-sc-*.ttf") \
-		$(usex !l10n_zh-TW "${PN%-*}*-tc-*.ttf")
-	local _v
-	for _v in "${MY_FONT_VARIANTS[@]/#+/}"; do
-		use ${_v} || rm -f ${PN%-*}-${_v#font_variants_}-*.ttf
-	done
+		$(usex !l10n_zh-HK "${PN%-*}*-hc-*.ttf") \
+		$(usex !l10n_zh-TW "${PN%-*}*-tc-*.ttf") \
+		$(usex !font_variants_sans "${PN%-*}-gothic-*.ttf") \
+		$(usex !font_variants_monospace "${PN%-*}-mono-*.ttf") \
+		$(usex !font_variants_term "${PN%-*}-term-*.ttf") \
+		$(usex !font_variants_ui "${PN%-*}-ui-*.ttf")
 }
