@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -6,15 +6,15 @@ EAPI=6
 inherit autotools qmake-utils
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="http://repo.or.cz/${PN}.git"
+	EGIT_REPO_URI="https://repo.or.cz/${PN}.git"
 	MY_G="${P}/.gnulib"
 else
 	inherit vcs-snapshot
-	MY_G="gnulib-68df637"
+	MY_G="gnulib-91584ed"
 	MY_PV="7fa4bca"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
-		http://repo.or.cz/ttfautohint.git/snapshot/${MY_PV}.tar.gz
+		https://repo.or.cz/ttfautohint.git/snapshot/${MY_PV}.tar.gz
 		-> ${P}.tar.gz
 		https://git.savannah.gnu.org/cgit/${MY_G%-*}.git/snapshot/${MY_G}.tar.gz
 	"
@@ -31,6 +31,7 @@ IUSE="qt5"
 
 RDEPEND="
 	media-libs/harfbuzz
+	media-libs/freetype
 	qt5? ( dev-qt/qtgui:5 )
 "
 DEPEND="
