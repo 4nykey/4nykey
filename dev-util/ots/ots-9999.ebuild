@@ -42,6 +42,7 @@ DOCS=(
 )
 
 src_prepare() {
+	local PATCHES=( "${FILESDIR}"/meson-5295.diff )
 	default
 	sed \
 		-e '/third_party\/\(woff2\|zlib\|lz4\|brotli\|googletest\)/d' \

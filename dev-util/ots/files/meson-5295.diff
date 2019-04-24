@@ -1,0 +1,11 @@
+https://github.com/mesonbuild/meson/issues/5295
+--- a/meson.build
++++ b/meson.build
+@@ -27,6 +27,7 @@ if freetype.found()
+ endif
+ 
+ coretext = dependency('appleframeworks', modules: 'applicationservices',
++                      method: 'extraframework',
+                       required: false)
+ if coretext.found()
+   conf.set('HAVE_CORETEXT', 1)
