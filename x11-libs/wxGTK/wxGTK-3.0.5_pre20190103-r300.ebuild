@@ -36,8 +36,9 @@ RDEPEND="
 		x11-libs/libXxf86vm[${MULTILIB_USEDEP}]
 		x11-libs/pango[${MULTILIB_USEDEP}]
 		gstreamer? (
-			media-libs/gstreamer:0.10[${MULTILIB_USEDEP}]
-			media-libs/gst-plugins-base:0.10[${MULTILIB_USEDEP}] )
+			media-libs/gstreamer:1.0[${MULTILIB_USEDEP}]
+			media-libs/gst-plugins-base:1.0[${MULTILIB_USEDEP}]
+		)
 		libnotify? ( x11-libs/libnotify[${MULTILIB_USEDEP}] )
 		opengl? ( virtual/opengl[${MULTILIB_USEDEP}] )
 		tiff?   ( media-libs/tiff:0[${MULTILIB_USEDEP}] )
