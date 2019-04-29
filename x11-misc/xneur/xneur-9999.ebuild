@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -7,11 +7,12 @@ PLOCALES="be de ro ru uk"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/AndrewCrewKuznetsov/xneur-devel.git"
-	S="${WORKDIR}/${P}/${PN}"
 else
+	inherit vcs-snapshot
+	MY_PV="ee27c77"
 	SRC_URI="
-		https://launchpad.net/ubuntu/+archive/primary/+files/${PN}_${PV}.orig.tar.gz
-		mirror://githubraw/AndrewCrewKuznetsov/xneur-devel/master/dists/${PV}/${PN}_${PV}.orig.tar.gz
+		mirror://githubcl/AndrewCrewKuznetsov/xneur-devel/tar.gz/${MY_PV}
+		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -43,14 +44,14 @@ RDEPEND="
 	${DEPEND}
 	alsa? ( media-sound/alsa-utils )
 	gstreamer? (
-		media-libs/gst-plugins-good
-		media-plugins/gst-plugins-alsa
+		media-libs/gst-plugins-good:1.0
 	)
 	nls? ( virtual/libintl )
 "
 DEPEND="
 	${DEPEND}
 	virtual/pkgconfig
+	dev-util/intltool
 	nls? ( sys-devel/gettext )
 "
 
@@ -58,6 +59,7 @@ REQUIRED_USE="
 	?? ( gstreamer openal alsa )
 	?? ( aspell enchant )
 "
+S="${WORKDIR}/${P}/${PN}"
 
 src_prepare() {
 	default
@@ -66,7 +68,6 @@ src_prepare() {
 		-e '/Libs:/s: @LDFLAGS@::' \
 		-e '/Cflags:/s:@includedir@:${includedir}:' \
 		-i "${S}"/xn*.pc.in
-	[[ -n ${PV%%*9999} ]] && return
 	sed -e '/\<INSTALL\>/d' -i "${S}"/Makefile.am
 	eautoreconf
 }
@@ -81,7 +82,6 @@ src_configure() {
 	local myeconfargs=(
 		--with-sound=${_snd}
 		--with-spell=${_spl}
-		--with-gtk=$(usex libnotify gtk2)
 		$(use_with debug)
 		$(use_enable nls)
 		$(use_with xosd)
@@ -90,5 +90,4 @@ src_configure() {
 	)
 
 	econf ${myeconfargs[@]}
-	[[ -z ${PV%%*9999} ]] && emake clean
 }
