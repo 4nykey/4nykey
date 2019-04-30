@@ -1,22 +1,17 @@
 --- a/python/psautohint/__init__.py
 +++ b/python/psautohint/__init__.py
-@@ -14,15 +14,7 @@ log = logging.getLogger(__name__)
- __version__ = _psautohint.version
+@@ -15,10 +15,9 @@ log = logging.getLogger(__name__)
  
  
--AUTOHINTEXE = os.path.join(
+ AUTOHINTEXE = os.path.join(
 -    os.path.dirname(__file__),
--    "autohintexe" + (".exe" if sys.platform in ("win32", "cygwin") else "")
--)
+     "autohintexe" + (".exe" if sys.platform in ("win32", "cygwin") else "")
+ )
 -if not os.path.isfile(AUTOHINTEXE) or not os.access(AUTOHINTEXE, os.X_OK):
--    import warnings
--    warnings.warn(
--        "embedded 'autohintexe' executable not found: %r" % AUTOHINTEXE
--    )
-+AUTOHINTEXE = "autohintexe"
- 
- 
- class FontParseError(Exception):
++if False:
+     import warnings
+     warnings.warn(
+         "embedded 'autohintexe' executable not found: %r" % AUTOHINTEXE
 --- a/setup.py
 +++ b/setup.py
 @@ -21,7 +21,7 @@ from setuptools.command.build_ext import build_ext as _build_ext
