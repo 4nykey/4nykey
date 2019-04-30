@@ -11,7 +11,7 @@ if [[ ${PV} == *9999* ]]; then
 else
 	inherit vcs-snapshot eapi7-ver
 	MY_PVB="$(ver_cut 1-2)R-ro/$(ver_cut 3-4)R-it"
-	MY_PV="d426b37"
+	MY_PV="b0d1256"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${MY_PVB//R}"
 	SRC_URI="
 		binary? (
