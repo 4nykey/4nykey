@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -11,10 +11,13 @@ if [[ ${PV} == *9999* ]]; then
 	REQUIRED_USE="!binary"
 else
 	inherit vcs-snapshot
-	MY_PV="${PV//_/-}"
+	MY_PVB="${PV%_p*}"
+	MY_PVB="${MY_PVB//_/-}"
+	MY_PV="a94138e"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV//_/-}"
 	SRC_URI="
 		binary? (
-			https://github.com/i-tu/${PN}/releases/download/${MY_PV}/${PN}-${MY_PV}.zip
+			https://github.com/i-tu/${PN}/releases/download/${MY_PVB}/${PN}-${MY_PVB}.zip
 		)
 		!binary? (
 			mirror://githubcl/i-tu/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -62,8 +65,11 @@ pkg_setup() {
 }
 
 src_prepare() {
+	if use !binary; then
+		unpack ${MY_MK}.tar.gz
+		local PATCHES=( "${FILESDIR}"/${PN}-axes.diff )
+	fi
 	default
-	use binary || unpack ${MY_MK}.tar.gz
 }
 
 src_compile() {
