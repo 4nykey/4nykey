@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -7,13 +7,13 @@ PYTHON_COMPAT=( python2_7 python3_{4,5,6,7} )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/robofab-developers/${PN}.git"
+	EGIT_REPO_URI="https://github.com/robotools/${PN}.git"
 else
 	inherit vcs-snapshot
 	MY_PV="9f6ff05"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
-		mirror://githubcl/robofab-developers/${PN}/tar.gz/${MY_PV}
+		mirror://githubcl/robotools/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
@@ -21,14 +21,14 @@ else
 fi
 
 DESCRIPTION="An API for interacting with the parts of fonts"
-HOMEPAGE="https://github.com/robofab-developers/${PN}"
+HOMEPAGE="https://github.com/robotools/${PN}"
 
 LICENSE="MIT"
 SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.32[ufo,${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.38[ufo,${PYTHON_USEDEP}]
 	dev-python/fontMath[${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
 "

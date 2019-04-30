@@ -1,13 +1,15 @@
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -8,23 +8,6 @@ set(HARFBUZZ_VERSION "2.1.1")
- set(HARFBUZZ_SHA256 "83bf5d552df72c52969332f294cd97d8f6b46b77b41b61346ca56ebb81884e14")
+@@ -8,25 +8,10 @@ set(HARFBUZZ_VERSION "2.4.0")
+ set(HARFBUZZ_SHA256 "b470eff9dd5b596edf078596b46a1f83c179449f051a469430afc15869db336f")
  
  # download, configure, build and install harbfuzz static library
 -ExternalProject_Add(
 -    harfbuzz
 -    URL "https://github.com/harfbuzz/harfbuzz/releases/download/${HARFBUZZ_VERSION}/harfbuzz-${HARFBUZZ_VERSION}.tar.bz2"
 -    URL_HASH SHA256=${HARFBUZZ_SHA256}
+-    # https://github.com/harfbuzz/harfbuzz/issues/1659
+-    PATCH_COMMAND patch -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/src/patches/hb-coretext-unused-variable.patch
 -    CMAKE_CACHE_ARGS
 -      -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
 -      -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
@@ -16,16 +18,16 @@
 -    # use a shorter prefix to fit in the Windows paths' 260-char limit
 -    PREFIX hb
 -)
--
--# this allows to use a step from an external project as a dependency of
--# another target. We want to install the harbuzz library before the
--# uharfbuzz module reaches its configure step
+ 
+ # this allows to use a step from an external project as a dependency of
+ # another target. We want to install the harbuzz library before the
+ # uharfbuzz module reaches its configure step
 -ExternalProject_Add_StepTargets(harfbuzz install)
  
  # build the Cython wrapper as an external project, and pass down to it all
  # the cmake variables set by scikit-build in the top-level CMakeLists.txt
-@@ -41,7 +24,6 @@ ExternalProject_Add(
-       -DPYTHON_LIBRARY:FILEPATH=${PYTHON_LIBRARY}
+@@ -46,7 +31,6 @@ ExternalProject_Add(
+       -DCYTHON_LINETRACE:BOOL=${CYTHON_LINETRACE}
        -DSKBUILD:BOOL=${SKBUILD}
        -DCMAKE_MODULE_PATH:PATH=${CMAKE_MODULE_PATH}
 -    DEPENDS harfbuzz-install
