@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -66,6 +66,8 @@ pkg_setup() {
 	CHOST=${CTARGET} strip-unsupported-flags
 	filter-flags -march=*
 	strip-flags
+	append-cppflags -DMISSING_SYSCALL_NAMES -U_FORTIFY_SOURCE
+	append-flags -fno-stack-protector
 	local _b
 	for _b in ar as dlltool ld nm obj{copy,dump} ranlib strip wind{mc,res}; do
 		export ${_b^^}_FOR_TARGET=${CTARGET}-${_b}
@@ -98,9 +100,11 @@ multilib_src_configure() {
 		--disable-multilib
 		--target=${CHOST%%-*}-${CTARGET#*-}
 	)
+
 	ECONF_SOURCE="${S}" \
 	CC_FOR_TARGET="${CTARGET}-gcc $(get_abi_CFLAGS)" \
 	CXX_FOR_TARGET="${CTARGET}-g++ $(get_abi_CFLAGS)" \
+	CFLAGS_FOR_TARGET="${CPPFLAGS} ${CFLAGS}" \
 	econf "${myeconfargs[@]}"
 }
 

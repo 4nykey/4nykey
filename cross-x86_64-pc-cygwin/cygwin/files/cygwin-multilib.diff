@@ -18,19 +18,19 @@
  install-headers:
  	cd $(srcdir); \
 @@ -749,9 +749,12 @@ libacl.a: ${LIB_NAME} sec_posixacl.o
- ${EXTRALIBS}: lib%.a: %.o
- 	$(AR) cru $@ $?
  
+ # mkvers.sh creates version.cc in the first place, winver.o always
+ # second, so version.cc is always older than winver.o
 +ifeq ($(target_cpu),i686)
 +WINDRESFLAGS=-F pe-i386
 +endif
- winver.o: mkvers.sh include/cygwin/version.h winver.rc $(DLL_OFILES)
+ version.cc: mkvers.sh include/cygwin/version.h winver.rc $(src_files)
  	@echo "Making version.cc and winver.o";\
 -	/bin/sh ${word 1,$^} ${word 2,$^} ${word 3,$^} $(WINDRES) ${CFLAGS} $(addprefix -I,${CCWRAP_SYSTEM_HEADERS} ${CCWRAP_DIRAFTER_HEADERS})
 +	/bin/sh ${word 1,$^} ${word 2,$^} ${word 3,$^} '$(WINDRES) $(WINDRESFLAGS)' ${CFLAGS} $(addprefix -I,${CCWRAP_SYSTEM_HEADERS} ${CCWRAP_DIRAFTER_HEADERS})
+ $(VERSION_OFILES): version.cc
  
- version.cc: winver.o
- 
+ Makefile: ${srcdir}/Makefile.in
 --- a/newlib/Makefile.in
 +++ b/newlib/Makefile.in
 @@ -380,7 +380,7 @@ SUBDIRS = libc libm \
