@@ -6,6 +6,5 @@
 	</maintainer>
 	<use>
 		<flag name="emoji">Install additional emoji fonts</flag>
-		<flag name="pipeline">Install WIP fonts created from glyphs</flag>
 	</use>
 </pkgmetadata>

@@ -11,7 +11,7 @@ else
 	inherit vcs-snapshot
 	MY_PV="phase3-second-cleanup"
 	MY_PV="v${PV//./-}-${MY_PV}"
-	[[ -z ${PV%%*_p*} ]] && MY_PV="576ccad"
+	[[ -z ${PV%%*_p*} ]] && MY_PV="af306de"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
