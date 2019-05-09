@@ -6,6 +6,9 @@ WANT_AUTOCONF="2.1"
 
 PYTHON_COMPAT=( python3_{5,6,7} )
 PYTHON_REQ_USE='ncurses,sqlite,ssl,threads(+)'
+
+# Patch version
+PATCH="firefox-60.6-patches-07"
 MOZCONFIG_OPTIONAL_WIFI=1
 
 LLVM_MAX_SLOT=8
@@ -40,7 +43,6 @@ LICENSE="BSD CC-BY-3.0 MPL-2.0 GPL-2 LGPL-2.1"
 IUSE="hardened hwaccel jack -screenshot selinux test"
 
 SRC_URI="mirror://tor/dist/${PN}/${TOR_PV}"
-PATCH="firefox-60.6-patches-03"
 PATCH=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c}/mozilla/patchsets/${PATCH}.tar.xz )
 SRC_URI="
 	https://gitweb.torproject.org/tor-browser.git/snapshot/${GIT_TAG}.tar.gz
@@ -58,12 +60,12 @@ RESTRICT="primaryuri"
 RDEPEND="
 	system-icu? ( >=dev-libs/icu-60.2 )
 	jack? ( virtual/jack )
+	>=dev-libs/nss-3.36.7
+	>=dev-libs/nspr-4.19
 	selinux? ( sec-policy/selinux-mozilla )
 "
 DEPEND="
 	${RDEPEND}
-	>=sys-devel/llvm-4.0.1
-	>=sys-devel/clang-4.0.1
 	>=dev-lang/yasm-1.1
 	virtual/opengl
 "
@@ -79,13 +81,13 @@ QA_PRESTRIPPED="usr/lib*/${PN}/${PN}/${PN}"
 BUILD_OBJ_DIR="${WORKDIR}/tb"
 
 llvm_check_deps() {
-	if ! has_version "sys-devel/clang:${LLVM_SLOT}" ; then
+	if ! has_version --host-root "sys-devel/clang:${LLVM_SLOT}" ; then
 		ewarn "sys-devel/clang:${LLVM_SLOT} is missing! Cannot use LLVM slot ${LLVM_SLOT} ..."
 		return 1
 	fi
 
 	if use clang ; then
-		if ! has_version "=sys-devel/lld-${LLVM_SLOT}*" ; then
+		if ! has_version --host-root "=sys-devel/lld-${LLVM_SLOT}*" ; then
 			ewarn "=sys-devel/lld-${LLVM_SLOT}* is missing! Cannot use LLVM slot ${LLVM_SLOT} ..."
 			return 1
 		fi
@@ -238,9 +240,8 @@ src_configure() {
 	mozconfig_annotate 'torbrowser' --disable-maintenance-service
 	mozconfig_annotate 'torbrowser' --disable-webrtc
 	mozconfig_annotate 'torbrowser' --disable-eme
-
-	mozconfig_annotate 'torbrowser' --without-system-nspr
-	mozconfig_annotate 'torbrowser' --without-system-nss
+	mozconfig_annotate 'torbrowser' --with-system-nspr
+	mozconfig_annotate 'torbrowser' --with-system-nss
 
 	# Finalize and report settings
 	mozconfig_final

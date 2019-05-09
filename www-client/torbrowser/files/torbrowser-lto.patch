@@ -14,19 +14,3 @@
      LDFLAGS += ['--lto-partition=one']
  
  if CONFIG['MOZ_ALSA']:
---- a/build/unix/elfhack/moz.build
-+++ b/build/unix/elfhack/moz.build
-@@ -14,7 +14,12 @@ if not CONFIG['CROSS_COMPILE']:
-         'test-ctors.c',
-     ]
- 
--    if '-flto' in CONFIG['OS_CFLAGS']:
-+    lto=False
-+    for f in CONFIG['OS_CFLAGS']:
-+        if f.startswith('-flto'):
-+            lto=True
-+            break
-+    if lto:
-         SOURCES['test-array.c'].flags += ['-fno-lto']
-         SOURCES['test-ctors.c'].flags += ['-fno-lto']
- 

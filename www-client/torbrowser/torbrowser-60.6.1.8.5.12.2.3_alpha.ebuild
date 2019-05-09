@@ -6,6 +6,9 @@ WANT_AUTOCONF="2.1"
 
 PYTHON_COMPAT=( python3_{5,6,7} )
 PYTHON_REQ_USE='ncurses,sqlite,ssl,threads(+)'
+
+# Patch version
+PATCH="firefox-60.6-patches-07"
 MOZCONFIG_OPTIONAL_WIFI=1
 
 LLVM_MAX_SLOT=8
@@ -26,6 +29,7 @@ TOR_PV="${TOR_PV%.0}"
 # https://gitweb.torproject.org/tor-browser.git/refs/tags
 GIT_TAG="$(ver_cut 4-5)-$(ver_cut 7-8)"
 GIT_TAG="tor-browser-${MOZ_PV}-$(ver_rs 3 '-build' ${GIT_TAG})"
+GIT_TAG="firefox-${GIT_TAG}"
 
 DESCRIPTION="The Tor Browser"
 HOMEPAGE="
@@ -39,18 +43,19 @@ SLOT="0"
 LICENSE="BSD CC-BY-3.0 MPL-2.0 GPL-2 LGPL-2.1"
 IUSE="hardened hwaccel jack -screenshot selinux test"
 
-SRC_URI="mirror://tor/dist/${PN}/${TOR_PV}"
-PATCH="firefox-60.6-patches-03"
 PATCH=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c}/mozilla/patchsets/${PATCH}.tar.xz )
+
+# official release bundles https-everywhere, noscript and torbutton
+# the latter does nothing for us except providing the Tor start page
+MY_EFF="2019.1.31"
+MY_NOS="10.6.1"
+MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
+MY_NOS="noscript-${MY_NOS}.xpi"
+
 SRC_URI="
-	https://gitweb.torproject.org/tor-browser.git/snapshot/${GIT_TAG}.tar.gz
-	-> ${GIT_TAG}.tar.gz
-	x86? (
-		${SRC_URI}/tor-browser-linux32-${TOR_PV}_en-US.tar.xz
-	)
-	amd64? (
-		${SRC_URI}/tor-browser-linux64-${TOR_PV}_en-US.tar.xz
-	)
+	mirror://tor/dist/${PN}/${TOR_PV}/src-${GIT_TAG}.tar.xz
+	https://www.eff.org/files/${MY_EFF}
+	https://secure.informaction.com/download/releases/${MY_NOS}
 	${PATCH[@]}
 "
 RESTRICT="primaryuri"
@@ -58,14 +63,15 @@ RESTRICT="primaryuri"
 RDEPEND="
 	system-icu? ( >=dev-libs/icu-60.2 )
 	jack? ( virtual/jack )
+	>=dev-libs/nss-3.36.7
+	>=dev-libs/nspr-4.19
 	selinux? ( sec-policy/selinux-mozilla )
 "
 DEPEND="
 	${RDEPEND}
-	>=sys-devel/llvm-4.0.1
-	>=sys-devel/clang-4.0.1
 	>=dev-lang/yasm-1.1
 	virtual/opengl
+	app-arch/zip
 "
 RDEPEND="
 	${RDEPEND}
@@ -79,13 +85,13 @@ QA_PRESTRIPPED="usr/lib*/${PN}/${PN}/${PN}"
 BUILD_OBJ_DIR="${WORKDIR}/tb"
 
 llvm_check_deps() {
-	if ! has_version "sys-devel/clang:${LLVM_SLOT}" ; then
+	if ! has_version --host-root "sys-devel/clang:${LLVM_SLOT}" ; then
 		ewarn "sys-devel/clang:${LLVM_SLOT} is missing! Cannot use LLVM slot ${LLVM_SLOT} ..."
 		return 1
 	fi
 
 	if use clang ; then
-		if ! has_version "=sys-devel/lld-${LLVM_SLOT}*" ; then
+		if ! has_version --host-root "=sys-devel/lld-${LLVM_SLOT}*" ; then
 			ewarn "=sys-devel/lld-${LLVM_SLOT}* is missing! Cannot use LLVM slot ${LLVM_SLOT} ..."
 			return 1
 		fi
@@ -238,9 +244,8 @@ src_configure() {
 	mozconfig_annotate 'torbrowser' --disable-maintenance-service
 	mozconfig_annotate 'torbrowser' --disable-webrtc
 	mozconfig_annotate 'torbrowser' --disable-eme
-
-	mozconfig_annotate 'torbrowser' --without-system-nspr
-	mozconfig_annotate 'torbrowser' --without-system-nss
+	mozconfig_annotate 'torbrowser' --with-system-nspr
+	mozconfig_annotate 'torbrowser' --with-system-nss
 
 	# Finalize and report settings
 	mozconfig_final
@@ -254,14 +259,25 @@ src_compile() {
 	MOZ_MAKE_FLAGS="${MAKEOPTS}" SHELL="${SHELL:-${EPREFIX}/bin/bash}" MOZ_NOSPAM=1 \
 	BUILD_VERBOSE_LOG=1 \
 	./mach build --verbose || die
+
+	# pack torbutton
+	cd toolkit/torproject/torbutton
+	sh ./makexpi.sh || die
 }
 
 src_install() {
-	local profile_dir="${WORKDIR}/tor-browser_en-US/Browser/TorBrowser/Data/Browser/profile.default"
 	cd "${BUILD_OBJ_DIR}" || die
 
-	cat "${profile_dir}"/bookmarks.html > \
+	# mimic official release
+	cat "${FILESDIR}"/bookmarks.html > \
 		dist/bin/browser/chrome/en-US/locale/browser/bookmarks.html
+	insinto ${MOZILLA_FIVE_HOME}/browser/extensions
+	newins "${DISTDIR}"/${MY_EFF} https-everywhere-eff@eff.org.xpi
+	newins "${DISTDIR}"/${MY_NOS} {73a6fe31-595d-460b-a920-fcc0f8843232}.xpi
+	local _tbtn="${S}/toolkit/torproject/torbutton"
+	local _tbtv=$(sed -e '/em:version/!d; s:[^0-9._]::g' \
+		"${_tbtn}"/src/install.rdf)
+	newins "${_tbtn}"/pkg/torbutton-${_tbtv}.xpi torbutton@torproject.org.xpi
 
 	# Pax mark xpcshell for hardened support, only used for startupcache creation.
 	pax-mark m "${BUILD_OBJ_DIR}"/dist/bin/xpcshell
@@ -312,17 +328,6 @@ src_install() {
 
 	# Required in order to use plugins and even run torbrowser on hardened.
 	pax-mark m "${ED}"${MOZILLA_FIVE_HOME}/{${PN},${PN}-bin,plugin-container}
-
-	# Profile without the tor-launcher extension
-	# see: https://trac.torproject.org/projects/tor/ticket/10160
-
-	rm "${profile_dir}/extensions/tor-launcher@torproject.org.xpi" || die \
-		"Failed to remove torlauncher extension"
-
-	insinto ${MOZILLA_FIVE_HOME}/browser
-	doins -r "${profile_dir}"/extensions
-
-	dodoc "${WORKDIR}/tor-browser_en-US/Browser/TorBrowser/Docs/ChangeLog.txt"
 }
 
 pkg_preinst() {
