@@ -27,7 +27,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.30.0[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.40[${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
 	dev-python/ufoNormalizer[${PYTHON_USEDEP}]
 "
