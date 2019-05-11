@@ -27,7 +27,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.35[ufo,${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.41[ufo,${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
 	dev-python/cu2qu[${PYTHON_USEDEP}]
 	dev-python/compreffor[${PYTHON_USEDEP}]
