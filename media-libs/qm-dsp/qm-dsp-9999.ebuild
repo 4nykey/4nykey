@@ -34,10 +34,10 @@ DEPEND="
 src_prepare() {
 	tc-export CC CXX AR RANLIB
 	sed \
-		-e 's,-Iext/clapack.*/include,,' \
-		-e 's,C\(LAPACK\|BLAS\)_SRC := ,&#,' \
+		-e 's,-Iext/clapack/include,-I/usr/include/clapack,' \
+		-e 's,-Iext/cblas/include,`pkg-config --cflags cblas`,' \
+		-e 's,$(C\(LAPACK\|BLAS\)_SRC),,' \
 		-i build/general/Makefile.inc
-	sed -e 's,clapack\.h,clapack/&,' -i hmm/hmm.c
 	default
 }
 
