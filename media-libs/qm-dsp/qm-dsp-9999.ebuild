@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -14,7 +14,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit toolchain-funcs
+inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="A C++ library for audio analysis"
 HOMEPAGE="https://code.soundsoftware.ac.uk/projects/${PN}"
@@ -32,19 +32,17 @@ DEPEND="
 "
 
 src_prepare() {
-	tc-export CC CXX AR RANLIB
 	sed \
-		-e 's,-Iext/clapack.*/include,,' \
+		-e "s,-Iext/clapack.*/include,$($(tc-getPKG_CONFIG) --cflags cblas)," \
 		-e 's,C\(LAPACK\|BLAS\)_SRC := ,&#,' \
 		-i build/general/Makefile.inc
 	sed -e 's,clapack\.h,clapack/&,' -i hmm/hmm.c
 	default
+	append-cppflags "-fPIC -DUSE_PTHREADS"
 }
 
 src_compile() {
-	CFLAGS="${CFLAGS} -fPIC -DUSE_PTHREADS" \
-	CXXFLAGS="${CXXFLAGS} -fPIC -DUSE_PTHREADS" \
-	emake -f build/general/Makefile.inc
+	tc-env_build emake -f build/general/Makefile.inc
 }
 
 src_install() {
