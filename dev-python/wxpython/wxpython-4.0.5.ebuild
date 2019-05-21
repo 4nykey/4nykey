@@ -37,10 +37,12 @@ RDEPEND="
 	!gtk3? (
 		>=x11-libs/wxGTK-${WXV#*:}:3.0[gstreamer,webkit,libnotify=,opengl?,tiff,X]
 	)
-	dev-python/pypubsub[${PYTHON_USEDEP}]
-	dev-python/six[${PYTHON_USEDEP}]
-	dev-python/numpy[${PYTHON_USEDEP}]
 	dev-python/appdirs[${PYTHON_USEDEP}]
+	dev-python/six[${PYTHON_USEDEP}]
+	dev-python/requests[${PYTHON_USEDEP}]
+	dev-python/numpy[${PYTHON_USEDEP}]
+	dev-python/pillow[${PYTHON_USEDEP}]
+	dev-python/pathlib2[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
@@ -73,6 +75,9 @@ python_prepare_all() {
 	sed \
 		-e "/conf.env.INCLUDES_WXPY/ s:'sip/siplib', ::" \
 		-i wscript
+	sed \
+		-e '/\(wheel\|twine\|sphinx\|pytest\)/d' \
+		-i requirements.txt
 
 	mv -f "${WORKDIR}"/wxGTK-${WXV#*:}/* ext/wxWidgets/
 	cp -s /usr/bin/{doxygen,sip} bin/
