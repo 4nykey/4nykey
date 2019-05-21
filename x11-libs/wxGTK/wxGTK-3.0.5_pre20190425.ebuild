@@ -8,7 +8,7 @@ inherit autotools multilib-minimal vcs-snapshot
 DESCRIPTION="GTK+ version of wxWidgets, a cross-platform C++ GUI toolkit"
 HOMEPAGE="http://wxwidgets.org/"
 
-MY_PV="53103dd"
+MY_PV="507617a"
 [[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 SRC_URI="
 	mirror://githubcl/wxwidgets/wxwidgets/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -16,9 +16,9 @@ SRC_URI="
 RESTRICT=primaryuri
 
 #KEYWORDS="~amd64 ~x86"
-IUSE="+X debug gstreamer libnotify chm opengl sdl tiff webkit"
+IUSE="+X debug gstreamer libnotify chm opengl sdl tiff"
 
-SLOT="${PV:0:3}-gtk3"
+SLOT="${PV:0:3}"
 
 RDEPEND="
 	dev-libs/expat[${MULTILIB_USEDEP}]
@@ -29,7 +29,7 @@ RDEPEND="
 		sys-libs/zlib[${MULTILIB_USEDEP}]
 		virtual/jpeg:0=[${MULTILIB_USEDEP}]
 		x11-libs/cairo[${MULTILIB_USEDEP}]
-		x11-libs/gtk+:3[${MULTILIB_USEDEP}]
+		x11-libs/gtk+:2[${MULTILIB_USEDEP}]
 		x11-libs/gdk-pixbuf[${MULTILIB_USEDEP}]
 		x11-libs/libSM[${MULTILIB_USEDEP}]
 		x11-libs/libX11[${MULTILIB_USEDEP}]
@@ -42,7 +42,6 @@ RDEPEND="
 		libnotify? ( x11-libs/libnotify[${MULTILIB_USEDEP}] )
 		opengl? ( virtual/opengl[${MULTILIB_USEDEP}] )
 		tiff?   ( media-libs/tiff:0[${MULTILIB_USEDEP}] )
-		webkit? ( net-libs/webkit-gtk:4 )
 	)
 	chm? ( dev-libs/libmspack )
 "
@@ -88,7 +87,7 @@ src_prepare() {
 	sed -i \
 		-e "s:\(WX_VERSION=\).*:\1${PV:0:5}:" \
 		-e "s:\(WX_RELEASE=\).*:\1${SLOT}:" \
-		-e "s:\(WX_SUBVERSION=\).*:\1${PV}-gtk3:" \
+		-e "s:\(WX_SUBVERSION=\).*:\1${PV}:" \
 		-e "/WX_VERSION_TAG=/ s:\${WX_RELEASE}:${PV:0:3}:" \
 		configure || die
 }
@@ -121,12 +120,12 @@ multilib_src_configure() {
 			--enable-graphics_ctx
 			--with-gtkprint
 			--enable-gui
-			--with-gtk=3
+			--with-gtk=2
 			--with-libpng=sys
 			--with-libjpeg=sys
 			--without-gnomevfs
 			$(use_enable gstreamer mediactrl)
-			$(multilib_native_use_enable webkit webview)
+			--disable-webview
 			$(use_with libnotify)
 			$(use_with opengl)
 			$(use_with tiff libtiff sys)
@@ -147,7 +146,7 @@ multilib_src_install_all() {
 	# version bakefile presets
 	pushd "${D}"usr/share/bakefile/presets/ > /dev/null
 	for f in wx*; do
-		mv "${f}" "${f/wx/wx${SLOT//.}gtk3}"
+		mv "${f}" "${f/wx/wx${SLOT//.}}"
 	done
 	popd > /dev/null
 }
