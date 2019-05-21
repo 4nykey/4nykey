@@ -29,6 +29,7 @@ TOR_PV="${TOR_PV%.0}"
 # https://gitweb.torproject.org/tor-browser.git/refs/tags
 GIT_TAG="$(ver_cut 4-5)-$(ver_cut 7-8)"
 GIT_TAG="tor-browser-${MOZ_PV}-$(ver_rs 3 '-build' ${GIT_TAG})"
+GIT_TAG="firefox-${GIT_TAG}"
 
 DESCRIPTION="The Tor Browser"
 HOMEPAGE="
@@ -42,17 +43,19 @@ SLOT="0"
 LICENSE="BSD CC-BY-3.0 MPL-2.0 GPL-2 LGPL-2.1"
 IUSE="hardened hwaccel jack -screenshot selinux test"
 
-SRC_URI="mirror://tor/dist/${PN}/${TOR_PV}"
 PATCH=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c}/mozilla/patchsets/${PATCH}.tar.xz )
+
+# official release bundles https-everywhere, noscript and torbutton
+# the latter does nothing for us except providing the Tor start page
+MY_EFF="2019.5.6.1"
+MY_NOS="10.6.1"
+MY_EFF="https_everywhere-${MY_EFF}-an+fx.xpi"
+MY_NOS="noscript_security_suite-${MY_NOS}-an+fx.xpi"
+
 SRC_URI="
-	https://gitweb.torproject.org/tor-browser.git/snapshot/${GIT_TAG}.tar.gz
-	-> ${GIT_TAG}.tar.gz
-	x86? (
-		${SRC_URI}/tor-browser-linux32-${TOR_PV}_en-US.tar.xz
-	)
-	amd64? (
-		${SRC_URI}/tor-browser-linux64-${TOR_PV}_en-US.tar.xz
-	)
+	mirror://tor/dist/${PN}/${TOR_PV}/src-${GIT_TAG}.tar.xz
+	https://addons.cdn.mozilla.net/user-media/addons/229918/${MY_EFF}
+	https://addons.cdn.mozilla.net/user-media/addons/722/${MY_NOS}
 	${PATCH[@]}
 "
 RESTRICT="primaryuri"
@@ -68,6 +71,7 @@ DEPEND="
 	${RDEPEND}
 	>=dev-lang/yasm-1.1
 	virtual/opengl
+	app-arch/zip
 "
 RDEPEND="
 	${RDEPEND}
@@ -255,14 +259,25 @@ src_compile() {
 	MOZ_MAKE_FLAGS="${MAKEOPTS}" SHELL="${SHELL:-${EPREFIX}/bin/bash}" MOZ_NOSPAM=1 \
 	BUILD_VERBOSE_LOG=1 \
 	./mach build --verbose || die
+
+	# pack torbutton
+	cd toolkit/torproject/torbutton
+	sh ./makexpi.sh || die
 }
 
 src_install() {
-	local profile_dir="${WORKDIR}/tor-browser_en-US/Browser/TorBrowser/Data/Browser/profile.default"
 	cd "${BUILD_OBJ_DIR}" || die
 
-	cat "${profile_dir}"/bookmarks.html > \
+	# mimic official release
+	cat "${FILESDIR}"/bookmarks.html > \
 		dist/bin/browser/chrome/en-US/locale/browser/bookmarks.html
+	insinto ${MOZILLA_FIVE_HOME}/browser/extensions
+	newins "${DISTDIR}"/${MY_EFF} https-everywhere-eff@eff.org.xpi
+	newins "${DISTDIR}"/${MY_NOS} {73a6fe31-595d-460b-a920-fcc0f8843232}.xpi
+	local _tbtn="${S}/toolkit/torproject/torbutton"
+	local _tbtv=$(sed -e '/em:version/!d; s:[^0-9._]::g' \
+		"${_tbtn}"/src/install.rdf)
+	newins "${_tbtn}"/pkg/torbutton-${_tbtv}.xpi torbutton@torproject.org.xpi
 
 	# Pax mark xpcshell for hardened support, only used for startupcache creation.
 	pax-mark m "${BUILD_OBJ_DIR}"/dist/bin/xpcshell
@@ -298,9 +313,10 @@ src_install() {
 	# Install icons and .desktop for menu entry
 	local size icon_path
 	icon_path="${S}/browser/branding/official"
-	for size in 16 32 48 64 128 256; do
+	for size in 16 32 48 64 128 256 512; do
 		newicon -s ${size} "${icon_path}/default${size}.png" ${PN}.png
 	done
+	newicon -s scalable "${icon_path}/firefox.svg" ${PN}.svg
 	make_desktop_entry ${PN} "Tor Browser" ${PN} "Network;WebBrowser" "StartupWMClass=Torbrowser"
 
 	# Add StartupNotify=true bug 237317
@@ -312,17 +328,6 @@ src_install() {
 
 	# Required in order to use plugins and even run torbrowser on hardened.
 	pax-mark m "${ED}"${MOZILLA_FIVE_HOME}/{${PN},${PN}-bin,plugin-container}
-
-	# Profile without the tor-launcher extension
-	# see: https://trac.torproject.org/projects/tor/ticket/10160
-
-	rm "${profile_dir}/extensions/tor-launcher@torproject.org.xpi" || die \
-		"Failed to remove torlauncher extension"
-
-	insinto ${MOZILLA_FIVE_HOME}/browser
-	doins -r "${profile_dir}"/extensions
-
-	dodoc "${WORKDIR}/tor-browser_en-US/Browser/TorBrowser/Docs/ChangeLog.txt"
 }
 
 pkg_preinst() {
