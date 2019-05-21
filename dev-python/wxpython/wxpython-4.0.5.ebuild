@@ -8,10 +8,10 @@ PYTHON_REQ_USE="threads(+)"
 
 MY_PN="wxPython"
 # ext/wxwidgets submodule commit and corresponding wxGTK version
-WXV="53103dd:3.0.5_pre20190103"
-# wafCurrentVersion from build.py
-WAF_BINARY="${WORKDIR}/waf-2.0.8"
-inherit alternatives distutils-r1 eutils wxwidgets vcs-snapshot
+WXV="507617a:3.0.5_pre20190425"
+# build.py: 'wafCurrentVersion'
+WAF_BINARY="waf-2.0.8"
+inherit waf-utils distutils-r1 eutils wxwidgets vcs-snapshot
 
 DESCRIPTION="A blending of the wxWindows C++ class library with Python"
 HOMEPAGE="https://wiki.wxpython.org/ProjectPhoenix"
@@ -20,7 +20,7 @@ SRC_URI="
 	-> ${P}.tar.gz
 	mirror://githubcl/wxwidgets/wxwidgets/tar.gz/${WXV%:*}
 	-> wxGTK-${WXV#*:}.tar.gz
-	https://wxpython.org/Phoenix/tools/${WAF_BINARY##*/}.bz2
+	https://waf.io/${WAF_BINARY}.tar.bz2
 "
 RESTRICT="primaryuri"
 
@@ -45,7 +45,7 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	app-doc/doxygen
-	~dev-python/sip-4.19.13[${PYTHON_USEDEP}]
+	>=dev-python/sip-4.19.16[${PYTHON_USEDEP}]
 	test? (
 		dev-python/pytest-xdist[${PYTHON_USEDEP}]
 	)
@@ -58,23 +58,11 @@ DOCS=(
 	docs/{classic_vs_phoenix,MigrationGuide}.rst
 )
 
-waf() {
-	local mywafargs=(
-		--jobs=$(makeopts_jobs)
-		--verbose
-		--out="${BUILD_DIR}"
-		--prefix=/usr
-		--destdir="${D}"
-		--python="${PYTHON}"
-		--wx_config="${WX_CONFIG}"
-		--gtk$(usex gtk3 3 2)
-	)
-	${EPYTHON} "${WAF_BINARY}" "${mywafargs[@]}" "${@}" || die
-}
-
 pkg_setup() {
 	WX_GTK_VER="3.0$(usex gtk3 '-gtk3' '')"
+	WAF_BINARY="${WORKDIR}/${WAF_BINARY}/waf"
 	use apidocs && DOCS+=( docs/html )
+	use examples && DOCS+=( demo samples )
 	python_setup
 	setup-wxwidgets
 }
@@ -95,11 +83,17 @@ python_prepare_all() {
 }
 
 python_configure() {
-	waf configure
+	local wafargs=(
+		--out="${BUILD_DIR}"
+		--python="${PYTHON}"
+		--wx_config="${WX_CONFIG}"
+		--gtk$(usex gtk3 3 2)
+	)
+	waf-utils_src_configure "${wafargs[@]}"
 }
 
 python_compile() {
-	waf build
+	waf-utils_src_compile
 }
 
 python_install() {
@@ -107,12 +101,6 @@ python_install() {
 }
 
 python_install_all() {
-	if use examples; then
-		docinto demo
-		dodoc -r demo/.
-		docinto samples
-		dodoc -r samples/.
-
-	fi
 	distutils-r1_python_install_all
+	use examples && docompress -x /usr/share/doc/${PF}/{demo,samples}
 }
