@@ -234,6 +234,7 @@ src_configure() {
 	mozconfig_annotate 'torbrowser' --with-app-name=${PN}
 	mozconfig_annotate 'torbrowser' --with-app-basename=${PN}
 	mozconfig_annotate 'torbrowser' --disable-tor-browser-update
+	mozconfig_annotate 'torbrowser' --disable-tor-launcher
 	mozconfig_annotate 'torbrowser' --with-tor-browser-version=${TOR_PV}
 	mozconfig_annotate 'torbrowser' --disable-tor-browser-data-outside-app-dir
 	mozconfig_annotate 'torbrowser' --with-branding=browser/branding/official
