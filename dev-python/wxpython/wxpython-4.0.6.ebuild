@@ -5,13 +5,14 @@ EAPI=6
 
 PYTHON_COMPAT=( python3_{5,6,7} )
 PYTHON_REQ_USE="threads(+)"
+VIRTUALX_REQUIRED="test"
 
 MY_PN="wxPython"
 # ext/wxwidgets submodule commit and corresponding wxGTK version
 WXV="507617a:3.0.5_pre20190425"
 # build.py: 'wafCurrentVersion'
 WAF_BINARY="waf-2.0.8"
-inherit waf-utils distutils-r1 eutils wxwidgets vcs-snapshot
+inherit waf-utils distutils-r1 eutils wxwidgets vcs-snapshot virtualx
 
 DESCRIPTION="A blending of the wxWindows C++ class library with Python"
 HOMEPAGE="https://wiki.wxpython.org/ProjectPhoenix"
@@ -37,12 +38,9 @@ RDEPEND="
 	!gtk3? (
 		>=x11-libs/wxGTK-${WXV#*:}:3.0[gstreamer,webkit,libnotify=,opengl?,tiff,X]
 	)
-	dev-python/appdirs[${PYTHON_USEDEP}]
-	dev-python/six[${PYTHON_USEDEP}]
-	dev-python/requests[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
 	dev-python/pillow[${PYTHON_USEDEP}]
-	dev-python/pathlib2[${PYTHON_USEDEP}]
+	dev-python/six[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
@@ -50,6 +48,7 @@ DEPEND="
 	>=dev-python/sip-4.19.16[${PYTHON_USEDEP}]
 	test? (
 		dev-python/pytest-xdist[${PYTHON_USEDEP}]
+		dev-python/pytest-timeout[${PYTHON_USEDEP}]
 	)
 	apidocs? (
 		dev-python/sphinx[${PYTHON_USEDEP}]
@@ -75,9 +74,6 @@ python_prepare_all() {
 	sed \
 		-e "/conf.env.INCLUDES_WXPY/ s:'sip/siplib', ::" \
 		-i wscript
-	sed \
-		-e '/\(wheel\|twine\|sphinx\|pytest\)/d' \
-		-i requirements.txt
 
 	mv -f "${WORKDIR}"/wxGTK-${WXV#*:}/* ext/wxWidgets/
 	cp -s /usr/bin/{doxygen,sip} bin/
@@ -99,6 +95,12 @@ python_configure() {
 
 python_compile() {
 	waf-utils_src_compile
+}
+
+python_test() {
+	virtx ${EPYTHON} ./build.py \
+		--verbose --pytest_jobs=$(makeopts_jobs) test || \
+		die "Tests failed with ${EPYTHON}"
 }
 
 python_install() {
