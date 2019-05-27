@@ -50,6 +50,7 @@ RDEPEND="
 		media-libs/libltc
 		media-libs/qm-dsp
 		hid? ( dev-libs/hidapi )
+		>=media-sound/fluidsynth-2.0.1
 	)
 	media-libs/liblo
 	media-libs/taglib
