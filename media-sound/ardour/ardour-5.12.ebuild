@@ -53,12 +53,12 @@ RDEPEND="
 		media-libs/libltc
 		media-libs/qm-dsp
 		hid? ( dev-libs/hidapi )
+		media-sound/fluidsynth
 	)
 	media-libs/liblo
 	media-libs/taglib
 	media-libs/vamp-plugin-sdk
 	media-libs/rubberband
-	media-sound/fluidsynth
 	sys-apps/util-linux
 "
 DEPEND="

@@ -56,7 +56,6 @@ RDEPEND="
 	media-libs/taglib
 	media-libs/vamp-plugin-sdk
 	media-libs/rubberband
-	media-sound/fluidsynth
 	sys-apps/util-linux
 "
 DEPEND="
