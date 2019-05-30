@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -23,7 +23,7 @@ HOMEPAGE="https://github.com/HOST-Oman/${PN}"
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="apidocs"
+IUSE="gtk-doc static-libs"
 
 RDEPEND="
 	media-libs/freetype:2
@@ -41,6 +41,9 @@ src_prepare() {
 }
 
 src_configure() {
-	econf \
-		$(use_enable apidocs gtk-doc)
+	local myeconfargs=(
+		$(use_enable gtk-doc)
+		$(use_enable static-libs static)
+	)
+	econf "${myeconfargs[@]}"
 }
