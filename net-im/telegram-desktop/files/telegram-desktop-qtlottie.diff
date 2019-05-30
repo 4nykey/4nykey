@@ -1,0 +1,10 @@
+--- a/Telegram/ThirdParty/qtlottie/src/bodymovin/bmbase.h
++++ b/Telegram/ThirdParty/qtlottie/src/bodymovin/bmbase.h
+@@ -29,6 +29,7 @@
+ #pragma once
+ 
+ #include <QList>
++#include <QDebug>
+ #include <functional>
+ 
+ namespace Lottie {

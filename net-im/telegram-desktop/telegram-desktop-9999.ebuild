@@ -15,11 +15,13 @@ else
 	inherit vcs-snapshot
 	MY_CAT="Catch2-5ca44b6"
 	MY_GSL="GSL-d846fe5"
-	MY_CRL="crl-84072fb"
-	MY_TGV="libtgvoip-e701050"
+	MY_CRL="crl-d259aeb"
+	MY_TGV="libtgvoip-a19a0af"
+	MY_QTL="qtlottie-6cd5e32"
+	MY_RJS="rapidjson-01950eb"
 	MY_VAR="variant-550ac2f"
 	MY_XXH="xxHash-7cc9639"
-	MY_DEB="${PN}_1.5.11-1.debian"
+	MY_DEB="${PN}_1.7.0-1.debian"
 	SRC_URI="
 		mirror://githubcl/telegramdesktop/${MY_PN}/tar.gz/v${PV} -> ${P}.tar.gz
 		mirror://debian/pool/main/t/${PN}/${MY_DEB}.tar.xz
@@ -29,6 +31,10 @@ else
 		-> ${MY_GSL}.tar.gz
 		mirror://githubcl/telegramdesktop/${MY_TGV%-*}/tar.gz/${MY_TGV##*-}
 		-> ${MY_TGV}.tar.gz
+		mirror://githubcl/telegramdesktop/${MY_QTL%-*}/tar.gz/${MY_QTL##*-}
+		-> ${MY_QTL}.tar.gz
+		mirror://githubcl/Tencent/${MY_RJS%-*}/tar.gz/${MY_RJS##*-}
+		-> ${MY_RJS}.tar.gz
 		mirror://githubcl/mapbox/${MY_VAR%-*}/tar.gz/${MY_VAR##*-}
 		-> ${MY_VAR}.tar.gz
 		mirror://githubcl/Cyan4973/${MY_XXH%-*}/tar.gz/${MY_XXH##*-}
@@ -102,6 +108,8 @@ src_unpack() {
 		vcs-snapshot_src_unpack
 		mv ${MY_CRL}/* "${S}"/Telegram/ThirdParty/crl/
 		mv ${MY_GSL}/* "${S}"/Telegram/ThirdParty/GSL/
+		mv ${MY_QTL}/* "${S}"/Telegram/ThirdParty/qtlottie/
+		mv ${MY_RJS}/* "${S}"/Telegram/ThirdParty/rapidjson/
 		mv ${MY_TGV}/* "${S}"/Telegram/ThirdParty/libtgvoip/
 		mv ${MY_VAR}/* "${S}"/Telegram/ThirdParty/variant/
 		mv ${MY_XXH}/* "${S}"/Telegram/ThirdParty/xxHash/
@@ -111,6 +119,15 @@ src_unpack() {
 }
 
 src_prepare() {
+	local _patches=(
+		debian/patches/Do-not-sync-wallpaper.patch
+		debian/patches/Packed-resources.patch
+		debian/patches/Use-system-wide-font.patch
+		"${FILESDIR}"/${PN}-gyp.diff
+		"${FILESDIR}"/${PN}-qtlottie.diff
+	)
+	eapply "${_patches[@]}"
+
 	local _p="$(tc-getPKG_CONFIG)" _q=$(best_version dev-qt/qtgui:5) \
 	_l=(
 		icu-i18n
@@ -160,11 +177,6 @@ src_prepare() {
 		-Dminizip_loc="${EROOT}usr/include/minizip"
 		-Dbuild_defines="${_d:1}"
 	)
-
-	eapply \
-		debian/patches/Use-system-wide-font.patch \
-		debian/patches/Packed-resources.patch \
-		"${FILESDIR}"/${PN}-gyp.diff
 
 	cd "${S}"/Telegram/gyp
 
