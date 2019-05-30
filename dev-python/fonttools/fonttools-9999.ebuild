@@ -3,7 +3,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 python3_{4,5,6,7} )
+PYTHON_COMPAT=( python2_7 python3_{5,6,7} )
 PYTHON_REQ_USE="xml(+)"
 
 inherit eutils distutils-r1
@@ -34,7 +34,7 @@ PATCHES=(
 
 # README.rst: Optional Requirements
 RDEPEND="
-	dev-python/lxml
+	dev-python/lxml[${PYTHON_USEDEP}]
 	brotli? ( app-arch/brotli[python,${PYTHON_USEDEP}] )
 	zopfli? ( dev-python/py-zopfli[${PYTHON_USEDEP}] )
 	ufo? (
@@ -44,7 +44,7 @@ RDEPEND="
 	unicode? (
 		$(python_gen_cond_dep \
 		'dev-python/unicodedata2[${PYTHON_USEDEP}]' \
-		python2_7 python3_4 python3_5 python3_6)
+		python2_7 python3_5 python3_6 python3_7)
 	)
 	qt5? ( dev-python/PyQt5[${PYTHON_USEDEP}] )
 	gtk? ( dev-python/pygobject:3[${PYTHON_USEDEP}] )
