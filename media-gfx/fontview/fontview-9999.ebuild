@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -9,14 +9,14 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}.git"
 	EGIT_SUBMODULES=( )
 else
-	MY_PV="a0581ed"
+	inherit vcs-snapshot
+	MY_PV="4d6f3fd"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
-	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 
 DESCRIPTION="An app that shows the contents of a font file"
@@ -60,14 +60,12 @@ src_configure() {
 
 src_compile() {
 	local _pc="$(tc-getPKG_CONFIG)" _d="fribidi freetype2 harfbuzz raqm"
-	emake \
-		CXX=$(tc-getCXX) \
-		CC=$(tc-getCC) \
-		LIBS="$(${WX_CONFIG} --libs) \
-			$(${_pc} --libs ${_d})" \
-		CPPFLAGS="$(${WX_CONFIG} --cppflags) \
-			$(${_pc} --cflags ${_d})" \
+	local myemakeargs=(
+		LIBS="$(${WX_CONFIG} --libs) $(${_pc} --libs ${_d})"
+		CPPFLAGS="$(${WX_CONFIG} --cppflags) $(${_pc} --cflags ${_d})"
 		V=1
+	)
+	tc-env_build emake "${myemakeargs[@]}"
 }
 
 src_install() {
