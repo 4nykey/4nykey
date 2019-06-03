@@ -17,7 +17,7 @@ else
 	MY_GSL="GSL-d846fe5"
 	MY_CRL="crl-d259aeb"
 	MY_TGV="libtgvoip-a19a0af"
-	MY_QTL="qtlottie-6cd5e32"
+	MY_QTL="qtlottie-ddccffe"
 	MY_RJS="rapidjson-01950eb"
 	MY_VAR="variant-550ac2f"
 	MY_XXH="xxHash-7cc9639"
@@ -124,6 +124,7 @@ src_prepare() {
 		debian/patches/Packed-resources.patch
 		debian/patches/Use-system-wide-font.patch
 		"${FILESDIR}"/${PN}-gyp.diff
+		"${FILESDIR}"/${PN}-pch.diff
 		"${FILESDIR}"/${PN}-qtlottie.diff
 	)
 	eapply "${_patches[@]}"

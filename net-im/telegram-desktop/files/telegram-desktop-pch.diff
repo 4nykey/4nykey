@@ -1,0 +1,10 @@
+--- a/Telegram/gyp/PrecompiledHeader.cmake
++++ b/Telegram/gyp/PrecompiledHeader.cmake
+@@ -77,6 +77,7 @@ function(export_all_flags _filename _sou
+   set(_compile_file_flags "$<$<BOOL:${_compile_file_flags}>:$<JOIN:${_compile_file_flags},\n>\n>")
+   set(_compile_flags "$<$<BOOL:${_compile_flags}>:$<JOIN:${_compile_flags},\n>\n>")
+   set(_compile_options "$<$<BOOL:${_compile_options}>:$<JOIN:${_compile_options},\n>\n>")
++  set(_compile_flags "${_compile_flags} ${CMAKE_CXX_FLAGS}")
+   file(GENERATE OUTPUT "${_filename}" CONTENT "${_compile_definitions}${_include_directories}${_compile_file_flags}${_compile_flags}${_compile_options}\n")
+ endfunction()
+ 
