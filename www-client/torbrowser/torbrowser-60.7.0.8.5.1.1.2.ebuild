@@ -17,19 +17,16 @@ inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils llvm \
 		mozconfig-v6.${PV%%.*} pax-utils xdg-utils autotools
 inherit eapi7-ver
 
-MOZ_PV="$(ver_cut 1-3)esr"
 # https://dist.torproject.org/torbrowser
-TOR_PV="$(ver_cut 4-6)"
+TOR_REL="$(ver_cut 4-6)"
 if [[ -z ${PV%%*_alpha} ]]; then
-	TOR_PV="$(ver_rs 2 a ${TOR_PV})"
+	TOR_REL="$(ver_rs 2 a ${TOR_REL})"
 else
 	KEYWORDS="~amd64 ~x86"
 fi
-TOR_PV="${TOR_PV%.0}"
-# https://gitweb.torproject.org/tor-browser.git/refs/tags
-GIT_TAG="$(ver_cut 4-5)-$(ver_cut 7-8)"
-GIT_TAG="tor-browser-${MOZ_PV}-$(ver_rs 3 '-build' ${GIT_TAG})"
-GIT_TAG="firefox-${GIT_TAG}"
+TOR_REL="${TOR_REL%.0}"
+MY_P="$(ver_cut 1-3)esr-$(ver_cut 4-5)-$(ver_cut 7)-build$(ver_cut 8)"
+MY_P="firefox-tor-browser-${MY_P}"
 
 DESCRIPTION="The Tor Browser"
 HOMEPAGE="
@@ -47,13 +44,13 @@ PATCH=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c}/mozilla/patchsets/${P
 
 # official release bundles https-everywhere, noscript and torbutton
 # the latter does nothing for us except providing the Tor start page
-MY_EFF="2019.5.6.1"
-MY_NOS="10.6.1"
+MY_EFF="2019.5.13"
+MY_NOS="10.6.2"
 MY_EFF="https_everywhere-${MY_EFF}-an+fx.xpi"
 MY_NOS="noscript_security_suite-${MY_NOS}-an+fx.xpi"
 
 SRC_URI="
-	mirror://tor/dist/${PN}/${TOR_PV}/src-${GIT_TAG}.tar.xz
+	mirror://tor/dist/${PN}/${TOR_REL}/src-${MY_P}.tar.xz
 	https://addons.cdn.mozilla.net/user-media/addons/229918/${MY_EFF}
 	https://addons.cdn.mozilla.net/user-media/addons/722/${MY_NOS}
 	${PATCH[@]}
@@ -78,7 +75,7 @@ RDEPEND="
 	>=net-vpn/tor-0.3.3.9
 "
 
-S="${WORKDIR}/${GIT_TAG}"
+S="${WORKDIR}/${MY_P}"
 
 QA_PRESTRIPPED="usr/lib*/${PN}/${PN}/${PN}"
 
@@ -234,7 +231,7 @@ src_configure() {
 	mozconfig_annotate 'torbrowser' --with-app-name=${PN}
 	mozconfig_annotate 'torbrowser' --with-app-basename=${PN}
 	mozconfig_annotate 'torbrowser' --disable-tor-browser-update
-	mozconfig_annotate 'torbrowser' --with-tor-browser-version=${TOR_PV}
+	mozconfig_annotate 'torbrowser' --with-tor-browser-version=${TOR_REL}
 	mozconfig_annotate 'torbrowser' --disable-tor-browser-data-outside-app-dir
 	mozconfig_annotate 'torbrowser' --with-branding=browser/branding/official
 	mozconfig_annotate 'torbrowser' --disable-maintenance-service
