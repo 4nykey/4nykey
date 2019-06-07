@@ -17,7 +17,7 @@ else
 	MY_GSL="GSL-d846fe5"
 	MY_CRL="crl-d259aeb"
 	MY_TGV="libtgvoip-a19a0af"
-	MY_QTL="qtlottie-ddccffe"
+	MY_QTL="qtlottie-a3fac9d"
 	MY_RJS="rapidjson-01950eb"
 	MY_VAR="variant-550ac2f"
 	MY_XXH="xxHash-7cc9639"
@@ -49,7 +49,7 @@ else
 fi
 
 DESCRIPTION="Telegram Desktop messaging app"
-HOMEPAGE="https://tdesktop.com/"
+HOMEPAGE="https://desktop.telegram.org"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -120,7 +120,6 @@ src_unpack() {
 
 src_prepare() {
 	local _patches=(
-		debian/patches/Do-not-sync-wallpaper.patch
 		debian/patches/Packed-resources.patch
 		debian/patches/Use-system-wide-font.patch
 		"${FILESDIR}"/${PN}-gyp.diff
