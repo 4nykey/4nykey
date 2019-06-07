@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -33,7 +33,6 @@ DOCS=( {CREDITS,README,TODO}.md )
 
 src_configure() {
 	local mycmakeargs=(
-		-DBUILD_TESTING=$(usex test)
 		-DRANGE_V3_TESTS=$(usex test)
 		-DRANGE_V3_EXAMPLES=$(usex examples)
 		-DRANGE_V3_PERF=no
