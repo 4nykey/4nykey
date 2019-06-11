@@ -16,7 +16,6 @@ else
 	MY_CAT="Catch2-5ca44b6"
 	MY_GSL="GSL-d846fe5"
 	MY_CRL="crl-d259aeb"
-	MY_TGV="libtgvoip-a19a0af"
 	MY_QTL="qtlottie-a3fac9d"
 	MY_RJS="rapidjson-01950eb"
 	MY_VAR="variant-550ac2f"
@@ -29,8 +28,6 @@ else
 		-> ${MY_CRL}.tar.gz
 		mirror://githubcl/Microsoft/${MY_GSL%-*}/tar.gz/${MY_GSL##*-}
 		-> ${MY_GSL}.tar.gz
-		mirror://githubcl/telegramdesktop/${MY_TGV%-*}/tar.gz/${MY_TGV##*-}
-		-> ${MY_TGV}.tar.gz
 		mirror://githubcl/telegramdesktop/${MY_QTL%-*}/tar.gz/${MY_QTL##*-}
 		-> ${MY_QTL}.tar.gz
 		mirror://githubcl/Tencent/${MY_RJS%-*}/tar.gz/${MY_RJS##*-}
@@ -73,6 +70,7 @@ RDEPEND="
 		x11-libs/gtk+:3
 		dev-libs/libappindicator:3
 	)
+	>=media-libs/libtgvoip-2.4.4_p20190528
 "
 DEPEND="
 	${RDEPEND}
@@ -98,6 +96,11 @@ See https://core.telegram.org/api/obtaining_api_id
 
 src_unpack() {
 	if [[ -z ${PV%%*9999} ]]; then
+		EGIT_SUBMODULES=(
+			'*'
+			'-Telegram/ThirdParty/libtgvoip'
+		)
+		use test || EGIT_SUBMODULES+=( '-Telegram/ThirdParty/Catch' )
 		git-r3_src_unpack
 		EGIT_REPO_URI="https://salsa.debian.org/debian/telegram-desktop.git"
 		EGIT_BRANCH=
@@ -110,7 +113,6 @@ src_unpack() {
 		mv ${MY_GSL}/* "${S}"/Telegram/ThirdParty/GSL/
 		mv ${MY_QTL}/* "${S}"/Telegram/ThirdParty/qtlottie/
 		mv ${MY_RJS}/* "${S}"/Telegram/ThirdParty/rapidjson/
-		mv ${MY_TGV}/* "${S}"/Telegram/ThirdParty/libtgvoip/
 		mv ${MY_VAR}/* "${S}"/Telegram/ThirdParty/variant/
 		mv ${MY_XXH}/* "${S}"/Telegram/ThirdParty/xxHash/
 		use test && mv ${MY_CAT}/* "${S}"/Telegram/ThirdParty/Catch/
@@ -150,6 +152,7 @@ src_prepare() {
 	local _f=(
 		$(${_p} --cflags ${_l[@]})
 		-I"${EROOT}"usr/include/range/v3
+		-I"${EROOT}"usr/include/tgvoip
 	)
 	local _d=(
 		TDESKTOP_DISABLE_UNITY_INTEGRATION
@@ -189,6 +192,7 @@ src_prepare() {
 	sed -e '/qt_static_plugins/d' -i telegram_sources.txt
 	sed \
 		-e '/utils.gyp:Updater/d' \
+		-e '/libtgvoip.gyp/d' \
 		-e '/\<\(AL_LIBTYPE_STATIC\|minizip_loc\)\>/d' \
 		-i Telegram.gyp
 	sed \
@@ -211,8 +215,9 @@ src_prepare() {
 		-e "/\<\(include\|library\)_dirs\>': \[/,/\]\,/d" \
 		-e '/-\(Ofast\|flto\|Wl,-\)/d' \
 		-i telegram_linux.gypi
-	sed \
-		-ze "s%\(libraries': \[\).*\n#\([ ]\+'<!(\)pkg-config\( .*',\)%\1\n\2${_p}\3%" \
+	sed -ze \
+		"s%\('libraries': \[\).*\n#\([ ]\+'<!(\)pkg-config\( .*pkgconfig_libs))',\)%\1\
+		\n\2${_p}\3\n\t'tgvoip',%" \
 		-i telegram_linux.gypi
 	sed -e '/-static-libstdc++/d' -i qt.gypi utils.gyp
 
