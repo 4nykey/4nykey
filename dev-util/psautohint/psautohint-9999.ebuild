@@ -15,6 +15,7 @@ else
 	inherit vcs-snapshot
 	MY_PV="427ab23"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV/_beta/b}"
+	MY_PV="${MY_PV/_rc/c}"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
