@@ -9,9 +9,10 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
-	inherit vcs-snapshot
+	inherit vcs-snapshot eapi7-ver
 	MY_PV="ab51531"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
+	MY_PV="${MY_PV/_alph}"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -35,7 +36,7 @@ RDEPEND="
 	dev-python/fontPens[${PYTHON_USEDEP}]
 	>=dev-python/fonttools-3.42[ufo,unicode,${PYTHON_USEDEP}]
 	dev-python/MutatorMath[${PYTHON_USEDEP}]
-	dev-util/psautohint[${PYTHON_USEDEP}]
+	>=dev-util/psautohint-1.9.3_rc1[${PYTHON_USEDEP}]
 	dev-python/ufoProcessor[${PYTHON_USEDEP}]
 	dev-python/ufoNormalizer[${PYTHON_USEDEP}]
 "
