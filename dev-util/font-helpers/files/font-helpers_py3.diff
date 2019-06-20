@@ -1,0 +1,71 @@
+--- a/clean_empty_kerns.py
++++ b/clean_empty_kerns.py
+@@ -21,11 +21,11 @@
+ import sys, getopt
+ 
+ def usage():
+-  print " -i file, --input=file     	input font file"
+-  print " -o file, --output=file    	output font file"
+-  print " -s, --subtable=\"string\"	kerning subtable"
+-  print " -t, --threshold=int      	remove kern |offsets| <= threshold (default 0)"
+-  print " -f, --remove-fail-kern     	remove false kern pairs"
++  print (" -i file, --input=file     	input font file")
++  print (" -o file, --output=file    	output font file")
++  print (" -s, --subtable=\"string\"	kerning subtable")
++  print (" -t, --threshold=int      	remove kern |offsets| <= threshold (default 0)")
++  print (" -f, --remove-fail-kern     	remove false kern pairs")
+ 
+ def uni2name(unichar):
+   i = font.findEncodingSlot(ord(unichar))
+@@ -36,8 +36,8 @@
+ 
+ try:
+   opts, args = getopt.getopt(sys.argv[1:], "hi:s:o:t:f", ["help", "input=", "subtable=", "output=", "threshold=","remove-fail-kern"])
+-except getopt.GetoptError, err:
+-  print "unrecognized option"
++except getopt.GetoptError as err:
++  print ("unrecognized option")
+   usage()
+   sys.exit(2)
+ outfile = None
+--- a/inst_acc.py
++++ b/inst_acc.py
+@@ -22,6 +22,10 @@
+ import fontforge
+ import sys, re, getopt
+ import unicodedata
++try:
++  unichr
++except NameError:
++  unichr = chr
+ 
+ strip_suff = re.compile("\..*$", re.I)
+ 
+@@ -138,18 +138,18 @@
+   f.write("  </shift>\n")
+ 
+ def usage():
+-  print " -i file, --input=file     input truetype font file"
+-  print " -o file, --output=file    output xgridfit file"
+-  print " -s file, --skipfile=file  skip from instructing glyphs whose names are listed in file"
+-  print " -v , --only-vertical      add only instructions for vertical placement (off)"
+-  print " -c , --center             add instructions for centering some accents (off)"
+-  print " -j , --instruct-j         instruct \"j\" (off)"
+-  print " -f , --function           use function tags instead of macros (off)"
++  print (" -i file, --input=file     input truetype font file")
++  print (" -o file, --output=file    output xgridfit file")
++  print (" -s file, --skipfile=file  skip from instructing glyphs whose names are listed in file")
++  print (" -v , --only-vertical      add only instructions for vertical placement (off)")
++  print (" -c , --center             add instructions for centering some accents (off)")
++  print (" -j , --instruct-j         instruct \"j\" (off)")
++  print (" -f , --function           use function tags instead of macros (off)")
+ 
+ try:
+   opts, args = getopt.getopt(sys.argv[1:], "hvcjfi:o:s:", ["help", "only-vertical", "center", "instruct-j", "function", "input=", "output=", "skipfile="])
+-except getopt.GetoptError, err:
+-  print "unrecognized option"
++except getopt.GetoptError as err:
++  print ("unrecognized option")
+   usage()
+   sys.exit(2)
+ outfile = None

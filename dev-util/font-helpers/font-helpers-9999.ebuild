@@ -1,12 +1,13 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 if [[ -z ${PV%%*9999} ]]; then
-	SRC_URI="mirror://gcarchive/${PN}/source-archive.zip -> ${P}.zip"
-	S="${WORKDIR}/${PN}/trunk"
+	inherit subversion
+	ESVN_REPO_URI="https://svn.code.sf.net/p/${PN}/code/trunk"
 else
 	SRC_URI="mirror://gcarchive/${PN}/${PN}-src-${PV}.tar.xz"
+	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 	S="${WORKDIR}"
 fi
@@ -19,8 +20,16 @@ SLOT="0"
 IUSE=""
 
 DEPEND=""
-RDEPEND="${DEPEND}"
-RESTRICT="primaryuri"
+RDEPEND="
+	${DEPEND}
+	dev-libs/libxslt
+"
+
+src_prepare() {
+	local PATCHES=( "${FILESDIR}"/${PN}_py3.diff )
+	default
+	sed -e 's:^\t:        :' -i *.py
+}
 
 src_install() {
 	insinto /usr/share/${PN}
