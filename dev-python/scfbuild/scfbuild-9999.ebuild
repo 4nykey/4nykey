@@ -1,16 +1,16 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python3_{5,6,7} )
 DISTUTILS_SINGLE_IMPL=1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/eosrei/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="bab88dd"
+	MY_PV="4613a8f"
 	SRC_URI="
 		mirror://githubcl/eosrei/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -32,9 +32,6 @@ DEPEND="
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 "
 RDEPEND="${DEPEND}"
-PATCHES=(
-	"${FILESDIR}"/${PN}-no_fonttools_version_check.diff
-)
 
 pkg_setup() {
 	python_setup
