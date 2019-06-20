@@ -1,17 +1,17 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
 PYTHON_COMPAT=( python2_7 python3_{4,5,6,7} )
-inherit distutils-r1
+inherit distutils-r1 eapi7-ver
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/fonttools/${PN}.git"
 else
 	inherit vcs-snapshot
 	MY_PV="5c4e5ae"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v$(ver_rs 3 '.post')"
 	MY_SK="skia-98900b5"
 	SRC_URI="
 		mirror://githubcl/fonttools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -48,9 +48,10 @@ python_prepare_all() {
 	if [[ -n ${PV%%*9999} ]]; then
 		mv "${WORKDIR}"/${MY_SK}/* "${S}"/src/cpp/skia
 	fi
+	sed -e '/doctest-cython/d' -i tox.ini
 	distutils-r1_python_prepare_all
 }
 
 python_test() {
-	esetup.py test
+	pytest -v || die "Tests failed with ${EPYTHON}"
 }
