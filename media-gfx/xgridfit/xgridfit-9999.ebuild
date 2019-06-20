@@ -1,10 +1,9 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python{2_7,3_{5,6,7}} )
 DISTUTILS_SINGLE_IMPL="1"
 inherit distutils-r1
 
@@ -28,14 +27,16 @@ IUSE=""
 DEPEND="
 	${PYTHON_DEPS}
 	media-gfx/fontforge[python,${PYTHON_USEDEP}]
+	dev-libs/libxml2[python,${PYTHON_USEDEP}]
 "
 RDEPEND="
 	${DEPEND}
 "
 S="${WORKDIR}/${PN}/python"
-HTML_DOCS=( "${S}/../docs/" )
+HTML_DOCS=( "${S}/../docs" )
 
 src_prepare() {
+	eapply --directory="${S%/*}" "${FILESDIR}"/${PN}-python3.diff
 	find "${WORKDIR}" -path '*/CVS*' -delete
 	sed \
 		-e 's:/usr/local:/usr:' \

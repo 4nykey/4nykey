@@ -1,0 +1,300 @@
+--- a/bin/getinstrs
++++ b/bin/getinstrs
+@@ -11,8 +11,8 @@ import sys
+ try:
+     import fontforge
+ except ImportError:
+-    print "You must install the FontForge Python extension before running"
+-    print "this program."
++    print ("You must install the FontForge Python extension before running")
++    print ("this program.")
+     sys.exit(1)
+ from optparse import OptionParser
+ 
+@@ -69,12 +69,12 @@ def make_glyph_program(gname, instrs):
+         else:
+             if this_type != token_type:
+                 num_string += "</push>"
+-                print num_string
++                print (num_string)
+             if "PUSH" in token_str:
+                 if "NPUSH" in token_str:
+                     eat_first_number = True
+             else:
+-                print make_instruction(token_str)
++                print (make_instruction(token_str))
+         token_type = this_type
+     sys.stdout.write(GLYPH_SPACE)
+     sys.stdout.write("</glyph>\n")
+@@ -90,9 +90,9 @@ PARSER.add_option("-x", "--xgridfit", ac
+ (OPTIONS, ARGS) = PARSER.parse_args()
+ 
+ if len(ARGS) < 2:
+-    print
+-    print "Error: not enough arguments"
+-    print
++    print()
++    print ("Error: not enough arguments")
++    print()
+     PARSER.print_help()
+     sys.exit(1)
+ 
+@@ -106,25 +106,25 @@ INST_SPACE = "  "
+ try:
+     FONT = fontforge.open(FONT_NAME)
+ except EnvironmentError as detail:
+-    print "Error opening file", FONT_NAME
+-    print detail
++    print ("Error opening file", FONT_NAME)
++    print (detail)
+     sys.exit(1)
+ 
+ if XGF_ELEMENT:
+-    print "<?xml version=\"1.0\"?>"
+-    print "<xgridfit xmlns=\"http://xgridfit.sourceforge.net/Xgridfit2\">"
++    print ("<?xml version=\"1.0\"?>")
++    print ("<xgridfit xmlns=\"http://xgridfit.sourceforge.net/Xgridfit2\">")
+     GLYPH_SPACE = "  "
+     INST_SPACE = "    "
+ for glyphname in GLYPH_LIST:
+     try:
+         INSTR_BINARY = FONT[glyphname].ttinstrs
+         if len(INSTR_BINARY) == 0:
+-            print "glyph", glyphname, "has no instructions"
++            print ("glyph", glyphname, "has no instructions")
+         else:
+             INSTR_STRING = fontforge.unParseTTInstrs(INSTR_BINARY)
+             if PLAIN_OUTPUT:
+-                print "# glyph", glyphname
+-                print INSTR_STRING
++                print ("# glyph", glyphname)
++                print (INSTR_STRING)
+                 print
+             else:
+                 make_glyph_program(glyphname, INSTR_STRING)
+@@ -132,6 +132,6 @@ for glyphname in GLYPH_LIST:
+         sys.stderr.write("Error retrieving instructions from glyph \"")
+         sys.stderr.write(glyphname)
+         sys.stderr.write("\"\n")
+-        print detail
++        print (detail)
+ if XGF_ELEMENT:
+-    print "</xgridfit>"
++    print ("</xgridfit>")
+--- a/lib/xgridfit-merge.xsl
++++ b/lib/xgridfit-merge.xsl
+@@ -652,10 +652,10 @@ except (KeyError, TypeError):</xsl:text>
+           </xsl:otherwise>
+ 	</xsl:choose>
+ 	<xsl:text>
+-    print "There is no Xgridfit dictionary for this font, but this script"
+-    print "requires one. Try first using Xgridfit's merge-mode to compile"
+-    print "an Xgridfit program containing functions, control-values and"
+-    print "pre-program, run that Python script, and then try this again."
++    print ("There is no Xgridfit dictionary for this font, but this script")
++    print ("requires one. Try first using Xgridfit's merge-mode to compile")
++    print ("an Xgridfit program containing functions, control-values and")
++    print ("pre-program, run that Python script, and then try this again.")
+     sys.exit(1)</xsl:text>
+       </xsl:otherwise>
+     </xsl:choose>
+@@ -726,10 +726,10 @@ def install_cvt(name, value, index):
+             CURRENT_FONT.cvt += (value,)
+         CVT_DICTIONARY[name] = tmpindex
+     if CURRENT_FONT.cvt[tmpindex] != value:
+-        print "The value of control-value", name, "does not match that in the"
+-        print "control-value table in the FontForge file. Updating the value."
+-        print "old value: ", CURRENT_FONT.cvt[tmpindex]
+-        print "new value: ", value
++        print ("The value of control-value", name, "does not match that in the")
++        print ("control-value table in the FontForge file. Updating the value.")
++        print ("old value: ", CURRENT_FONT.cvt[tmpindex])
++        print ("new value: ", value)
+         CURRENT_FONT.cvt[tmpindex] = value
+ def replace_from_dict(target_string, delimiter, dicty):
+     for thiskey in dicty.keys():
+@@ -739,9 +739,9 @@ def replace_from_dict(target_string, del
+                 target_string = \
+                     target_string.replace(keystring, str(dicty[thiskey]))
+             except KeyError:
+-                print "Cannot resolve value ", thiskey, "."
+-                print "Have you run the script that would install functions"
+-                print "and control-values in this font?"
++                print ("Cannot resolve value ", thiskey, ".")
++                print ("Have you run the script that would install functions")
++                print ("and control-values in this font?")
+                 sys.exit(1)
+     return target_string
+ def replace_with_add(source, dea, deb, addn):
+@@ -826,11 +826,11 @@ def install_glyph_program(name, instrs):
+         CURRENT_FONT[name].ttinstrs = \
+             fontforge.parseTTInstrs(fix_instructions(instrs))
+     except TypeError as detail:
+-        print "Warning: can't install instructions for glyph ", name
+-        print detail
++        print ("Warning: can't install instructions for glyph ", name)
++        print (detail)
+     except ValueError as detail:
+-        print "Warning: can't install instructions for glyph ", name
+-        print detail
++        print ("Warning: can't install instructions for glyph ", name)
++        print (detail)
+ </xsl:text>
+     <xsl:value-of select="$text-newline"/>
+   </xsl:template>
+@@ -1051,6 +1051,7 @@ except KeyError:
+     CURRENT_FUNCTION = 0
+ try:
+     ALL_FUNCTION_CODE = fontforge.unParseTTInstrs(XGRIDFIT_DICTIONARY['ofunc'])
++    ALL_FUNCTION_CODE = ALL_FUNCTION_CODE.decode()
+ except KeyError:
+     ALL_FUNCTION_CODE = ""
+ # Assign numbers to Xgridfit functions.
+@@ -1082,6 +1083,7 @@ CURRENT_FONT.maxp_FDEFs = CURRENT_FUNCTI
+ # try to get legacy or auto-generated prep code.
+ try:
+     OLD_PREP_CODE = fontforge.unParseTTInstrs(XGRIDFIT_DICTIONARY['oprep'])
++    OLD_PREP_CODE = OLD_PREP_CODE.decode()
+ except KeyError:
+     OLD_PREP_CODE = ""
+ if COMBINE_PREP and (len(OLD_PREP_CODE) > 0):
+@@ -1094,7 +1096,7 @@ CURRENT_FONT.setTableData("prep", fontfo
+     <xsl:text>
+ # Install the Xgridfit glyph programs.</xsl:text>
+     <xsl:value-of select="$text-newline"/>
+-    <xsl:text>for ps_name, instrs in GLYPH_DICT.iteritems():</xsl:text>
++    <xsl:text>for ps_name, instrs in GLYPH_DICT.items():</xsl:text>
+     <xsl:value-of select="$text-newline"/>
+     <xsl:text>    install_glyph_program(ps_name, instrs)</xsl:text>
+     <xsl:value-of select="$text-newline"/>
+@@ -1257,7 +1259,7 @@ if XGF_DICT_ALTERED:
+ 	<xsl:value-of select="$datafile"/>
+ 	<xsl:text>', 'w'))
+     except IOError:
+-        print "Couldn't write the data file!"</xsl:text>
++        print ("Couldn't write the data file!")</xsl:text>
+ 	<xsl:value-of select="$text-newline"/>
+     </xsl:if>
+     <xsl:if test="not(string-length($o)) or $ext = '.sfd'">
+@@ -1267,11 +1269,11 @@ if XGF_DICT_ALTERED:
+     try:
+         CURRENT_FONT.persistent['xgridfit'] = XGRIDFIT_DICTIONARY
+     except TypeError:
+-        print "Warning: font.persistent is not a dictionary, so I can't"
+-        print "store any data there. Names of control-values and the"
+-        print "font's original fpgm, prep and other data will be lost"
+-        print "after this run. To save this data in a separate file,"
+-        print "use the datafile element or the -F option."</xsl:text>
++        print ("Warning: font.persistent is not a dictionary, so I can't")
++        print ("store any data there. Names of control-values and the")
++        print ("font's original fpgm, prep and other data will be lost")
++        print ("after this run. To save this data in a separate file,")
++        print ("use the datafile element or the -F option.")</xsl:text>
+       </xsl:if>
+       <xsl:value-of select="$text-newline"/>
+     </xsl:if>
+--- a/lib/xgridfit-python.xsl
++++ b/lib/xgridfit-python.xsl
+@@ -540,11 +540,11 @@ CURRENT_FONT.maxp_maxStackDepth = 0
+     try:
+         CURRENT_FONT[name].ttinstrs = fontforge.parseTTInstrs(instrs)
+     except TypeError as detail:
+-        print "Warning: can't install instructions for glyph ", name
+-        print detail
++        print ("Warning: can't install instructions for glyph ", name)
++        print (detail)
+     except ValueError as detail:
+-        print "Warning: can't install instructions for glyph ", name
+-        print detail
++        print ("Warning: can't install instructions for glyph ", name)
++        print (detail)
+ </xsl:text>
+     <xsl:if test="$compile_globals='yes'">
+       <xsl:text>CURRENT_FONT.cvt = (</xsl:text>
+--- a/python/xgflib.py
++++ b/python/xgflib.py
+@@ -6,14 +6,7 @@ from os import access, R_OK, W_OK, paths
+ from tempfile import mkstemp, TemporaryFile
+ from optparse import OptionParser
+ from time import time
+-try:
+-    import libxml2
+-except ImportError:
+-    print """
+-    Xgridfit depends on libxml2 and its Python bindings.
+-    Install these and try again.
+-    """
+-    exit(1)
++import libxml2
+ 
+ VERSION = '2.2'
+ JAVA_EXECUTABLE = 'java'
+@@ -904,7 +897,7 @@ do not check")
+                         int_val = str(int_val)
+                     self.params[k] = int_val
+         # Discard any undefined params.
+-        for k in self.params.keys():
++        for k in list(self.params):
+             if self.params[k] is None:
+                 del self.params[k]
+         if DISPLAY_DIAGNOSTIC_MESSAGES:
+@@ -940,6 +940,7 @@ class Configuration():
+     default_validator_priority = ['libxml2', 'lxml', 'rnv', 'jing', 'msv']
+     default_processor_priority = ['libxslt', 'saxon-9', 'xsltproc', 'xalan-c',
+                                   'lxml', 'saxon-6', '4xslt', 'xalan-j']
++    default_processor_priority.insert(0,default_processor_priority.pop(4))
+     processor_jar_files = ['saxon-9', 'saxon-6', 'xalan-j']
+     validator_jar_files = ['jing', 'msv']
+     java_progs = processor_jar_files + validator_jar_files
+@@ -1008,20 +1001,20 @@ class Configuration():
+         else:
+             stdout.write("None (this is the default configuration)")
+         stdout.write("\n")
+-        print "Processors in order of preference:"
++        print ("Processors in order of preference:")
+         for p in self.processor_priority:
+             stdout.write("  " + p)
+             if p in self.jar_files:
+                 stdout.write(" (" + self.jar_files[p] + ")")
+             stdout.write("\n")
+-        print "Validators in order of preference:"
++        print ("Validators in order of preference:")
+         for v in self.validator_priority:
+             stdout.write("  " + v)
+             if v in self.jar_files:
+                 stdout.write(" (" + self.jar_files[v] + ")")
+             stdout.write("\n")
+-        print "Xgridfit base directory: "
+-        print " ", XGRIDFIT_DIR
++        print ("Xgridfit base directory: ")
++        print (" ", XGRIDFIT_DIR)
+     def __processor_jar_files_changed(self):
+         """ True if the current list of processor jar files differs from the default """
+         changed = False
+@@ -1209,7 +1202,7 @@ def run_xgridfit(xgfdir="/usr/share/xml/
+     # Parse the command line.
+     options_and_args = OptionsAndArgs()
+     if options_and_args.version:
+-        print VERSION
++        print (VERSION)
+         return True
+     # Choose the XSLT script we want.
+     xsl_file = 'xgridfit-python.xsl'
+@@ -1319,7 +1312,7 @@ def run_xgridfit(xgfdir="/usr/share/xml/
+         if not error_free:
+             break
+     if options_and_args.elapsed_time:
+-        print "Elapsed time:", time() - start_time
++        print ("Elapsed time:", time() - start_time)
+     return error_free
+ 
+ def run_config(xgfdir="/usr/local/share/xml/xgridfit/"):
+@@ -1442,7 +1435,7 @@ def run_ttx2xgf(xgfdir="/usr/share/xml/x
+             stderr.write(str(d) + "\n")
+             error_free = False
+     if options_and_args.elapsed_time:
+-        print "Elapsed time:", time() - start_time
++        print ("Elapsed time:", time() - start_time)
+     return error_free
+ 
+ def run_xgfmerge(xgfdir="/usr/local/share/xml/xgridfit/"):
