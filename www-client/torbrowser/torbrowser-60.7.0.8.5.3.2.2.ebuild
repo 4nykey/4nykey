@@ -45,7 +45,7 @@ PATCH=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c}/mozilla/patchsets/${P
 # official release bundles https-everywhere, noscript and torbutton
 # the latter does nothing for us except providing the Tor start page
 MY_EFF="2019.5.13"
-MY_NOS="10.6.2"
+MY_NOS="10.6.3"
 MY_EFF="https_everywhere-${MY_EFF}-an+fx.xpi"
 MY_NOS="noscript_security_suite-${MY_NOS}-an+fx.xpi"
 
@@ -231,7 +231,6 @@ src_configure() {
 	mozconfig_annotate 'torbrowser' --with-app-name=${PN}
 	mozconfig_annotate 'torbrowser' --with-app-basename=${PN}
 	mozconfig_annotate 'torbrowser' --disable-tor-browser-update
-	mozconfig_annotate 'torbrowser' --disable-tor-launcher
 	mozconfig_annotate 'torbrowser' --with-tor-browser-version=${TOR_REL}
 	mozconfig_annotate 'torbrowser' --disable-tor-browser-data-outside-app-dir
 	mozconfig_annotate 'torbrowser' --with-branding=browser/branding/official
