@@ -1,10 +1,10 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
 MY_FONT_TYPES=( otf +ttf )
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python{2_7,3_{5,6,7}} )
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/larsenwork/${PN}.git"
@@ -49,9 +49,11 @@ src_prepare() {
 }
 
 src_compile() {
-	local _t
-	for _t in ${FONT_SUFFIX}; do
-		fontforge -script ${MY_MK}/ffgen.py Source/${PN^}-Regular.sfdir \
-			${_t} || die
+	local _s _t
+	for _s in Source/*.sfdir; do
+		for _t in ${FONT_SUFFIX}; do
+			fontforge -script ${MY_MK}/ffgen.py "${_s}" \
+				${_t} || die
+		done
 	done
 }

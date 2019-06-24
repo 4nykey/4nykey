@@ -5,13 +5,14 @@ EAPI=6
 
 MY_PN="opensans"
 FONT_SRCDIR="source"
+EMAKE_EXTRA_ARGS=( glyphs='source/OpenSans-Roman.glyphs source/OpenSans-Italic.glyphs' )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${MY_PN}.git"
 	EGIT_REPO_URI="https://github.com/laerm0/${MY_PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="40ce72e"
+	MY_PV="3ce0a0b"
 	SRC_URI="
 		mirror://githubcl/googlefonts/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"

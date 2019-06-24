@@ -1,9 +1,9 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python{2_7,3_{5,6,7}} )
 MY_FONT_TYPES=( otf +ttf )
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
@@ -60,6 +60,7 @@ pkg_setup() {
 
 src_compile() {
 	use binary && return
+	sed -e '/woff_meta =/,/filename + ".woff"/d' -i ${PN}-generate.py
 	fontforge -lang=py -script ${PN}-generate.py || die
 	use font_types_ttf || return
 	local _t

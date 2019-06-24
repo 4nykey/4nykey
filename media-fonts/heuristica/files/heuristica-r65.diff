@@ -1,0 +1,125 @@
+--- a/FontLog.txt
++++ b/FontLog.txt
+@@ -86,6 +86,11 @@
+ ChangeLog
+ ---------
+ 
++2014-06-06 Andrey V. Panov
++	Added ruble sign.
++	Version 1.0.2 is released.
++
++
+ 2012-03-06 Andrey V. Panov
+ 	Added more smallcaps.
+ 	Added substitutions for the Ewe language.
+--- a/Makefile
++++ b/Makefile
+@@ -20,11 +20,12 @@
+ XGFFILES= upr_functions.xgf upr_g.xgf \
+ 	$(FAMILY)-Regular.ed.xgf $(FAMILY)-Italic.ed.xgf $(FAMILY)-Bold.ed.xgf $(FAMILY)-BoldItalic.ed.xgf
+ COMPRESS=xz -9
+-TEXENC=t1,t2a,t2b,t2c
++TEXENC=t1,t2a,t2b,t2c,ts1,ot1
+ #PYTHON=python -W all
+ PYTHON=fontforge -lang=py -script 
+ 
+-INSTALL=install
++TEXPREFIX=./texmf
++INSTALL=install -m 644 -p
+ DESTDIR=
+ prefix=/usr
+ fontdir=$(prefix)/share/fonts/TTF
+@@ -36,21 +37,37 @@
+ 	fontforge -lang=ff -script process.ff $(FAMILY)-Regular UTRG__
+ 	$(PYTHON) clean_empty_kerns.py -f -i $(FAMILY)-Regular_.sfd -o $(FAMILY)-Regular_.sfd
+ 	fontforge -lang=ff -script generate.ff $(FAMILY)-Regular
++	BASE=`basename $@ .otf`; \
++	csplit --prefix=$${BASE}. $${BASE}.afm /StartKernData/ ; \
++	ot2kpx $${BASE}.otf > $${BASE}.kpx; \
++	cat $${BASE}.00 $${BASE}.kpx > $${BASE}.afm
+ 
+ $(FAMILY)-Italic.otf: $(FAMILY)-Italic.sfd $(FFSCRIPTS) $(EXTRAFFSCRIPTS)
+ 	fontforge -lang=ff -script process.ff $(FAMILY)-Italic UTI___
+ 	$(PYTHON) clean_empty_kerns.py -f -i $(FAMILY)-Italic_.sfd -o $(FAMILY)-Italic_.sfd
+ 	fontforge -lang=ff -script generate.ff $(FAMILY)-Italic 
++	BASE=`basename $@ .otf`; \
++	csplit --prefix=$${BASE}. $${BASE}.afm /StartKernData/ ; \
++	ot2kpx $${BASE}.otf > $${BASE}.kpx; \
++	cat $${BASE}.00 $${BASE}.kpx > $${BASE}.afm
+ 
+ $(FAMILY)-Bold.otf: $(FAMILY)-Bold.sfd $(FFSCRIPTS) $(EXTRAFFSCRIPTS)
+ 	fontforge -lang=ff -script process.ff $(FAMILY)-Bold UTB___
+ 	$(PYTHON) clean_empty_kerns.py -f -i $(FAMILY)-Bold_.sfd -o $(FAMILY)-Bold_.sfd
+ 	fontforge -lang=ff -script generate.ff $(FAMILY)-Bold 
++	BASE=`basename $@ .otf`; \
++	csplit --prefix=$${BASE}. $${BASE}.afm /StartKernData/ ; \
++	ot2kpx $${BASE}.otf > $${BASE}.kpx; \
++	cat $${BASE}.00 $${BASE}.kpx > $${BASE}.afm
+ 
+ $(FAMILY)-BoldItalic.otf: $(FAMILY)-BoldItalic.sfd $(FFSCRIPTS) $(EXTRAFFSCRIPTS)
+ 	fontforge -lang=ff -script process.ff $(FAMILY)-BoldItalic UTBI__
+ 	$(PYTHON) clean_empty_kerns.py -f -i $(FAMILY)-BoldItalic_.sfd -o $(FAMILY)-BoldItalic_.sfd
+ 	fontforge -lang=ff -script generate.ff $(FAMILY)-BoldItalic 
++	BASE=`basename $@ .otf`; \
++	csplit --prefix=$${BASE}. $${BASE}.afm /StartKernData/ ; \
++	ot2kpx $${BASE}.otf > $${BASE}.kpx; \
++	cat $${BASE}.00 $${BASE}.kpx > $${BASE}.afm
+ 
+ %.pdf: %.otf
+ 	fntsample -f $< -o $@
+@@ -102,28 +119,30 @@
+ 	xgridfit -m -p 25 -G no -i $*_.sfd -o $*.ttf -O $*.py $*.ed.xgf
+ #	xgridfit -p 25 -G no -i $*_.sfd -o $*.ttf $<
+ 
+-.SECONDARY : *.py *.xml *.gen.xgf *.gen.ttx
++.SECONDARY : *.py *.xml *.gen.xgf *.gen.ttx *.00 *.01
+ 
+ ttf: $(TTFFILES)
+ 
+ tex-support: all
+-	mkdir -p texmf
++	mkdir -p $(TEXPREFIX)
+ 	-rm -rf ./texmf/*
+-	TEXMFVAR=`pwd`/texmf autoinst --encoding=$(TEXENC) \
+-	--extra="--typeface=$(PKGNAME) --no-updmap  --vendor=public" \
++	TEXMFVAR=$(TEXPREFIX) autoinst --encoding=$(TEXENC) -typeface=$(PKGNAME) \
++	-vendor=public --extra="--no-updmap" \
++	 -target=$(TEXPREFIX) \
+ 	$(OTFFILES)
+-	mkdir -p texmf/fonts/enc/dvips/$(PKGNAME)
+-	mv texmf/fonts/enc/dvips/public/* texmf/fonts/enc/dvips/$(PKGNAME)/
+-	-rm -r texmf/fonts/enc/dvips/public
+-	mkdir -p texmf/tex/latex/$(PKGNAME)
+-	mkdir -p texmf/fonts/map/dvips/$(PKGNAME)
+-	mv *$(FAMILY)-TLF.fd texmf/tex/latex/$(PKGNAME)/
+-	mv $(FAMILY).sty texmf/tex/latex/$(PKGNAME)/$(PKGNAME).sty
+-	mv $(FAMILY).map texmf/fonts/map/dvips/$(PKGNAME)/$(PKGNAME).map
+-	mkdir -p texmf/dvips/$(PKGNAME)
+-	echo "p +$(PKGNAME).map" > texmf/dvips/$(PKGNAME)/config.$(PKGNAME)
+-	mkdir -p texmf/doc/fonts/$(PKGNAME)
+-	cp -p $(DOCUMENTS) texmf/doc/fonts/$(PKGNAME)/
++	mkdir -p $(TEXPREFIX)/fonts/enc/dvips/$(PKGNAME)
++	#mv $(TEXPREFIX)/fonts/enc/dvips/public/* texmf/fonts/enc/dvips/$(PKGNAME)/
++	-rm -rf $(TEXPREFIX)/fonts/truetype/public/$(PKGNAME)
++	-rm -r $(TEXPREFIX)/fonts/truetype
++	#mkdir -p texmf/tex/latex/$(PKGNAME)
++	#mkdir -p texmf/fonts/map/dvips/$(PKGNAME)
++	#mv *$(FAMILY)-TLF.fd texmf/tex/latex/$(PKGNAME)/
++	mv $(TEXPREFIX)/tex/latex/$(PKGNAME)/$(FAMILY).sty $(TEXPREFIX)/tex/latex/$(PKGNAME)/$(PKGNAME).sty
++	mv $(TEXPREFIX)/fonts/map/dvips/$(PKGNAME)/$(FAMILY).map $(TEXPREFIX)/fonts/map/dvips/$(PKGNAME)/$(PKGNAME).map
++	mkdir -p $(TEXPREFIX)/dvips/$(PKGNAME)
++	echo "p +$(PKGNAME).map" > $(TEXPREFIX)/dvips/$(PKGNAME)/config.$(PKGNAME)
++	mkdir -p $(TEXPREFIX)/doc/fonts/$(PKGNAME)
++	$(INSTALL) $(DOCUMENTS) $(TEXPREFIX)/doc/fonts/$(PKGNAME)/
+ 
+ dist-src:
+ 	tar -cvf $(PKGNAME)-src-$(VERSION).tar $(SFDFILES) Makefile \
+@@ -158,7 +177,7 @@
+ 
+ .PHONY : clean
+ clean :
+-	rm *.gen.ttx *..gen.xgf
++	rm *.gen.ttx *..gen.xgf *.00 *.01
+ 
+ distclean :
+ 	-rm $(OTFFILES) $(TTFFILES) $(PFBFILES) $(AFMFILES) $(FAMILY)-*_.sfd

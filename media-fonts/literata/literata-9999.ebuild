@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -23,3 +23,4 @@ HOMEPAGE="https://github.com/googlefonts/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
+REQUIRED_USE="!binary"

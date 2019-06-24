@@ -6,19 +6,20 @@ EAPI=6
 FONTDIR_BIN=( fonts/ttfs )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/EbenSorkin/${PN}.git"
+	EGIT_REPO_URI="https://github.com/SorkinType/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="b7670e1"
+	MY_PV="8a1b078"
 	SRC_URI="
-		mirror://githubcl/EbenSorkin/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/SorkinType/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit fontmake
 
 DESCRIPTION="A sans font useful for creating long texts for books or articles"
-HOMEPAGE="https://github.com/EbenSorkin/${PN}"
+HOMEPAGE="https://github.com/SorkinType/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
+REQUIRED_USE="binary? ( !font_types_otf )"

@@ -1,13 +1,13 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python{2_7,3_{5,6,7}} )
 MY_FONT_TYPES=( pfb otf +ttf )
 if [[ -z ${PV%%*9999} ]]; then
-	SRC_URI="mirror://gcarchive/evristika/source-archive.zip -> ${P}.zip"
-	S="${WORKDIR}/evristika/trunk"
+	inherit subversion
+	ESVN_REPO_URI="https://svn.code.sf.net/p/${PN}/code/trunk"
 	REQUIRED_USE="!binary"
 else
 	S="${WORKDIR}"
@@ -58,11 +58,11 @@ src_prepare() {
 	default
 	use binary || \
 		cp "${EPREFIX}"/usr/share/font-helpers/*.{ff,py} "${S}"/
+	[[ -z ${PV%%*9999} ]] && eapply "${FILESDIR}"/${PN}-r65.diff
+
 }
 
 src_compile() {
-	# fontforge fails with EMFILE otherwise
-	use binary || ulimit -n 4096
 	default
 }
 

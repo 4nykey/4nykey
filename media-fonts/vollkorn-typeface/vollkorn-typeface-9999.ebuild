@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -8,7 +8,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/FAlthausen/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="8d8b679"
+	MY_PV="ff42913"
 	MY_PB="${PN%-*}-${PV%_p*}"
 	SRC_URI="
 		mirror://githubcl/FAlthausen/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -24,4 +24,3 @@ LICENSE="OFL-1.1"
 SLOT="0"
 REQUIRED_USE="binary? ( !font_types_otf )"
 DOCS=( Fontlog.txt )
-PATCHES=( ${FILESDIR}/${PN}-anchors.diff )

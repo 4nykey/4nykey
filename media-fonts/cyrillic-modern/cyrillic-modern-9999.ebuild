@@ -1,31 +1,28 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python{2_7,3_{5,6,7}} )
 MY_FONT_TYPES=( +otf ttc )
 inherit python-any-r1
 if [[ -z ${PV%%*9999} ]]; then
-	SRC_URI="mirror://gcarchive/${PN}/source-archive.zip -> ${P}.zip"
-	S="${WORKDIR}/${PN}/trunk"
-	DEPEND="
-		${PYTHON_DEPS}
-		$(python_gen_any_dep '
-			media-gfx/fontforge[python,${PYTHON_USEDEP}]
-			dev-python/fonttools[${PYTHON_USEDEP}]
-			font_types_ttc? ( dev-util/afdko[${PYTHON_USEDEP}] )
-		')
-		dev-util/font-helpers
-		dev-libs/kpathsea
-		dev-texlive/texlive-basic
-	"
+	inherit subversion
+	ESVN_REPO_URI="https://svn.code.sf.net/p/${PN}/code/trunk"
+	REQUIRED_USE="!binary"
+	MY_P="${P}"
 else
+	MY_P="${PN}/trunk"
+	MY_PV="${PV%_p*}"
 	SRC_URI="
-		mirror://sourceforge/cyrillic-modern/nm-otf+ttc-${PV}.tar.xz
-		latex? ( mirror://sourceforge/cyrillic-modern/nm-${PV}.tar.xz )
+	binary? (
+		mirror://sourceforge/cyrillic-modern/nm-otf+ttc-${MY_PV}.tar.xz
+		latex? ( mirror://sourceforge/cyrillic-modern/nm-${MY_PV}.tar.xz )
+	)
+	!binary? (
+		mirror://gcarchive/${PN}/source-archive.zip -> ${P}.zip
+	)
 	"
-	S="${WORKDIR}/nm-${PV}"
 	KEYWORDS="~amd64 ~x86"
 fi
 inherit latex-package font-r1
@@ -35,18 +32,39 @@ HOMEPAGE="https://code.google.com/p/cyrillic-modern"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="latex"
+IUSE="+binary latex"
 RESTRICT="primaryuri"
+DEPEND="
+	!binary? (
+		${PYTHON_DEPS}
+		$(python_gen_any_dep '
+			media-gfx/fontforge[python,${PYTHON_USEDEP}]
+			dev-python/fonttools[${PYTHON_USEDEP}]
+			font_types_ttc? ( dev-util/afdko[${PYTHON_USEDEP}] )
+		')
+		dev-util/font-helpers
+		latex? (
+			dev-libs/kpathsea
+			dev-texlive/texlive-basic
+		)
+		app-arch/unzip
+	)
+"
 
 pkg_setup() {
-	use latex && DOCS+=" USAGE"
-	python-any-r1_pkg_setup
+	if use binary; then
+		S="${WORKDIR}/nm-${MY_PV}"
+	else
+		S="${WORKDIR}/${MY_P}"
+		python-any-r1_pkg_setup
+	fi
 	font-r1_pkg_setup
+	use latex && DOCS+=" USAGE"
 }
 
 src_prepare() {
 	default
-	[[ -n ${PV%%*9999} ]] && return
+	use binary && return
 	cp "${EPREFIX}"/usr/share/font-helpers/*.{ff,py} "${S}"/
 	if use font_types_ttc; then
 		sed -e \
@@ -60,9 +78,7 @@ src_prepare() {
 }
 
 src_compile() {
-	[[ -n ${PV%%*9999} ]] && return
-	# fontforge fails with EMFILE otherwise
-	ulimit -n 4096
+	use binary && return
 	emake otf \
 		$(usex latex 'all nm.map' '') \
 		$(usex font_types_ttc '' 'OTCFONTS=') \
@@ -71,15 +87,15 @@ src_compile() {
 
 src_install() {
 	if use latex; then
-		if [[ -z ${PV%%*9999} ]]; then
+		if use binary; then
+			insinto "${TEXMF}"
+			doins -r "${WORKDIR}"/{dvips,fonts,tex}
+			dodoc "${WORKDIR}"/doc/fonts/nm/USAGE
+		else
 			emake install \
 				OTCFONTS= TEXPREFIX="${ED}/${TEXMF}" DESTDIR="${ED}"
 			rm -rf "${ED}"/${TEXMF}/doc
 			dodoc USAGE
-		else
-			insinto "${TEXMF}"
-			doins -r "${WORKDIR}"/{dvips,fonts,tex}
-			dodoc "${WORKDIR}"/doc/fonts/nm/USAGE
 		fi
 		echo 'Map nm.map' > "${T}"/${PN}.cfg
 		insinto /etc/texmf/updmap.d

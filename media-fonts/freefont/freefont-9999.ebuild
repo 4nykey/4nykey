@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -38,10 +38,7 @@ DOCS="CREDITS"
 
 DEPEND="
 	!binary? (
-		${PYTHON_DEPS}
-		$(python_gen_any_dep '
-			media-gfx/fontforge[${PYTHON_USEDEP}]
-		')
+		media-gfx/fontforge[python]
 	)
 "
 
@@ -60,7 +57,7 @@ pkg_setup() {
 src_prepare() {
 	default
 	use binary && return
-	python_fix_shebang "${S}"
+	python_fix_shebang "${S}"/tools
 	sed \
 		-e '/\$(TESTFF)/d' \
 		-i sfd/Makefile
@@ -70,7 +67,7 @@ src_compile() {
 	use binary && return
 	emake \
 		${FONT_SUFFIX} \
-		FF=fontforge IFP=true
+		FF=fontforge
 }
 
 src_test() {

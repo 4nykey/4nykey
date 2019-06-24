@@ -1,30 +1,31 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python{2_7,3_{5,6,7}} )
 if [[ -z ${PV%%*9999} ]]; then
+	inherit subversion
+	ESVN_REPO_URI="https://svn.code.sf.net/p/${PN}/code/trunk"
 	REQUIRED_USE="!binary"
-	MY_PV="1.0.3"
-	S="${WORKDIR}/${PN}-${MY_PV}"
 else
+	MY_PV="${PV%_p*}"
 	SRC_URI="
 	binary? (
-		mirror://sourceforge/${PN}/${PN}-ttf-${PV}.tar.xz
-		latex? ( mirror://sourceforge/${PN}/${PN}-tex-${PV}.tar.xz )
+		mirror://sourceforge/${PN}/${PN}-ttf-${MY_PV}.tar.xz
+		latex? ( mirror://sourceforge/${PN}/${PN}-tex-${MY_PV}.tar.xz )
+	)
+	!binary? (
+		mirror://sourceforge/${PN}/${PN}-src-${MY_PV}.tar.xz
 	)
 	"
+	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
-	MY_PV="${PV}"
 fi
 inherit python-any-r1 latex-package font-r1
 
 DESCRIPTION="Istok is a sans serif typeface"
 HOMEPAGE="https://sourceforge.net/projects/${PN}"
-SRC_URI+="
-	!binary? ( mirror://sourceforge/${PN}/${PN}-src-${MY_PV}.tar.xz )
-"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -41,7 +42,6 @@ DEPEND="
 		dev-util/font-helpers
 	)
 "
-RESTRICT="primaryuri"
 
 pkg_setup() {
 	use binary || python-any-r1_pkg_setup
@@ -56,11 +56,12 @@ src_prepare() {
 		-e '/_acc\.xgf:/ s:_\.sfd:.gen.ttf:' \
 		-i Makefile
 	cp "${EPREFIX}"/usr/share/font-helpers/*.{ff,py} "${S}"/
+
+	# missing in svn, taken from 1.0.3 tarball
+	[[ -e "${S}"/upr_AEsc.xgf ]] || cp "${FILESDIR}"/upr_AEsc.xgf "${S}"/
 }
 
 src_compile() {
-	# fontforge fails with EMFILE otherwise
-	use binary || ulimit -n 4096
 	default
 }
 

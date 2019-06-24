@@ -1,13 +1,13 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python{2_7,3_{5,6,7}} )
 if [[ -z ${PV%%*9999} ]]; then
+	inherit subversion
+	ESVN_REPO_URI="https://svn.code.sf.net/p/lib-ka/code/trunk"
 	REQUIRED_USE="!binary"
-	SRC_URI="mirror://gcarchive/${PN}/source-archive.zip -> ${P}.zip"
-	S="${WORKDIR}/${PN}/trunk"
 else
 	S="${WORKDIR}"
 	SRC_URI="
@@ -54,8 +54,7 @@ src_prepare() {
 }
 
 src_compile() {
-	# fontforge fails with EMFILE otherwise
-	use binary || ulimit -n 4096
+	use binary && return
 	default
 }
 
