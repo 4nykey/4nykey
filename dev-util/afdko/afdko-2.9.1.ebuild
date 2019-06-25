@@ -3,15 +3,16 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_{6,7} )
+PYTHON_COMPAT=( python2_7 python3_{6,7} )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
 	inherit vcs-snapshot eapi7-ver
-	MY_PV="040bced"
-	[[ -n ${PV%%*_*} ]] && MY_PV="${PV}"
+	MY_PV="ab51531"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
+	MY_PV="${MY_PV/_alph}"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -33,7 +34,7 @@ RDEPEND="
 	dev-python/defcon[${PYTHON_USEDEP}]
 	dev-python/fontMath[${PYTHON_USEDEP}]
 	dev-python/fontPens[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-3.42[ufo,unicode,${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.43.1[ufo,unicode,${PYTHON_USEDEP}]
 	dev-python/MutatorMath[${PYTHON_USEDEP}]
 	>=dev-util/psautohint-1.9.3_rc1[${PYTHON_USEDEP}]
 	dev-python/ufoProcessor[${PYTHON_USEDEP}]
@@ -43,6 +44,9 @@ DEPEND="
 	${RDEPEND}
 	test? (
 		dev-python/pytest[${PYTHON_USEDEP}]
+		python_targets_python2_7? (
+			dev-python/subprocess32[python_targets_python2_7]
+		)
 	)
 "
 DOCS=( {README,NEWS}.md html pdf )
