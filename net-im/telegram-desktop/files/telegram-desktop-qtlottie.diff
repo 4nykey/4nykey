@@ -1,5 +1,5 @@
---- a/Telegram/ThirdParty/qtlottie/src/bodymovin/bmbase.h
-+++ b/Telegram/ThirdParty/qtlottie/src/bodymovin/bmbase.h
+--- a/Telegram/ThirdParty/rlottie/src/bodymovin/bmbase.h
++++ b/Telegram/ThirdParty/rlottie/src/bodymovin/bmbase.h
 @@ -29,6 +29,7 @@
  #pragma once
  

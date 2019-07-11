@@ -13,25 +13,24 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 else
 	inherit vcs-snapshot
+	MY_PV="9c909c8"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	MY_CAT="Catch2-5ca44b6"
 	MY_GSL="GSL-d846fe5"
-	MY_CRL="crl-d259aeb"
-	MY_QTL="qtlottie-eeeb4ed"
-	MY_RJS="rapidjson-01950eb"
+	MY_CRL="crl-9ea8700"
+	MY_QTL="rlottie-40ccf08"
 	MY_VAR="variant-550ac2f"
 	MY_XXH="xxHash-7cc9639"
 	MY_DEB="${PN}_1.7.0-1.debian"
 	SRC_URI="
-		mirror://githubcl/telegramdesktop/${MY_PN}/tar.gz/v${PV} -> ${P}.tar.gz
+		mirror://githubcl/telegramdesktop/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://debian/pool/main/t/${PN}/${MY_DEB}.tar.xz
 		mirror://githubcl/telegramdesktop/${MY_CRL%-*}/tar.gz/${MY_CRL##*-}
 		-> ${MY_CRL}.tar.gz
 		mirror://githubcl/Microsoft/${MY_GSL%-*}/tar.gz/${MY_GSL##*-}
 		-> ${MY_GSL}.tar.gz
-		mirror://githubcl/telegramdesktop/${MY_QTL%-*}/tar.gz/${MY_QTL##*-}
+		mirror://githubcl/john-preston/${MY_QTL%-*}/tar.gz/${MY_QTL##*-}
 		-> ${MY_QTL}.tar.gz
-		mirror://githubcl/Tencent/${MY_RJS%-*}/tar.gz/${MY_RJS##*-}
-		-> ${MY_RJS}.tar.gz
 		mirror://githubcl/mapbox/${MY_VAR%-*}/tar.gz/${MY_VAR##*-}
 		-> ${MY_VAR}.tar.gz
 		mirror://githubcl/Cyan4973/${MY_XXH%-*}/tar.gz/${MY_XXH##*-}
@@ -58,6 +57,7 @@ RDEPEND="
 	dev-qt/qtnetwork:5
 	webp? ( dev-qt/qtimageformats:5 )
 	sys-libs/zlib[minizip]
+	app-arch/lz4
 	app-arch/xz-utils
 	dev-libs/openssl:0
 	media-libs/libexif
@@ -70,7 +70,7 @@ RDEPEND="
 		x11-libs/gtk+:3
 		dev-libs/libappindicator:3
 	)
-	>=media-libs/libtgvoip-2.4.4_p20190528
+	>=media-libs/libtgvoip-2.4.4_p20190624
 "
 DEPEND="
 	${RDEPEND}
@@ -99,6 +99,7 @@ src_unpack() {
 		EGIT_SUBMODULES=(
 			'*'
 			'-Telegram/ThirdParty/libtgvoip'
+			'-Telegram/ThirdParty/lz4'
 		)
 		use test || EGIT_SUBMODULES+=( '-Telegram/ThirdParty/Catch' )
 		git-r3_src_unpack
@@ -111,8 +112,7 @@ src_unpack() {
 		vcs-snapshot_src_unpack
 		mv ${MY_CRL}/* "${S}"/Telegram/ThirdParty/crl/
 		mv ${MY_GSL}/* "${S}"/Telegram/ThirdParty/GSL/
-		mv ${MY_QTL}/* "${S}"/Telegram/ThirdParty/qtlottie/
-		mv ${MY_RJS}/* "${S}"/Telegram/ThirdParty/rapidjson/
+		mv ${MY_QTL}/* "${S}"/Telegram/ThirdParty/rlottie/
 		mv ${MY_VAR}/* "${S}"/Telegram/ThirdParty/variant/
 		mv ${MY_XXH}/* "${S}"/Telegram/ThirdParty/xxHash/
 		use test && mv ${MY_CAT}/* "${S}"/Telegram/ThirdParty/Catch/
@@ -126,7 +126,6 @@ src_prepare() {
 		debian/patches/Use-system-wide-font.patch
 		"${FILESDIR}"/${PN}-gyp.diff
 		"${FILESDIR}"/${PN}-pch.diff
-		"${FILESDIR}"/${PN}-qtlottie.diff
 	)
 	eapply "${_patches[@]}"
 
@@ -138,6 +137,7 @@ src_prepare() {
 		libavutil
 		libcrypto
 		libexif
+		liblz4
 		liblzma
 		libssl
 		libswresample
@@ -220,6 +220,8 @@ src_prepare() {
 		\n\2${_p}\3\n\t'tgvoip',%" \
 		-i telegram_linux.gypi
 	sed -e '/-static-libstdc++/d' -i qt.gypi utils.gyp
+	sed -e '/lib_lz4/d' -i lib_lottie.gyp
+	sed -e '/RLOTTIE_WITH_STATIC_QT/d' -i lib_rlottie.gyp
 
 	cd "${S}"
 	set -- gyp "${mygypargs[@]}" Telegram/gyp/Telegram.gyp
