@@ -18,7 +18,7 @@ else
 	MY_CAT="Catch2-5ca44b6"
 	MY_GSL="GSL-d846fe5"
 	MY_CRL="crl-9ea8700"
-	MY_QTL="rlottie-40ccf08"
+	MY_QTL="rlottie-bd9ee52"
 	MY_VAR="variant-550ac2f"
 	MY_XXH="xxHash-7cc9639"
 	MY_DEB="${PN}_1.7.0-1.debian"
@@ -70,7 +70,7 @@ RDEPEND="
 		x11-libs/gtk+:3
 		dev-libs/libappindicator:3
 	)
-	>=media-libs/libtgvoip-2.4.4_p20190624
+	>=media-libs/libtgvoip-2.4.4_p20190715
 "
 DEPEND="
 	${RDEPEND}
@@ -126,6 +126,8 @@ src_prepare() {
 		debian/patches/Use-system-wide-font.patch
 		"${FILESDIR}"/${PN}-gyp.diff
 		"${FILESDIR}"/${PN}-pch.diff
+		"${FILESDIR}"/${PN}-mtp_pch.diff
+		"${FILESDIR}"/${PN}-qt_functions.diff
 	)
 	eapply "${_patches[@]}"
 
