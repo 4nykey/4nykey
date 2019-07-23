@@ -27,7 +27,6 @@ SLOT="${PV%%.*}"
 IUSE="alsa bindist bundled-libs +c++0x debug doc jack hid lv2 nls phone-home sanitize sse vst"
 REQUIRED_USE="
 	|| ( alsa jack )
-	${PYTHON_REQUIRED_USE}
 "
 
 RDEPEND="
