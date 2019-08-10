@@ -1,9 +1,9 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-PYTHON_COMPAT=( python2_7 python3_{4,5,6,7} )
+PYTHON_COMPAT=( python2_7 python3_{6,7} )
 DISTUTILS_IN_SOURCE_BUILD=1
 EMESON_SOURCE="${S}/libpsautohint"
 inherit meson distutils-r1
@@ -13,11 +13,14 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="427ab23"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV/_beta/b}"
-	MY_PV="${MY_PV/_rc/c}"
+	MY_PV="85d3327"
+	MY_TD="psautohint-testdata-83a3b1b"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		test? (
+			mirror://githubcl/adobe-type-tools/${MY_TD%-*}/tar.gz/${MY_TD##*-}
+			-> ${MY_TD}.tar.gz
+		)
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -28,14 +31,23 @@ HOMEPAGE="https://github.com/adobe-type-tools/${PN}"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE=""
+IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.41[ufo,${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.44[ufo,${PYTHON_USEDEP}]
+	>=dev-python/lxml-4.3.5[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
+"
+BDEPEND="
+	test? (
+		dev-python/pytest[${PYTHON_USEDEP}]
+		python_targets_python2_7? (
+			dev-python/subprocess32[python_targets_python2_7]
+		)
+	)
 "
 
 pkg_setup() {
@@ -47,6 +59,15 @@ python_prepare_all() {
 	local PATCHES=(
 		"${FILESDIR}"/${PN}-bininpath.diff
 	)
+	sed \
+		-e "s:self.distribution.has_\(executabl\|c_librari\)es():False:" \
+		-e "/\(executabl\|librari\)es=\(executabl\|librari\)es,/d" \
+		-e "/lib': Custom\(InstallL\|BuildCl\)ib/d" \
+		-e "/build_exe': build_exe,/d" \
+		-i setup.py
+	if [[ -n ${PV%%*9999} ]]; then
+		mv "${WORKDIR}"/${MY_TD}/* "${S}"/tests/integration/data/
+	fi
 	distutils-r1_python_prepare_all
 }
 
@@ -73,6 +94,13 @@ src_install() {
 	distutils-r1_src_install
 }
 
-python_install() {
-	distutils-r1_python_install --skip-build
+python_test() {
+	local _t="${BUILD_DIR}/test"
+	local -x \
+		PYTHONPATH="${_t}/lib/python:${PYTHONPATH}" \
+		PATH="${_t}/scripts:${MESON_BUILD_DIR}l:${PATH}" \
+		LD_LIBRARY_PATH="${MESON_BUILD_DIR}"
+	mkdir -p "${_t}/lib/python"
+	distutils_install_for_testing
+	pytest -v || die
 }
