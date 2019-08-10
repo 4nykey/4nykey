@@ -1,7 +1,7 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 PYTHON_COMPAT=( python2_7 python3_{5,6,7} )
 PYTHON_REQ_USE="xml(+)"
@@ -11,9 +11,11 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
 else
-	inherit vcs-snapshot
-	MY_PV="66d847e"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
+	if [[ -z ${PV%%*_p*} ]]; then
+		inherit vcs-snapshot
+		MY_PV="66d847e"
+	fi
+	MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/${PN}/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -38,7 +40,7 @@ RDEPEND="
 	brotli? ( app-arch/brotli[python,${PYTHON_USEDEP}] )
 	zopfli? ( dev-python/py-zopfli[${PYTHON_USEDEP}] )
 	ufo? (
-		>=dev-python/fs-2.2[${PYTHON_USEDEP}]
+		>=dev-python/fs-2.4.9[${PYTHON_USEDEP}]
 		virtual/python-enum34[${PYTHON_USEDEP}]
 	)
 	unicode? (
@@ -51,6 +53,8 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
+"
+BDEPEND="
 	test? ( dev-python/pytest[${PYTHON_USEDEP}] )
 "
 

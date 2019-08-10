@@ -1,8 +1,8 @@
 --- a/Lib/glyphsLib/builder/builders.py
 +++ b/Lib/glyphsLib/builder/builders.py
 @@ -194,6 +194,7 @@ class UFOBuilder(_LoggerMixin):
-                 "[" in layer.name
-                 and "]" in layer.name
+                 BRACKET_LAYER_RE.match(layer.name)
+                 and glyph.export
                  and ".background" not in layer.name
 +                and self.minimize_glyphs_diffs
              ):
@@ -10,7 +10,7 @@
              else:
 --- a/tests/builder/designspace_gen_test.py
 +++ b/tests/builder/designspace_gen_test.py
-@@ -226,7 +226,7 @@ def test_designspace_generation_on_disk(datadir, tmpdir):
+@@ -227,7 +227,7 @@ def test_designspace_generation_on_disk(
  def test_designspace_generation_bracket_roundtrip(datadir):
      with open(str(datadir.join("BracketTestFont.glyphs"))) as f:
          font = glyphsLib.load(f)
@@ -19,12 +19,30 @@
  
      assert designspace.rules[0].name == "BRACKET.300.600"
      assert designspace.rules[0].conditionSets == [
-@@ -289,7 +289,7 @@ def test_designspace_generation_bracket_unbalanced_brackets(datadir):
-     # Delete the "Other [600]" layer to unbalance bracket layers.
-     del font.glyphs["x"].layers["C5C3CA59-C2D0-46F6-B5D3-86541DE36ACB"]
-     with pytest.raises(ValueError) as excinfo:
--        to_designspace(font)
-+        to_designspace(font,minimize_glyphs_diffs=True)
-     assert "bracket layer(s) missing" in str(excinfo)
+@@ -311,7 +311,7 @@ def test_designspace_generation_bracket_
+     layer_names = {l.name for l in font.glyphs["C"].layers}
+     assert layer_names == {"Regular", "Bold", "Bold [600]"}
  
-     # Delete the other [600] layers to rebalance.
+-    designspace = to_designspace(font)
++    designspace = to_designspace(font,minimize_glyphs_diffs=True)
+ 
+     for source in designspace.sources:
+         assert "C.BRACKET.600" in source.font
+@@ -332,7 +332,7 @@ def test_designspace_generation_bracket_
+     for layer in g.layers:
+         assert layer.components[0].name == "A"
+ 
+-    designspace = to_designspace(font)
++    designspace = to_designspace(font,minimize_glyphs_diffs=True)
+ 
+     for source in designspace.sources:
+         ufo = source.font
+@@ -359,7 +359,7 @@ def test_designspace_generation_reverse_
+ 
+     assert {"Regular ]600]", "Bold ]600]"}.intersection(l.name for l in g.layers)
+ 
+-    designspace = to_designspace(font)
++    designspace = to_designspace(font,minimize_glyphs_diffs=True)
+ 
+     assert designspace.rules[1].name == "BRACKET.400.600"
+     assert designspace.rules[1].conditionSets == [

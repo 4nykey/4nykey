@@ -11,9 +11,11 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/PyFilesystem/${MY_PN}.git"
 else
-	inherit vcs-snapshot
-	MY_PV="627f997"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
+	if [[ -z ${PV%%*_p*} ]]; then
+		inherit vcs-snapshot
+		MY_PV="627f997"
+	fi
+	MY_PV="v${PV}"
 	SRC_URI="
 		mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz
 	"
