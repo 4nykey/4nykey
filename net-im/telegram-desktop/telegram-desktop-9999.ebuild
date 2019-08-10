@@ -1,15 +1,20 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 MY_PN=tdesktop
 CMAKE_USE_DIR="${S}/out/Release"
 PYTHON_COMPAT=( python2_7 )
-inherit python-any-r1 toolchain-funcs desktop xdg gnome2-utils cmake-utils
+inherit python-any-r1 toolchain-funcs desktop xdg cmake-utils
 if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/telegramdesktop/${MY_PN}.git"
 	EGIT_BRANCH="dev"
+	EGIT_SUBMODULES=(
+		'*'
+		'-Telegram/ThirdParty/libtgvoip'
+		'-Telegram/ThirdParty/lz4'
+	)
 	inherit git-r3
 else
 	inherit vcs-snapshot
@@ -17,14 +22,12 @@ else
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	MY_CAT="Catch2-5ca44b6"
 	MY_GSL="GSL-d846fe5"
-	MY_CRL="crl-9ea8700"
-	MY_QTL="rlottie-bd9ee52"
+	MY_CRL="crl-52baf11"
+	MY_QTL="rlottie-d08a03b"
 	MY_VAR="variant-550ac2f"
 	MY_XXH="xxHash-7cc9639"
-	MY_DEB="${PN}_1.7.0-1.debian"
 	SRC_URI="
 		mirror://githubcl/telegramdesktop/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
-		mirror://debian/pool/main/t/${PN}/${MY_DEB}.tar.xz
 		mirror://githubcl/telegramdesktop/${MY_CRL%-*}/tar.gz/${MY_CRL##*-}
 		-> ${MY_CRL}.tar.gz
 		mirror://githubcl/Microsoft/${MY_GSL%-*}/tar.gz/${MY_GSL##*-}
@@ -43,6 +46,10 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
+MY_DEB="${PN}_1.7.0-1.debian"
+SRC_URI+="
+	mirror://debian/pool/main/t/${PN}/${MY_DEB}.tar.xz
+"
 
 DESCRIPTION="Telegram Desktop messaging app"
 HOMEPAGE="https://desktop.telegram.org"
@@ -74,14 +81,16 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	dev-util/gyp
-	virtual/pkgconfig
 	x11-libs/libxkbcommon[static-libs]
 	dev-cpp/range-v3
 "
 RDEPEND="
 	${RDEPEND}
 	media-fonts/open-sans
+"
+BDEPEND="
+	dev-util/gyp
+	virtual/pkgconfig
 "
 
 pkg_pretend() {
@@ -94,33 +103,23 @@ See https://core.telegram.org/api/obtaining_api_id
 "
 }
 
-src_unpack() {
-	if [[ -z ${PV%%*9999} ]]; then
-		EGIT_SUBMODULES=(
-			'*'
-			'-Telegram/ThirdParty/libtgvoip'
-			'-Telegram/ThirdParty/lz4'
-		)
-		use test || EGIT_SUBMODULES+=( '-Telegram/ThirdParty/Catch' )
-		git-r3_src_unpack
-		EGIT_REPO_URI="https://salsa.debian.org/debian/telegram-desktop.git"
-		EGIT_BRANCH=
-		git-r3_fetch
-		git-r3_checkout "${EGIT_REPO_URI}" "${WORKDIR}" '' debian
-		mv debian "${S}"/
-	else
-		vcs-snapshot_src_unpack
-		mv ${MY_CRL}/* "${S}"/Telegram/ThirdParty/crl/
-		mv ${MY_GSL}/* "${S}"/Telegram/ThirdParty/GSL/
-		mv ${MY_QTL}/* "${S}"/Telegram/ThirdParty/rlottie/
-		mv ${MY_VAR}/* "${S}"/Telegram/ThirdParty/variant/
-		mv ${MY_XXH}/* "${S}"/Telegram/ThirdParty/xxHash/
-		use test && mv ${MY_CAT}/* "${S}"/Telegram/ThirdParty/Catch/
-		mv ${MY_DEB} "${S}"/debian
-	fi
+pkg_setup() {
+	EGIT_SUBMODULES+=( $(usex test '' '-Telegram/ThirdParty/Catch') )
+	python-any-r1_pkg_setup
 }
 
 src_prepare() {
+	if [[ -n ${PV%%*9999} ]]; then
+		mv "${WORKDIR}"/${MY_CRL}/* "${S}"/Telegram/ThirdParty/crl/
+		mv "${WORKDIR}"/${MY_DEB} "${S}"/debian
+		mv "${WORKDIR}"/${MY_GSL}/* "${S}"/Telegram/ThirdParty/GSL/
+		mv "${WORKDIR}"/${MY_QTL}/* "${S}"/Telegram/ThirdParty/rlottie/
+		mv "${WORKDIR}"/${MY_VAR}/* "${S}"/Telegram/ThirdParty/variant/
+		mv "${WORKDIR}"/${MY_XXH}/* "${S}"/Telegram/ThirdParty/xxHash/
+		use test && mv "${WORKDIR}"/${MY_CAT}/* "${S}"/Telegram/ThirdParty/Catch/
+	else
+		unpack ${MY_DEB}.tar.xz
+	fi
 	local _patches=(
 		debian/patches/Packed-resources.patch
 		debian/patches/Use-system-wide-font.patch
@@ -153,8 +152,8 @@ src_prepare() {
 	)
 	local _f=(
 		$(${_p} --cflags ${_l[@]})
-		-I"${EROOT}"usr/include/range/v3
-		-I"${EROOT}"usr/include/tgvoip
+		-I"${EPREFIX}"/usr/include/range/v3
+		-I"${EPREFIX}"/usr/include/tgvoip
 	)
 	local _d=(
 		TDESKTOP_DISABLE_UNITY_INTEGRATION
@@ -176,10 +175,10 @@ src_prepare() {
 		-Dnot_need_gtk="True"
 		-Dmy_cflags="${_f[*]}"
 		-Dqt_version=${_q%[-_]*}
-		-Dlinux_path_qt="${EROOT}usr/$(get_libdir)/qt5"
-		-Dlinux_path_xkbcommon="${EROOT}usr"
-		-Dlinux_path_opus_include="${EROOT}usr/include/opus"
-		-Dminizip_loc="${EROOT}usr/include/minizip"
+		-Dlinux_path_qt="${EPREFIX}/usr/$(get_libdir)/qt5"
+		-Dlinux_path_xkbcommon="${EPREFIX}/usr"
+		-Dlinux_path_opus_include="${EPREFIX}/usr/include/opus"
+		-Dminizip_loc="${EPREFIX}/usr/include/minizip"
 		-Dbuild_defines="${_d:1}"
 	)
 
@@ -256,19 +255,4 @@ src_test () {
 		"${CMAKE_BUILD_DIR}"/${_t}
 		eend $?
 	done
-}
-
-pkg_preinst() {
-	xdg_pkg_preinst
-	gnome2_icon_savelist
-}
-
-pkg_postinst() {
-	xdg_pkg_postinst
-	gnome2_icon_cache_update
-}
-
-pkg_postrm() {
-	xdg_pkg_postrm
-	gnome2_icon_cache_update
 }
