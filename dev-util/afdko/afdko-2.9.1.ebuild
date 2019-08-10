@@ -36,7 +36,7 @@ RDEPEND="
 	dev-python/fontPens[${PYTHON_USEDEP}]
 	>=dev-python/fonttools-3.43.1[ufo,unicode,${PYTHON_USEDEP}]
 	dev-python/MutatorMath[${PYTHON_USEDEP}]
-	>=dev-util/psautohint-1.9.3_rc1[${PYTHON_USEDEP}]
+	>=dev-util/psautohint-1.9.4[${PYTHON_USEDEP}]
 	dev-python/ufoProcessor[${PYTHON_USEDEP}]
 	dev-python/ufoNormalizer[${PYTHON_USEDEP}]
 "
@@ -82,10 +82,11 @@ src_compile() {
 }
 
 python_test() {
+	local _t="${BUILD_DIR}/test"
 	local -x \
-	PYTHONPATH="${BUILD_DIR}/test/lib/python:${PYTHONPATH}" \
-	PATH="${BUILD_DIR}/test/scripts:${S}/c/build_all:${PATH}"
-	mkdir -p "${BUILD_DIR}/test/lib/python"
+		PYTHONPATH="${_t}/lib/python:${PYTHONPATH}" \
+		PATH="${_t}/scripts:${S}/c/build_all:${PATH}"
+	mkdir -p "${_t}/lib/python"
 	distutils_install_for_testing
 	pytest -v || die
 }

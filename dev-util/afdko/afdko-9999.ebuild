@@ -1,7 +1,7 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 PYTHON_COMPAT=( python3_{6,7} )
 inherit distutils-r1
@@ -9,9 +9,8 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
-	inherit vcs-snapshot eapi7-ver
-	MY_PV="f06e58c"
-	[[ -n ${PV%%*_*} ]] && MY_PV="${PV}"
+	inherit vcs-snapshot
+	MY_PV="be1e5d3"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -20,7 +19,7 @@ else
 fi
 
 DESCRIPTION="Adobe Font Development Kit for OpenType"
-HOMEPAGE="http://www.adobe.com/devnet/opentype/afdko.html"
+HOMEPAGE="https://adobe-type-tools.github.io/afdko"
 
 LICENSE="Apache-2.0"
 SLOT="0"
@@ -33,14 +32,17 @@ RDEPEND="
 	dev-python/defcon[${PYTHON_USEDEP}]
 	dev-python/fontMath[${PYTHON_USEDEP}]
 	dev-python/fontPens[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-3.43.2[ufo,unicode,${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.44[ufo,unicode,${PYTHON_USEDEP}]
 	dev-python/MutatorMath[${PYTHON_USEDEP}]
 	>=dev-util/psautohint-1.9.3_rc1[${PYTHON_USEDEP}]
 	dev-python/ufoProcessor[${PYTHON_USEDEP}]
 	dev-python/ufoNormalizer[${PYTHON_USEDEP}]
+	>=dev-python/lxml-4.3.5[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
+"
+BDEPEND="
 	test? (
 		dev-python/pytest[${PYTHON_USEDEP}]
 	)
@@ -50,11 +52,9 @@ DOCS=( {README,NEWS}.md html pdf )
 python_prepare_all() {
 	local PATCHES=(
 		"${FILESDIR}"/${PN}-nowheel.diff
+		"${FILESDIR}"/${PN}-pdflib.diff
 	)
 	grep -rl '\$(AR) -' c | xargs sed -e 's:\(\$(AR) \)-:\1:' -i
-	grep -rl 'import subprocess32' tests | xargs sed -i -e \
-	's%import subprocess32%import sys\nif int(sys.version[0])>2:\
-	import subprocess\nelse:\n\t&%'
 	sed -e 's:==:>=:' -i requirements.txt
 	sed -i setup.py \
 		-e 's:scripts=\(_get_scripts()\),:data_files=[("bin",\1)],:'
