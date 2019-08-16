@@ -1,7 +1,7 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 PYTHON_COMPAT=( python3_{5,6,7} )
 inherit distutils-r1
@@ -9,9 +9,12 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}.git"
 else
-	inherit vcs-snapshot
+	[[ -z ${PV%%*_*} ]] && inherit vcs-snapshot
 	MY_PV="1ef915d"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV/_alph}"
+	if [[ -n ${PV%%*_p*} ]]; then
+		MY_PV=$(ver_cut 4)
+		MY_PV="v$(ver_cut 1-3)${MY_PV:0:1}$(ver_cut 5)"
+	fi
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -36,6 +39,8 @@ RDEPEND="
 	dev-python/booleanOperations[${PYTHON_USEDEP}]
 	dev-python/lxml[${PYTHON_USEDEP}]
 	dev-python/skia-pathops[${PYTHON_USEDEP}]
+	dev-python/ufoLib2[${PYTHON_USEDEP}]
+	>=dev-python/attrs-19.1[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
@@ -46,9 +51,8 @@ DEPEND="
 	)
 "
 
-python_prepare_all() {
+pkg_setup() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
-	distutils-r1_python_prepare_all
 }
 
 python_test() {
