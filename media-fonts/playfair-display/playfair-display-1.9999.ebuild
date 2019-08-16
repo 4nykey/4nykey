@@ -1,7 +1,7 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 EMAKE_EXTRA_ARGS=( glyphs='sources/Playfair-Display-Italic.glyphs sources/Playfair-Display-Roman.glyphs' )
 FONTDIR_BIN=( fonts/{CF,TT}F )

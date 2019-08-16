@@ -1,9 +1,10 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 FONTDIR_BIN=( fonts )
+EMAKE_EXTRA_ARGS=( VARLIB=' ' )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}.git"
@@ -22,4 +23,3 @@ HOMEPAGE="https://github.com/googlefonts/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-PATCHES=( ${FILESDIR}/${PN}-anchors.diff )

@@ -1,0 +1,47 @@
+--- a/source/OpenSans-Roman.glyphs
++++ b/source/OpenSans-Roman.glyphs
+@@ -680926,8 +680926,6 @@ weightClass = ExtraBold;
+ {
+ customParameters = (
+ {
+-name = familyName;
+-value = "Open Sans Condensed";
+ }
+ );
+ interpolationWidth = 75;
+@@ -680941,8 +680939,6 @@ widthClass = Condensed;
+ {
+ customParameters = (
+ {
+-name = familyName;
+-value = "Open Sans Condensed";
+ }
+ );
+ interpolationWeight = 170;
+@@ -680957,8 +680953,6 @@ widthClass = Condensed;
+ {
+ customParameters = (
+ {
+-name = familyName;
+-value = "Open Sans Condensed";
+ }
+ );
+ interpolationWeight = 239;
+@@ -680976,8 +680970,6 @@ widthClass = Condensed;
+ {
+ customParameters = (
+ {
+-name = familyName;
+-value = "Open Sans Condensed";
+ }
+ );
+ interpolationWeight = 310;
+@@ -680994,8 +680986,6 @@ widthClass = Condensed;
+ {
+ customParameters = (
+ {
+-name = familyName;
+-value = "Open Sans Condensed";
+ }
+ );
+ interpolationCustom = 400;

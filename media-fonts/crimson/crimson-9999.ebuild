@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/skosch/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="3df8aeb"
+	MY_PV="f825505"
 	SRC_URI="
 		mirror://githubcl/skosch/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"

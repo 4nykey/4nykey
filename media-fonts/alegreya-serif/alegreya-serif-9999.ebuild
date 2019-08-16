@@ -1,7 +1,7 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -22,11 +22,6 @@ HOMEPAGE="https://github.com/huertatipografica/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-
-src_prepare() {
-	local PATCHES=(
-		"${FILESDIR}"/${PN%-*}_toomanyalignmentzones.diff
-	)
-	sed -e 's:\<_top\(left\|right\)\>:top\1:' -i sources/*.glyphs
-	fontmake_src_prepare
-}
+PATCHES=(
+	"${FILESDIR}"/${PN%-*}_toomanyalignmentzones.diff
+)

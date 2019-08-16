@@ -1,16 +1,17 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-EMAKE_EXTRA_ARGS=( INTERPOLATE= )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/alexeiva/${PN}.git"
 else
-	inherit vcs-snapshot
-	MY_PV="d84ad58"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
+	if [[ -z ${PV%%*_p*} ]]; then
+		inherit vcs-snapshot
+		MY_PV="d84ad58"
+	fi
+	MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/alexeiva/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"

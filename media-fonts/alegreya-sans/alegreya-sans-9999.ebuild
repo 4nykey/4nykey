@@ -1,7 +1,7 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -24,8 +24,3 @@ LICENSE="OFL-1.1"
 SLOT="0"
 
 DOCS="*.txt"
-
-src_prepare() {
-	sed -e 's:\<_\(topleft\)\>:\1:' -i sources/*.glyphs
-	fontmake_src_prepare
-}
