@@ -1,7 +1,7 @@
 # Copyright 2004-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 PYTHON_COMPAT=( python{2_7,3_{5,6,7}} )
 
@@ -10,14 +10,13 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/${PN}/${PN}"
 else
-	inherit vcs-snapshot
-	MY_UH="uthash-f19dde2"
-	MY_PV="570e17b"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
+	MY_PV="${PV}"
+	if [[ -z ${PV%%*_p*} ]]; then
+		inherit vcs-snapshot
+		MY_PV="570e17b"
+	fi
 	SRC_URI="
 		mirror://githubcl/${PN}/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
-		mirror://githubcl/troydhanson/${MY_UH%-*}/tar.gz/${MY_UH##*-}
-		-> ${MY_UH}.tar.gz
 	"
 	KEYWORDS="~amd64 ~x86"
 fi
@@ -29,7 +28,7 @@ HOMEPAGE="https://fontforge.github.io/"
 LICENSE="BSD GPL-3+"
 SLOT="0"
 IUSE="cairo truetype-debugger gif gtk jpeg png +python readline test tiff svg unicode X"
-IUSE+=" libspiro"
+IUSE+=" extras libspiro woff2"
 
 RESTRICT="!test? ( test )"
 RESTRICT+=" primaryuri"
@@ -64,8 +63,8 @@ RDEPEND="
 		x11-libs/libXi:0=
 		>=x11-libs/pango-1.10:0=[X]
 	)
-	!media-gfx/pfaedit
 	libspiro? ( media-libs/libspiro )
+	woff2? ( media-libs/woff2 )
 "
 DEPEND="
 	${RDEPEND}
@@ -82,18 +81,6 @@ pkg_setup() {
 	use python && python-single-r1_pkg_setup
 }
 
-src_unpack() {
-	if [[ -z ${PV%%*9999} ]]; then
-		git-r3_src_unpack
-		EGIT_REPO_URI="https://github.com/troydhanson/uthash" \
-		EGIT_CHECKOUT_DIR="${S}/uthash" \
-			git-r3_src_unpack
-	else
-		vcs-snapshot_src_unpack
-		mv "${WORKDIR}"/${MY_UH} "${S}"/uthash
-	fi
-}
-
 src_prepare() {
 	default
 	eautoreconf
@@ -106,6 +93,8 @@ src_configure() {
 		$(use_enable python python-extension)
 		$(use_enable python python-scripting)
 		--enable-tile-path
+		$(use_enable woff2)
+		$(use_enable extras fontforge-extras)
 		$(use_with cairo)
 		$(use_with gif giflib)
 		$(use_with jpeg libjpeg)

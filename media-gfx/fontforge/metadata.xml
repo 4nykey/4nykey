@@ -5,7 +5,9 @@
 		<email>4nykey@gmail.com</email>
 	</maintainer>
 	<use>
+		<flag name="extras">Build and install fontforge-extras from contrib directory</flag>
 		<flag name="libspiro">Add support for media-libs/libspiro</flag>
 		<flag name="truetype-debugger">Enable truetype debugger in fontforge</flag>
+		<flag name="woff2">Enable WOFF2 support</flag>
 	</use>
 </pkgmetadata>
