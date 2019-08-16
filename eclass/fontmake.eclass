@@ -1,9 +1,10 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: fontmake.eclass
 # @MAINTAINER:
 # 4nykey@gmail.com
+# @SUPPORTED_EAPIS: 5 6 7
 # @BLURB: An eclass to build fonts from sources using dev-util/fontmake
 
 # @VARIABLE: FONT_SRCDIR
@@ -28,7 +29,7 @@ FONT_SRCDIR=${FONT_SRCDIR:-sources}
 # fonts. By default: 'fonts fonts/otf fonts/ttf'
 FONTDIR_BIN=( ${FONTDIR_BIN[@]:-fonts fonts/otf fonts/ttf} )
 
-PYTHON_COMPAT=( python2_7 python3_{4,5,6,7} )
+PYTHON_COMPAT=( python3_{5,6,7} )
 IUSE="autohint +binary"
 MY_FONT_TYPES=( ${MY_FONT_TYPES[@]:-otf +ttf} )
 
@@ -36,7 +37,7 @@ inherit python-any-r1 font-r1
 
 EXPORT_FUNCTIONS pkg_setup src_prepare src_compile
 
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-c2b1043"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-bb03134"
 SRC_URI+="
 !binary? (
 	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
@@ -44,7 +45,6 @@ SRC_URI+="
 )
 "
 RESTRICT="primaryuri"
-
 DEPEND="
 !binary? (
 	${PYTHON_DEPS}
@@ -54,6 +54,11 @@ DEPEND="
 	autohint? ( media-gfx/ttfautohint )
 )
 "
+case ${EAPI:-0} in
+	5|6) ;;
+	7) BDEPEND="${DEPEND}"; DEPEND="" ;;
+	*) die "${ECLASS}: EAPI ${EAPI} not supported" ;;
+esac
 
 fontmake_pkg_setup() {
 	if use binary; then

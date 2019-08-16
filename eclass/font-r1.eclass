@@ -1,12 +1,11 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: font-r1.eclass
 # @MAINTAINER:
-# fonts@gentoo.org
+# 4nykey@gmail.com
+# @SUPPORTED_EAPIS: 5 6 7
 # @BLURB: Eclass to make font installation uniform
-
-[[ ${EAPI} -lt 6 ]] && inherit eutils
 
 EXPORT_FUNCTIONS pkg_setup src_install pkg_postinst pkg_postrm
 
@@ -85,6 +84,13 @@ DEPEND="
 	)
 	sys-apps/findutils
 "
+case ${EAPI:-0} in
+	5) inherit eutils ;;
+	6) ;;
+	7) BDEPEND="${DEPEND}"; DEPEND="" ;;
+	*) die "${ECLASS}: EAPI ${EAPI} not supported" ;;
+esac
+
 RDEPEND=""
 RESTRICT+=" strip binchecks"
 
@@ -125,24 +131,7 @@ font-r1_fontconfig() {
 # @FUNCTION: font-r1_pkg_setup
 # @DESCRIPTION:
 # The font pkg_setup function.
-# Collision protection and Prefix compat for eapi < 3.
 font-r1_pkg_setup() {
-	# Prefix compat
-	case ${EAPI:-0} in
-		0|1|2)
-			if ! use prefix; then
-				EPREFIX=
-				ED=${D}
-				EROOT=${ROOT}
-				[[ ${EROOT} = */ ]] || EROOT+="/"
-			fi
-			;;
-	esac
-
-	# make sure we get no collisions
-	# setup is not the nicest place, but preinst doesn't cut it
-	[[ -e "${EROOT}/${FONTDIR}/fonts.cache-1" ]] && rm -f "${EROOT}/${FONTDIR}/fonts.cache-1"
-
 	local _t
 	for _t in ${MY_FONT_TYPES[@]/*_}; do
 		use font_types_${_t} && FONT_SUFFIX+=" ${_t}"
@@ -198,7 +187,7 @@ font-r1_pkg_postinst() {
 		elog "The following fontconfig configuration files have been installed:"
 		elog
 		for conffile in "${FONT_CONF[@]}"; do
-			if [[ -e ${EROOT}etc/fonts/conf.avail/$(basename ${conffile}) ]]; then
+			if [[ -e "${EROOT%/}/etc/fonts/conf.avail/$(basename ${conffile})" ]]; then
 				elog "  $(basename ${conffile})"
 			fi
 		done
@@ -207,9 +196,9 @@ font-r1_pkg_postinst() {
 		echo
 	fi
 
-	if has_version media-libs/fontconfig && [[ ${ROOT} == / ]]; then
+	if has_version media-libs/fontconfig && [[ -z "${ROOT%/}" ]]; then
 		ebegin "Updating fontconfig cache for ${FONT_PN}"
-		fc-cache -s "${EROOT}"usr/share/fonts/${FONT_PN}
+		fc-cache -s "${EROOT%/}/usr/share/fonts/${FONT_PN}"
 		eend $?
 	else
 		einfo "Skipping cache update (media-libs/fontconfig is not installed or ROOT != /)"
@@ -220,9 +209,9 @@ font-r1_pkg_postinst() {
 # @DESCRIPTION:
 # The font pkg_postrm function.
 font-r1_pkg_postrm() {
-	if has_version media-libs/fontconfig && [[ ${ROOT} == / ]]; then
+	if has_version media-libs/fontconfig && [[ -z "${ROOT%/}" ]]; then
 		ebegin "Updating fontconfig cache for ${FONT_PN}"
-		fc-cache -s "${EROOT}"usr/share/fonts/${FONT_PN}
+		fc-cache -s "${EROOT%/}/usr/share/fonts/${FONT_PN}"
 		eend $?
 	else
 		einfo "Skipping cache update (media-libs/fontconfig is not installed or ROOT != /)"
