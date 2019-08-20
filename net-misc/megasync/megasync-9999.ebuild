@@ -1,11 +1,11 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 CMAKE_USE_DIR="${S}/src/MEGAShellExtDolphin"
 CMAKE_IN_SOURCE_BUILD=y
-inherit gnome2 cmake-utils qmake-utils
+inherit cmake-utils qmake-utils xdg
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/meganz/${PN}.git"
@@ -13,7 +13,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI=
 else
 	inherit vcs-snapshot
-	MY_PV="9a04439"
+	MY_PV="0add0dc"
 	SRC_URI="
 		mirror://githubcl/meganz/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -31,7 +31,7 @@ SLOT="0"
 IUSE="dolphin nautilus thunar"
 
 RDEPEND="
-	>=net-misc/meganz-sdk-3.5.4:=[libuv,qt,sodium(+),sqlite]
+	>=net-misc/meganz-sdk-3.6.0:=[libuv,qt,sodium(+),sqlite]
 	dev-qt/qtsvg:5
 	dev-qt/qtdbus:5
 	dev-qt/qtconcurrent:5
@@ -42,13 +42,15 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
+"
+BDEPEND="
 	dev-qt/linguist-tools:5
 "
 src_prepare() {
 	local PATCHES=(
 		"${FILESDIR}"/${PN}-qmake.diff
 	)
-	cp -r "${EROOT}"usr/share/meganz-sdk/bindings "${S}"/src/MEGASync/mega/
+	cp -r "${EROOT}"/usr/share/meganz-sdk/bindings "${S}"/src/MEGASync/mega/
 	cmake-utils_src_prepare
 	mv -f src/MEGAShellExtDolphin/CMakeLists{_kde5,}.txt
 	rm -f src/MEGAShellExtDolphin/megasync-plugin.moc
