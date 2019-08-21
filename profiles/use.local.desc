@@ -28,8 +28,6 @@ dev-python/wxpython:examples - Install interactive demo module browser and sampl
 dev-python/wxpython:gtk3 - Build with GTK+3 instead of GTK+2
 dev-util/ots:graphite - Sanitize Graphite tables
 dev-util/ots:variations - Sanitize OpenType Variation tables
-media-fonts/fira:clean-as-you-go - Clean intermediate ufos after they were built (useful when PORTAGE_TMPDIR resides on a tmpfs)
-media-fonts/fira:interpolate - Interpolate to get more font weights (significantly increases build time and diskspace requirements)
 media-fonts/iosevka:font_variants_cc - A variant with several symbols enwiden to be compatible with most CJK typefaces
 media-fonts/iosevka:font_variants_default - The default variant with ligatures and semantic full-width glyphs
 media-fonts/iosevka:font_variants_ss01 - A variant stylized after Andale Mono
@@ -46,7 +44,6 @@ media-fonts/iosevka:font_variants_ss11 - A variant stylized after X Windows Fixe
 media-fonts/iosevka:font_variants_term - A variant without ligatures and full-width glyphs
 media-fonts/iosevka:font_variants_type - A variant for better typesetting layout
 media-fonts/noto:emoji - Install additional emoji fonts
-media-fonts/noto:pipeline - Install WIP fonts created from glyphs
 media-fonts/noto-emoji:zopfli - Optimize using app-arch/zopfli
 media-fonts/noto-source:clean-as-you-go - Clean intermediate ufos after they were built (useful when PORTAGE_TMPDIR resides on a tmpfs)
 media-fonts/noto-source:interpolate - Interpolate to get more font weights (significantly increases build time and diskspace requirements)
@@ -58,12 +55,11 @@ media-gfx/fim:dia - Enable DIA file support via app-office/dia
 media-gfx/fim:graphicsmagick - Enable GraphicsMagick library support
 media-gfx/fim:screen - Add experimental support for running under screen
 media-gfx/fim:xfig - Enable FIG file support via media-gfx/xfig
+media-gfx/fontforge:extras - Build and install fontforge-extras from contrib directory
+media-gfx/fontforge:libspiro - Add support for media-libs/libspiro
+media-gfx/fontforge:truetype-debugger - Enable truetype debugger in fontforge
+media-gfx/fontforge:woff2 - Enable WOFF2 support
 media-gfx/fontview:gtk3 - Use GTK+3 instead of GTK+2
-media-gfx/gmic:cli - Build CLI interface
-media-gfx/gmic:krita - Build a plugin for krita
-media-gfx/gmic:opencv - Enable support for webcams using the OpenCV library
-media-gfx/natron:c++11 - Build using the C++11 standard
-media-gfx/natron:gmic - Install openfx-gmic
 media-sound/ardour:bundled-libs - Use bundled libs instead of system installed
 media-sound/ardour:c++0x - Compile using the C++11 standard
 media-sound/ardour:hid - Add support for dev-libs/hidapi
@@ -90,9 +86,6 @@ media-sound/flactag:scripts - Install additional scripts to /usr/bin
 media-sound/jack-audio-connection-kit:classic - Force enable standard JACK (jackd) even if D-Bus JACK (jackdbus) is enabled too
 media-sound/jack-audio-connection-kit:opus - Build Opus netjack2
 media-sound/picard:acoustid - Use media-libs/chromaprint for acoustic fingerprinting
-media-video/flowblade:frei0r - Additional video filters (media-plugins/frei0r-plugins)
-media-video/flowblade:gmic - Additional image filters (media-gfx/gmic)
-media-video/flowblade:swh - Additional audio filters (media-plugins/swh-plugins)
 net-misc/meganz-sdk:freeimage - Enable support for image I/O via media-libs/freeimage
 net-misc/meganz-sdk:fuse - Build FUSE-based example client
 net-misc/meganz-sdk:libuv - Support asynchronous I/O via dev-libs/libuv
@@ -129,7 +122,6 @@ x11-libs/wxGTK:chm - Enable support for Microsoft Compiled HTML Help files.
 x11-libs/wxGTK:gstreamer - Enable the wxMediaCtrl class for playing audio and video through gstreamer.
 x11-libs/wxGTK:sdl - Use Simple Directmedia Layer (media-libs/libsdl) for audio.
 x11-misc/gpaste:gnome-shell - Install gnome-shell extension
-x11-misc/gxneur:gconf - Enable GConf as configuration backend
 x11-misc/xneur:aspell - Enable spellchecking using app-text/aspell
 x11-misc/xneur:enchant - Enable spell checking using app-text/enchant
 x11-misc/xneur:keylogger - Enable keyboard logger
