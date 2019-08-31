@@ -1,7 +1,7 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 MY_PN="${PN}-core"
 if [[ -z ${PV%%*9999} ]]; then
@@ -13,6 +13,8 @@ else
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV//_/-}"
 	SRC_URI="
 		mirror://githubcl/${PN}/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubraw/${PN}/${MY_PN}/${MY_PV}/Bootstrap.mak
+		-> premake_bootstrap-${MY_PV}.mak
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -32,6 +34,8 @@ DOCS=( C{ONTRIBUTORS,HANGES}.txt README.md )
 
 src_prepare() {
 	default
+	[[ -n ${PV%%*9999} ]] && \
+		cp "${DISTDIR}"/premake_bootstrap-${MY_PV}.mak Bootstrap.mak
 	sed \
 		-e '/MAKE.*getconf/d' \
 		-e 's:--to=:--no-curl --no-zlib &:' \
@@ -54,6 +58,10 @@ src_compile() {
 		-e 's: -\(O3\|\<s\>\)::g' \
 		-i *.make
 	emake verbose=1
+}
+
+src_test() {
+	bin/release/premake${SLOT} test || die
 }
 
 src_install() {
