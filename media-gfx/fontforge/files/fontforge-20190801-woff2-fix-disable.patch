@@ -1,0 +1,11 @@
+--- fontforge-20190801/m4/fontforge_arg_enable.m4.old	2019-08-22 12:11:57.000000000 -0400
++++ fontforge-20190801/m4/fontforge_arg_enable.m4	2019-08-22 12:13:18.468255183 -0400
+@@ -233,7 +233,7 @@
+         [AS_HELP_STRING([--enable-woff2],
+                 [Enable WOFF2 support.])],
+         [use_woff2=yes])
+-if test x$use_woff2 = xyes ; then
++if test x$use_woff2 = xyes -a x$enableval = xyes ; then
+     PKG_CHECK_MODULES([WOFF2],[libwoff2enc,libwoff2dec],
+     [
+         AC_LANG_PUSH([C++])

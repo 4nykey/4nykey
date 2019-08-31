@@ -19,6 +19,9 @@ else
 		mirror://githubcl/${PN}/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	KEYWORDS="~amd64 ~x86"
+	PATCHES=(
+		"${FILESDIR}"/${P}-woff2-fix-disable.patch
+	)
 fi
 inherit autotools
 
@@ -72,8 +75,7 @@ DEPEND="
 	sys-devel/gettext
 	virtual/pkgconfig
 "
-
-PATCHES=(
+PATCHES+=(
 	"${FILESDIR}"/20170731-gethex-unaligned.patch
 )
 
