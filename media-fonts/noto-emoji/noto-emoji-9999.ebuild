@@ -1,25 +1,29 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python2_7 python3_{5,6,7} )
+inherit python-any-r1 font-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/googlei18n/${PN}"
+	EGIT_REPO_URI="https://github.com/googlefonts/${PN}"
 else
 	inherit vcs-snapshot
 	MY_PV="unicode11"
 	MY_PV="v${PV//./-}-${MY_PV}"
-	[[ -z ${PV%%*_p*} ]] && MY_PV="09e5d14"
-	SRC_URI="mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz"
+	[[ -z ${PV%%*_p*} ]] && MY_PV="833a43d"
+	SRC_URI="mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font-r1
+SRC_URI+="
+	https://github.com/googlei18n/${PN}/commit/a9ca546.patch
+"
+PATCHES=( "${DISTDIR}"/a9ca546.patch )
 
 DESCRIPTION="Noto Emoji fonts"
-HOMEPAGE="https://github.com/googlei18n/${PN}"
+HOMEPAGE="https://github.com/googlefonts/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
