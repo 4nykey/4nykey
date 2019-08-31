@@ -1,0 +1,28 @@
+--- a/nototools/shape_diff.py
++++ b/nototools/shape_diff.py
+@@ -33,7 +33,11 @@ from __future__ import division
+ import os
+ from PIL import Image
+ import re
+-import StringIO
++import sys
++if sys.version_info[0] < 3:
++    from StringIO import StringIO
++else:
++    from io import StringIO
+ import subprocess
+ import tempfile
+ 
+@@ -153,10 +157,10 @@ class ShapeDiffFinder:
+             if unichr(0) in text:
+                 continue
+ 
+-            img_file_a = StringIO.StringIO(subprocess.check_output([
++            img_file_a = StringIO(subprocess.check_output([
+                 'hb-view', '--font-size=%d' % font_size,
+                 '--features=%s' % ','.join(features), self.path_a, text]))
+-            img_file_b = StringIO.StringIO(subprocess.check_output([
++            img_file_b = StringIO(subprocess.check_output([
+                 'hb-view', '--font-size=%d' % font_size,
+                 '--features=%s' % ','.join(features), self.path_b, text]))
+             img_a = Image.open(img_file_a)

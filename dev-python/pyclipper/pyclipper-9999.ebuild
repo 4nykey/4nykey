@@ -1,9 +1,9 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 python3_{4,5,6,7} )
+PYTHON_COMPAT=( python2_7 python3_{5,6,7} )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -29,7 +29,7 @@ DEPEND+="
 	test? (
 		dev-python/pytest[${PYTHON_USEDEP}]
 		$(python_gen_cond_dep 'dev-python/funcsigs[${PYTHON_USEDEP}]' \
-			python2_7 python3_4 python3_5)
+			python2_7 python3_5)
 	)
 "
 

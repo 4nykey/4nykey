@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python2_7 python3_{5,6,7} )
+PYTHON_COMPAT=( python3_{6,7} )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -30,11 +30,9 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.34[ufo,${PYTHON_USEDEP}]
-	>=dev-python/attrs-18.2[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.39[ufo,${PYTHON_USEDEP}]
+	>=dev-python/attrs-19.1[${PYTHON_USEDEP}]
 	dev-python/lxml[${PYTHON_USEDEP}]
-	virtual/python-typing[${PYTHON_USEDEP}]
-	virtual/python-enum34[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}

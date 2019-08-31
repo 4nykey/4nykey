@@ -37,7 +37,7 @@ RDEPEND="
 	virtual/python-enum34[${PYTHON_USEDEP}]
 	virtual/python-typing[${PYTHON_USEDEP}]
 	$(python_gen_cond_dep 'dev-python/scandir[${PYTHON_USEDEP}]' \
-		python2_7 python3_4)
+		python2_7)
 	$(python_gen_cond_dep 'dev-python/backports-os[${PYTHON_USEDEP}]' \
 		python2_7)
 "
