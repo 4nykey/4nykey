@@ -1,15 +1,16 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/open-eid/${PN}.git"
 else
-	inherit vcs-snapshot
 	MY_PV="${PV/_/-}"
 	MY_PV="${MY_PV^^}"
+	[[ -z ${PV%%*_p*} ]] && MY_PV="8c95639"
+	[[ -z ${PV%%*_*} ]] && inherit vcs-snapshot
 	SRC_URI="
 		mirror://githubcl/open-eid/${PN}/tar.gz/v${MY_PV} -> ${P}.tar.gz
 	"
@@ -35,6 +36,8 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
+"
+BDEPEND="
 	>=dev-cpp/xsd-4.0
 	test? ( dev-libs/boost )
 	apidocs? ( app-doc/doxygen )
