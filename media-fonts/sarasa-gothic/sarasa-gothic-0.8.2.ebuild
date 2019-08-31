@@ -1,7 +1,7 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 MY_FONT_TYPES=( ttc +ttf )
 MY_FONT_VARIANTS=( sans +monospace term ui )
@@ -25,7 +25,7 @@ REQUIRED_USE="
 font_types_ttf? ( || ( ${IUSE} ) )
 ?? ( ${MY_FONT_TYPES[@]/#+/} )
 "
-DEPEND="
+BDEPEND="
 	app-arch/p7zip
 "
 S="${WORKDIR}"
