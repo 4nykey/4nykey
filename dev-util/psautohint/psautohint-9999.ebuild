@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python2_7 python3_{6,7} )
+PYTHON_COMPAT=( python3_{6,7} )
 DISTUTILS_IN_SOURCE_BUILD=1
 EMESON_SOURCE="${S}/libpsautohint"
 inherit meson distutils-r1
@@ -12,8 +12,11 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
-	inherit vcs-snapshot
-	MY_PV="85d3327"
+	MY_PV="v${PV}"
+	if [[ -z ${PV%%*_*} ]]; then
+		MY_PV="0b7af01"
+		inherit vcs-snapshot
+	fi
 	MY_TD="psautohint-testdata-83a3b1b"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -35,7 +38,7 @@ IUSE="test"
 
 RDEPEND="
 	>=dev-python/fonttools-3.44[ufo,${PYTHON_USEDEP}]
-	>=dev-python/lxml-4.3.5[${PYTHON_USEDEP}]
+	>=dev-python/lxml-4.4.1[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
@@ -44,14 +47,15 @@ DEPEND="
 BDEPEND="
 	test? (
 		dev-python/pytest[${PYTHON_USEDEP}]
-		python_targets_python2_7? (
-			dev-python/subprocess32[python_targets_python2_7]
-		)
 	)
 "
 
 pkg_setup() {
-	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_p*}"
+	if [[ -n ${PV%%*9999} ]]; then
+		local _v=$(ver_cut 4)
+		_v="$(ver_cut 1-3)${_v:0:1}$(ver_cut 5)"
+		export SETUPTOOLS_SCM_PRETEND_VERSION="${_v/p/.post}"
+	fi
 	MESON_BUILD_DIR="${WORKDIR}/${P}-build"
 }
 
@@ -65,7 +69,7 @@ python_prepare_all() {
 		-e "/lib': Custom\(InstallL\|BuildCl\)ib/d" \
 		-e "/build_exe': build_exe,/d" \
 		-i setup.py
-	if [[ -n ${PV%%*9999} ]]; then
+	if [[ -n ${PV%%*9999} ]] && use test; then
 		mv "${WORKDIR}"/${MY_TD}/* "${S}"/tests/integration/data/
 	fi
 	distutils-r1_python_prepare_all
