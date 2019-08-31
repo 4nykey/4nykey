@@ -9,8 +9,11 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
-	inherit vcs-snapshot
-	MY_PV="be1e5d3"
+	MY_PV="${PV}"
+	if [[ -z ${PV%%*_*} ]]; then
+		MY_PV="be1e5d3"
+		inherit vcs-snapshot
+	fi
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -27,17 +30,17 @@ IUSE="test"
 
 RDEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
+	>=dev-python/lxml-4.4.1[${PYTHON_USEDEP}]
 	dev-python/booleanOperations[${PYTHON_USEDEP}]
 	dev-python/cu2qu[${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
 	dev-python/fontMath[${PYTHON_USEDEP}]
 	dev-python/fontPens[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-3.44[ufo,unicode,${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4[ufo,unicode,${PYTHON_USEDEP}]
 	dev-python/MutatorMath[${PYTHON_USEDEP}]
-	>=dev-util/psautohint-1.9.3_rc1[${PYTHON_USEDEP}]
+	>=dev-util/psautohint-2.0.0_alpha1[${PYTHON_USEDEP}]
 	dev-python/ufoProcessor[${PYTHON_USEDEP}]
 	dev-python/ufoNormalizer[${PYTHON_USEDEP}]
-	>=dev-python/lxml-4.3.5[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
@@ -73,7 +76,7 @@ src_compile() {
 		emake -C "${_d%/Makefile}" \
 			XFLAGS="${CFLAGS}" || return
 	done
-	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_p*}"
+	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV/_p/.post}"
 	distutils-r1_src_compile
 }
 

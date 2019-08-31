@@ -36,7 +36,7 @@ RDEPEND="
 	dev-python/fontPens[${PYTHON_USEDEP}]
 	>=dev-python/fonttools-3.43.1[ufo,unicode,${PYTHON_USEDEP}]
 	dev-python/MutatorMath[${PYTHON_USEDEP}]
-	>=dev-util/psautohint-1.9.4[${PYTHON_USEDEP}]
+	~dev-util/psautohint-1.9.4[${PYTHON_USEDEP}]
 	dev-python/ufoProcessor[${PYTHON_USEDEP}]
 	dev-python/ufoNormalizer[${PYTHON_USEDEP}]
 "
