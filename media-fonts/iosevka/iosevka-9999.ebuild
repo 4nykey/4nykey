@@ -1,7 +1,7 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 MY_FONT_TYPES=( ttc +ttf )
 MY_FONT_VARIANTS=(
@@ -27,7 +27,6 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/be5invis/${PN}.git"
 	REQUIRED_USE="!binary"
 else
-	inherit vcs-snapshot
 	SRC_URI="https://github.com/be5invis/${PN^}/releases/download/v${PV}/"
 	SRC_URI="
 	binary? (
@@ -77,8 +76,9 @@ else
 	)
 	"
 	RESTRICT="primaryuri"
-	DEPEND="binary? ( app-arch/unzip )"
+	BDEPEND="binary? ( app-arch/unzip )"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN^}-${PV}"
 fi
 inherit font-r1
 
@@ -101,8 +101,7 @@ font_variants_slab? ( || (
 	font_variants_type
 ) )
 "
-
-DEPEND+="
+BDEPEND+="
 	!binary? (
 		net-libs/nodejs[npm]
 		autohint? ( media-gfx/ttfautohint )
