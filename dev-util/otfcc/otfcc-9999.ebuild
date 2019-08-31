@@ -1,16 +1,17 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/caryll/${PN}.git"
 	EGIT_BRANCH=releases
 else
-	inherit vcs-snapshot
+	MY_PV="v$(ver_rs 3 '-')"
+	[[ -z ${PV%%*_*} ]] && inherit vcs-snapshot
 	SRC_URI="
-		mirror://githubcl/caryll/${PN}/tar.gz/v${PV} -> ${P}.tar.gz
+		mirror://githubcl/caryll/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -24,9 +25,7 @@ LICENSE="Apache-2.0"
 SLOT="0"
 IUSE=""
 
-RDEPEND=""
-DEPEND="
-	${RDEPEND}
+BDEPEND="
 	dev-util/premake:5
 "
 
