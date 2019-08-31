@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{5,6,7} )
+PYTHON_COMPAT=( python3_{6,7} )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -39,7 +39,7 @@ RDEPEND="
 	dev-python/booleanOperations[${PYTHON_USEDEP}]
 	dev-python/lxml[${PYTHON_USEDEP}]
 	dev-python/skia-pathops[${PYTHON_USEDEP}]
-	dev-python/ufoLib2[${PYTHON_USEDEP}]
+	>=dev-python/ufoLib2-0.4[${PYTHON_USEDEP}]
 	>=dev-python/attrs-19.1[${PYTHON_USEDEP}]
 "
 DEPEND="
