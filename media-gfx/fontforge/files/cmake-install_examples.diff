@@ -1,0 +1,11 @@
+--- a/contrib/CMakeLists.txt
++++ b/contrib/CMakeLists.txt
+@@ -5,4 +5,8 @@ if(ENABLE_MAINTAINER_TOOLS)
+ endif()
+ if(ENABLE_FONTFORGE_EXTRAS)
+   add_subdirectory(fonttools)
++  get_property(bins DIRECTORY fonttools PROPERTY BUILDSYSTEM_TARGETS)
++  foreach(bin ${bins})
++    install(TARGETS ${bin} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
++  endforeach()
+ endif()
