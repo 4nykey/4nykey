@@ -45,14 +45,14 @@ PATCH=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c}/mozilla/patchsets/${P
 # official release bundles https-everywhere, noscript and torbutton
 # the latter does nothing for us except providing the Tor start page
 MY_EFF="2019.6.27"
-MY_NOS="10.6.3"
-MY_EFF="https_everywhere-${MY_EFF}-an+fx.xpi"
-MY_NOS="noscript_security_suite-${MY_NOS}-an+fx.xpi"
+MY_NOS="11.0.3"
+MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
+MY_NOS="noscript-${MY_NOS}.xpi"
 
 SRC_URI="
 	mirror://tor/dist/${PN}/${TOR_REL}/src-${MY_P}.tar.xz
-	https://addons.cdn.mozilla.net/user-media/addons/229918/${MY_EFF}
-	https://addons.cdn.mozilla.net/user-media/addons/722/${MY_NOS}
+	https://www.eff.org/files/${MY_EFF}
+	https://secure.informaction.com/download/releases/${MY_NOS}
 	${PATCH[@]}
 "
 RESTRICT="primaryuri"
@@ -72,7 +72,7 @@ DEPEND="
 "
 RDEPEND="
 	${RDEPEND}
-	>=net-vpn/tor-0.3.3.9
+	net-vpn/tor
 "
 
 S="${WORKDIR}/${MY_P}"

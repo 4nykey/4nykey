@@ -13,8 +13,8 @@ MOZCONFIG_OPTIONAL_WIFI=1
 
 LLVM_MAX_SLOT=8
 
-inherit check-reqs flag-o-matic toolchain-funcs eutils gnome2-utils llvm \
-		mozconfig-v6.${PV%%.*} pax-utils xdg-utils autotools
+inherit check-reqs flag-o-matic toolchain-funcs eutils llvm \
+		mozconfig-v6.${PV%%.*} pax-utils xdg autotools
 inherit eapi7-ver
 
 # https://dist.torproject.org/torbrowser
@@ -46,13 +46,13 @@ PATCH=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c}/mozilla/patchsets/${P
 # the latter does nothing for us except providing the Tor start page
 MY_EFF="2019.6.27"
 MY_NOS="10.6.3"
-MY_EFF="https_everywhere-${MY_EFF}-an+fx.xpi"
-MY_NOS="noscript_security_suite-${MY_NOS}-an+fx.xpi"
+MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
+MY_NOS="noscript-${MY_NOS}.xpi"
 
 SRC_URI="
 	mirror://tor/dist/${PN}/${TOR_REL}/src-${MY_P}.tar.xz
-	https://addons.cdn.mozilla.net/user-media/addons/229918/${MY_EFF}
-	https://addons.cdn.mozilla.net/user-media/addons/722/${MY_NOS}
+	https://www.eff.org/files/${MY_EFF}
+	https://secure.informaction.com/download/releases/${MY_NOS}
 	${PATCH[@]}
 "
 RESTRICT="primaryuri"
@@ -72,7 +72,7 @@ DEPEND="
 "
 RDEPEND="
 	${RDEPEND}
-	>=net-vpn/tor-0.3.3.9
+	net-vpn/tor
 "
 
 S="${WORKDIR}/${MY_P}"
@@ -322,46 +322,4 @@ src_install() {
 
 	# Required in order to use plugins and even run torbrowser on hardened.
 	pax-mark m "${ED}"${MOZILLA_FIVE_HOME}/{${PN},${PN}-bin,plugin-container}
-}
-
-pkg_preinst() {
-	gnome2_icon_savelist
-
-	# if the apulse libs are available in MOZILLA_FIVE_HOME then apulse
-	# doesn't need to be forced into the LD_LIBRARY_PATH
-	if use pulseaudio && has_version ">=media-sound/apulse-0.1.9" ; then
-		einfo "APULSE found - Generating library symlinks for sound support"
-		local lib
-		pushd "${ED}"${MOZILLA_FIVE_HOME} &>/dev/null || die
-		for lib in ../apulse/libpulse{.so{,.0},-simple.so{,.0}} ; do
-			# a quickpkg rolled by hand will grab symlinks as part of the package,
-			# so we need to avoid creating them if they already exist.
-			if ! [ -L ${lib##*/} ]; then
-				ln -s "${lib}" ${lib##*/} || die
-			fi
-		done
-		popd &>/dev/null || die
-	fi
-}
-
-pkg_postinst() {
-	ewarn "This patched firefox build is _NOT_ recommended by Tor upstream but uses"
-	ewarn "the exact same sources. Use this only if you know what you are doing!"
-	elog "Torbrowser uses port 9150 to connect to Tor. You can change the port"
-	elog "in the connection settings to match your setup."
-
-	gnome2_icon_cache_update
-	xdg_desktop_database_update
-
-	if use pulseaudio && has_version ">=media-sound/apulse-0.1.9"; then
-		elog "Apulse was detected at merge time on this system and so it will always be"
-		elog "used for sound.  If you wish to use pulseaudio instead please unmerge"
-		elog "media-sound/apulse."
-		elog
-	fi
-}
-
-pkg_postrm() {
-	gnome2_icon_cache_update
-	xdg_desktop_database_update
 }
