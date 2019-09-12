@@ -1,7 +1,7 @@
 # Copyright 2018-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit toolchain-funcs multiprocessing
 MY_PN="${PN}-toolchain"
@@ -9,7 +9,6 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://git.${PN}.org/${MY_PN}.git"
 else
-	inherit vcs-snapshot
 	SRC_URI="
 		https://download.${PN}.org/${PV}/${MY_PN}-${PV}.tar.xz
 	"
