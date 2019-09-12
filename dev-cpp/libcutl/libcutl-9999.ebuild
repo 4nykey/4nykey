@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -20,7 +20,7 @@ fi
 inherit toolchain-funcs multiprocessing
 
 DESCRIPTION="A collection of C++ libraries (successor of libcult)"
-HOMEPAGE="http://www.codesynthesis.com/projects/libcutl/"
+HOMEPAGE="https://www.codesynthesis.com/projects/libcutl/"
 
 LICENSE="MIT"
 SLOT="0"
