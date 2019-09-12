@@ -1,7 +1,7 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 PYTHON_COMPAT=( python{2_7,3_{5,6,7}} )
 
@@ -45,15 +45,13 @@ DEPEND="
 	${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
 	test? (
-		dev-python/mako[${PYTHON_USEDEP}]
-		dev-python/nose[${PYTHON_USEDEP}]
-		dev-python/mock[${PYTHON_USEDEP}]
+		dev-python/pytest[${PYTHON_USEDEP}]
 		dev-python/pyftpdlib[${PYTHON_USEDEP},test]
 	)
 "
 
 python_test() {
-	nosetests --verbose || die
+	pytest -v || die
 }
 
 pkg_postinst() {

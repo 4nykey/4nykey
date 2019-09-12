@@ -9,9 +9,11 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/LettError/${PN}.git"
 else
-	inherit vcs-snapshot
-	MY_PV="ac9af54"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
+	MY_PV="${PV}"
+	if [[ -z ${PV%%*_p*} ]]; then
+		inherit vcs-snapshot
+		MY_PV="ac9af54"
+	fi
 	SRC_URI="
 		mirror://githubcl/LettError/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
