@@ -8,3 +8,13 @@
  QStringList qt_make_filter_list(const QString &filter)
  {
      QString f(filter);
+--- a/Telegram/SourceFiles/core/file_utilities.cpp
++++ b/Telegram/SourceFiles/core/file_utilities.cpp
+@@ -16,6 +16,7 @@ https://github.com/telegramdesktop/tdesk
+ #include <QtWidgets/QFileDialog>
+ #include <QtCore/QCoreApplication>
+ #include <QtCore/QStandardPaths>
++#include <QtCore/QResource>
+ #include <QtGui/QDesktopServices>
+ 
+ bool filedialogGetSaveFile(

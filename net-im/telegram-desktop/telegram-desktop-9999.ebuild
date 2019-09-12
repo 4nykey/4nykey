@@ -23,7 +23,7 @@ else
 	MY_CAT="Catch2-5ca44b6"
 	MY_GSL="GSL-d846fe5"
 	MY_CRL="crl-52baf11"
-	MY_QTL="rlottie-d08a03b"
+	MY_QTL="rlottie-589db02"
 	MY_VAR="variant-550ac2f"
 	MY_XXH="xxHash-7cc9639"
 	SRC_URI="
@@ -46,7 +46,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-MY_DEB="${PN}_1.7.0-1.debian"
+MY_DEB="${PN}_1.8.4-1.debian"
 SRC_URI+="
 	mirror://debian/pool/main/t/${PN}/${MY_DEB}.tar.xz
 "
@@ -120,12 +120,13 @@ src_prepare() {
 	else
 		unpack ${MY_DEB}.tar.xz
 	fi
+	rm \
+		debian/patches/Modify-build-scripts.patch \
+		-f
 	local _patches=(
-		debian/patches/Packed-resources.patch
-		debian/patches/Use-system-wide-font.patch
+		debian/patches
 		"${FILESDIR}"/${PN}-gyp.diff
 		"${FILESDIR}"/${PN}-pch.diff
-		"${FILESDIR}"/${PN}-mtp_pch.diff
 		"${FILESDIR}"/${PN}-qt_functions.diff
 	)
 	eapply "${_patches[@]}"
