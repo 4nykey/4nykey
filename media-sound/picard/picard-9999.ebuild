@@ -1,7 +1,7 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 PYTHON_COMPAT=( python3_{5,6,7} )
 DISTUTILS_SINGLE_IMPL=1
 PLOCALES="
@@ -42,7 +42,7 @@ DEPEND="
 	sys-devel/gettext
 "
 
-DOCS=( {AUTHORS,HACKING,NEWS}.txt {CONTRIBUTING,README}.md )
+DOCS=( AUTHORS.txt {CONTRIBUTING,NEWS,README}.md )
 
 src_prepare() {
 	myloc() {
