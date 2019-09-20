@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/${PN%-*}/${PN#*-}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="f0186e0"
+	MY_PV="fcd2f0e"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/${PN%-*}/${PN#*-}/tar.gz/${MY_PV}
@@ -25,13 +25,15 @@ HOMEPAGE="https://github.com/meganz/sdk"
 LICENSE="BSD-2"
 # awk '/define/ {print $3}' include/mega/version.h|awk 'BEGIN{RS="";FS="\n"}{printf $1*10000+$2*100+$3}'
 SLOT="0/30602"
-IUSE="examples ffmpeg freeimage fuse hardened inotify libuv mediainfo qt raw +sqlite"
+IUSE="examples ffmpeg freeimage fuse hardened inotify libuv mediainfo qt raw +sqlite test"
 REQUIRED_USE="
 	examples? ( sqlite )
 	fuse? ( examples )
 "
+# tests require a working mega.nz account and login details provided via $MEGA_EMAIL and $MEGA_PWD
+RESTRICT+=" test"
 
-DEPEND="
+RDEPEND="
 	dev-libs/crypto++
 	sys-libs/zlib
 	dev-libs/libpcre:3[cxx]
@@ -51,8 +53,9 @@ DEPEND="
 	ffmpeg? ( virtual/ffmpeg )
 	raw? ( media-libs/libraw )
 "
-RDEPEND="
-	${DEPEND}
+DEPEND="
+	${RDEPEND}
+	test? ( dev-cpp/gtest )
 "
 
 pkg_setup() {
@@ -67,6 +70,10 @@ src_prepare() {
 		-e 's:CONFIG(USE_MEGAAPI) {:&\nLIBS += -lmega:' \
 		-e '/^unix:!macx {/,/^}/d' \
 		-i bindings/qt/sdk.pri
+	use test && sed \
+		-e 's:\$(GTEST_DIR)/lib/lib\([^ ]\+\)\.la:-l\1:g' \
+		-e 's: tests/tool_purge_account::' \
+		-i tests/include.am
 	eautoreconf
 }
 
@@ -79,13 +86,22 @@ src_configure() {
 		$(use_with !sqlite db)
 		$(use_with sqlite)
 		$(use_enable examples)
+		$(use_enable test tests)
 		$(use_with freeimage)
 		$(use_with fuse)
 		$(use_with mediainfo libmediainfo)
 		$(use_with ffmpeg)
 		$(use_with raw libraw)
 	)
+	use test && myeconfargs+=(
+		--with-gtest="${EPREFIX}/usr"
+	)
 	econf "${myeconfargs[@]}"
+}
+
+src_test() {
+	export MEGA_EMAIL MEGA_PWD MEGA_EMAIL_AUX="${MEGA_EMAIL}" MEGA_PWD_AUX="${MEGA_PWD}"
+	default
 }
 
 src_install() {
