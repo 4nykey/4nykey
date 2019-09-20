@@ -13,7 +13,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI=
 else
 	inherit vcs-snapshot
-	MY_PV="8ac5607"
+	MY_PV="7ef5168"
 	SRC_URI="
 		mirror://githubcl/meganz/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -31,7 +31,7 @@ SLOT="0"
 IUSE="dolphin nautilus thunar"
 
 RDEPEND="
-	>=net-misc/meganz-sdk-3.6.0:=[libuv,qt,sodium(+),sqlite]
+	>=net-misc/meganz-sdk-3.6.2b:=[libuv,qt,sodium(+),sqlite]
 	dev-qt/qtsvg:5
 	dev-qt/qtdbus:5
 	dev-qt/qtconcurrent:5
