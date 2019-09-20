@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -16,11 +16,9 @@ if [[ ${PV} = *9999* ]]; then
 	EGIT_BRANCH="${PN}-${MY_GNOME}"
 	SRC_URI=""
 else
-	inherit vcs-snapshot
 	SRC_URI="https://www.imagination-land.org/files/${PN}/${P}.tar.xz"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
-	KEYWORDS=
 fi
 
 DESCRIPTION="Clipboard management system"
@@ -34,7 +32,7 @@ REQUIRED_USE="gnome-shell? ( introspection )"
 RDEPEND="
 	>=dev-libs/glib-2.58:2
 	>=x11-libs/gtk+-3.24:3
-	=gnome-base/gnome-control-center-${MY_GNOME}*:2
+	gnome-base/gnome-control-center:2
 	>=x11-libs/gdk-pixbuf-2.38
 	sys-apps/dbus
 	vala? ( $(vala_depend) )
