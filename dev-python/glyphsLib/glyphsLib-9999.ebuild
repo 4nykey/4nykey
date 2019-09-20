@@ -25,26 +25,29 @@ fi
 DESCRIPTION="A library to provide a bridge from Glyphs source files to UFOs"
 HOMEPAGE="https://github.com/googlei18n/${PN}"
 
-LICENSE="Apache-2.0"
+LICENSE="Apache-2.0 MIT"
 SLOT="0"
 IUSE="test"
 
 RDEPEND="
 	>=dev-python/fonttools-3.40[${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
-	dev-python/ufoNormalizer[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
+"
+BDEPEND="
 	dev-python/setuptools_scm[${PYTHON_USEDEP}]
 	test? (
 		dev-python/pytest[${PYTHON_USEDEP}]
+		dev-python/ufoNormalizer[${PYTHON_USEDEP}]
 		>=app-text/xmldiff-2.2[${PYTHON_USEDEP}]
 	)
 "
 PATCHES=(
 	"${FILESDIR}"/${PN}-masters_wcodes.diff
 	"${FILESDIR}"/${PN}-brackets.diff
+	"${FILESDIR}"/${PN}-setup.diff
 )
 
 pkg_setup() {
@@ -52,5 +55,5 @@ pkg_setup() {
 }
 
 python_test() {
-	esetup.py test
+	esetup.py pytest
 }

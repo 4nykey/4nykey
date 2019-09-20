@@ -1,0 +1,18 @@
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -30,7 +30,6 @@ include_package_data = True
+ python_requires = >=3.6
+ setup_requires =
+     setuptools_scm
+-    wheel
+ install_requires =
+     defcon >= 0.3.0
+     fonttools >= 3.24.0
+--- a/setup.py
++++ b/setup.py
+@@ -14,4 +14,4 @@
+ 
+ from setuptools import setup
+ 
+-setup(use_scm_version={"write_to": "Lib/glyphsLib/_version.py"})
++setup(use_scm_version={"write_to": "Lib/glyphsLib/_version.py"}, package_data={"glyphsLib": ["data/*.xml"]})
