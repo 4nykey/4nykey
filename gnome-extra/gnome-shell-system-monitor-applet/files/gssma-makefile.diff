@@ -1,0 +1,30 @@
+--- a/Makefile
++++ b/Makefile
+@@ -96,10 +96,14 @@ help:
+ 
+ PHONY += install remove
+ 
+-install: remove build
++install:
+ 	$(call msg,$@,$(SUDO) $(INSTALLBASE)/$(INSTALLNAME))
+ 	$(Q) $(SUDO) mkdir -p $(INSTALLBASE)/$(INSTALLNAME)
+ 	$(Q) $(SUDO) cp $(VV) -r ./_build/* $(INSTALLBASE)/$(INSTALLNAME)/
++	$(Q)mkdir -p $(DESTDIR)/usr/share/locale
++	$(Q)cp $(VV) -r $(UUID)/locale/* $(DESTDIR)/usr/share/locale
++	$(Q)mkdir -p $(DESTDIR)/usr/share/glib-2.0/schemas
++	$(Q)cp $(VV) $(UUID)/schemas/*.xml $(DESTDIR)/usr/share/glib-2.0/schemas
+ ifeq ($(strip $(BUILD_FOR_RPM)),)
+ 	$(Q) $(MAKE) -s reload
+ endif
+@@ -155,11 +159,6 @@ PHONY += build build.clean
+ build: translate
+ 	$(Q)mkdir -p _build
+ 	$(Q)cp $(VV) $(BASE_MODULES) _build
+-	$(Q)mkdir -p _build/locale
+-	$(Q)cp $(VV) -r $(UUID)/locale/* _build/locale/
+-	$(Q)mkdir -p _build/schemas
+-	$(Q)cp $(VV) $(UUID)/schemas/*.xml _build/schemas/
+-	$(Q)cp $(VV)  $(UUID)/schemas/gschemas.compiled _build/schemas/
+ 	$(Q)sed -i 's/"version": -1/"version": "$(VERSION)"/'  _build/metadata.json;
+ 	$(call msg,$@,OK)
+ 

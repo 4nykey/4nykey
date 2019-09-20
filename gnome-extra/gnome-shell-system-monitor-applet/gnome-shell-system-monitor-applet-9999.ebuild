@@ -1,8 +1,10 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-PLOCALES="ar ca cs de es_ES es_MX fa fr it pl pt pt_BR ro ru sk zh_CN"
+EAPI=7
+PLOCALES="
+ar ca cs de es_ES es_MX fa fi fr it ja pl pt pt_BR ro ru sk uk zh_CN
+"
 
 inherit gnome2-utils l10n
 if [[ -z ${PV%%*9999} ]]; then
@@ -11,7 +13,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI=""
 else
 	inherit vcs-snapshot
-	MY_PV="0c5dc8e"
+	MY_PV="71fce05"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/paradoxxxzero/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -33,31 +35,37 @@ DEPEND="
 RDEPEND="
 	${DEPEND}
 	gnome-base/gnome-shell
-	dev-python/pygtk
 	gnome-base/libgtop[introspection]
 	net-misc/networkmanager[introspection]
 "
 DEPEND="
 	${DEPEND}
+"
+BDEPEND="
 	nls? ( sys-devel/gettext )
 "
 
-src_compile() {
-	use nls || return
-	my_loc() {
-		msgfmt po/${1}/system-monitor.po -o ${1}.mo
-	}
-	l10n_for_each_locale_do my_loc
+src_prepare() {
+	local PATCHES=( "${FILESDIR}"/gssma-makefile.diff )
+	sed -e '/UUID)\/README/d' -i Makefile
+	default
+	rm -rf system-monitor@paradoxxx.zero.gmail.com/locale
+	if use nls; then
+		my_loc() { rm -rf po/${1}; }
+		l10n_for_each_disabled_locale_do my_loc
+	else
+		sed \
+			-e '/build:/s,translate,,' \
+			-e '/usr\/share\/locale/d' \
+			-i Makefile
+	fi
+	MAKEOPTS="${MAKEOPTS} BUILD_FOR_RPM=1"
 }
 
-src_install() {
-	local _d="$(awk '/UUID =/ {print $3}' Makefile)"
-	insinto /usr/share/gnome-shell/extensions/${_d}
-	doins ${_d}/*.{js,json,css}
-	insinto /usr/share/glib-2.0/schemas
-	doins ${_d}/schemas/*gschema.xml
-	einstalldocs
-	use nls && MOPREFIX="${_d%@*}" domo *.mo
+src_compile() {
+	local myemakeargs=( V=1 )
+	[[ -n ${PV%%*9999} ]] && myemakeargs+=( VERSION="${PV%_p*}" )
+	emake "${myemakeargs[@]}" build
 }
 
 pkg_preinst() {

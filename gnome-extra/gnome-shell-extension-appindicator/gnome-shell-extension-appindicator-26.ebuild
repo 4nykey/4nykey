@@ -5,22 +5,25 @@ EAPI=7
 
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/mpdeimos/${PN}.git"
-	EGIT_BRANCH=master
+	EGIT_REPO_URI="https://github.com/ubuntu/${PN}.git"
 	SRC_URI=""
 else
-	inherit vcs-snapshot
-	KEYWORDS="~amd64 ~x86"
+	MY_PV="v${PV}"
+	if [[ -z ${PV%%*_p*} ]]; then
+		inherit vcs-snapshot
+		MY_PV="87db22d"
+	fi
 	SRC_URI="
-		mirror://githubcl/mpdeimos/${PN}/tar.gz/version/${PV} -> ${P}.tar.gz
+		mirror://githubcl/ubuntu/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
+	KEYWORDS="~amd64 ~x86"
 fi
 
-DESCRIPTION="An extension that removes the dropdown arrows from GS menus"
-HOMEPAGE="https://github.com/mpdeimos/${PN}"
+DESCRIPTION="Adds AppIndicator support to gnome shell"
+HOMEPAGE="https://github.com/ubuntu/${PN}"
 
-LICENSE="GPL-3"
+LICENSE="GPL-2+"
 SLOT="0"
 IUSE=""
 
@@ -29,15 +32,16 @@ DEPEND="
 "
 RDEPEND="
 	${DEPEND}
-	gnome-base/gnome-shell
+	<gnome-base/gnome-shell-3.32
 "
 
 src_compile() { :; }
 
 src_install() {
-	insinto /usr/share/gnome-shell/extensions/remove-dropdown-arrows@mpdeimos.com
-	doins -r *.js{,on}
-	dodoc README.md
+	local _u=$(awk -F'"' '/uuid/ {print $4}' metadata.json)
+	insinto /usr/share/gnome-shell/extensions/${_u}
+	doins -r interfaces-xml *.js{,on}
+	dodoc {AUTHORS,README}.md
 }
 
 pkg_postinst() {

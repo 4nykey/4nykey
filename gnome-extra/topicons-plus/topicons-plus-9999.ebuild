@@ -3,24 +3,25 @@
 
 EAPI=7
 
+inherit gnome2-utils
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/mpdeimos/${PN}.git"
-	EGIT_BRANCH=master
-	SRC_URI=""
+	EGIT_REPO_URI="https://github.com/phocean/${PN}"
 else
 	inherit vcs-snapshot
 	KEYWORDS="~amd64 ~x86"
+	MY_PV="79abdd7"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
-		mirror://githubcl/mpdeimos/${PN}/tar.gz/version/${PV} -> ${P}.tar.gz
+		mirror://githubcl/phocean/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 fi
 
-DESCRIPTION="An extension that removes the dropdown arrows from GS menus"
-HOMEPAGE="https://github.com/mpdeimos/${PN}"
+DESCRIPTION="An extension to move legacy tray icons to the top panel"
+HOMEPAGE="https://github.com/phocean/${PN}"
 
-LICENSE="GPL-3"
+LICENSE="GPL-2+"
 SLOT="0"
 IUSE=""
 
@@ -35,18 +36,27 @@ RDEPEND="
 src_compile() { :; }
 
 src_install() {
-	insinto /usr/share/gnome-shell/extensions/remove-dropdown-arrows@mpdeimos.com
-	doins -r *.js{,on}
-	dodoc README.md
+	local _u=$(awk -F'"' '/uuid/ {print $4}' metadata.json)
+	insinto /usr/share/gnome-shell/extensions/${_u}
+	doins *.js*
+	insinto /usr/share/glib-2.0/schemas
+	doins schemas/*.xml
+	einstalldocs
+}
+
+pkg_preinst() {
+	gnome2_schemas_savelist
 }
 
 pkg_postinst() {
+	gnome2_schemas_update
 	ebegin "Updating list of installed extensions"
 	eselect gnome-shell-extensions update
 	eend $?
 }
 
 pkg_postrm() {
+	gnome2_schemas_update
 	ebegin "Updating list of installed extensions"
 	eselect gnome-shell-extensions update
 	eend $?
