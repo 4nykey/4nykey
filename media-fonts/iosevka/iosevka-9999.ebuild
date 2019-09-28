@@ -21,10 +21,14 @@ MY_FONT_VARIANTS=(
 	ss09
 	ss10
 	ss11
+	etoile
+	aile
+	extended
 )
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/be5invis/${PN}.git"
+	EGIT_BRANCH="dev"
 	REQUIRED_USE="!binary"
 else
 	SRC_URI="https://github.com/be5invis/${PN^}/releases/download/v${PV}/"
@@ -157,6 +161,10 @@ src_compile() {
 		fi
 		for _s in $(seq -w 11); do
 			use font_variants_ss${_s} && _t+=( ${PN}-ss${_s} )
+		done
+
+		for _s in etoile aile extended; do
+			use font_variants_${_s} && _t+=( ${PN}-${_s} )
 		done
 
 		emake ${_t[@]/#/${_v}::}
