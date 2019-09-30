@@ -11,7 +11,7 @@ PYTHON_REQ_USE='threads(+)'
 EGIT_REPO_URI="https://github.com/${PN^}/${PN}.git"
 inherit gnome2 python-any-r1 waf-utils l10n git-r3 toolchain-funcs
 if [[ -n ${PV%%*9999} ]]; then
-	MY_PV="d686076"
+	MY_PV="6987196"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	EGIT_COMMIT="${MY_PV/_/-}"
 	KEYWORDS="~amd64 ~x86"
@@ -23,9 +23,12 @@ HOMEPAGE="http://ardour.org/"
 
 LICENSE="GPL-2"
 SLOT="${PV%%.*}"
-IUSE="alsa bindist bundled-libs +c++0x debug doc jack hid nls phone-home sanitize sse vst"
+IUSE="
+alsa bindist bundled-libs +c++0x debug doc jack hid nls pulseaudio phone-home
+sanitize sse vst
+"
 REQUIRED_USE="
-	|| ( alsa jack )
+	|| ( alsa jack pulseaudio )
 "
 
 RDEPEND="
@@ -45,6 +48,7 @@ RDEPEND="
 	net-misc/curl
 	media-libs/libsndfile
 	jack? ( virtual/jack )
+	pulseaudio? ( media-sound/pulseaudio )
 	!bundled-libs? (
 		media-libs/libltc
 		media-libs/qm-dsp
@@ -90,7 +94,7 @@ src_configure() {
 		--versioned
 		--freedesktop
 		--keepflags
-		--with-backends="$(usev alsa),$(usev jack)"
+		--with-backends="dummy,$(usev alsa),$(usev jack),$(usev pulseaudio)"
 		$(my_use vst lxvst)
 		$(my_use nls)
 		$(my_use phone-home)
