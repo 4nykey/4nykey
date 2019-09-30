@@ -50,5 +50,14 @@
 		<flag name="font_variants_ss11">
 			A variant stylized after X Windows Fixed
 		</flag>
+		<flag name="font_variants_aile">
+			A quasi-proportional variant
+		</flag>
+		<flag name="font_variants_etoile">
+			A quasi-proportional slab-serif variant
+		</flag>
+		<flag name="font_variants_extended">
+			A wider variant
+		</flag>
 	</use>
 </pkgmetadata>

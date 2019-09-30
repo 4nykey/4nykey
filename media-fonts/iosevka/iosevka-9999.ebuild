@@ -21,10 +21,14 @@ MY_FONT_VARIANTS=(
 	ss09
 	ss10
 	ss11
+	etoile
+	aile
+	extended
 )
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/be5invis/${PN}.git"
+	EGIT_BRANCH="dev"
 	REQUIRED_USE="!binary"
 else
 	SRC_URI="https://github.com/be5invis/${PN^}/releases/download/v${PV}/"
@@ -53,6 +57,9 @@ else
 			font_variants_term? ( ${SRC_URI}/06-${PN}-term-slab-${PV}.zip )
 			font_variants_type? ( ${SRC_URI}/07-${PN}-type-slab-${PV}.zip )
 			font_variants_cc? ( ${SRC_URI}/08-${PN}-cc-slab-${PV}.zip )
+			font_variants_extended? (
+				${SRC_URI}/experimental-${PN}-slab-extended-${PV}.zip
+			)
 		)
 		font_variants_ss01? ( ${SRC_URI}/${PN}-ss01-${PV}.zip )
 		font_variants_ss02? ( ${SRC_URI}/${PN}-ss02-${PV}.zip )
@@ -65,6 +72,9 @@ else
 		font_variants_ss09? ( ${SRC_URI}/${PN}-ss09-${PV}.zip )
 		font_variants_ss10? ( ${SRC_URI}/${PN}-ss10-${PV}.zip )
 		font_variants_ss11? ( ${SRC_URI}/${PN}-ss11-${PV}.zip )
+		font_variants_aile? ( ${SRC_URI}/experimental-${PN}-aile-${PV}.zip )
+		font_variants_etoile? ( ${SRC_URI}/experimental-${PN}-etoile-${PV}.zip )
+		font_variants_extended? ( ${SRC_URI}/experimental-${PN}-extended-${PV}.zip )
 	)
 	font_types_ttc? (
 			${SRC_URI}/ttc-${P}.zip
@@ -157,6 +167,10 @@ src_compile() {
 		fi
 		for _s in $(seq -w 11); do
 			use font_variants_ss${_s} && _t+=( ${PN}-ss${_s} )
+		done
+
+		for _s in etoile aile extended; do
+			use font_variants_${_s} && _t+=( ${PN}-${_s} )
 		done
 
 		emake ${_t[@]/#/${_v}::}
