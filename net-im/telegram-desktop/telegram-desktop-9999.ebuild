@@ -23,7 +23,6 @@ else
 	MY_CAT="Catch2-5ca44b6"
 	MY_GSL="GSL-d846fe5"
 	MY_CRL="crl-52baf11"
-	MY_QTL="rlottie-589db02"
 	MY_VAR="variant-550ac2f"
 	MY_XXH="xxHash-7cc9639"
 	SRC_URI="
@@ -32,8 +31,6 @@ else
 		-> ${MY_CRL}.tar.gz
 		mirror://githubcl/Microsoft/${MY_GSL%-*}/tar.gz/${MY_GSL##*-}
 		-> ${MY_GSL}.tar.gz
-		mirror://githubcl/john-preston/${MY_QTL%-*}/tar.gz/${MY_QTL##*-}
-		-> ${MY_QTL}.tar.gz
 		mirror://githubcl/mapbox/${MY_VAR%-*}/tar.gz/${MY_VAR##*-}
 		-> ${MY_VAR}.tar.gz
 		mirror://githubcl/Cyan4973/${MY_XXH%-*}/tar.gz/${MY_XXH##*-}
@@ -46,7 +43,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-MY_DEB="${PN}_1.8.4-1.debian"
+MY_DEB="${PN}_1.8.8-1.debian"
 SRC_URI+="
 	mirror://debian/pool/main/t/${PN}/${MY_DEB}.tar.xz
 "
@@ -78,6 +75,7 @@ RDEPEND="
 		dev-libs/libappindicator:3
 	)
 	>=media-libs/libtgvoip-2.4.4_p20190715
+	media-libs/rlottie
 "
 DEPEND="
 	${RDEPEND}
@@ -113,7 +111,6 @@ src_prepare() {
 		mv "${WORKDIR}"/${MY_CRL}/* "${S}"/Telegram/ThirdParty/crl/
 		mv "${WORKDIR}"/${MY_DEB} "${S}"/debian
 		mv "${WORKDIR}"/${MY_GSL}/* "${S}"/Telegram/ThirdParty/GSL/
-		mv "${WORKDIR}"/${MY_QTL}/* "${S}"/Telegram/ThirdParty/rlottie/
 		mv "${WORKDIR}"/${MY_VAR}/* "${S}"/Telegram/ThirdParty/variant/
 		mv "${WORKDIR}"/${MY_XXH}/* "${S}"/Telegram/ThirdParty/xxHash/
 		use test && mv "${WORKDIR}"/${MY_CAT}/* "${S}"/Telegram/ThirdParty/Catch/
@@ -148,6 +145,7 @@ src_prepare() {
 		minizip
 		openal
 		opus
+		rlottie
 		xkbcommon
 		$(usex gtk 'appindicator3-0.1' '')
 	)
@@ -222,8 +220,7 @@ src_prepare() {
 		\n\2${_p}\3\n\t'tgvoip',%" \
 		-i telegram_linux.gypi
 	sed -e '/-static-libstdc++/d' -i qt.gypi utils.gyp
-	sed -e '/lib_lz4/d' -i lib_lottie.gyp
-	sed -e '/RLOTTIE_WITH_STATIC_QT/d' -i lib_rlottie.gyp
+	sed -e '/lib_\(rlottie\|lz4\)/d' -i lib_lottie.gyp
 
 	cd "${S}"
 	set -- gyp "${mygypargs[@]}" Telegram/gyp/Telegram.gyp
