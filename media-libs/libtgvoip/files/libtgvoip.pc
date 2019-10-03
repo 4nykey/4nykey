@@ -1,0 +1,9 @@
+prefix=@PREFIX@/usr
+libdir=${prefix}/@LIBDIR@
+includedir=${prefix}/include/tgvoip
+
+Name: @PN@
+Description: @DESC@
+Version: @PV@
+Libs: -L${libdir} -ltgvoip
+Cflags: -I${includedir}

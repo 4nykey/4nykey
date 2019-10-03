@@ -40,6 +40,13 @@ DEPEND="
 src_prepare() {
 	default
 	eautoreconf
+	sed \
+		-e "s:@PREFIX@:${EPREFIX}:" \
+		-e "s:@LIBDIR@:$(get_libdir):" \
+		-e "s:@PN@:${PN}:" \
+		-e "s:@DESC@:${DESCRIPTION}:" \
+		-e "s:@PV@:${PV%_p*}:" \
+		"${FILESDIR}"/${PN}.pc > ${PN}.pc
 }
 
 src_configure() {
@@ -49,4 +56,10 @@ src_configure() {
 		$(use_enable static-libs static)
 	)
 	econf "${myeconfargs[@]}"
+}
+
+src_install() {
+	default
+	insinto /usr/$(get_libdir)/pkgconfig
+	doins ${PN}.pc
 }
