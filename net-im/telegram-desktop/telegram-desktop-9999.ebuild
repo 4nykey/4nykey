@@ -13,6 +13,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_SUBMODULES=(
 		'*'
 		'-Telegram/ThirdParty/libtgvoip'
+		'-Telegram/ThirdParty/rlottie'
 		'-Telegram/ThirdParty/lz4'
 	)
 	inherit git-r3
@@ -74,8 +75,8 @@ RDEPEND="
 		x11-libs/gtk+:3
 		dev-libs/libappindicator:3
 	)
-	>=media-libs/libtgvoip-2.4.4_p20190715
-	media-libs/rlottie
+	>=media-libs/libtgvoip-2.4.4_p20190715-r1
+	>=media-libs/rlottie-0.0.1_p20190927
 "
 DEPEND="
 	${RDEPEND}
@@ -117,14 +118,18 @@ src_prepare() {
 	else
 		unpack ${MY_DEB}.tar.xz
 	fi
+
+	cp "${FILESDIR}"/{Packed-resources,Use-system-wide-font}.patch "${S}"/debian/patches
 	rm \
 		debian/patches/Modify-build-scripts.patch \
+		debian/patches/Deprecated-ranges.patch \
 		-f
 	local _patches=(
 		debian/patches
 		"${FILESDIR}"/${PN}-gyp.diff
 		"${FILESDIR}"/${PN}-pch.diff
 		"${FILESDIR}"/${PN}-qt_functions.diff
+		"${FILESDIR}"/${PN}-ui_pch.diff
 	)
 	eapply "${_patches[@]}"
 
@@ -141,6 +146,7 @@ src_prepare() {
 		libssl
 		libswresample
 		libswscale
+		libtgvoip
 		libva-x11
 		minizip
 		openal
@@ -152,7 +158,6 @@ src_prepare() {
 	local _f=(
 		$(${_p} --cflags ${_l[@]})
 		-I"${EPREFIX}"/usr/include/range/v3
-		-I"${EPREFIX}"/usr/include/tgvoip
 	)
 	local _d=(
 		TDESKTOP_DISABLE_UNITY_INTEGRATION
@@ -183,18 +188,18 @@ src_prepare() {
 
 	cd "${S}"/Telegram/gyp
 
-	use test || sed -e '/\<tests\>/d' -i Telegram.gyp
+	use test || sed -e '/\<tests\>/d' -i telegram/telegram.gypi
 	sed \
 		-e "s%target_name': 'tests_storage',%& 'libraries': ['crypto',],%" \
 		-i tests/tests.gyp
 
 	grep -rl 'libs_loc)/' | xargs sed -e '/<(libs_loc)\//d' -i
-	sed -e '/qt_static_plugins/d' -i telegram_sources.txt
+	sed -e '/qt_static_plugins/d' -i telegram/sources.txt
 	sed \
 		-e '/utils.gyp:Updater/d' \
 		-e '/libtgvoip.gyp/d' \
 		-e '/\<\(AL_LIBTYPE_STATIC\|minizip_loc\)\>/d' \
-		-i Telegram.gyp
+		-i telegram/telegram.gypi
 	sed \
 		-e '/\<\(qwebp\|Qt5PlatformSupport\|qtharfbuzzng\|qtpcre\)\>/d' \
 		-e '/\<\(qconnmanbearer\|qgenericbearer\|qnmbearer\|xcb-static\)\>/d' \
@@ -203,23 +208,23 @@ src_prepare() {
 		-e "s:<!@(python -c .*\(<@(qt_libs)\).*:\1',:" \
 		-e '/\<qt_loc\>/s:\(/include\):/../..\1/qt5:' \
 		-e "/linux_path_xkbcommon/s:\<lib\>:$(get_libdir):" \
-		-i qt.gypi
+		-e '/-static-libstdc++/d' \
+		-i modules/qt.gypi
 	sed \
 		-e '/-\<Werror\>/d' \
 		-e "/'QT_STATICPLUGIN',/d" \
-		-i settings_linux.gypi
+		-i common/linux.gypi
 	_l=( ${_l[@]/%/\',} )
 	_l="${_l[@]/#/\'}"
 	sed \
 		-e "s%'pkgconfig_libs': \[%& ${_l}%" \
 		-e "/\<\(include\|library\)_dirs\>': \[/,/\]\,/d" \
 		-e '/-\(Ofast\|flto\|Wl,-\)/d' \
-		-i telegram_linux.gypi
+		-i telegram/linux.gypi
 	sed -ze \
 		"s%\('libraries': \[\).*\n#\([ ]\+'<!(\)pkg-config\( .*pkgconfig_libs))',\)%\1\
-		\n\2${_p}\3\n\t'tgvoip',%" \
-		-i telegram_linux.gypi
-	sed -e '/-static-libstdc++/d' -i qt.gypi utils.gyp
+		\n\2${_p}\3%" \
+		-i telegram/linux.gypi
 	sed -e '/lib_\(rlottie\|lz4\)/d' -i lib_lottie.gyp
 
 	cd "${S}"

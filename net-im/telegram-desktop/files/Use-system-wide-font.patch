@@ -1,0 +1,25 @@
+--- a/Telegram/gyp/telegram/qrc.gypi
++++ b/Telegram/gyp/telegram/qrc.gypi
+@@ -7,7 +7,6 @@
+ {
+   'variables': {
+     'qrc_files': [
+-      '<(res_loc)/qrc/fonts.qrc',
+       '<(res_loc)/qrc/emoji_1.qrc',
+       '<(res_loc)/qrc/emoji_2.qrc',
+       '<(res_loc)/qrc/emoji_3.qrc',
+--- a/Telegram/SourceFiles/ui/style/style_core_font.cpp
++++ b/Telegram/SourceFiles/ui/style/style_core_font.cpp
+@@ -84,9 +84,9 @@ void Start() {
+ 	}
+ 	Started = true;
+ 
+-	auto regular = LoadCustomFont(":/gui/fonts/OpenSans-Regular.ttf", "Open Sans");
+-	auto bold = LoadCustomFont(":/gui/fonts/OpenSans-Bold.ttf", "Open Sans", style::internal::FontBold);
+-	auto semibold = LoadCustomFont(":/gui/fonts/OpenSans-Semibold.ttf", "Open Sans Semibold");
++	auto regular = ValidateFont("Open Sans");
++	auto bold = ValidateFont("Open Sans", style::internal::FontBold);
++	auto semibold = ValidateFont("Open Sans Semibold");
+ 
+ #ifdef Q_OS_WIN
+ 	// Attempt to workaround a strange font bug with Open Sans Semibold not loading.

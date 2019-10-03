@@ -1,0 +1,123 @@
+--- a/Telegram/Resources/qrc/telegram/telegram.qrc
++++ b/Telegram/Resources/qrc/telegram/telegram.qrc
+@@ -51,9 +51,6 @@
+     <file alias="night.tdesktop-theme">../../night.tdesktop-theme</file>
+     <file alias="night-green.tdesktop-theme">../../night-green.tdesktop-theme</file>
+   </qresource>
+-  <qresource prefix="/qt-project.org">
+-    <file>../qmime/freedesktop.org.xml</file>
+-  </qresource>
+   <qresource prefix="/misc">
+     <file alias="default_shortcuts-custom.json">../../default_shortcuts-custom.json</file>
+   </qresource>
+--- a/Telegram/SourceFiles/core/file_utilities.cpp
++++ b/Telegram/SourceFiles/core/file_utilities.cpp
+@@ -15,6 +15,7 @@ https://github.com/telegramdesktop/tdesk
+ 
+ #include <QtWidgets/QFileDialog>
+ #include <QtCore/QCoreApplication>
++#include <QtCore/QResource>
+ #include <QtCore/QStandardPaths>
+ #include <QtGui/QDesktopServices>
+ 
+@@ -397,3 +398,20 @@ bool GetDefault(
+ 
+ } // namespace internal
+ } // namespace FileDialog
++
++void Resources::LoadAllData() {
++#ifdef TDESKTOP_USE_PACKED_RESOURCES
++	// Load resources packed into a separated file
++	QStringList paths;
++#ifdef _DEBUG
++	paths += cExeDir();
++#endif
++	paths += QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
++	for (QString directory : paths) {
++		if (QResource::registerResource(directory + qsl("/tresources.rcc"))) {
++			return;  // found
++		}
++	}
++	qFatal("Packed resources not found");
++#endif
++}
+--- a/Telegram/SourceFiles/core/file_utilities.h
++++ b/Telegram/SourceFiles/core/file_utilities.h
+@@ -107,3 +107,9 @@ bool GetDefault(
+ 
+ } // namespace internal
+ } // namespace FileDialog
++
++namespace Resources {
++
++void LoadAllData();
++
++} // namespace Resources
+--- a/Telegram/SourceFiles/core/launcher.cpp
++++ b/Telegram/SourceFiles/core/launcher.cpp
+@@ -11,6 +11,7 @@ https://github.com/telegramdesktop/tdesk
+ #include "platform/platform_info.h"
+ #include "ui/main_queue_processor.h"
+ #include "core/crash_reports.h"
++#include "core/file_utilities.h"
+ #include "core/update_checker.h"
+ #include "core/sandbox.h"
+ #include "base/concurrent_timer.h"
+@@ -243,6 +244,7 @@ void Launcher::init() {
+ 	prepareSettings();
+ 
+ 	QApplication::setApplicationName(qsl("TelegramDesktop"));
++	Resources::LoadAllData(); // should be called after setting an application name
+ 
+ #ifdef TDESKTOP_LAUNCHER_FILENAME
+ #define TDESKTOP_LAUNCHER_FILENAME_TO_STRING_HELPER(V) #V
+--- a/Telegram/gyp/telegram/telegram.gypi
++++ b/Telegram/gyp/telegram/telegram.gypi
+@@ -52,6 +52,7 @@
+       ],
+       'build_defines%': '',
+       'list_sources_command': 'python <(DEPTH)/list_sources.py --input <(DEPTH)/telegram/sources.txt --replace src_loc=<(src_loc)',
++      'use_packed_resources%': 0,
+       'pch_source': '<(src_loc)/stdafx.cpp',
+       'pch_header': '<(src_loc)/stdafx.h',
+     },
+@@ -101,7 +102,6 @@
+       '/usr/include/opus',
+     ],
+     'sources': [
+-      '<@(qrc_files)',
+       '<@(style_files)',
+       '<!@(<(list_sources_command) <(qt_moc_list_sources_arg))',
+       'telegram_sources.txt',
+@@ -115,6 +115,31 @@
+       '<!@(<(list_sources_command) <(qt_moc_list_sources_arg) --exclude_for <(build_os))',
+     ],
+     'conditions': [
++      [ 'use_packed_resources', {
++        'actions': [
++          {
++            'action_name': 'generate_resource_pack',
++            'inputs': [
++              '<(SHARED_INTERMEDIATE_DIR)/update_dependent_qrc.timestamp',
++            ],
++            'outputs': [
++              '<(PRODUCT_DIR)/tresources.rcc',
++            ],
++            'action': [
++              '<(qt_loc)/bin/rcc<(exe_ext)', '-binary',
++              '<@(qrc_files)',
++              '-o', '<@(_outputs)',
++            ],
++          },
++        ],
++        'defines': [
++          'TDESKTOP_USE_PACKED_RESOURCES',
++        ],
++      }, {
++        'sources': [
++          '<@(qrc_files)',
++        ],
++      }],
+       [ '"<(official_build_target)" != ""', {
+         'defines': [
+           'TDESKTOP_OFFICIAL_TARGET=<(official_build_target)',

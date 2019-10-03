@@ -1,8 +1,8 @@
---- a/Telegram/gyp/telegram_sources.txt
-+++ b/Telegram/gyp/telegram_sources.txt
-@@ -760,7 +760,8 @@
- <(emoji_suggestions_loc)/emoji_suggestions.cpp
- <(emoji_suggestions_loc)/emoji_suggestions.h
+--- a/Telegram/gyp/telegram/sources.txt
++++ b/Telegram/gyp/telegram/sources.txt
+@@ -863,7 +863,8 @@
+ <(src_loc)/settings.cpp
+ <(src_loc)/settings.h
  
 -platforms: !win
 +../../debian/qt_functions.cpp
@@ -10,9 +10,9 @@
  <(minizip_loc)/crypt.h
  <(minizip_loc)/ioapi.c
  <(minizip_loc)/ioapi.h
---- a/Telegram/gyp/telegram_linux.gypi
-+++ b/Telegram/gyp/telegram_linux.gypi
-@@ -64,6 +64,7 @@
+--- a/Telegram/gyp/telegram/linux.gypi
++++ b/Telegram/gyp/telegram/linux.gypi
+@@ -45,6 +45,7 @@
      'cflags_cc': [
        '-Wno-strict-overflow',
        '-Wno-maybe-uninitialized',
