@@ -42,3 +42,15 @@
      NS_ENSURE_SUCCESS(rv, rv);
    }
  
+@@ -1497,7 +1497,11 @@ nsresult nsXREDirProvider::GetSysUserExt
+ 
+ nsresult nsXREDirProvider::GetSysUserExtensionsDevDirectory(nsIFile** aFile) {
+   nsCOMPtr<nsIFile> localDir;
++#ifndef TOR_BROWSER_DATA_IN_HOME_DIR
+   nsresult rv = GetUserDataDirectoryHome(getter_AddRefs(localDir), false);
++#else
++  nsresult rv = GetTorBrowserUserDataDir(getter_AddRefs(localDir));
++#endif
+   NS_ENSURE_SUCCESS(rv, rv);
+ 
+   rv = AppendSysUserExtensionsDevPath(localDir);

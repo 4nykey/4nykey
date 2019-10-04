@@ -9,9 +9,9 @@ PYTHON_COMPAT=( python3_{5,6,7} )
 PYTHON_REQ_USE='ncurses,sqlite,ssl,threads(+)'
 
 # Patch version
-PATCH="firefox-68.0-patches-11"
+PATCH="firefox-68.0-patches-12"
 
-LLVM_MAX_SLOT=8
+LLVM_MAX_SLOT=9
 
 inherit check-reqs eapi7-ver flag-o-matic toolchain-funcs eutils \
 		gnome2-utils llvm mozcoreconf-v6 pax-utils xdg-utils \
@@ -117,6 +117,15 @@ DEPEND="${CDEPEND}
 	sys-apps/findutils
 	|| (
 		(
+			sys-devel/clang:9
+			!clang? ( sys-devel/llvm:9 )
+			clang? (
+				=sys-devel/lld-9*
+				sys-devel/llvm:9[gold]
+				pgo? ( =sys-libs/compiler-rt-sanitizers-9*[profile] )
+			)
+		)
+		(
 			sys-devel/clang:8
 			!clang? ( sys-devel/llvm:8 )
 			clang? (
@@ -217,7 +226,7 @@ pkg_setup() {
 
 pkg_pretend() {
 	# Ensure we have enough disk space to compile
-	if use pgo || use debug || use test ; then
+	if use pgo || use lto || use debug || use test ; then
 		CHECKREQS_DISK_BUILD="8G"
 	else
 		CHECKREQS_DISK_BUILD="4G"
