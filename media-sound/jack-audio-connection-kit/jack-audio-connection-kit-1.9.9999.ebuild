@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -58,7 +58,7 @@ DEPEND="
 	virtual/pkgconfig
 	apidocs? ( app-doc/doxygen )
 "
-DOCS=( ChangeLog README README_NETJACK2 TODO )
+DOCS=( {AUTHORS,ChangeLog,README}.rst README_NETJACK2 )
 CONFIG_CHECK="~!GRKERNSEC_HARDEN_IPC"
 
 pkg_setup() {
