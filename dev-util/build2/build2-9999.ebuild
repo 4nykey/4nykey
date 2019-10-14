@@ -26,6 +26,7 @@ IUSE="test"
 
 RDEPEND="
 	dev-db/sqlite:3
+	virtual/pkgconfig
 "
 DEPEND="${RDEPEND}"
 PATCHES=(
@@ -63,10 +64,18 @@ src_prepare() {
 	printf 'cxx.libs += %s\ncxx.poptions += %s\n' \
 		"$(${_pc} sqlite3 --libs)" "$(${_pc} sqlite3 --cflags)" >> \
 		libodb-sqlite/buildfile
-
 	sed \
 		-e 's:libsqlite3[/]\?::' \
 		-i buildfile build/bootstrap.build
+
+	if has_version dev-util/pkgconf; then
+		printf 'cxx.libs += %s\ncxx.poptions += %s\n' \
+			"$(${_pc} libpkgconf --libs)" "$(${_pc} libpkgconf --cflags)" >> \
+			build2/build2/buildfile
+		sed \
+			-e 's:libpkgconf[/]\?::' \
+			-i buildfile build/bootstrap.build
+	fi
 
 	default
 	emake -C build2 -f bootstrap.gmake CXX=$(tc-getCXX)
