@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -24,7 +24,7 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="
 aalib archive debug dia djvu exif fbcon gif graphicsmagick imagemagick imlib
-jpeg jpeg2k pdf png postscript readline +screen sdl svg tiff truetype xfig
+jpeg pdf png postscript readline +screen sdl svg tiff truetype xfig
 "
 
 PATCHES=(
@@ -38,8 +38,7 @@ DEPEND="
 	gif? ( media-libs/giflib )
 	tiff? ( media-libs/tiff:0 )
 	readline? ( sys-libs/readline:0 )
-	jpeg? ( virtual/jpeg:62 )
-	jpeg2k? ( media-libs/jasper )
+	jpeg? ( virtual/jpeg )
 	postscript? ( app-text/libspectre )
 	djvu? ( app-text/djvu )
 	pdf? ( app-text/poppler[cairo] )
@@ -90,7 +89,6 @@ src_configure() {
 		$(use_enable tiff)
 		$(use_enable readline)
 		$(use_enable jpeg)
-		$(use_enable jpeg2k jasper)
 		$(use_enable postscript ps)
 		$(use_enable djvu)
 		$(use_enable pdf)
