@@ -1,7 +1,7 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 PYTHON_COMPAT=( python{2_7,3_{5,6,7}} )
 FONT_SUFFIX=otf
@@ -9,9 +9,11 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/alif-type/${PN}.git"
 else
-	inherit vcs-snapshot
-	MY_PV="983ab6c"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
+	MY_PV="v${PV}"
+	if [[ -z ${PV%%*_p*} ]]; then
+		inherit vcs-snapshot
+		MY_PV="983ab6c"
+	fi
 	SRC_URI="
 		mirror://githubcl/alif-type/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -27,7 +29,7 @@ LICENSE="OFL-1.1"
 SLOT="0"
 IUSE="+binary"
 
-DEPEND="
+BDEPEND="
 	!binary? (
 		${PYTHON_DEPS}
 		$(python_gen_any_dep '
