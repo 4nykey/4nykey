@@ -12,15 +12,11 @@ else
 	inherit vcs-snapshot
 	MY_PV="unicode11"
 	MY_PV="v${PV//./-}-${MY_PV}"
-	[[ -z ${PV%%*_p*} ]] && MY_PV="833a43d"
+	[[ -z ${PV%%*_p*} ]] && MY_PV="018aa14"
 	SRC_URI="mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-SRC_URI+="
-	https://github.com/googlei18n/${PN}/commit/a9ca546.patch
-"
-PATCHES=( "${DISTDIR}"/a9ca546.patch )
 
 DESCRIPTION="Noto Emoji fonts"
 HOMEPAGE="https://github.com/googlefonts/${PN}"
@@ -29,7 +25,7 @@ LICENSE="OFL-1.1"
 SLOT="0"
 IUSE="+binary zopfli"
 
-DEPEND="
+BDEPEND="
 !binary? (
 	${PYTHON_DEPS}
 	$(python_gen_any_dep '
