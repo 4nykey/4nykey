@@ -7,20 +7,22 @@ PYTHON_COMPAT=( python2_7 python3_{5,6,7} )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/googlei18n/${PN}.git"
+	EGIT_REPO_URI="https://github.com/googlefonts/${PN}.git"
 else
-	inherit vcs-snapshot
-	MY_PV="39ff50d"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV//./-}-tooling-for-phase3-update"
+	MY_PV="v${PV}"
+	if [[ -z ${PV%%*_p*} ]]; then
+		inherit vcs-snapshot
+		MY_PV="39ff50d"
+	fi
 	SRC_URI="
-		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
 
 DESCRIPTION="A python package for maintaining the Noto Fonts project"
-HOMEPAGE="https://github.com/googlei18n/nototools"
+HOMEPAGE="https://github.com/googlefonts/nototools"
 
 LICENSE="Apache-2.0"
 SLOT="0"
@@ -29,8 +31,8 @@ IUSE=""
 DEPEND="
 	dev-python/booleanOperations[${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-3.36[ufo,${PYTHON_USEDEP}]
-	>=dev-python/pillow-4[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.44[ufo,${PYTHON_USEDEP}]
+	>=dev-python/pillow-6.2[${PYTHON_USEDEP}]
 	dev-python/pyclipper[${PYTHON_USEDEP}]
 	dev-python/freetype-py[${PYTHON_USEDEP}]
 	media-libs/harfbuzz
@@ -44,10 +46,6 @@ RDEPEND="
 "
 
 python_prepare_all() {
-	local PATCHES=(
-		"${FILESDIR}"/${PN}-stringio.diff
-	)
-
 	local _f _s
 	for _f in nototools/[a-z]*.py; do basename "${_f}" '.py'; done | \
 		while read _s; do
