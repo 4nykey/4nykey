@@ -1,14 +1,14 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit autotools multilib-minimal vcs-snapshot
 
 DESCRIPTION="GTK+ version of wxWidgets, a cross-platform C++ GUI toolkit"
 HOMEPAGE="http://wxwidgets.org/"
 
-MY_PV="507617a"
+MY_PV="3b6a9f7"
 [[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 SRC_URI="
 	mirror://githubcl/wxwidgets/wxwidgets/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -16,9 +16,9 @@ SRC_URI="
 RESTRICT=primaryuri
 
 #KEYWORDS="~amd64 ~x86"
-IUSE="+X debug gstreamer libnotify chm opengl sdl tiff"
+IUSE="+X debug gstreamer libnotify chm opengl sdl tiff webkit"
 
-SLOT="${PV:0:3}"
+SLOT="${PV:0:3}-gtk3"
 
 RDEPEND="
 	dev-libs/expat[${MULTILIB_USEDEP}]
@@ -29,7 +29,7 @@ RDEPEND="
 		sys-libs/zlib[${MULTILIB_USEDEP}]
 		virtual/jpeg:0=[${MULTILIB_USEDEP}]
 		x11-libs/cairo[${MULTILIB_USEDEP}]
-		x11-libs/gtk+:2[${MULTILIB_USEDEP}]
+		x11-libs/gtk+:3[${MULTILIB_USEDEP}]
 		x11-libs/gdk-pixbuf[${MULTILIB_USEDEP}]
 		x11-libs/libSM[${MULTILIB_USEDEP}]
 		x11-libs/libX11[${MULTILIB_USEDEP}]
@@ -42,6 +42,7 @@ RDEPEND="
 		libnotify? ( x11-libs/libnotify[${MULTILIB_USEDEP}] )
 		opengl? ( virtual/opengl[${MULTILIB_USEDEP}] )
 		tiff?   ( media-libs/tiff:0[${MULTILIB_USEDEP}] )
+		webkit? ( net-libs/webkit-gtk:4 )
 	)
 	chm? ( dev-libs/libmspack )
 "
@@ -87,20 +88,19 @@ src_prepare() {
 	sed -i \
 		-e "s:\(WX_VERSION=\).*:\1${PV:0:5}:" \
 		-e "s:\(WX_RELEASE=\).*:\1${SLOT}:" \
-		-e "s:\(WX_SUBVERSION=\).*:\1${PV}:" \
+		-e "s:\(WX_SUBVERSION=\).*:\1${PV}-gtk3:" \
 		-e "/WX_VERSION_TAG=/ s:\${WX_RELEASE}:${PV:0:3}:" \
 		configure || die
 }
 
 multilib_src_configure() {
-	local myconf
-
 	# X independent options
-	myconf="
-			--with-zlib=sys
-			--with-expat=sys
-			--enable-compat28
-			$(use_with sdl)"
+	local myeconfargs=(
+		--with-zlib=sys
+		--with-expat=sys
+		--enable-compat28
+		$(use_with sdl)
+	)
 
 	# debug in >=2.9
 	# there is no longer separate debug libraries (gtk2ud)
@@ -109,33 +109,31 @@ multilib_src_configure() {
 	# apps can disable these features by building w/ -NDEBUG or wxDEBUG_LEVEL_0.
 	# http://docs.wxwidgets.org/3.0/overview_debugging.html
 	# https://groups.google.com/group/wx-dev/browse_thread/thread/c3c7e78d63d7777f/05dee25410052d9c
-	use debug \
-		&& myconf="${myconf} --enable-debug=max"
+	use debug && myeconfargs+=( --enable-debug=max )
 
 	# wxGTK options
 	#   --enable-graphics_ctx - needed for webkit, editra
 	#   --without-gnomevfs - bug #203389
-	use X && \
-		myconf="${myconf}
+	use X && myeconfargs+=(
 			--enable-graphics_ctx
 			--with-gtkprint
 			--enable-gui
-			--with-gtk=2
+			--with-gtk=3
 			--with-libpng=sys
 			--with-libjpeg=sys
 			--without-gnomevfs
 			$(use_enable gstreamer mediactrl)
-			--disable-webview
+			$(multilib_native_use_enable webkit webview)
 			$(use_with libnotify)
 			$(use_with opengl)
 			$(use_with tiff libtiff sys)
 			$(use_with chm libmspack)
-		"
+	)
 
 	# wxBase options
-	use X || myconf="${myconf} --disable-gui"
+	use X || myeconfargs+=( --disable-gui )
 
-	ECONF_SOURCE="${S}" econf ${myconf}
+	ECONF_SOURCE="${S}" econf ${myeconfargs[@]}
 }
 
 multilib_src_install_all() {
@@ -145,8 +143,9 @@ multilib_src_install_all() {
 
 	# version bakefile presets
 	pushd "${D}"usr/share/bakefile/presets/ > /dev/null
+	local f
 	for f in wx*; do
-		mv "${f}" "${f/wx/wx${SLOT//.}}"
+		mv "${f}" "${f/wx/wx${SLOT//.}gtk3}"
 	done
 	popd > /dev/null
 }
