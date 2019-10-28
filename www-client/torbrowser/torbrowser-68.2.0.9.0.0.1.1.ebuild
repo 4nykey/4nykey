@@ -240,8 +240,9 @@ pkg_pretend() {
 
 src_prepare() {
 	rm "${WORKDIR}"/firefox/2013_avoid_noinline_on_GCC_with_skcms.patch
+	rm "${WORKDIR}"/firefox/2015_fix_cssparser.patch
 	eapply "${WORKDIR}/firefox"
-	eapply "${FILESDIR}"/${PN}-profiledir.diff
+	eapply "${FILESDIR}"/${PN}-{profiledir,lto}.patch
 
 	# Allow user to apply any additional patches without modifing ebuild
 	eapply_user

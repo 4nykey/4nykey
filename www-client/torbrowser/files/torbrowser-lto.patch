@@ -1,16 +1,11 @@
 --- a/security/sandbox/linux/moz.build
 +++ b/security/sandbox/linux/moz.build
-@@ -102,7 +102,12 @@ if CONFIG['CC_TYPE'] in ('clang', 'gcc')
+@@ -98,7 +98,7 @@ if CONFIG['CC_TYPE'] in ('clang', 'gcc')
  # gcc lto likes to put the top level asm in syscall.cc in a different partition
  # from the function using it which breaks the build.  Work around that by
  # forcing there to be only one partition.
--if '-flto' in CONFIG['OS_CXXFLAGS'] and CONFIG['CC_TYPE'] != 'clang':
-+lto=False
-+for f in CONFIG['OS_CXXFLAGS']:
-+    if f.startswith('-flto'):
-+        lto=True
-+        break
-+if lto and CONFIG['CC_TYPE'] != 'clang':
-     LDFLAGS += ['--lto-partition=one']
+-for f in CONFIG['OS_CXXFLAGS']:
++for f in CONFIG['MOZ_LTO_CFLAGS']:
+     if f.startswith('-flto') and CONFIG['CC_TYPE'] != 'clang':
+         LDFLAGS += ['--param', 'lto-partitions=1']
  
- if CONFIG['MOZ_ALSA']:

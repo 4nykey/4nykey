@@ -1,17 +1,17 @@
 --- a/xpcom/io/TorFileUtils.cpp
 +++ b/xpcom/io/TorFileUtils.cpp
-@@ -81,7 +81,7 @@
+@@ -86,7 +86,7 @@ TorBrowser_GetUserDataDir(nsIFile *aExeF
    }
  #endif
  
 -#elif defined(ANDROID)
 +#elif defined(ANDROID) || defined(TOR_BROWSER_DATA_IN_HOME_DIR)
-   // Orfox stores data in the app home directory.
+   // Tor Browser Android stores data in the app home directory.
    const char* homeDir = getenv("HOME");
    if (!homeDir || !*homeDir)
 --- a/toolkit/xre/nsXREDirProvider.cpp
 +++ b/toolkit/xre/nsXREDirProvider.cpp
-@@ -1283,6 +1283,9 @@
+@@ -1440,6 +1440,9 @@ nsresult nsXREDirProvider::GetUserDataDi
  #if !defined(ANDROID)
  #ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
    rv = localDir->AppendNative(NS_LITERAL_CSTRING("Browser"));
@@ -19,9 +19,9 @@
 +  rv = localDir->AppendRelativeNativePath(NS_LITERAL_CSTRING(MOZ_USER_DIR
 +                                        XPCOM_FILE_PATH_SEPARATOR "torbrowser"));
  #else
-   rv = localDir->AppendRelativeNativePath(NS_LITERAL_CSTRING("Data"
-                                      XPCOM_FILE_PATH_SEPARATOR "Browser"));
-@@ -1291,7 +1294,20 @@
+   rv = localDir->AppendRelativeNativePath(
+       NS_LITERAL_CSTRING("Data" XPCOM_FILE_PATH_SEPARATOR "Browser"));
+@@ -1448,7 +1451,20 @@ nsresult nsXREDirProvider::GetUserDataDi
  #endif
  
    if (aLocal) {
@@ -42,3 +42,15 @@
      NS_ENSURE_SUCCESS(rv, rv);
    }
  
+@@ -1497,7 +1497,11 @@ nsresult nsXREDirProvider::GetSysUserExt
+ 
+ nsresult nsXREDirProvider::GetSysUserExtensionsDevDirectory(nsIFile** aFile) {
+   nsCOMPtr<nsIFile> localDir;
++#ifndef TOR_BROWSER_DATA_IN_HOME_DIR
+   nsresult rv = GetUserDataDirectoryHome(getter_AddRefs(localDir), false);
++#else
++  nsresult rv = GetTorBrowserUserDataDir(getter_AddRefs(localDir));
++#endif
+   NS_ENSURE_SUCCESS(rv, rv);
+ 
+   rv = AppendSysUserExtensionsDevPath(localDir);
