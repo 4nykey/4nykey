@@ -9,7 +9,7 @@ VIRTUALX_REQUIRED="test"
 
 MY_PN="wxPython"
 # ext/wxwidgets submodule commit and corresponding wxGTK version
-WXV="507617a:3.0.5_pre20190425"
+WXV="3b6a9f7:3.0.5_pre20191020"
 # build.py: 'wafCurrentVersion'
 WAF_BINARY="waf-2.0.8"
 inherit waf-utils distutils-r1 eutils wxwidgets vcs-snapshot virtualx
@@ -44,7 +44,7 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	app-doc/doxygen
+	<app-doc/doxygen-1.8.15
 	>=dev-python/sip-4.19.16[${PYTHON_USEDEP}]
 	test? (
 		dev-python/pytest-xdist[${PYTHON_USEDEP}]
