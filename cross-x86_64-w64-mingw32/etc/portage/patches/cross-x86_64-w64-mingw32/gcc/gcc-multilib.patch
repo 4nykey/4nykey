@@ -1,8 +1,0 @@
---- a/gcc/config/i386/t-mingw-w64
-+++ b/gcc/config/i386/t-mingw-w64
-@@ -1,3 +1,4 @@
- MULTILIB_OPTIONS = m64/m32
- MULTILIB_DIRNAMES = 64 32
--MULTILIB_OSDIRNAMES = ../lib ../lib32
-+MULTILIB_OSDIRNAMES = m64=../lib64
-+MULTILIB_OSDIRNAMES+= m32=../lib32
