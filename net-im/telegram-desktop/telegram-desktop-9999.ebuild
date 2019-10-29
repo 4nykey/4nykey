@@ -44,7 +44,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-MY_DEB="${PN}_1.8.8-1.debian"
+MY_DEB="${PN}_1.8.15-2.debian"
 SRC_URI+="
 	mirror://debian/pool/main/t/${PN}/${MY_DEB}.tar.xz
 "
@@ -76,11 +76,11 @@ RDEPEND="
 		dev-libs/libappindicator:3
 	)
 	>=media-libs/libtgvoip-2.4.4_p20190715-r1
-	>=media-libs/rlottie-0.0.1_p20190927
+	media-libs/rlottie
+	x11-libs/libxkbcommon
 "
 DEPEND="
 	${RDEPEND}
-	x11-libs/libxkbcommon[static-libs]
 	dev-cpp/range-v3
 "
 RDEPEND="
@@ -119,17 +119,15 @@ src_prepare() {
 		unpack ${MY_DEB}.tar.xz
 	fi
 
-	cp "${FILESDIR}"/{Packed-resources,Use-system-wide-font}.patch "${S}"/debian/patches
 	rm \
 		debian/patches/Modify-build-scripts.patch \
-		debian/patches/Deprecated-ranges.patch \
 		-f
 	local _patches=(
+		"${FILESDIR}"/Packed-resources.patch
 		debian/patches
 		"${FILESDIR}"/${PN}-gyp.diff
 		"${FILESDIR}"/${PN}-pch.diff
 		"${FILESDIR}"/${PN}-qt_functions.diff
-		"${FILESDIR}"/${PN}-ui_pch.diff
 	)
 	eapply "${_patches[@]}"
 
@@ -180,10 +178,10 @@ src_prepare() {
 		-Dmy_cflags="${_f[*]}"
 		-Dqt_version=${_q%[-_]*}
 		-Dlinux_path_qt="${EPREFIX}/usr/$(get_libdir)/qt5"
-		-Dlinux_path_xkbcommon="${EPREFIX}/usr"
 		-Dlinux_path_opus_include="${EPREFIX}/usr/include/opus"
 		-Dminizip_loc="${EPREFIX}/usr/include/minizip"
 		-Dbuild_defines="${_d:1}"
+		-Dqt_bindir="${EPREFIX}/usr/$(get_libdir)/qt5/bin"
 	)
 
 	cd "${S}"/Telegram/gyp
@@ -207,7 +205,7 @@ src_prepare() {
 		-e '/linux_glibc_wraps/d' \
 		-e "s:<!@(python -c .*\(<@(qt_libs)\).*:\1',:" \
 		-e '/\<qt_loc\>/s:\(/include\):/../..\1/qt5:' \
-		-e "/linux_path_xkbcommon/s:\<lib\>:$(get_libdir):" \
+		-e "/linux_path_xkbcommon/d" \
 		-e '/-static-libstdc++/d' \
 		-i modules/qt.gypi
 	sed \
