@@ -12,7 +12,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/laerm0/${MY_PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="c1ac1c0"
+	MY_PV="06d3e6c"
 	SRC_URI="
 		mirror://githubcl/googlefonts/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -26,4 +26,6 @@ DESCRIPTION="A clean and modern sans-serif typeface for web, print and mobile"
 LICENSE="Apache-2.0"
 SLOT="0"
 REQUIRED_USE="binary? ( !font_types_otf )"
-PATCHES=( "${FILESDIR}"/${PN}_familyname.diff )
+PATCHES=(
+	"${FILESDIR}"/${PN}_familyname.diff
+)

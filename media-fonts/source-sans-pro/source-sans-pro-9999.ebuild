@@ -1,7 +1,7 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 PYTHON_COMPAT=( python2_7 python3_{5,6,7} )
 MY_FONT_TYPES=( otf +ttf )
@@ -9,13 +9,14 @@ if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-fonts/${PN}"
 else
-	inherit vcs-snapshot eapi7-ver
-	MY_PVB="$(ver_cut 1-2)R-ro/$(ver_cut 3-4)R-it"
-	MY_PV="d975556"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="${MY_PVB//R}"
+	MY_PV="${PV}"
+	if [[ -z ${PV%%*_p*} ]]; then
+		inherit vcs-snapshot
+		MY_PV="d975556"
+	fi
 	SRC_URI="
 		binary? (
-			mirror://githubcl/adobe-fonts/${PN}/tar.gz/${MY_PVB}
+			mirror://githubcl/adobe-fonts/${PN}/tar.gz/${PV%_p*}R
 			-> ${P%_p*}R.tar.gz
 		)
 		!binary? (

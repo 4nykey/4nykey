@@ -1,7 +1,7 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 PYTHON_COMPAT=( python{2_7,3_{5,6,7}} )
 if [[ -z ${PV%%*9999} ]]; then
@@ -31,7 +31,7 @@ LICENSE="GPL-3"
 SLOT="0"
 IUSE="+binary latex"
 
-DEPEND="
+BDEPEND="
 	!binary? (
 		${PYTHON_DEPS}
 		$(python_gen_any_dep '
@@ -40,6 +40,7 @@ DEPEND="
 		')
 		dev-python/fonttools
 		dev-util/font-helpers
+		latex? ( app-text/lcdf-typetools )
 	)
 "
 

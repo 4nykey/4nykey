@@ -23,4 +23,3 @@ HOMEPAGE="http://www.impallari.com/lobster"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-PATCHES=( ${FILESDIR}/${PN}-anchors.diff )

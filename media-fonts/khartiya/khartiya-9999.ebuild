@@ -1,7 +1,7 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 PYTHON_COMPAT=( python{2_7,3_{5,6,7}} )
 MY_FONT_TYPES=( pfb otf +ttf )
@@ -35,7 +35,7 @@ LICENSE="OFL-1.1"
 SLOT="0"
 IUSE="+binary latex"
 
-DEPEND="
+BDEPEND="
 	!binary? (
 		${PYTHON_DEPS}
 		$(python_gen_any_dep '
@@ -45,6 +45,7 @@ DEPEND="
 		dev-texlive/texlive-fontutils
 		sys-apps/coreutils
 		dev-util/font-helpers
+		latex? ( app-text/lcdf-typetools )
 	)
 "
 RESTRICT="primaryuri"

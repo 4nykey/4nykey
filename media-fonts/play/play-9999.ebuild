@@ -24,4 +24,3 @@ HOMEPAGE="https://github.com/alexeiva/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-PATCHES=( ${FILESDIR}/${PN}-anchors.diff )

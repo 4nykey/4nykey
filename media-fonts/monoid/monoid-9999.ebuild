@@ -1,9 +1,9 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python{2_7,3_{5,6,7}} )
 MY_FONT_VARIANTS="loose halfloose halftight tight xtrasmall small large xtralarge"
 MY_FONT_CHARS="empty_dollar dotted_zero base_one zstyle_l no_contextual_alternates"
 if [[ ${PV} == *9999* ]]; then
@@ -27,7 +27,7 @@ LICENSE="MIT OFL-1.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
-DEPEND="
+BDEPEND="
 	${PYTHON_DEPS}
 	$(python_gen_any_dep '
 		media-gfx/fontforge[${PYTHON_USEDEP}]
@@ -40,6 +40,11 @@ DOCS="Readme.md"
 pkg_setup() {
 	python-any-r1_pkg_setup
 	font-r1_pkg_setup
+}
+
+src_prepare() {
+	sed -e 's:xrange:range:' -i Scripts/fontbuilder.py
+	default
 }
 
 src_configure() {
