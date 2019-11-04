@@ -17,7 +17,7 @@ inherit waf-utils distutils-r1 eutils wxwidgets vcs-snapshot virtualx
 DESCRIPTION="A blending of the wxWindows C++ class library with Python"
 HOMEPAGE="https://wiki.wxpython.org/ProjectPhoenix"
 SRC_URI="
-	mirror://githubcl/wxWidgets/Phoenix/tar.gz/${MY_PN}-${PV/_p}
+	mirror://githubcl/wxWidgets/Phoenix/tar.gz/${MY_PN}-${PV/_p/.post}
 	-> ${P}.tar.gz
 	mirror://githubcl/wxwidgets/wxwidgets/tar.gz/${WXV%:*}
 	-> wxGTK-${WXV#*:}.tar.gz
@@ -44,7 +44,7 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	<app-doc/doxygen-1.8.15
+	app-doc/doxygen
 	>=dev-python/sip-4.19.16[${PYTHON_USEDEP}]
 	test? (
 		dev-python/pytest-xdist[${PYTHON_USEDEP}]
