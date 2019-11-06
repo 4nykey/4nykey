@@ -17,7 +17,7 @@ else
 		mirror://githubcl/ubuntu/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
-	KEYWORDS="~amd64 ~x86"
+#	KEYWORDS="~amd64 ~x86"
 fi
 
 DESCRIPTION="Adds AppIndicator support to gnome shell"
@@ -32,7 +32,7 @@ DEPEND="
 "
 RDEPEND="
 	${DEPEND}
-	gnome-base/gnome-shell
+	>gnome-base/gnome-shell-3.33
 "
 
 src_compile() { :; }
