@@ -20,7 +20,7 @@ fi
 inherit cmake-utils
 
 DESCRIPTION="DigiDoc digital signature library"
-HOMEPAGE="https://open-eid.github.io"
+HOMEPAGE="https://id.ee"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
@@ -70,4 +70,9 @@ src_configure() {
 		-DCMAKE_INSTALL_SYSCONFDIR="${EROOT}etc"
 	)
 	cmake-utils_src_configure
+}
+
+src_test() {
+	local myctestargs=( -j1 )
+	cmake-utils_src_test
 }

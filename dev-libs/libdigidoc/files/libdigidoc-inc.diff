@@ -8,3 +8,23 @@
  #include <stdio.h>
  #include <stdlib.h>
  #include <memory.h>
+--- a/libdigidoc/DigiDocCert.h
++++ b/libdigidoc/DigiDocCert.h
+@@ -347,6 +347,8 @@ EXP_OPTION int getCertSubjectCN(X509* ce
+ // get certificate owners id-code
+ // USE: ddocCertGetSubjectPerCode()
+ EXP_OPTION int getCertOwnerCode(const X509* pCert, char* buf, int len);
++    
++#endif  // WITH_DEPRECATED_FUNCTIONS
+ 
+ //--------------------------------------------------
+ // Returns the desired item from string rep of DN
+@@ -356,8 +358,6 @@ EXP_OPTION int getCertOwnerCode(const X5
+ // returns error code or ERR_OK
+ //--------------------------------------------------
+ EXP_OPTION int ddocGetDNPartFromString(const char* sDn, const char* sId, DigiDocMemBuf* pMBuf);
+-    
+-#endif  // WITH_DEPRECATED_FUNCTIONS
+ 
+ #ifdef  __cplusplus
+ }

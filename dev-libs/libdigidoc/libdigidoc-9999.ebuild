@@ -1,17 +1,19 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/open-eid/${PN}.git"
 else
-	inherit vcs-snapshot
-	MY_PV="a7a2547"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV/_/-}"
+	MY_PV="v${PV/_/-}"
+	if [[ -z ${PV%%*_p*} ]]; then
+		inherit vcs-snapshot
+		MY_PV="a7a2547"
+	fi
 	MY_PV="${MY_PV/rc/RC}"
-	MY_C="certs-5415bae"
+	MY_C="certs-99e63ae"
 	SRC_URI="
 		mirror://githubcl/open-eid/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://githubcl/open-eid/${MY_C%-*}/tar.gz/${MY_C##*-} -> ${MY_C}.tar.gz
@@ -22,7 +24,7 @@ fi
 inherit flag-o-matic cmake-utils
 
 DESCRIPTION="DigiDoc digital signature library"
-HOMEPAGE="http://id.ee"
+HOMEPAGE="https://id.ee"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
@@ -37,6 +39,8 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
+"
+BDEPEND="
 	apidocs? ( app-doc/doxygen )
 	dev-util/cmake-openeid
 "
@@ -55,7 +59,7 @@ src_prepare() {
 
 src_configure() {
 	local mycmakeargs=(
-		-DCMAKE_INSTALL_SYSCONFDIR="${EROOT}"etc
+		-DCMAKE_INSTALL_SYSCONFDIR="${EPREFIX}/etc"
 		-DCMAKE_DISABLE_FIND_PACKAGE_Doxygen=$(usex !apidocs)
 	)
 	cmake-utils_src_configure
