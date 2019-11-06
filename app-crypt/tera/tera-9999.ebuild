@@ -1,7 +1,7 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -19,7 +19,7 @@ fi
 inherit cmake-utils xdg
 
 DESCRIPTION="Time-stamping application"
-HOMEPAGE="https://open-eid.github.io"
+HOMEPAGE="https://id.ee"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
@@ -34,13 +34,15 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
+"
+BDEPEND="
 	dev-qt/linguist-tools:5
 	dev-util/cmake-openeid
 "
 
 src_prepare() {
 	sed \
-		-e "s:\${CMAKE_SOURCE_DIR}/cmake/modules:${EROOT}usr/share/cmake/openeid:" \
+		-e "s:\${CMAKE_SOURCE_DIR}/cmake/modules:/usr/share/cmake/openeid:" \
 		-i CMakeLists.txt
 	cmake-utils_src_prepare
 }

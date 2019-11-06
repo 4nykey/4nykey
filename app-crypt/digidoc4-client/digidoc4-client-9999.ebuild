@@ -1,7 +1,7 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -11,8 +11,8 @@ else
 	MY_PV="${PV^^}"
 	MY_PV="v${MY_PV/_/-}"
 	[[ -z ${PV%%*_p*} ]] && MY_PV="a4da0d3"
-	MY_QC="qt-common-20c8815"
-	MY_EX="digidoc-extensions-11abf02"
+	MY_QC="qt-common-3a58c1c"
+	MY_EX="digidoc-extensions-b4758d7"
 	SRC_URI="${SRC_URI}
 		mirror://githubcl/open-eid/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://githubcl/open-eid/${MY_QC%-*}/tar.gz/${MY_QC##*-} -> ${MY_QC}.tar.gz
@@ -24,7 +24,7 @@ fi
 inherit cmake-utils xdg
 
 DESCRIPTION="An application for digitally signing and encrypting documents"
-HOMEPAGE="https://open-eid.github.io"
+HOMEPAGE="https://id.ee"
 
 LICENSE="LGPL-2.1 Nokia-Qt-LGPL-Exception-1.1"
 SLOT="0"
@@ -47,6 +47,8 @@ RDEPEND="
 "
 DEPEND="
 	${DEPEND}
+"
+BDEPEND="
 	dev-qt/linguist-tools:5
 	dev-util/cmake-openeid
 "
@@ -59,7 +61,7 @@ src_prepare() {
 	fi
 	sed \
 		-e "s:doc/${PN}:doc/${PF}:" \
-		-e "s:\${CMAKE_SOURCE_DIR}/cmake/modules:${EROOT}/usr/share/cmake/openeid:" \
+		-e "s:\${CMAKE_SOURCE_DIR}/cmake/modules:/usr/share/cmake/openeid:" \
 		-i CMakeLists.txt
 	cmake-utils_src_prepare
 }

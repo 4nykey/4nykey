@@ -1,1 +1,0 @@
-qdigidoc-9999.ebuild

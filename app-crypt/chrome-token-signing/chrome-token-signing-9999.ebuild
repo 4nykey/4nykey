@@ -1,7 +1,7 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 DOC_CONTENTS="To use this the OpenSC PKCS#11 module has to be loaded
 - for firefox
@@ -15,10 +15,12 @@ if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/open-eid/${PN}.git"
 else
-	inherit vcs-snapshot
 	MY_PV="${PV/_/-}"
 	MY_PV="v${MY_PV/rc/RC}"
-	[[ -z ${PV%%*_p*} ]] && MY_PV="1c9bebc"
+	if [[ -z ${PV%%*_p*} ]]; then
+		inherit vcs-snapshot
+		MY_PV="1c9bebc"
+	fi
 	SRC_URI="
 		mirror://githubcl/open-eid/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -30,7 +32,7 @@ SRC_URI+="
 "
 
 DESCRIPTION="Native client and browser extension for eID"
-HOMEPAGE="https://open-eid.github.io"
+HOMEPAGE="https://id.ee"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
@@ -49,6 +51,8 @@ RDEPEND="
 "
 DEPEND="
 	${DEPEND}
+"
+BDEPEND="
 	dev-qt/linguist-tools
 "
 PATCHES=( "${FILESDIR}"/${PN}_allow_disabling.diff )
@@ -56,7 +60,7 @@ PATCHES=( "${FILESDIR}"/${PN}_allow_disabling.diff )
 src_configure() {
 	cd "${S}"/host-linux
 	rm -f GNUmakefile
-	eqmake5 LIBPATH="${EROOT}/usr/$(get_libdir)"
+	eqmake5 LIBPATH="${EPREFIX}/usr/$(get_libdir)"
 }
 
 src_compile() {
@@ -64,7 +68,7 @@ src_compile() {
 	sed \
 		-e "/LIBS=/s:=.*:=/usr/$(get_libdir):" \
 		-e "/^[A-Z]\+=/s:/usr/:${EPREFIX}&:" \
-		${DISTDIR}/esteid-update-nssdb > esteid-update-nssdb
+		"${DISTDIR}"/esteid-update-nssdb > esteid-update-nssdb
 }
 
 src_install() {
