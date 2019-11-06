@@ -1,0 +1,46 @@
+--- a/browser/components/moz.build
++++ b/browser/components/moz.build
+@@ -56,7 +56,6 @@ DIRS += [
+     'syncedtabs',
+     'uitour',
+     'urlbar',
+-    'torpreferences',
+     'translation',
+ ]
+ 
+--- a/browser/components/preferences/in-content/preferences.js
++++ b/browser/components/preferences/in-content/preferences.js
+@@ -93,7 +92,6 @@ function init_all() {
+     document.getElementById("template-paneSync").remove();
+   }
+   register_module("paneSearchResults", gSearchResultsPane);
+-  register_module("paneTor", gTorPane);
+   gSearchResultsPane.init();
+   gMainPane.preInit();
+ 
+--- a/browser/components/preferences/in-content/preferences.xul
++++ b/browser/components/preferences/in-content/preferences.xul
+@@ -16,7 +16,6 @@
+ <?xml-stylesheet href="chrome://browser/skin/preferences/in-content/containers.css"?>
+ <?xml-stylesheet href="chrome://browser/skin/preferences/in-content/privacy.css"?>
+ <?xml-stylesheet href="chrome://browser/content/securitylevel/securityLevelPreferences.css"?>
+-<?xml-stylesheet href="chrome://browser/content/torpreferences/torPreferences.css"?>
+ 
+ <!DOCTYPE page [
+ <!ENTITY % aboutTorDTD SYSTEM "chrome://torbutton/locale/aboutTor.dtd">
+@@ -140,7 +139,6 @@
+           <label class="category-name" flex="1" data-l10n-id="pane-sync-title2"></label>
+         </richlistitem>
+ 
+-#include ../../torpreferences/content/torCategory.inc.xul
+ 
+       </richlistbox>
+ 
+@@ -199,7 +197,6 @@
+ #include privacy.xul
+ #include containers.xul
+ #include sync.xul
+-#include ../../torpreferences/content/torPane.xul
+         </vbox>
+       </vbox>
+     </vbox>
