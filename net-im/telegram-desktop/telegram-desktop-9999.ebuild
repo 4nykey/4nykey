@@ -4,9 +4,6 @@
 EAPI=7
 
 MY_PN=tdesktop
-CMAKE_USE_DIR="${S}/out/Release"
-PYTHON_COMPAT=( python2_7 )
-inherit python-any-r1 toolchain-funcs desktop xdg cmake-utils
 if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/telegramdesktop/${MY_PN}.git"
 	EGIT_BRANCH="dev"
@@ -18,49 +15,34 @@ if [[ -z ${PV%%*9999} ]]; then
 	)
 	inherit git-r3
 else
-	inherit vcs-snapshot
-	MY_PV="9c909c8"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
-	MY_CAT="Catch2-5ca44b6"
-	MY_GSL="GSL-d846fe5"
-	MY_CRL="crl-52baf11"
-	MY_VAR="variant-550ac2f"
-	MY_XXH="xxHash-7cc9639"
+	MY_P="${MY_PN}-${PV}-full"
 	SRC_URI="
-		mirror://githubcl/telegramdesktop/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
-		mirror://githubcl/telegramdesktop/${MY_CRL%-*}/tar.gz/${MY_CRL##*-}
-		-> ${MY_CRL}.tar.gz
-		mirror://githubcl/Microsoft/${MY_GSL%-*}/tar.gz/${MY_GSL##*-}
-		-> ${MY_GSL}.tar.gz
-		mirror://githubcl/mapbox/${MY_VAR%-*}/tar.gz/${MY_VAR##*-}
-		-> ${MY_VAR}.tar.gz
-		mirror://githubcl/Cyan4973/${MY_XXH%-*}/tar.gz/${MY_XXH##*-}
-		-> ${MY_XXH}.tar.gz
-		test? (
-			mirror://githubcl/catchorg/${MY_CAT%-*}/tar.gz/${MY_CAT##*-}
-			-> ${MY_CAT}.tar.gz
-		)
+		https://github.com/telegramdesktop/${MY_PN}/releases/download/v${PV}/${MY_P}.tar.gz
 	"
+	S="${WORKDIR}/${MY_P}"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-MY_DEB="${PN}_1.8.15-2.debian"
+MY_DEB="${PN}-patches-dc0956c"
 SRC_URI+="
-	mirror://debian/pool/main/t/${PN}/${MY_DEB}.tar.xz
+	mirror://githubcl/4nykey/${MY_DEB%-*}/tar.gz/${MY_DEB##*-} -> ${MY_DEB}.tar.gz
 "
+CMAKE_USE_DIR="${S}/out/Release"
+PYTHON_COMPAT=( python2_7 )
+inherit python-any-r1 toolchain-funcs flag-o-matic desktop xdg cmake-utils
 
 DESCRIPTION="Telegram Desktop messaging app"
 HOMEPAGE="https://desktop.telegram.org"
 
 LICENSE="GPL-3"
 SLOT="0"
-IUSE="gtk test +webp"
+IUSE="crashreporter gtk +packed-resources test"
 
 RDEPEND="
 	dev-qt/qtmultimedia:5
 	dev-qt/qtgui:5[xcb]
 	dev-qt/qtnetwork:5
-	webp? ( dev-qt/qtimageformats:5 )
+	dev-qt/qtimageformats:5
 	sys-libs/zlib[minizip]
 	app-arch/lz4
 	app-arch/xz-utils
@@ -78,6 +60,7 @@ RDEPEND="
 	>=media-libs/libtgvoip-2.4.4_p20190715-r1
 	media-libs/rlottie
 	x11-libs/libxkbcommon
+	crashreporter? ( dev-libs/breakpad )
 "
 DEPEND="
 	${RDEPEND}
@@ -105,29 +88,19 @@ See https://core.telegram.org/api/obtaining_api_id
 pkg_setup() {
 	EGIT_SUBMODULES+=( $(usex test '' '-Telegram/ThirdParty/Catch') )
 	python-any-r1_pkg_setup
+	use packed-resources && append-cppflags -DTDESKTOP_USE_PACKED_RESOURCES
 }
 
 src_prepare() {
-	if [[ -n ${PV%%*9999} ]]; then
-		mv "${WORKDIR}"/${MY_CRL}/* "${S}"/Telegram/ThirdParty/crl/
-		mv "${WORKDIR}"/${MY_DEB} "${S}"/debian
-		mv "${WORKDIR}"/${MY_GSL}/* "${S}"/Telegram/ThirdParty/GSL/
-		mv "${WORKDIR}"/${MY_VAR}/* "${S}"/Telegram/ThirdParty/variant/
-		mv "${WORKDIR}"/${MY_XXH}/* "${S}"/Telegram/ThirdParty/xxHash/
-		use test && mv "${WORKDIR}"/${MY_CAT}/* "${S}"/Telegram/ThirdParty/Catch/
-	else
-		unpack ${MY_DEB}.tar.xz
-	fi
+	unpack ${MY_DEB}.tar.gz
+	mv ${MY_DEB}/debian .
+	rm -rf Telegram/ThirdParty/{libtgvoip,lz4,minizip,rlottie}
 
-	rm \
-		debian/patches/Modify-build-scripts.patch \
-		-f
 	local _patches=(
-		"${FILESDIR}"/Packed-resources.patch
 		debian/patches
 		"${FILESDIR}"/${PN}-gyp.diff
 		"${FILESDIR}"/${PN}-pch.diff
-		"${FILESDIR}"/${PN}-qt_functions.diff
+		"${FILESDIR}"/${PN}-breakpad.diff
 	)
 	eapply "${_patches[@]}"
 
@@ -152,6 +125,7 @@ src_prepare() {
 		rlottie
 		xkbcommon
 		$(usex gtk 'appindicator3-0.1' '')
+		$(usex crashreporter 'breakpad-client' '')
 	)
 	local _f=(
 		$(${_p} --cflags ${_l[@]})
@@ -159,7 +133,7 @@ src_prepare() {
 	)
 	local _d=(
 		TDESKTOP_DISABLE_UNITY_INTEGRATION
-		TDESKTOP_DISABLE_CRASH_REPORTS
+		$(usex crashreporter '' 'TDESKTOP_DISABLE_CRASH_REPORTS')
 		TDESKTOP_DISABLE_AUTOUPDATE
 		$(usex gtk '' 'TDESKTOP_DISABLE_GTK_INTEGRATION')
 	)
@@ -170,10 +144,10 @@ src_prepare() {
 		--depth=Telegram/gyp
 		--generator-output=../..
 		-Gconfig=${CMAKE_USE_DIR##*/}
-		-Dofficial_build_target=
+		-Dspecial_build_target=
 		-Dapi_id=${TELEGRAM_API_ID:-17349}
 		-Dapi_hash=${TELEGRAM_API_HASH:-344583e45741c457fe1862106095a5eb}
-		-Duse_packed_resources=1
+		-Duse_packed_resources=$(usex packed-resources 1 0)
 		-Dnot_need_gtk="True"
 		-Dmy_cflags="${_f[*]}"
 		-Dqt_version=${_q%[-_]*}
@@ -182,11 +156,12 @@ src_prepare() {
 		-Dminizip_loc="${EPREFIX}/usr/include/minizip"
 		-Dbuild_defines="${_d:1}"
 		-Dqt_bindir="${EPREFIX}/usr/$(get_libdir)/qt5/bin"
+		-Dlinux_path_breakpad="${EPREFIX}/usr"
 	)
 
 	cd "${S}"/Telegram/gyp
 
-	use test || sed -e '/\<tests\>/d' -i telegram/telegram.gypi
+	use test || sed -e '/\<tests\>/d' -i Telegram.gyp
 	sed \
 		-e "s%target_name': 'tests_storage',%& 'libraries': ['crypto',],%" \
 		-i tests/tests.gyp
@@ -194,24 +169,25 @@ src_prepare() {
 	grep -rl 'libs_loc)/' | xargs sed -e '/<(libs_loc)\//d' -i
 	sed -e '/qt_static_plugins/d' -i telegram/sources.txt
 	sed \
-		-e '/utils.gyp:Updater/d' \
+		-e '/utils.gyp:\(Updater\|Packer\)/d' \
 		-e '/libtgvoip.gyp/d' \
 		-e '/\<\(AL_LIBTYPE_STATIC\|minizip_loc\)\>/d' \
-		-i telegram/telegram.gypi
+		-i Telegram.gyp
 	sed \
-		-e '/\<\(qwebp\|Qt5PlatformSupport\|qtharfbuzzng\|qtpcre\)\>/d' \
+		-e '/\<\(qwebp\|Qt5PlatformSupport\|qtharfbuzz\|qtlibpng\|qtpcre2\)\>/d' \
 		-e '/\<\(qconnmanbearer\|qgenericbearer\|qnmbearer\|xcb-static\)\>/d' \
+		-e '/-\<l[a-z]\+platforminputcontextplugin\>/d' \
 		-e '/<(linux_lib_/d' \
 		-e '/linux_glibc_wraps/d' \
 		-e "s:<!@(python -c .*\(<@(qt_libs)\).*:\1',:" \
 		-e '/\<qt_loc\>/s:\(/include\):/../..\1/qt5:' \
 		-e "/linux_path_xkbcommon/d" \
 		-e '/-static-libstdc++/d' \
-		-i modules/qt.gypi
+		-i helpers/modules/qt.gypi
 	sed \
 		-e '/-\<Werror\>/d' \
 		-e "/'QT_STATICPLUGIN',/d" \
-		-i common/linux.gypi
+		-i helpers/common/linux.gypi
 	_l=( ${_l[@]/%/\',} )
 	_l="${_l[@]/#/\'}"
 	sed \
@@ -223,9 +199,12 @@ src_prepare() {
 		"s%\('libraries': \[\).*\n#\([ ]\+'<!(\)pkg-config\( .*pkgconfig_libs))',\)%\1\
 		\n\2${_p}\3%" \
 		-i telegram/linux.gypi
-	sed -e '/lib_\(rlottie\|lz4\)/d' -i lib_lottie.gyp
 
 	cd "${S}"
+	sed -e '/lib_\(rlottie\|lz4\)/d' -i Telegram/lib_lottie/lib_lottie.gyp
+	use crashreporter || sed \
+		-e '/crash_report_/d' -i Telegram/lib_base/gyp/sources.txt
+
 	set -- gyp "${mygypargs[@]}" Telegram/gyp/Telegram.gyp
 	einfo "${@}"
 	"${@}" || die "gyp failed"
@@ -237,8 +216,10 @@ src_prepare() {
 
 src_install() {
 	newbin "${BUILD_DIR}"/Telegram ${PN}
-	insinto /usr/share/TelegramDesktop
-	doins "${BUILD_DIR}"/tresources.rcc
+	if use packed-resources; then
+		insinto /usr/share/TelegramDesktop
+		doins "${BUILD_DIR}"/tresources.rcc
+	fi
 	newmenu lib/xdg/telegramdesktop.desktop ${PN}.desktop
 	local _s
 	for _s in 16 32 48 64 128 256 512; do

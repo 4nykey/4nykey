@@ -1,0 +1,11 @@
+--- a/Telegram/SourceFiles/stdafx.h
++++ b/Telegram/SourceFiles/stdafx.h
+@@ -83,7 +83,7 @@ https://github.com/telegramdesktop/tdesk
+ #endif // OS_MAC_OLD
+ 
+ // Fix Google Breakpad build for Mac App Store version
+-#ifdef Q_OS_MAC
++#if defined Q_OS_MAC || defined Q_OS_LINUX
+ #define __STDC_FORMAT_MACROS
+ #endif // Q_OS_MAC
+ 

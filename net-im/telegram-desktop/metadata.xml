@@ -4,4 +4,8 @@
 	<maintainer type="person">
 		<email>4nykey@gmail.com</email>
 	</maintainer>
+	<use>
+		<flag name="crashreporter">Enable crash reporter</flag>
+		<flag name="packed-resources">Use packed resources</flag>
+	</use>
 </pkgmetadata>
