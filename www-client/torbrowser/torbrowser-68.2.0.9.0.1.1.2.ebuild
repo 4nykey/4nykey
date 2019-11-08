@@ -242,7 +242,12 @@ src_prepare() {
 	rm "${WORKDIR}"/firefox/2013_avoid_noinline_on_GCC_with_skcms.patch
 	rm "${WORKDIR}"/firefox/2015_fix_cssparser.patch
 	eapply "${WORKDIR}/firefox"
-	eapply "${FILESDIR}"/${PN}-{profiledir,lto,prefs_torlauncher}.patch
+	eapply "${FILESDIR}"/${PN}-{profiledir,lto}.patch
+	sed -e '/if (gTorPane.enabled/,/^  }$/d' \
+		-i browser/components/preferences/in-content/preferences.js
+	sed -e '/\<torpreferences\>/d' \
+		-i browser/components/{moz.build,preferences/in-content/preferences.xul}
+
 
 	# Allow user to apply any additional patches without modifing ebuild
 	eapply_user
