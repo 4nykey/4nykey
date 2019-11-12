@@ -9,10 +9,9 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/GNOME/${MY_PN}.git"
 	REQUIRED_USE="!binary"
 else
-	inherit vcs-snapshot
 	MY_PV="76c5a52"
-	MY_P="${MY_PN}-${PV%_p*}"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
+	MY_P="${MY_PN}-${MY_PV#v}"
 	SRC_URI="
 		!binary? (
 			mirror://githubcl/GNOME/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -22,6 +21,7 @@ else
 		)
 	"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${MY_P}"
 fi
 inherit fontmake meson
 REQUIRED_USE+="
@@ -39,11 +39,6 @@ DEPEND="
 	)
 "
 DOCS=( NEWS README.md )
-
-pkg_setup() {
-	use binary && S="${WORKDIR}/${MY_P}"
-	fontmake_pkg_setup
-}
 
 src_prepare() {
 	default
