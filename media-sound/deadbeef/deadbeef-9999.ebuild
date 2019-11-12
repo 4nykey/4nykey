@@ -1,26 +1,27 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-GNOME2_EAUTORECONF="yes"
-inherit gnome2 ltprune
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/DeaDBeeF-Player/${PN}.git"
 	EGIT_SUBMODULES=( )
 	SRC_URI=""
 else
-	inherit vcs-snapshot
-	MY_PV="d2fc9ef"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
+	MY_PV="${PV}"
+	if [[ -z ${PV%%*_p*} ]]; then
+		inherit vcs-snapshot
+		MY_PV="d2fc9ef"
+	fi
 	SRC_URI="
 		mirror://githubcl/DeaDBeeF-Player/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
-	KEYWORDS="~x86 ~amd64"
+	KEYWORDS="~amd64 ~x86"
 fi
+inherit autotools xdg
 
 DESCRIPTION="A music player for *nix-like systems and OSX"
 HOMEPAGE="https://github.com/DeaDBeeF-Player/${PN}"
@@ -69,6 +70,8 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
+"
+BDEPEND="
 	sys-devel/gettext
 	dev-util/intltool
 	oss? ( virtual/libc )
@@ -76,13 +79,13 @@ DEPEND="
 "
 
 src_prepare() {
+	default
 	local _t=/usr/share/timidity/freepats/timidity.cfg
 	sed \
 		-e "s,#define DEFAULT_TIMIDITY_CONFIG \",&${_t}:," \
 		-i plugins/wildmidi/wildmidiplug.c
-	mkdir -p plugins/gtkui/temp
 	eautopoint --force
-	gnome2_src_prepare
+	eautoreconf
 }
 
 src_configure() {
@@ -125,11 +128,11 @@ src_configure() {
 		$(use_enable opus)
 	)
 	use imlib && myconf+=( $(use_enable network artwork-network) )
-	gnome2_src_configure "${myconf[@]}"
+	econf "${myconf[@]}"
 }
 
 src_install() {
 	default
-	prune_libtool_files --modules
+	find "${ED}" -name '*.la' -delete
 	docompress -x /usr/share/doc/${PF}
 }
