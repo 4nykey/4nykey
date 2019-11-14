@@ -243,7 +243,7 @@ src_prepare() {
 	rm "${WORKDIR}"/firefox/2015_fix_cssparser.patch
 	eapply "${WORKDIR}/firefox"
 	eapply "${FILESDIR}"/${PN}-{profiledir,lto}.patch
-	sed -e '/register_module("paneTor"/d' \
+	sed -e '/if (gTorPane.enabled/,/^  }$/d' \
 		-i browser/components/preferences/in-content/preferences.js
 	sed -e '/\<torpreferences\>/d' \
 		-i browser/components/{moz.build,preferences/in-content/preferences.xul}
