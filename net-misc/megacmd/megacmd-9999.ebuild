@@ -27,7 +27,7 @@ SLOT="0"
 IUSE=""
 
 DEPEND="
-	>=net-misc/meganz-sdk-3.4.8:=[-megacmd(-),sodium(+),sqlite]
+	>=net-misc/meganz-sdk-3.6.5:=[-megacmd(-),sodium(+),sqlite]
 	dev-libs/libpcre:3[cxx]
 	sys-libs/readline:0
 "

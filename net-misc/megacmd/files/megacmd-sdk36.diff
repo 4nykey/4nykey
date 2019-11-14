@@ -146,6 +146,75 @@
      session = NULL;
  }
  
+@@ -1298,15 +1298,15 @@ void MegaCmdExecuter::createOrModifyBack
+ {
+     string locallocal;
+     fsAccessCMD->path2local(&local, &locallocal);
+-    FileAccess *fa = fsAccessCMD->newfileaccess();
++    auto fa = fsAccessCMD->newfileaccess();
+     if (!fa->isfolder(&locallocal))
+     {
+         setCurrentOutCode(MCMD_NOTFOUND);
+         LOG_err << "Local path must be an existing folder: " << local;
+-        delete fa;
++        fa.reset();
+         return;
+     }
+-    delete fa;
++    fa.reset();
+ 
+ 
+     int64_t period = -1;
+@@ -1620,15 +1620,15 @@ bool MegaCmdExecuter::TestCanWriteOnCont
+ 
+     string localcontainingFolder;
+     fsAccessCMD->path2local(&containingFolder, &localcontainingFolder);
+-    FileAccess *fa = fsAccessCMD->newfileaccess();
++    auto fa = fsAccessCMD->newfileaccess();
+     if (!fa->isfolder(&localcontainingFolder))
+     {
+-        delete fa;
++        fa.reset();
+         setCurrentOutCode(MCMD_INVALIDTYPE);
+         LOG_err << containingFolder << " is not a valid Download Folder";
+         return false;
+     }
+-    delete fa;
++    fa.reset();
+     if (!canWrite(containingFolder))
+     {
+         setCurrentOutCode(MCMD_NOTPERMITTED);
+@@ -2906,15 +2906,15 @@ void MegaCmdExecuter::uploadNode(string
+ 
+     string locallocal;
+     fsAccessCMD->path2local(&path, &locallocal);
+-    FileAccess *fa = fsAccessCMD->newfileaccess();
++    auto fa = fsAccessCMD->newfileaccess();
+     if (!fa->fopen(&locallocal, true, false))
+     {
+         setCurrentOutCode(MCMD_NOTFOUND);
+         LOG_err << "Unable to open local path: " << path;
+-        delete fa;
++        fa.reset();
+         return;
+     }
+-    delete fa;
++    fa.reset();
+ 
+     MegaCmdTransferListener *megaCmdTransferListener = NULL;
+     if (!background)
+@@ -3670,9 +3670,9 @@ bool MegaCmdExecuter::IsFolder(string pa
+ #endif
+     string localpath;
+     fsAccessCMD->path2local(&path, &localpath);
+-    FileAccess *fa = fsAccessCMD->newfileaccess();
++    auto fa = fsAccessCMD->newfileaccess();
+     bool destinyIsFolder = fa->isfolder(&localpath);
+-    delete fa;
++    fa.reset();
+     return destinyIsFolder;
+ }
+ 
 --- a/src/megacmdexecuter.h
 +++ b/src/megacmdexecuter.h
 @@ -33,12 +33,12 @@ private:
