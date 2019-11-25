@@ -31,7 +31,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.44[ufo,unicode,${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4[ufo(-),unicode(-),${PYTHON_USEDEP}]
 	dev-python/booleanOperations[${PYTHON_USEDEP}]
 	app-arch/brotli[python,${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
@@ -54,7 +54,6 @@ python_prepare_all() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
 	sed \
 		-e 's:\<wheel\>::' \
-		-e '/fonttools/s:, <4::' \
 		-i setup.cfg
 	distutils-r1_python_prepare_all
 }
