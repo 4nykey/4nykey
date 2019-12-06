@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/alexeiva/${PN^}Font.git"
 else
 	inherit vcs-snapshot
-	MY_PV="3437281"
+	MY_PV="6d8a4e1"
 	SRC_URI="
 		mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"

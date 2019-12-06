@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -16,7 +16,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI="https://osdn.net/dl/mplus-fonts/${MY_MP}.tar.xz"
 else
 	SRC_URI="
-		http://www.rs.tus.ac.jp/yyusa/${PN}/${PN}_generator-${PV}.sh
+		http://www.yusa.lab.uec.ac.jp/~yusa/${PN}/${PN}_generator-${PV}.sh
 		mirror://githubcl/MihailJP/${MY_IN%-*}/tar.gz/${MY_IN##*-}
 		-> ${MY_IN}.tar.gz
 		https://osdn.net/dl/mix-mplus-ipa/${MY_MI}.zip
@@ -27,7 +27,7 @@ inherit font-r1
 RESTRICT="primaryuri bindist"
 
 DESCRIPTION="A monotype font combining Inconsolata and Migu 1M"
-HOMEPAGE="http://www.rs.tus.ac.jp/yyusa/ricty.html"
+HOMEPAGE="http://www.yusa.lab.uec.ac.jp/~yusa/ricty.html"
 
 LICENSE="OFL-1.1 IPAfont"
 SLOT="0"
@@ -40,7 +40,7 @@ DEPEND="
 src_unpack() {
 	if [[ -z ${PV%%*9999} ]]; then
 		unpack ${MY_MP}.tar.xz
-		wget --no-verbose http://www.rs.tus.ac.jp/yyusa/${PN}/${PN}_generator.sh
+		wget --no-verbose http://www.yusa.lab.uec.ac.jp/~yusa/${PN}/${PN}_generator.sh
 		EGIT_CHECKOUT_DIR="${S}/${MY_IN}" git-r3_src_unpack
 		cvs_src_unpack
 	else
