@@ -42,8 +42,8 @@ IUSE="bindist clang cpu_flags_x86_avx2 dbus debug eme-free geckodriver
 RESTRICT="!bindist? ( bindist )"
 RESTRICT+=" primaryuri"
 
-MY_EFF="2019.6.27"
-MY_NOS="11.0.3"
+MY_EFF="2019.11.7"
+MY_NOS="11.0.9"
 MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
 MY_NOS="noscript-${MY_NOS}.xpi"
 PATCH_URIS=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c,whissi}/mozilla/patchsets/${PATCH}.tar.xz )
