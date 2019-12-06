@@ -3,23 +3,23 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python2_7 python3_{5,6,7} )
+PYTHON_COMPAT=( python3_{6,7} )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}.git"
 else
 	if [[ -z ${PV%%*_p*} ]]; then
-		inherit vcs-snapshot
 		MY_PV="b4f2232"
 	fi
-	MY_PV="v${PV}"
+	MY_PV="v${PV/_beta/b}"
 	SRC_URI="
-		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV/_beta/b}
+		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 
 DESCRIPTION="A library to provide a bridge from Glyphs source files to UFOs"
@@ -30,8 +30,8 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.40[${PYTHON_USEDEP}]
-	dev-python/defcon[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.0.2[${PYTHON_USEDEP}]
+	dev-python/ufoLib2[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
@@ -48,6 +48,7 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-masters_wcodes.diff
 	"${FILESDIR}"/${PN}-brackets.diff
 	"${FILESDIR}"/${PN}-setup.diff
+	"${FILESDIR}"/${PN}-custom_params.diff
 )
 
 pkg_setup() {

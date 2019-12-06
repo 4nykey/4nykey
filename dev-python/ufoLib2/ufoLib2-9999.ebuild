@@ -30,7 +30,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.39[ufo,${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.39[ufo(-),${PYTHON_USEDEP}]
 	>=dev-python/attrs-19.1[${PYTHON_USEDEP}]
 	dev-python/lxml[${PYTHON_USEDEP}]
 "
@@ -43,6 +43,12 @@ DEPEND="
 pkg_setup() {
 	[[ -n ${PV%%*9999} ]] && \
 		export SETUPTOOLS_SCM_PRETEND_VERSION="${PV/_p/.post}"
+}
+
+python_prepare_all() {
+	local PATCHES=( "${FILESDIR}"/${PN}-newGlyph.diff )
+	sed -e '/\<wheel\>/d' -i setup.cfg
+	distutils-r1_python_prepare_all
 }
 
 python_test() {

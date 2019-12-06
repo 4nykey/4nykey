@@ -11,11 +11,11 @@
 --- a/tests/builder/designspace_gen_test.py
 +++ b/tests/builder/designspace_gen_test.py
 @@ -227,7 +227,7 @@ def test_designspace_generation_on_disk(
- def test_designspace_generation_bracket_roundtrip(datadir):
+ def test_designspace_generation_bracket_roundtrip(datadir, ufo_module):
      with open(str(datadir.join("BracketTestFont.glyphs"))) as f:
          font = glyphsLib.load(f)
--    designspace = to_designspace(font)
-+    designspace = to_designspace(font,minimize_glyphs_diffs=True)
+-    designspace = to_designspace(font, ufo_module=ufo_module)
++    designspace = to_designspace(font, ufo_module=ufo_module, minimize_glyphs_diffs=True)
  
      assert designspace.rules[0].name == "BRACKET.300.600"
      assert designspace.rules[0].conditionSets == [
@@ -23,8 +23,8 @@
      layer_names = {l.name for l in font.glyphs["C"].layers}
      assert layer_names == {"Regular", "Bold", "Bold [600]"}
  
--    designspace = to_designspace(font)
-+    designspace = to_designspace(font,minimize_glyphs_diffs=True)
+-    designspace = to_designspace(font, ufo_module=ufo_module)
++    designspace = to_designspace(font, ufo_module=ufo_module, minimize_glyphs_diffs=True)
  
      for source in designspace.sources:
          assert "C.BRACKET.600" in source.font
@@ -32,8 +32,8 @@
      for layer in g.layers:
          assert layer.components[0].name == "A"
  
--    designspace = to_designspace(font)
-+    designspace = to_designspace(font,minimize_glyphs_diffs=True)
+-    designspace = to_designspace(font, ufo_module=ufo_module)
++    designspace = to_designspace(font, ufo_module=ufo_module, minimize_glyphs_diffs=True)
  
      for source in designspace.sources:
          ufo = source.font
@@ -41,8 +41,8 @@
  
      assert {"Regular ]600]", "Bold ]600]"}.intersection(l.name for l in g.layers)
  
--    designspace = to_designspace(font)
-+    designspace = to_designspace(font,minimize_glyphs_diffs=True)
+-    designspace = to_designspace(font, ufo_module=ufo_module)
++    designspace = to_designspace(font, ufo_module=ufo_module, minimize_glyphs_diffs=True)
  
      assert designspace.rules[1].name == "BRACKET.400.600"
      assert designspace.rules[1].conditionSets == [

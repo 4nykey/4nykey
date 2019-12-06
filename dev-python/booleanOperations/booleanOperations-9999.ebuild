@@ -1,7 +1,7 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 PYTHON_COMPAT=( python2_7 python3_{5,6,7} )
 inherit distutils-r1
@@ -9,7 +9,6 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/typemytype/${PN}.git"
 else
-	inherit vcs-snapshot
 	MY_PV="0a9cc5c"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
@@ -17,6 +16,7 @@ else
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
 
 DESCRIPTION="A library for boolean operations on paths"
@@ -27,7 +27,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.32[ufo,${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.32[ufo(-),${PYTHON_USEDEP}]
 	dev-python/pyclipper[${PYTHON_USEDEP}]
 "
 DEPEND="
@@ -39,13 +39,12 @@ DEPEND="
 "
 
 python_prepare_all() {
-	local _v="${PV%_p*}"
-	[[ -z ${PV%%*9999} ]] && _v="$(git describe --tags)"
-	sed \
-		-e '/setuptools_scm/d' \
-		-e "s:use_scm_version=True:version=\"${_v}\":" \
-		-i "${S}"/setup.py
+	sed -e '/\<wheel\>/d' -i setup.cfg
 	distutils-r1_python_prepare_all
+}
+
+pkg_setup() {
+	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
 }
 
 python_test() {

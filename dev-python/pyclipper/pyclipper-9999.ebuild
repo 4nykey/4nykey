@@ -1,7 +1,7 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 PYTHON_COMPAT=( python2_7 python3_{5,6,7} )
 inherit distutils-r1
@@ -10,11 +10,14 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/fonttools/${PN}.git"
 	REQUIRED_USE="cython"
 else
-	inherit vcs-snapshot
-	SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.zip"
+	MY_PV="${PV}"
+	[[ -z ${PV%%*_p*} ]] && MY_PV="${PV/_p/.post}"
+	SRC_URI="
+		mirror://githubcl/fonttools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
-	DEPEND="app-arch/unzip"
+	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
 
 DESCRIPTION="A Cython wrapper for the Clipper library"
@@ -40,8 +43,8 @@ python_prepare_all() {
 	else
 		rm -f dev
 	fi
-	sed -e '/setuptools_scm_git_archive/d' -i setup.py
 	distutils-r1_python_prepare_all
+	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${MY_PV}"
 }
 
 python_test() {

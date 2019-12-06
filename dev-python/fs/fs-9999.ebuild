@@ -26,7 +26,7 @@ fi
 DESCRIPTION="Filesystem abstraction layer"
 HOMEPAGE="https://www.pyfilesystem.org"
 
-LICENSE="BSD"
+LICENSE="MIT"
 SLOT="0"
 IUSE="test"
 
@@ -47,11 +47,13 @@ DEPEND="
 	test? (
 		dev-python/pytest[${PYTHON_USEDEP}]
 		dev-python/pyftpdlib[${PYTHON_USEDEP},test]
+		$(python_gen_cond_dep 'dev-python/mock[${PYTHON_USEDEP}]' \
+			python2_7)
 	)
 "
 
 python_test() {
-	pytest -v || die
+	esetup.py pytest
 }
 
 pkg_postinst() {

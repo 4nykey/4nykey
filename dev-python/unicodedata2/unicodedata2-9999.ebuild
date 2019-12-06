@@ -1,7 +1,7 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 PYTHON_COMPAT=( python2_7 python3_{5,6,7} )
 inherit distutils-r1
@@ -9,9 +9,11 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/mikekap/${PN}.git"
 else
-	inherit vcs-snapshot
-	MY_PV="45378d5"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV/_p/-}"
+	MY_PV="${PV/_p/-}"
+	if [[ -z ${PV%%*_p*} ]]; then
+		inherit vcs-snapshot
+		MY_PV="45378d5"
+	fi
 	SRC_URI="
 		mirror://githubcl/mikekap/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -31,6 +33,8 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
+"
+BDEPEND="
 	test? ( dev-python/pytest[${PYTHON_USEDEP}] )
 "
 

@@ -27,7 +27,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.38[ufo,${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.44[ufo(-),${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}

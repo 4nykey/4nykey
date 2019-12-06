@@ -30,7 +30,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.34[ufo,${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.34[ufo(-),${PYTHON_USEDEP}]
 	>=dev-python/attrs-18.2[${PYTHON_USEDEP}]
 	dev-python/lxml[${PYTHON_USEDEP}]
 	virtual/python-typing[${PYTHON_USEDEP}]

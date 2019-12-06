@@ -31,7 +31,7 @@ IUSE=""
 DEPEND="
 	dev-python/booleanOperations[${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-3.44[ufo,${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.44[ufo(-),${PYTHON_USEDEP}]
 	>=dev-python/pillow-6.2[${PYTHON_USEDEP}]
 	dev-python/pyclipper[${PYTHON_USEDEP}]
 	dev-python/freetype-py[${PYTHON_USEDEP}]

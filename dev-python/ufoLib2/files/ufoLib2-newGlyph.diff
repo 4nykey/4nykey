@@ -1,0 +1,12 @@
+--- a/src/ufoLib2/objects/layer.py
++++ b/src/ufoLib2/objects/layer.py
+@@ -117,7 +117,8 @@ class Layer:
+ 
+     def newGlyph(self, name):
+         if name in self._glyphs:
+-            raise KeyError("glyph %r already exists" % name)
++            import logging
++            logging.getLogger(__name__).warning("glyph %r already exists" % name)
+         self._glyphs[name] = glyph = Glyph(name)
+         return glyph
+ 

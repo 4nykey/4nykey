@@ -29,7 +29,7 @@ SLOT="0"
 IUSE="cython test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.32[ufo,${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.32[ufo(-),${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}

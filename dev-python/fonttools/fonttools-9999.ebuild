@@ -52,7 +52,10 @@ DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
-	test? ( dev-python/pytest[${PYTHON_USEDEP}] )
+	test? (
+		dev-python/pytest[${PYTHON_USEDEP}]
+		sci-libs/scipy[${PYTHON_USEDEP}]
+	)
 "
 
 python_test() {
