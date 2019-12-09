@@ -1,59 +1,69 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python3_{6,7} )
 
 inherit toolchain-funcs distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/JoeLametta/${PN}.git"
+	EGIT_REPO_URI="https://github.com/whipper-team/${PN}.git"
 else
-	inherit vcs-snapshot
-	MY_PV="158fab2"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
+	MY_PV="v${PV}"
+	if [[ -z ${PV%%*_p*} ]]; then
+		inherit vcs-snapshot
+		MY_PV="158fab2"
+	fi
 	SRC_URI="
-		mirror://githubcl/JoeLametta/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/whipper-team/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
 
-DESCRIPTION="A Python CD-DA ripper preferring accuracy over speed (forked from morituri)"
-HOMEPAGE="https://github.com/JoeLametta/${PN}"
+DESCRIPTION="A Python CD-DA ripper preferring accuracy over speed"
+HOMEPAGE="https://github.com/whipper-team/${PN}"
 
 LICENSE="GPL-3"
 SLOT="0"
-IUSE=""
+IUSE="test"
 
 RDEPEND="
-	media-sound/cdparanoia
+	|| (
+		dev-libs/libcdio-paranoia
+		media-sound/cdparanoia
+	)
+	app-eselect/eselect-cdparanoia
 	app-cdr/cdrdao
-	dev-python/pygobject[${PYTHON_USEDEP}]
+	dev-python/pygobject:3[${PYTHON_USEDEP}]
 	dev-python/python-musicbrainz-ngs[${PYTHON_USEDEP}]
 	media-libs/mutagen[${PYTHON_USEDEP}]
-	dev-python/cddb-py[${PYTHON_USEDEP}]
 	dev-python/pycdio[${PYTHON_USEDEP}]
+	dev-python/ruamel-yaml[${PYTHON_USEDEP}]
 	media-libs/libsndfile
 	media-sound/sox
 "
 DEPEND="
-	${PYTHON_DEPS}
-	dev-python/setuptools[${PYTHON_USEDEP}]
+	${RDEPEND}
+"
+BDEPEND="
+	test? ( dev-python/twisted[${PYTHON_USEDEP}] )
+	dev-python/setuptools_scm[${PYTHON_USEDEP}]
 "
 DOCS=( {CHANGELOG,README}.md HACKING TODO )
 
-python_prepare_all() {
-	sed -e '/FLAGS/s:=:+=:' -i src/config.mk
-	distutils-r1_python_prepare_all
+src_prepare() {
+	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
+	sed \
+		-e 's:cd-paranoia:cdparanoia:' \
+		-i whipper/program/cdparanoia.py
+	has network-sandbox ${FEATURES} && sed \
+		-e '/^class TestAccurateRipResponse(TestCase)/,/^# XXX: test arc.py/d' \
+		-i whipper/test/test_common_accurip.py
+	default
 }
 
-python_compile_all() {
-	emake -C src CC=$(tc-getCC)
-}
-
-python_install_all() {
-	distutils-r1_python_install_all
-	emake -C src DESTDIR="${D}" PREFIX="/usr" install
+python_test() {
+	esetup.py test
 }
