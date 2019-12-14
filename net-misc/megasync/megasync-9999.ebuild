@@ -49,6 +49,7 @@ BDEPEND="
 src_prepare() {
 	local PATCHES=(
 		"${FILESDIR}"/${PN}-qmake.diff
+		"${FILESDIR}"/fix-double-declaration-of-tgkill.patch
 	)
 	cp -r "${EROOT}"/usr/share/meganz-sdk/bindings "${S}"/src/MEGASync/mega/
 	cmake-utils_src_prepare
