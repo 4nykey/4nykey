@@ -1,0 +1,1 @@
+deadbeef-statusnotifier-plugin-9999.ebuild
