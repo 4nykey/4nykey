@@ -42,6 +42,7 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
+	dev-libs/breakpad
 "
 BDEPEND="
 	dev-qt/linguist-tools:5
@@ -54,6 +55,10 @@ src_prepare() {
 	cmake-utils_src_prepare
 	mv -f src/MEGAShellExtDolphin/CMakeLists{_kde5,}.txt
 	rm -f src/MEGAShellExtDolphin/megasync-plugin.moc
+	printf 'CONFIG += link_pkgconfig
+		PKGCONFIG += breakpad-client
+		DEFINES += __STDC_FORMAT_MACROS\n' > \
+		src/MEGASync/google_breakpad/google_breakpad.pri
 	sed \
 		-e "/USE_\(FFMPEG\|LIBRAW\|MEDIAINFO\)/s:+:-:" \
 		-i src/MEGASync/MEGASync.pro
