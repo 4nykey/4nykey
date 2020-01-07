@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	MY_PV="${PV}"
 	if [[ -z ${PV%%*_*} ]]; then
-		MY_PV="be1e5d3"
+		MY_PV="d4fce3f"
 		inherit vcs-snapshot
 	fi
 	SRC_URI="
@@ -30,15 +30,15 @@ IUSE="test"
 
 RDEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
-	>=dev-python/lxml-4.4.1[${PYTHON_USEDEP}]
+	>=dev-python/lxml-4.4.2[${PYTHON_USEDEP}]
 	dev-python/booleanOperations[${PYTHON_USEDEP}]
 	dev-python/cu2qu[${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
 	dev-python/fontMath[${PYTHON_USEDEP}]
 	dev-python/fontPens[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-4[ufo,unicode,${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.2.2[ufo,unicode,${PYTHON_USEDEP}]
 	dev-python/MutatorMath[${PYTHON_USEDEP}]
-	>=dev-util/psautohint-2.0.0_alpha1[${PYTHON_USEDEP}]
+	>=dev-util/psautohint-2[${PYTHON_USEDEP}]
 	dev-python/ufoProcessor[${PYTHON_USEDEP}]
 	dev-python/ufoNormalizer[${PYTHON_USEDEP}]
 "
@@ -50,7 +50,7 @@ BDEPEND="
 		dev-python/pytest[${PYTHON_USEDEP}]
 	)
 "
-DOCS=( {README,NEWS}.md html pdf )
+DOCS=( {README,NEWS}.md docs )
 
 python_prepare_all() {
 	local PATCHES=(
@@ -58,14 +58,14 @@ python_prepare_all() {
 		"${FILESDIR}"/${PN}-pdflib.diff
 	)
 	grep -rl '\$(AR) -' c | xargs sed -e 's:\(\$(AR) \)-:\1:' -i
-	sed -e 's:==:>=:' -i requirements.txt
+	sed \
+		-e 's:==:>=:' \
+		-e 's:,<=[0-9.]\+::' \
+		-i requirements.txt
 	sed -i setup.py \
 		-e 's:scripts=\(_get_scripts()\),:data_files=[("bin",\1)],:'
 
-	mkdir html pdf
-	mv -f docs/*.html html
-	mv -f docs/*.pdf pdf
-
+	rm -f docs/*.{yml,plist}
 	distutils-r1_python_prepare_all
 }
 
