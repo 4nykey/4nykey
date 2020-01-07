@@ -1,0 +1,109 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -10,6 +10,7 @@ cmake_policy(SET CMP0091 NEW)
+ 
+ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+ 
++find_package(PkgConfig REQUIRED)
+ include(cmake/variables.cmake)
+ include(cmake/version.cmake)
+ desktop_app_parse_version(Telegram/build/version)
+--- a/Telegram/CMakeLists.txt
++++ b/Telegram/CMakeLists.txt
+@@ -93,6 +93,8 @@ PRIVATE
+ if (NOT DESKTOP_APP_DISABLE_CRASH_REPORTS)
+     target_link_libraries(Telegram PRIVATE desktop-app::external_crash_reports)
+ endif()
++find_package(Threads REQUIRED)
++target_link_libraries(Telegram PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+ 
+ target_precompile_headers(Telegram PRIVATE ${src_loc}/stdafx.h)
+ nice_target_sources(Telegram ${src_loc}
+@@ -940,6 +942,7 @@ PRIVATE
+     settings.cpp
+     settings.h
+ )
++target_sources(Telegram PRIVATE ../debian/qt_functions.cpp)
+ 
+ nice_target_sources(Telegram ${res_loc}
+ PRIVATE
+@@ -1020,15 +1023,11 @@ elseif (LINUX)
+     if (NOT TDESKTOP_DISABLE_GTK_INTEGRATION)
+         find_package(PkgConfig REQUIRED)
+ 
+-        pkg_check_modules(GTK2 REQUIRED gtk+-2.0)
+-        target_include_directories(Telegram PRIVATE ${GTK2_INCLUDE_DIRS})
++        target_link_libraries(Telegram PRIVATE X11)
+         target_compile_options(Telegram PRIVATE -Wno-register)
+ 
+         set(appindicator_packages
+-            ayatana-appindicator3-0.1
+-            ayatana-appindicator-0.1
+             appindicator3-0.1
+-            appindicator-0.1
+         )
+         set(appindicator_found 0)
+         foreach (package ${appindicator_packages})
+--- a/Telegram/lib_lottie/CMakeLists.txt
++++ b/Telegram/lib_lottie/CMakeLists.txt
+@@ -14,8 +14,6 @@ nice_target_sources(lib_lottie ${src_loc}
+ PRIVATE
+     lottie/lottie_animation.cpp
+     lottie/lottie_animation.h
+-    lottie/lottie_cache.cpp
+-    lottie/lottie_cache.h
+     lottie/lottie_common.cpp
+     lottie/lottie_common.h
+     lottie/lottie_frame_renderer.cpp
+@@ -28,6 +26,10 @@ PRIVATE
+ )
+ 
+ if (DESKTOP_APP_LOTTIE_USE_CACHE)
++    list(APPEND lib_lottie_SOURCES
++        lottie/lottie_cache.cpp
++        lottie/lottie_cache.h
++    )
+     target_compile_definitions(lib_lottie PUBLIC LOTTIE_USE_CACHE)
+     target_link_libraries(lib_lottie
+     PUBLIC
+--- a/Telegram/lib_spellcheck/CMakeLists.txt
++++ b/Telegram/lib_spellcheck/CMakeLists.txt
+@@ -44,4 +44,5 @@ if (LINUX)
+ 
+     pkg_search_module(ENCHANT REQUIRED enchant-2 enchant)
+     target_include_directories(lib_spellcheck PRIVATE ${ENCHANT_INCLUDE_DIRS})
++    target_link_libraries(lib_spellcheck PRIVATE dl)
+ endif()
+--- a/Telegram/lib_ui/CMakeLists.txt
++++ b/Telegram/lib_ui/CMakeLists.txt
+@@ -192,6 +192,8 @@ target_include_directories(lib_ui
+ PUBLIC
+     ${src_loc}
+     ${src_loc}/emoji_suggestions
++    ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
++    ${Qt5Core_PRIVATE_INCLUDE_DIRS}
+ )
+ 
+ target_link_libraries(lib_ui
+--- a/cmake/external/ranges/CMakeLists.txt
++++ b/cmake/external/ranges/CMakeLists.txt
+@@ -9,7 +9,7 @@ add_library(desktop-app::external_ranges ALIAS external_ranges)
+ 
+ target_include_directories(external_ranges SYSTEM
+ INTERFACE
+-    ${libs_loc}/range-v3/include
++    /usr/include/range/v3
+ )
+ 
+ if (WIN32)
+--- a/cmake/target_link_static_libraries.cmake
++++ b/cmake/target_link_static_libraries.cmake
+@@ -16,7 +16,7 @@ function(target_link_static_libraries target_name)
+         if (${entry} STREQUAL "PRIVATE" OR ${entry} STREQUAL "PUBLIC" OR ${entry} STREQUAL "INTERFACE")
+             set(writing_now ${entry})
+         else()
+-            find_library(static_lib_${entry} lib${entry}.a)
++            find_library(static_lib_${entry} NAMES ${entry})
+             set(full_path "${static_lib_${entry}}")
+             if (${full_path} STREQUAL static_lib_${entry}-NOTFOUND)
+                 message(FATAL_ERROR "Could not find static library lib${entry}.a")

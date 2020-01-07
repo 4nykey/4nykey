@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -23,20 +23,20 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-MY_DEB="${PN}-patches-dc0956c"
+MY_DEB="${PN}-patches-793f2bd"
 SRC_URI+="
 	mirror://githubcl/4nykey/${MY_DEB%-*}/tar.gz/${MY_DEB##*-} -> ${MY_DEB}.tar.gz
 "
-CMAKE_USE_DIR="${S}/out/Release"
+#CMAKE_USE_DIR="${S}/out/Release"
 PYTHON_COMPAT=( python2_7 )
-inherit python-any-r1 toolchain-funcs flag-o-matic desktop xdg cmake-utils
+inherit toolchain-funcs flag-o-matic desktop xdg cmake-utils
 
 DESCRIPTION="Telegram Desktop messaging app"
 HOMEPAGE="https://desktop.telegram.org"
 
 LICENSE="GPL-3"
 SLOT="0"
-IUSE="crashreporter gtk +packed-resources test"
+IUSE="-crashreporter gtk spell test"
 
 RDEPEND="
 	dev-qt/qtmultimedia:5
@@ -56,41 +56,29 @@ RDEPEND="
 	media-libs/libexif
 	x11-libs/libva[X]
 	gtk? (
-		x11-libs/gtk+:3
+		x11-libs/gtk+:3[X]
 		dev-libs/libappindicator:3
 	)
-	>=media-libs/libtgvoip-2.4.4_p20190715-r1
+	>=media-libs/libtgvoip-2.4.4_p20191205
 	media-libs/rlottie
 	x11-libs/libxkbcommon
-	crashreporter? ( dev-libs/breakpad )
+	spell? ( app-text/enchant:0 )
 "
 DEPEND="
 	${RDEPEND}
 	dev-cpp/range-v3
+	crashreporter? ( dev-libs/breakpad )
 "
 RDEPEND="
 	${RDEPEND}
 	media-fonts/open-sans
 "
 BDEPEND="
-	dev-util/gyp
 	virtual/pkgconfig
 "
 
-pkg_pretend() {
-	[[ -n ${TELEGRAM_API_ID} ]] && [[ -n ${TELEGRAM_API_HASH} ]] && return
-	ewarn "
-A sample API ID included with the code is limited on the server side.
-You can get your own key and provide it via TELEGRAM_API_ID and
-TELEGRAM_API_HASH environment variables.
-See https://core.telegram.org/api/obtaining_api_id
-"
-}
-
 pkg_setup() {
 	EGIT_SUBMODULES+=( $(usex test '' '-Telegram/ThirdParty/Catch') )
-	python-any-r1_pkg_setup
-	use packed-resources && append-cppflags -DTDESKTOP_USE_PACKED_RESOURCES
 }
 
 src_prepare() {
@@ -98,130 +86,78 @@ src_prepare() {
 	mv ${MY_DEB}/debian .
 	rm -rf Telegram/ThirdParty/{libtgvoip,lz4,minizip,rlottie}
 
-	local _patches=(
+	local PATCHES=(
 		debian/patches
-		"${FILESDIR}"/${PN}-gyp.diff
-		"${FILESDIR}"/${PN}-pch.diff
+		"${FILESDIR}"/${PN}-cmake.diff
 		"${FILESDIR}"/${PN}-breakpad.diff
+		"${FILESDIR}"/${PN}-fonts.diff
+		"${FILESDIR}"/${PN}-qt.diff
 	)
-	eapply "${_patches[@]}"
-
-	local _p="$(tc-getPKG_CONFIG)" _q=$(best_version dev-qt/qtgui:5) \
-	_l=(
-		icu-i18n
-		libavcodec
-		libavformat
-		libavutil
-		libcrypto
-		libexif
-		liblz4
-		liblzma
-		libssl
-		libswresample
-		libswscale
-		libtgvoip
-		libva-x11
-		minizip
-		openal
-		opus
-		rlottie
-		xkbcommon
-		$(usex gtk 'appindicator3-0.1' '')
-		$(usex crashreporter 'breakpad-client' '')
-	)
-	local _f=(
-		$(${_p} --cflags ${_l[@]})
-		-I"${EPREFIX}"/usr/include/range/v3
-	)
-	local _d=(
-		TDESKTOP_DISABLE_UNITY_INTEGRATION
-		$(usex crashreporter '' 'TDESKTOP_DISABLE_CRASH_REPORTS')
-		TDESKTOP_DISABLE_AUTOUPDATE
-		$(usex gtk '' 'TDESKTOP_DISABLE_GTK_INTEGRATION')
-	)
-	_d=$(printf ',%s' "${_d[@]}")
-	_q=${_q#dev-qt/qtgui-}
-	local mygypargs=(
-		--format=cmake
-		--depth=Telegram/gyp
-		--generator-output=../..
-		-Gconfig=${CMAKE_USE_DIR##*/}
-		-Dspecial_build_target=
-		-Dapi_id=${TELEGRAM_API_ID:-17349}
-		-Dapi_hash=${TELEGRAM_API_HASH:-344583e45741c457fe1862106095a5eb}
-		-Duse_packed_resources=$(usex packed-resources 1 0)
-		-Dnot_need_gtk="True"
-		-Dmy_cflags="${_f[*]}"
-		-Dqt_version=${_q%[-_]*}
-		-Dlinux_path_qt="${EPREFIX}/usr/$(get_libdir)/qt5"
-		-Dlinux_path_opus_include="${EPREFIX}/usr/include/opus"
-		-Dminizip_loc="${EPREFIX}/usr/include/minizip"
-		-Dbuild_defines="${_d:1}"
-		-Dqt_bindir="${EPREFIX}/usr/$(get_libdir)/qt5/bin"
-		-Dlinux_path_breakpad="${EPREFIX}/usr"
-	)
-
-	cd "${S}"/Telegram/gyp
-
-	use test || sed -e '/\<tests\>/d' -i Telegram.gyp
-	sed \
-		-e "s%target_name': 'tests_storage',%& 'libraries': ['crypto',],%" \
-		-i tests/tests.gyp
-
-	grep -rl 'libs_loc)/' | xargs sed -e '/<(libs_loc)\//d' -i
-	sed -e '/qt_static_plugins/d' -i telegram/sources.txt
-	sed \
-		-e '/utils.gyp:\(Updater\|Packer\)/d' \
-		-e '/libtgvoip.gyp/d' \
-		-e '/\<\(AL_LIBTYPE_STATIC\|minizip_loc\)\>/d' \
-		-i Telegram.gyp
-	sed \
-		-e '/\<\(qwebp\|Qt5PlatformSupport\|qtharfbuzz\|qtlibpng\|qtpcre2\)\>/d' \
-		-e '/\<\(qconnmanbearer\|qgenericbearer\|qnmbearer\|xcb-static\)\>/d' \
-		-e '/-\<l[a-z]\+platforminputcontextplugin\>/d' \
-		-e '/<(linux_lib_/d' \
-		-e '/linux_glibc_wraps/d' \
-		-e "s:<!@(python -c .*\(<@(qt_libs)\).*:\1',:" \
-		-e '/\<qt_loc\>/s:\(/include\):/../..\1/qt5:' \
-		-e "/linux_path_xkbcommon/d" \
-		-e '/-static-libstdc++/d' \
-		-i helpers/modules/qt.gypi
-	sed \
-		-e '/-\<Werror\>/d' \
-		-e "/'QT_STATICPLUGIN',/d" \
-		-i helpers/common/linux.gypi
-	_l=( ${_l[@]/%/\',} )
-	_l="${_l[@]/#/\'}"
-	sed \
-		-e "s%'pkgconfig_libs': \[%& ${_l}%" \
-		-e "/\<\(include\|library\)_dirs\>': \[/,/\]\,/d" \
-		-e '/-\(Ofast\|flto\|Wl,-\)/d' \
-		-i telegram/linux.gypi
-	sed -ze \
-		"s%\('libraries': \[\).*\n#\([ ]\+'<!(\)pkg-config\( .*pkgconfig_libs))',\)%\1\
-		\n\2${_p}\3%" \
-		-i telegram/linux.gypi
-
-	cd "${S}"
-	sed -e '/lib_\(rlottie\|lz4\)/d' -i Telegram/lib_lottie/lib_lottie.gyp
-	use crashreporter || sed \
-		-e '/crash_report_/d' -i Telegram/lib_base/gyp/sources.txt
-
-	set -- gyp "${mygypargs[@]}" Telegram/gyp/Telegram.gyp
-	einfo "${@}"
-	"${@}" || die "gyp failed"
+	[[ -e "${FILESDIR}"/${P}.diff ]] && PATCHES+=( "${FILESDIR}"/${P}.diff )
 
 	cmake-utils_src_prepare
 
-	cat debian/CMakeLists.inj >> ${CMAKE_USE_DIR}/CMakeLists.txt
+	grep -rl 'usr/local' --include=CMakeLists.txt | xargs \
+		sed -e 's:/usr/local:/usr:' -i
+	sed \
+		-e '/qt_static_plugins\.cpp/d' \
+		-e 's:third_party_loc}/minizip:Qt5Core_INCLUDE_DIRS}:' \
+		-i Telegram/CMakeLists.txt
+	sed \
+		-e 's:\<Debug\>:Gentoo:' \
+		-e 's:-Werror::' \
+		-i cmake/options_linux.cmake
+	sed \
+		-e '/LINK_SEARCH_START_STATIC/s:1:0:' \
+		-i cmake/init_target.cmake
+
+	unbundle() {
+		printf '
+		pkg_check_modules(%s REQUIRED IMPORTED_TARGET GLOBAL %s)
+		add_library(%s::%s ALIAS PkgConfig::%s)
+		' "${1}" "${2}" "${3}" "${1}" "${1}"
+	}
+
+	unbundle lib_tgvoip libtgvoip tdesktop \
+		> Telegram/cmake/lib_tgvoip.cmake
+	unbundle external_crash_reports breakpad-client desktop-app \
+		> cmake/external/crash_reports/CMakeLists.txt
+	unbundle external_ffmpeg \
+		"libavformat libavcodec libswresample libswscale libavutil" \
+		desktop-app > cmake/external/ffmpeg/CMakeLists.txt
+	unbundle external_lz4 liblz4 desktop-app \
+		> cmake/external/lz4/CMakeLists.txt
+	unbundle external_openssl libcrypto desktop-app i\
+		> cmake/external/openssl/CMakeLists.txt
+	unbundle external_opus opus desktop-app \
+		> cmake/external/opus/CMakeLists.txt
+	unbundle external_qt "Qt5Network Qt5Gui Qt5Widgets Qt5DBus" \
+		desktop-app > cmake/external/qt/CMakeLists.txt
+	unbundle external_rlottie rlottie desktop-app \
+		> cmake/external/rlottie/CMakeLists.txt
+	unbundle external_zlib "zlib minizip" desktop-app \
+		> cmake/external/zlib/CMakeLists.txt
+}
+
+src_configure() {
+	local mycmakeargs=(
+		-DDESKTOP_APP_USE_PACKAGED=yes
+		-DDESKTOP_APP_LOTTIE_USE_CACHE=no
+		-DDESKTOP_APP_DISABLE_CRASH_REPORTS=$(usex !crashreporter)
+		-DDESKTOP_APP_DISABLE_SPELLCHECK=$(usex !spell)
+		-DTDESKTOP_DISABLE_GTK_INTEGRATION=$(usex !gtk)
+		-DTDESKTOP_FORCE_GTK_FILE_DIALOG=$(usex gtk)
+		-DTDESKTOP_DISABLE_DESKTOP_FILE_GENERATION=yes
+	)
+	if [[ -z ${TELEGRAM_API_ID} ]] || [[ -z ${TELEGRAM_API_HASH} ]]; then
+		mycmakeargs+=( -DTDESKTOP_API_TEST=yes )
+	fi
+
+	cmake-utils_src_configure
 }
 
 src_install() {
-	newbin "${BUILD_DIR}"/Telegram ${PN}
-	if use packed-resources; then
-		insinto /usr/share/TelegramDesktop
-		doins "${BUILD_DIR}"/tresources.rcc
-	fi
+	newbin "${BUILD_DIR}"/bin/Telegram ${PN}
 	newmenu lib/xdg/telegramdesktop.desktop ${PN}.desktop
 	local _s
 	for _s in 16 32 48 64 128 256 512; do

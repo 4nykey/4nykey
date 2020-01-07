@@ -6,6 +6,5 @@
 	</maintainer>
 	<use>
 		<flag name="crashreporter">Enable crash reporter</flag>
-		<flag name="packed-resources">Use packed resources</flag>
 	</use>
 </pkgmetadata>

@@ -1,0 +1,10 @@
+--- a/Telegram/SourceFiles/platform/linux/notifications_manager_linux.cpp
++++ b/Telegram/SourceFiles/platform/linux/notifications_manager_linux.cpp
+@@ -12,6 +12,7 @@ https://github.com/telegramdesktop/tdesk
+ #include "facades.h"
+ 
+ #include <QtCore/QBuffer>
++#include <QtCore/QVersionNumber>
+ #include <QtDBus/QDBusConnection>
+ #include <QtDBus/QDBusReply>
+ #include <QtDBus/QDBusMetaType>
