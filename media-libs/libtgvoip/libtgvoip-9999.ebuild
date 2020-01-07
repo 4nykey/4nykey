@@ -1,7 +1,7 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit autotools
 if [[ -z ${PV%%*9999} ]]; then
@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 else
 	inherit vcs-snapshot
-	MY_PV="d4a0f71"
+	MY_PV="303dcac"
 	SRC_URI="
 		mirror://githubcl/telegramdesktop/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -62,4 +62,5 @@ src_install() {
 	default
 	insinto /usr/$(get_libdir)/pkgconfig
 	doins ${PN}.pc
+	find "${ED}" -name '*.la' -delete
 }
