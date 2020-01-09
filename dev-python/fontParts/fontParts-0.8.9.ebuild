@@ -12,7 +12,7 @@ else
 	MY_PV="v${PV}"
 	if [[ -z ${PV%%*_p*} ]]; then
 		inherit vcs-snapshot
-		MY_PV="101eb70"
+		MY_PV="9f6ff05"
 	fi
 	SRC_URI="
 		mirror://githubcl/robotools/${PN}/tar.gz/${MY_PV}
@@ -22,25 +22,26 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 
-DESCRIPTION="A collection of classes implementing the pen protocol for manipulating glyphs"
+DESCRIPTION="An API for interacting with the parts of fonts"
 HOMEPAGE="https://github.com/robotools/${PN}"
 
-LICENSE="BSD"
+LICENSE="MIT"
 SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.32[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-3.43.2[ufo(-),unicode(-),${PYTHON_USEDEP}]
+	dev-python/fontMath[${PYTHON_USEDEP}]
+	dev-python/defcon[${PYTHON_USEDEP}]
+	dev-python/booleanOperations[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
-	test? (
-		dev-python/pytest[${PYTHON_USEDEP}]
-		dev-python/fontParts[${PYTHON_USEDEP}]
-	)
+	test? ( dev-python/fontPens[${PYTHON_USEDEP}] )
 "
 
 python_test() {
-	esetup.py pytest
+	"${EPYTHON}" Lib/fontParts/fontshell/test.py || die \
+		"Tests failed with ${EPYTHON}"
 }
