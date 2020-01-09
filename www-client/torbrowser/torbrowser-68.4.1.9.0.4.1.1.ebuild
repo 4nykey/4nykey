@@ -35,11 +35,16 @@ SLOT="0"
 LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
 LICENSE+=" BSD CC-BY-3.0"
 IUSE="bindist clang cpu_flags_x86_avx2 dbus debug eme-free geckodriver
-	+gmp-autoupdate hardened hwaccel jack lto neon pgo pulseaudio
-	+screenshot selinux startup-notification +system-av1
+	+gmp-autoupdate hardened hwaccel jack lto cpu_flags_arm_neon
+	pgo pulseaudio +screenshot selinux startup-notification +system-av1
 	+system-harfbuzz +system-icu +system-jpeg +system-libevent
 	+system-sqlite +system-libvpx +system-webp test wayland wifi"
-RESTRICT="!bindist? ( bindist )"
+
+REQUIRED_USE="pgo? ( lto )
+	wifi? ( dbus )"
+
+RESTRICT="!bindist? ( bindist )
+	!test? ( test )"
 RESTRICT+=" primaryuri"
 
 MY_EFF="2019.11.7"
@@ -55,7 +60,7 @@ SRC_URI="
 "
 
 CDEPEND="
-	>=dev-libs/nss-3.44.1
+	>=dev-libs/nss-3.44.3
 	>=dev-libs/nspr-4.21
 	dev-libs/atk
 	dev-libs/expat
@@ -154,7 +159,6 @@ DEPEND="${CDEPEND}
 		)
 	)
 	pulseaudio? ( media-sound/pulseaudio )
-	>=virtual/cargo-1.34.0
 	>=virtual/rust-1.34.0
 	wayland? ( >=x11-libs/gtk+-3.11:3[wayland] )
 	amd64? ( >=dev-lang/yasm-1.1 virtual/opengl )
@@ -167,8 +171,6 @@ RDEPEND="
 	${RDEPEND}
 	net-vpn/tor
 "
-REQUIRED_USE="wifi? ( dbus )
-	pgo? ( lto )"
 
 S="${WORKDIR}/${MY_P}"
 
@@ -178,35 +180,35 @@ BUILD_OBJ_DIR="${WORKDIR}/tb"
 
 llvm_check_deps() {
 	if ! has_version --host-root "sys-devel/clang:${LLVM_SLOT}" ; then
-		ewarn "sys-devel/clang:${LLVM_SLOT} is missing! Cannot use LLVM slot ${LLVM_SLOT} ..."
+		ewarn "sys-devel/clang:${LLVM_SLOT} is missing! Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
 		return 1
-	fi
-
-	if use pgo ; then
-		if ! has usersandbox $FEATURES ; then
-			eerror "You must enable usersandbox as X server can not run as root!"
-		fi
 	fi
 
 	if use clang ; then
 		if ! has_version --host-root "=sys-devel/lld-${LLVM_SLOT}*" ; then
-			ewarn "=sys-devel/lld-${LLVM_SLOT}* is missing! Cannot use LLVM slot ${LLVM_SLOT} ..."
+			ewarn "=sys-devel/lld-${LLVM_SLOT}* is missing! Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
 			return 1
 		fi
 
 		if use pgo ; then
 			if ! has_version --host-root "=sys-libs/compiler-rt-sanitizers-${LLVM_SLOT}*" ; then
-				ewarn "=sys-libs/compiler-rt-sanitizers-${LLVM_SLOT}* is missing! Cannot use LLVM slot ${LLVM_SLOT} ..."
+				ewarn "=sys-libs/compiler-rt-sanitizers-${LLVM_SLOT}* is missing! Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
 				return 1
 			fi
 		fi
 	fi
 
-	einfo "Will use LLVM slot ${LLVM_SLOT}!"
+	einfo "Will use LLVM slot ${LLVM_SLOT}!" >&2
 }
 
 pkg_setup() {
 	moz_pkgsetup
+
+	if use pgo ; then
+		if ! has usersandbox $FEATURES ; then
+			die "You must enable usersandbox as X server can not run as root!"
+		fi
+	fi
 
 	# Avoid PGO profiling problems due to enviroment leakage
 	# These should *always* be cleaned up anyway
@@ -247,7 +249,6 @@ src_prepare() {
 		-i browser/components/preferences/in-content/preferences.js
 	sed -e '/\<torpreferences\>/d' \
 		-i browser/components/{moz.build,preferences/in-content/preferences.xul}
-
 
 	# Allow user to apply any additional patches without modifing ebuild
 	eapply_user
@@ -413,7 +414,7 @@ src_configure() {
 	fi
 
 	# Add full relro support for hardened
-	if use hardened; then
+	if use hardened ; then
 		append-ldflags "-Wl,-z,relro,-z,now"
 		mozconfig_use_enable hardened hardening
 	fi

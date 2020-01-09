@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="6"
@@ -247,7 +247,6 @@ src_prepare() {
 		-i browser/components/preferences/in-content/preferences.js
 	sed -e '/\<torpreferences\>/d' \
 		-i browser/components/{moz.build,preferences/in-content/preferences.xul}
-
 
 	# Allow user to apply any additional patches without modifing ebuild
 	eapply_user
