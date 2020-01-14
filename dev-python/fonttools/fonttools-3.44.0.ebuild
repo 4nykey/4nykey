@@ -1,9 +1,9 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python2_7 python3_{5,6,7} )
+PYTHON_COMPAT=( python2_7 python3_{6,7} )
 PYTHON_REQ_USE="xml(+)"
 
 inherit eutils distutils-r1
@@ -46,7 +46,7 @@ RDEPEND="
 	unicode? (
 		$(python_gen_cond_dep \
 		'dev-python/unicodedata2[${PYTHON_USEDEP}]' \
-		python2_7 python3_5 python3_6 python3_7)
+		python2_7 python3_6 python3_7)
 	)
 	qt5? ( dev-python/PyQt5[${PYTHON_USEDEP}] )
 	gtk? ( dev-python/pygobject:3[${PYTHON_USEDEP}] )
