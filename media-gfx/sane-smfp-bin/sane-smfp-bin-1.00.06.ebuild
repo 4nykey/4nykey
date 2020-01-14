@@ -1,1 +1,0 @@
-sane-smfp-bin-4.01.17.ebuild
