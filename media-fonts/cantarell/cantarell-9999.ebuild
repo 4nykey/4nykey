@@ -1,32 +1,23 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
 MY_PN="${PN}-fonts"
+MY_FONT_TYPES=( otf )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/GNOME/${MY_PN}.git"
 	REQUIRED_USE="!binary"
 else
-	MY_PV="76c5a52"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
-	MY_P="${MY_PN}-${MY_PV#v}"
+	MY_P="${MY_PN}-${PV}"
 	SRC_URI="
-		!binary? (
-			mirror://githubcl/GNOME/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
-		)
-		binary? (
-			mirror://gnome/sources/${MY_PN}/$(ver_cut 1-2)/${MY_P}.tar.xz
-		)
+		mirror://gnome/sources/${MY_PN}/${PV}/${MY_P}.tar.xz
 	"
 	KEYWORDS="~amd64 ~x86"
 	S="${WORKDIR}/${MY_P}"
 fi
 inherit fontmake meson
-REQUIRED_USE+="
-	binary? ( !font_types_ttf )
-"
 
 DESCRIPTION="Default fontset for GNOME Shell"
 HOMEPAGE="https://wiki.gnome.org/Projects/CantarellFonts"
@@ -44,6 +35,7 @@ src_prepare() {
 	default
 	use autohint || sed \
 		-e "/find_program/s:'psautohint':'true':" -i meson.build
+	sed -e '/^$/,/^)/d' -i src/meson.build
 }
 
 src_configure() {
