@@ -1,9 +1,9 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python{2_7,3_{5,6,7}} )
+PYTHON_COMPAT=( python{2_7,3_{6,7}} )
 MY_FONT_VARIANTS="loose halfloose halftight tight xtrasmall small large xtralarge"
 MY_FONT_CHARS="empty_dollar dotted_zero base_one zstyle_l no_contextual_alternates"
 if [[ ${PV} == *9999* ]]; then
