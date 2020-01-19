@@ -102,6 +102,7 @@ src_prepare() {
 	sed \
 		-e '/qt_static_plugins\.cpp/d' \
 		-e 's:third_party_loc}/minizip:Qt5Core_INCLUDE_DIRS}:' \
+		-e 's:set(output_name "Telegram"):set(output_name "Telegram.bin"):' \
 		-i Telegram/CMakeLists.txt
 	sed \
 		-e 's:\<Debug\>:Gentoo:' \
@@ -120,8 +121,14 @@ src_prepare() {
 
 	unbundle lib_tgvoip libtgvoip tdesktop \
 		> Telegram/cmake/lib_tgvoip.cmake
-	unbundle external_crash_reports breakpad-client desktop-app \
-		> cmake/external/crash_reports/CMakeLists.txt
+	if use crashreporter ; then
+		unbundle external_crash_reports breakpad-client desktop-app \
+			> cmake/external/crash_reports/CMakeLists.txt
+	else
+		echo 'add_library(dummy_ecr INTERFACE)
+			add_library(desktop-app::external_crash_reports ALIAS dummy_ecr)' \
+			> cmake/external/crash_reports/CMakeLists.txt
+	fi
 	unbundle external_ffmpeg \
 		"libavformat libavcodec libswresample libswscale libavutil" \
 		desktop-app > cmake/external/ffmpeg/CMakeLists.txt
@@ -157,11 +164,11 @@ src_configure() {
 }
 
 src_install() {
-	newbin "${BUILD_DIR}"/bin/Telegram ${PN}
-	newmenu lib/xdg/telegramdesktop.desktop ${PN}.desktop
+	newbin "${BUILD_DIR}"/Telegram.bin ${PN}
+	newmenu "${S%/}"/lib/xdg/telegramdesktop.desktop ${PN}.desktop
 	local _s
 	for _s in 16 32 48 64 128 256 512; do
-		newicon --size "${_s}" Telegram/Resources/art/icon${_s}.png \
+		newicon --size "${_s}" "${S%/}"/Telegram/Resources/art/icon${_s}.png \
 			telegram.png
 	done
 	einstalldocs
