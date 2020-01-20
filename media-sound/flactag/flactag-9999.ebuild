@@ -1,14 +1,16 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit autotools
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adhawkins/${PN}.git"
 else
-	SRC_URI="mirror://githubcl/adhawkins/${PN}/tar.gz/${PV} -> ${P}.tar.gz"
+	inherit vcs-snapshot
+	MY_PV="dcf73ee"
+	SRC_URI="mirror://githubcl/adhawkins/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
@@ -20,28 +22,27 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="+scripts gcrypt"
 
-RDEPEND="
+DEPEND="
 	media-libs/musicbrainz:5
 	media-libs/libdiscid
 	media-libs/flac[cxx]
 	sys-libs/slang
 	net-libs/neon
 	app-text/unac
-	virtual/jpeg:62
+	virtual/jpeg
 	gcrypt? ( dev-libs/libgcrypt:0 )
 "
-DEPEND="
-	${RDEPEND}
-	app-text/xmlto
-	app-text/asciidoc
-"
 RDEPEND="
-	${RDEPEND}
+	${DEPEND}
 	scripts? (
 		app-cdr/cdrdao
 		app-cdr/cuetools
 		|| ( dev-libs/libcdio-paranoia media-sound/cdparanoia )
 	)
+"
+BDEPEND="
+	app-text/xmlto
+	app-text/asciidoc
 "
 
 src_prepare() {
