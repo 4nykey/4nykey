@@ -1,3 +1,23 @@
+--- a/cmake/external/crash_reports/CMakeLists.txt
++++ b/cmake/external/crash_reports/CMakeLists.txt
+@@ -8,6 +8,12 @@ add_library(external_crash_reports INTER
+ add_library(desktop-app::external_crash_reports ALIAS external_crash_reports)
+ 
+ if (NOT DESKTOP_APP_DISABLE_CRASH_REPORTS)
++if (DESKTOP_APP_USE_PACKAGED)
++    find_package(PkgConfig REQUIRED)
++    pkg_check_modules(BREAKPAD REQUIRED breakpad-client)
++    target_include_directories(external_crash_reports INTERFACE ${BREAKPAD_INCLUDE_DIRS})
++    target_link_libraries(external_crash_reports INTERFACE ${BREAKPAD_LIBRARIES})
++else()
+     if (WIN32 OR LINUX OR build_macstore)
+         add_subdirectory(breakpad)
+         target_link_libraries(external_crash_reports
+@@ -22,3 +28,4 @@ if (NOT DESKTOP_APP_DISABLE_CRASH_REPORT
+         )
+     endif()
+ endif()
++endif()
 --- a/Telegram/SourceFiles/stdafx.h
 +++ b/Telegram/SourceFiles/stdafx.h
 @@ -83,7 +83,7 @@ https://github.com/telegramdesktop/tdesk
@@ -9,79 +29,3 @@
  #define __STDC_FORMAT_MACROS
  #endif // Q_OS_MAC
  
---- a/Telegram/SourceFiles/core/crash_reports.cpp
-+++ b/Telegram/SourceFiles/core/crash_reports.cpp
-@@ -39,7 +39,7 @@ https://github.com/telegramdesktop/tdesk
- #include "client/crashpad_client.h"
- #endif // else for MAC_USE_BREAKPAD
- 
--#elif defined Q_OS_LINUX64 || defined Q_OS_LINUX32 // Q_OS_MAC
-+#elif defined Q_OS_LINUX // Q_OS_MAC
- 
- #include <execinfo.h>
- #include <signal.h>
-@@ -140,7 +140,7 @@ QMutex ReportingMutex;
- const char *BreakpadDumpPath = nullptr;
- const wchar_t *BreakpadDumpPathW = nullptr;
- 
--#if defined Q_OS_MAC || defined Q_OS_LINUX32 || defined Q_OS_LINUX64
-+#if defined Q_OS_MAC || defined Q_OS_LINUX
- struct sigaction SIG_def[32];
- 
- void SignalHandler(int signum, siginfo_t *info, void *ucontext) {
-@@ -294,7 +294,7 @@ google_breakpad::ExceptionHandler* Break
- bool DumpCallback(const wchar_t* _dump_dir, const wchar_t* _minidump_id, void* context, EXCEPTION_POINTERS* exinfo, MDRawAssertionInfo* assertion, bool success)
- #elif defined Q_OS_MAC // Q_OS_WIN
- bool DumpCallback(const char* _dump_dir, const char* _minidump_id, void *context, bool success)
--#elif defined Q_OS_LINUX64 || defined Q_OS_LINUX32 // Q_OS_MAC
-+#elif defined Q_OS_LINUX // Q_OS_MAC
- bool DumpCallback(const google_breakpad::MinidumpDescriptor &md, void *context, bool success)
- #endif // Q_OS_LINUX64 || Q_OS_LINUX32
- {
-@@ -391,7 +391,7 @@ void StartCatching(not_null<Core::Launch
- 		crashpad_client.UseHandler();
- 	}
- #endif // else for MAC_USE_BREAKPAD
--#elif defined Q_OS_LINUX64 || defined Q_OS_LINUX32
-+#elif defined Q_OS_LINUX
- 	BreakpadExceptionHandler = new google_breakpad::ExceptionHandler(
- 		google_breakpad::MinidumpDescriptor(QFile::encodeName(dumpspath).toStdString()),
- 		/*FilterCallback*/ 0,
---- a/Telegram/lib_base/base/crash_report_writer.cpp
-+++ b/Telegram/lib_base/base/crash_report_writer.cpp
-@@ -51,7 +51,7 @@
- #include "client/crashpad_client.h"
- #endif // USE_BREAKPAD
- 
--#elif defined Q_OS_LINUX64 || defined Q_OS_LINUX32 // Q_OS_MAC
-+#elif defined Q_OS_LINUX // Q_OS_MAC
- 
- #include <execinfo.h>
- #include <signal.h>
-@@ -141,7 +141,7 @@ void InstallQtMessageHandler() {
- 	});
- }
- 
--#if defined Q_OS_MAC || defined Q_OS_LINUX32 || defined Q_OS_LINUX64
-+#if defined Q_OS_MAC || defined Q_OS_LINUX
- struct sigaction SIG_def[32];
- 
- void SignalHandler(int signum, siginfo_t *info, void *ucontext) {
-@@ -253,7 +253,7 @@ google_breakpad::ExceptionHandler* Break
- bool DumpCallback(const wchar_t* _dump_dir, const wchar_t* _minidump_id, void* context, EXCEPTION_POINTERS* exinfo, MDRawAssertionInfo* assertion, bool success)
- #elif defined Q_OS_MAC // Q_OS_WIN
- bool DumpCallback(const char* _dump_dir, const char* _minidump_id, void *context, bool success)
--#elif defined Q_OS_LINUX64 || defined Q_OS_LINUX32 // Q_OS_MAC
-+#elif defined Q_OS_LINUX // Q_OS_MAC
- bool DumpCallback(const google_breakpad::MinidumpDescriptor &md, void *context, bool success)
- #endif // Q_OS_LINUX64 || Q_OS_LINUX32
- {
-@@ -423,7 +423,7 @@ void CrashReportWriter::startCatching()
- 		crashpad_client.UseHandler();
- 	}
- #endif // USE_BREAKPAD
--#elif defined Q_OS_LINUX64 || defined Q_OS_LINUX32
-+#elif defined Q_OS_LINUX
- 	BreakpadExceptionHandler = new google_breakpad::ExceptionHandler(
- 		google_breakpad::MinidumpDescriptor(QFile::encodeName(_path).toStdString()),
- 		/*FilterCallback*/ 0,

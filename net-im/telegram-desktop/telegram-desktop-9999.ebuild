@@ -59,14 +59,15 @@ RDEPEND="
 		x11-libs/gtk+:3[X]
 		dev-libs/libappindicator:3
 	)
-	>=media-libs/libtgvoip-2.4.4_p20191205
+	>=media-libs/libtgvoip-2.4.4_p20200118
 	media-libs/rlottie
 	x11-libs/libxkbcommon
 	spell? ( app-text/enchant:0 )
+	dev-libs/xxhash
 "
 DEPEND="
 	${RDEPEND}
-	dev-cpp/range-v3
+	>=dev-cpp/range-v3-0.10
 	crashreporter? ( dev-libs/breakpad )
 "
 RDEPEND="
@@ -110,33 +111,6 @@ src_prepare() {
 	sed \
 		-e '/LINK_SEARCH_START_STATIC/s:1:0:' \
 		-i cmake/init_target.cmake
-
-	unbundle() {
-		printf '
-		pkg_check_modules(%s REQUIRED IMPORTED_TARGET GLOBAL %s)
-		add_library(%s::%s ALIAS PkgConfig::%s)
-		' "${1}" "${2}" "${3}" "${1}" "${1}"
-	}
-
-	unbundle lib_tgvoip libtgvoip tdesktop \
-		> Telegram/cmake/lib_tgvoip.cmake
-	unbundle external_crash_reports breakpad-client desktop-app \
-		> cmake/external/crash_reports/CMakeLists.txt
-	unbundle external_ffmpeg \
-		"libavformat libavcodec libswresample libswscale libavutil" \
-		desktop-app > cmake/external/ffmpeg/CMakeLists.txt
-	unbundle external_lz4 liblz4 desktop-app \
-		> cmake/external/lz4/CMakeLists.txt
-	unbundle external_openssl libcrypto desktop-app i\
-		> cmake/external/openssl/CMakeLists.txt
-	unbundle external_opus opus desktop-app \
-		> cmake/external/opus/CMakeLists.txt
-	unbundle external_qt "Qt5Network Qt5Gui Qt5Widgets Qt5DBus" \
-		desktop-app > cmake/external/qt/CMakeLists.txt
-	unbundle external_rlottie rlottie desktop-app \
-		> cmake/external/rlottie/CMakeLists.txt
-	unbundle external_zlib "zlib minizip" desktop-app \
-		> cmake/external/zlib/CMakeLists.txt
 }
 
 src_configure() {

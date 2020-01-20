@@ -1,17 +1,16 @@
 --- a/Telegram/lib_ui/CMakeLists.txt
 +++ b/Telegram/lib_ui/CMakeLists.txt
-@@ -20,8 +20,6 @@ set(style_files
-     ui/widgets/widgets.style
- )
- set(qrc_files
+@@ -33,7 +33,6 @@ set(style_files
+     ui/colors.palette
+     emoji_suggestions/emoji_autocomplete.json
+ 
 -    fonts/fonts.qrc
--    qt_conf/linux.qrc
      qt_conf/mac.qrc
      qt_conf/win.qrc
- )
+
 --- a/Telegram/lib_ui/ui/style/style_core_font.cpp
 +++ b/Telegram/lib_ui/ui/style/style_core_font.cpp
-@@ -15,13 +15,10 @@
+@@ -15,7 +15,6 @@
  #include <QtGui/QFontDatabase>
  
  void style_InitFontsResource() {
@@ -19,12 +18,6 @@
  #ifdef Q_OS_WIN
  	Q_INIT_RESOURCE(win);
  #elif defined Q_OS_MAC // Q_OS_WIN
- 	Q_INIT_RESOURCE(mac);
--#else // Q_OS_WIN || Q_OS_MAC
--	Q_INIT_RESOURCE(linux);
- #endif // Q_OS_WIN || Q_OS_MAC || Q_OS_LINUX
- }
- 
 @@ -126,6 +126,14 @@ void StartFonts() {
  	}
  	Started = true;

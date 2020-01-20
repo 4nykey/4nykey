@@ -5,45 +5,20 @@
  set_property(GLOBAL PROPERTY USE_FOLDERS ON)
  
 +find_package(PkgConfig REQUIRED)
- include(cmake/variables.cmake)
+ include(cmake/validate_special_target.cmake)
  include(cmake/version.cmake)
  desktop_app_parse_version(Telegram/build/version)
 --- a/Telegram/CMakeLists.txt
 +++ b/Telegram/CMakeLists.txt
-@@ -93,6 +93,8 @@ PRIVATE
- if (NOT DESKTOP_APP_DISABLE_CRASH_REPORTS)
-     target_link_libraries(Telegram PRIVATE desktop-app::external_crash_reports)
- endif()
-+find_package(Threads REQUIRED)
-+target_link_libraries(Telegram PRIVATE ${CMAKE_THREAD_LIBS_INIT})
- 
- target_precompile_headers(Telegram PRIVATE ${src_loc}/stdafx.h)
- nice_target_sources(Telegram ${src_loc}
-@@ -940,6 +942,7 @@ PRIVATE
-     settings.cpp
-     settings.h
- )
-+target_sources(Telegram PRIVATE ../debian/qt_functions.cpp)
- 
- nice_target_sources(Telegram ${res_loc}
- PRIVATE
-@@ -1020,15 +1023,11 @@ elseif (LINUX)
+@@ -1034,7 +1034,7 @@ elseif (LINUX)
      if (NOT TDESKTOP_DISABLE_GTK_INTEGRATION)
          find_package(PkgConfig REQUIRED)
  
--        pkg_check_modules(GTK2 REQUIRED gtk+-2.0)
--        target_include_directories(Telegram PRIVATE ${GTK2_INCLUDE_DIRS})
-+        target_link_libraries(Telegram PRIVATE X11)
+-        pkg_search_module(GTK REQUIRED gtk+-2.0 gtk+-3.0)
++        pkg_search_module(GTK REQUIRED gtk+-3.0)
+         target_include_directories(Telegram PRIVATE ${GTK_INCLUDE_DIRS})
          target_compile_options(Telegram PRIVATE -Wno-register)
  
-         set(appindicator_packages
--            ayatana-appindicator3-0.1
--            ayatana-appindicator-0.1
-             appindicator3-0.1
--            appindicator-0.1
-         )
-         set(appindicator_found 0)
-         foreach (package ${appindicator_packages})
 --- a/Telegram/lib_lottie/CMakeLists.txt
 +++ b/Telegram/lib_lottie/CMakeLists.txt
 @@ -14,8 +14,6 @@ nice_target_sources(lib_lottie ${src_loc}
@@ -85,17 +60,6 @@
  )
  
  target_link_libraries(lib_ui
---- a/cmake/external/ranges/CMakeLists.txt
-+++ b/cmake/external/ranges/CMakeLists.txt
-@@ -9,7 +9,7 @@ add_library(desktop-app::external_ranges ALIAS external_ranges)
- 
- target_include_directories(external_ranges SYSTEM
- INTERFACE
--    ${libs_loc}/range-v3/include
-+    /usr/include/range/v3
- )
- 
- if (WIN32)
 --- a/cmake/target_link_static_libraries.cmake
 +++ b/cmake/target_link_static_libraries.cmake
 @@ -16,7 +16,7 @@ function(target_link_static_libraries target_name)
@@ -107,3 +71,17 @@
              set(full_path "${static_lib_${entry}}")
              if (${full_path} STREQUAL static_lib_${entry}-NOTFOUND)
                  message(FATAL_ERROR "Could not find static library lib${entry}.a")
+--- a/cmake/external/rlottie/CMakeLists.txt
++++ b/cmake/external/rlottie/CMakeLists.txt
+@@ -8,8 +8,9 @@ if (DESKTOP_APP_USE_PACKAGED_RLOTTIE)
+     add_library(external_rlottie INTERFACE IMPORTED GLOBAL)
+     add_library(desktop-app::external_rlottie ALIAS external_rlottie)
+ 
+-    find_package(rlottie REQUIRED)
+-    target_link_libraries(external_rlottie INTERFACE rlottie::rlottie)
++    find_package(PkgConfig REQUIRED)
++    pkg_check_modules(RLOTTIE REQUIRED rlottie)
++    target_link_libraries(external_rlottie INTERFACE ${RLOTTIE_LIBRARIES})
+ else()
+     add_library(external_rlottie OBJECT)
+     add_library(desktop-app::external_rlottie ALIAS external_rlottie)
