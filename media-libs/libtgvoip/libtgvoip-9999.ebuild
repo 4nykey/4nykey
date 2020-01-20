@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 else
 	inherit vcs-snapshot
-	MY_PV="303dcac"
+	MY_PV="38bc087"
 	SRC_URI="
 		mirror://githubcl/telegramdesktop/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -40,13 +40,6 @@ DEPEND="
 src_prepare() {
 	default
 	eautoreconf
-	sed \
-		-e "s:@PREFIX@:${EPREFIX}:" \
-		-e "s:@LIBDIR@:$(get_libdir):" \
-		-e "s:@PN@:${PN}:" \
-		-e "s:@DESC@:${DESCRIPTION}:" \
-		-e "s:@PV@:${PV%_p*}:" \
-		"${FILESDIR}"/${PN}.pc > ${PN}.pc
 }
 
 src_configure() {
@@ -60,7 +53,5 @@ src_configure() {
 
 src_install() {
 	default
-	insinto /usr/$(get_libdir)/pkgconfig
-	doins ${PN}.pc
 	find "${ED}" -name '*.la' -delete
 }
