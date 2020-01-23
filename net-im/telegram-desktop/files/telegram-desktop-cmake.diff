@@ -1,13 +1,3 @@
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -10,6 +10,7 @@ cmake_policy(SET CMP0091 NEW)
- 
- set_property(GLOBAL PROPERTY USE_FOLDERS ON)
- 
-+find_package(PkgConfig REQUIRED)
- include(cmake/validate_special_target.cmake)
- include(cmake/version.cmake)
- desktop_app_parse_version(Telegram/build/version)
 --- a/Telegram/CMakeLists.txt
 +++ b/Telegram/CMakeLists.txt
 @@ -1034,7 +1034,7 @@ elseif (LINUX)
@@ -85,3 +75,19 @@
  else()
      add_library(external_rlottie OBJECT)
      add_library(desktop-app::external_rlottie ALIAS external_rlottie)
+--- a/cmake/init_target.cmake	2020-01-17 19:21:17.000000000 +0200
++++ b/cmake/init_target.cmake	2020-01-21 22:30:05.000000000 +0200
+@@ -15,11 +15,11 @@
+         if (${ARGV1} STREQUAL cxx_std_14 OR ${ARGV1} STREQUAL cxx_std_11)
+             target_compile_features(${target_name} PUBLIC ${ARGV1})
+         else()
+-            target_compile_features(${target_name} PUBLIC cxx_std_20)
++            target_compile_features(${target_name} PUBLIC cxx_std_17)
+             init_target_folder(${target_name} ${ARGV1})
+         endif()
+     else()
+-        target_compile_features(${target_name} PUBLIC cxx_std_20)
++        target_compile_features(${target_name} PUBLIC cxx_std_17)
+     endif()
+     if (WIN32)
+         set_target_properties(${target_name} PROPERTIES

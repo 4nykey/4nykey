@@ -29,22 +29,23 @@ SRC_URI+="
 "
 #CMAKE_USE_DIR="${S}/out/Release"
 PYTHON_COMPAT=( python2_7 )
-inherit toolchain-funcs flag-o-matic desktop xdg cmake-utils
+inherit toolchain-funcs flag-o-matic desktop xdg cmake
 
 DESCRIPTION="Telegram Desktop messaging app"
 HOMEPAGE="https://desktop.telegram.org"
 
 LICENSE="GPL-3"
 SLOT="0"
-IUSE="-crashreporter gtk spell test"
+IUSE="-crashreporter dbus gtk spell test"
 
 RDEPEND="
 	dev-qt/qtmultimedia:5
-	dev-qt/qtgui:5[xcb]
+	dev-qt/qtgui:5
 	dev-qt/qtnetwork:5
 	dev-qt/qtimageformats:5
 	dev-qt/qtprintsupport:5
 	dev-qt/qtwidgets:5[gtk?]
+	dbus? ( dev-qt/qtdbus:5 )
 	sys-libs/zlib[minizip]
 	app-arch/lz4
 	app-arch/xz-utils
@@ -91,12 +92,11 @@ src_prepare() {
 		debian/patches
 		"${FILESDIR}"/${PN}-cmake.diff
 		"${FILESDIR}"/${PN}-breakpad.diff
-		"${FILESDIR}"/${PN}-fonts.diff
 		"${FILESDIR}"/${PN}-qt.diff
 	)
 	[[ -e "${FILESDIR}"/${P}.diff ]] && PATCHES+=( "${FILESDIR}"/${P}.diff )
 
-	cmake-utils_src_prepare
+	cmake_src_prepare
 
 	grep -rl 'usr/local' --include=CMakeLists.txt | xargs \
 		sed -e 's:/usr/local:/usr:' -i
@@ -116,18 +116,21 @@ src_prepare() {
 src_configure() {
 	local mycmakeargs=(
 		-DDESKTOP_APP_USE_PACKAGED=yes
+		-DDESKTOP_APP_USE_PACKAGED_FONTS=yes
 		-DDESKTOP_APP_LOTTIE_USE_CACHE=no
 		-DDESKTOP_APP_DISABLE_CRASH_REPORTS=$(usex !crashreporter)
 		-DDESKTOP_APP_DISABLE_SPELLCHECK=$(usex !spell)
 		-DTDESKTOP_DISABLE_GTK_INTEGRATION=$(usex !gtk)
 		-DTDESKTOP_FORCE_GTK_FILE_DIALOG=$(usex gtk)
+		-DTDESKTOP_DISABLE_DBUS_INTEGRATION=$(usex !dbus)
 		-DTDESKTOP_DISABLE_DESKTOP_FILE_GENERATION=yes
+		-DTDESKTOP_LAUNCHER_BASENAME=${PN}
 	)
 	if [[ -z ${TELEGRAM_API_ID} ]] || [[ -z ${TELEGRAM_API_HASH} ]]; then
 		mycmakeargs+=( -DTDESKTOP_API_TEST=yes )
 	fi
 
-	cmake-utils_src_configure
+	cmake_src_configure
 }
 
 src_install() {

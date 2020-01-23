@@ -5,6 +5,6 @@
  
  #include <QtCore/QBuffer>
 +#include <QtCore/QVersionNumber>
+ 
+ #ifndef TDESKTOP_DISABLE_DBUS_INTEGRATION
  #include <QtDBus/QDBusConnection>
- #include <QtDBus/QDBusReply>
- #include <QtDBus/QDBusMetaType>
