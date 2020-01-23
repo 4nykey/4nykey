@@ -1,7 +1,7 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit readme.gentoo-r1
 
@@ -9,10 +9,15 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/zsh-users/${PN}.git"
 	inherit git-r3
 else
-	inherit vcs-snapshot
-	SRC_URI="mirror://githubcl/zsh-users/${PN}/tar.gz/${PV/_/-} -> ${P}.tar.gz"
+	MY_PV=$(ver_rs 3 -)
+	MY_P="${PN}-${MY_PV}"
+	SRC_URI="
+		mirror://githubcl/zsh-users/${PN}/tar.gz/${MY_PV}
+		-> ${MY_P}.tar.gz
+	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${MY_P}"
 fi
 
 DESCRIPTION="Fish shell like syntax highlighting for zsh"
