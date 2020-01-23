@@ -8,7 +8,7 @@
 +KBASE              ?= /lib/modules/${KV_FULL}
  KBUILD_DIR         ?= $(KBASE)/build
 -MDEST_DIR          ?= $(KBASE)/kernel/drivers/net/wireless
-+MDEST_DIR          ?= ${D}$(KBASE)/kernel/drivers/net/wireless
++MDEST_DIR          ?= ${ED}$(KBASE)/kernel/drivers/net/wireless
  
  all:
  	KBUILD_NOPEDANTIC=1 make -C $(KBUILD_DIR) M=`pwd`

@@ -1,7 +1,7 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit eutils linux-info linux-mod
 if [[ -z ${PV%%*9999} ]]; then
@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/antoineco/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="21ddc7b"
+	MY_PV="f3b8105"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/antoineco/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -60,11 +60,7 @@ pkg_setup() {
 src_prepare() {
 	local PATCHES=(
 		"${FILESDIR}/${PN}-6.30.223.141-makefile.patch"
-		"${FILESDIR}/${PN}-6.30.223.141-eth-to-wlan.patch"
 		"${FILESDIR}/${PN}-6.30.223.141-gcc.patch"
-		"${FILESDIR}/${PN}-6.30.223.248-r3-Wno-date-time.patch"
-		"${FILESDIR}/${PN}-6.30.223.271-r1-linux-3.18.patch"
-		"${FILESDIR}/${PN}-6.30.223.271-r2-linux-4.3-v2.patch"
 		"${FILESDIR}/${PN}-6.30.223.271-r4-linux-4.7.patch"
 	)
 
