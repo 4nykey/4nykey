@@ -29,7 +29,7 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
-	>=media-libs/harfbuzz-2.4
+	>=media-libs/harfbuzz-2.6.4
 "
 DEPEND="
 	${RDEPEND}
@@ -38,10 +38,15 @@ BDEPEND="
 	dev-python/setuptools_scm[${PYTHON_USEDEP}]
 	dev-python/cython[${PYTHON_USEDEP}]
 	dev-python/scikit-build[${PYTHON_USEDEP}]
-	dev-python/packaging[${PYTHON_USEDEP}]
+	dev-util/cmake
 "
 PATCHES=( "${FILESDIR}"/${PN}-systemhb.diff )
 
 pkg_setup() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
+}
+
+python_install() {
+	distutils-r1_python_install
+	python_optimize "${ED}"/$(python_get_sitedir)/${PN}
 }
