@@ -92,7 +92,6 @@ src_prepare() {
 		debian/patches
 		"${FILESDIR}"/${PN}-cmake.diff
 		"${FILESDIR}"/${PN}-breakpad.diff
-		"${FILESDIR}"/${PN}-qt.diff
 	)
 	[[ -e "${FILESDIR}"/${P}.diff ]] && PATCHES+=( "${FILESDIR}"/${P}.diff )
 
