@@ -1,0 +1,36 @@
+--- a/Lib/fontmake/instantiator.py
++++ b/Lib/fontmake/instantiator.py
+@@ -248,9 +248,10 @@ class Instantiator:
+                 # By default, explode if we cannot generate a glyph instance for
+                 # whatever reason (usually outline incompatibility)...
+                 if glyph_name not in self.skip_export_glyphs:
+-                    raise InstantiatorError(
+-                        f"Failed to generate instance of glyph '{glyph_name}'."
+-                    ) from e
++                    logger.warning(
++                        "Failed to generate instance of glyph '%s'. "
++                        "Glyph will be left empty. Failure reason: %s", glyph_name, e,
++                    )
+ 
+                 # ...except if the glyph is in public.skipExportGlyphs and would
+                 # therefore be removed from the compiled font anyway. There's not much
+--- a/tests/test_instantiator.py
++++ b/tests/test_instantiator.py
+@@ -212,17 +212,6 @@ def test_raise_no_default_master(data_di
+         )
+ 
+ 
+-def test_raise_failed_glyph_interpolation(data_dir):
+-    designspace = designspaceLib.DesignSpaceDocument.fromfile(
+-        data_dir / "DesignspaceBrokenTest" / "DesignspaceTest.designspace"
+-    )
+-    generator = fontmake.instantiator.Instantiator.from_designspace(designspace)
+-
+-    with pytest.raises(
+-        fontmake.instantiator.InstantiatorError, match="Failed to generate instance"
+-    ):
+-        for instance in designspace.instances:
+-            instance.font = generator.generate_instance(instance)
+ 
+ 
+ def test_ignore_failed_glyph_interpolation(data_dir):
