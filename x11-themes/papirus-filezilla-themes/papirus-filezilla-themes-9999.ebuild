@@ -1,7 +1,7 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -26,9 +26,14 @@ IUSE=""
 RDEPEND="
 	net-ftp/filezilla
 "
-DEPEND="
-	gnome-base/librsvg
+BDEPEND="
+	virtual/imagemagick-tools[svg]
 "
+
+src_prepare() {
+	sed -e '/\<LICENSE\>/d' -i build.sh
+	default
+}
 
 src_compile() {
 	emake build
