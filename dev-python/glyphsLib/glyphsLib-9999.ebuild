@@ -30,7 +30,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.0.2[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.2.4[${PYTHON_USEDEP}]
 	dev-python/ufoLib2[${PYTHON_USEDEP}]
 "
 DEPEND="
@@ -46,7 +46,6 @@ BDEPEND="
 "
 PATCHES=(
 	"${FILESDIR}"/${PN}-masters_wcodes.diff
-	"${FILESDIR}"/${PN}-brackets.diff
 	"${FILESDIR}"/${PN}-setup.diff
 	"${FILESDIR}"/${PN}-custom_params.diff
 )

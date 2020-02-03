@@ -46,3 +46,12 @@
  
      assert designspace.rules[1].name == "BRACKET.400.600"
      assert designspace.rules[1].conditionSets == [
+@@ -427,7 +427,7 @@ def test_designspace_generation_bracket_
+         anchor.position = (0, 0)
+         layer.anchors.append(anchor)
+ 
+-    designspace = to_designspace(font, ufo_module=ufo_module, generate_GDEF=True)
++    designspace = to_designspace(font, ufo_module=ufo_module, generate_GDEF=True, minimize_glyphs_diffs=True)
+ 
+     for source in designspace.sources:
+         ufo = source.font
