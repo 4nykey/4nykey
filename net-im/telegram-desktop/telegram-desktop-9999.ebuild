@@ -9,9 +9,14 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_BRANCH="dev"
 	EGIT_SUBMODULES=(
 		'*'
+		'-Telegram/ThirdParty/GSL'
+		'-Telegram/ThirdParty/expected'
+		'-Telegram/ThirdParty/libdbusmenu-qt'
 		'-Telegram/ThirdParty/libtgvoip'
-		'-Telegram/ThirdParty/rlottie'
 		'-Telegram/ThirdParty/lz4'
+		'-Telegram/ThirdParty/rlottie'
+		'-Telegram/ThirdParty/variant'
+		'-Telegram/ThirdParty/xxHash'
 	)
 	inherit git-r3
 else
@@ -45,7 +50,7 @@ RDEPEND="
 	dev-qt/qtimageformats:5
 	dev-qt/qtprintsupport:5
 	dev-qt/qtwidgets:5[gtk?]
-	dbus? ( dev-qt/qtdbus:5 )
+	dbus? ( dev-libs/libdbusmenu-qt )
 	sys-libs/zlib[minizip]
 	app-arch/lz4
 	app-arch/xz-utils
@@ -56,10 +61,7 @@ RDEPEND="
 	media-libs/opus
 	media-libs/libexif
 	x11-libs/libva[X]
-	gtk? (
-		x11-libs/gtk+:3[X]
-		dev-libs/libappindicator:3
-	)
+	gtk? ( x11-libs/gtk+:3[X] )
 	>=media-libs/libtgvoip-2.4.4_p20200118
 	media-libs/rlottie
 	x11-libs/libxkbcommon
@@ -69,6 +71,9 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	>=dev-cpp/range-v3-0.10
+	dev-cpp/expected
+	dev-cpp/ms-gsl
+	dev-cpp/variant
 	crashreporter? ( dev-libs/breakpad )
 "
 RDEPEND="
