@@ -50,3 +50,7 @@ python_install() {
 	distutils-r1_python_install
 	python_optimize "${ED}"/$(python_get_sitedir)/${PN}
 }
+
+python_test() {
+	pytest -v || die
+}
