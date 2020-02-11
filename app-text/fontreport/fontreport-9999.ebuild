@@ -1,7 +1,7 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 PYTHON_COMPAT=( python2_7 python3_{6,7} )
 DISTUTILS_SINGLE_IMPL=1
@@ -30,9 +30,8 @@ RDEPEND="
 	${PYTHON_DEPS}
 	virtual/tex-base
 	virtual/latex-base
-	dev-python/fonttools[${PYTHON_USEDEP}]
+	$(python_gen_cond_dep 'dev-python/fonttools[${PYTHON_MULTI_USEDEP}]')
 "
 DEPEND="
 	${RDEPEND}
-	dev-python/setuptools[${PYTHON_USEDEP}]
 "
