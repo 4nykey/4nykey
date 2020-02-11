@@ -32,13 +32,17 @@ IUSE="+acoustid nls"
 
 RDEPEND="
 	${PYTHON_DEPS}
-	dev-python/PyQt5[${PYTHON_USEDEP},gui]
-	>=media-libs/mutagen-1.37[${PYTHON_USEDEP}]
+	$(python_gen_cond_dep '
+		dev-python/PyQt5[${PYTHON_MULTI_USEDEP},gui]
+		>=media-libs/mutagen-1.37[${PYTHON_MULTI_USEDEP}]
+		dev-python/python-discid[${PYTHON_MULTI_USEDEP}]
+	')
 	acoustid? ( >=media-libs/chromaprint-1.0[tools] )
-	dev-python/python-discid[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
+"
+BDEPEND="
 	sys-devel/gettext
 "
 

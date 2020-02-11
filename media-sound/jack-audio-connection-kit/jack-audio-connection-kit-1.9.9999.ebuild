@@ -50,7 +50,9 @@ DEPEND="
 RDEPEND="
 	${DEPEND}
 	alsa? ( sys-process/lsof )
-	dbus? ( dev-python/dbus-python[${PYTHON_USEDEP}] )
+	dbus? (
+		$(python_gen_cond_dep 'dev-python/dbus-python[${PYTHON_MULTI_USEDEP}]')
+	)
 	pam? ( sys-auth/realtime-base )
 "
 DEPEND="
