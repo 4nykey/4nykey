@@ -4,7 +4,8 @@
 EAPI=6
 
 PYTHON_COMPAT=( python{2_7,3_{6,7}} )
-DISTUTILS_SINGLE_IMPL="1"
+DISTUTILS_SINGLE_IMPL=1
+DISTUTILS_USE_SETUPTOOLS=no
 inherit distutils-r1
 
 if [[ -z ${PV%%*9999} ]]; then
@@ -26,8 +27,10 @@ IUSE=""
 
 DEPEND="
 	${PYTHON_DEPS}
-	media-gfx/fontforge[python,${PYTHON_USEDEP}]
-	dev-libs/libxml2[python,${PYTHON_USEDEP}]
+	$(python_gen_cond_dep '
+		media-gfx/fontforge[python,${PYTHON_SINGLE_USEDEP}]
+		dev-libs/libxml2[python,${PYTHON_MULTI_USEDEP}]
+	')
 "
 RDEPEND="
 	${DEPEND}
