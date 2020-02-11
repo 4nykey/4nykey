@@ -27,9 +27,11 @@ SLOT="0"
 IUSE=""
 
 DEPEND="
-	>=dev-python/fonttools-2.5[${PYTHON_USEDEP}]
-	media-gfx/fontforge[python,${PYTHON_USEDEP}]
-	dev-python/pyyaml[${PYTHON_USEDEP}]
+	$(python_gen_cond_dep '
+		>=dev-python/fonttools-2.5[${PYTHON_MULTI_USEDEP}]
+		media-gfx/fontforge[python,${PYTHON_SINGLE_USEDEP}]
+		dev-python/pyyaml[${PYTHON_MULTI_USEDEP}]
+	')
 "
 RDEPEND="${DEPEND}"
 
