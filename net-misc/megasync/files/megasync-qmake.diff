@@ -12,9 +12,19 @@
 @@ -41,5 +42,4 @@ INSTALLS += emblems32  emblems64
  !contains(DEFINES, no_desktop) {
      update_cache.commands = gtk-update-icon-cache -f -t $${HICOLOR} || true
-     update_cache.path = $$PWD
+     update_cache.path = $${HICOLOR}
 -    INSTALLS += update_cache
  }
+--- a/src/MEGASync/control/control.pri
++++ b/src/MEGASync/control/control.pri
+@@ -2,6 +2,7 @@ DEPENDPATH += $$PWD
+ INCLUDEPATH += $$PWD
+ 
+ QT       += network
++LIBS+=-lz
+ 
+ SOURCES += $$PWD/HTTPServer.cpp \
+     $$PWD/Preferences.cpp \
 --- a/src/MEGASync/platform/platform.pri
 +++ b/src/MEGASync/platform/platform.pri
 @@ -34,7 +34,8 @@ unix:!macx {
