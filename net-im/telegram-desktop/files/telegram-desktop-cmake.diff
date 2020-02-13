@@ -9,28 +9,6 @@
          target_include_directories(Telegram PRIVATE ${GTK_INCLUDE_DIRS})
          target_compile_options(Telegram PRIVATE -Wno-register)
  
---- a/Telegram/lib_lottie/CMakeLists.txt
-+++ b/Telegram/lib_lottie/CMakeLists.txt
-@@ -14,8 +14,6 @@ nice_target_sources(lib_lottie ${src_loc}
- PRIVATE
-     lottie/lottie_animation.cpp
-     lottie/lottie_animation.h
--    lottie/lottie_cache.cpp
--    lottie/lottie_cache.h
-     lottie/lottie_common.cpp
-     lottie/lottie_common.h
-     lottie/lottie_frame_renderer.cpp
-@@ -28,6 +26,10 @@ PRIVATE
- )
- 
- if (DESKTOP_APP_LOTTIE_USE_CACHE)
-+    list(APPEND lib_lottie_SOURCES
-+        lottie/lottie_cache.cpp
-+        lottie/lottie_cache.h
-+    )
-     target_compile_definitions(lib_lottie PUBLIC LOTTIE_USE_CACHE)
-     target_link_libraries(lib_lottie
-     PUBLIC
 --- a/Telegram/lib_spellcheck/CMakeLists.txt
 +++ b/Telegram/lib_spellcheck/CMakeLists.txt
 @@ -44,4 +44,5 @@ if (LINUX)
@@ -50,28 +28,3 @@
  )
  
  target_link_libraries(lib_ui
---- a/cmake/target_link_static_libraries.cmake
-+++ b/cmake/target_link_static_libraries.cmake
-@@ -16,7 +16,7 @@ function(target_link_static_libraries target_name)
-         if (${entry} STREQUAL "PRIVATE" OR ${entry} STREQUAL "PUBLIC" OR ${entry} STREQUAL "INTERFACE")
-             set(writing_now ${entry})
-         else()
--            find_library(static_lib_${entry} lib${entry}.a)
-+            find_library(static_lib_${entry} NAMES ${entry})
-             set(full_path "${static_lib_${entry}}")
-             if (${full_path} STREQUAL static_lib_${entry}-NOTFOUND)
-                 message(FATAL_ERROR "Could not find static library lib${entry}.a")
---- a/cmake/external/rlottie/CMakeLists.txt
-+++ b/cmake/external/rlottie/CMakeLists.txt
-@@ -8,8 +8,9 @@ if (DESKTOP_APP_USE_PACKAGED_RLOTTIE)
-     add_library(external_rlottie INTERFACE IMPORTED GLOBAL)
-     add_library(desktop-app::external_rlottie ALIAS external_rlottie)
- 
--    find_package(rlottie REQUIRED)
--    target_link_libraries(external_rlottie INTERFACE rlottie::rlottie)
-+    find_package(PkgConfig REQUIRED)
-+    pkg_check_modules(RLOTTIE REQUIRED rlottie)
-+    target_link_libraries(external_rlottie INTERFACE ${RLOTTIE_LIBRARIES})
- else()
-     add_library(external_rlottie OBJECT)
-     add_library(desktop-app::external_rlottie ALIAS external_rlottie)

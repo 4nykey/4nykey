@@ -28,11 +28,6 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-MY_DEB="${PN}-patches-793f2bd"
-SRC_URI+="
-	mirror://githubcl/4nykey/${MY_DEB%-*}/tar.gz/${MY_DEB##*-} -> ${MY_DEB}.tar.gz
-"
-#CMAKE_USE_DIR="${S}/out/Release"
 PYTHON_COMPAT=( python2_7 )
 inherit toolchain-funcs flag-o-matic desktop xdg cmake
 
@@ -89,16 +84,10 @@ pkg_setup() {
 }
 
 src_prepare() {
-	unpack ${MY_DEB}.tar.gz
-	mv ${MY_DEB}/debian .
-	rm -rf Telegram/ThirdParty/{libtgvoip,lz4,minizip,rlottie}
-
 	local PATCHES=(
-		debian/patches
 		"${FILESDIR}"/${PN}-cmake.diff
 		"${FILESDIR}"/${PN}-breakpad.diff
 	)
-	[[ -e "${FILESDIR}"/${P}.diff ]] && PATCHES+=( "${FILESDIR}"/${P}.diff )
 
 	cmake_src_prepare
 
