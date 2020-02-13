@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 else
 	inherit vcs-snapshot
-	MY_PV="38bc087"
+	MY_PV="522550a"
 	SRC_URI="
 		mirror://githubcl/telegramdesktop/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
