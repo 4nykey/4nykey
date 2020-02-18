@@ -48,7 +48,7 @@ RESTRICT="!bindist? ( bindist )
 RESTRICT+=" primaryuri"
 
 MY_EFF="2019.11.7"
-MY_NOS="11.0.11"
+MY_NOS="11.0.13"
 MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
 MY_NOS="noscript-${MY_NOS}.xpi"
 PATCH_URIS=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c,whissi}/mozilla/patchsets/${PATCH}.tar.xz )
