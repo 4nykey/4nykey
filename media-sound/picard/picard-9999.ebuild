@@ -45,8 +45,8 @@ DEPEND="
 BDEPEND="
 	sys-devel/gettext
 "
-
 DOCS=( AUTHORS.txt {CONTRIBUTING,NEWS,README}.md )
+distutils_enable_tests pytest
 
 src_prepare() {
 	myloc() {
@@ -66,8 +66,4 @@ python_install() {
 		--disable-autoupdate \
 		--skip-build \
 		$(usex nls "" "--disable-locales")
-}
-
-python_test() {
-	esetup.py test
 }
