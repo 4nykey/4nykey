@@ -53,14 +53,10 @@ DEPEND="
 "
 BDEPEND="
 	test? (
-		dev-python/pytest[${PYTHON_USEDEP}]
 		sci-libs/scipy[${PYTHON_USEDEP}]
 	)
 "
-
-python_test() {
-	pytest -v || die "Tests failed with ${EPYTHON}"
-}
+distutils_enable_tests pytest
 
 pkg_postinst() {
 	optfeature \
