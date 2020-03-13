@@ -30,23 +30,20 @@ IUSE="cython test"
 
 RDEPEND="
 	>=dev-python/fonttools-3.32[ufo(-),${PYTHON_USEDEP}]
+	dev-python/defcon[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
-	dev-python/setuptools[${PYTHON_USEDEP}]
-	dev-python/defcon[${PYTHON_USEDEP}]
+"
+BDEPEND="
 	cython? ( >=dev-python/cython-0.28.5[${PYTHON_USEDEP}] )
 	test? (
-		dev-python/pytest[${PYTHON_USEDEP}]
 		dev-python/coverage[${PYTHON_USEDEP}]
 	)
 "
+distutils_enable_tests pytest
 
 pkg_setup() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
 	export CU2QU_WITH_CYTHON=$(usex cython)
-}
-
-python_test() {
-	esetup.py test
 }

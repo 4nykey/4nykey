@@ -30,10 +30,8 @@ IUSE="+cython test"
 BDEPEND="
 	dev-python/setuptools_scm[${PYTHON_USEDEP}]
 	cython? ( dev-python/cython[${PYTHON_USEDEP}] )
-	test? (
-		dev-python/pytest[${PYTHON_USEDEP}]
-	)
 "
+distutils_enable_tests pytest
 
 python_prepare_all() {
 	if use cython; then
@@ -44,8 +42,4 @@ python_prepare_all() {
 	fi
 	distutils-r1_python_prepare_all
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${MY_PV}"
-}
-
-python_test() {
-	esetup.py test
 }

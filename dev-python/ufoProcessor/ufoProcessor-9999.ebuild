@@ -36,7 +36,6 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	test? ( dev-python/pytest[${PYTHON_USEDEP}] )
 "
 
 pkg_setup() {

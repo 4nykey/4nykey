@@ -33,11 +33,7 @@ DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
-	dev-python/setuptools[${PYTHON_USEDEP}]
 	cython? ( >=dev-python/cython-0.28.4[${PYTHON_USEDEP}] )
 	test? ( dev-python/pytest[${PYTHON_USEDEP}] )
 "
-
-python_test() {
-	esetup.py test
-}
+distutils_enable_tests setup.py

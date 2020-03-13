@@ -4,6 +4,7 @@
 EAPI=7
 
 PYTHON_COMPAT=( python2_7 python3_{6,7} )
+DISTUTILS_USE_SETUPTOOLS=rdepend
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -20,21 +21,29 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
+RESTRICT+=" test"
 
 DESCRIPTION="Improved build system generator for CPython extensions"
 HOMEPAGE="https://github.com/${PN}/${PN}"
 
 LICENSE="MIT"
 SLOT="0"
-IUSE=""
+IUSE="test"
 
 RDEPEND="
 	dev-python/packaging[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
-	dev-python/setuptools[${PYTHON_USEDEP}]
 "
+BDEPEND="
+	test? (
+		>=dev-python/pytest-cov-2.7.1[${PYTHON_USEDEP}]
+		>=dev-python/path-py-11.5[${PYTHON_USEDEP}]
+		dev-python/wheel[${PYTHON_USEDEP}]
+	)
+"
+distutils_enable_tests pytest
 
 python_prepare_all() {
 	distutils-r1_python_prepare_all

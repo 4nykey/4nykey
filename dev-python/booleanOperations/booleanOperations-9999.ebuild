@@ -33,10 +33,10 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	test? (
-		dev-python/pytest[${PYTHON_USEDEP}]
 		dev-python/fontPens[${PYTHON_USEDEP}]
 	)
 "
+distutils_enable_tests pytest
 
 python_prepare_all() {
 	sed -e '/\<wheel\>/d' -i setup.cfg
@@ -45,8 +45,4 @@ python_prepare_all() {
 
 pkg_setup() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
-}
-
-python_test() {
-	esetup.py test
 }

@@ -43,18 +43,15 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	dev-python/setuptools[${PYTHON_USEDEP}]
+"
+BDEPEND="
 	test? (
-		dev-python/pytest[${PYTHON_USEDEP}]
 		dev-python/pyftpdlib[${PYTHON_USEDEP},test]
 		$(python_gen_cond_dep 'dev-python/mock[${PYTHON_USEDEP}]' \
 			python2_7)
 	)
 "
-
-python_test() {
-	esetup.py pytest
-}
+distutils_enable_tests pytest
 
 pkg_postinst() {
 	optfeature "S3 support" dev-python/boto

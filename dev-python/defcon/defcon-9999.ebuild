@@ -34,12 +34,8 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	test? ( dev-python/pytest[${PYTHON_USEDEP}] )
 "
 PDEPEND="
 	dev-python/fontPens[${PYTHON_USEDEP}]
 "
-
-python_test() {
-	esetup.py test
-}
+distutils_enable_tests pytest

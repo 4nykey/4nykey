@@ -41,6 +41,7 @@ BDEPEND="
 	dev-util/cmake
 "
 PATCHES=( "${FILESDIR}"/${PN}-systemhb.diff )
+distutils_enable_tests pytest
 
 pkg_setup() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
@@ -49,8 +50,4 @@ pkg_setup() {
 python_install() {
 	distutils-r1_python_install
 	python_optimize "${ED}"/$(python_get_sitedir)/${PN}
-}
-
-python_test() {
-	pytest -v || die
 }

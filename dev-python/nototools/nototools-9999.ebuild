@@ -44,6 +44,7 @@ RDEPEND="
 	app-i18n/unicode-data
 	app-i18n/unicode-emoji
 "
+distutils_enable_tests pytest
 
 python_prepare_all() {
 	local _f _s
@@ -71,5 +72,5 @@ python_prepare_all() {
 python_test() {
 	local -x \
 		PYTHONPATH="${BUILD_DIR}/lib/nototools:${PYTHONPATH}"
-	pytest -v tests || die
+	pytest -v tests || die "Tests fail with ${EPYTHON}"
 }

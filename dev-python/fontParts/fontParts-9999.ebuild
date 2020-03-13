@@ -37,11 +37,12 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	dev-python/setuptools[${PYTHON_USEDEP}]
+"
+BDEPEND="
 	test? ( dev-python/fontPens[${PYTHON_USEDEP}] )
 "
 
 python_test() {
-	"${EPYTHON}" Lib/fontParts/fontshell/test.py || die \
+	"${EPYTHON}" Lib/fontParts/fontshell/test.py -v || die \
 		"Tests failed with ${EPYTHON}"
 }
