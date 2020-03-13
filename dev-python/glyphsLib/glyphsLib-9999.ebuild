@@ -39,7 +39,6 @@ DEPEND="
 BDEPEND="
 	dev-python/setuptools_scm[${PYTHON_USEDEP}]
 	test? (
-		dev-python/pytest[${PYTHON_USEDEP}]
 		dev-python/ufoNormalizer[${PYTHON_USEDEP}]
 		>=app-text/xmldiff-2.2[${PYTHON_USEDEP}]
 	)
@@ -49,11 +48,8 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-setup.diff
 	"${FILESDIR}"/${PN}-custom_params.diff
 )
+distutils_enable_tests pytest
 
 pkg_setup() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
-}
-
-python_test() {
-	esetup.py pytest
 }
