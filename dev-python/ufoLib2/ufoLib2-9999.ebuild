@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -31,14 +31,14 @@ IUSE="test"
 
 RDEPEND="
 	>=dev-python/fonttools-3.39[ufo(-),${PYTHON_USEDEP}]
-	>=dev-python/attrs-19.1[${PYTHON_USEDEP}]
+	>=dev-python/attrs-19.2[${PYTHON_USEDEP}]
 	dev-python/lxml[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
 	dev-python/setuptools_scm[${PYTHON_USEDEP}]
-	test? ( dev-python/pytest[${PYTHON_USEDEP}] )
 "
+distutils_enable_tests pytest
 
 pkg_setup() {
 	[[ -n ${PV%%*9999} ]] && \
@@ -49,8 +49,4 @@ python_prepare_all() {
 	local PATCHES=( "${FILESDIR}"/${PN}-newGlyph.diff )
 	sed -e '/\<wheel\>/d' -i setup.cfg
 	distutils-r1_python_prepare_all
-}
-
-python_test() {
-	pytest -v || die "Tests failed with ${EPYTHON}"
 }
