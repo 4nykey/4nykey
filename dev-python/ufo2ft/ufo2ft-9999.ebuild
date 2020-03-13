@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -29,7 +29,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.2[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.4[ufo(-),${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
 	dev-python/cu2qu[${PYTHON_USEDEP}]
 	dev-python/compreffor[${PYTHON_USEDEP}]
@@ -42,17 +42,13 @@ DEPEND="
 "
 BDEPEND="
 	dev-python/setuptools_scm[${PYTHON_USEDEP}]
-	test? ( dev-python/pytest-runner[${PYTHON_USEDEP}] )
 "
 PATCHES=(
-	"${FILESDIR}"/${PN}-heightfallback.diff
+#	"${FILESDIR}"/${PN}-heightfallback.diff
 	"${FILESDIR}"/${PN}-exportedglyphs.diff
 )
+distutils_enable_tests pytest
 
 pkg_setup() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV/_p/.post}"
-}
-
-python_test() {
-	esetup.py test
 }
