@@ -8,6 +8,7 @@ inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/fonttools/${PN}.git"
+	EGIT_SUBMODULES=( )
 else
 	MY_PV="5c4e5ae"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v$(ver_rs 3 '.post')"
@@ -32,13 +33,21 @@ LICENSE="BSD"
 SLOT="0"
 IUSE="test"
 
+RDEPEND="
+	>=media-libs/skia-80:=
+"
+DEPEND="
+	${RDEPEND}
+"
 BDEPEND="
 	>=dev-python/cython-0.28.4[${PYTHON_USEDEP}]
-	test? ( dev-python/pytest[${PYTHON_USEDEP}] )
+	dev-python/setuptools_scm[${PYTHON_USEDEP}]
 "
+distutils_enable_tests pytest
 
 pkg_setup() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
+	export BUILD_SKIA_FROM_SOURCE=0
 }
 
 python_prepare_all() {
@@ -47,8 +56,4 @@ python_prepare_all() {
 	fi
 	sed -e '/doctest-cython/d' -i tox.ini
 	distutils-r1_python_prepare_all
-}
-
-python_test() {
-	esetup.py pytest
 }
