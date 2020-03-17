@@ -36,7 +36,7 @@ PATCHES=(
 
 # README.rst: Optional Requirements
 RDEPEND="
-	>=dev-python/lxml-4.4.1[${PYTHON_USEDEP}]
+	>=dev-python/lxml-4.5[${PYTHON_USEDEP}]
 	brotli? ( app-arch/brotli[python,${PYTHON_USEDEP}] )
 	zopfli? ( dev-python/py-zopfli[${PYTHON_USEDEP}] )
 	ufo? (
