@@ -18,7 +18,7 @@ else
 	SRC_URI="
 		mirror://githubcl/${PN}/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
-#	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64 ~x86"
 fi
 inherit cmake-utils
 
@@ -78,8 +78,9 @@ BDEPEND="
 	sys-devel/gettext
 	virtual/pkgconfig
 "
-PATCHES+=(
+PATCHES=(
 	"${FILESDIR}"/20170731-gethex-unaligned.patch
+	"${FILESDIR}"/${PN}-tilepath.diff
 )
 
 pkg_setup() {
@@ -87,8 +88,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	sed -e 's:CMAKE_INSTALL_DOCDIR}:&/html:' \
-		-i doc/html/CMakeLists.txt
 	sed \
 		-e '/\<\(Cantarell\|Inconsolata\)\>/d' \
 		-e 's:OFL\.txt::' \
