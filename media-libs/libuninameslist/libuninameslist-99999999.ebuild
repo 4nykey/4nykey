@@ -1,7 +1,7 @@
 # Copyright 2004-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 DISTUTILS_OPTIONAL=true
 PYTHON_COMPAT=( python{2_7,3_{6,7}} )
@@ -11,9 +11,11 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/fontforge/${PN}"
 else
-	inherit vcs-snapshot
-	MY_PV="366bc41"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
+	MY_PV="${PV}"
+	if [[ -z ${PV%%*_p*} ]]; then
+		inherit vcs-snapshot
+		MY_PV="366bc41"
+	fi
 	SRC_URI="
 		mirror://githubcl/fontforge/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -31,9 +33,6 @@ IUSE="python static-libs"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 RDEPEND="
-	python? (
-		dev-python/setuptools[${PYTHON_USEDEP}]
-	)
 "
 DEPEND="
 	${RDEPEND}
