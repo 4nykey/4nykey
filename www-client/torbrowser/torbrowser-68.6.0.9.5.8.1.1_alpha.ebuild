@@ -48,7 +48,7 @@ RESTRICT="!bindist? ( bindist )
 RESTRICT+=" primaryuri"
 
 MY_EFF="2019.11.7"
-MY_NOS="11.0.13"
+MY_NOS="11.0.15"
 MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
 MY_NOS="noscript-${MY_NOS}.xpi"
 PATCH_URIS=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c,whissi}/mozilla/patchsets/${PATCH}.tar.xz )
@@ -122,6 +122,15 @@ DEPEND="${CDEPEND}
 	sys-apps/findutils
 	|| (
 		(
+			sys-devel/clang:10
+			!clang? ( sys-devel/llvm:10 )
+			clang? (
+				=sys-devel/lld-10*
+				sys-devel/llvm:10[gold]
+				pgo? ( =sys-libs/compiler-rt-sanitizers-10*[profile] )
+			)
+		)
+		(
 			sys-devel/clang:9
 			!clang? ( sys-devel/llvm:9 )
 			clang? (
@@ -146,15 +155,6 @@ DEPEND="${CDEPEND}
 				=sys-devel/lld-7*
 				sys-devel/llvm:7[gold]
 				pgo? ( =sys-libs/compiler-rt-sanitizers-7*[profile] )
-			)
-		)
-		(
-			sys-devel/clang:6
-			!clang? ( sys-devel/llvm:6 )
-			clang? (
-				=sys-devel/lld-6*
-				sys-devel/llvm:6[gold]
-				pgo? ( =sys-libs/compiler-rt-sanitizers-6*[profile] )
 			)
 		)
 	)
@@ -201,32 +201,29 @@ llvm_check_deps() {
 	einfo "Will use LLVM slot ${LLVM_SLOT}!" >&2
 }
 
-pkg_setup() {
-	moz_pkgsetup
-
+pkg_pretend() {
 	if use pgo ; then
 		if ! has usersandbox $FEATURES ; then
 			die "You must enable usersandbox as X server can not run as root!"
 		fi
 	fi
 
-	# Avoid PGO profiling problems due to enviroment leakage
-	# These should *always* be cleaned up anyway
-	unset DBUS_SESSION_BUS_ADDRESS \
-		DISPLAY \
-		ORBIT_SOCKETDIR \
-		SESSION_MANAGER \
-		XDG_SESSION_COOKIE \
-		XAUTHORITY
+	# Ensure we have enough disk space to compile
+	if use pgo || use lto || use debug || use test ; then
+		CHECKREQS_DISK_BUILD="8G"
+	else
+		CHECKREQS_DISK_BUILD="4G"
+	fi
 
-	append-cppflags "-DTOR_BROWSER_DATA_IN_HOME_DIR"
+	check-reqs_pkg_pretend
 
-	addpredict /proc/self/oom_score_adj
-
-	llvm_pkg_setup
+	local _d="${EPREFIX}/usr/$(get_libdir)/${PN}/${PN}"
+	[[ -d "${_d}" ]] && die "Please manually remove ${_d}"
 }
 
-pkg_pretend() {
+pkg_setup() {
+	moz_pkgsetup
+
 	# Ensure we have enough disk space to compile
 	if use pgo || use lto || use debug || use test ; then
 		CHECKREQS_DISK_BUILD="8G"
@@ -236,8 +233,21 @@ pkg_pretend() {
 
 	check-reqs_pkg_setup
 
-	local _d="${EPREFIX}/usr/$(get_libdir)/${PN}/${PN}"
-	[[ -d "${_d}" ]] && die "Please manually remove ${_d}"
+	# Avoid PGO profiling problems due to enviroment leakage
+	# These should *always* be cleaned up anyway
+	unset DBUS_SESSION_BUS_ADDRESS \
+		DISPLAY \
+		ORBIT_SOCKETDIR \
+		SESSION_MANAGER \
+		XDG_CACHE_HOME \
+		XDG_SESSION_COOKIE \
+		XAUTHORITY
+
+	append-cppflags "-DTOR_BROWSER_DATA_IN_HOME_DIR"
+
+	addpredict /proc/self/oom_score_adj
+
+	llvm_pkg_setup
 }
 
 src_prepare() {
@@ -587,7 +597,7 @@ src_install() {
 		|| die
 	fi
 
-	if ! use screenshot; then
+	if ! use screenshot ; then
 		echo "pref(\"extensions.screenshots.disabled\", true);" >> \
 			"${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
 			|| die
