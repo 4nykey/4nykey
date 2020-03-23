@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -29,13 +29,12 @@ LICENSE="GPL-2 LGPL-2.1"
 
 SLOT="0"
 IUSE="
-alsa oss pulseaudio gtk network sid mad mac adplug vorbis ffmpeg flac sndfile
+alsa oss pulseaudio gtk network sid mad mac vorbis ffmpeg flac sndfile
 wavpack cdda gme libnotify musepack midi tta dts aac mms libsamplerate X imlib
 zip nls threads gtk3 dumb shorten alac wma opus
 "
 
 RDEPEND="
-	adplug? ( media-libs/adplug )
 	dts? ( media-libs/libdca )
 	mac? ( media-sound/mac )
 	gme? ( media-libs/game-music-emu )
@@ -103,7 +102,6 @@ src_configure() {
 		$(use_enable sid)
 		$(use_enable mad libmad)
 		$(use_enable mac ffap)
-		$(use_enable adplug)
 		$(use_enable X hotkeys)
 		$(use_enable vorbis)
 		$(use_enable ffmpeg)

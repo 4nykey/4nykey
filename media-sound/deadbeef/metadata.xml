@@ -17,7 +17,6 @@
 		<flag name="gme">Add support for playing various video game music formats</flag>
 		<flag name="dumb">Enable media-libs/dumb module library support</flag>
 		<flag name="alac">Add support for Apple Lossless Audio Codec files</flag>
-		<flag name="adplug">Enable the AdPlug decoder plugin</flag>
 		<flag name="shorten">Enable the shorten decoder plugin</flag>
 	</use>
 </pkgmetadata>
