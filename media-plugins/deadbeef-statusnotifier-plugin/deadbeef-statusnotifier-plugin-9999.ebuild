@@ -1,4 +1,4 @@
-# Copyright 2019 Gentoo Authors
+# Copyright 2019-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -17,7 +17,6 @@ else
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
-	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
 inherit cmake-utils
 
@@ -36,9 +35,11 @@ RDEPEND="${DEPEND}"
 BDEPEND="
 	dev-util/glib-utils
 "
+PATCHES=( "${FILESDIR}"/gtk2.diff )
 
 src_configure() {
 	local mycmakeargs=(
+		-DLIB_INSTALL_DIR=$(get_libdir)
 		-DUSE_GTK=$(usex gtk)
 		-DUSE_GTK3=$(usex gtk3)
 	)
