@@ -5,8 +5,14 @@
 		<email>4nykey@gmail.com</email>
 	</maintainer>
 	<use>
+		<flag name="font_variants_fixed">
+			A variant without ligatures and half-width glyphs
+		</flag>
+		<flag name="font_variants_monospace">
+			A variant with ligatures and full-width glyphs
+		</flag>
 		<flag name="font_variants_term">
-			A variant without ligatures and full-width glyphs
+			A variant with ligatures and half-width glyphs
 		</flag>
 	</use>
 </pkgmetadata>
