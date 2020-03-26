@@ -30,7 +30,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.4[ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.6[ufo(-),unicode(-),${PYTHON_USEDEP}]
 	dev-python/cu2qu[${PYTHON_USEDEP}]
 	dev-python/glyphsLib[${PYTHON_USEDEP}]
 	dev-python/ufo2ft[${PYTHON_USEDEP}]
@@ -39,7 +39,7 @@ RDEPEND="
 	dev-python/booleanOperations[${PYTHON_USEDEP}]
 	dev-python/lxml[${PYTHON_USEDEP}]
 	dev-python/skia-pathops[${PYTHON_USEDEP}]
-	>=dev-python/ufoLib2-0.6.1[${PYTHON_USEDEP}]
+	>=dev-python/ufoLib2-0.6.2[${PYTHON_USEDEP}]
 	>=dev-python/attrs-19.3[${PYTHON_USEDEP}]
 "
 DEPEND="
@@ -50,9 +50,6 @@ DEPEND="
 		dev-python/mock[${PYTHON_USEDEP}]
 	)
 "
-PATCHES=(
-	"${FILESDIR}"/${PN}-instantiator.diff
-)
 
 pkg_setup() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
