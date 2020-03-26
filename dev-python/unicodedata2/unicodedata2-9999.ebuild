@@ -9,16 +9,14 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/mikekap/${PN}.git"
 else
-	MY_PV="${PV/_p/-}"
-	if [[ -z ${PV%%*_p*} ]]; then
-		inherit vcs-snapshot
-		MY_PV="45378d5"
-	fi
+	MY_PV="$(ver_rs 3 -)"
+	[[ -z ${PV%%*_p*} ]] && MY_PV="45378d5"
 	SRC_URI="
 		mirror://githubcl/mikekap/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
 
 DESCRIPTION="Unicodedata backport for python 2/3 updated to the latest unicode version"

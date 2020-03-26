@@ -43,7 +43,7 @@ RDEPEND="
 		>=dev-python/fs-2.4.11[${PYTHON_USEDEP}]
 	)
 	unicode? (
-		dev-python/unicodedata2[${PYTHON_USEDEP}]
+		>=dev-python/unicodedata2-13[${PYTHON_USEDEP}]
 	)
 	qt5? ( dev-python/PyQt5[${PYTHON_USEDEP}] )
 	gtk? ( dev-python/pygobject:3[${PYTHON_USEDEP}] )
