@@ -1,17 +1,18 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 PLOCALES="
-cs de el en_GB es fr it nn pl pt pt_PT ru sv zh
+cs de el en_GB es fr it ja nn pl pt pt_PT ru sv zh
 "
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python3_{6,7,8} )
 PYTHON_REQ_USE='threads(+)'
+WAF_BINARY="${S}/waf"
 EGIT_REPO_URI="https://github.com/${PN^}/${PN}.git"
-inherit gnome2 python-any-r1 waf-utils l10n git-r3 toolchain-funcs
+inherit python-any-r1 l10n git-r3 toolchain-funcs multiprocessing desktop xdg
 if [[ -n ${PV%%*9999} ]]; then
-	MY_PV="6987196"
+	MY_PV="f744b5f"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	EGIT_COMMIT="${MY_PV/_/-}"
 	KEYWORDS="~amd64 ~x86"
@@ -19,12 +20,12 @@ fi
 SRC_URI=""
 
 DESCRIPTION="Digital Audio Workstation"
-HOMEPAGE="http://ardour.org/"
+HOMEPAGE="https://ardour.org/"
 
 LICENSE="GPL-2"
 SLOT="${PV%%.*}"
 IUSE="
-alsa bindist bundled-libs +c++0x debug doc jack hid nls pulseaudio phone-home
+alsa bindist bundled-libs debug doc jack hid nls pulseaudio phone-home
 sanitize sse vst
 "
 REQUIRED_USE="
@@ -33,7 +34,7 @@ REQUIRED_USE="
 
 RDEPEND="
 	dev-cpp/gtkmm:2.4
-	sci-libs/fftw:3.0
+	sci-libs/fftw:3.0[threads]
 	media-libs/flac
 	media-libs/libogg
 	media-libs/fontconfig
@@ -63,6 +64,8 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
+"
+BDEPEND="
 	${PYTHON_DEPS}
 	dev-libs/boost
 	nls? ( sys-devel/gettext )
@@ -70,18 +73,19 @@ DEPEND="
 "
 
 PATCHES=(
+	"${FILESDIR}"/${PN}-fftw3f.diff
+	"${FILESDIR}"/${PN}-ardourcp.diff
 )
 DOCS=( README TRANSLATORS doc/monitor_modes.pdf )
 
 src_prepare() {
-	default
 	my_lcmsg() {
 		rm -f {gtk2_ardour,gtk2_ardour/appdata,libs/ardour,libs/gtkmm2ext}/po/${1}.po
 	}
+	l10n_for_each_disabled_locale_do my_lcmsg
 	sed -e 's:AudioEditing:X-&:' -i gtk2_ardour/ardour.desktop.in
-	sed -e 's:USE_EXTERNAL_LIBS:CANT_&:' -i libs/zita-convolver/wscript
-	use nls && l10n_for_each_disabled_locale_do my_lcmsg
 	grep -rl '/\<lib\>' | xargs sed -e "s:/\<lib\>:/$(get_libdir):g" -i
+	default
 }
 
 src_configure() {
@@ -89,6 +93,8 @@ src_configure() {
 		usex $1 --${2:-${1}} --no-${2:-${1}}
 	}
 	local wafargs=(
+		--prefix="${EPREFIX}/usr"
+		--libdir="${EPREFIX}/usr/$(get_libdir)"
 		--configdir=/etc
 		--noconfirm
 		--versioned
@@ -101,23 +107,30 @@ src_configure() {
 		$(my_use sse fpu-optimization)
 		$(usex bindist '--freebie' '')
 		$(usex debug '--debug-symbols --rt-alloc-debug' '')
-		$(usex c++0x '--cxx11' '')
 		$(usex sanitize '--address-sanitizer' '')
 		$(usex bundled-libs '' '--use-external-libs')
 		$(usex doc '--docs' '')
 	)
+
+	tc-export AR CC CPP CXX RANLIB
+
+	set -- "${WAF_BINARY}" "${wafargs[@]}" configure
+	echo "${@}"
+
+	LINKFLAGS="${LDFLAGS}" \
 	PKGCONFIG="$(tc-getPKG_CONFIG)" \
-	waf-utils_src_configure "${wafargs[@]}"
+	${EPYTHON} "${@}" || die "configure failed"
 }
 
 src_compile() {
 	"${WAF_BINARY}" \
 		--jobs=$(makeopts_jobs) --verbose \
-		build $(usex nls i18n '') || die
+		build $(usex nls i18n '') || die "build failed"
 }
 
 src_install() {
-	waf-utils_src_install
+	"${WAF_BINARY}" --destdir="${D}" "${@}" install || die "install failed"
+	einstalldocs
 	newicon gtk2_ardour/icons/${PN}-app-icon_osx.png ${PN}${SLOT}.png
 	domenu build/gtk2_ardour/${PN}${SLOT}.desktop
 	insinto /usr/share/mime/packages
