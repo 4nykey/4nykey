@@ -17,7 +17,7 @@ else
 		MY_PV="0b7af01"
 		inherit vcs-snapshot
 	fi
-	MY_TD="psautohint-testdata-07168d5"
+	MY_TD="psautohint-testdata-0ceaf9f"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		test? (
@@ -37,12 +37,11 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.2[ufo,${PYTHON_USEDEP}]
-	>=dev-python/lxml-4.4.1[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.5[ufo,${PYTHON_USEDEP}]
+	>=dev-python/lxml-4.5[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
-	dev-python/setuptools[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	test? (
@@ -69,9 +68,9 @@ python_prepare_all() {
 		-e "/lib': Custom\(InstallL\|BuildCl\)ib/d" \
 		-e "/build_exe': build_exe,/d" \
 		-i setup.py
-	if [[ -n ${PV%%*9999} ]] && use test; then
+	sed -e '/-Werror/d' -i "${EMESON_SOURCE}"/meson.build
+	[[ -d "${WORKDIR}"/${MY_TD} ]] && \
 		mv "${WORKDIR}"/${MY_TD}/* "${S}"/tests/integration/data/
-	fi
 	distutils-r1_python_prepare_all
 }
 
