@@ -11,7 +11,7 @@ PYTHON_REQ_USE='ncurses,sqlite,ssl,threads(+)'
 # Patch version
 PATCH="firefox-68.0-patches-12"
 
-LLVM_MAX_SLOT=9
+LLVM_MAX_SLOT=10
 
 inherit check-reqs eapi7-ver flag-o-matic toolchain-funcs eutils \
 		gnome2-utils llvm mozcoreconf-v6 pax-utils xdg-utils \
@@ -48,7 +48,7 @@ RESTRICT="!bindist? ( bindist )
 RESTRICT+=" primaryuri"
 
 MY_EFF="2019.11.7"
-MY_NOS="11.0.15"
+MY_NOS="11.0.19"
 MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
 MY_NOS="noscript-${MY_NOS}.xpi"
 PATCH_URIS=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c,whissi}/mozilla/patchsets/${PATCH}.tar.xz )
