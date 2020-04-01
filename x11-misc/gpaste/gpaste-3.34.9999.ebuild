@@ -16,7 +16,7 @@ if [[ ${PV} = *9999* ]]; then
 else
 	SRC_URI="https://www.imagination-land.org/files/${PN}/${P}.tar.xz"
 	RESTRICT="primaryuri"
-#	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64 ~x86"
 fi
 
 DESCRIPTION="Clipboard management system"
