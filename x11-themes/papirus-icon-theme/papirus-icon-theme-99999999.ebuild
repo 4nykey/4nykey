@@ -17,24 +17,20 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 DESCRIPTION="Papirus icon theme for GTK"
-HOMEPAGE="https://github.com/PapirusDevelopmentTeam/${PN}"
+HOMEPAGE="https://git.io/papirus-icon-theme"
 
-LICENSE="CC-BY-SA-4.0"
+LICENSE="GPL-3"
 SLOT="0"
-IUSE=""
+IUSE="test"
 
 DEPEND=""
 RDEPEND="
 	${DEPEND}
-	x11-themes/gtk-engines-murrine
-	x11-libs/gdk-pixbuf:2
 "
-DOCS=( README.md )
+BDEPEND="
+	test? ( app-text/xmlstarlet )
+"
 
-src_prepare() {
-	default
-	find -mindepth 2 -type f -regex '.*\(AUTHORS\|LICENSE\)' -delete
-	find -L -type l -delete
+src_test() {
+	emake test-all
 }
-
-src_configure() { :; }
