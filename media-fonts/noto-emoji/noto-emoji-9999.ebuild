@@ -10,9 +10,9 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}"
 else
 	inherit vcs-snapshot
-	MY_PV="unicode12"
+	MY_PV="unicode12_1"
 	MY_PV="v${PV//./-}-${MY_PV}"
-	[[ -z ${PV%%*_p*} ]] && MY_PV="018aa14"
+	[[ -z ${PV%%*_p*} ]] && MY_PV="ac1703e"
 	SRC_URI="mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
