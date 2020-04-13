@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -31,7 +31,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4[ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.7[ufo(-),unicode(-),${PYTHON_USEDEP}]
 	dev-python/booleanOperations[${PYTHON_USEDEP}]
 	app-arch/brotli[python,${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
