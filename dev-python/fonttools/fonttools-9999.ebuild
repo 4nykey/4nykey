@@ -52,8 +52,10 @@ DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
+	dev-python/cython[${PYTHON_USEDEP}]
 	test? (
 		sci-libs/scipy[${PYTHON_USEDEP}]
+		dev-python/ufoLib2[${PYTHON_USEDEP}]
 	)
 "
 distutils_enable_tests pytest
