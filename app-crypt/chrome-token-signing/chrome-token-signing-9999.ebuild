@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -27,8 +27,10 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
+MY_DOC="esteid-update-nssdb-3b283c2"
 SRC_URI+="
-	mirror://githubraw/open-eid/linux-installer/21d2227/esteid-update-nssdb
+	mirror://githubraw/open-eid/linux-installer/${MY_DOC##*-}/${MY_DOC%-*}
+	-> ${MY_DOC}
 "
 
 DESCRIPTION="Native client and browser extension for eID"
@@ -49,9 +51,6 @@ RDEPEND="
 	www-plugins/firefox-pkcs11-loader
 	dev-libs/nss[utils]
 "
-DEPEND="
-	${DEPEND}
-"
 BDEPEND="
 	dev-qt/linguist-tools
 "
@@ -68,7 +67,7 @@ src_compile() {
 	sed \
 		-e "/LIBS=/s:=.*:=/usr/$(get_libdir):" \
 		-e "/^[A-Z]\+=/s:/usr/:${EPREFIX}&:" \
-		"${DISTDIR}"/esteid-update-nssdb > esteid-update-nssdb
+		"${DISTDIR}"/${MY_DOC} > esteid-update-nssdb
 }
 
 src_install() {
