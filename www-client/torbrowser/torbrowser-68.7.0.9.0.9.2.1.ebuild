@@ -47,7 +47,7 @@ RESTRICT="!bindist? ( bindist )
 	!test? ( test )"
 RESTRICT+=" primaryuri"
 
-MY_EFF="2019.11.7"
+MY_EFF="2020.3.16"
 MY_NOS="11.0.23"
 MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
 MY_NOS="noscript-${MY_NOS}.xpi"
