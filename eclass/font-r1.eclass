@@ -79,7 +79,7 @@ ${MY_FONT_CHARS[@]}
 
 DEPEND="
 	X? (
-		x11-apps/mkfontdir
+		x11-apps/mkfontscale
 		media-fonts/encodings
 	)
 	sys-apps/findutils
