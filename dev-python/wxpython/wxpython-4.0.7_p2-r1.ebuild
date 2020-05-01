@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -8,8 +8,8 @@ PYTHON_REQ_USE="threads(+)"
 VIRTUALX_REQUIRED="test"
 
 MY_PN="wxPython"
-# ext/wxwidgets submodule commit and corresponding wxGTK version
-WXV="3b6a9f7:3.0.5_pre20191020"
+# wxGTK version and corresponding ext/wxwidgets submodule commit or tag
+WXV=( 3.0.5 v3.0.5 )
 # build.py: 'wafCurrentVersion'
 WAF_BINARY="waf-2.0.8"
 inherit waf-utils distutils-r1 eutils wxwidgets vcs-snapshot virtualx
@@ -19,24 +19,24 @@ HOMEPAGE="https://wiki.wxpython.org/ProjectPhoenix"
 SRC_URI="
 	mirror://githubcl/wxWidgets/Phoenix/tar.gz/${MY_PN}-${PV/_p/.post}
 	-> ${P}.tar.gz
-	mirror://githubcl/wxwidgets/wxwidgets/tar.gz/${WXV%:*}
-	-> wxGTK-${WXV#*:}.tar.gz
+	mirror://githubcl/wxwidgets/wxwidgets/tar.gz/${WXV[1]}
+	-> wxGTK-${WXV}.tar.gz
 	https://waf.io/${WAF_BINARY}.tar.bz2
 "
 RESTRICT="primaryuri"
 
 LICENSE="wxWinLL-3.1 LGPL-2"
-SLOT="${PV:0:3}"
-KEYWORDS="~amd64 ~x86"
+SLOT="4.0"
+#KEYWORDS="~amd64 ~x86"
 IUSE="apidocs examples gtk3 libnotify opengl test"
 
 RDEPEND="
 	dev-lang/python-exec:2[${PYTHON_USEDEP}]
 	gtk3? (
-		>=x11-libs/wxGTK-${WXV#*:}:3.0-gtk3[gstreamer,webkit,libnotify=,opengl?,tiff,X]
+		>=x11-libs/wxGTK-${WXV}:3.0-gtk3[gstreamer,webkit,libnotify=,opengl?,tiff,X]
 	)
 	!gtk3? (
-		>=x11-libs/wxGTK-${WXV#*:}:3.0[gstreamer,webkit,libnotify=,opengl?,tiff,X]
+		>=x11-libs/wxGTK-${WXV}:3.0[gstreamer,webkit,libnotify=,opengl?,tiff,X]
 	)
 	dev-python/numpy[${PYTHON_USEDEP}]
 	dev-python/pillow[${PYTHON_USEDEP}]
@@ -71,14 +71,9 @@ pkg_setup() {
 python_prepare_all() {
 	distutils-r1_python_prepare_all
 
-	sed \
-		-e "/conf.env.INCLUDES_WXPY/ s:'sip/siplib', ::" \
-		-i wscript
+	mv -f "${WORKDIR}"/wxGTK-${WXV}/* ext/wxWidgets/
 
-	mv -f "${WORKDIR}"/wxGTK-${WXV#*:}/* ext/wxWidgets/
-	cp -s /usr/bin/{doxygen,sip} bin/
-
-	SIP=bin/sip DOXYGEN=bin/doxygen \
+	SIP=/usr/bin/sip DOXYGEN=/usr/bin/doxygen \
 		${EPYTHON} "${S}"/build.py dox etg sip \
 		$(usex apidocs 'sphinx' '--nodoc') || die
 }
