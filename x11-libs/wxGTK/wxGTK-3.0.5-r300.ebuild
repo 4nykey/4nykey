@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -6,7 +6,7 @@ EAPI=7
 inherit autotools multilib-minimal vcs-snapshot
 
 DESCRIPTION="GTK+ version of wxWidgets, a cross-platform C++ GUI toolkit"
-HOMEPAGE="http://wxwidgets.org/"
+HOMEPAGE="https://wxwidgets.org/"
 
 MY_PV="3b6a9f7"
 [[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
@@ -22,8 +22,8 @@ SLOT="${PV:0:3}-gtk3"
 
 RDEPEND="
 	dev-libs/expat[${MULTILIB_USEDEP}]
-	sdl?    ( media-libs/libsdl[${MULTILIB_USEDEP}] )
-	X?  (
+	sdl? ( media-libs/libsdl2[${MULTILIB_USEDEP}] )
+	X? (
 		>=dev-libs/glib-2.22:2[${MULTILIB_USEDEP}]
 		media-libs/libpng:0=[${MULTILIB_USEDEP}]
 		sys-libs/zlib[${MULTILIB_USEDEP}]
@@ -139,13 +139,13 @@ multilib_src_configure() {
 multilib_src_install_all() {
 	einstalldocs
 	# Unversioned links
-	rm "${D}"/usr/bin/wx{-config,rc}
+	rm "${ED}"/usr/bin/wx{-config,rc}
 
 	# version bakefile presets
-	pushd "${D}"usr/share/bakefile/presets/ > /dev/null
+	pushd "${ED}"/usr/share/bakefile/presets/ > /dev/null
 	local f
 	for f in wx*; do
-		mv "${f}" "${f/wx/wx${SLOT//.}gtk3}"
+		mv "${f}" "wx${SLOT//.}${f#wx}"
 	done
 	popd > /dev/null
 }

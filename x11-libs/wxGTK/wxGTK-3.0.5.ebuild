@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -6,7 +6,7 @@ EAPI=7
 inherit autotools multilib-minimal vcs-snapshot
 
 DESCRIPTION="GTK+ version of wxWidgets, a cross-platform C++ GUI toolkit"
-HOMEPAGE="http://wxwidgets.org/"
+HOMEPAGE="https://wxwidgets.org/"
 
 MY_PV="3b6a9f7"
 [[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
@@ -22,8 +22,8 @@ SLOT="${PV:0:3}"
 
 RDEPEND="
 	dev-libs/expat[${MULTILIB_USEDEP}]
-	sdl?    ( media-libs/libsdl[${MULTILIB_USEDEP}] )
-	X?  (
+	sdl? ( media-libs/libsdl2[${MULTILIB_USEDEP}] )
+	X? (
 		>=dev-libs/glib-2.22:2[${MULTILIB_USEDEP}]
 		media-libs/libpng:0=[${MULTILIB_USEDEP}]
 		sys-libs/zlib[${MULTILIB_USEDEP}]
@@ -93,14 +93,13 @@ src_prepare() {
 }
 
 multilib_src_configure() {
-	local myeconfargs
-
 	# X independent options
-	myeconfargs="
-			--with-zlib=sys
-			--with-expat=sys
-			--enable-compat28
-			$(use_with sdl)"
+	local myeconfargs=(
+		--with-zlib=sys
+		--with-expat=sys
+		--enable-compat28
+		$(use_with sdl)
+	)
 
 	# debug in >=2.9
 	# there is no longer separate debug libraries (gtk2ud)
@@ -109,14 +108,12 @@ multilib_src_configure() {
 	# apps can disable these features by building w/ -NDEBUG or wxDEBUG_LEVEL_0.
 	# http://docs.wxwidgets.org/3.0/overview_debugging.html
 	# https://groups.google.com/group/wx-dev/browse_thread/thread/c3c7e78d63d7777f/05dee25410052d9c
-	use debug \
-		&& myeconfargs="${myeconfargs} --enable-debug=max"
+	use debug && myeconfargs+=( --enable-debug=max )
 
 	# wxGTK options
 	#   --enable-graphics_ctx - needed for webkit, editra
 	#   --without-gnomevfs - bug #203389
-	use X && \
-		myeconfargs="${myeconfargs}
+	use X && myeconfargs+=(
 			--enable-graphics_ctx
 			--with-gtkprint
 			--enable-gui
@@ -130,23 +127,24 @@ multilib_src_configure() {
 			$(use_with opengl)
 			$(use_with tiff libtiff sys)
 			$(use_with chm libmspack)
-		"
+	)
 
 	# wxBase options
-	use X || myeconfargs="${myeconfargs} --disable-gui"
+	use X || myeconfargs+=( --disable-gui )
 
-	ECONF_SOURCE="${S}" econf ${myeconfargs}
+	ECONF_SOURCE="${S}" econf ${myeconfargs[@]}
 }
 
 multilib_src_install_all() {
 	einstalldocs
 	# Unversioned links
-	rm "${D}"/usr/bin/wx{-config,rc}
+	rm "${ED}"/usr/bin/wx{-config,rc}
 
 	# version bakefile presets
-	pushd "${D}"usr/share/bakefile/presets/ > /dev/null
+	pushd "${ED}"/usr/share/bakefile/presets/ > /dev/null
+	local f
 	for f in wx*; do
-		mv "${f}" "${f/wx/wx${SLOT//.}}"
+		mv "${f}" "wx${SLOT//.}${f#wx}"
 	done
 	popd > /dev/null
 }
