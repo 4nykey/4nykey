@@ -5,7 +5,7 @@ EAPI=7
 
 VALA_MIN_API_VERSION="0.42"
 VALA_USE_DEPEND="vapigen"
-inherit vala meson xdg
+inherit vala meson gnome2-utils xdg
 MY_GNOME="${PV:2:2}"
 MY_GNOME="${PV%%.*}.$((MY_GNOME+MY_GNOME%2))"
 if [[ ${PV} = *9999* ]]; then
@@ -27,6 +27,7 @@ SLOT="0"
 IUSE="bash-completion gnome-shell introspection systemd vala zsh-completion"
 REQUIRED_USE="
 	vala? ( introspection )
+	gnome-shell? ( introspection )
 "
 
 DEPEND="
@@ -37,15 +38,15 @@ DEPEND="
 	introspection? (
 		>=dev-libs/gobject-introspection-1.58
 		>=x11-wm/mutter-3.30:0/5[introspection]
+		>=dev-libs/gjs-1.54
 	)
-	>=dev-libs/gjs-1.54
 	systemd? ( sys-apps/systemd )
+	sys-apps/dbus
+	gnome-base/gnome-control-center:2
 "
 RDEPEND="
 	${DEPEND}
 	dev-libs/appstream-glib
-	gnome-base/gnome-control-center:2
-	sys-apps/dbus
 	gnome-shell? ( gnome-base/gnome-shell )
 "
 BDEPEND="
@@ -68,4 +69,19 @@ src_configure() {
 		$(meson_use zsh-completion)
 	)
 	meson_src_configure
+}
+
+pkg_preinst() {
+	xdg_pkg_preinst
+	gnome2_schemas_savelist
+}
+
+pkg_postinst() {
+	xdg_pkg_postinst
+	gnome2_schemas_update
+}
+
+pkg_postrm() {
+	xdg_pkg_postrm
+	gnome2_schemas_update
 }
