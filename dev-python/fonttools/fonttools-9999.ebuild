@@ -28,7 +28,7 @@ HOMEPAGE="https://github.com/${PN}/${PN}"
 
 LICENSE="BSD"
 SLOT="0"
-IUSE="brotli gtk qt5 test +ufo unicode zopfli"
+IUSE="brotli gtk qt5 +ufo unicode zopfli"
 DOCS=( {README,NEWS}.rst )
 PATCHES=(
 	"${FILESDIR}"/${PN}-xattr.diff

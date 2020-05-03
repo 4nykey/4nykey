@@ -29,7 +29,7 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
-	>=media-libs/harfbuzz-2.6.4
+	>=media-libs/harfbuzz-2.6.5
 "
 DEPEND="
 	${RDEPEND}
