@@ -30,16 +30,16 @@ IUSE="test"
 
 RDEPEND="
 	>=dev-python/lxml-4.5[${PYTHON_USEDEP}]
-	dev-python/booleanOperations[${PYTHON_USEDEP}]
-	dev-python/cu2qu[${PYTHON_USEDEP}]
-	dev-python/defcon[${PYTHON_USEDEP}]
-	dev-python/fontMath[${PYTHON_USEDEP}]
+	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
+	>=dev-python/cu2qu-1.6.7[${PYTHON_USEDEP}]
+	>=dev-python/defcon-0.6[${PYTHON_USEDEP}]
+	>=dev-python/fontMath-0.5.2[${PYTHON_USEDEP}]
 	dev-python/fontPens[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-4.5[brotli(-),ufo(-),unicode(-),${PYTHON_USEDEP}]
-	dev-python/MutatorMath[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.8.1[brotli(-),ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/MutatorMath-3.0.1[${PYTHON_USEDEP}]
 	>=dev-util/psautohint-2.0.1[${PYTHON_USEDEP}]
 	>=dev-python/ufoProcessor-1.9[${PYTHON_USEDEP}]
-	dev-python/ufoNormalizer[${PYTHON_USEDEP}]
+	>=dev-python/ufoNormalizer-0.4.1[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
