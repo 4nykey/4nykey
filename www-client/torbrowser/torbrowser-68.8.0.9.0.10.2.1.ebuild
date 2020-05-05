@@ -9,7 +9,7 @@ PYTHON_COMPAT=( python3_{6,7} )
 PYTHON_REQ_USE='ncurses,sqlite,ssl,threads(+)'
 
 # Patch version
-PATCH="firefox-68.0-patches-12"
+PATCH="firefox-68.0-patches-14"
 
 LLVM_MAX_SLOT=10
 
@@ -48,7 +48,7 @@ RESTRICT="!bindist? ( bindist )
 RESTRICT+=" primaryuri"
 
 MY_EFF="2020.3.16"
-MY_NOS="11.0.23"
+MY_NOS="11.0.25"
 MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
 MY_NOS="noscript-${MY_NOS}.xpi"
 PATCH_URIS=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c,whissi}/mozilla/patchsets/${PATCH}.tar.xz )
