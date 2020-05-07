@@ -1,7 +1,7 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 PYTHON_COMPAT=( python2_7 python3_{6,7} )
 inherit python-any-r1 vala toolchain-funcs
@@ -9,9 +9,11 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/johanmattssonm/${PN}.git"
 	inherit git-r3
 else
-	inherit vcs-snapshot
-	MY_PV="58c28cb"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
+	MY_PV="v${PV}"
+	if [[ -z ${PV%%*_p*} ]]; then
+		inherit vcs-snapshot
+		MY_PV="58c28cb"
+	fi
 	SRC_URI="
 		mirror://githubcl/johanmattssonm/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
