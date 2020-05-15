@@ -7,7 +7,8 @@ DISTUTILS_SINGLE_IMPL=1
 PLOCALES="
 af ar ast bg ca cs cy da de el en_CA en_GB en eo es et fa fi fo fr_CA fr fy gl
 he hi hr hu id is it ja kn ko lt mr nb nds ne nl oc pa pl pt_BR pt ro ru sco sk
-sl sr sv ta te tr uk vi zh_CN zh_TW
+sl sr sv ta te tr uk vi zh_CN zh_TW de_CH en_AU es_419 ga ms_MY nl_BE pt_PT sq
+zh zh-Hans
 "
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -46,11 +47,12 @@ BDEPEND="
 	sys-devel/gettext
 "
 DOCS=( AUTHORS.txt {CONTRIBUTING,NEWS,README}.md )
+PATCHES=( "${FILESDIR}"/${PN}-test_id3.diff )
 distutils_enable_tests pytest
 
 src_prepare() {
 	myloc() {
-		rm -f po/{.,attributes,countries}/${1}.po
+		rm -f po/{.,appstream,attributes,countries}/${1}.po
 	}
 	l10n_for_each_disabled_locale_do myloc
 	distutils-r1_python_prepare_all
