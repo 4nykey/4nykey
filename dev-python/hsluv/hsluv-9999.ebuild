@@ -1,23 +1,27 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 PYTHON_COMPAT=( python2_7 python3_{6,7} )
 inherit distutils-r1
+MY_PN="${PN}-python"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/${PN}/${PN}-python.git"
+	EGIT_REPO_URI="https://github.com/${PN}/${MY_PN}.git"
 else
+	inherit vcs-snapshot
+	MY_PV="b212507"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
-		mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz
+		mirror://githubcl/${PN}/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
 
 DESCRIPTION="Python implementation of HSLuv (revision 4)"
-HOMEPAGE="http://www.hsluv.org/"
+HOMEPAGE="https://www.hsluv.org/"
 
 LICENSE="MIT"
 SLOT="0"
@@ -27,5 +31,5 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	dev-python/setuptools[${PYTHON_USEDEP}]
 "
+distutils_enable_tests pytest
