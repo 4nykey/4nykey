@@ -28,27 +28,26 @@ HOMEPAGE="https://trufont.github.io/"
 
 LICENSE="MPL-2.0"
 SLOT="0"
-IUSE="test"
+IUSE=""
 
 RDEPEND="
-	>=dev-python/fonttools-4.7[ufo(-),unicode(-),${PYTHON_USEDEP}]
-	dev-python/booleanOperations[${PYTHON_USEDEP}]
-	app-arch/brotli[python,${PYTHON_USEDEP}]
-	dev-python/defcon[${PYTHON_USEDEP}]
-	dev-python/hsluv[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.9[ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
+	>=app-arch/brotli-1.0.7[python,${PYTHON_USEDEP}]
+	>=dev-python/defcon-0.6[${PYTHON_USEDEP}]
+	>=dev-python/hsluv-5[${PYTHON_USEDEP}]
 	dev-python/PyQt5[${PYTHON_USEDEP}]
-	dev-python/extractor[${PYTHON_USEDEP}]
-	dev-python/ufo2ft[${PYTHON_USEDEP}]
+	>=dev-python/pytz-2020.1[${PYTHON_USEDEP}]
+	>=dev-python/extractor-0.3[${PYTHON_USEDEP}]
+	>=dev-python/ufo2ft-2.13[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
 	dev-python/setuptools_scm[${PYTHON_USEDEP}]
-	test? (
-		dev-python/pytest[${PYTHON_USEDEP}]
-	)
 "
+distutils_enable_tests pytest
 
 python_prepare_all() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
@@ -59,5 +58,5 @@ python_prepare_all() {
 }
 
 python_test() {
-	virtx esetup.py test
+	virtx pytest -vv || die "Tests fail with ${EPYTHON}"
 }
