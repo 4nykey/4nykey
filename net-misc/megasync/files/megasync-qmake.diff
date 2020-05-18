@@ -15,6 +15,16 @@
      update_cache.path = $${HICOLOR}
 -    INSTALLS += update_cache
  }
+--- a/src/MEGASync/MEGASync.pro
++++ b/src/MEGASync/MEGASync.pro
+@@ -48,7 +48,6 @@ TEMPLATE = app
+ #DEFINES += LOG_TO_LOGGER
+ #DEFINES += LOG_TO_FILE
+ #DEFINES += LOG_TO_STDOUT
+-DEFINES += ENABLE_LOG_PERFORMANCE
+ 
+ debug {
+     CONFIG += console
 --- a/src/MEGASync/control/control.pri
 +++ b/src/MEGASync/control/control.pri
 @@ -2,6 +2,7 @@ DEPENDPATH += $$PWD
