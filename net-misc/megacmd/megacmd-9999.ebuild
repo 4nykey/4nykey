@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_SUBMODULES=( )
 else
 	inherit vcs-snapshot
-	MY_PV="6465224"
+	MY_PV="2335a80"
 	SRC_URI="
 		mirror://githubcl/meganz/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -27,7 +27,7 @@ SLOT="0"
 IUSE=""
 
 DEPEND="
-	>=net-misc/meganz-sdk-3.6.5:=[-megacmd(-),sodium(+),sqlite]
+	>=net-misc/meganz-sdk-3.6.9:=[-megacmd(-),sodium(+),sqlite]
 	dev-libs/libpcre:3[cxx]
 	sys-libs/readline:0
 "
@@ -35,7 +35,6 @@ RDEPEND="
 	${DEPEND}
 "
 DOCS=( README.md build/megacmd/megacmd.changes )
-PATCHES=( "${FILESDIR}"/${PN}-sdk36.diff )
 
 src_prepare() {
 	sed \
