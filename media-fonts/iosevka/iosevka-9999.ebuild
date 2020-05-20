@@ -1,15 +1,20 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
 MY_FONT_TYPES=( ttc +ttf )
-MY_FONT_VARIANTS=(
-	cc
-	+default
+MAIN_VARIANTS=(
+	aile
+	curly
+	default
+	etoile
 	slab
-	term
-	type
+	sparkle
+)
+MY_FONT_VARIANTS=(
+	${MAIN_VARIANTS[@]/#default/+default}
+	fixed
 	ss01
 	ss02
 	ss03
@@ -21,9 +26,10 @@ MY_FONT_VARIANTS=(
 	ss09
 	ss10
 	ss11
-	etoile
-	aile
-	extended
+	ss12
+	ss13
+	ss14
+	term
 )
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
@@ -31,64 +37,99 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_BRANCH="dev"
 	REQUIRED_USE="!binary"
 else
-	SRC_URI="https://github.com/be5invis/${PN^}/releases/download/v${PV}/"
+	MY_PV=$(ver_rs 3 '-' 4 '.')
+	SRC_URI="https://github.com/be5invis/${PN^}/releases/download/v${MY_PV}/"
 	SRC_URI="
 	binary? (
 	font_types_ttf? (
-		font_variants_default? ( ${SRC_URI}/01-${P}.zip )
-		font_variants_term? (
-			${SRC_URI}/02-${PN}-term-${PV}.zip
-			font_variants_ss01? ( ${SRC_URI}/${PN}-term-ss01-${PV}.zip )
-			font_variants_ss02? ( ${SRC_URI}/${PN}-term-ss02-${PV}.zip )
-			font_variants_ss03? ( ${SRC_URI}/${PN}-term-ss03-${PV}.zip )
-			font_variants_ss04? ( ${SRC_URI}/${PN}-term-ss04-${PV}.zip )
-			font_variants_ss05? ( ${SRC_URI}/${PN}-term-ss05-${PV}.zip )
-			font_variants_ss06? ( ${SRC_URI}/${PN}-term-ss06-${PV}.zip )
-			font_variants_ss07? ( ${SRC_URI}/${PN}-term-ss07-${PV}.zip )
-			font_variants_ss08? ( ${SRC_URI}/${PN}-term-ss08-${PV}.zip )
-			font_variants_ss09? ( ${SRC_URI}/${PN}-term-ss09-${PV}.zip )
-			font_variants_ss10? ( ${SRC_URI}/${PN}-term-ss10-${PV}.zip )
-			font_variants_ss11? ( ${SRC_URI}/${PN}-term-ss11-${PV}.zip )
+		font_variants_default? ( ${SRC_URI}pkg-${PN}-${MY_PV}.zip )
+		font_variants_fixed? (
+			${SRC_URI}ttf-${PN}-fixed-${MY_PV}.zip
+			font_variants_ss01? ( ${SRC_URI}ttf-${PN}-fixed-ss01-${MY_PV}.zip )
+			font_variants_ss02? ( ${SRC_URI}ttf-${PN}-fixed-ss02-${MY_PV}.zip )
+			font_variants_ss03? ( ${SRC_URI}ttf-${PN}-fixed-ss03-${MY_PV}.zip )
+			font_variants_ss04? ( ${SRC_URI}ttf-${PN}-fixed-ss04-${MY_PV}.zip )
+			font_variants_ss05? ( ${SRC_URI}ttf-${PN}-fixed-ss05-${MY_PV}.zip )
+			font_variants_ss06? ( ${SRC_URI}ttf-${PN}-fixed-ss06-${MY_PV}.zip )
+			font_variants_ss07? ( ${SRC_URI}ttf-${PN}-fixed-ss07-${MY_PV}.zip )
+			font_variants_ss08? ( ${SRC_URI}ttf-${PN}-fixed-ss08-${MY_PV}.zip )
+			font_variants_ss09? ( ${SRC_URI}ttf-${PN}-fixed-ss09-${MY_PV}.zip )
+			font_variants_ss10? ( ${SRC_URI}ttf-${PN}-fixed-ss10-${MY_PV}.zip )
+			font_variants_ss11? ( ${SRC_URI}ttf-${PN}-fixed-ss11-${MY_PV}.zip )
+			font_variants_ss12? ( ${SRC_URI}ttf-${PN}-fixed-ss12-${MY_PV}.zip )
+			font_variants_ss13? ( ${SRC_URI}ttf-${PN}-fixed-ss13-${MY_PV}.zip )
+			font_variants_ss14? ( ${SRC_URI}ttf-${PN}-fixed-ss14-${MY_PV}.zip )
 		)
-		font_variants_type? ( ${SRC_URI}/03-${PN}-type-${PV}.zip )
-		font_variants_cc? ( ${SRC_URI}/04-${PN}-cc-${PV}.zip )
+		font_variants_term? (
+			${SRC_URI}ttf-${PN}-term-${MY_PV}.zip
+			font_variants_ss01? ( ${SRC_URI}ttf-${PN}-term-ss01-${MY_PV}.zip )
+			font_variants_ss02? ( ${SRC_URI}ttf-${PN}-term-ss02-${MY_PV}.zip )
+			font_variants_ss03? ( ${SRC_URI}ttf-${PN}-term-ss03-${MY_PV}.zip )
+			font_variants_ss04? ( ${SRC_URI}ttf-${PN}-term-ss04-${MY_PV}.zip )
+			font_variants_ss05? ( ${SRC_URI}ttf-${PN}-term-ss05-${MY_PV}.zip )
+			font_variants_ss06? ( ${SRC_URI}ttf-${PN}-term-ss06-${MY_PV}.zip )
+			font_variants_ss07? ( ${SRC_URI}ttf-${PN}-term-ss07-${MY_PV}.zip )
+			font_variants_ss08? ( ${SRC_URI}ttf-${PN}-term-ss08-${MY_PV}.zip )
+			font_variants_ss09? ( ${SRC_URI}ttf-${PN}-term-ss09-${MY_PV}.zip )
+			font_variants_ss10? ( ${SRC_URI}ttf-${PN}-term-ss10-${MY_PV}.zip )
+			font_variants_ss11? ( ${SRC_URI}ttf-${PN}-term-ss11-${MY_PV}.zip )
+			font_variants_ss12? ( ${SRC_URI}ttf-${PN}-term-ss12-${MY_PV}.zip )
+			font_variants_ss13? ( ${SRC_URI}ttf-${PN}-term-ss13-${MY_PV}.zip )
+			font_variants_ss14? ( ${SRC_URI}ttf-${PN}-term-ss14-${MY_PV}.zip )
+		)
 		font_variants_slab? (
-			font_variants_default? ( ${SRC_URI}/05-${PN}-slab-${PV}.zip )
-			font_variants_term? ( ${SRC_URI}/06-${PN}-term-slab-${PV}.zip )
-			font_variants_type? ( ${SRC_URI}/07-${PN}-type-slab-${PV}.zip )
-			font_variants_cc? ( ${SRC_URI}/08-${PN}-cc-slab-${PV}.zip )
-			font_variants_extended? (
-				${SRC_URI}/experimental-${PN}-slab-extended-${PV}.zip
+			font_variants_default? ( ${SRC_URI}ttf-${PN}-slab-${MY_PV}.zip )
+			font_variants_fixed? ( ${SRC_URI}ttf-${PN}-fixed-slab-${MY_PV}.zip )
+			font_variants_term? ( ${SRC_URI}ttf-${PN}-term-slab-${MY_PV}.zip )
+		)
+		font_variants_curly? (
+			font_variants_default? ( ${SRC_URI}ttf-${PN}-curly-${MY_PV}.zip )
+			font_variants_fixed? ( ${SRC_URI}ttf-${PN}-fixed-curly-${MY_PV}.zip )
+			font_variants_term? ( ${SRC_URI}ttf-${PN}-term-curly-${MY_PV}.zip )
+			font_variants_slab? (
+				${SRC_URI}ttf-${PN}-curly-slab-${MY_PV}.zip
+				font_variants_fixed? ( ${SRC_URI}ttf-${PN}-fixed-curly-slab-${MY_PV}.zip )
+				font_variants_term? ( ${SRC_URI}ttf-${PN}-term-curly-slab-${MY_PV}.zip )
 			)
 		)
-		font_variants_ss01? ( ${SRC_URI}/${PN}-ss01-${PV}.zip )
-		font_variants_ss02? ( ${SRC_URI}/${PN}-ss02-${PV}.zip )
-		font_variants_ss03? ( ${SRC_URI}/${PN}-ss03-${PV}.zip )
-		font_variants_ss04? ( ${SRC_URI}/${PN}-ss04-${PV}.zip )
-		font_variants_ss05? ( ${SRC_URI}/${PN}-ss05-${PV}.zip )
-		font_variants_ss06? ( ${SRC_URI}/${PN}-ss06-${PV}.zip )
-		font_variants_ss07? ( ${SRC_URI}/${PN}-ss07-${PV}.zip )
-		font_variants_ss08? ( ${SRC_URI}/${PN}-ss08-${PV}.zip )
-		font_variants_ss09? ( ${SRC_URI}/${PN}-ss09-${PV}.zip )
-		font_variants_ss10? ( ${SRC_URI}/${PN}-ss10-${PV}.zip )
-		font_variants_ss11? ( ${SRC_URI}/${PN}-ss11-${PV}.zip )
-		font_variants_aile? ( ${SRC_URI}/experimental-${PN}-aile-${PV}.zip )
-		font_variants_etoile? ( ${SRC_URI}/experimental-${PN}-etoile-${PV}.zip )
-		font_variants_extended? ( ${SRC_URI}/experimental-${PN}-extended-${PV}.zip )
+		font_variants_ss01? ( ${SRC_URI}ttf-${PN}-ss01-${MY_PV}.zip )
+		font_variants_ss02? ( ${SRC_URI}ttf-${PN}-ss02-${MY_PV}.zip )
+		font_variants_ss03? ( ${SRC_URI}ttf-${PN}-ss03-${MY_PV}.zip )
+		font_variants_ss04? ( ${SRC_URI}ttf-${PN}-ss04-${MY_PV}.zip )
+		font_variants_ss05? ( ${SRC_URI}ttf-${PN}-ss05-${MY_PV}.zip )
+		font_variants_ss06? ( ${SRC_URI}ttf-${PN}-ss06-${MY_PV}.zip )
+		font_variants_ss07? ( ${SRC_URI}ttf-${PN}-ss07-${MY_PV}.zip )
+		font_variants_ss08? ( ${SRC_URI}ttf-${PN}-ss08-${MY_PV}.zip )
+		font_variants_ss09? ( ${SRC_URI}ttf-${PN}-ss09-${MY_PV}.zip )
+		font_variants_ss10? ( ${SRC_URI}ttf-${PN}-ss10-${MY_PV}.zip )
+		font_variants_ss11? ( ${SRC_URI}ttf-${PN}-ss11-${MY_PV}.zip )
+		font_variants_ss12? ( ${SRC_URI}ttf-${PN}-ss12-${MY_PV}.zip )
+		font_variants_ss13? ( ${SRC_URI}ttf-${PN}-ss13-${MY_PV}.zip )
+		font_variants_ss14? ( ${SRC_URI}ttf-${PN}-ss14-${MY_PV}.zip )
+		font_variants_aile? ( ${SRC_URI}ttf-${PN}-aile-${MY_PV}.zip )
+		font_variants_etoile? ( ${SRC_URI}ttf-${PN}-etoile-${MY_PV}.zip )
+		font_variants_sparkle? ( ${SRC_URI}ttf-${PN}-sparkle-${MY_PV}.zip )
 	)
 	font_types_ttc? (
-			${SRC_URI}/ttc-${P}.zip
-			font_variants_slab? ( ${SRC_URI}/ttc-${PN}-slab-${PV}.zip )
+			font_variants_default? ( ${SRC_URI}ttc-${PN}-${MY_PV}.zip )
+			font_variants_curly? ( ${SRC_URI}ttc-${PN}-curly-${MY_PV}.zip )
+			font_variants_slab? (
+				${SRC_URI}ttc-${PN}-slab-${MY_PV}.zip
+				font_variants_curly? ( ${SRC_URI}ttc-${PN}-curly-slab-${MY_PV}.zip )
+				)
+			font_variants_aile? ( ${SRC_URI}ttc-${PN}-aile-${MY_PV}.zip )
+			font_variants_etoile? ( ${SRC_URI}ttc-${PN}-etoile-${MY_PV}.zip )
+			font_variants_sparkle? ( ${SRC_URI}ttc-${PN}-sparkle-${MY_PV}.zip )
 	)
 	)
 	!binary? (
-		mirror://githubcl/be5invis/${PN}/tar.gz/v${PV} -> ${P}.tar.gz
+		mirror://githubcl/be5invis/${PN}/tar.gz/v${MY_PV} -> ${P}.tar.gz
 	)
 	"
 	RESTRICT="primaryuri"
 	BDEPEND="binary? ( app-arch/unzip )"
 	KEYWORDS="~amd64 ~x86"
-	S="${WORKDIR}/${PN^}-${PV}"
+	S="${WORKDIR}/${PN^}-${MY_PV}"
 fi
 inherit font-r1
 
@@ -103,13 +144,12 @@ IUSE="
 "
 REQUIRED_USE+="
 ?? ( ${MY_FONT_TYPES[@]/#+/} )
-|| ( ${MY_FONT_VARIANTS[@]/#+/} )
-font_variants_slab? ( || (
-	font_variants_default
-	font_variants_cc
-	font_variants_term
-	font_variants_type
-) )
+font_types_ttc? (
+	|| ( ${MAIN_VARIANTS[@]/#/font_variants_} )
+)
+font_types_ttf? (
+	|| ( ${MY_FONT_VARIANTS[@]/#+/} )
+)
 "
 BDEPEND+="
 	!binary? (
@@ -138,45 +178,56 @@ src_compile() {
 	use binary && return
 
 	local -x MAKE="npm run build" MAKEOPTS="--verbose --"
+	local _s _t=()
 
 	if use font_types_ttc; then
 
-		emake collection-fonts::${PN}
-		use font_variants_slab && emake collection-fonts::${PN}-slab
-		FONT_S=( dist/collections/${PN}{,-slab} )
+		for _s in ${MAIN_VARIANTS[@]/#/-}; do
+			if use font_variants_${_s#-}; then
+				_s=${_s#-default}
+				_t+=( ${PN}${_s} )
+				FONT_S+=( dist/collections/${PN}${_s} )
+			fi
+		done
+		if use font_variants_slab && use font_variants_curly; then
+			_t+=( ${PN}-curly-slab )
+			FONT_S+=( dist/collections/${PN}-curly-slab )
+		fi
+		emake ${_t[@]/#/collection-fonts::}
 
 	elif use font_types_ttf; then
 
-		local _s _t _v="ttf$(usex autohint '' '-unhinted')"
-		if use font_variants_default; then
-			_t+=( ${PN} )
-		fi
-		use font_variants_cc && _t+=( ${PN}-cc )
-		if use font_variants_term; then
-			_t+=( ${PN}-term )
-			for _s in $(seq -w 11); do
-				use font_variants_ss${_s} && _t+=( ${PN}-term-ss${_s} )
-			done
-		fi
-		use font_variants_type && _t+=( ${PN}-type )
-		if use font_variants_slab; then
-			use font_variants_default && _t+=( ${PN}-slab )
-			use font_variants_cc && _t+=( ${PN}-cc-slab )
-			use font_variants_term && _t+=( ${PN}-term-slab )
-			use font_variants_type && _t+=( ${PN}-type-slab )
-		fi
-		for _s in $(seq -w 11); do
-			use font_variants_ss${_s} && _t+=( ${PN}-ss${_s} )
-		done
+		local _v="ttf$(usex autohint '' '-unhinted')"
+		local _x=( ${FONT_VARIANTS[@]/#ss*/} )
 
-		for _s in etoile aile extended; do
-			use font_variants_${_s} && _t+=( ${PN}-${_s} )
+		for _s in ${_x[@]/#/-}; do
+				_s=${_s#-default}
+				_t+=( ${PN}${_s} )
 		done
+		for _s in $(seq -w 14); do
+			if use font_variants_ss${_s}; then
+				use font_variants_default && _t+=( ${PN}-ss${_s} )
+				use font_variants_fixed && _t+=( ${PN}-fixed-ss${_s} )
+				use font_variants_term && _t+=( ${PN}-term-ss${_s} )
+			fi
+		done
+		if use font_variants_slab; then
+			use font_variants_fixed && _t+=( ${PN}-fixed-slab )
+			use font_variants_term && _t+=( ${PN}-term-slab )
+			if use font_variants_curly; then
+				_t+=( ${PN}-curly-slab )
+				use font_variants_fixed && _t+=( ${PN}-fixed-curly-slab )
+				use font_variants_term && _t+=( ${PN}-term-curly-slab )
+			fi
+		fi
+		if use font_variants_curly; then
+			use font_variants_fixed && _t+=( ${PN}-fixed-curly )
+			use font_variants_term && _t+=( ${PN}-term-curly )
+		fi
 
 		emake ${_t[@]/#/${_v}::}
 
 		FONT_S=( ${_t[@]/#/dist/} )
 		FONT_S=( ${FONT_S[@]/%//${_v}} )
-
 	fi
 }
