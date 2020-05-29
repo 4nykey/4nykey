@@ -29,13 +29,13 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.4[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.10.2[ufo(-),${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
 	dev-python/cu2qu[${PYTHON_USEDEP}]
 	dev-python/compreffor[${PYTHON_USEDEP}]
 	dev-python/booleanOperations[${PYTHON_USEDEP}]
 	dev-python/skia-pathops[${PYTHON_USEDEP}]
-	$(python_gen_cond_dep 'dev-python/ufoLib2[${PYTHON_USEDEP}]' -3)
+	dev-python/ufoLib2[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
