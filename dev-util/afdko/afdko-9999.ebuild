@@ -29,13 +29,13 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/lxml-4.5[${PYTHON_USEDEP}]
+	>=dev-python/lxml-4.5.1[${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 	>=dev-python/cu2qu-1.6.7[${PYTHON_USEDEP}]
 	>=dev-python/defcon-0.6[${PYTHON_USEDEP}]
-	>=dev-python/fontMath-0.5.2[${PYTHON_USEDEP}]
+	>=dev-python/fontMath-0.6[${PYTHON_USEDEP}]
 	dev-python/fontPens[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-4.8.1[brotli(-),ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.10.2[brotli(-),ufo(-),unicode(-),${PYTHON_USEDEP}]
 	>=dev-python/MutatorMath-3.0.1[${PYTHON_USEDEP}]
 	>=dev-util/psautohint-2.0.1[${PYTHON_USEDEP}]
 	>=dev-python/ufoProcessor-1.9[${PYTHON_USEDEP}]
