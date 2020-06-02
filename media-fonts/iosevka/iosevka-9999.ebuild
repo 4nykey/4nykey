@@ -186,16 +186,16 @@ src_compile() {
 			if use font_variants_${_s#-}; then
 				_s=${_s#-default}
 				_t+=( ${PN}${_s} )
-				FONT_S+=( dist/collections/${PN}${_s} )
+				FONT_S+=( dist/export/${PN}${_s}/ttc )
 			fi
 		done
 		if use font_variants_slab && use font_variants_curly; then
 			_t+=( ${PN}-curly-slab )
-			FONT_S+=( dist/collections/${PN}-curly-slab )
+			FONT_S+=( dist/export/${PN}-curly-slab/ttc )
 		fi
 		emake ${_t[@]/#/collection-fonts::}
 
-	elif use font_types_ttf; then
+	else
 
 		local _v="ttf$(usex autohint '' '-unhinted')"
 		local _x=( ${FONT_VARIANTS[@]/#ss*/} )
