@@ -30,9 +30,11 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.39[ufo(-),${PYTHON_USEDEP}]
-	>=dev-python/attrs-19.2[${PYTHON_USEDEP}]
-	dev-python/lxml[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.9[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/appdirs-1.4.3[${PYTHON_USEDEP}]
+	>=dev-python/attrs-19.3[${PYTHON_USEDEP}]
+	>=dev-python/pytz-2020.1[${PYTHON_USEDEP}]
+	dev-python/typing-extensions[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
@@ -46,7 +48,9 @@ pkg_setup() {
 }
 
 python_prepare_all() {
-	local PATCHES=( "${FILESDIR}"/${PN}-newGlyph.diff )
+	local PATCHES=(
+		"${FILESDIR}"/${PN}-newGlyph.diff
+	)
 	sed -e '/\<wheel\>/d' -i setup.cfg
 	distutils-r1_python_prepare_all
 }

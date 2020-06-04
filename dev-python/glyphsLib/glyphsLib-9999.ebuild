@@ -47,9 +47,15 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-masters_wcodes.diff
 	"${FILESDIR}"/${PN}-setup.diff
 	"${FILESDIR}"/${PN}-custom_params.diff
+	"${FILESDIR}"/${PN}-skipMissingComponents.diff
 )
 distutils_enable_tests pytest
 
 pkg_setup() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
+}
+
+python_prepare_all() {
+	sed -e '/\<wheel\>/d' -i setup.cfg
+	distutils-r1_python_prepare_all
 }
