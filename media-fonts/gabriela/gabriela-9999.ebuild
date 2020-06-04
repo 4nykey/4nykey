@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -22,3 +22,4 @@ HOMEPAGE="https://github.com/etunni/${PN}"
 LICENSE="OFL-1.1"
 SLOT="0"
 REQUIRED_USE="binary? ( !font_types_otf )"
+PATCHES=( "${FILESDIR}"/${PN}-guillemot.diff )

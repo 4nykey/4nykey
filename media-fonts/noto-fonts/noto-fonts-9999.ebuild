@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -11,7 +11,7 @@ else
 	inherit vcs-snapshot
 	MY_PV="phase3-second-cleanup"
 	MY_PV="v${PV//./-}-${MY_PV}"
-	[[ -z ${PV%%*_p*} ]] && MY_PV="de09105"
+	[[ -z ${PV%%*_p*} ]] && MY_PV="0723a59"
 	SRC_URI="
 		mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz

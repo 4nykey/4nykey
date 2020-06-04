@@ -36,9 +36,8 @@ IUSE="+binary latex"
 RESTRICT="primaryuri"
 BDEPEND="
 	!binary? (
-		${PYTHON_DEPS}
+		media-gfx/fontforge[python]
 		$(python_gen_any_dep '
-			media-gfx/fontforge[python,${PYTHON_USEDEP}]
 			dev-python/fonttools[${PYTHON_USEDEP}]
 			font_types_ttc? ( dev-util/afdko[${PYTHON_USEDEP}] )
 		')

@@ -1,10 +1,10 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
 MY_IN="Inconsolata-LGC-8adfef7" #20160404 https://github.com/MihailJP/Inconsolata-LGC
-MY_MI="migu-1m-20150712"        #20150712 https://osdn.net/pkg/mix-mplus-ipa/migu
+MY_MI="migu-1m-20200307"        #20150712 https://osdn.net/pkg/mix-mplus-ipa/migu
 MY_MP="mplus-TESTFLIGHT-063"    #20171025 https://osdn.net/rel/mplus-fonts/TESTFLIGHT
 S="${WORKDIR}"
 if [[ -z ${PV%%*9999} ]]; then
@@ -16,7 +16,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI="https://osdn.net/dl/mplus-fonts/${MY_MP}.tar.xz"
 else
 	SRC_URI="
-		http://www.yusa.lab.uec.ac.jp/~yusa/${PN}/${PN}_generator-${PV}.sh
+		mirror://githubraw/rictyfonts/rictyfonts.github.io/11f3cc6/files/${PN}_generator-${PV}.sh
 		mirror://githubcl/MihailJP/${MY_IN%-*}/tar.gz/${MY_IN##*-}
 		-> ${MY_IN}.tar.gz
 		https://osdn.net/dl/mix-mplus-ipa/${MY_MI}.zip
@@ -27,7 +27,7 @@ inherit font-r1
 RESTRICT="primaryuri bindist"
 
 DESCRIPTION="A monotype font combining Inconsolata and Migu 1M"
-HOMEPAGE="http://www.yusa.lab.uec.ac.jp/~yusa/ricty.html"
+HOMEPAGE="https://rictyfonts.github.io"
 
 LICENSE="OFL-1.1 IPAfont"
 SLOT="0"

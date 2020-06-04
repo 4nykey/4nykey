@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}"
 else
 	inherit vcs-snapshot
-	MY_PV="1771cb3"
+	MY_PV="4f16288"
 	SRC_URI="
 		mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -28,5 +28,9 @@ IUSE="clean-as-you-go +interpolate"
 
 src_prepare() {
 	rm -rf src/NotoSansTifinagh-Regular.glyphs src/NotoSansTifinagh
+	sed -e '/GPOS/s:Regular ::' \
+		-i src/NotoSansKharoshthi/NotoSansKharoshthi.plist
+	sed -e 's:\.\./build/instance_ufos:../instance_ufo:' \
+		-i src/NotoSansHanifiRohingya/NotoSansHanifiRohingya.designspace
 	fontmake_src_prepare
 }

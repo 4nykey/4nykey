@@ -1,0 +1,11 @@
+--- a/sources/Gabriela.glyphs
++++ b/sources/Gabriela.glyphs
+@@ -26,7 +26,7 @@ code = "A B C D E F G H I J K L M N O P
+ name = mayusculas;
+ },
+ {
+-code = "parenleft parenright hyphen bracketleft bracketright braceleft bar braceright brokenbar guillemotleft guillemotright endash emdash bullet guilsinglleft guilsinglright";
++code = "parenleft parenright hyphen bracketleft bracketright braceleft bar braceright brokenbar guillemetleft guillemetright endash emdash bullet guilsinglleft guilsinglright";
+ name = case1;
+ }
+ );
