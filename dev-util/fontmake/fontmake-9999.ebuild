@@ -27,19 +27,20 @@ HOMEPAGE="https://github.com/googlei18n/${PN}"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE="test"
+IUSE=""
 
 RDEPEND="
-	>=dev-python/fonttools-4.6[ufo(-),unicode(-),${PYTHON_USEDEP}]
-	dev-python/cu2qu[${PYTHON_USEDEP}]
-	dev-python/glyphsLib[${PYTHON_USEDEP}]
-	dev-python/ufo2ft[${PYTHON_USEDEP}]
-	dev-python/MutatorMath[${PYTHON_USEDEP}]
-	dev-python/defcon[${PYTHON_USEDEP}]
-	dev-python/booleanOperations[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.10.2[ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/cu2qu-1.6.7[${PYTHON_USEDEP}]
+	>=dev-python/glyphsLib-5.1.10[${PYTHON_USEDEP}]
+	>=dev-python/ufo2ft-2.14[${PYTHON_USEDEP}]
+	>=dev-python/MutatorMath-2.1.2[${PYTHON_USEDEP}]
+	>=dev-python/fontMath-0.6[${PYTHON_USEDEP}]
+	>=dev-python/defcon-0.6[${PYTHON_USEDEP}]
+	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 	dev-python/lxml[${PYTHON_USEDEP}]
 	dev-python/skia-pathops[${PYTHON_USEDEP}]
-	>=dev-python/ufoLib2-0.6.2[${PYTHON_USEDEP}]
+	>=dev-python/ufoLib2-0.7.1[${PYTHON_USEDEP}]
 	>=dev-python/attrs-19.3[${PYTHON_USEDEP}]
 "
 DEPEND="
@@ -50,11 +51,8 @@ DEPEND="
 		dev-python/mock[${PYTHON_USEDEP}]
 	)
 "
+distutils_enable_tests pytest
 
 pkg_setup() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
-}
-
-python_test() {
-	pytest -v || die "Tests failed with ${EPYTHON}"
 }
