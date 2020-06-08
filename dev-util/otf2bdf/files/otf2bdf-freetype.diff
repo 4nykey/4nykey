@@ -1,0 +1,24 @@
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -25,7 +25,7 @@ CP = @CP@
+ MKINSTALLDIRS = ./mkinstalldirs
+ 
+ CC = @CC@
+-CFLAGS = @XX_CFLAGS@ @CFLAGS@
++CFLAGS = @XX_CFLAGS@ @CFLAGS@ @freetype_CFLAGS@
+ 
+ SRCS = remap.c otf2bdf.c
+ OBJS = remap.o otf2bdf.o
+--- a/configure.in
++++ b/configure.in
+@@ -4,9 +4,7 @@ AC_INIT(otf2bdf.c)
+ 
+ AC_PROG_CC
+ 
+-OLDLIBS=$LIBS
+-LIBS="$LIBS `freetype-config --libs`"
+-CPPFLAGS="$CPPFLAGS `freetype-config --cflags`"
++PKG_CHECK_MODULES(freetype, freetype2)
+ AC_CHECK_LIB(freetype, FT_Init_FreeType, LIBS="$LIBS -lfreetype",[
+              AC_MSG_ERROR([Can't find Freetype library! Compile FreeType first.])])
+ AC_SUBST(LIBS)
