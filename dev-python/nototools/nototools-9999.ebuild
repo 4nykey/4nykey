@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python2_7 python3_{6,7} )
+PYTHON_COMPAT=( python3_7 )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -29,48 +29,66 @@ SLOT="0"
 IUSE=""
 
 DEPEND="
-	dev-python/booleanOperations[${PYTHON_USEDEP}]
-	dev-python/defcon[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-3.44[ufo(-),${PYTHON_USEDEP}]
-	>=dev-python/pillow-6.2[${PYTHON_USEDEP}]
-	dev-python/pyclipper[${PYTHON_USEDEP}]
+	>=dev-util/afdko-3.4[${PYTHON_USEDEP}]
+	>=dev-python/appdirs-1.4.4[${PYTHON_USEDEP}]
+	>=dev-python/attrs-19.3[${PYTHON_USEDEP}]
+	>=dev-python/black-19.10_beta0[${PYTHON_USEDEP}]
+	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
+	>=app-arch/brotli-1.0.7[python,${PYTHON_USEDEP}]
+	>=dev-python/click-7.1.2[${PYTHON_USEDEP}]
+	>=dev-python/cu2qu-1.6.7[${PYTHON_USEDEP}]
+	>=dev-python/defcon-0.6[${PYTHON_USEDEP}]
+	>=dev-python/fontMath-0.6[${PYTHON_USEDEP}]
+	>=dev-python/fontParts-0.9.2[${PYTHON_USEDEP}]
+	>=dev-python/fontPens-0.2.4[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.11[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/MutatorMath-3.0.1[${PYTHON_USEDEP}]
+	>=dev-python/pathspec-0.8[${PYTHON_USEDEP}]
+	>=dev-python/pillow-7.1.2[${PYTHON_USEDEP}]
+	>=dev-python/pyclipper-1.1.0_p1[${PYTHON_USEDEP}]
+	>=dev-python/pytz-2020.1[${PYTHON_USEDEP}]
+	>=dev-python/regex-2020.4[${PYTHON_USEDEP}]
+	>=media-gfx/scour-0.37[${PYTHON_USEDEP}]
+	>=dev-python/toml-0.10.1[${PYTHON_USEDEP}]
+	>=dev-python/typed-ast-1.4.1[${PYTHON_USEDEP}]
+	>=dev-python/ufoNormalizer-0.4.1[${PYTHON_USEDEP}]
+	>=dev-python/ufoProcessor-1.9[${PYTHON_USEDEP}]
+	>=dev-python/py-zopfli-0.1.7[${PYTHON_USEDEP}]
+	dev-python/unicodedata2[${PYTHON_USEDEP}]
 	dev-python/freetype-py[${PYTHON_USEDEP}]
 	media-libs/harfbuzz
 "
 RDEPEND="
 	${DEPEND}
-	media-gfx/scour
-	app-i18n/unicode-cldr
-	app-i18n/unicode-data
-	app-i18n/unicode-emoji
+	>=app-i18n/unicode-cldr-37
+	>=app-i18n/unicode-data-13
+	>=app-i18n/unicode-emoji-13
+"
+BDEPEND="
+	dev-python/setuptools_scm[${PYTHON_USEDEP}]
 "
 distutils_enable_tests pytest
 
 python_prepare_all() {
-	local _f _s
-	for _f in nototools/[a-z]*.py; do basename "${_f}" '.py'; done | \
-		while read _s; do
-			grep -rl "^import ${_s}" | xargs --no-run-if-empty \
-				sed -i -e "s:^import ${_s}:from nototools &:"
-		done
-
-	sed -e "/packages=/s: + \['third_party'\]::" -i setup.py
-	sed -e 's: \(ufoLib\.pointPen\): fontTools.\1:' \
-		-i nototools/shape_diff.py
-	sed -e "s:HB_SHAPE_PATH,:'/usr/bin/hb-shape',:" \
-		-i nototools/render.py
+	distutils-r1_python_prepare_all
 	sed \
-		-e "/_DATA_DIR_PATH =/s:=.*:= '${EROOT}/usr/share/unicode-data':" \
-		-e '/third_party.*\<ucd\>/d' \
-		-e "s:'\(emoji-[a-z-]\+\.txt'\):'../unicode/emoji/\1:g" \
+		-e '/packages=/s: + \["third_party"\]::' \
+		-i setup.py
+	sed \
+		-e "/third_party.*\<ucd\>/s:path.abspath.*:'${EROOT}/usr/share/unicode-data':" \
+		-e 's:"\(emoji-[a-z-]\+\.txt"\):"../unicode/emoji/\1:g' \
 		-i nototools/unicode_data.py
 	grep -rl CLDR_DIR nototools | xargs sed -i \
 		-e "/CLDR_DIR =/s:=.*:= '${EROOT}/usr/share/unicode/cldr':"
-	distutils-r1_python_prepare_all
+	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
 }
 
 python_test() {
-	local -x \
-		PYTHONPATH="${BUILD_DIR}/lib/nototools:${PYTHONPATH}"
-	pytest -v tests || die "Tests fail with ${EPYTHON}"
+	cd tests
+	# ./run_tests
+	local _t
+	for _t in *_test.py; do
+		echo "Running ${_t}"
+		${EPYTHON} "${_t}" || die "${_t} failed with ${EPYTHON}"
+	done
 }

@@ -4,7 +4,7 @@
 EAPI=7
 
 PYTHON_COMPAT=( python3_{6,7} )
-inherit distutils-r1
+inherit distutils-r1 flag-o-matic
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/fonttools/${PN}.git"
@@ -12,11 +12,8 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	MY_PV="5c4e5ae"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v$(ver_rs 3 '.post')"
-	MY_SK="skia-3517aa7"
 	SRC_URI="
 		mirror://githubcl/fonttools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
-		mirror://githubcl/fonttools/${MY_SK%-*}/tar.gz/${MY_SK##*-}
-		-> ${MY_SK}.tar.gz
 	"
 	S="${WORKDIR}/${PN}-${MY_PV#v}"
 	RESTRICT="primaryuri"
@@ -34,7 +31,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=media-libs/skia-80:=
+	media-libs/skia:=
 "
 DEPEND="
 	${RDEPEND}
@@ -48,12 +45,11 @@ distutils_enable_tests pytest
 pkg_setup() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
 	export BUILD_SKIA_FROM_SOURCE=0
+	append-cxxflags "-I${EROOT}/usr/include/skia"
 }
 
 python_prepare_all() {
-	if [[ -n ${PV%%*9999} ]]; then
-		mv "${WORKDIR}"/${MY_SK}/* "${S}"/src/cpp/skia
-	fi
-	sed -e '/doctest-cython/d' -i tox.ini
 	distutils-r1_python_prepare_all
+	sed -e '/doctest-cython/d' -i tox.ini
+	grep -rl '"include/' src/python/pathops | xargs sed 's:"include/:"skia/:' -i
 }

@@ -3,24 +3,23 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python{2_7,3_{6,7}} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit distutils-r1 eutils
-MY_PN=pyfilesystem2
+MY_PN="pyfilesystem2"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/PyFilesystem/${MY_PN}.git"
 else
-	if [[ -z ${PV%%*_p*} ]]; then
-		inherit vcs-snapshot
-		MY_PV="627f997"
-	fi
 	MY_PV="v${PV}"
+	[[ -z ${PV%%*_p*} ]] && MY_PV="ea2051c"
 	SRC_URI="
-		mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz
+		mirror://githubcl/PyFilesystem/${MY_PN}/tar.gz/${MY_PV}
+		-> ${MY_PN}-${PV}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${MY_PN}-${MY_PV#v}"
 fi
 
 DESCRIPTION="Filesystem abstraction layer"
@@ -34,12 +33,6 @@ RDEPEND="
 	dev-python/appdirs[${PYTHON_USEDEP}]
 	dev-python/pytz[${PYTHON_USEDEP}]
 	dev-python/six[${PYTHON_USEDEP}]
-	virtual/python-enum34[${PYTHON_USEDEP}]
-	virtual/python-typing[${PYTHON_USEDEP}]
-	$(python_gen_cond_dep 'dev-python/scandir[${PYTHON_USEDEP}]' \
-		python2_7)
-	$(python_gen_cond_dep 'dev-python/backports-os[${PYTHON_USEDEP}]' \
-		python2_7)
 "
 DEPEND="
 	${RDEPEND}
@@ -47,8 +40,6 @@ DEPEND="
 BDEPEND="
 	test? (
 		dev-python/pyftpdlib[${PYTHON_USEDEP},test]
-		$(python_gen_cond_dep 'dev-python/mock[${PYTHON_USEDEP}]' \
-			python2_7)
 	)
 "
 distutils_enable_tests pytest
