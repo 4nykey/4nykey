@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python2_7 python3_{6,7} )
+PYTHON_COMPAT=( python3_7 )
 inherit python-any-r1 font-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3

@@ -1,10 +1,10 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 MY_FONT_TYPES=( otf +ttf )
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python3_{6,7} )
 if [[ ${PV} == *9999* ]]; then
 	inherit subversion
 	ESVN_REPO_URI="svn://svn.sv.gnu.org/${PN}/trunk/${PN}"
@@ -36,7 +36,7 @@ IUSE="+binary"
 
 DOCS="CREDITS"
 
-DEPEND="
+BDEPEND="
 	!binary? (
 		media-gfx/fontforge[python]
 	)
@@ -54,23 +54,18 @@ pkg_setup() {
 	font-r1_pkg_setup
 }
 
-src_prepare() {
-	default
-	use binary && return
-	python_fix_shebang "${S}"/tools
-	sed \
-		-e '/\$(TESTFF)/d' \
-		-i sfd/Makefile
-}
-
 src_compile() {
 	use binary && return
 	emake \
-		${FONT_SUFFIX} \
-		FF=fontforge
+		FFBIN=/usr/bin/fontforge \
+		FF=fontforge \
+		${FONT_SUFFIX}
 }
 
 src_test() {
 	use binary && return
-	emake tests
+	emake \
+		FFBIN=/usr/bin/fontforge \
+		FF=fontforge \
+		tests
 }

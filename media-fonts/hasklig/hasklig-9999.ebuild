@@ -1,9 +1,9 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-PYTHON_COMPAT=( python2_7 python3_{6,7} )
+PYTHON_COMPAT=( python3_{6,7} )
 MY_FONT_TYPES=( otf +ttf )
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
@@ -45,7 +45,7 @@ REQUIRED_USE+="
 	binary? ( !font_types_ttf )
 "
 
-DEPEND="
+BDEPEND="
 	!binary? (
 		${PYTHON_DEPS}
 		$(python_gen_any_dep '
