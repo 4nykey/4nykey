@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_BRANCH="chrome/m$(ver_cut 1)"
 else
 	inherit vcs-snapshot
-	MY_PV="97c9a95"
+	MY_PV="c3d05a7"
 	SRC_URI="
 		mirror://githubcl/google/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -24,19 +24,23 @@ HOMEPAGE="https://skia.org"
 
 LICENSE="BSD"
 SLOT="0/$(ver_cut 1)"
-IUSE="static-libs"
+IUSE="
+egl ffmpeg fontconfig harfbuzz icu jpeg lottie opengl png static-libs truetype
+webp xml
+"
 
 RDEPEND="
-	dev-libs/expat
-	dev-libs/icu
-	media-libs/fontconfig
-	media-libs/freetype
-	media-libs/harfbuzz
-	media-libs/libjpeg-turbo
-	media-libs/libpng
-	media-libs/libwebp
+	xml? ( dev-libs/expat )
+	ffmpeg? ( media-video/ffmpeg )
+	icu? ( dev-libs/icu )
+	fontconfig? ( media-libs/fontconfig )
+	truetype? ( media-libs/freetype )
+	harfbuzz? ( media-libs/harfbuzz )
+	jpeg? ( media-libs/libjpeg-turbo )
+	png? ( media-libs/libpng )
+	webp? ( media-libs/libwebp )
 	sys-libs/zlib
-	virtual/opengl
+	opengl? ( virtual/opengl )
 "
 DEPEND="
 	${RDEPEND}
@@ -47,12 +51,19 @@ BDEPEND="
 
 src_prepare() {
 	default
+
 	# https://chromium.googlesource.com/chromium/src/third_party/zlib
 	# https://github.com/jtkukunas/zlib
 	sed \
 		-e '/:zlib_x86/d' \
 		-e '/third_party("zlib_x86/,/^}/d' \
 		-i third_party/zlib/BUILD.gn
+
+	mkdir -p _h/${PN}
+	cd _h/${PN}
+	cp -a "${S}"/include/* .
+	cp -a "${S}"/src/core/SkGeometry.h ./core/
+	grep -rl '#include.*"include/' . | xargs sed '/#include/ s:"include/:":' -i
 }
 
 src_configure() {
@@ -70,6 +81,9 @@ src_configure() {
 	passflags "${CXXFLAGS}" cflags_cc
 	passflags "${CFLAGS}" ldflags
 
+	my_usex() {
+		usex $1 true false
+	}
 	myconf_gn+=(
 		ar=\"${AR}\"
 		cc=\"${CC}\"
@@ -78,6 +92,23 @@ src_configure() {
 		skia_enable_pdf=false
 		skia_use_dng_sdk=false
 		is_component_build=true
+		skia_enable_skottie=$(my_usex lottie)
+		skia_use_egl=$(my_usex egl)
+		skia_use_expat=$(my_usex xml)
+		skia_use_ffmpeg=$(my_usex ffmpeg)
+		skia_use_fontconfig=$(my_usex fontconfig)
+		skia_use_freetype=$(my_usex truetype)
+		skia_use_harfbuzz=$(my_usex harfbuzz)
+		skia_enable_skshaper=$(my_usex harfbuzz)
+		skia_use_gl=$(my_usex opengl)
+		skia_use_icu=$(my_usex icu)
+		skia_use_libjpeg_turbo_decode=$(my_usex jpeg)
+		skia_use_libjpeg_turbo_encode=$(my_usex jpeg)
+		skia_use_libpng_decode=$(my_usex png)
+		skia_use_libpng_encode=$(my_usex png)
+		skia_use_libwebp_decode=$(my_usex webp)
+		skia_use_libwebp_encode=$(my_usex webp)
+		skia_use_sfntly=false
 	)
 
 	myconf_gn="${myconf_gn[@]} ${EXTRA_GN}"
@@ -93,6 +124,5 @@ src_compile() {
 src_install() {
 	dolib.so out/Release/*.so
 	use static-libs && dolib.a out/Release/*.a
-	insinto /usr/include/${PN}
-	doins -r include/.
+	doheader -r _h/${PN}
 }

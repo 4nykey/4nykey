@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="project">
-		<email>sound@gentoo.org</email>
-		<name>Gentoo Sound project</name>
+	<maintainer type="person">
+		<email>4nykey@gmail.com</email>
 	</maintainer>
-	<upstream>
-		<remote-id type="github">projectM-visualizer</remote-id>
-	</upstream>
+	<use>
+		<flag name="egl">Enable EGL support</flag>
+		<flag name="harfbuzz">Enable OpenType shaping via media-libs/harfbuzz</flag>
+		<flag name="lottie">Enable Lottie animation support</flag>
+	</use>
 </pkgmetadata>
