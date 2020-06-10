@@ -30,7 +30,7 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
-	>=dev-python/fonttools-4.10.2[ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.12[ufo(-),unicode(-),${PYTHON_USEDEP}]
 	>=dev-python/cu2qu-1.6.7[${PYTHON_USEDEP}]
 	>=dev-python/glyphsLib-5.1.10[${PYTHON_USEDEP}]
 	>=dev-python/ufo2ft-2.14[${PYTHON_USEDEP}]
@@ -40,7 +40,7 @@ RDEPEND="
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 	dev-python/lxml[${PYTHON_USEDEP}]
 	dev-python/skia-pathops[${PYTHON_USEDEP}]
-	>=dev-python/ufoLib2-0.7.1[${PYTHON_USEDEP}]
+	>=dev-python/ufoLib2-0.8[${PYTHON_USEDEP}]
 	>=dev-python/attrs-19.3[${PYTHON_USEDEP}]
 "
 DEPEND="
