@@ -30,8 +30,8 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.9[ufo(-),${PYTHON_USEDEP}]
-	>=dev-python/appdirs-1.4.3[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.11[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/appdirs-1.4.4[${PYTHON_USEDEP}]
 	>=dev-python/attrs-19.3[${PYTHON_USEDEP}]
 	>=dev-python/pytz-2020.1[${PYTHON_USEDEP}]
 	dev-python/typing-extensions[${PYTHON_USEDEP}]

@@ -26,7 +26,7 @@ HOMEPAGE="https://github.com/googlei18n/${PN}"
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="test"
+IUSE="cffsubr test"
 
 RDEPEND="
 	>=dev-python/fonttools-4.11[ufo(-),${PYTHON_USEDEP}]
@@ -36,6 +36,7 @@ RDEPEND="
 	dev-python/booleanOperations[${PYTHON_USEDEP}]
 	dev-python/skia-pathops[${PYTHON_USEDEP}]
 	dev-python/ufoLib2[${PYTHON_USEDEP}]
+	cffsubr? ( dev-python/cffsubr[${PYTHON_USEDEP}] )
 "
 DEPEND="
 	${RDEPEND}
