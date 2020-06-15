@@ -1,21 +1,21 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit autotools
+inherit autotools flag-o-matic
 if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/Thomas-Tsai/${PN}.git"
 	inherit git-r3
 else
-	inherit vcs-snapshot
-	MY_PV="5e00059"
+	MY_PV="5d52ebb"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/Thomas-Tsai/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
 
 DESCRIPTION="Partition cloning tool"
@@ -58,10 +58,12 @@ DEPEND="
 	${RDEPEND}
 "
 DOCS=( AUTHORS ChangeLog HACKING NEWS README.md TODO )
+PATCHES=( "${FILESDIR}"/${PN}-reiserfs.diff )
 
 src_prepare() {
 	default
 	eautoreconf
+	append-cflags -fno-strict-aliasing
 }
 
 src_configure() {
