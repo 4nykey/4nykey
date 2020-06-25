@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -8,7 +8,7 @@ if [[ ${PV} = *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/google/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="5915ea9"
+	MY_PV="2757a2c"
 	SRC_URI="
 		mirror://githubcl/google/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -39,6 +39,7 @@ DEPEND="
 src_prepare() {
 	unpack ${MY_LSS}.tar.gz
 	mv ${MY_LSS} src/third_party/lss
+	sed -e '/docdir = /d' -i Makefile.am
 	default
 	eautoreconf
 }
