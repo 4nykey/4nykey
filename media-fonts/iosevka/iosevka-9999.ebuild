@@ -156,8 +156,10 @@ BDEPEND+="
 		net-libs/nodejs[npm]
 		autohint? ( media-gfx/ttfautohint )
 		dev-util/otfcc
+		dev-util/afdko
 	)
 "
+PATCHES=( "${FILESDIR}"/${PN}-buildttc.diff )
 
 pkg_setup() {
 	if use binary; then
@@ -193,7 +195,7 @@ src_compile() {
 			_t+=( ${PN}-curly-slab )
 			FONT_S+=( dist/export/${PN}-curly-slab/ttc )
 		fi
-		emake ${_t[@]/#/collection-fonts::}
+		emake ${_t[@]/#/collection-export::}
 
 	else
 
