@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -17,7 +17,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit cmake-utils
+inherit cmake
 
 DESCRIPTION="DigiDoc digital signature library"
 HOMEPAGE="https://id.ee"
@@ -59,7 +59,7 @@ src_prepare() {
 	sed \
 		-e 's:XERCESC_LIBRARIES:XercesC_LIBRARIES:' -i src/CMakeLists.txt
 	rm -rf src/{minizip,openssl}
-	cmake-utils_src_prepare
+	cmake_src_prepare
 }
 
 src_configure() {
@@ -69,10 +69,10 @@ src_configure() {
 		-DCMAKE_DISABLE_FIND_PACKAGE_SWIG=yes
 		-DCMAKE_INSTALL_SYSCONFDIR="${EROOT}etc"
 	)
-	cmake-utils_src_configure
+	cmake_src_configure
 }
 
 src_test() {
 	local myctestargs=( -j1 )
-	cmake-utils_src_test
+	cmake_src_test
 }
