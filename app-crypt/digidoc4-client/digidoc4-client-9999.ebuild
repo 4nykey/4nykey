@@ -11,7 +11,7 @@ else
 	MY_PV="${PV^^}"
 	MY_PV="v${MY_PV/_/-}"
 	[[ -z ${PV%%*_p*} ]] && MY_PV="a4da0d3"
-	MY_QC="qt-common-376ae1f"
+	MY_QC="qt-common-0a626b5"
 	MY_EX="digidoc-extensions-69b0284"
 	SRC_URI="${SRC_URI}
 		mirror://githubcl/open-eid/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -21,7 +21,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit cmake-utils xdg
+inherit cmake xdg
 
 DESCRIPTION="An application for digitally signing and encrypting documents"
 HOMEPAGE="https://id.ee"
@@ -63,7 +63,7 @@ src_prepare() {
 		-e "s:doc/${PN}:doc/${PF}:" \
 		-e "s:\${CMAKE_SOURCE_DIR}/cmake/modules:/usr/share/cmake/openeid:" \
 		-i CMakeLists.txt
-	cmake-utils_src_prepare
+	cmake_src_prepare
 }
 
 src_configure() {
@@ -71,5 +71,5 @@ src_configure() {
 		-DENABLE_KDE=no
 		-DENABLE_NAUTILUS_EXTENSION=$(usex nautilus)
 	)
-	cmake-utils_src_configure
+	cmake_src_configure
 }
