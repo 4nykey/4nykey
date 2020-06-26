@@ -20,10 +20,10 @@ else
 	"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit cmake-utils
+inherit cmake
 
 DESCRIPTION="postscript font editor and converter"
-HOMEPAGE="https://fontforge.github.io/"
+HOMEPAGE="https://fontforge.org/"
 
 LICENSE="BSD GPL-3+"
 SLOT="0"
@@ -93,7 +93,7 @@ src_prepare() {
 		-e 's:OFL\.txt::' \
 		-i fontforgeexe/pixmaps/*/CMakeLists.txt
 	eapply -l "${FILESDIR}"/cmake-install_examples.diff
-	cmake-utils_src_prepare
+	cmake_src_prepare
 }
 
 src_configure() {
@@ -122,5 +122,8 @@ src_configure() {
 			-DFreeTypeSource_INCLUDE_DIRS="${_d}"
 		)
 	fi
-	cmake-utils_src_configure
+	if use python; then
+		mycmakeargs+=( -DPython3_EXECUTABLE="${PYTHON}" )
+	fi
+	cmake_src_configure
 }
