@@ -3,9 +3,10 @@
 
 EAPI=7
 
-DOC_CONTENTS="To use this the OpenSC PKCS#11 module has to be loaded
-- for firefox
-www-plugins/firefox-pkcs11-loader does this automatically
+DOC_CONTENTS="Few additional steps are required
+- for firefox install
+https://addons.mozilla.org/firefox/addon/token-signing2
+https://addons.mozilla.org/firefox/addon/pkcs11-module-loader
 - for chromium see
 ${EPREFIX}/usr/share/doc/${PF}/esteid-update-nssdb"
 DISABLE_AUTOFORMATTING=1
@@ -19,7 +20,7 @@ else
 	MY_PV="v${MY_PV/rc/RC}"
 	if [[ -z ${PV%%*_p*} ]]; then
 		inherit vcs-snapshot
-		MY_PV="1c9bebc"
+		MY_PV="c0a4ae1"
 	fi
 	SRC_URI="
 		mirror://githubcl/open-eid/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -80,6 +81,10 @@ src_install() {
 	dosym \
 		../../../opt/chrome/policies/managed/ee.ria.chrome-token-signing.policy.json \
 		/etc/chromium/policies/managed/ee.ria.chrome-token-signing.policy.json
+	local _x="{443830f0-1fff-4f9a-aa1e-444bafbc7319}.xpi"
+	dosym \
+		../../../../share/mozilla/extensions/{ec8030f7-c20a-464f-9b0e-13a3a9e97384}/${_x} \
+		/usr/$(get_libdir)/firefox/distribution/extensions/${_x}
 
 	readme.gentoo_create_doc
 	einstalldocs
