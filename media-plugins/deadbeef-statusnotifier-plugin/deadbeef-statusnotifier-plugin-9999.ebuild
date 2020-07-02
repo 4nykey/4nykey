@@ -18,7 +18,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit cmake-utils
+inherit cmake
 
 DESCRIPTION="Plugin that provides system tray icon for deadbeef in Plasma5"
 HOMEPAGE="https://github.com/vovochka404/${PN}"
@@ -35,7 +35,6 @@ RDEPEND="${DEPEND}"
 BDEPEND="
 	dev-util/glib-utils
 "
-PATCHES=( "${FILESDIR}"/gtk2.diff )
 
 src_configure() {
 	local mycmakeargs=(
@@ -43,5 +42,5 @@ src_configure() {
 		-DUSE_GTK=$(usex gtk)
 		-DUSE_GTK3=$(usex gtk3)
 	)
-	cmake-utils_src_configure
+	cmake_src_configure
 }

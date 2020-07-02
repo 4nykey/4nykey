@@ -1,4 +1,4 @@
-# Copyright 2019 Gentoo Authors
+# Copyright 2019-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 else
 	inherit vcs-snapshot
-	MY_PV="f632b4b"
+	MY_PV="a97fd4e"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/cboxdoerfer/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz

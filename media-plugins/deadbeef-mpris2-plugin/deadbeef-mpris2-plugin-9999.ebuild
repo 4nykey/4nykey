@@ -1,4 +1,4 @@
-# Copyright 2019 Gentoo Authors
+# Copyright 2019-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	MY_PV="v${PV}"
 	if [[ -z ${PV%%*_p*} ]]; then
-		MY_PV="91e20e6"
+		MY_PV="d6d5bf2"
 		inherit vcs-snapshot
 	fi
 	SRC_URI="
