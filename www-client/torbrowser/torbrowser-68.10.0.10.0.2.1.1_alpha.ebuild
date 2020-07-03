@@ -5,7 +5,7 @@ EAPI="6"
 VIRTUALX_REQUIRED="pgo"
 WANT_AUTOCONF="2.1"
 
-PYTHON_COMPAT=( python3_{6,7,8} )
+PYTHON_COMPAT=( python3_{6,7,8,9} )
 PYTHON_REQ_USE='ncurses,sqlite,ssl,threads(+)'
 
 # Patch version
@@ -48,7 +48,7 @@ RESTRICT="!bindist? ( bindist )
 RESTRICT+=" primaryuri"
 
 MY_EFF="2020.5.20"
-MY_NOS="11.0.26"
+MY_NOS="11.0.32"
 MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
 MY_NOS="noscript-${MY_NOS}.xpi"
 PATCH_URIS=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c,whissi}/mozilla/patchsets/${PATCH}.tar.xz )
@@ -60,7 +60,7 @@ SRC_URI="
 "
 
 CDEPEND="
-	>=dev-libs/nss-3.44.3
+	>=dev-libs/nss-3.44.4
 	>=dev-libs/nspr-4.21
 	dev-libs/atk
 	dev-libs/expat
@@ -81,7 +81,7 @@ CDEPEND="
 	>=x11-libs/pixman-0.19.2
 	>=dev-libs/glib-2.26:2
 	>=sys-libs/zlib-1.2.3
-	>=virtual/libffi-3.0.10:=
+	>=dev-libs/libffi-3.0.10:=
 	media-video/ffmpeg
 	x11-libs/libX11
 	x11-libs/libXcomposite
@@ -148,15 +148,6 @@ DEPEND="${CDEPEND}
 				pgo? ( =sys-libs/compiler-rt-sanitizers-8*[profile] )
 			)
 		)
-		(
-			sys-devel/clang:7
-			!clang? ( sys-devel/llvm:7 )
-			clang? (
-				=sys-devel/lld-7*
-				sys-devel/llvm:7[gold]
-				pgo? ( =sys-libs/compiler-rt-sanitizers-7*[profile] )
-			)
-		)
 	)
 	pulseaudio? ( media-sound/pulseaudio )
 	>=virtual/rust-1.34.0
@@ -173,8 +164,6 @@ RDEPEND="
 "
 
 S="${WORKDIR}/${MY_P}"
-
-QA_PRESTRIPPED="usr/lib*/${PN}/${PN}"
 
 BUILD_OBJ_DIR="${WORKDIR}/tb"
 
@@ -248,12 +237,6 @@ pkg_setup() {
 	addpredict /proc/self/oom_score_adj
 
 	llvm_pkg_setup
-
-	if has ccache ${FEATURES} ; then
-		if use clang && use pgo ; then
-			die "Using FEATURES=ccache with USE=clang and USE=pgo is currently known to be broken (bug #718632)."
-		fi
-	fi
 }
 
 src_prepare() {
@@ -469,6 +452,7 @@ src_configure() {
 	# Set both --target and --host as mozilla uses python to guess values otherwise
 	mozconfig_annotate '' --target="${CHOST}"
 	mozconfig_annotate '' --host="${CBUILD:-${CHOST}}"
+	mozconfig_annotate '' --with-toolchain-prefix="${CHOST}-"
 	if use system-libevent ; then
 		mozconfig_annotate '' --with-system-libevent="${SYSROOT}${EPREFIX}"/usr
 	fi
