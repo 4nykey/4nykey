@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{6,7} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -33,7 +33,7 @@ RDEPEND="
 	>=dev-python/fonttools-4.12[ufo(-),unicode(-),${PYTHON_USEDEP}]
 	>=dev-python/cu2qu-1.6.7[${PYTHON_USEDEP}]
 	>=dev-python/glyphsLib-5.1.10[${PYTHON_USEDEP}]
-	>=dev-python/ufo2ft-2.14[${PYTHON_USEDEP}]
+	>=dev-python/ufo2ft-2.14[cffsubr,${PYTHON_USEDEP}]
 	>=dev-python/MutatorMath-2.1.2[${PYTHON_USEDEP}]
 	>=dev-python/fontMath-0.6[${PYTHON_USEDEP}]
 	>=dev-python/defcon-0.6[${PYTHON_USEDEP}]
