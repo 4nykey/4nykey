@@ -4,7 +4,7 @@
 EAPI=7
 
 DISTUTILS_OPTIONAL=true
-PYTHON_COMPAT=( python{2_7,3_{6,7}} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
