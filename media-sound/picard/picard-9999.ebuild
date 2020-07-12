@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-PYTHON_COMPAT=( python3_{6,7} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 DISTUTILS_SINGLE_IMPL=1
 PLOCALES="
 af ar ast bg ca cs cy da de el en_CA en_GB en eo es et fa fi fo fr_CA fr fy gl
@@ -16,6 +16,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	inherit vcs-snapshot
 	MY_PV="release-${PV/_rc/dev}"
+	MY_PV="${MY_PV/_beta/b}"
 	SRC_URI="
 		mirror://githubcl/metabrainz/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -45,6 +46,11 @@ DEPEND="
 "
 BDEPEND="
 	sys-devel/gettext
+	test? (
+		$(python_gen_cond_dep '
+		dev-python/python-dateutil[${PYTHON_MULTI_USEDEP}]
+		')
+	)
 "
 DOCS=( AUTHORS.txt {CONTRIBUTING,NEWS,README}.md )
 PATCHES=( "${FILESDIR}"/${PN}-test_id3.diff )
