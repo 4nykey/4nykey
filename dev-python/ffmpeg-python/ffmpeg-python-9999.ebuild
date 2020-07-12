@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{6,7} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -34,9 +34,13 @@ RDEPEND="
 "
 BDEPEND="
 	test? (
-		dev-python/pytest-runner[${PYTHON_USEDEP}]
 		dev-python/pytest-mock[${PYTHON_USEDEP}]
 		virtual/ffmpeg
 	)
 "
 distutils_enable_tests pytest
+
+python_prepare_all() {
+	sed -e '/\<pytest-runner\>/d' -i setup.py
+	distutils-r1_python_prepare_all
+}
