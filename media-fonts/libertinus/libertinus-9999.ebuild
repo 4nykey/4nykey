@@ -3,27 +3,25 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python{2_7,3_{6,7}} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 FONT_SUFFIX=otf
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/alif-type/${PN}.git"
+	EGIT_REPO_URI="https://github.com/alerque/${PN}.git"
 else
-	MY_PV="v${PV}"
-	if [[ -z ${PV%%*_p*} ]]; then
-		inherit vcs-snapshot
-		MY_PV="983ab6c"
-	fi
+	MY_PV="983ab6c"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
-		mirror://githubcl/alif-type/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/alerque/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 inherit python-any-r1 font-r1
 
 DESCRIPTION="A fork of the Linux Libertine and Linux Biolinum fonts"
-HOMEPAGE="https://github.com/alif-type/${PN}"
+HOMEPAGE="https://github.com/alerque/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
@@ -33,11 +31,12 @@ BDEPEND="
 	!binary? (
 		${PYTHON_DEPS}
 		$(python_gen_any_dep '
-			media-gfx/fontforge[python,${PYTHON_USEDEP}]
-			dev-python/fonttools[${PYTHON_USEDEP}]
+			>=dev-python/fonttools-4.10.2[ufo(-),${PYTHON_USEDEP}]
+			dev-python/ufo2ft[cffsubr(-),${PYTHON_USEDEP}]
 			dev-python/pcpp[${PYTHON_USEDEP}]
-			dev-util/psautohint[${PYTHON_USEDEP}]
+			dev-python/sfdLib[${PYTHON_USEDEP}]
 		')
+		dev-util/psautohint
 	)
 "
 DOCS="*.linuxlibertine.txt"
