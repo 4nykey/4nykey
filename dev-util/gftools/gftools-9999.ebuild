@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{6,7} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 DISTUTILS_SINGLE_IMPL=1
 inherit distutils-r1
 MY_PN=tools
@@ -12,7 +12,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlefonts/${MY_PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="7956c94"
+	MY_PV="8db1bef"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	MY_GL="GlyphsInfo-e33ccf3"
 	SRC_URI="
