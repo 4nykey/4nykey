@@ -1,11 +1,11 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-PYTHON_COMPAT=( python{2_7,3_{6,7}} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 MY_FONT_TYPES=( otf +ttf )
-inherit python-any-r1 font-r1
+inherit python-single-r1 font-r1
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/georgd/${PN}.git"
@@ -32,14 +32,14 @@ LICENSE="OFL-1.1"
 SLOT="0"
 IUSE="+binary"
 
-DEPEND="
+BDEPEND="
 	binary? (
 		app-arch/unzip
 	)
 	!binary? (
 		${PYTHON_DEPS}
-		$(python_gen_any_dep '
-			media-gfx/fontforge[${PYTHON_USEDEP}]
+		$(python_gen_cond_dep '
+			media-gfx/fontforge[python,${PYTHON_SINGLE_USEDEP}]
 		')
 		font_types_ttf? ( media-gfx/ttfautohint )
 	)
@@ -52,7 +52,7 @@ pkg_setup() {
 		FONT_S=( otf ttf )
 	else
 		FONT_S=( build )
-		python-any-r1_pkg_setup
+		python-single-r1_pkg_setup
 	fi
 	font-r1_pkg_setup
 }

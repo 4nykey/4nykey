@@ -1,11 +1,11 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-PYTHON_COMPAT=( python{2_7,3_{6,7}} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 MY_FONT_TYPES=( otf +ttf )
-inherit python-any-r1 font-r1
+inherit python-single-r1 font-r1
 
 MY_PN="${PN}-type-a"
 MY_MK="f9edc47e189d8495b647a4feac8ca240-1827636"
@@ -27,19 +27,19 @@ KEYWORDS="~amd64 ~x86"
 IUSE="+binary"
 REQUIRED_USE="binary? ( !font_types_otf )"
 
-DEPEND="
+BDEPEND="
 	app-arch/unzip
 	!binary? (
 		${PYTHON_DEPS}
-		$(python_gen_any_dep '
-			media-gfx/fontforge[${PYTHON_USEDEP}]
+		$(python_gen_cond_dep '
+			media-gfx/fontforge[python,${PYTHON_SINGLE_USEDEP}]
 		')
 	)
 "
 S="${WORKDIR}/GTRS_font"
 
 pkg_setup() {
-	use binary || python-any-r1_pkg_setup
+	use binary || python-single-r1_pkg_setup
 	font-r1_pkg_setup
 }
 

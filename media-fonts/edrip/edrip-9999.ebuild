@@ -1,20 +1,13 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-PYTHON_COMPAT=( python{2_7,3_{6,7}} )
-inherit python-any-r1
+PYTHON_COMPAT=( python3_{6,7,8} )
+inherit python-single-r1
 if [[ ${PV} == *9999* ]]; then
 	SRC_URI="mirror://gcarchive/${PN}/source-archive.zip -> ${P}.zip"
 	S="${WORKDIR}/${PN}/trunk"
-	DEPEND="
-		${PYTHON_DEPS}
-		$(python_gen_any_dep '
-			media-gfx/fontforge[python,${PYTHON_USEDEP}]
-			media-gfx/xgridfit[${PYTHON_USEDEP}]
-		')
-	"
 	REQUIRED_USE="!binary"
 else
 	SRC_URI="
@@ -39,8 +32,15 @@ SLOT="0"
 IUSE="+binary"
 
 RESTRICT="primaryuri"
+BDEPEND="
+	${PYTHON_DEPS}
+	$(python_gen_cond_dep '
+		media-gfx/fontforge[python,${PYTHON_SINGLE_USEDEP}]
+		media-gfx/xgridfit[${PYTHON_SINGLE_USEDEP}]
+	')
+"
 
 pkg_setup() {
-	use binary || python-any-r1_pkg_setup
+	use binary || python-single-r1_pkg_setup
 	font-r1_pkg_setup
 }

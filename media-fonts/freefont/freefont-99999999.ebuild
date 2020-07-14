@@ -4,7 +4,7 @@
 EAPI=7
 
 MY_FONT_TYPES=( otf +ttf )
-PYTHON_COMPAT=( python3_{6,7} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 if [[ ${PV} == *9999* ]]; then
 	inherit subversion
 	ESVN_REPO_URI="svn://svn.sv.gnu.org/${PN}/trunk/${PN}"
@@ -21,11 +21,11 @@ else
 		)
 	"
 	RESTRICT="primaryuri"
-	DEPEND="binary? ( font_types_ttf? ( app-arch/unzip ) )"
+	BDEPEND="binary? ( font_types_ttf? ( app-arch/unzip ) )"
 	KEYWORDS="~amd64 ~x86"
 	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
-inherit python-any-r1 font-r1
+inherit python-single-r1 font-r1
 
 DESCRIPTION="A free family of scalable outline unicode fonts"
 HOMEPAGE="https://www.gnu.org/software/freefont"
@@ -38,7 +38,9 @@ DOCS="CREDITS"
 
 BDEPEND="
 	!binary? (
-		media-gfx/fontforge[python]
+	$(python_gen_cond_dep '
+		media-gfx/fontforge[python,${PYTHON_SINGLE_USEDEP}]
+	')
 	)
 "
 
@@ -46,12 +48,17 @@ pkg_setup() {
 	if use binary; then
 		DOCS+=" TROUBLESHOOTING USAGE"
 	else
-		python-any-r1_pkg_setup
+		python-single-r1_pkg_setup
 		FONT_S=( sfd )
 		DOCS+=" notes/*.txt"
 	fi
 
 	font-r1_pkg_setup
+}
+
+src_prepare() {
+	default
+	python_fix_shebang -q "${S}"/tools/generate
 }
 
 src_compile() {

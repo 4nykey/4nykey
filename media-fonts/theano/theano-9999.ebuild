@@ -1,9 +1,9 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-PYTHON_COMPAT=( python{2_7,3_{6,7}} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 MY_FONT_TYPES=( otf +ttf )
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
@@ -29,7 +29,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font-r1
+inherit python-single-r1 font-r1
 
 DESCRIPTION="A Greek font designed from historic samples"
 HOMEPAGE="https://github.com/akryukov/${PN}"
@@ -38,12 +38,12 @@ LICENSE="OFL-1.1"
 SLOT="0"
 IUSE="+binary"
 
-DEPEND="
+BDEPEND="
 	binary? ( app-arch/unzip )
 	!binary? (
 		${PYTHON_DEPS}
-		$(python_gen_any_dep '
-			media-gfx/fontforge[${PYTHON_USEDEP}]
+		$(python_gen_cond_dep '
+			media-gfx/fontforge[python,${PYTHON_SINGLE_USEDEP}]
 		')
 		font_types_ttf? ( dev-util/grcompiler )
 	)
@@ -53,7 +53,7 @@ pkg_setup() {
 	if use binary; then
 		S="${WORKDIR}"
 	else
-		python-any-r1_pkg_setup
+		python-single-r1_pkg_setup
 	fi
 	font-r1_pkg_setup
 }

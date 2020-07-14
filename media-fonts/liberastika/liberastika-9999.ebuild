@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python{2_7,3_{6,7}} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit subversion
 	ESVN_REPO_URI="https://svn.code.sf.net/p/lib-ka/code/trunk"
@@ -21,7 +21,7 @@ else
 	"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 latex-package font-r1
+inherit python-single-r1 latex-package font-r1
 
 DESCRIPTION="Liberastika fonts are fork of Liberation Sans"
 HOMEPAGE="https://sourceforge.net/projects/lib-ka"
@@ -33,9 +33,9 @@ IUSE="+binary latex"
 BDEPEND="
 	!binary? (
 		${PYTHON_DEPS}
-		$(python_gen_any_dep '
-			media-gfx/fontforge[python,${PYTHON_USEDEP}]
-			media-gfx/xgridfit[${PYTHON_USEDEP}]
+		$(python_gen_cond_dep '
+			media-gfx/fontforge[python,${PYTHON_SINGLE_USEDEP}]
+			media-gfx/xgridfit[${PYTHON_SINGLE_USEDEP}]
 		')
 		dev-util/font-helpers
 		latex? ( app-text/lcdf-typetools )
@@ -44,7 +44,7 @@ BDEPEND="
 RESTRICT="primaryuri"
 
 pkg_setup() {
-	use binary || python-any-r1_pkg_setup
+	use binary || python-single-r1_pkg_setup
 	font-r1_pkg_setup
 }
 

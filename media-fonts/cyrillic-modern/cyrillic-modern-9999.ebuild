@@ -3,9 +3,9 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python{2_7,3_{6,7}} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 MY_FONT_TYPES=( +otf ttc )
-inherit python-any-r1
+inherit python-single-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit subversion
 	ESVN_REPO_URI="https://svn.code.sf.net/p/${PN}/code/trunk"
@@ -36,10 +36,10 @@ IUSE="+binary latex"
 RESTRICT="primaryuri"
 BDEPEND="
 	!binary? (
-		media-gfx/fontforge[python]
-		$(python_gen_any_dep '
-			dev-python/fonttools[${PYTHON_USEDEP}]
-			font_types_ttc? ( dev-util/afdko[${PYTHON_USEDEP}] )
+		$(python_gen_cond_dep '
+			media-gfx/fontforge[python,${PYTHON_SINGLE_USEDEP}]
+			dev-python/fonttools[${PYTHON_MULTI_USEDEP}]
+			font_types_ttc? ( dev-util/afdko[${PYTHON_MULTI_USEDEP}] )
 		')
 		dev-util/font-helpers
 		latex? (
@@ -55,7 +55,7 @@ pkg_setup() {
 		S="${WORKDIR}/nm-${MY_PV}"
 	else
 		S="${WORKDIR}/${MY_P}"
-		python-any-r1_pkg_setup
+		python-single-r1_pkg_setup
 	fi
 	font-r1_pkg_setup
 	use latex && DOCS+=" USAGE"

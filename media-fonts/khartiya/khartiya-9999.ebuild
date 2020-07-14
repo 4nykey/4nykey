@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python{2_7,3_{6,7}} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 MY_FONT_TYPES=( pfb otf +ttf )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit subversion
@@ -26,7 +26,7 @@ else
 	"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 latex-package font-r1
+inherit python-single-r1 latex-package font-r1
 
 DESCRIPTION="Khartiya is extended Bitstream Charter font"
 HOMEPAGE="https://code.google.com/p/${PN}"
@@ -38,9 +38,9 @@ IUSE="+binary latex"
 BDEPEND="
 	!binary? (
 		${PYTHON_DEPS}
-		$(python_gen_any_dep '
-			media-gfx/fontforge[python,${PYTHON_USEDEP}]
-			media-gfx/xgridfit[${PYTHON_USEDEP}]
+		$(python_gen_cond_dep '
+			media-gfx/fontforge[python,${PYTHON_SINGLE_USEDEP}]
+			media-gfx/xgridfit[${PYTHON_SINGLE_USEDEP}]
 		')
 		dev-texlive/texlive-fontutils
 		sys-apps/coreutils
@@ -51,7 +51,7 @@ BDEPEND="
 RESTRICT="primaryuri"
 
 pkg_setup() {
-	use binary || python-any-r1_pkg_setup
+	use binary || python-single-r1_pkg_setup
 	font-r1_pkg_setup
 }
 

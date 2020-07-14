@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python{2_7,3_{6,7}} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 MY_FONT_VARIANTS="loose halfloose halftight tight xtrasmall small large xtralarge"
 MY_FONT_CHARS="empty_dollar dotted_zero base_one zstyle_l no_contextual_alternates"
 if [[ ${PV} == *9999* ]]; then
@@ -18,7 +18,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-any-r1 font-r1
+inherit python-single-r1 font-r1
 
 DESCRIPTION="Customisable coding font with alternates, ligatures and contextual positioning"
 HOMEPAGE="https://larsenwork.com/monoid"
@@ -29,8 +29,8 @@ KEYWORDS="~amd64 ~x86"
 
 BDEPEND="
 	${PYTHON_DEPS}
-	$(python_gen_any_dep '
-		media-gfx/fontforge[${PYTHON_USEDEP}]
+	$(python_gen_cond_dep '
+		media-gfx/fontforge[python,${PYTHON_SINGLE_USEDEP}]
 	')
 "
 
@@ -38,7 +38,7 @@ FONT_S=( _release )
 DOCS="Readme.md"
 
 pkg_setup() {
-	python-any-r1_pkg_setup
+	python-single-r1_pkg_setup
 	font-r1_pkg_setup
 }
 
