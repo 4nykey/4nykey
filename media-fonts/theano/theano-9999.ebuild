@@ -10,7 +10,6 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/akryukov/${PN}.git"
 	REQUIRED_USE="!binary"
 else
-	inherit vcs-snapshot
 	MY_PV="v${PV}"
 	MY_P="${PN}-${MY_PV#v}"
 	SRC_URI="
