@@ -10,7 +10,6 @@ if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/georgd/${PN}.git"
 else
-	inherit vcs-snapshot
 	MY_PV="d9d931d"
 	MY_P="EBGaramond-${PV%_p*}"
 	SRC_URI="
@@ -51,6 +50,7 @@ pkg_setup() {
 		S="${WORKDIR}/${MY_P}"
 		FONT_S=( otf ttf )
 	else
+		S="${WORKDIR}/EB-Garamond-${MY_PV}"
 		FONT_S=( build )
 		python-single-r1_pkg_setup
 	fi
