@@ -30,6 +30,9 @@ IUSE="test"
 BDEPEND="
 	dev-python/setuptools_scm[${PYTHON_USEDEP}]
 	dev-python/cython[${PYTHON_USEDEP}]
+	test? (
+		dev-python/unittest2[${PYTHON_USEDEP}]
+	)
 "
 distutils_enable_tests pytest
 

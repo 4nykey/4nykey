@@ -4,6 +4,7 @@
 EAPI=7
 
 PYTHON_COMPAT=( python3_{6,7,8} )
+DISTUTILS_IN_SOURCE_BUILD=1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}.git"
@@ -36,4 +37,5 @@ BDEPEND="
 	cython? ( >=dev-python/cython-0.28.4[${PYTHON_USEDEP}] )
 	test? ( dev-python/pytest[${PYTHON_USEDEP}] )
 "
-distutils_enable_tests setup.py
+distutils_enable_tests pytest
+PATCHES=( "${FILESDIR}"/${PN}-test.diff )

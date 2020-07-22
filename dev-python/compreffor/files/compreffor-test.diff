@@ -1,0 +1,11 @@
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -34,7 +34,7 @@ license_file = LICENSE
+ [tool:pytest]
+ minversion = 2.8
+ testpaths = 
+-	src/python/compreffor
++	build/lib/compreffor
+ python_files = 
+ 	*_test.py
+ python_classes = 
