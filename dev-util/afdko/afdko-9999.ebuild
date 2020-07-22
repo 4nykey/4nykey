@@ -29,32 +29,29 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/lxml-4.5.1[${PYTHON_USEDEP}]
+	>=dev-python/lxml-4.5.2[${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 	>=dev-python/cu2qu-1.6.7[${PYTHON_USEDEP}]
-	>=dev-python/defcon-0.6[${PYTHON_USEDEP}]
+	>=dev-python/defcon-0.7.2[${PYTHON_USEDEP}]
 	>=dev-python/fontMath-0.6[${PYTHON_USEDEP}]
 	dev-python/fontPens[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-4.10.2[brotli(-),ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.13[brotli(-),ufo(-),unicode(-),${PYTHON_USEDEP}]
 	>=dev-python/MutatorMath-3.0.1[${PYTHON_USEDEP}]
-	>=dev-util/psautohint-2.0.1[${PYTHON_USEDEP}]
+	>=dev-util/psautohint-2.1[${PYTHON_USEDEP}]
 	>=dev-python/ufoProcessor-1.9[${PYTHON_USEDEP}]
 	>=dev-python/ufoNormalizer-0.4.1[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
 "
-BDEPEND="
-	test? (
-		dev-python/pytest[${PYTHON_USEDEP}]
-	)
-"
 DOCS=( {README,NEWS}.md docs )
+distutils_enable_tests pytest
 
 python_prepare_all() {
 	local PATCHES=(
 		"${FILESDIR}"/${PN}-nowheel.diff
 		"${FILESDIR}"/${PN}-pdflib.diff
+		"${FILESDIR}"/${PN}-inc.diff
 	)
 	grep -rl '\$(AR) -' c | xargs sed -e 's:\(\$(AR) \)-:\1:' -i
 	sed \
