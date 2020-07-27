@@ -3,19 +3,24 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_7 )
+PYTHON_COMPAT=( python3_{7,8} )
 inherit python-any-r1 font-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}"
 else
-	inherit vcs-snapshot
-	MY_PV="unicode12_1"
-	MY_PV="v${PV//./-}-${MY_PV}"
+	MY_PV="v$(ver_rs 1-2 '-')"
+	MY_PV="$(ver_rs 5 '_' ${MY_PV})"
+	MY_PV="$(ver_rs 4 '-unicode' ${MY_PV})"
 	[[ -z ${PV%%*_p*} ]] && MY_PV="ac1703e"
-	SRC_URI="mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz"
+	MY_P="${PN}-${MY_PV#v}"
+	SRC_URI="
+		mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV}
+		-> ${MY_P}.tar.gz
+	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${MY_P}"
 fi
 
 DESCRIPTION="Noto Emoji fonts"
@@ -23,7 +28,7 @@ HOMEPAGE="https://github.com/googlefonts/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="+binary zopfli"
+IUSE="+binary"
 
 BDEPEND="
 !binary? (
@@ -33,11 +38,11 @@ BDEPEND="
 	')
 	media-gfx/pngquant
 	virtual/imagemagick-tools[png]
-	zopfli? ( app-arch/zopfli )
-	!zopfli? ( media-gfx/optipng )
+	app-arch/zopfli
 	x11-libs/cairo
 )
 "
+PATCHES=( "${FILESDIR}"/${PN}-makefile.diff )
 
 pkg_setup() {
 	if use binary; then
@@ -52,16 +57,16 @@ src_prepare() {
 	default
 	use binary && return
 	sed \
-		-e 's:CFLAGS =:CFLAGS +=:' \
+		-e 's:^\t@:\t:' \
+		-e '/\(C\|LD\)FLAGS =/s:=:+=:' \
+		-e 's:\<pkg-config\>:$(PKG_CONFIG):' \
 		-i Makefile
 }
 
 src_compile() {
 	use binary && return
-	addpredict /dev/dri
-	tc-export CC
-	emake \
+	tc-env_build emake \
 		PNGQUANT=/usr/bin/pngquant \
-		$(usex zopfli '' 'MISSING_ZOPFLI=1')
+		VIRTUAL_ENV=1
 	rm -f *.tmpl.ttf
 }
