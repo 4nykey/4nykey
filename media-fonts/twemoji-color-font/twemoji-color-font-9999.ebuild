@@ -1,22 +1,23 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/eosrei/${PN}"
 	REQUIRED_USE="!binary"
 else
-	inherit vcs-snapshot
-	MY_PV="${PV//_/-}"
-	MY_P="TwitterColorEmoji-SVGinOT-Linux-${MY_PV}"
+	MY_PVB="v${PV%_p*}"
+	MY_P="TwitterColorEmoji-SVGinOT-Linux-${MY_PVB#v}"
+	MY_PV="v${PV}"
+	[[ -z ${PV%%*_p*} ]] && MY_PV="cd3bc6a"
 	SRC_URI="
 		!binary? (
-			mirror://githubcl/eosrei/${PN}/tar.gz/v${MY_PV} -> ${P}.tar.gz
+			mirror://githubcl/eosrei/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		)
 		binary? (
-			https://github.com/eosrei/${PN}/releases/download/v${MY_PV}/${MY_P}.tar.gz
+			https://github.com/eosrei/${PN}/releases/download/${MY_PVB}/${MY_P}.tar.gz
 		)
 	"
 	RESTRICT="primaryuri"
@@ -31,7 +32,7 @@ LICENSE="CC-BY-4.0 MIT"
 SLOT="0"
 IUSE="+binary"
 
-DEPEND="
+BDEPEND="
 	!binary? (
 		media-gfx/inkscape
 		virtual/imagemagick-tools[png]
@@ -47,6 +48,7 @@ pkg_setup() {
 		S="${WORKDIR}/${MY_P}"
 		FONT_CONF="${S}/${_fc}"
 	else
+		S="${WORKDIR}/${PN}-${MY_PV#v}"
 		FONT_S=( build )
 		FONT_CONF="${S}/linux/${_fc}"
 	fi
@@ -57,13 +59,15 @@ src_prepare() {
 	default
 	use binary && return
 
-	sed -e '/all:/ s:$(OSX_FONT)::' -i "${S}"/Makefile
-	addpredict /dev/dri
+	sed \
+		-e '/all:/ s:$(OSX_FONT)::' \
+		-e '/inkscape /s: -z -e : -o :' \
+		-i "${S}"/Makefile
 }
 
 src_compile() {
 	use binary && return
 
 	emake \
-		SCFBUILD="${EROOT}usr/bin/scfbuild"
+		SCFBUILD="${EROOT}/usr/bin/scfbuild"
 }
