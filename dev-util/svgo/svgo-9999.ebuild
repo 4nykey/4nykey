@@ -1,7 +1,7 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -21,10 +21,12 @@ LICENSE="MIT"
 SLOT="0"
 IUSE=""
 
-DEPEND="
+BDEPEND="
 	net-libs/nodejs[npm]
 "
-RDEPEND="${DEPEND}"
+RDEPEND="
+	net-libs/nodejs
+"
 DOCS=( {CHANGELOG,README,docs/how-it-works/en}.md )
 
 src_prepare() {
