@@ -9,7 +9,7 @@ PYTHON_COMPAT=( python3_{6,7,8,9} )
 PYTHON_REQ_USE='ncurses,sqlite,ssl,threads(+)'
 
 # Patch version
-PATCH="firefox-68.0-patches-14"
+PATCH="firefox-68.0-patches-15"
 
 LLVM_MAX_SLOT=10
 
@@ -36,7 +36,7 @@ LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
 LICENSE+=" BSD CC-BY-3.0"
 IUSE="bindist clang cpu_flags_x86_avx2 dbus debug eme-free geckodriver
 	+gmp-autoupdate hardened hwaccel jack lto cpu_flags_arm_neon
-	pgo pulseaudio +screenshot selinux startup-notification +system-av1
+	+openh264 pgo pulseaudio +screenshot selinux startup-notification +system-av1
 	+system-harfbuzz +system-icu +system-jpeg +system-libevent
 	+system-sqlite +system-libvpx +system-webp test wayland wifi"
 
@@ -48,12 +48,12 @@ RESTRICT="!bindist? ( bindist )
 RESTRICT+=" primaryuri"
 
 MY_EFF="2020.5.20"
-MY_NOS="11.0.32"
+MY_NOS="11.0.34"
 MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
 MY_NOS="noscript-${MY_NOS}.xpi"
 PATCH_URIS=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c,whissi}/mozilla/patchsets/${PATCH}.tar.xz )
 SRC_URI="
-	mirror://tor/dist/${PN}/${TOR_REL}/src-${MY_P}.tar.xz
+	mirror://tor/dist/${PN}/${TOR_REL}/src-${MY_P}.tar.xz -> ${P}.tar.xz
 	https://www.eff.org/files/${MY_EFF}
 	https://secure.informaction.com/download/releases/${MY_NOS}
 	${PATCH_URIS[@]}
@@ -75,8 +75,10 @@ CDEPEND="
 	>=media-libs/freetype-2.4.10
 	kernel_linux? ( !pulseaudio? ( media-libs/alsa-lib ) )
 	virtual/freedesktop-icon-theme
-	dbus? ( >=sys-apps/dbus-0.60
-		>=dev-libs/dbus-glib-0.72 )
+	dbus? (
+		>=sys-apps/dbus-0.60
+		>=dev-libs/dbus-glib-0.72
+	)
 	startup-notification? ( >=x11-libs/startup-notification-0.8 )
 	>=x11-libs/pixman-0.19.2
 	>=dev-libs/glib-2.26:2
@@ -94,23 +96,35 @@ CDEPEND="
 		>=media-libs/dav1d-0.3.0:=
 		>=media-libs/libaom-1.0.0:=
 	)
-	system-harfbuzz? ( >=media-libs/harfbuzz-2.4.0:0= >=media-gfx/graphite2-1.3.13 )
+	system-harfbuzz? (
+		>=media-libs/harfbuzz-2.4.0:0=
+		>=media-gfx/graphite2-1.3.13
+	)
 	system-icu? ( >=dev-libs/icu-63.1:= )
 	system-jpeg? ( >=media-libs/libjpeg-turbo-1.2.1 )
 	system-libevent? ( >=dev-libs/libevent-2.0:0=[threads] )
 	system-libvpx? ( =media-libs/libvpx-1.7*:0=[postproc] )
 	system-sqlite? ( >=dev-db/sqlite-3.28.0:3[secure-delete,debug=] )
 	system-webp? ( >=media-libs/libwebp-1.0.2:0= )
-	wifi? ( kernel_linux? ( >=sys-apps/dbus-0.60
+	wifi? (
+		kernel_linux? (
+			>=sys-apps/dbus-0.60
 			>=dev-libs/dbus-glib-0.72
-			net-misc/networkmanager ) )
+			net-misc/networkmanager
+		)
+	)
 	jack? ( virtual/jack )
 	selinux? ( sec-policy/selinux-mozilla )"
 
 RDEPEND="${CDEPEND}
 	jack? ( virtual/jack )
-	pulseaudio? ( || ( media-sound/pulseaudio
-		>=media-sound/apulse-0.1.9 ) )
+	openh264? ( media-libs/openh264:*[plugin] )
+	pulseaudio? (
+		|| (
+			media-sound/pulseaudio
+			>=media-sound/apulse-0.1.9
+		)
+	)
 	selinux? ( sec-policy/selinux-mozilla )"
 
 DEPEND="${CDEPEND}
@@ -120,6 +134,8 @@ DEPEND="${CDEPEND}
 	>=net-libs/nodejs-8.11.0
 	>=sys-devel/binutils-2.30
 	sys-apps/findutils
+	virtual/pkgconfig
+	>=virtual/rust-1.34.0
 	|| (
 		(
 			sys-devel/clang:10
@@ -150,7 +166,6 @@ DEPEND="${CDEPEND}
 		)
 	)
 	pulseaudio? ( media-sound/pulseaudio )
-	>=virtual/rust-1.34.0
 	wayland? ( >=x11-libs/gtk+-3.11:3[wayland] )
 	amd64? ( >=dev-lang/yasm-1.1 virtual/opengl )
 	x86? ( >=dev-lang/yasm-1.1 virtual/opengl )
@@ -191,57 +206,56 @@ llvm_check_deps() {
 }
 
 pkg_pretend() {
-	if use pgo ; then
-		if ! has usersandbox $FEATURES ; then
-			die "You must enable usersandbox as X server can not run as root!"
+	if [[ ${MERGE_TYPE} != binary ]] ; then
+		if use pgo ; then
+			if ! has usersandbox $FEATURES ; then
+				die "You must enable usersandbox as X server can not run as root!"
+			fi
 		fi
+
+		# Ensure we have enough disk space to compile
+		if use pgo || use lto || use debug || use test ; then
+			CHECKREQS_DISK_BUILD="8G"
+		else
+			CHECKREQS_DISK_BUILD="4G"
+		fi
+
+		check-reqs_pkg_pretend
 	fi
-
-	# Ensure we have enough disk space to compile
-	if use pgo || use lto || use debug || use test ; then
-		CHECKREQS_DISK_BUILD="8G"
-	else
-		CHECKREQS_DISK_BUILD="4G"
-	fi
-
-	check-reqs_pkg_pretend
-
-	local _d="${EPREFIX}/usr/$(get_libdir)/${PN}/${PN}"
-	[[ -d "${_d}" ]] && die "Please manually remove ${_d}"
 }
 
 pkg_setup() {
 	moz_pkgsetup
 
-	# Ensure we have enough disk space to compile
-	if use pgo || use lto || use debug || use test ; then
-		CHECKREQS_DISK_BUILD="8G"
-	else
-		CHECKREQS_DISK_BUILD="4G"
+	if [[ ${MERGE_TYPE} != binary ]] ; then
+		# Ensure we have enough disk space to compile
+		if use pgo || use lto || use debug || use test ; then
+			CHECKREQS_DISK_BUILD="8G"
+		else
+			CHECKREQS_DISK_BUILD="4G"
+		fi
+
+		check-reqs_pkg_setup
+
+		# Avoid PGO profiling problems due to enviroment leakage
+		# These should *always* be cleaned up anyway
+		unset DBUS_SESSION_BUS_ADDRESS \
+			DISPLAY \
+			ORBIT_SOCKETDIR \
+			SESSION_MANAGER \
+			XDG_CACHE_HOME \
+			XDG_SESSION_COOKIE \
+			XAUTHORITY
+
+		addpredict /proc/self/oom_score_adj
+
+		llvm_pkg_setup
 	fi
 
-	check-reqs_pkg_setup
-
-	# Avoid PGO profiling problems due to enviroment leakage
-	# These should *always* be cleaned up anyway
-	unset DBUS_SESSION_BUS_ADDRESS \
-		DISPLAY \
-		ORBIT_SOCKETDIR \
-		SESSION_MANAGER \
-		XDG_CACHE_HOME \
-		XDG_SESSION_COOKIE \
-		XAUTHORITY
-
 	append-cppflags "-DTOR_BROWSER_DATA_IN_HOME_DIR"
-
-	addpredict /proc/self/oom_score_adj
-
-	llvm_pkg_setup
 }
 
 src_prepare() {
-	rm "${WORKDIR}"/firefox/2013_avoid_noinline_on_GCC_with_skcms.patch
-	rm "${WORKDIR}"/firefox/2015_fix_cssparser.patch
 	eapply "${WORKDIR}/firefox"
 	eapply "${FILESDIR}"/${PN}-{profiledir,lto}.patch
 	sed -e '/if (gTorPane.enabled/,/^  }$/d' \
@@ -249,14 +263,23 @@ src_prepare() {
 	sed -e '/\<torpreferences\>/d' \
 		-i browser/components/{moz.build,preferences/in-content/preferences.xul}
 
-	# Allow user to apply any additional patches without modifing ebuild
-	eapply_user
-
 	# Make LTO respect MAKEOPTS
 	sed -i \
 		-e "s/multiprocessing.cpu_count()/$(makeopts_jobs)/" \
 		"${S}"/build/moz.configure/toolchain.configure \
 		|| die "sed failed to set num_cores"
+
+	# sed-in toolchain prefix
+	sed -i \
+		-e "s/objdump/${CHOST}-objdump/" \
+		"${S}"/python/mozbuild/mozbuild/configure/check_debug_ranges.py \
+		|| die "sed failed to set toolchain prefix"
+
+	# Allow user to apply any additional patches without modifing ebuild
+	eapply_user
+
+	einfo "Removing pre-built binaries ..."
+	find "${S}"/third_party -type f \( -name '*.so' -o -name '*.o' \) -print -delete || die
 
 	# Enable gnomebreakpad
 	if use debug ; then
