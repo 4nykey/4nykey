@@ -1,16 +1,16 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-PLOCALES="ca cs de es fr it ja ko no pl pt ru zh zh_TW"
+PLOCALES="ca cs de es fr it ja ko nl no pl pt ru sr zh zh_TW"
 if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/alessandrofrancesconi/${PN}.git"
 	inherit git-r3
 else
-	inherit vcs-snapshot
 	SRC_URI="
-		mirror://githubcl/alessandrofrancesconi/${PN}/tar.gz/v${PV} -> ${P}.tar.gz
+		mirror://githubcl/alessandrofrancesconi/${PN}/tar.gz/v${PV}
+		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -25,21 +25,15 @@ SLOT="0"
 
 RDEPEND="
 	media-gfx/gimp:2
-	dev-libs/libpcre:3
 "
 DEPEND="
 	${RDEPEND}
 	virtual/pkgconfig
 "
-PATCHES=( "${FILESDIR}"/${PN}_build.diff )
 DOCS=( CHANGELOG.md README.md )
 
 src_compile() {
-	local _pc="$(tc-getPKG_CONFIG)" _d="gimpui-2.0 libpcre"
-	emake \
-		CC=$(tc-getCC) \
-		CFLAGS="${CFLAGS} $(${_pc} --cflags ${_d})" \
-		LIBS="$(${_pc} --libs ${_d})"
+	tc-env_build emake -f "${FILESDIR}"/Makefile
 }
 
 src_install() {
