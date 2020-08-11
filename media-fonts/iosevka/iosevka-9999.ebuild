@@ -164,6 +164,7 @@ PATCHES=( "${FILESDIR}"/${PN}-buildttc.diff )
 pkg_setup() {
 	if use binary; then
 		S="${WORKDIR}"
+		PATCHES=()
 		use font_types_ttf && FONT_S="ttf$(usex autohint '' '-unhinted')"
 	fi
 	font-r1_pkg_setup
