@@ -35,9 +35,11 @@ IUSE="+acoustid nls"
 RDEPEND="
 	${PYTHON_DEPS}
 	$(python_gen_cond_dep '
-		dev-python/PyQt5[${PYTHON_MULTI_USEDEP},gui]
-		>=media-libs/mutagen-1.37[${PYTHON_MULTI_USEDEP}]
+		dev-python/python-dateutil[${PYTHON_MULTI_USEDEP}]
 		dev-python/python-discid[${PYTHON_MULTI_USEDEP}]
+		dev-python/markdown[${PYTHON_MULTI_USEDEP}]
+		>=media-libs/mutagen-1.37[${PYTHON_MULTI_USEDEP}]
+		dev-python/PyQt5[${PYTHON_MULTI_USEDEP},gui]
 	')
 	acoustid? ( >=media-libs/chromaprint-1.0[tools] )
 "
@@ -46,11 +48,6 @@ DEPEND="
 "
 BDEPEND="
 	sys-devel/gettext
-	test? (
-		$(python_gen_cond_dep '
-		dev-python/python-dateutil[${PYTHON_MULTI_USEDEP}]
-		')
-	)
 "
 DOCS=( AUTHORS.txt {CONTRIBUTING,NEWS,README}.md )
 PATCHES=( "${FILESDIR}"/${PN}-test_id3.diff )
