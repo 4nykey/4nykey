@@ -24,7 +24,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
-inherit python-any-r1 font-r1
+inherit python-single-r1 font-r1
 
 DESCRIPTION="A fork of the Linux Libertine and Linux Biolinum fonts"
 HOMEPAGE="https://github.com/alerque/${PN}"
@@ -36,9 +36,7 @@ IUSE="+binary"
 BDEPEND="
 	!binary? (
 		${PYTHON_DEPS}
-		$(python_gen_any_dep '
-			dev-util/fontship[${PYTHON_USEDEP}]
-		')
+		dev-util/fontship[${PYTHON_SINGLE_USEDEP}]
 	)
 "
 
@@ -47,7 +45,7 @@ pkg_setup() {
 		S="${WORKDIR}/${PN^}-${PV%_p*}"
 		FONT_S=( static/OTF )
 	else
-		python-any-r1_pkg_setup
+		python-single-r1_pkg_setup
 		DOCS="*.linuxlibertine.txt"
 	fi
 	font-r1_pkg_setup
@@ -55,12 +53,12 @@ pkg_setup() {
 
 src_compile() {
 	use binary && return
-	local _args=(
+	local _args=()
+	[[ -n ${PV%%*9999} ]] && _args=(
 		GITNAME="${PN}"
 		FontVersion="${PV%_p*}"
 		GitVersion="${PV%_p*}"
 		SOURCES="$(ls -b1 sources/*.sfd)"
-		STATICOTF="true"
 	)
 	fontship -v make "${_args[@]}" || die
 }
