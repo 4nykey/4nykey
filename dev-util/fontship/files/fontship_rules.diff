@@ -1,0 +1,22 @@
+--- a/src/rules.mk
++++ b/src/rules.mk
+@@ -21,7 +21,7 @@ CONTAINERIZED != test -f /.dockerenv &&
+ 
+ # Initial environment setup
+ FONTSHIPDIR != cd "$(shell dirname $(lastword $(MAKEFILE_LIST)))/" && pwd
+-GITNAME := $(notdir $(shell git worktree list | head -n1 | awk '{print $$1}'))
++GITNAME ?= $(notdir $(shell git worktree list | head -n1 | awk '{print $$1}'))
+ PROJECT ?= $(shell $(CONTAINERIZED) || $(PYTHON) $(PYTHONFLAGS) -c 'print("$(GITNAME)".replace(" ", "").title())')
+ _PROJECTDIR != cd "$(shell dirname $(firstword $(MAKEFILE_LIST)))/" && pwd
+ PROJECTDIR ?= $(_PROJECTDIR)
+@@ -307,8 +307,8 @@ $(STATICOTFS): %.otf: $(BUILDDIR)/%-subr
+ 
+ forceiftagchange = $(shell cmp -s $@ - <<< "$(GitVersion)" || echo force)
+ $(BUILDDIR)/last-commit: $$(forceiftagchange) | $(BUILDDIR)
+-	git update-index --refresh --ignore-submodules ||:
+-	git diff-index --quiet --cached HEAD -- $(SOURCES)
++	-git update-index --refresh --ignore-submodules ||:
++	-git diff-index --quiet --cached HEAD -- $(SOURCES)
+ 	echo $(GitVersion) > $@
+ 
+ DISTDIR = $(PROJECT)-$(GitVersion)
