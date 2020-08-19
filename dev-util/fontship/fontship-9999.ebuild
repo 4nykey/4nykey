@@ -4,9 +4,7 @@
 EAPI=7
 
 PYTHON_COMPAT=( python3_{6,7,8} )
-DISTUTILS_IN_SOURCE_BUILD=0
-DISTUTILS_USE_SETUPTOOLS=no
-inherit autotools distutils-r1
+inherit autotools python-single-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/theleagueof/${PN}.git"
@@ -29,21 +27,20 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
-	>=dev-python/babelfont-0.0.2[${PYTHON_USEDEP}]
-	>=dev-python/cffsubr-0.2.7[${PYTHON_USEDEP}]
-	>=dev-python/click-7.1.2[${PYTHON_USEDEP}]
-	>=dev-python/defcon-0.7.2[${PYTHON_USEDEP}]
-	>=dev-python/font-v-1.0.2[${PYTHON_USEDEP}]
-	>=dev-util/fontmake-2.2[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-4.13[ufo(-),unicode(-),${PYTHON_USEDEP}]
-	>=dev-python/pcpp-1.21[${PYTHON_USEDEP}]
-	>=dev-util/psautohint-2.1[${PYTHON_USEDEP}]
-	>=dev-python/pygit2-1.2.1[${PYTHON_USEDEP}]
-	dev-python/sfdLib[${PYTHON_USEDEP}]
-	>=dev-python/skia-pathops-0.4.1[${PYTHON_USEDEP}]
-	>=dev-python/ufo2ft-2.15[cffsubr,${PYTHON_USEDEP}]
-	>=dev-python/ufoLib2-0.8[${PYTHON_USEDEP}]
+	${PYTHON_DEPS}
+	$(python_gen_cond_dep '
+		>=dev-python/babelfont-0.0.2[${PYTHON_USEDEP}]
+		>=dev-python/click-7.1.2[${PYTHON_USEDEP}]
+		>=dev-python/pcpp-1.21[${PYTHON_USEDEP}]
+		>=dev-python/pygit2-1.2.1[${PYTHON_USEDEP}]
+		dev-python/sfdLib[${PYTHON_USEDEP}]
+		>=dev-python/ufo2ft-2.15[cffsubr,${PYTHON_USEDEP}]
+	')
 	>=dev-util/gftools-0.4.1
+	>=dev-python/font-v-1.0.2
+	>=dev-util/fontmake-2.2
+	>=dev-python/fonttools-4.13
+	>=dev-util/psautohint-2.1
 	dev-util/sfdnormalize
 	media-gfx/ttfautohint
 	media-libs/woff2
@@ -54,26 +51,11 @@ DEPEND="
 "
 PATCHES=( "${FILESDIR}"/${PN}_rules.diff )
 
-python_prepare_all() {
+src_prepare() {
+	[[ -n ${PV%%*9999} ]] && echo "${PV%_p*}" > .tarball-version
+	./build-aux/git-version-gen .tarball-version > .version
+	default
 	sed -e '/sfnt2woff-zopfli/d' -i configure.ac
+	sed -e '/dist_license_DATA = /d' -i Makefile.am
 	eautoreconf
-	touch setup.py
-	distutils-r1_python_prepare_all
-}
-
-python_configure() {
-	econf
-	echo "${PV%_p*}" > .version
-}
-
-python_compile() {
-	emake
-}
-
-python_install() {
-	emake \
-		DESTDIR="${D%/}/_${EPYTHON}" \
-		bindir=$(python_get_scriptdir) \
-		install
-	distutils-r1_python_install
 }
