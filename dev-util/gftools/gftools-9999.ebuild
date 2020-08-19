@@ -12,7 +12,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlefonts/${MY_PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="8db1bef"
+	MY_PV="206b829"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	MY_GL="GlyphsInfo-e33ccf3"
 	SRC_URI="
@@ -42,6 +42,8 @@ RDEPEND="
 		dev-python/ots-python[${PYTHON_MULTI_USEDEP}]
 		dev-python/vttLib[${PYTHON_MULTI_USEDEP}]
 		dev-python/diffbrowsers[${PYTHON_MULTI_USEDEP}]
+		dev-python/pygit2[${PYTHON_MULTI_USEDEP}]
+		dev-python/strictyaml[${PYTHON_MULTI_USEDEP}]
 	')
 "
 DEPEND="
