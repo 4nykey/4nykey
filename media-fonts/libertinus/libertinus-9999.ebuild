@@ -8,11 +8,17 @@ FONT_SUFFIX=otf
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/alerque/${PN}.git"
+	REQUIRED_USE="!binary"
 else
 	MY_PV="983ab6c"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
-		mirror://githubcl/alerque/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		!binary? (
+			mirror://githubcl/alerque/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		)
+		binary? (
+			https://github.com/alerque/${PN}/releases/download/v${PV%_p*}/${PN^}-${PV%_p*}.tar.xz
+		)
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -31,29 +37,30 @@ BDEPEND="
 	!binary? (
 		${PYTHON_DEPS}
 		$(python_gen_any_dep '
-			>=dev-python/fonttools-4.10.2[ufo(-),${PYTHON_USEDEP}]
-			dev-python/ufo2ft[cffsubr(-),${PYTHON_USEDEP}]
-			dev-python/pcpp[${PYTHON_USEDEP}]
-			dev-python/sfdLib[${PYTHON_USEDEP}]
+			dev-util/fontship[${PYTHON_USEDEP}]
 		')
-		dev-util/psautohint
 	)
 "
-DOCS="*.linuxlibertine.txt"
 
 pkg_setup() {
-	use binary || python-any-r1_pkg_setup
+	if use binary; then
+		S="${WORKDIR}/${PN^}-${PV%_p*}"
+		FONT_S=( static/OTF )
+	else
+		python-any-r1_pkg_setup
+		DOCS="*.linuxlibertine.txt"
+	fi
 	font-r1_pkg_setup
-}
-
-src_prepare() {
-	default
-	use binary || rm  -f "${S}"/*.otf
 }
 
 src_compile() {
 	use binary && return
-	emake \
-		PY=${EPYTHON} \
-		${FONT_SUFFIX}
+	local _args=(
+		GITNAME="${PN}"
+		FontVersion="${PV%_p*}"
+		GitVersion="${PV%_p*}"
+		SOURCES="$(ls -b1 sources/*.sfd)"
+		STATICOTF="true"
+	)
+	fontship -v make "${_args[@]}" || die
 }
