@@ -51,6 +51,7 @@ src_prepare() {
 	local PATCHES=(
 		"${FILESDIR}"/${PN}-qmake.diff
 		"${FILESDIR}"/${PN}-qt515.diff
+		"${FILESDIR}"/${PN}-glibc232.diff
 	)
 	cp -r "${EROOT}"/usr/share/meganz-sdk/bindings "${S}"/src/MEGASync/mega/
 	cmake-utils_src_prepare
