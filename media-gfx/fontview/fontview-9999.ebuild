@@ -1,26 +1,26 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit toolchain-funcs wxwidgets
+inherit toolchain-funcs
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/googlei18n/${PN}.git"
+	EGIT_REPO_URI="https://github.com/googlefonts/${PN}.git"
 	EGIT_SUBMODULES=( )
 else
-	inherit vcs-snapshot
-	MY_PV="4d6f3fd"
+	MY_PV="b8f4b51"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
-		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 
 DESCRIPTION="An app that shows the contents of a font file"
-HOMEPAGE="https://github.com/googlei18n/${PN}"
+HOMEPAGE="https://github.com/googlefonts/${PN}"
 
 LICENSE="Apache-2.0"
 SLOT="0"
@@ -32,7 +32,7 @@ RDEPEND="
 	media-libs/freetype:2
 	media-libs/harfbuzz
 	!gtk3? ( x11-libs/wxGTK:3.0 )
-	gtk3? ( x11-libs/wxGTK:3.0-gtk3 )
+	gtk3? ( || ( x11-libs/wxGTK:3.0-gtk3 x11-libs/wxGTK:3.1 ) )
 "
 DEPEND="
 	${RDEPEND}
@@ -41,8 +41,14 @@ DEPEND="
 "
 
 pkg_setup() {
-	WX_GTK_VER=$(usex gtk3 3.0-gtk3 3.0)
-	setup-wxwidgets
+	local _w=( 2 3.0 )
+	if use gtk3; then
+		_w=( 3 3.0-gtk3 )
+		has_version x11-libs/wxGTK:3.1 && _w=( 3 3.1 )
+	fi
+	_w="gtk${_w[0]}-unicode-${_w[1]}"
+	WX_CONFIG="${EPREFIX}/usr/$(get_libdir)/wx/config/${_w}"
+	einfo "Using wxWidgets:            ${_w}"
 }
 
 src_prepare() {
