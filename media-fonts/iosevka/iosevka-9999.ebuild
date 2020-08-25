@@ -189,14 +189,14 @@ src_compile() {
 			if use font_variants_${_s#-}; then
 				_s=${_s#-default}
 				_t+=( ${PN}${_s} )
-				FONT_S+=( dist/export/${PN}${_s}/ttc )
+				FONT_S+=( .build/ttc-collect/${PN}${_s}/ttc )
 			fi
 		done
 		if use font_variants_slab && use font_variants_curly; then
 			_t+=( ${PN}-curly-slab )
-			FONT_S+=( dist/export/${PN}-curly-slab/ttc )
+			FONT_S+=( .build/ttc-collect/${PN}-curly-slab/ttc )
 		fi
-		emake ${_t[@]/#/collection-export::}
+		emake "${_t[@]/#/collection-export::}"
 
 	else
 
@@ -228,7 +228,7 @@ src_compile() {
 			use font_variants_term && _t+=( ${PN}-term-curly )
 		fi
 
-		emake ${_t[@]/#/${_v}::}
+		emake "${_t[@]/#/${_v}::}"
 
 		FONT_S=( ${_t[@]/#/dist/} )
 		FONT_S=( ${FONT_S[@]/%//${_v}} )

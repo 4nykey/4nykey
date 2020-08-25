@@ -1,11 +1,15 @@
 --- a/verdafile.js
 +++ b/verdafile.js
-@@ -562,8 +562,6 @@ const CollectionExport = task.group("collection-export", async (target, gr) => {
- 	const [collectPlans] = await target.need(CollectPlans, de`${DIST}/export/${gr}`);
- 	const sourceGroups = collectPlans.groupDecomposition[gr];
- 	// TTF, etc
--	await target.need(sourceGroups.map(g => GroupContents(g)));
--	for (const g of sourceGroups) await cp(`${DIST}/${g}`, `${DIST}/export/${gr}`);
- 	// TTC
- 	const ttcFiles = Array.from(new Set(collectPlans.ttcContents[gr]));
- 	await target.need(ttcFiles.map(pt => ExportTtc(gr, pt)));
+@@ -569,6 +569,12 @@ async function buildCompositeTtc(out, in
+ 	);
+ }
+ 
++const CollectionExport = task.group("collection-export", async (target, gr) => {
++	const [collectPlans] = await target.need(CollectPlans, de`${DIST}/ttc-collect/${gr}`);
++	const sourceGroups = collectPlans.groupDecomposition[gr];
++	const ttcFiles = Array.from(new Set(collectPlans.ttcContents[gr]));
++	await target.need(ttcFiles.map(pt => ExportTtcFile(gr, pt)));
++});
+ const ExportSuperTtc = file.make(
+ 	gr => `${DIST_SUPER_TTC}/${gr}.ttc`,
+ 	async (target, out, gr) => {
