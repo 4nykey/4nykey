@@ -47,23 +47,18 @@ RDEPEND="
 	)
 	qt5? ( dev-python/PyQt5[${PYTHON_USEDEP}] )
 	gtk? ( dev-python/pygobject:3[${PYTHON_USEDEP}] )
+	>=sci-libs/scipy-1.5.2[${PYTHON_USEDEP}]
+	dev-python/ufoLib2[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
 	dev-python/cython[${PYTHON_USEDEP}]
-	test? (
-		sci-libs/scipy[${PYTHON_USEDEP}]
-		dev-python/ufoLib2[${PYTHON_USEDEP}]
-	)
 "
 distutils_enable_tests pytest
 
 pkg_postinst() {
-	optfeature \
-		"finding wrong contour/component order between different masters" \
-		sci-libs/scipy
 	optfeature \
 		"visualizing DesignSpaceDocument and resulting VariationModel" \
 		dev-python/matplotlib
