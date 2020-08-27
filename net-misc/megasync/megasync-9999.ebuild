@@ -5,7 +5,7 @@ EAPI=7
 
 CMAKE_USE_DIR="${S}/src/MEGAShellExtDolphin"
 CMAKE_IN_SOURCE_BUILD=y
-inherit cmake-utils qmake-utils xdg
+inherit cmake qmake-utils xdg
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/meganz/${PN}.git"
@@ -33,6 +33,7 @@ IUSE="dolphin nautilus thunar"
 RDEPEND="
 	>=net-misc/meganz-sdk-3.7.0a:=[libuv,qt,sodium(+),sqlite]
 	dev-qt/qtsvg:5
+	dev-qt/qtx11extras:5
 	dev-qt/qtdbus:5
 	dev-qt/qtconcurrent:5
 	dev-qt/qtimageformats:5
@@ -54,7 +55,7 @@ src_prepare() {
 		"${FILESDIR}"/${PN}-glibc232.diff
 	)
 	cp -r "${EROOT}"/usr/share/meganz-sdk/bindings "${S}"/src/MEGASync/mega/
-	cmake-utils_src_prepare
+	cmake_src_prepare
 	mv -f src/MEGAShellExtDolphin/CMakeLists{_kde5,}.txt
 	rm -f src/MEGAShellExtDolphin/megasync-plugin.moc
 	printf 'CONFIG += link_pkgconfig
@@ -75,7 +76,7 @@ src_configure() {
 		CONFIG-=with_tools
 	)
 	eqmake5 "${eqmakeargs[@]}"
-	use dolphin && cmake-utils_src_configure
+	use dolphin && cmake_src_configure
 }
 
 src_compile() {
@@ -83,12 +84,12 @@ src_compile() {
 	$(qt5_get_bindir)/lrelease \
 		MEGASync/MEGASync.pro
 	emake
-	use dolphin && cmake-utils_src_compile
+	use dolphin && cmake_src_compile
 }
 
 src_install() {
 	local DOCS=( CREDITS.md README.md )
 	einstalldocs
 	emake -C src INSTALL_ROOT="${D}" install
-	use dolphin && cmake-utils_src_install
+	use dolphin && cmake_src_install
 }
