@@ -46,8 +46,8 @@ RESTRICT="!bindist? ( bindist )
 	!test? ( test )"
 RESTRICT+=" primaryuri"
 
-MY_EFF="2020.5.20"
-MY_NOS="11.0.37"
+MY_EFF="2020.8.13"
+MY_NOS="11.0.39"
 MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
 MY_NOS="noscript-${MY_NOS}.xpi"
 PATCH_URIS=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c,whissi}/mozilla/patchsets/${PATCH}.tar.xz )

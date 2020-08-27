@@ -47,8 +47,8 @@ RESTRICT="!bindist? ( bindist )
 	!test? ( test )"
 RESTRICT+=" primaryuri"
 
-MY_EFF="2020.5.20"
-MY_NOS="11.0.34"
+MY_EFF="2020.8.13"
+MY_NOS="11.0.39"
 MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
 MY_NOS="noscript-${MY_NOS}.xpi"
 PATCH_URIS=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c,whissi}/mozilla/patchsets/${PATCH}.tar.xz )
@@ -247,6 +247,7 @@ pkg_setup() {
 }
 
 src_prepare() {
+	rm "${WORKDIR}"/firefox/2016_set_CARGO_PROFILE_RELEASE_LTO.patch
 	eapply "${WORKDIR}/firefox"
 	eapply "${FILESDIR}"/${PN}-{profiledir,lto}.patch
 	sed -e '/if (gTorPane.enabled/,/^  }$/d' \
