@@ -1,13 +1,12 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://git.codesynthesis.com/${PN}/${PN}.git"
 else
-	inherit vcs-snapshot
 	MY_PV="dd5dbdd"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV/_beta/-b.}"
 	SRC_URI="
@@ -16,6 +15,7 @@ else
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${MY_PV}"
 fi
 inherit toolchain-funcs multiprocessing
 
@@ -23,13 +23,15 @@ DESCRIPTION="A collection of C++ libraries (successor of libcult)"
 HOMEPAGE="https://www.codesynthesis.com/projects/libcutl/"
 
 LICENSE="MIT"
-SLOT="0"
+SLOT="0/${PV/_beta/-b.}"
 IUSE="static-libs"
 
 RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
+"
+BDEPEND="
 	>=dev-util/build2-0.8.0
 "
 

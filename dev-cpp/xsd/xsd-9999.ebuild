@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -27,7 +27,7 @@ IUSE="doc examples test zlib"
 RDEPEND="
 	>=dev-libs/xerces-c-3.0.0
 	dev-libs/boost:=[threads]
-	dev-cpp/libcutl
+	dev-cpp/libcutl:=
 	>=dev-cpp/libxsd-frontend-2.0.0
 	zlib? ( sys-libs/zlib )
 "
