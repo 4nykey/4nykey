@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -7,15 +7,15 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://git.codesynthesis.com/${PN}/${PN}.git"
 else
-	inherit vcs-snapshot
 	MY_PV="eb5ef9d"
-	[[ -n ${PV%%*_*} ]] && MY_PV="${PV}"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV/_beta/-b.}"
 	SRC_URI="
 		https://git.codesynthesis.com/cgit/${PN}/${PN}/snapshot/${MY_PV}.tar.gz
 		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${MY_PV}"
 fi
 inherit toolchain-funcs multiprocessing
 
@@ -27,7 +27,7 @@ SLOT="0"
 IUSE="static-libs"
 
 RDEPEND="
-	dev-cpp/libcutl
+	dev-cpp/libcutl:=
 "
 DEPEND="
 	${RDEPEND}
