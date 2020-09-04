@@ -1,5 +1,5 @@
---- a/build2/build2/cc/module.cxx
-+++ b/build2/build2/cc/module.cxx
+--- a/build2/libbuild2/cc/module.cxx
++++ b/build2/libbuild2/cc/module.cxx
 @@ -304,7 +304,7 @@ namespace build2
        sys_lib_dirs_extra = lib_dirs.size ();
        sys_inc_dirs_extra = inc_dirs.size ();

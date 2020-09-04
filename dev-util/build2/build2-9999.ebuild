@@ -1,4 +1,4 @@
-# Copyright 2018-2019 Gentoo Authors
+# Copyright 2018-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -59,7 +59,7 @@ myb() {
 }
 
 src_prepare() {
-	local _pc="$(tc-getPKG_CONFIG)"
+	local _b _pc="$(tc-getPKG_CONFIG)"
 
 	printf 'cxx.libs += %s\ncxx.poptions += %s\n' \
 		"$(${_pc} sqlite3 --libs)" "$(${_pc} sqlite3 --cflags)" >> \
@@ -69,9 +69,11 @@ src_prepare() {
 		-i buildfile build/bootstrap.build
 
 	if has_version dev-util/pkgconf; then
-		printf 'cxx.libs += %s\ncxx.poptions += %s\n' \
-			"$(${_pc} libpkgconf --libs)" "$(${_pc} libpkgconf --cflags)" >> \
-			build2/build2/buildfile
+		for _b in build2/{lib,}build2/buildfile; do
+			printf 'cxx.libs += %s\ncxx.poptions += %s\n' \
+				"$(${_pc} libpkgconf --libs)" "$(${_pc} libpkgconf --cflags)" >> \
+				"${_b}"
+		done
 		sed \
 			-e 's:libpkgconf[/]\?::' \
 			-i buildfile build/bootstrap.build
