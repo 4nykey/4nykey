@@ -47,7 +47,7 @@ RDEPEND="
 	)
 	qt5? ( dev-python/PyQt5[${PYTHON_USEDEP}] )
 	gtk? ( dev-python/pygobject:3[${PYTHON_USEDEP}] )
-	>=sci-libs/scipy-1.5.2[${PYTHON_USEDEP}]
+	>=dev-python/scipy-1.5.2[${PYTHON_USEDEP}]
 	dev-python/ufoLib2[${PYTHON_USEDEP}]
 "
 DEPEND="
