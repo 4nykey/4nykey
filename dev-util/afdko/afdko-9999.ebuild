@@ -35,11 +35,12 @@ RDEPEND="
 	>=dev-python/defcon-0.7.2[${PYTHON_USEDEP}]
 	>=dev-python/fontMath-0.6[${PYTHON_USEDEP}]
 	dev-python/fontPens[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-4.13[brotli(-),ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.14[brotli(-),ufo(-),unicode(-),${PYTHON_USEDEP}]
 	>=dev-python/MutatorMath-3.0.1[${PYTHON_USEDEP}]
 	>=dev-util/psautohint-2.1[${PYTHON_USEDEP}]
+	>=dev-python/tqdm-4.48.2[${PYTHON_USEDEP}]
 	>=dev-python/ufoProcessor-1.9[${PYTHON_USEDEP}]
-	>=dev-python/ufoNormalizer-0.4.1[${PYTHON_USEDEP}]
+	>=dev-python/ufoNormalizer-0.4.2[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
