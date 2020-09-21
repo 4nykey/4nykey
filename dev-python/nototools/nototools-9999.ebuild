@@ -3,22 +3,20 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_7 )
+PYTHON_COMPAT=( python3_{7,8} )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}.git"
 else
-	MY_PV="v${PV}"
-	if [[ -z ${PV%%*_p*} ]]; then
-		inherit vcs-snapshot
-		MY_PV="39ff50d"
-	fi
+	MY_PV="39ff50d"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 
 DESCRIPTION="A python package for maintaining the Noto Fonts project"
@@ -62,7 +60,7 @@ RDEPEND="
 	${DEPEND}
 	>=app-i18n/unicode-cldr-37
 	>=app-i18n/unicode-data-13
-	>=app-i18n/unicode-emoji-13
+	>=app-i18n/unicode-emoji-13.1
 "
 BDEPEND="
 	dev-python/setuptools_scm[${PYTHON_USEDEP}]
