@@ -34,7 +34,7 @@ BDEPEND="
 !binary? (
 	${PYTHON_DEPS}
 	$(python_gen_any_dep '
-		dev-python/nototools[${PYTHON_USEDEP}]
+		>=dev-python/nototools-0.2.13[${PYTHON_USEDEP}]
 	')
 	media-gfx/pngquant
 	virtual/imagemagick-tools[png]
@@ -67,6 +67,7 @@ src_compile() {
 	use binary && return
 	tc-env_build emake \
 		PNGQUANT=/usr/bin/pngquant \
+		PYTHON="${EPYTHON}" \
 		VIRTUAL_ENV=1
 	rm -f *.tmpl.ttf
 }
