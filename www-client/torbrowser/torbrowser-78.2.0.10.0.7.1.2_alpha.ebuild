@@ -47,7 +47,7 @@ RESTRICT="!bindist? ( bindist )
 RESTRICT+=" primaryuri"
 
 MY_EFF="2020.8.13"
-MY_NOS="11.0.39"
+MY_NOS="11.0.43"
 MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
 MY_NOS="noscript-${MY_NOS}.xpi"
 PATCH_URIS=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c,whissi}/mozilla/patchsets/${PATCH}.tar.xz )
@@ -147,15 +147,6 @@ DEPEND="${CDEPEND}
 				=sys-devel/lld-9*
 				sys-devel/llvm:9[gold]
 				pgo? ( =sys-libs/compiler-rt-sanitizers-9*[profile] )
-			)
-		)
-		(
-			sys-devel/clang:8
-			!clang? ( sys-devel/llvm:8 )
-			clang? (
-				=sys-devel/lld-8*
-				sys-devel/llvm:8[gold]
-				pgo? ( =sys-libs/compiler-rt-sanitizers-8*[profile] )
 			)
 		)
 	)
@@ -266,6 +257,11 @@ src_prepare() {
 		-i browser/components/preferences/preferences.js
 	sed -e '/\<torpreferences\>/d' \
 		-i browser/components/preferences/preferences.xhtml
+
+	# browser/components/BrowserGlue.jsm
+	local _h=toolkit/torproject/torbutton/chrome/content/extensions/https-everywhere
+	mkdir -p "${_h}"
+	unzip -q "${DISTDIR}/${MY_EFF}" -d "${_h}" || die
 
 	# Make LTO respect MAKEOPTS
 	sed -i \
@@ -594,7 +590,6 @@ src_install() {
 	cat "${FILESDIR}"/bookmarks.html > \
 		dist/bin/browser/chrome/en-US/locale/browser/bookmarks.html
 	insinto ${MOZILLA_FIVE_HOME}/browser/extensions
-	newins "${DISTDIR}"/${MY_EFF} https-everywhere-eff@eff.org.xpi
 	newins "${DISTDIR}"/${MY_NOS} {73a6fe31-595d-460b-a920-fcc0f8843232}.xpi
 
 	# Pax mark xpcshell for hardened support, only used for startupcache creation.
