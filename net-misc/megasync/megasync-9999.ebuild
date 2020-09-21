@@ -3,24 +3,25 @@
 
 EAPI=7
 
-CMAKE_USE_DIR="${S}/src/MEGAShellExtDolphin"
-CMAKE_IN_SOURCE_BUILD=y
-inherit cmake qmake-utils xdg
+MY_PN="MEGAsync"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/meganz/${PN}.git"
+	EGIT_REPO_URI="https://github.com/meganz/${MY_PN}.git"
 	EGIT_SUBMODULES=( -src/MEGASync/mega )
 	SRC_URI=
 else
-	inherit vcs-snapshot
-	MY_PV="ee4297b"
+	MY_PV="afa45c3"
 	SRC_URI="
-		mirror://githubcl/meganz/${PN}/tar.gz/${MY_PV}
+		mirror://githubcl/meganz/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${MY_PN}-${MY_PV}"
 fi
+CMAKE_USE_DIR="${S}/src/MEGAShellExtDolphin"
+CMAKE_IN_SOURCE_BUILD=y
+inherit cmake qmake-utils xdg
 
 DESCRIPTION="Easy automated syncing with MEGA Cloud Drive"
 HOMEPAGE="https://github.com/meganz/MEGAsync"
@@ -51,7 +52,6 @@ BDEPEND="
 src_prepare() {
 	local PATCHES=(
 		"${FILESDIR}"/${PN}-qmake.diff
-		"${FILESDIR}"/${PN}-qt515.diff
 		"${FILESDIR}"/${PN}-glibc232.diff
 	)
 	cp -r "${EROOT}"/usr/share/meganz-sdk/bindings "${S}"/src/MEGASync/mega/
