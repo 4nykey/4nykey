@@ -14,8 +14,11 @@ else
 		inherit vcs-snapshot
 		MY_PV="3e8a1e2"
 	fi
+	MY_HB="harfbuzz-2.7.2"
 	SRC_URI="
 		mirror://githubcl/harfbuzz/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/harfbuzz/${MY_HB%-*}/tar.gz/${MY_HB##*-}
+		-> ${MY_HB}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -29,7 +32,6 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
-	>=media-libs/harfbuzz-2.6.8
 "
 DEPEND="
 	${RDEPEND}
@@ -37,14 +39,14 @@ DEPEND="
 BDEPEND="
 	dev-python/setuptools_scm[${PYTHON_USEDEP}]
 	dev-python/cython[${PYTHON_USEDEP}]
-	dev-python/scikit-build[${PYTHON_USEDEP}]
-	dev-util/cmake
 "
-PATCHES=( "${FILESDIR}"/${PN}-systemhb.diff )
 distutils_enable_tests pytest
 
-pkg_setup() {
-	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
+python_prepare_all() {
+	distutils-r1_python_prepare_all
+	[[ -z ${PV%%*9999} ]] && return
+	export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
+	mv "${WORKDIR}"/${MY_HB}/* harfbuzz
 }
 
 python_install() {
