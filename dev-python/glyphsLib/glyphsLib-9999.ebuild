@@ -3,15 +3,13 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{6,7,8} )
+PYTHON_COMPAT=( python3_{7,8} )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}.git"
 else
-	if [[ -z ${PV%%*_p*} ]]; then
-		MY_PV="b4f2232"
-	fi
+	[[ -z ${PV%%*_p*} ]] && MY_PV="b4f2232"
 	MY_PV="v${PV/_beta/b}"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV}
@@ -30,8 +28,8 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.6[${PYTHON_USEDEP}]
-	>=dev-python/ufoLib2-0.6.2[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.14[ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/ufoLib2-0.8[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
@@ -44,7 +42,6 @@ BDEPEND="
 	)
 "
 PATCHES=(
-	"${FILESDIR}"/${PN}-masters_wcodes.diff
 	"${FILESDIR}"/${PN}-setup.diff
 	"${FILESDIR}"/${PN}-custom_params.diff
 	"${FILESDIR}"/${PN}-skipMissingComponents.diff

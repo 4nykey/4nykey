@@ -5,7 +5,7 @@ EAPI=7
 
 PYTHON_COMPAT=( python3_{6,7,8} )
 
-inherit distutils-r1 eutils
+inherit distutils-r1 optfeature
 MY_PN="pyfilesystem2"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -27,7 +27,7 @@ HOMEPAGE="https://www.pyfilesystem.org"
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="test"
+IUSE="doc test"
 
 RDEPEND="
 	dev-python/appdirs[${PYTHON_USEDEP}]
@@ -42,6 +42,7 @@ BDEPEND="
 		dev-python/pyftpdlib[${PYTHON_USEDEP},test]
 	)
 "
+distutils_enable_sphinx docs/source dev-python/sphinx_rtd_theme
 distutils_enable_tests pytest
 
 pkg_postinst() {
