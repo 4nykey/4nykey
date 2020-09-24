@@ -5,11 +5,11 @@ EAPI="6"
 VIRTUALX_REQUIRED="pgo"
 WANT_AUTOCONF="2.1"
 
-PYTHON_COMPAT=( python3_{6,7,8,9} )
+PYTHON_COMPAT=( python3_{7,8,9} )
 PYTHON_REQ_USE='ncurses,sqlite,ssl,threads(+)'
 
 # Patch version
-PATCH="firefox-68.0-patches-15"
+PATCH="firefox-esr-78-patches-01"
 
 LLVM_MAX_SLOT=10
 
@@ -34,21 +34,20 @@ HOMEPAGE="https://www.torproject.org"
 SLOT="0"
 LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
 LICENSE+=" BSD CC-BY-3.0"
-IUSE="bindist clang cpu_flags_x86_avx2 dbus debug eme-free geckodriver
+IUSE="bindist clang cpu_flags_x86_avx2 debug eme-free geckodriver
 	+gmp-autoupdate hardened hwaccel jack lto cpu_flags_arm_neon
-	+openh264 pgo pulseaudio +screenshot selinux startup-notification +system-av1
+	+openh264 pgo pulseaudio screencast +screenshot selinux +system-av1
 	+system-harfbuzz +system-icu +system-jpeg +system-libevent
-	+system-sqlite +system-libvpx +system-webp test wayland wifi"
+	+system-libvpx +system-webp test wayland wifi"
 
-REQUIRED_USE="pgo? ( lto )
-	wifi? ( dbus )"
+REQUIRED_USE="pgo? ( lto )"
 
 RESTRICT="!bindist? ( bindist )
 	!test? ( test )"
 RESTRICT+=" primaryuri"
 
 MY_EFF="2020.8.13"
-MY_NOS="11.0.39"
+MY_NOS="11.0.43"
 MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
 MY_NOS="noscript-${MY_NOS}.xpi"
 PATCH_URIS=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c,whissi}/mozilla/patchsets/${PATCH}.tar.xz )
@@ -60,8 +59,8 @@ SRC_URI="
 "
 
 CDEPEND="
-	>=dev-libs/nss-3.44.4
-	>=dev-libs/nspr-4.21
+	>=dev-libs/nss-3.53.1
+	>=dev-libs/nspr-4.25
 	dev-libs/atk
 	dev-libs/expat
 	>=x11-libs/cairo-1.10[X]
@@ -75,11 +74,8 @@ CDEPEND="
 	>=media-libs/freetype-2.4.10
 	kernel_linux? ( !pulseaudio? ( media-libs/alsa-lib ) )
 	virtual/freedesktop-icon-theme
-	dbus? (
-		>=sys-apps/dbus-0.60
-		>=dev-libs/dbus-glib-0.72
-	)
-	startup-notification? ( >=x11-libs/startup-notification-0.8 )
+	sys-apps/dbus
+	dev-libs/dbus-glib
 	>=x11-libs/pixman-0.19.2
 	>=dev-libs/glib-2.26:2
 	>=sys-libs/zlib-1.2.3
@@ -92,24 +88,22 @@ CDEPEND="
 	x11-libs/libXfixes
 	x11-libs/libXrender
 	x11-libs/libXt
+	screencast? ( media-video/pipewire:0/0.3 )
 	system-av1? (
 		>=media-libs/dav1d-0.3.0:=
 		>=media-libs/libaom-1.0.0:=
 	)
 	system-harfbuzz? (
-		>=media-libs/harfbuzz-2.4.0:0=
+		>=media-libs/harfbuzz-2.6.4:0=
 		>=media-gfx/graphite2-1.3.13
 	)
-	system-icu? ( >=dev-libs/icu-63.1:= )
+	system-icu? ( >=dev-libs/icu-67.1:= )
 	system-jpeg? ( >=media-libs/libjpeg-turbo-1.2.1 )
 	system-libevent? ( >=dev-libs/libevent-2.0:0=[threads] )
-	system-libvpx? ( =media-libs/libvpx-1.7*:0=[postproc] )
-	system-sqlite? ( >=dev-db/sqlite-3.28.0:3[secure-delete,debug=] )
-	system-webp? ( >=media-libs/libwebp-1.0.2:0= )
+	system-libvpx? ( >=media-libs/libvpx-1.8.2:0=[postproc] )
+	system-webp? ( >=media-libs/libwebp-1.1.0:0= )
 	wifi? (
 		kernel_linux? (
-			>=sys-apps/dbus-0.60
-			>=dev-libs/dbus-glib-0.72
 			net-misc/networkmanager
 		)
 	)
@@ -122,7 +116,7 @@ RDEPEND="${CDEPEND}
 	pulseaudio? (
 		|| (
 			media-sound/pulseaudio
-			>=media-sound/apulse-0.1.9
+			>=media-sound/apulse-0.1.12-r4
 		)
 	)
 	selinux? ( sec-policy/selinux-mozilla )"
@@ -130,12 +124,12 @@ RDEPEND="${CDEPEND}
 DEPEND="${CDEPEND}
 	app-arch/zip
 	app-arch/unzip
-	>=dev-util/cbindgen-0.8.7
-	>=net-libs/nodejs-8.11.0
+	>=dev-util/cbindgen-0.14.1
+	>=net-libs/nodejs-10.19.0
 	>=sys-devel/binutils-2.30
 	sys-apps/findutils
 	virtual/pkgconfig
-	>=virtual/rust-1.34.0
+	>=virtual/rust-1.41.0
 	|| (
 		(
 			sys-devel/clang:10
@@ -156,7 +150,12 @@ DEPEND="${CDEPEND}
 			)
 		)
 	)
-	pulseaudio? ( media-sound/pulseaudio )
+	pulseaudio? (
+		|| (
+			media-sound/pulseaudio
+			>=media-sound/apulse-0.1.12-r4[sdk]
+		)
+	)
 	wayland? ( >=x11-libs/gtk+-3.11:3[wayland] )
 	amd64? ( >=dev-lang/yasm-1.1 virtual/opengl )
 	x86? ( >=dev-lang/yasm-1.1 virtual/opengl )
@@ -197,68 +196,82 @@ llvm_check_deps() {
 }
 
 pkg_pretend() {
-	if [[ ${MERGE_TYPE} != binary ]] ; then
-		if use pgo ; then
-			if ! has usersandbox $FEATURES ; then
-				die "You must enable usersandbox as X server can not run as root!"
-			fi
+	if use pgo ; then
+		if ! has usersandbox $FEATURES ; then
+			die "You must enable usersandbox as X server can not run as root!"
 		fi
-
-		# Ensure we have enough disk space to compile
-		if use pgo || use lto || use debug || use test ; then
-			CHECKREQS_DISK_BUILD="8G"
-		else
-			CHECKREQS_DISK_BUILD="4G"
-		fi
-
-		check-reqs_pkg_pretend
 	fi
+
+	# Ensure we have enough disk space to compile
+	if use pgo || use lto || use debug || use test ; then
+		CHECKREQS_DISK_BUILD="10G"
+	else
+		CHECKREQS_DISK_BUILD="5G"
+	fi
+
+	check-reqs_pkg_pretend
 }
 
 pkg_setup() {
 	moz_pkgsetup
 
-	if [[ ${MERGE_TYPE} != binary ]] ; then
-		# Ensure we have enough disk space to compile
-		if use pgo || use lto || use debug || use test ; then
-			CHECKREQS_DISK_BUILD="8G"
-		else
-			CHECKREQS_DISK_BUILD="4G"
-		fi
-
-		check-reqs_pkg_setup
-
-		# Avoid PGO profiling problems due to enviroment leakage
-		# These should *always* be cleaned up anyway
-		unset DBUS_SESSION_BUS_ADDRESS \
-			DISPLAY \
-			ORBIT_SOCKETDIR \
-			SESSION_MANAGER \
-			XDG_CACHE_HOME \
-			XDG_SESSION_COOKIE \
-			XAUTHORITY
-
-		addpredict /proc/self/oom_score_adj
-
-		llvm_pkg_setup
+	# Ensure we have enough disk space to compile
+	if use pgo || use lto || use debug || use test ; then
+		CHECKREQS_DISK_BUILD="10G"
+	else
+		CHECKREQS_DISK_BUILD="5G"
 	fi
+
+	check-reqs_pkg_setup
+
+	# Avoid PGO profiling problems due to enviroment leakage
+	# These should *always* be cleaned up anyway
+	unset DBUS_SESSION_BUS_ADDRESS \
+		DISPLAY \
+		ORBIT_SOCKETDIR \
+		SESSION_MANAGER \
+		XDG_CACHE_HOME \
+		XDG_SESSION_COOKIE \
+		XAUTHORITY
+
+	if ! use bindist ; then
+		einfo
+		elog "You are enabling official branding. You may not redistribute this build"
+		elog "to any users on your network or the internet. Doing so puts yourself into"
+		elog "a legal problem with Mozilla Foundation."
+		elog "You can disable it by emerging ${PN} _with_ the bindist USE-flag."
+	fi
+
+	addpredict /proc/self/oom_score_adj
+
+	llvm_pkg_setup
 
 	append-cppflags "-DTOR_BROWSER_DATA_IN_HOME_DIR"
 }
 
 src_prepare() {
-	rm "${WORKDIR}"/firefox/2016_set_CARGO_PROFILE_RELEASE_LTO.patch
 	eapply "${WORKDIR}/firefox"
-	eapply "${FILESDIR}"/${PN}-{profiledir,lto}.patch
+	eapply "${FILESDIR}"/${PN}-profiledir.patch
 	sed -e '/if (gTorPane.enabled/,/^  }$/d' \
-		-i browser/components/preferences/in-content/preferences.js
+		-i browser/components/preferences/preferences.js
 	sed -e '/\<torpreferences\>/d' \
-		-i browser/components/{moz.build,preferences/in-content/preferences.xul}
+		-i browser/components/preferences/preferences.xhtml
+
+	# browser/components/BrowserGlue.jsm
+	local _h=toolkit/torproject/torbutton/chrome/content/extensions/https-everywhere
+	mkdir -p "${_h}"
+	unzip -q "${DISTDIR}/${MY_EFF}" -d "${_h}" || die
 
 	# Make LTO respect MAKEOPTS
 	sed -i \
 		-e "s/multiprocessing.cpu_count()/$(makeopts_jobs)/" \
-		"${S}"/build/moz.configure/toolchain.configure \
+		"${S}"/build/moz.configure/lto-pgo.configure \
+		|| die "sed failed to set num_cores"
+
+	# Make ICU respect MAKEOPTS
+	sed -i \
+		-e "s/multiprocessing.cpu_count()/$(makeopts_jobs)/" \
+		"${S}"/intl/icu_sources_data.py \
 		|| die "sed failed to set num_cores"
 
 	# sed-in toolchain prefix
@@ -311,6 +324,9 @@ src_prepare() {
 	# Must run autoconf in js/src
 	cd "${S}"/js/src || die
 	eautoconf old-configure.in
+
+	# Clear checksums that present a problem
+	sed -i 's/\("files":{\)[^}]*/\1/' "${S}"/third_party/rust/target-lexicon-0.9.0/.cargo-checksum.json || die
 }
 
 src_configure() {
@@ -347,11 +363,13 @@ src_configure() {
 	mozconfig_init
 	# common config components
 	mozconfig_annotate 'system_libs' \
-		--with-system-zlib \
-		--with-system-bz2
+		--with-system-zlib
 
 	# Must pass release in order to properly select linker
 	mozconfig_annotate 'Enable by Gentoo' --enable-release
+
+	# libclang.so is not properly detected work around issue
+	mozconfig_annotate '' --with-libclang-path="$(llvm-config --libdir)"
 
 	if use pgo ; then
 		if ! has userpriv $FEATURES ; then
@@ -378,9 +396,6 @@ src_configure() {
 			if [[ $(gcc-major-version) -lt 8 ]] ; then
 				show_old_compiler_warning=1
 			fi
-
-			# Bug 689358
-			append-cxxflags -flto
 
 			if ! use cpu_flags_x86_avx2 ; then
 				local _gcc_version_with_ipa_cdtor_fix="8.3"
@@ -434,10 +449,7 @@ src_configure() {
 	fi
 
 	# Add full relro support for hardened
-	if use hardened ; then
-		append-ldflags "-Wl,-z,relro,-z,now"
-		mozconfig_use_enable hardened hardening
-	fi
+	use hardened && append-ldflags "-Wl,-z,now"
 
 	mozconfig_use_enable !bindist official-branding
 
@@ -449,8 +461,8 @@ src_configure() {
 		mozconfig_annotate 'enabled by Gentoo' --enable-debug-symbols
 	fi
 	# These are enabled by default in all mozilla applications
-	mozconfig_annotate '' --with-system-nspr --with-nspr-prefix="${SYSROOT}${EPREFIX}"/usr
-	mozconfig_annotate '' --with-system-nss --with-nss-prefix="${SYSROOT}${EPREFIX}"/usr
+	mozconfig_annotate '' --with-system-nspr
+	mozconfig_annotate '' --with-system-nss
 	mozconfig_annotate '' --x-includes="${SYSROOT}${EPREFIX}"/usr/include \
 		--x-libraries="${SYSROOT}${EPREFIX}"/usr/$(get_libdir)
 	mozconfig_annotate '' --prefix="${EPREFIX}"/usr
@@ -458,7 +470,6 @@ src_configure() {
 	mozconfig_annotate '' --disable-crashreporter
 	mozconfig_annotate 'Gentoo default' --with-system-png
 	mozconfig_annotate '' --enable-system-ffi
-	mozconfig_annotate '' --disable-gconf
 	mozconfig_annotate '' --with-intl-api
 	mozconfig_annotate '' --enable-system-pixman
 	# Instead of the standard --build= and --host=, mozilla uses --host instead
@@ -484,8 +495,6 @@ src_configure() {
 		mozconfig_annotate '' --enable-default-toolkit=cairo-gtk3
 	fi
 
-	mozconfig_use_enable startup-notification
-	mozconfig_use_enable system-sqlite
 	mozconfig_use_with system-av1
 	mozconfig_use_with system-harfbuzz
 	mozconfig_use_with system-harfbuzz system-graphite2
@@ -506,14 +515,14 @@ src_configure() {
 		python/mozbuild/mozbuild/controller/building.py || \
 		die "Failed to disable ccache stats call"
 
-	mozconfig_use_enable dbus
-
 	mozconfig_use_enable wifi necko-wifi
 
 	mozconfig_use_enable geckodriver
 
 	# enable JACK, bug 600002
 	mozconfig_use_enable jack
+
+	mozconfig_use_enable screencast pipewire
 
 	# Enable/Disable eme support
 	use eme-free && mozconfig_annotate '+eme-free' --disable-eme
@@ -562,7 +571,6 @@ src_compile() {
 		gnome2_environment_reset
 
 		addpredict /root
-		addpredict /etc/gconf
 	fi
 
 	GDK_BACKEND=x11 \
@@ -581,7 +589,6 @@ src_install() {
 	cat "${FILESDIR}"/bookmarks.html > \
 		dist/bin/browser/chrome/en-US/locale/browser/bookmarks.html
 	insinto ${MOZILLA_FIVE_HOME}/browser/extensions
-	newins "${DISTDIR}"/${MY_EFF} https-everywhere-eff@eff.org.xpi
 	newins "${DISTDIR}"/${MY_NOS} {73a6fe31-595d-460b-a920-fcc0f8843232}.xpi
 
 	# Pax mark xpcshell for hardened support, only used for startupcache creation.
@@ -625,18 +632,11 @@ src_install() {
 	# Install icons and .desktop for menu entry
 	local size icon_path
 	icon_path="${S}/browser/branding/official"
-	for size in 16 32 48 64 128 256 512; do
+	for size in 16 22 24 32 48 64 128 256 512; do
 		newicon -s ${size} "${icon_path}/default${size}.png" ${PN}.png
 	done
 	newicon -s scalable "${icon_path}/firefox.svg" ${PN}.svg
 	make_desktop_entry ${PN} "Tor Browser" ${PN} "Network;WebBrowser" "StartupWMClass=Torbrowser"
-
-	# Add StartupNotify=true bug 237317
-	if use startup-notification ; then
-		echo "StartupNotify=true"\
-			 >> "${ED}/usr/share/applications/${PN}-${PN}.desktop" \
-			|| die
-	fi
 
 	# Don't install llvm-symbolizer from sys-devel/llvm package
 	[[ -f "${ED%/}${MOZILLA_FIVE_HOME}/llvm-symbolizer" ]] && \
