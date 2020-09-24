@@ -4,19 +4,20 @@
 EAPI=7
 
 inherit autotools
+MY_PN="MEGAcmd"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/meganz/${PN}.git"
+	EGIT_REPO_URI="https://github.com/meganz/${MY_PN}.git"
 	EGIT_SUBMODULES=( )
 else
-	inherit vcs-snapshot
-	MY_PV="2335a80"
+	MY_PV="267fa1d"
 	SRC_URI="
-		mirror://githubcl/meganz/${PN}/tar.gz/${MY_PV}
+		mirror://githubcl/meganz/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${MY_PN}-${MY_PV}"
 fi
 
 DESCRIPTION="Command Line Interactive and Scriptable Application to access MEGA"
@@ -27,7 +28,7 @@ SLOT="0"
 IUSE=""
 
 DEPEND="
-	>=net-misc/meganz-sdk-3.6.9:=[-megacmd(-),sodium(+),sqlite]
+	>=net-misc/meganz-sdk-3.7.3:=[sodium(+),sqlite]
 	dev-libs/libpcre:3[cxx]
 	sys-libs/readline:0
 "
@@ -35,6 +36,7 @@ RDEPEND="
 	${DEPEND}
 "
 DOCS=( README.md build/megacmd/megacmd.changes )
+PATCHES=( "${FILESDIR}"/${PN}-sdk373.diff )
 
 src_prepare() {
 	sed \
