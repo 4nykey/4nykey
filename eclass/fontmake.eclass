@@ -29,7 +29,7 @@ FONT_SRCDIR=${FONT_SRCDIR:-sources}
 # fonts. By default: 'fonts fonts/otf fonts/ttf'
 FONTDIR_BIN=( ${FONTDIR_BIN[@]:-fonts fonts/otf fonts/ttf} )
 
-PYTHON_COMPAT=( python3_{5,6,7} )
+PYTHON_COMPAT=( python3_{7,8} )
 IUSE="autohint +binary"
 MY_FONT_TYPES=( ${MY_FONT_TYPES[@]:-otf +ttf} )
 
