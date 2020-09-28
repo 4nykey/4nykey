@@ -9,7 +9,7 @@ PYTHON_COMPAT=( python3_{7,8,9} )
 PYTHON_REQ_USE='ncurses,sqlite,ssl,threads(+)'
 
 # Patch version
-PATCH="firefox-78.0-patches-05"
+PATCH="firefox-esr-78-patches-01"
 
 LLVM_MAX_SLOT=10
 
@@ -250,7 +250,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	rm -f "${WORKDIR}"/firefox/00{29,31,32}-*.patch
 	eapply "${WORKDIR}/firefox"
 	eapply "${FILESDIR}"/${PN}-profiledir.patch
 	sed -e '/if (gTorPane.enabled/,/^  }$/d' \
