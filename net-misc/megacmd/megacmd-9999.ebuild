@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/meganz/${MY_PN}.git"
 	EGIT_SUBMODULES=( )
 else
-	MY_PV="267fa1d"
+	MY_PV="4fc0787"
 	SRC_URI="
 		mirror://githubcl/meganz/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -36,7 +36,6 @@ RDEPEND="
 	${DEPEND}
 "
 DOCS=( README.md build/megacmd/megacmd.changes )
-PATCHES=( "${FILESDIR}"/${PN}-sdk373.diff )
 
 src_prepare() {
 	sed \
