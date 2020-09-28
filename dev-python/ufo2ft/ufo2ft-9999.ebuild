@@ -29,8 +29,8 @@ SLOT="0"
 IUSE="cffsubr test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.11[ufo(-),${PYTHON_USEDEP}]
-	dev-python/defcon[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.14[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/defcon-0.7.2[${PYTHON_USEDEP}]
 	dev-python/cu2qu[${PYTHON_USEDEP}]
 	dev-python/compreffor[${PYTHON_USEDEP}]
 	dev-python/booleanOperations[${PYTHON_USEDEP}]
@@ -45,7 +45,6 @@ BDEPEND="
 	dev-python/setuptools_scm[${PYTHON_USEDEP}]
 "
 PATCHES=(
-#	"${FILESDIR}"/${PN}-heightfallback.diff
 	"${FILESDIR}"/${PN}-exportedglyphs.diff
 )
 distutils_enable_tests pytest
