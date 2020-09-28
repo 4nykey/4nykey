@@ -31,15 +31,13 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
-	>=dev-python/fonttools-4.9[ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.15[ufo(-),unicode(-),woff(-),${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
-	>=app-arch/brotli-1.0.7[python,${PYTHON_USEDEP}]
-	>=dev-python/defcon-0.6[${PYTHON_USEDEP}]
+	>=dev-python/defcon-0.7.2[${PYTHON_USEDEP}]
 	>=dev-python/hsluv-5[${PYTHON_USEDEP}]
 	dev-python/PyQt5[${PYTHON_USEDEP}]
-	>=dev-python/pytz-2020.1[${PYTHON_USEDEP}]
 	>=dev-python/extractor-0.3[${PYTHON_USEDEP}]
-	>=dev-python/ufo2ft-2.13[${PYTHON_USEDEP}]
+	>=dev-python/ufo2ft-2.16[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
