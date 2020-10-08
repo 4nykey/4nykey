@@ -10,12 +10,12 @@ else
 	MY_PV="${PV/_/-}"
 	MY_PV="${MY_PV^^}"
 	[[ -z ${PV%%*_p*} ]] && MY_PV="8c95639"
-	[[ -z ${PV%%*_*} ]] && inherit vcs-snapshot
 	SRC_URI="
 		mirror://githubcl/open-eid/${PN}/tar.gz/v${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 inherit cmake
 
