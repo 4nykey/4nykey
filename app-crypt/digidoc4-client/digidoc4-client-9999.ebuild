@@ -3,23 +3,24 @@
 
 EAPI=7
 
+MY_PN="DigiDoc4-Client"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/open-eid/${PN}.git"
+	EGIT_REPO_URI="https://github.com/open-eid/${MY_PN}.git"
 else
-	inherit vcs-snapshot
 	MY_PV="${PV^^}"
 	MY_PV="v${MY_PV/_/-}"
 	[[ -z ${PV%%*_p*} ]] && MY_PV="a4da0d3"
-	MY_QC="qt-common-0a626b5"
-	MY_EX="digidoc-extensions-69b0284"
+	MY_QC="qt-common-f982a4b"
+	MY_EX="digidoc-extensions-458cdb9"
 	SRC_URI="${SRC_URI}
-		mirror://githubcl/open-eid/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/open-eid/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://githubcl/open-eid/${MY_QC%-*}/tar.gz/${MY_QC##*-} -> ${MY_QC}.tar.gz
 		mirror://githubcl/open-eid/${MY_EX%-*}/tar.gz/${MY_EX##*-} -> ${MY_EX}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${MY_PN}-${MY_PV#v}"
 fi
 inherit cmake xdg
 
