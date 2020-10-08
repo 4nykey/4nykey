@@ -8,13 +8,13 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/open-eid/${MY_PN}.git"
 else
-	inherit vcs-snapshot
-	MY_PV="7073613"
+	MY_PV="9af4598"
 	SRC_URI="
 		mirror://githubcl/open-eid/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${MY_PN}-${MY_PV}"
 fi
 
 DESCRIPTION="Open-EID CMake modules"
