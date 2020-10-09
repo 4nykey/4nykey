@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{6,7,8} )
+PYTHON_COMPAT=( python3_{7,8} )
 FONT_SUFFIX=otf
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -53,8 +53,10 @@ pkg_setup() {
 
 src_compile() {
 	use binary && return
-	local _args=()
-	[[ -n ${PV%%*9999} ]] && _args=(
+	local _args=(
+		STATICWOFF2=
+	)
+	[[ -n ${PV%%*9999} ]] && _args+=(
 		GITNAME="${PN}"
 		FontVersion="${PV%_p*}"
 		GitVersion="${PV%_p*}"
