@@ -35,13 +35,15 @@ RDEPEND="
 		>=dev-python/pygit2-1.2.1[${PYTHON_USEDEP}]
 		dev-python/sfdLib[${PYTHON_USEDEP}]
 		>=dev-python/ufo2ft-2.15[cffsubr,${PYTHON_USEDEP}]
+		dev-python/vttLib[${PYTHON_USEDEP}]
 	')
-	>=dev-util/gftools-0.4.1
+	>=dev-util/gftools-0.4.2
 	>=dev-python/font-v-1.0.2
 	>=dev-util/fontmake-2.2
-	>=dev-python/fonttools-4.13
+	>=dev-python/fonttools-4.14
 	>=dev-util/psautohint-2.1
 	dev-util/sfdnormalize
+	dev-python/ufoNormalizer
 	media-gfx/ttfautohint
 	media-libs/woff2
 	app-shells/zsh
@@ -57,5 +59,6 @@ src_prepare() {
 	default
 	sed -e '/sfnt2woff-zopfli/d' -i configure.ac
 	sed -e '/dist_license_DATA = /d' -i Makefile.am
+	sed -e '/GITNAME :=/s,:=,?=,' -i src/fontship.mk
 	eautoreconf
 }
