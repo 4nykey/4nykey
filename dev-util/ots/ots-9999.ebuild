@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -8,16 +8,14 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/khaledhosny/${PN}.git"
 	EGIT_SUBMODULES=( )
 else
-	MY_PV="v${PV}"
-	if [[ -z ${PV%%*_p*} ]]; then
-		inherit vcs-snapshot
-		MY_PV="a886e72"
-	fi
+	MY_PV="a886e72"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/khaledhosny/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 inherit meson
 
@@ -26,7 +24,7 @@ HOMEPAGE="https://github.com/khaledhosny/${PN}"
 
 LICENSE="BSD"
 SLOT="0"
-IUSE="debug graphite test variations"
+IUSE="debug graphite test"
 
 RDEPEND="
 	sys-libs/zlib
@@ -44,7 +42,9 @@ DOCS=(
 )
 
 src_prepare() {
-	local PATCHES=( "${FILESDIR}"/meson-5295.diff )
+	local PATCHES=(
+		"${FILESDIR}"/meson-gtest.diff
+	)
 	default
 	sed \
 		-e '/third_party\/\(woff2\|zlib\|lz4\|brotli\|googletest\)/d' \
@@ -57,17 +57,13 @@ src_prepare() {
 		-e "s%\('gtest', \).*%\1main: true)%" \
 		-i meson.build
 	sed -e 's:fc-list:false:' -i tests/test_good_fonts.sh
-	use test || sed \
-		-e '/test_good_fonts = /,/^[ ]*)/d' \
-		-e '/gtest = dependency/,//d' \
-		-i meson.build
 }
 
 src_configure() {
 	local emesonargs=(
 		$(meson_use debug)
 		$(meson_use graphite)
-		$(meson_use variations)
+		$(meson_use test tests)
 	)
 	meson_src_configure
 }
