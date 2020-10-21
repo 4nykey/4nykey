@@ -30,10 +30,10 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
-	>=dev-python/fonttools-4.12[ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.15[ufo(-),unicode(-),${PYTHON_USEDEP}]
 	>=dev-python/cu2qu-1.6.7[${PYTHON_USEDEP}]
-	>=dev-python/glyphsLib-5.1.10[${PYTHON_USEDEP}]
-	>=dev-python/ufo2ft-2.14[cffsubr,${PYTHON_USEDEP}]
+	>=dev-python/glyphsLib-5.2[${PYTHON_USEDEP}]
+	>=dev-python/ufo2ft-2.16[cffsubr,${PYTHON_USEDEP}]
 	>=dev-python/MutatorMath-2.1.2[${PYTHON_USEDEP}]
 	>=dev-python/fontMath-0.6[${PYTHON_USEDEP}]
 	>=dev-python/defcon-0.6[${PYTHON_USEDEP}]
