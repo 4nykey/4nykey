@@ -3,7 +3,7 @@
 
 EAPI="7"
 
-FIREFOX_PATCHSET="firefox-esr-78-patches-03.tar.xz"
+FIREFOX_PATCHSET="firefox-78esr-patches-04.tar.xz"
 
 LLVM_MAX_SLOT=11
 
@@ -33,7 +33,7 @@ TOR_REL="${TOR_REL%.0}"
 MY_P="$(ver_cut 1-3)esr-$(ver_cut 4-5)-$(ver_cut 7)-build$(ver_cut 8)"
 MY_P="firefox-tor-browser-${MY_P}"
 MY_EFF="2020.8.13"
-MY_NOS="11.1.1"
+MY_NOS="11.1.3"
 MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
 MY_NOS="noscript-${MY_NOS}.xpi"
 SRC_URI="
@@ -413,14 +413,20 @@ src_configure() {
 		# Force clang
 		einfo "Enforcing the use of clang due to USE=clang ..."
 		have_switched_compiler=yes
+		AR=llvm-ar
 		CC=${CHOST}-clang
 		CXX=${CHOST}-clang++
+		NM=llvm-nm
+		RANLIB=llvm-ranlib
 	elif ! use clang && ! tc-is-gcc ; then
 		# Force gcc
 		have_switched_compiler=yes
 		einfo "Enforcing the use of gcc due to USE=-clang ..."
+		AR=gcc-ar
 		CC=${CHOST}-gcc
 		CXX=${CHOST}-g++
+		NM=gcc-nm
+		RANLIB=gcc-ranlib
 	fi
 
 	if [[ -n "${have_switched_compiler}" ]] ; then
@@ -462,6 +468,11 @@ src_configure() {
 
 		if use pgo ; then
 			mozconfig_add_options_ac '+pgo' MOZ_PGO=1
+
+			if use clang ; then
+				# Used in build/pgo/profileserver.py
+				export LLVM_PROFDATA="llvm-profdata"
+			fi
 		fi
 	else
 		# Avoid auto-magic on linker
