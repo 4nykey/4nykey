@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_SUBMODULES=( -src/MEGASync/mega )
 	SRC_URI=
 else
-	MY_PV="f2b6575"
+	MY_PV="c5d2fc8"
 	SRC_URI="
 		mirror://githubcl/meganz/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -52,7 +52,6 @@ BDEPEND="
 src_prepare() {
 	local PATCHES=(
 		"${FILESDIR}"/${PN}-qmake.diff
-		"${FILESDIR}"/${PN}-glibc232.diff
 	)
 	cp -r "${EROOT}"/usr/share/meganz-sdk/bindings "${S}"/src/MEGASync/mega/
 	cmake_src_prepare

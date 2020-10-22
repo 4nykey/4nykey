@@ -24,7 +24,7 @@ HOMEPAGE="https://github.com/meganz/sdk"
 
 LICENSE="BSD-2"
 # awk '/define/ {print $3}' include/mega/version.h|awk 'BEGIN{RS="";FS="\n"}{printf $1*10000+$2*100+$3}'
-SLOT="0/30703"
+SLOT="0/30704"
 IUSE="examples ffmpeg freeimage fuse hardened inotify libuv mediainfo qt raw +sqlite test"
 REQUIRED_USE="
 	examples? ( sqlite )
@@ -50,7 +50,7 @@ RDEPEND="
 	libuv? ( dev-libs/libuv )
 	dev-libs/libsodium
 	mediainfo? ( media-libs/libmediainfo )
-	ffmpeg? ( virtual/ffmpeg )
+	ffmpeg? ( media-video/ffmpeg )
 	raw? ( media-libs/libraw )
 "
 DEPEND="
