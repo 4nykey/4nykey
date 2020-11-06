@@ -3,9 +3,9 @@
 
 EAPI=7
 
-MY_FONT_TYPES=( otf +ttf )
-FONT_S=( OTF TTF )
-inherit font-r1
+FONTDIR_BIN=( OTF TTF )
+EMAKE_EXTRA_ARGS=( VARLIB=' ' )
+FONT_SRCDIR=.
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/rubjo/${PN}.git"
@@ -19,6 +19,7 @@ else
 	RESTRICT="primaryuri"
 	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
+inherit fontmake
 
 DESCRIPTION="A free programming font with cursive italics and ligatures"
 HOMEPAGE="https://rubjo.github.io/victor-mono"
@@ -27,10 +28,10 @@ LICENSE="MIT"
 SLOT="0"
 IUSE=""
 BDEPEND="
-	app-arch/unzip
+	binary? ( app-arch/unzip )
 "
 
 src_prepare() {
-	unpack public/VictorMonoAll.zip
-	default
+	use binary && unpack public/VictorMonoAll.zip
+	fontmake_src_prepare
 }
