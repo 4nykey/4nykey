@@ -50,7 +50,6 @@ BDEPEND="
 	sys-devel/gettext
 "
 DOCS=( AUTHORS.txt {CONTRIBUTING,NEWS,README}.md )
-PATCHES=( "${FILESDIR}"/${PN}-test_id3.diff )
 distutils_enable_tests pytest
 
 src_prepare() {
