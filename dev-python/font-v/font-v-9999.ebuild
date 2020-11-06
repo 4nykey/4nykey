@@ -16,6 +16,7 @@ else
 	"
 	RESTRICT="primaryuri test"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 
 DESCRIPTION="Font version string reporting and modification library"
@@ -26,8 +27,8 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.6[${PYTHON_USEDEP}]
-	dev-python/GitPython[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.16.1[${PYTHON_USEDEP}]
+	>=dev-python/GitPython-3.1.10[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
