@@ -12,12 +12,9 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
-	MY_PV="v${PV}"
-	if [[ -z ${PV%%*_*} ]]; then
-		MY_PV="0b7af01"
-		inherit vcs-snapshot
-	fi
-	MY_TD="psautohint-testdata-0ceaf9f"
+	MY_PV="0b7af01"
+	[[ -n ${PV%%*_*} ]] && MY_PV="v${PV}"
+	MY_TD="psautohint-testdata-b12b42f"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		test? (
@@ -27,6 +24,7 @@ else
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 
 DESCRIPTION="A standalone version of AFDKO autohinter"
@@ -37,8 +35,8 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.12.1[ufo,${PYTHON_USEDEP}]
-	>=dev-python/lxml-4.5.1[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.16.1[ufo,${PYTHON_USEDEP}]
+	>=dev-python/lxml-4.5.2[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
