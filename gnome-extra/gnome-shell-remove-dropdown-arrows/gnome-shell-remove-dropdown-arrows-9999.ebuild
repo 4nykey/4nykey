@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -10,11 +10,13 @@ if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI=""
 else
 	inherit vcs-snapshot
-	KEYWORDS="~amd64 ~x86"
+	MY_PV="c241d44"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="version/${PV}"
 	SRC_URI="
-		mirror://githubcl/mpdeimos/${PN}/tar.gz/version/${PV} -> ${P}.tar.gz
+		mirror://githubcl/mpdeimos/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
+	KEYWORDS="~amd64 ~x86"
 fi
 
 DESCRIPTION="An extension that removes the dropdown arrows from GS menus"
@@ -35,7 +37,8 @@ RDEPEND="
 src_compile() { :; }
 
 src_install() {
-	insinto /usr/share/gnome-shell/extensions/remove-dropdown-arrows@mpdeimos.com
+	local _u=$(awk -F\" '/uuid": / {print $4}'  metadata.json)
+	insinto /usr/share/gnome-shell/extensions/${_u}
 	doins -r *.js{,on}
 	dodoc README.md
 }

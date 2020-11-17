@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -12,14 +12,14 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/paradoxxxzero/${PN}.git"
 	SRC_URI=""
 else
-	inherit vcs-snapshot
-	MY_PV="07ca28b"
+	MY_PV="7f8f0a7"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/paradoxxxzero/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 
 DESCRIPTION="An extension for displaying sensors information in GNOME Shell"
@@ -46,7 +46,10 @@ BDEPEND="
 "
 
 src_prepare() {
-	local PATCHES=( "${FILESDIR}"/gssma-makefile.diff )
+	local PATCHES=(
+		"${FILESDIR}"/gssma-makefile.diff
+		"${FILESDIR}"/PR
+	)
 	sed -e '/UUID)\/README/d' -i Makefile
 	default
 	rm -rf system-monitor@paradoxxx.zero.gmail.com/locale

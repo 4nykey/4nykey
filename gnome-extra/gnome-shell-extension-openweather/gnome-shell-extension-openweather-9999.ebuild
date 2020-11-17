@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -9,15 +9,15 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://gitlab.com/jenslody/${PN}.git"
 	SRC_URI=""
 else
-	inherit vcs-snapshot
 	KEYWORDS="~amd64 ~x86"
-	MY_PV="1c9dd03"
+	MY_PV="d8be50f"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		https://gitlab.com/jenslody/${PN}/-/archive/${MY_PV}/${PN}-${MY_PV}.tar.bz2
 		-> ${P}.tar.bz2
 	"
 	RESTRICT="primaryuri"
+	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 
 DESCRIPTION="An extension for displaying weather informations in GNOME Shell"
