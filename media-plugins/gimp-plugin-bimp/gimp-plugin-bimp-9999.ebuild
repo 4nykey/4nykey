@@ -8,12 +8,15 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/alessandrofrancesconi/${PN}.git"
 	inherit git-r3
 else
+	MY_PV="cfbbd83"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
-		mirror://githubcl/alessandrofrancesconi/${PN}/tar.gz/v${PV}
+		mirror://githubcl/alessandrofrancesconi/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 inherit toolchain-funcs l10n
 
@@ -24,10 +27,12 @@ LICENSE="GPL-2+"
 SLOT="0"
 
 RDEPEND="
-	media-gfx/gimp:2
+	media-gfx/gimp
 "
 DEPEND="
 	${RDEPEND}
+"
+BDEPEND="
 	virtual/pkgconfig
 "
 DOCS=( CHANGELOG.md README.md )
