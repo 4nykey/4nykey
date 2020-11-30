@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python3_{6,7,8} )
 PLOCALES="
 cs de el es fi fr he id it nb nl oc pl pt pt_BR ru sk sr sv tr uk
 "
-inherit python-any-r1 vala l10n toolchain-funcs xdg-utils multiprocessing
+inherit python-any-r1 vala l10n toolchain-funcs xdg
 if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/johanmattssonm/${PN}.git"
 	inherit git-r3
@@ -45,11 +45,9 @@ DEPEND="
 	$(vala_depend)
 "
 BDEPEND="
-	$(python_gen_any_dep '
-		dev-python/doit[${PYTHON_USEDEP}]
-	')
 	nls? ( sys-devel/gettext )
 "
+PATCHES=( "${FILESDIR}"/fontconfig.diff )
 
 pkg_setup() {
 	python-any-r1_pkg_setup
@@ -82,15 +80,12 @@ src_configure() {
 
 src_compile() {
 	use nls || declare -x LINGUAS=''
-	doit \
-		--process=$(makeopts_jobs) \
-		--verbosity=2 \
-		|| die
+	"${PYTHON}" ./build.py || die
 }
 
 src_install() {
 	"${PYTHON}" ./install.py \
-		--dest="${D}" \
+		--dest="${ED}" \
 		--nogzip=1 \
 		--libdir="/$(get_libdir)" \
 		--manpages-directory="/share/man/man1" \

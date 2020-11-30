@@ -1,0 +1,11 @@
+--- a/libbirdfont/Renderer/fontconfig.c
++++ b/libbirdfont/Renderer/fontconfig.c
+@@ -13,7 +13,7 @@
+ */
+ 
+ #include <stdio.h>
+-#include <glib.h>a
++#include <glib.h>
+ #include <fontconfig/fontconfig.h>
+ 
+ gchar* find_font_with_property (FcConfig* fontconfig, const gchar* characters, const gchar* property) {
