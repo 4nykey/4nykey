@@ -1,0 +1,12 @@
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -210,6 +210,9 @@ libwim_la_LIBADD =		\
+ 	$(LIBRT_LIBS)		\
+ 	$(LIBCRYPTO_LIBS)	\
+ 	$(PLATFORM_LIBS)
++if ENABLE_TEST_SUPPORT
++libwim_la_LIBADD += -lm
++endif
+ 
+ if ENABLE_SSSE3_SHA1
+ libwim_la_SOURCES += src/sha1-ssse3.asm

@@ -20,7 +20,7 @@ HOMEPAGE="https://wimlib.net/"
 
 LICENSE="|| ( GPL-3+ LGPL-3+ ) CC0-1.0"
 SLOT="0"
-IUSE="cpu_flags_x86_ssse3 fuse ntfs openssl static-libs threads yasm"
+IUSE="cpu_flags_x86_ssse3 fuse ntfs openssl static-libs threads test yasm"
 REQUIRED_USE="cpu_flags_x86_ssse3? ( !openssl )"
 
 RDEPEND="
@@ -38,6 +38,7 @@ BDEPEND="
 		!yasm? ( dev-lang/nasm )
 	)
 "
+PATCHES=( "${FILESDIR}"/${PN}-tests.diff )
 
 src_prepare() {
 	default
@@ -53,7 +54,7 @@ src_configure() {
 		$(use_enable threads multithreaded-compression)
 		$(use_enable static-libs static)
 	)
-	has test ${FEATURES} && myeconfargs+=( --enable-test-support )
+	use test && myeconfargs+=( --enable-test-support )
 	ac_cv_prog_NASM="$(usex yasm yasm nasm)" \
 		econf "${myeconfargs[@]}"
 }
