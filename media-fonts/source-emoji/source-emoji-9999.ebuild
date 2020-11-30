@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -45,7 +45,7 @@ src_unpack() {
 	if [[ ${PV} == *9999* ]]; then
 		git-r3_src_unpack
 	elif use binary; then
-		mv "${DISTDIR}"/${P}.otf "${S}"/
+		cp "${DISTDIR}"/${P}.otf "${S}"/
 	else
 		default
 	fi
