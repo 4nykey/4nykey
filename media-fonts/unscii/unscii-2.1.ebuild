@@ -1,7 +1,7 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 MY_FONT_TYPES=( otf +pcf ttf )
 MY_FONT_VARIANTS=( alt fantasy mcr tall thin )
@@ -60,6 +60,8 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
+"
+BDEPEND="
 	!binary? (
 		dev-lang/perl
 		font_types_otf? ( media-gfx/fontforge )
@@ -82,7 +84,7 @@ src_unpack() {
 src_prepare() {
 	default
 	use binary && return
-	use unicode && cp "${EROOT}"usr/share/unifont/unifont.hex "${S}"
+	use unicode && cp /usr/share/unifont/unifont.hex "${S}"
 	local _t='\<woff\>'
 	use font_types_otf || _t+='\|\<otf\>'
 	use font_types_ttf || _t+='\|\<ttf\>'
