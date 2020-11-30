@@ -1,14 +1,13 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 MY_FONT_TYPES=( +otf ttc )
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-fonts/${PN}"
 else
-	inherit vcs-snapshot
 	SRC_URI="
 		binary? (
 			mirror://githubcl/adobe-fonts/${PN}/tar.gz/${PV}R
@@ -45,7 +44,7 @@ pkg_setup() {
 	if [[ ${PV} == *9999* ]]; then
 		EGIT_BRANCH="$(usex binary release master)"
 	else
-		S="${WORKDIR}/${P}$(usex binary 'R' '')"
+		use binary && S="${WORKDIR}/${P}R"
 	fi
 	use binary && FONT_S=( OTC OTF )
 	font-r1_pkg_setup
