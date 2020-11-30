@@ -102,6 +102,7 @@ src_configure() {
 		--keepflags
 		--with-backends="dummy,$(usev alsa),$(usev jack),$(usev pulseaudio)"
 		$(my_use vst lxvst)
+		$(my_use vst vst3)
 		$(my_use nls)
 		$(my_use phone-home)
 		$(my_use sse fpu-optimization)
@@ -129,7 +130,7 @@ src_compile() {
 }
 
 src_install() {
-	"${WAF_BINARY}" --destdir="${D}" "${@}" install || die "install failed"
+	"${WAF_BINARY}" --destdir="${ED}" install || die "install failed"
 	einstalldocs
 	newicon gtk2_ardour/icons/${PN}-app-icon_osx.png ${PN}${SLOT}.png
 	domenu build/gtk2_ardour/${PN}${SLOT}.desktop
