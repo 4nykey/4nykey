@@ -1,27 +1,23 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 FONT_SUFFIX=otf
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-fonts/${PN}"
-	REQUIRED_USE="!binary"
+	EGIT_BRANCH="dev_branch"
 else
-	inherit vcs-snapshot
+	MY_PV="5aeeff4"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
-		binary? (
-			https://github.com/adobe-fonts/${PN}/releases/download/${PV}/SourceEmoji-BnW.otf
-			-> ${P}.otf
-		)
-		!binary? (
-			mirror://githubcl/adobe-fonts/${PN}/tar.gz/${PV}
-			-> ${P}.tar.gz
-		)
+		mirror://githubcl/adobe-fonts/${PN}/tar.gz/${MY_PV}
+		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
 inherit font-r1
 
@@ -32,26 +28,13 @@ LICENSE="OFL-1.1"
 SLOT="0"
 IUSE="+binary"
 
-DEPEND="
+BDEPEND="
 	!binary? ( dev-util/afdko )
 "
 
-pkg_setup() {
-	use binary && S="${WORKDIR}"
-	font-r1_pkg_setup
-}
-
-src_unpack() {
-	if [[ ${PV} == *9999* ]]; then
-		git-r3_src_unpack
-	elif use binary; then
-		cp "${DISTDIR}"/${P}.otf "${S}"/
-	else
-		default
-	fi
-}
-
 src_compile() {
+	rm -f SourceEmojiUnicode-BnW.otf
 	use binary && return
+	checkoutlinesufo SourceEmoji-BnW.ufo || die
 	makeotf -f SourceEmoji-BnW.ufo -r || die
 }
