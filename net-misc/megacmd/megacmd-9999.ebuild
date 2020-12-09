@@ -35,6 +35,9 @@ DEPEND="
 RDEPEND="
 	${DEPEND}
 "
+BDEPEND="
+	sys-devel/autoconf-archive
+"
 DOCS=( README.md build/megacmd/megacmd.changes )
 
 src_prepare() {
