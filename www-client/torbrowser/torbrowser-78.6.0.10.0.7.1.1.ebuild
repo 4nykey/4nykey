@@ -32,8 +32,8 @@ fi
 TOR_REL="${TOR_REL%.0}"
 MY_P="$(ver_cut 1-3)esr-$(ver_cut 4-5)-$(ver_cut 7)-build$(ver_cut 8)"
 MY_P="firefox-tor-browser-${MY_P}"
-MY_EFF="2020.8.13"
-MY_NOS="11.1.5"
+MY_EFF="2020.11.17"
+MY_NOS="11.1.6"
 MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
 MY_NOS="noscript-${MY_NOS}.xpi"
 SRC_URI="
@@ -731,7 +731,7 @@ src_compile() {
 
 src_install() {
 	# mimic official release
-	cat "${FILESDIR}"/bookmarks.html > "${BUILD_DIR}"/browser/locales/bookmarks.html
+	rm -f "${BUILD_DIR}"/browser/locales/bookmarks.html
 	insinto ${MOZILLA_FIVE_HOME}/browser/extensions
 	newins "${DISTDIR}"/${MY_NOS} {73a6fe31-595d-460b-a920-fcc0f8843232}.xpi
 
@@ -754,6 +754,7 @@ src_install() {
 
 	# Install policy (currently only used to disable application updates)
 	insinto "${MOZILLA_FIVE_HOME}/distribution"
+	newins "${FILESDIR}"/distribution.ini distribution.ini
 	newins "${FILESDIR}"/disable-auto-update.policy.json policies.json
 
 	# Install system-wide preferences
