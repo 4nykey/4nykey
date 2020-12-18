@@ -3,7 +3,7 @@
 
 EAPI="7"
 
-FIREFOX_PATCHSET="firefox-78esr-patches-06.tar.xz"
+FIREFOX_PATCHSET="firefox-78esr-patches-07.tar.xz"
 
 LLVM_MAX_SLOT=11
 
@@ -62,7 +62,7 @@ BDEPEND="${PYTHON_DEPS}
 	app-arch/unzip
 	app-arch/zip
 	>=dev-util/cbindgen-0.14.3
-	>=net-libs/nodejs-10.19.0
+	>=net-libs/nodejs-10.21.0
 	virtual/pkgconfig
 	>=virtual/rust-1.41.0
 	|| (
