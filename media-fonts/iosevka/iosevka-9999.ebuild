@@ -280,18 +280,10 @@ src_compile() {
 	else
 
 		local _v="ttf$(usex autohint '' '-unhinted')"
-		local _x=( ${FONT_VARIANTS[@]/#ss*/} )
 
-		for _s in ${_x[@]/#/-}; do
-				_s=${_s#-default}
-				_t+=( ${PN}${_s} )
-		done
-		for _s in $(seq -w 14); do
-			if use font_variants_ss${_s}; then
-				use font_variants_default && _t+=( ${PN}-ss${_s} )
-				use font_variants_fixed && _t+=( ${PN}-fixed-ss${_s} )
-				use font_variants_term && _t+=( ${PN}-term-ss${_s} )
-			fi
+		for _s in ${FONT_VARIANTS[@]}; do
+				_s=${_s#default}
+				_t+=( ${PN}-${_s} )
 		done
 		if use font_variants_slab; then
 			use font_variants_fixed && _t+=( ${PN}-fixed-slab )
@@ -307,6 +299,7 @@ src_compile() {
 			use font_variants_term && _t+=( ${PN}-term-curly )
 		fi
 
+		_t=( ${_t[@]/%-} )
 		emake "${_t[@]/#/${_v}::}"
 
 		FONT_S=( ${_t[@]/#/dist/} )

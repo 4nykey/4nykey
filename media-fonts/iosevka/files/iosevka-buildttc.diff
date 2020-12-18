@@ -1,15 +1,16 @@
 --- a/verdafile.js
 +++ b/verdafile.js
-@@ -569,6 +569,12 @@ async function buildCompositeTtc(out, in
- 	);
+@@ -446,6 +446,13 @@
+ 	await run("ttfautohint", tmpTtc, out.full);
+ 	await rm(tmpTtc);
  }
- 
++
 +const CollectionExport = task.group("collection-export", async (target, gr) => {
 +	const [collectPlans] = await target.need(CollectPlans, de`${DIST}/ttc-collect/${gr}`);
 +	const sourceGroups = collectPlans.groupDecomposition[gr];
 +	const ttcFiles = Array.from(new Set(collectPlans.ttcContents[gr]));
-+	await target.need(ttcFiles.map(pt => ExportTtcFile(gr, pt)));
++	await target.need(ttcFiles.map(pt => CollectedTtcFile(gr, pt)));
 +});
- const ExportSuperTtc = file.make(
- 	gr => `${DIST_SUPER_TTC}/${gr}.ttc`,
- 	async (target, out, gr) => {
+ 
+ ///////////////////////////////////////////////////////////
+ //////                   Archives                    //////
