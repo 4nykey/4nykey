@@ -10,7 +10,7 @@
 		<flag name="tta">Add support for decoding True Audio input files</flag>
 		<flag name="sid">Build with SID (Commodore 64 Audio) support</flag>
 		<flag name="opus">Enable Opus audio codec support</flag>
-		<flag name="network">Enable HTTP streaming vfs plugin</flag>
+		<flag name="lastfm">Enable last.fm support</flag>
 		<flag name="midi">Enables MIDI support</flag>
 		<flag name="mac">Add support for decoding Monkey's Audio files</flag>
 		<flag name="gtk3">Enable support for GTK+3</flag>
@@ -18,5 +18,6 @@
 		<flag name="dumb">Enable media-libs/dumb module library support</flag>
 		<flag name="alac">Add support for Apple Lossless Audio Codec files</flag>
 		<flag name="shorten">Enable the shorten decoder plugin</flag>
+		<flag name="clang">Build with Clang compiler</flag>
 	</use>
 </pkgmetadata>

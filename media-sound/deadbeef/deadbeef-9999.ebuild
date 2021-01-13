@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -9,19 +9,20 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_SUBMODULES=( )
 	SRC_URI=""
 else
-	MY_PV="${PV}"
-	if [[ -z ${PV%%*_p*} ]]; then
-		inherit vcs-snapshot
-		MY_PV="d2fc9ef"
-	fi
+	MY_PV="d2fc9ef"
+	MY_MP="mp4p-de193f5"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/DeaDBeeF-Player/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
+		mirror://githubcl/DeaDBeeF-Player/${MY_MP%-*}/tar.gz/${MY_MP##*-}
+		-> ${MY_MP}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
-inherit autotools xdg
+inherit autotools flag-o-matic xdg
 
 DESCRIPTION="A music player for *nix-like systems and OSX"
 HOMEPAGE="https://github.com/DeaDBeeF-Player/${PN}"
@@ -29,9 +30,13 @@ LICENSE="GPL-2 LGPL-2.1"
 
 SLOT="0"
 IUSE="
-alsa oss pulseaudio gtk network sid mad mac vorbis ffmpeg flac sndfile
+alsa oss pulseaudio gtk curl sid mad mac vorbis ffmpeg flac sndfile
 wavpack cdda gme libnotify musepack midi tta dts aac mms libsamplerate X imlib
-zip nls threads gtk3 dumb shorten alac wma opus
+zip nls threads gtk3 dumb shorten alac wma opus lastfm clang
+"
+REQUIRED_USE="
+	lastfm? ( curl clang )
+	libnotify? ( clang )
 "
 
 RDEPEND="
@@ -45,13 +50,13 @@ RDEPEND="
 	shorten? ( media-sound/shorten )
 	alac? ( media-sound/alac_decoder )
 	alsa? ( media-libs/alsa-lib )
-	ffmpeg? ( virtual/ffmpeg )
+	ffmpeg? ( media-video/ffmpeg )
 	mad? ( media-libs/libmad )
 	vorbis? ( media-libs/libvorbis )
 	flac? ( media-libs/flac )
 	wavpack? ( media-sound/wavpack )
 	sndfile? ( media-libs/libsndfile )
-	network? ( net-misc/curl )
+	curl? ( net-misc/curl )
 	cdda? ( dev-libs/libcdio media-libs/libcddb )
 	gtk? ( x11-libs/gtk+:2 dev-libs/jansson )
 	gtk3? ( x11-libs/gtk+:3 dev-libs/jansson )
@@ -66,6 +71,7 @@ RDEPEND="
 	gme? ( sys-libs/zlib )
 	midi? ( media-sound/timidity-freepats )
 	opus? ( media-libs/opusfile )
+	clang? ( dev-libs/libdispatch )
 "
 DEPEND="
 	${RDEPEND}
@@ -75,10 +81,22 @@ BDEPEND="
 	dev-util/intltool
 	oss? ( virtual/libc )
 	mac? ( dev-lang/yasm )
+	clang? ( sys-devel/clang )
 "
 
+pkg_setup() {
+	if use clang && ! tc-is-clang; then
+		CC=${CHOST}-clang
+		CXX=${CHOST}-clang++
+		strip-unsupported-flags
+	fi
+}
+
 src_prepare() {
-	default
+	xdg_src_prepare
+	if [[ -n ${PV%%*9999} ]]; then
+		mv "${WORKDIR}"/${MY_MP}/* "${S}"/external/mp4p
+	fi
 	local _t=/usr/share/timidity/freepats/timidity.cfg
 	sed \
 		-e "s,#define DEFAULT_TIMIDITY_CONFIG \",&${_t}:," \
@@ -96,8 +114,8 @@ src_configure() {
 		$(use_enable pulseaudio pulse)
 		$(use_enable gtk gtk2)
 		$(use_enable gtk3)
-		$(use_enable network vfs-curl)
-		$(use_enable network lfm)
+		$(use_enable curl vfs-curl)
+		$(use_enable lastfm lfm)
 		$(use_enable imlib artwork)
 		$(use_enable sid)
 		$(use_enable mad libmad)
@@ -125,7 +143,7 @@ src_configure() {
 		$(use_enable wma)
 		$(use_enable opus)
 	)
-	use imlib && myconf+=( $(use_enable network artwork-network) )
+	use imlib && myconf+=( $(use_enable curl artwork-network) )
 	econf "${myconf[@]}"
 }
 
