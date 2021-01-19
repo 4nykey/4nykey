@@ -30,14 +30,15 @@ FONT_SRCDIR=${FONT_SRCDIR:-sources}
 FONTDIR_BIN=( ${FONTDIR_BIN[@]:-fonts fonts/otf fonts/ttf} )
 
 PYTHON_COMPAT=( python3_{7,8} )
-IUSE="autohint +binary"
+IUSE="autohint +binary variable"
 MY_FONT_TYPES=( ${MY_FONT_TYPES[@]:-otf +ttf} )
 
 inherit python-any-r1 font-r1
 
 EXPORT_FUNCTIONS pkg_setup src_prepare src_compile
 
-MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-9a9636f"
+MY_MK="06abe73"
+MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-${MY_MK}"
 SRC_URI+="
 !binary? (
 	mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
@@ -66,7 +67,7 @@ fontmake_pkg_setup() {
 		FONT_S=( "${FONTDIR_BIN[@]}" )
 		PATCHES=( )
 	else
-		FONT_S=( master_{o,t}tf autohinted/master_ttf )
+		FONT_S=( master_{o,t}tf autohinted/master_ttf variable_{o,t}tf )
 		python-any-r1_pkg_setup
 	fi
 	font-r1_pkg_setup
@@ -91,6 +92,7 @@ fontmake_src_compile() {
 		"${EMAKE_EXTRA_ARGS[@]}"
 		$(in_iuse interpolate && usex interpolate '' 'INTERPOLATE=')
 		$(in_iuse clean-as-you-go && usex clean-as-you-go 'CLEAN=clean' '')
+		$(in_iuse variable && usex variable '' 'VARIABLE=')
 	)
 	use autohint && FONTMAKE_EXTRA_ARGS+=( --autohint )
 	[[ "${#FONTMAKE_EXTRA_ARGS[@]}" -ge 1 ]] && \
