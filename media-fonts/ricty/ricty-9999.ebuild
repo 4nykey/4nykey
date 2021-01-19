@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -9,7 +9,7 @@ MY_MP="mplus-TESTFLIGHT-063"    #20171025 https://osdn.net/rel/mplus-fonts/TESTF
 S="${WORKDIR}"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3 cvs
-	EGIT_REPO_URI="https://github.com/MihailJP/Inconsolata-LGC.git"
+	EGIT_REPO_URI="https://github.com/rictyfonts/rictyfonts.github.io.git"
 	ECVS_USER="anonymous"
 	ECVS_MODULE="mixfont-mplus-ipa"
 	ECVS_SERVER="cvs.osdn.jp:/cvsroot/mix-mplus-ipa"
@@ -39,10 +39,12 @@ DEPEND="
 
 src_unpack() {
 	if [[ -z ${PV%%*9999} ]]; then
-		unpack ${MY_MP}.tar.xz
-		wget --no-verbose http://www.yusa.lab.uec.ac.jp/~yusa/${PN}/${PN}_generator.sh
+		git-r3_src_unpack
+		EGIT_REPO_URI="https://github.com/MihailJP/Inconsolata-LGC.git" \
 		EGIT_CHECKOUT_DIR="${S}/${MY_IN}" git-r3_src_unpack
 		cvs_src_unpack
+		unpack ${MY_MP}.tar.xz
+		ln -s "${WORKDIR}"/${P}/files/${PN}_generator.sh "${S}"/${PN}_generator.sh
 	else
 		cp "${DISTDIR}"/${PN}_generator-${PV}.sh "${S}"/${PN}_generator.sh
 		unpack ${MY_IN}.tar.gz ${MY_MI}.zip

@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}.git"
 else
 	inherit vcs-snapshot
-	MY_PV="8750981"
+	MY_PV="aff5d08"
 	SRC_URI="
 		mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
