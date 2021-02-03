@@ -52,6 +52,7 @@ pkg_setup() {
 
 	FONT_S=( $(usex binary . target)/$(usex variable VAR $(usex font_types_otf OTF TTF)) )
 
+	use binary || PATCHES=( "${FILESDIR}"/buildVFs.diff )
 	font-r1_pkg_setup
 }
 
