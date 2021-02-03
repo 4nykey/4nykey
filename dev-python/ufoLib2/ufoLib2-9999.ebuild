@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -30,11 +30,11 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.11[ufo(-),${PYTHON_USEDEP}]
-	>=dev-python/appdirs-1.4.4[${PYTHON_USEDEP}]
-	>=dev-python/attrs-19.3[${PYTHON_USEDEP}]
-	>=dev-python/pytz-2020.1[${PYTHON_USEDEP}]
-	dev-python/typing-extensions[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.18.2[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/attrs-20.3[${PYTHON_USEDEP}]
+	$(python_gen_cond_dep \
+		'dev-python/typing-extensions[${PYTHON_USEDEP}]' python3_7
+	)
 "
 DEPEND="
 	${RDEPEND}
@@ -50,9 +50,6 @@ pkg_setup() {
 }
 
 python_prepare_all() {
-	local PATCHES=(
-		"${FILESDIR}"/${PN}-newGlyph.diff
-	)
 	sed -e '/\<wheel\>/d' -i setup.cfg
 	distutils-r1_python_prepare_all
 }
