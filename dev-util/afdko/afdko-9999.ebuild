@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -29,18 +29,16 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/lxml-4.5.2[${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 	>=dev-python/cu2qu-1.6.7[${PYTHON_USEDEP}]
 	>=dev-python/defcon-0.7.2[${PYTHON_USEDEP}]
 	>=dev-python/fontMath-0.6[${PYTHON_USEDEP}]
 	dev-python/fontPens[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-4.14[ufo(-),unicode(-),${PYTHON_USEDEP}]
-	>=dev-python/MutatorMath-3.0.1[${PYTHON_USEDEP}]
-	>=dev-util/psautohint-2.1[${PYTHON_USEDEP}]
-	>=dev-python/tqdm-4.48.2[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.18.2[ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-util/psautohint-2.2[${PYTHON_USEDEP}]
+	>=dev-python/tqdm-4.56[${PYTHON_USEDEP}]
 	>=dev-python/ufoProcessor-1.9[${PYTHON_USEDEP}]
-	>=dev-python/ufoNormalizer-0.4.2[${PYTHON_USEDEP}]
+	>=dev-python/ufoNormalizer-0.5.2[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
@@ -51,8 +49,6 @@ distutils_enable_tests pytest
 python_prepare_all() {
 	local PATCHES=(
 		"${FILESDIR}"/${PN}-nowheel.diff
-		"${FILESDIR}"/${PN}-pdflib.diff
-		"${FILESDIR}"/${PN}-inc.diff
 	)
 	grep -rl '\$(AR) -' c | xargs sed -e 's:\(\$(AR) \)-:\1:' -i
 	sed \
@@ -79,9 +75,8 @@ src_compile() {
 
 python_test() {
 	local -x \
-	PYTHONPATH="${BUILD_DIR}/test/lib/python:${PYTHONPATH}" \
-	PATH="${BUILD_DIR}/test/scripts:${S}/c/build_all:${PATH}"
-	mkdir -p "${BUILD_DIR}/test/lib/python"
+		PYTHONPATH="${S}/python:${PYTHONPATH}" \
+		PATH="${BUILD_DIR}/test/scripts:${S}/c/build_all:${PATH}"
 	distutils_install_for_testing
 	pytest -v || die
 }
