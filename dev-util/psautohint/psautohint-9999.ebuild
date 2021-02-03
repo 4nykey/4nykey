@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -8,13 +8,13 @@ DISTUTILS_IN_SOURCE_BUILD=1
 EMESON_SOURCE="${S}/libpsautohint"
 inherit meson distutils-r1
 
+MY_TD="psautohint-testdata-b12b42f"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
 	MY_PV="0b7af01"
 	[[ -n ${PV%%*_*} ]] && MY_PV="v${PV}"
-	MY_TD="psautohint-testdata-b12b42f"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		test? (
@@ -97,12 +97,9 @@ src_install() {
 }
 
 python_test() {
-	local _t="${BUILD_DIR}/test"
 	local -x \
-		PYTHONPATH="${_t}/lib/python:${PYTHONPATH}" \
-		PATH="${_t}/scripts:${MESON_BUILD_DIR}l:${PATH}" \
+		PATH="${BUILD_DIR}/test/scripts:${MESON_BUILD_DIR}l:${PATH}" \
 		LD_LIBRARY_PATH="${MESON_BUILD_DIR}"
-	mkdir -p "${_t}/lib/python"
 	distutils_install_for_testing
 	pytest -v || die
 }
