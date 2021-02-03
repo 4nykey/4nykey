@@ -50,7 +50,7 @@ DEPEND="
 !binary? (
 	${PYTHON_DEPS}
 	$(python_gen_any_dep '
-		dev-util/fontmake[${PYTHON_USEDEP}]
+		>=dev-util/fontmake-2.3[${PYTHON_USEDEP}]
 	')
 	autohint? ( media-gfx/ttfautohint )
 )
