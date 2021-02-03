@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -30,18 +30,18 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
-	>=dev-python/fonttools-4.15[ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.18.1[ufo(-),unicode(-),${PYTHON_USEDEP}]
 	>=dev-python/cu2qu-1.6.7[${PYTHON_USEDEP}]
-	>=dev-python/glyphsLib-5.2[${PYTHON_USEDEP}]
-	>=dev-python/ufo2ft-2.16[cffsubr,${PYTHON_USEDEP}]
+	>=dev-python/glyphsLib-5.3[${PYTHON_USEDEP}]
+	>=dev-python/ufo2ft-2.19.1[cffsubr,${PYTHON_USEDEP}]
 	>=dev-python/MutatorMath-2.1.2[${PYTHON_USEDEP}]
 	>=dev-python/fontMath-0.6[${PYTHON_USEDEP}]
-	>=dev-python/defcon-0.6[${PYTHON_USEDEP}]
+	>=dev-python/defcon-0.7.2[${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 	dev-python/lxml[${PYTHON_USEDEP}]
 	dev-python/skia-pathops[${PYTHON_USEDEP}]
 	>=dev-python/ufoLib2-0.8[${PYTHON_USEDEP}]
-	>=dev-python/attrs-19.3[${PYTHON_USEDEP}]
+	>=dev-python/attrs-20.2[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
@@ -53,6 +53,7 @@ BDEPEND="
 		dev-python/mock[${PYTHON_USEDEP}]
 	)
 "
+PATCHES=( "${FILESDIR}"/defaults.diff )
 distutils_enable_tests pytest
 
 pkg_setup() {
