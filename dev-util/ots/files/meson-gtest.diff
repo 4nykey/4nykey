@@ -1,15 +1,13 @@
 --- a/meson.build
 +++ b/meson.build
-@@ -303,7 +303,8 @@ if cxx.has_header('sys/time.h')
- endif
+@@ -303,6 +303,7 @@ if cxx.has_header('sys/time.h')
+ install_man('docs/ots-sanitize.1')
  
- 
--gtest = subproject('gtest').get_variable('gtest_main_dep')
+ # https://mesonbuild.com/Dependencies.html#gtest-and-gmock
 +if get_option('tests')
-+gtest = dependency('gtest_main')
-
+ gtest = dependency('gtest', main : true, fallback : ['gtest', 'gtest_main_dep'])
+ 
  cff_charstring = executable('cff_charstring',
-   'tests/cff_charstring_test.cc',
 @@ -342,3 +343,4 @@ test('test_fuzzed_fonts',
      'top_builddir=@0@'.format(meson.current_build_dir()),
    ]

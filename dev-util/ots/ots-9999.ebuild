@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -46,16 +46,6 @@ src_prepare() {
 		"${FILESDIR}"/meson-gtest.diff
 	)
 	default
-	sed \
-		-e '/third_party\/\(woff2\|zlib\|lz4\|brotli\|googletest\)/d' \
-		-e '/lib\(brotli\|woff2\|lz4\) = library(/,/^[ ]*)/d' \
-		-e "s:ots_libs = \[.*:libbrotli=dependency('libbrotlidec')\nlibwoff2=dependency('libwoff2dec')\n&:" \
-		-e "s:ots_libs += \[\(liblz4\)\]:\1 = dependency('\1')\n&:" \
-		-e 's:zlib = dependency.*:&\nots_libs += [zlib]:' \
-		-e '/link_with: ots_libs,/d' \
-		-e '/dependencies: /s:zlib,$:ots_libs,:' \
-		-e "s%\('gtest', \).*%\1main: true)%" \
-		-i meson.build
 	sed -e 's:fc-list:false:' -i tests/test_good_fonts.sh
 }
 
