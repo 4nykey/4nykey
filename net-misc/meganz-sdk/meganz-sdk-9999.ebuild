@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -8,7 +8,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/${PN%-*}/${PN#*-}.git"
 else
-	MY_PV="ba9902f"
+	MY_PV="0e79b27"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/${PN%-*}/${PN#*-}/tar.gz/${MY_PV}
@@ -24,7 +24,7 @@ HOMEPAGE="https://github.com/meganz/sdk"
 
 LICENSE="BSD-2"
 # awk '/define/ {print $3}' include/mega/version.h|awk 'BEGIN{RS="";FS="\n"}{printf $1*10000+$2*100+$3}'
-SLOT="0/30704"
+SLOT="0/30703h"
 IUSE="examples ffmpeg freeimage fuse hardened inotify libuv mediainfo qt raw +sqlite test"
 REQUIRED_USE="
 	examples? ( sqlite )
@@ -34,7 +34,7 @@ REQUIRED_USE="
 RESTRICT+=" test"
 
 RDEPEND="
-	dev-libs/crypto++
+	dev-libs/crypto++:=
 	sys-libs/zlib
 	dev-libs/libpcre:3[cxx]
 	dev-libs/openssl:0
