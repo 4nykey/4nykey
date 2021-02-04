@@ -1,4 +1,4 @@
-# Copyright 2019-2020 Gentoo Authors
+# Copyright 2019-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -8,7 +8,6 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/cboxdoerfer/${PN}.git"
 	inherit git-r3
 else
-	inherit vcs-snapshot
 	MY_PV="a97fd4e"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
@@ -16,10 +15,12 @@ else
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${MY_PN}-${MY_PV#v}"
 fi
+inherit toolchain-funcs
 
 DESCRIPTION="Musical spectrum for the DeaDBeeF audio player"
-HOMEPAGE="https://github.com/cboxdoerfer/${PN}"
+HOMEPAGE="https://github.com/cboxdoerfer/${MY_PN}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -31,8 +32,18 @@ DEPEND="
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
+src_prepare() {
+	default
+	sed \
+		-e '/^\t@echo/d' \
+		-e '/\$(call /s:@::' \
+		-e 's:-g -O2 ::' \
+		-e "s:\`pkg-config \(.*\)\`:\$(shell $(tc-getPKG_CONFIG) \1):" \
+		-i Makefile
+}
+
 src_compile() {
-	emake $(usex gtk gtk2 '') $(usev gtk3)
+	tc-env_build emake $(usex gtk gtk2 '') $(usev gtk3)
 }
 
 src_install() {

@@ -1,4 +1,4 @@
-# Copyright 2019 Gentoo Authors
+# Copyright 2019-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -8,19 +8,19 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/saivert/${PN}.git"
 	inherit git-r3
 else
-	inherit vcs-snapshot
-	MY_PV="d10f93e"
+	MY_PV="e7200bc"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/saivert/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${MY_PN}-${MY_PV#v}"
 fi
 inherit meson
 
 DESCRIPTION="Adds a headerbar to your DeaDBeeF"
-HOMEPAGE="https://github.com/saivert/${PN}"
+HOMEPAGE="https://github.com/saivert/${MY_PN}"
 
 LICENSE="GPL-2"
 SLOT="0"
