@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -36,7 +36,7 @@ IUSE="+binary"
 BDEPEND="
 	!binary? (
 		${PYTHON_DEPS}
-		dev-util/fontship[${PYTHON_SINGLE_USEDEP}]
+		>=dev-util/fontship-0.7[${PYTHON_SINGLE_USEDEP}]
 	)
 "
 
@@ -51,16 +51,23 @@ pkg_setup() {
 	font-r1_pkg_setup
 }
 
+src_prepare() {
+	default
+	use binary && return
+	[[ -z ${PV%%*9999} ]] && return
+	git init . -q -b master
+	git config user.email "portage@local"
+	git config user.name "portage"
+	git add .
+	git commit -q -m init
+	git tag v${PV%_p*}
+}
+
 src_compile() {
 	use binary && return
 	local _args=(
 		STATICWOFF2=
+		PROJECT="${PN^}"
 	)
-	[[ -n ${PV%%*9999} ]] && _args+=(
-		GITNAME="${PN}"
-		FontVersion="${PV%_p*}"
-		GitVersion="${PV%_p*}"
-		SOURCES="$(ls -b1 sources/*.sfd)"
-	)
-	fontship -v make "${_args[@]}" || die
+	fontship make -- "${_args[@]}" || die
 }
