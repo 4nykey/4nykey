@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI=""
 else
 	MY_PV="d2fc9ef"
-	MY_MP="mp4p-de193f5"
+	MY_MP="mp4p-18b9197"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/DeaDBeeF-Player/${PN}/tar.gz/${MY_PV}
