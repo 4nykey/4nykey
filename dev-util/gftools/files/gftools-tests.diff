@@ -15,3 +15,14 @@
          with tempfile.TemporaryDirectory() as qa_out:
              subprocess.call(
                  [
+--- a/Lib/gftools/tests/test_stat.py
++++ b/Lib/gftools/tests/test_stat.py
+@@ -373,7 +373,7 @@ def test_gen_stat_tables_from_config(var
+         - name: Italic
+           value: 1
+     """
+-    config = yaml.load(config_text)
++    config = yaml.safe_load(config_text)
+     gen_stat_tables_from_config(config, var_fonts)
+     roman, italic = var_fonts
+ 
