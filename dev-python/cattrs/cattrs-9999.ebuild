@@ -7,28 +7,27 @@ PYTHON_COMPAT=( python3_{7,8} )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/source-foundry/${PN}.git"
+	EGIT_REPO_URI="https://github.com/Tinche/${PN}.git"
 else
-	MY_PV="e66b6a2"
+	MY_PV="77e29d6"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
-		mirror://githubcl/source-foundry/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/Tinche/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
-	RESTRICT="primaryuri test"
+	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 
-DESCRIPTION="Font version string reporting and modification library"
-HOMEPAGE="https://github.com/source-foundry/${PN}"
+DESCRIPTION="Complex custom class converters for attrs"
+HOMEPAGE="https://github.com/Tinche/${PN}"
 
 LICENSE="MIT"
 SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.17[${PYTHON_USEDEP}]
-	>=dev-python/GitPython-3.1.11[${PYTHON_USEDEP}]
+	dev-python/attrs[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}

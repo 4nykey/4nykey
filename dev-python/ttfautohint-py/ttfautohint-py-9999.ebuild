@@ -8,34 +8,37 @@ inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/fonttools/${PN}.git"
+	EGIT_SUBMODULES=( )
 else
-	MY_PV="${PV}"
-	[[ -z ${PV%%*_p*} ]] && MY_PV="${PV/_p/.post}"
-	SETUPTOOLS_SCM_PRETEND_VERSION="${MY_PV}"
+	MY_PV="6d6b18b"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/fonttools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
-	S="${WORKDIR}/${PN}-${MY_PV}"
+	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 
-DESCRIPTION="A Cython wrapper for the Clipper library"
+DESCRIPTION="A Python wrapper for ttfautohint"
 HOMEPAGE="https://github.com/fonttools/${PN}"
 
 LICENSE="MIT"
 SLOT="0"
 IUSE="test"
 
-BDEPEND="
-	dev-python/setuptools_scm[${PYTHON_USEDEP}]
-	dev-python/cython[${PYTHON_USEDEP}]
+RDEPEND="
+	media-gfx/ttfautohint
+"
+DEPEND="
 	test? (
-		dev-python/unittest2[${PYTHON_USEDEP}]
+		dev-python/fonttools[${PYTHON_USEDEP}]
 	)
 "
 distutils_enable_tests pytest
 
-pkg_setup() {
-	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${MY_PV}"
+src_prepare() {
+	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
+	sed -e '/ext_modules=/d' -i setup.py
+	default
 }
