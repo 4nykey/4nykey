@@ -10,7 +10,6 @@ MY_FONT_VARIANTS=(
 	+default
 	etoile
 	slab
-	sparkle
 	fixed
 	ss01
 	ss02
@@ -26,6 +25,9 @@ MY_FONT_VARIANTS=(
 	ss12
 	ss13
 	ss14
+	ss15
+	ss16
+	ss17
 	term
 )
 if [[ ${PV} == *9999* ]]; then
@@ -57,6 +59,9 @@ else
 				font_variants_ss12? ( ${SRC_URI}ttf-${PN}-fixed-ss12-${MY_PV}.zip )
 				font_variants_ss13? ( ${SRC_URI}ttf-${PN}-fixed-ss13-${MY_PV}.zip )
 				font_variants_ss14? ( ${SRC_URI}ttf-${PN}-fixed-ss14-${MY_PV}.zip )
+				font_variants_ss15? ( ${SRC_URI}ttf-${PN}-fixed-ss15-${MY_PV}.zip )
+				font_variants_ss16? ( ${SRC_URI}ttf-${PN}-fixed-ss16-${MY_PV}.zip )
+				font_variants_ss17? ( ${SRC_URI}ttf-${PN}-fixed-ss17-${MY_PV}.zip )
 			)
 			font_variants_term? (
 				${SRC_URI}ttf-${PN}-term-${MY_PV}.zip
@@ -74,6 +79,9 @@ else
 				font_variants_ss12? ( ${SRC_URI}ttf-${PN}-term-ss12-${MY_PV}.zip )
 				font_variants_ss13? ( ${SRC_URI}ttf-${PN}-term-ss13-${MY_PV}.zip )
 				font_variants_ss14? ( ${SRC_URI}ttf-${PN}-term-ss14-${MY_PV}.zip )
+				font_variants_ss15? ( ${SRC_URI}ttf-${PN}-term-ss15-${MY_PV}.zip )
+				font_variants_ss16? ( ${SRC_URI}ttf-${PN}-term-ss16-${MY_PV}.zip )
+				font_variants_ss17? ( ${SRC_URI}ttf-${PN}-term-ss17-${MY_PV}.zip )
 			)
 			font_variants_slab? (
 				font_variants_default? ( ${SRC_URI}ttf-${PN}-slab-${MY_PV}.zip )
@@ -106,7 +114,6 @@ else
 			font_variants_ss14? ( ${SRC_URI}ttf-${PN}-ss14-${MY_PV}.zip )
 			font_variants_aile? ( ${SRC_URI}ttf-${PN}-aile-${MY_PV}.zip )
 			font_variants_etoile? ( ${SRC_URI}ttf-${PN}-etoile-${MY_PV}.zip )
-			font_variants_sparkle? ( ${SRC_URI}ttf-${PN}-sparkle-${MY_PV}.zip )
 		)
 		!autohint? (
 			font_variants_default? ( ${SRC_URI}ttf-unhinted-${PN}-${MY_PV}.zip )
@@ -126,6 +133,9 @@ else
 				font_variants_ss12? ( ${SRC_URI}ttf-unhinted-${PN}-fixed-ss12-${MY_PV}.zip )
 				font_variants_ss13? ( ${SRC_URI}ttf-unhinted-${PN}-fixed-ss13-${MY_PV}.zip )
 				font_variants_ss14? ( ${SRC_URI}ttf-unhinted-${PN}-fixed-ss14-${MY_PV}.zip )
+				font_variants_ss15? ( ${SRC_URI}ttf-unhinted-${PN}-fixed-ss15-${MY_PV}.zip )
+				font_variants_ss16? ( ${SRC_URI}ttf-unhinted-${PN}-fixed-ss16-${MY_PV}.zip )
+				font_variants_ss17? ( ${SRC_URI}ttf-unhinted-${PN}-fixed-ss17-${MY_PV}.zip )
 			)
 			font_variants_term? (
 				${SRC_URI}ttf-unhinted-${PN}-term-${MY_PV}.zip
@@ -143,6 +153,9 @@ else
 				font_variants_ss12? ( ${SRC_URI}ttf-unhinted-${PN}-term-ss12-${MY_PV}.zip )
 				font_variants_ss13? ( ${SRC_URI}ttf-unhinted-${PN}-term-ss13-${MY_PV}.zip )
 				font_variants_ss14? ( ${SRC_URI}ttf-unhinted-${PN}-term-ss14-${MY_PV}.zip )
+				font_variants_ss15? ( ${SRC_URI}ttf-unhinted-${PN}-term-ss15-${MY_PV}.zip )
+				font_variants_ss16? ( ${SRC_URI}ttf-unhinted-${PN}-term-ss16-${MY_PV}.zip )
+				font_variants_ss17? ( ${SRC_URI}ttf-unhinted-${PN}-term-ss17-${MY_PV}.zip )
 			)
 			font_variants_slab? (
 				font_variants_default? ( ${SRC_URI}ttf-unhinted-${PN}-slab-${MY_PV}.zip )
@@ -173,35 +186,39 @@ else
 			font_variants_ss12? ( ${SRC_URI}ttf-unhinted-${PN}-ss12-${MY_PV}.zip )
 			font_variants_ss13? ( ${SRC_URI}ttf-unhinted-${PN}-ss13-${MY_PV}.zip )
 			font_variants_ss14? ( ${SRC_URI}ttf-unhinted-${PN}-ss14-${MY_PV}.zip )
+			font_variants_ss15? ( ${SRC_URI}ttf-unhinted-${PN}-ss15-${MY_PV}.zip )
+			font_variants_ss16? ( ${SRC_URI}ttf-unhinted-${PN}-ss16-${MY_PV}.zip )
+			font_variants_ss17? ( ${SRC_URI}ttf-unhinted-${PN}-ss17-${MY_PV}.zip )
 			font_variants_aile? ( ${SRC_URI}ttf-unhinted-${PN}-aile-${MY_PV}.zip )
 			font_variants_etoile? ( ${SRC_URI}ttf-unhinted-${PN}-etoile-${MY_PV}.zip )
-			font_variants_sparkle? ( ${SRC_URI}ttf-unhinted-${PN}-sparkle-${MY_PV}.zip )
 		)
 	)
 	font_types_ttc? (
-			font_variants_default? ( ${SRC_URI}ttc-${PN}-${MY_PV}.zip )
-			font_variants_curly? ( ${SRC_URI}ttc-${PN}-curly-${MY_PV}.zip )
+			font_variants_default? ( ${SRC_URI}super-ttc-${PN}-${MY_PV}.zip )
+			font_variants_curly? ( ${SRC_URI}super-ttc-${PN}-curly-${MY_PV}.zip )
 			font_variants_slab? (
-				${SRC_URI}ttc-${PN}-slab-${MY_PV}.zip
-				font_variants_curly? ( ${SRC_URI}ttc-${PN}-curly-slab-${MY_PV}.zip )
+				${SRC_URI}super-ttc-${PN}-slab-${MY_PV}.zip
+				font_variants_curly? ( ${SRC_URI}super-ttc-${PN}-curly-slab-${MY_PV}.zip )
 				)
-			font_variants_aile? ( ${SRC_URI}ttc-${PN}-aile-${MY_PV}.zip )
-			font_variants_etoile? ( ${SRC_URI}ttc-${PN}-etoile-${MY_PV}.zip )
-			font_variants_sparkle? ( ${SRC_URI}ttc-${PN}-sparkle-${MY_PV}.zip )
-			font_variants_ss01? ( ${SRC_URI}ttc-${PN}-ss01-${MY_PV}.zip )
-			font_variants_ss02? ( ${SRC_URI}ttc-${PN}-ss02-${MY_PV}.zip )
-			font_variants_ss03? ( ${SRC_URI}ttc-${PN}-ss03-${MY_PV}.zip )
-			font_variants_ss04? ( ${SRC_URI}ttc-${PN}-ss04-${MY_PV}.zip )
-			font_variants_ss05? ( ${SRC_URI}ttc-${PN}-ss05-${MY_PV}.zip )
-			font_variants_ss06? ( ${SRC_URI}ttc-${PN}-ss06-${MY_PV}.zip )
-			font_variants_ss07? ( ${SRC_URI}ttc-${PN}-ss07-${MY_PV}.zip )
-			font_variants_ss08? ( ${SRC_URI}ttc-${PN}-ss08-${MY_PV}.zip )
-			font_variants_ss09? ( ${SRC_URI}ttc-${PN}-ss09-${MY_PV}.zip )
-			font_variants_ss10? ( ${SRC_URI}ttc-${PN}-ss10-${MY_PV}.zip )
-			font_variants_ss11? ( ${SRC_URI}ttc-${PN}-ss11-${MY_PV}.zip )
-			font_variants_ss12? ( ${SRC_URI}ttc-${PN}-ss12-${MY_PV}.zip )
-			font_variants_ss13? ( ${SRC_URI}ttc-${PN}-ss13-${MY_PV}.zip )
-			font_variants_ss14? ( ${SRC_URI}ttc-${PN}-ss14-${MY_PV}.zip )
+			font_variants_aile? ( ${SRC_URI}super-ttc-${PN}-aile-${MY_PV}.zip )
+			font_variants_etoile? ( ${SRC_URI}super-ttc-${PN}-etoile-${MY_PV}.zip )
+			font_variants_ss01? ( ${SRC_URI}super-ttc-${PN}-ss01-${MY_PV}.zip )
+			font_variants_ss02? ( ${SRC_URI}super-ttc-${PN}-ss02-${MY_PV}.zip )
+			font_variants_ss03? ( ${SRC_URI}super-ttc-${PN}-ss03-${MY_PV}.zip )
+			font_variants_ss04? ( ${SRC_URI}super-ttc-${PN}-ss04-${MY_PV}.zip )
+			font_variants_ss05? ( ${SRC_URI}super-ttc-${PN}-ss05-${MY_PV}.zip )
+			font_variants_ss06? ( ${SRC_URI}super-ttc-${PN}-ss06-${MY_PV}.zip )
+			font_variants_ss07? ( ${SRC_URI}super-ttc-${PN}-ss07-${MY_PV}.zip )
+			font_variants_ss08? ( ${SRC_URI}super-ttc-${PN}-ss08-${MY_PV}.zip )
+			font_variants_ss09? ( ${SRC_URI}super-ttc-${PN}-ss09-${MY_PV}.zip )
+			font_variants_ss10? ( ${SRC_URI}super-ttc-${PN}-ss10-${MY_PV}.zip )
+			font_variants_ss11? ( ${SRC_URI}super-ttc-${PN}-ss11-${MY_PV}.zip )
+			font_variants_ss12? ( ${SRC_URI}super-ttc-${PN}-ss12-${MY_PV}.zip )
+			font_variants_ss13? ( ${SRC_URI}super-ttc-${PN}-ss13-${MY_PV}.zip )
+			font_variants_ss14? ( ${SRC_URI}super-ttc-${PN}-ss14-${MY_PV}.zip )
+			font_variants_ss15? ( ${SRC_URI}super-ttc-${PN}-ss15-${MY_PV}.zip )
+			font_variants_ss16? ( ${SRC_URI}super-ttc-${PN}-ss16-${MY_PV}.zip )
+			font_variants_ss17? ( ${SRC_URI}super-ttc-${PN}-ss17-${MY_PV}.zip )
 	)
 	)
 	!binary? (
@@ -234,7 +251,6 @@ BDEPEND+="
 		autohint? ( media-gfx/ttfautohint )
 	)
 "
-PATCHES=( "${FILESDIR}"/${PN}-buildttc.diff )
 
 pkg_setup() {
 	if use binary; then
@@ -246,34 +262,33 @@ pkg_setup() {
 
 src_prepare() {
 	default
-	use binary && return
-	sed -e '/ttf2woff/d' -i package.json
-	npm install
+	use binary || npm install
 }
 
 src_compile() {
 	use binary && return
 
 	local -x MAKE="npm run build" MAKEOPTS="--verbose --"
-	local _s _t=()
+	local _s _v=() _t=()
 
 	if use font_types_ttc; then
 
+		FONT_S=( dist/.super-ttc )
 		if use font_variants_default; then
 			_t+=( ${PN} )
-			FONT_S+=( .build/ttc-collect/${PN}/ttc )
 		fi
-		for _s in ${FONT_VARIANTS[@]/default/}; do
+		_v=( ${FONT_VARIANTS[@]/default} )
+		_v=( ${_v[@]/fixed} )
+		_v=( ${_v[@]/term} )
+		for _s in ${_v[@]}; do
 			if use font_variants_${_s}; then
 				_t+=( ${PN}-${_s} )
-				FONT_S+=( .build/ttc-collect/${PN}-${_s}/ttc )
 			fi
 		done
 		if use font_variants_slab && use font_variants_curly; then
 			_t+=( ${PN}-curly-slab )
-			FONT_S+=( .build/ttc-collect/${PN}-curly-slab/ttc )
 		fi
-		emake "${_t[@]/#/collection-export::}"
+		emake "${_t[@]/#/super-ttc::}"
 
 	else
 

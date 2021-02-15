@@ -59,14 +59,20 @@
 		<flag name="font_variants_ss14">
 			A variant stylized after JetBrains Mono
 		</flag>
+		<flag name="font_variants_ss15">
+			A variant stylized after IBM Plex Mono
+		</flag>
+		<flag name="font_variants_ss16">
+			A variant stylized after PT Mono
+		</flag>
+		<flag name="font_variants_ss17">
+			A variant stylized after Recursive Mono
+		</flag>
 		<flag name="font_variants_aile">
 			A quasi-proportional variant
 		</flag>
 		<flag name="font_variants_etoile">
 			A quasi-proportional slab-serif variant
-		</flag>
-		<flag name="font_variants_sparkle">
-			A quasi-proportional variant like iA Writer’s Duo
 		</flag>
 	</use>
 </pkgmetadata>
