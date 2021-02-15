@@ -8,9 +8,8 @@ EMAKE_EXTRA_ARGS=( glyphs='sources/OpenSans-Roman.designspace sources/OpenSans-I
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${MY_PN}.git"
-	EGIT_REPO_URI="https://github.com/TypeNetwork/${MY_PN}-1.git"
 else
-	MY_PV="f58956c"
+	MY_PV="c071e96"
 	SRC_URI="
 		mirror://githubcl/googlefonts/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
