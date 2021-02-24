@@ -1,9 +1,9 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{6,7,8} )
+PYTHON_COMPAT=( python3_{7,8} )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -27,7 +27,7 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
-	dev-util/afdko
+	>=dev-util/afdko-3.6.1[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	dev-python/setuptools_scm[${PYTHON_USEDEP}]
