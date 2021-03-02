@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -11,8 +11,8 @@ else
 	MY_PV="${PV^^}"
 	MY_PV="v${MY_PV/_/-}"
 	[[ -z ${PV%%*_p*} ]] && MY_PV="a4da0d3"
-	MY_QC="qt-common-f982a4b"
-	MY_EX="digidoc-extensions-458cdb9"
+	MY_QC="qt-common-e1b79bd"
+	MY_EX="digidoc-extensions-963dfab"
 	SRC_URI="${SRC_URI}
 		mirror://githubcl/open-eid/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://githubcl/open-eid/${MY_QC%-*}/tar.gz/${MY_QC##*-} -> ${MY_QC}.tar.gz
@@ -54,6 +54,7 @@ BDEPEND="
 	dev-util/cmake-openeid
 "
 DOCS=( {CONTRIBUTING,README,RELEASE-NOTES}.md )
+PATCHES=( "${FILESDIR}"/QPainterPath.diff )
 
 src_prepare() {
 	if [[ -n ${PV%%*9999} ]]; then
