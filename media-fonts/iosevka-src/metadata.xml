@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>4nykey@gmail.com</email>
+	</maintainer>
+	<use>
+		<flag name="font_variants_curly">
+			A variant with curly leg shapes
+		</flag>
+		<flag name="font_variants_default">
+			The default variant with ligatures and semantic full-width glyphs
+		</flag>
+		<flag name="font_variants_term">
+			A narrower variant focusing terminal uses
+		</flag>
+		<flag name="font_variants_fixed">
+			Exact monospace font without ligatures and wide glyphs
+		</flag>
+		<flag name="font_variants_ss01">
+			A variant stylized after Andale Mono
+		</flag>
+		<flag name="font_variants_ss02">
+			A variant stylized after Anonymous Pro
+		</flag>
+		<flag name="font_variants_ss03">
+			A variant stylized after Consolas
+		</flag>
+		<flag name="font_variants_ss04">
+			A variant stylized after Menlo
+		</flag>
+		<flag name="font_variants_ss05">
+			A variant stylized after Fira Mono
+		</flag>
+		<flag name="font_variants_ss06">
+			A variant stylized after Liberation Mono
+		</flag>
+		<flag name="font_variants_ss07">
+			A variant stylized after Monaco
+		</flag>
+		<flag name="font_variants_ss08">
+			A variant stylized after Pragmata Pro
+		</flag>
+		<flag name="font_variants_ss09">
+			A variant stylized after Source Code Pro
+		</flag>
+		<flag name="font_variants_ss10">
+			A variant stylized after Envy Code R
+		</flag>
+		<flag name="font_variants_ss11">
+			A variant stylized after X Windows Fixed
+		</flag>
+		<flag name="font_variants_ss12">
+			A variant stylized after Ubuntu Mono
+		</flag>
+		<flag name="font_variants_ss13">
+			A variant stylized after Lucida
+		</flag>
+		<flag name="font_variants_ss14">
+			A variant stylized after JetBrains Mono
+		</flag>
+		<flag name="font_variants_ss15">
+			A variant stylized after IBM Plex Mono
+		</flag>
+		<flag name="font_variants_ss16">
+			A variant stylized after PT Mono
+		</flag>
+		<flag name="font_variants_ss17">
+			A variant stylized after Recursive Mono
+		</flag>
+		<flag name="font_variants_aile">
+			A quasi-proportional variant
+		</flag>
+		<flag name="font_variants_etoile">
+			A quasi-proportional slab-serif variant
+		</flag>
+		<flag name="font_variants_custom">
+			User customized variant
+		</flag>
+	</use>
+</pkgmetadata>
