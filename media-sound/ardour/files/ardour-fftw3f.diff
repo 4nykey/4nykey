@@ -9,11 +9,3 @@
                        atleast_version='3.3.5', mandatory=False)
  
      # controls whether we actually use it in preference to soundtouch
-@@ -398,6 +398,7 @@ def build(bld):
-     obj.target       = 'ardour'
-     obj.uselib       = ['GLIBMM','GTHREAD','AUBIO','SIGCPP','XML','UUID', 'LO',
-                         'SNDFILE','SAMPLERATE','LRDF','AUDIOUNITS', 'GIOMM',
-+                        'FFTW35F',
-                         'OSX','BOOST','CURL','TAGLIB','VAMPSDK','VAMPHOSTSDK','RUBBERBAND']
-     obj.use          = ['libpbd','libmidipp','libevoral',
-                         'libaudiographer',
