@@ -9,16 +9,14 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
-	MY_PV="${PV}"
-	if [[ -z ${PV%%*_*} ]]; then
-		MY_PV="d4fce3f"
-		inherit vcs-snapshot
-	fi
+	MY_PV="d4fce3f"
+	[[ -n ${PV%%*_*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
 
 DESCRIPTION="Adobe Font Development Kit for OpenType"
@@ -30,15 +28,14 @@ IUSE="test"
 
 RDEPEND="
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
-	>=dev-python/cu2qu-1.6.7[${PYTHON_USEDEP}]
 	>=dev-python/defcon-0.7.2[${PYTHON_USEDEP}]
 	>=dev-python/fontMath-0.6[${PYTHON_USEDEP}]
 	dev-python/fontPens[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-4.18.2[ufo(-),unicode(-),${PYTHON_USEDEP}]
-	>=dev-util/psautohint-2.2[${PYTHON_USEDEP}]
-	>=dev-python/tqdm-4.56[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.21.1[ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-util/psautohint-2.3[${PYTHON_USEDEP}]
+	>=dev-python/tqdm-4.58[${PYTHON_USEDEP}]
+	>=dev-python/ufoNormalizer-0.5.3[${PYTHON_USEDEP}]
 	>=dev-python/ufoProcessor-1.9[${PYTHON_USEDEP}]
-	>=dev-python/ufoNormalizer-0.5.2[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
