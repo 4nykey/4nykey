@@ -1,0 +1,10 @@
+--- a/sources/JetBrainsMono-Italic.glyphs
++++ b/sources/JetBrainsMono-Italic.glyphs
+@@ -1875,7 +1872,6 @@ horizontalStems = (
+ );
+ id = "9ADF6715-3D0F-493D-8567-18A6FBCFC567";
+ italicAngle = 9;
+-name = ExtraBold;
+ userData = {
+ de.kutilek.MasterGrid.type = units;
+ de.kutilek.MasterGrid.value = (
