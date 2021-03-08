@@ -5,7 +5,6 @@ EAPI=7
 
 EMAKE_EXTRA_ARGS=( glyphs='sources/Lora-Italic.designspace sources/Lora.designspace' )
 MY_PN="${PN^}-Cyrillic"
-FONTDIR_BIN=( fonts/{OTF,TTF,ttf} )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/cyrealtype/${MY_PN}.git"
@@ -30,6 +29,6 @@ REQUIRED_USE+="
 "
 
 pkg_setup() {
-	use variable && FONTDIR_BIN=( fonts/variable )
+	use variable && FONTDIR_BIN=( fonts/vf )
 	fontmake_pkg_setup
 }
