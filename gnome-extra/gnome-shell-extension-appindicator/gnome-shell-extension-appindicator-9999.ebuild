@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -33,6 +33,8 @@ DEPEND="
 RDEPEND="
 	${DEPEND}
 	>gnome-base/gnome-shell-3.33
+	x11-libs/gdk-pixbuf[introspection]
+	media-libs/clutter[introspection]
 "
 
 src_compile() { :; }
