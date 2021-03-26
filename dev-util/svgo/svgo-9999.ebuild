@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -27,7 +27,6 @@ BDEPEND="
 RDEPEND="
 	net-libs/nodejs
 "
-DOCS=( {CHANGELOG,README,docs/how-it-works/en}.md )
 
 src_prepare() {
 	default
@@ -37,10 +36,13 @@ src_prepare() {
 src_compile() { :; }
 
 src_install() {
+	rm -rf node_modules
+	npm install --production --no-dev || die
 	local _d="/usr/$(get_libdir)/node_modules/${PN}"
 	insinto ${_d}
-	doins -r bin lib node_modules plugins package*.json .svgo.yml
+	doins -r bin lib node_modules plugins package.json
 	fperms +x ${_d}/bin/${PN}
 	dosym ..${_d#/usr}/bin/${PN} /usr/bin/${PN}
+	find "${ED}" -type f -regex '.*/\(\..*\|LICENSE.*\|README.*\|build.js\)' -delete
 	einstalldocs
 }
