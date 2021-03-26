@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -25,7 +25,7 @@ else
 fi
 inherit font-r1
 
-DESCRIPTION="A color emoji SVGinOT font using Twitter Unicode 8.0 emoji"
+DESCRIPTION="A color emoji SVGinOT font using Twitter emoji"
 HOMEPAGE="https://github.com/eosrei/${PN}"
 
 LICENSE="CC-BY-4.0 MIT"
@@ -55,19 +55,13 @@ pkg_setup() {
 	font-r1_pkg_setup
 }
 
-src_prepare() {
-	default
-	use binary && return
-
-	sed \
-		-e '/all:/ s:$(OSX_FONT)::' \
-		-e '/inkscape /s: -z -e : -o :' \
-		-i "${S}"/Makefile
-}
-
 src_compile() {
 	use binary && return
 
-	emake \
-		SCFBUILD="${EROOT}/usr/bin/scfbuild"
+	local myemakeargs=(
+		build/TwitterColorEmoji-SVGinOT.ttf
+		SCFBUILD=/usr/bin/scfbuild
+		INKSCAPE_EXPORT_FLAGS='--export-filename'
+	)
+	emake "${myemakeargs[@]}"
 }
