@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/meganz/${MY_PN}.git"
 	EGIT_SUBMODULES=( )
 else
-	MY_PV="4fc0787"
+	MY_PV="28f96da"
 	SRC_URI="
 		mirror://githubcl/meganz/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -25,11 +25,11 @@ HOMEPAGE="https://mega.nz/cmd"
 
 LICENSE="BSD-2"
 SLOT="0"
-IUSE=""
+IUSE="pcre"
 
 DEPEND="
 	>=net-misc/meganz-sdk-3.7.3:=[sodium(+),sqlite]
-	dev-libs/libpcre:3[cxx]
+	pcre? ( dev-libs/libpcre:3[cxx] )
 	sys-libs/readline:0
 "
 RDEPEND="
@@ -55,4 +55,12 @@ src_prepare() {
 		-i src/include.am
 	default
 	eautoreconf
+}
+
+src_configure() {
+	local myeconfargs=(
+		--with-readline="${EROOT}/usr/$(get_libdir)"
+		$(use_with pcre pcre "${EROOT}/usr")
+	)
+	econf "${myeconfargs[@]}"
 }
