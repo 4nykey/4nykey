@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -14,7 +14,6 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/metabrainz/${PN}.git"
 else
-	inherit vcs-snapshot
 	MY_PV="release-${PV/_rc/dev}"
 	MY_PV="${MY_PV/_beta/b}"
 	SRC_URI="
@@ -22,6 +21,7 @@ else
 	"
 	KEYWORDS="~amd64 ~x86"
 	RESTRICT="primaryuri"
+	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
 inherit eutils distutils-r1 l10n xdg
 
@@ -37,6 +37,7 @@ RDEPEND="
 	$(python_gen_cond_dep '
 		dev-python/python-dateutil[${PYTHON_MULTI_USEDEP}]
 		dev-python/python-discid[${PYTHON_MULTI_USEDEP}]
+		dev-python/fasteners[${PYTHON_MULTI_USEDEP}]
 		dev-python/markdown[${PYTHON_MULTI_USEDEP}]
 		>=media-libs/mutagen-1.37[${PYTHON_MULTI_USEDEP}]
 		dev-python/PyQt5[${PYTHON_MULTI_USEDEP},gui]
