@@ -1,31 +1,30 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{6,7,8} )
+PYTHON_COMPAT=( python3_{7,8} )
 MY_FONT_VARIANTS="loose halfloose halftight tight xtrasmall small large xtralarge"
 MY_FONT_CHARS="empty_dollar dotted_zero base_one zstyle_l no_contextual_alternates"
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/larsenwork/${PN}.git"
 else
-	inherit vcs-snapshot
-	MY_PV="e9d77ec"
+	MY_PV="0673c8d"
 	SRC_URI="
 		mirror://githubcl/larsenwork/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
-inherit python-single-r1 font-r1
+inherit python-single-r1 font-r1 multiprocessing
 
 DESCRIPTION="Customisable coding font with alternates, ligatures and contextual positioning"
 HOMEPAGE="https://larsenwork.com/monoid"
 
 LICENSE="MIT OFL-1.1"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
 
 BDEPEND="
 	${PYTHON_DEPS}
@@ -40,11 +39,6 @@ DOCS="Readme.md"
 pkg_setup() {
 	python-single-r1_pkg_setup
 	font-r1_pkg_setup
-}
-
-src_prepare() {
-	sed -e 's:xrange:range:' -i Scripts/fontbuilder.py
-	default
 }
 
 src_configure() {
@@ -68,11 +62,11 @@ src_configure() {
 }
 
 src_compile() {
-	local _d _l
+	local _d
 	for _d in {Monoisome,Source}/*.sfdir; do
-		_l="${T}/${_d##*/}.log"
-		ebegin "Building ${_d}"
-		${PYTHON} "${S}"/Scripts/build.py 1 0 ${_d} > "${_l}"
-		eend $? || die "failed to build, see ${_l}"
+		set -- fontforge -script ./Scripts/build.py $(makeopts_jobs) 0 "${_d}"
+		ebegin "${@}"
+		"${@}"
+		eend $? || die "failed to build ${_d}"
 	done
 }
