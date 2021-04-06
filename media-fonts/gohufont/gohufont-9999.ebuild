@@ -1,7 +1,7 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
@@ -21,7 +21,7 @@ FONT_S=( . hidpi )
 inherit font-ebdftopcf font-r1
 
 DESCRIPTION="A monospace bitmap font"
-HOMEPAGE="http://font.gohu.org"
+HOMEPAGE="https://font.gohu.org"
 
 LICENSE="WTFPL-2"
 SLOT="0"
