@@ -7,7 +7,7 @@ MY_PN="${PN}-fonts"
 MY_FONT_TYPES=( otf )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/GNOME/${MY_PN}.git"
+	EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/${MY_PN}.git"
 	REQUIRED_USE="!binary"
 else
 	MY_P="${MY_PN}-${PV}"

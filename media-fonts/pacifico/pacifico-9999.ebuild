@@ -4,7 +4,7 @@
 EAPI=7
 
 FONTDIR_BIN=( fonts )
-EMAKE_EXTRA_ARGS=( VARLIB=' ' )
+HELPER_ARGS=( mutatormath )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}.git"

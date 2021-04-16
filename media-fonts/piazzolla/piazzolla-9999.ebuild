@@ -42,7 +42,7 @@ REQUIRED_USE+="
 "
 
 pkg_setup() {
-	use binary && S="${WORKDIR}"
+	use binary && S="${S%/*}"
 	if use variable; then
 		FONTDIR_BIN=( ${PN^}{,SC}/variable/ttf )
 	else

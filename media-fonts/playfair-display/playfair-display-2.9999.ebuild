@@ -6,8 +6,8 @@ EAPI=7
 MY_PN="Playfair-Display"
 EMAKE_EXTRA_ARGS=(
 	glyphs='sources/Playfair-2-Italic.glyphs sources/Playfair-2-Roman.glyphs'
-	VARLIB=' '
 )
+HELPER_ARGS=( mutatormath )
 FONTDIR_BIN=( fonts/{CF,TT}F )
 SLOT="2"
 FONT_PN="${PN}-${SLOT}"

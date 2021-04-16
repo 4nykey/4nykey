@@ -39,7 +39,7 @@ pkg_setup() {
 			EGIT_BRANCH=release
 			FONTDIR_BIN=( ${FONTDIR_BIN[*]/#/fonts/} )
 		else
-			S="${WORKDIR}"
+			S="${S%/*}"
 		fi
 	fi
 	fontmake_pkg_setup

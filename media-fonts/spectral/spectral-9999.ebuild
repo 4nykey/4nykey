@@ -5,7 +5,6 @@ EAPI=7
 
 FONTDIR_BIN=( fonts/desktop{,_otf} fonts/sc{,_otf} )
 MY_FONT_VARIANTS=( smallcaps )
-EMAKE_EXTRA_ARGS=( VARLIB=' ' )
 MY_PN="${PN^}"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3

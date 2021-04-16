@@ -38,7 +38,7 @@ REQUIRED_USE+="
 "
 
 pkg_setup() {
-	use binary && S="${WORKDIR}"
+	use binary && S="${S%/*}"
 	use font_types_otf && FONTDIR_BIN=( 'Inter Desktop' )
 	use font_types_ttf && FONTDIR_BIN=( 'Inter Hinted for Windows/Desktop' )
 	use variable && FONTDIR_BIN=( 'Inter Variable' )

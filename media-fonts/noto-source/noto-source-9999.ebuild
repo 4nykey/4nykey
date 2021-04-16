@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}"
 	EGIT_SUBMODULES=( )
 else
-	MY_PV="bb7f697"
+	MY_PV="b1e8999"
 	SRC_URI="
 		mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -25,12 +25,13 @@ HOMEPAGE="https://github.com/googlefonts/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="clean-as-you-go +interpolate"
+IUSE="clean-as-you-go"
 RDEPEND="
 	!media-fonts/croscorefonts
 "
 
 src_prepare() {
+	use clean-as-you-go && HELPER_ARGS=( clean )
 	local _g
 	rm -f src/NotoSansTifinagh-Regular.glyphs
 	for _g in NotoNaskhArabic{,UI}; do

@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -33,6 +33,6 @@ HOMEPAGE="https://www.ndiscovered.com"
 LICENSE="OFL-1.1"
 
 pkg_setup() {
-	use binary && S="${WORKDIR}"
+	use binary && S="${S%/*}"
 	fontmake_pkg_setup
 }

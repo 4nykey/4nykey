@@ -41,7 +41,7 @@ SLOT="0"
 
 pkg_setup() {
 	if use binary; then
-		S="${WORKDIR}"
+		S="${S%/*}"
 		FONTDIR_BIN=( ${MY_P} ${MY_P/-OT} )
 		DOCS="*/ChangeLog */README"
 	fi
