@@ -23,6 +23,11 @@ FONT_SRCDIR=${FONT_SRCDIR:-sources}
 # @DESCRIPTION:
 # An array containing additional arguments for emake.
 
+# @VARIABLE: HELPER_ARGS
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# An array containing additional arguments to helper.py.
+
 # @VARIABLE: FONTDIR_BIN
 # @DESCRIPTION:
 # An array containing paths relative to ${S}, where to search for prebuilt
@@ -37,7 +42,7 @@ inherit python-any-r1 font-r1
 
 EXPORT_FUNCTIONS pkg_setup src_prepare src_compile
 
-MY_MK="06abe73"
+MY_MK="3fb0e57"
 MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-${MY_MK}"
 SRC_URI+="
 !binary? (
@@ -50,7 +55,7 @@ DEPEND="
 !binary? (
 	${PYTHON_DEPS}
 	$(python_gen_any_dep '
-		>=dev-util/fontmake-2.3[${PYTHON_USEDEP}]
+		>=dev-util/fontmake-2.4[${PYTHON_USEDEP}]
 	')
 	autohint? ( media-gfx/ttfautohint )
 )
@@ -70,6 +75,8 @@ fontmake_pkg_setup() {
 		FONT_S=( master_{o,t}tf autohinted/master_ttf variable_{o,t}tf )
 		python-any-r1_pkg_setup
 	fi
+	use variable && HELPER_ARGS+=( variable )
+	use autohint && FONTMAKE_EXTRA_ARGS+=( --autohint )
 	font-r1_pkg_setup
 }
 
@@ -88,17 +95,13 @@ fontmake_src_compile() {
 	local myemakeargs=(
 		--no-builtin-rules
 		-f ${MY_MK}/Makefile
-		SRCDIR="${FONT_SRCDIR}"
 		"${EMAKE_EXTRA_ARGS[@]}"
-		$(in_iuse interpolate && usex interpolate '' 'INTERPOLATE=')
-		$(in_iuse clean-as-you-go && usex clean-as-you-go 'CLEAN=clean' '')
-		$(in_iuse variable && usex variable '' 'VARIABLE=')
+		SRCDIR="${FONT_SRCDIR}"
 	)
-	use autohint && FONTMAKE_EXTRA_ARGS+=( --autohint )
+	[[ "${#HELPER_ARGS[@]}" -ge 1 ]] && \
+		myemakeargs+=( ARGS="${HELPER_ARGS[*]}" )
 	[[ "${#FONTMAKE_EXTRA_ARGS[@]}" -ge 1 ]] && \
-	myemakeargs+=(
-		FONTMAKE="fontmake ${FONTMAKE_EXTRA_ARGS[@]}"
-	)
+		myemakeargs+=( FONTMAKE="fontmake ${FONTMAKE_EXTRA_ARGS[@]}" )
 
 	emake "${myemakeargs[@]}" ${FONT_SUFFIX}
 }
