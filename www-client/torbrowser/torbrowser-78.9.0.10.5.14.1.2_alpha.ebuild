@@ -33,7 +33,7 @@ TOR_REL="${TOR_REL%.0}"
 MY_P="$(ver_cut 1-3)esr-$(ver_cut 4-5)-$(ver_cut 7)-build$(ver_cut 8)"
 MY_P="firefox-tor-browser-${MY_P}"
 MY_EFF="2021.1.27"
-MY_NOS="11.2.3"
+MY_NOS="11.2.4"
 MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
 MY_NOS="noscript-${MY_NOS}.xpi"
 SRC_URI="
@@ -81,14 +81,6 @@ BDEPEND="${PYTHON_DEPS}
 			clang? (
 				=sys-devel/lld-10*
 				pgo? ( =sys-libs/compiler-rt-sanitizers-10*[profile] )
-			)
-		)
-		(
-			sys-devel/clang:9
-			sys-devel/llvm:9
-			clang? (
-				=sys-devel/lld-9*
-				pgo? ( =sys-libs/compiler-rt-sanitizers-9*[profile] )
 			)
 		)
 	)
