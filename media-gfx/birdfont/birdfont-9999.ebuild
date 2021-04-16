@@ -1,9 +1,9 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{6,7,8} )
+PYTHON_COMPAT=( python3_{7,8} )
 PLOCALES="
 cs de el es fi fr he id it nb nl oc pl pt pt_BR ru sk sr sv tr uk
 "
@@ -91,14 +91,4 @@ src_install() {
 		--manpages-directory="/share/man/man1" \
 		|| die
 	einstalldocs
-}
-
-pkg_postinst() {
-	xdg_desktop_database_update
-	xdg_mimeinfo_database_update
-}
-
-pkg_postrm() {
-	xdg_desktop_database_update
-	xdg_mimeinfo_database_update
 }
