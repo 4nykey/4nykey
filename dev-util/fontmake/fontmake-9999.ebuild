@@ -30,15 +30,14 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
-	>=dev-python/fonttools-4.18.1[ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.21.1[ufo(-),unicode(-),${PYTHON_USEDEP}]
 	>=dev-python/cu2qu-1.6.7[${PYTHON_USEDEP}]
-	>=dev-python/glyphsLib-5.3[${PYTHON_USEDEP}]
-	>=dev-python/ufo2ft-2.19.1[cffsubr,${PYTHON_USEDEP}]
-	>=dev-python/MutatorMath-2.1.2[${PYTHON_USEDEP}]
+	>=dev-python/glyphsLib-5.3.2[${PYTHON_USEDEP}]
+	>=dev-python/ufo2ft-2.20[cffsubr(+),${PYTHON_USEDEP}]
+	>=dev-python/MutatorMath-3.0.1[${PYTHON_USEDEP}]
 	>=dev-python/fontMath-0.6[${PYTHON_USEDEP}]
-	>=dev-python/defcon-0.7.2[${PYTHON_USEDEP}]
+	>=dev-python/defcon-0.8.1[${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
-	dev-python/lxml[${PYTHON_USEDEP}]
 	dev-python/skia-pathops[${PYTHON_USEDEP}]
 	>=dev-python/ufoLib2-0.8[${PYTHON_USEDEP}]
 	>=dev-python/attrs-20.2[${PYTHON_USEDEP}]
@@ -53,7 +52,10 @@ BDEPEND="
 		dev-python/mock[${PYTHON_USEDEP}]
 	)
 "
-PATCHES=( "${FILESDIR}"/defaults.diff )
+PATCHES=(
+	"${FILESDIR}"/defaults.diff
+	"${FILESDIR}"/instance_dir.diff
+)
 distutils_enable_tests pytest
 
 pkg_setup() {
