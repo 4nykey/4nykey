@@ -158,7 +158,7 @@ RDEPEND="
 		>=dev-python/pcpp-1.22[${PYTHON_USEDEP}]
 		>=dev-python/pygit2-1.2.1[${PYTHON_USEDEP}]
 		>=dev-python/sfdLib-1.0.7[${PYTHON_USEDEP}]
-		>=dev-python/ufo2ft-2.19.1[cffsubr,${PYTHON_USEDEP}]
+		>=dev-python/ufo2ft-2.19.1[cffsubr(+),${PYTHON_USEDEP}]
 		dev-python/vttLib[${PYTHON_USEDEP}]
 	')
 	>=dev-util/gftools-0.6.2
