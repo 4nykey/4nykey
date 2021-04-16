@@ -28,8 +28,8 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.14[ufo(-),unicode(-),${PYTHON_USEDEP}]
-	>=dev-python/ufoLib2-0.8[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.19[ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/ufoLib2-0.11.1[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
@@ -43,8 +43,6 @@ BDEPEND="
 "
 PATCHES=(
 	"${FILESDIR}"/${PN}-setup.diff
-	"${FILESDIR}"/${PN}-custom_params.diff
-	"${FILESDIR}"/${PN}-skipMissingComponents.diff
 )
 distutils_enable_tests pytest
 

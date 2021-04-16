@@ -26,17 +26,16 @@ HOMEPAGE="https://github.com/googlei18n/${PN}"
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="cffsubr test"
+IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.17.1[ufo(-),${PYTHON_USEDEP}]
-	>=dev-python/defcon-0.7.2[${PYTHON_USEDEP}]
-	dev-python/cu2qu[${PYTHON_USEDEP}]
-	dev-python/compreffor[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.21.1[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/defcon-0.8.1[${PYTHON_USEDEP}]
+	>=dev-python/compreffor-0.5.1[${PYTHON_USEDEP}]
 	dev-python/booleanOperations[${PYTHON_USEDEP}]
 	dev-python/skia-pathops[${PYTHON_USEDEP}]
 	dev-python/ufoLib2[${PYTHON_USEDEP}]
-	cffsubr? ( dev-python/cffsubr[${PYTHON_USEDEP}] )
+	dev-python/cffsubr[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
