@@ -5,15 +5,13 @@ EAPI=7
 
 PYTHON_COMPAT=( python3_{7,8} )
 DISTUTILS_IN_SOURCE_BUILD=1
-EMESON_SOURCE="${S}/libpsautohint"
-inherit meson distutils-r1
 
-MY_TD="psautohint-testdata-b12b42f"
+MY_TD="psautohint-testdata-1e4c506"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
-	MY_PV="0b7af01"
+	MY_PV="db0dac3"
 	[[ -n ${PV%%*_*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -26,6 +24,8 @@ else
 	KEYWORDS="~amd64 ~x86"
 	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
+EMESON_SOURCE="${S}/libpsautohint"
+inherit meson distutils-r1
 
 DESCRIPTION="A standalone version of AFDKO autohinter"
 HOMEPAGE="https://github.com/adobe-type-tools/${PN}"
@@ -35,7 +35,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.20[ufo,${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.22.1[ufo,${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
