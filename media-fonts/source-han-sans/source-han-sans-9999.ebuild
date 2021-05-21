@@ -11,58 +11,58 @@ if [[ -z ${PV%%*9999} ]]; then
 	REQUIRED_USE="!binary"
 else
 	SRC_URI="mirror://githubraw/adobe-fonts/${PN}/${PV}R/"
+	SRC_URIB="https://github.com/adobe-fonts/${PN}/releases/download/${PV}R/${MY_PN}"
 	SRC_URI="
 	binary? (
 		font_types_otf? (
 			!variable? (
 				l10n_ja? (
-					${SRC_URI}SubsetOTF/${MY_PN}JP.zip -> ${MY_PN}JP-${PV}.zip
+					${SRC_URIB}JP.zip -> ${MY_PN}JP-${PV}.zip
 				)
 				l10n_ko? (
-					${SRC_URI}SubsetOTF/${MY_PN}KR.zip -> ${MY_PN}KR-${PV}.zip
+					${SRC_URIB}KR.zip -> ${MY_PN}KR-${PV}.zip
 				)
 				l10n_zh-CN? (
-					${SRC_URI}SubsetOTF/${MY_PN}CN.zip -> ${MY_PN}CN-${PV}.zip
+					${SRC_URIB}CN.zip -> ${MY_PN}CN-${PV}.zip
 				)
 				l10n_zh-HK? (
-					${SRC_URI}SubsetOTF/${MY_PN}HK.zip -> ${MY_PN}HK-${PV}.zip
+					${SRC_URIB}HK.zip -> ${MY_PN}HK-${PV}.zip
 				)
 				l10n_zh-TW? (
-					${SRC_URI}SubsetOTF/${MY_PN}TW.zip -> ${MY_PN}TW-${PV}.zip
+					${SRC_URIB}TC.zip -> ${MY_PN}TC-${PV}.zip
 				)
 			)
 			variable? (
 				l10n_ja? (
-					${SRC_URI}Variable/Subset/${MY_PN}JP-VF.otf -> ${MY_PN}JP-VF-${PV}.otf
+					${SRC_URI}Variable/OTF/Subset/${MY_PN}JP-VF.otf -> ${MY_PN}JP-VF-${PV}.otf
 				)
 				l10n_ko? (
-					${SRC_URI}Variable/Subset/${MY_PN}KR-VF.otf -> ${MY_PN}KR-VF-${PV}.otf
+					${SRC_URI}Variable/OTF/Subset/${MY_PN}KR-VF.otf -> ${MY_PN}KR-VF-${PV}.otf
 				)
 				l10n_zh-CN? (
-					${SRC_URI}Variable/Subset/${MY_PN}CN-VF.otf -> ${MY_PN}CN-VF-${PV}.otf
+					${SRC_URI}Variable/OTF/Subset/${MY_PN}CN-VF.otf -> ${MY_PN}CN-VF-${PV}.otf
 				)
 				l10n_zh-HK? (
-					${SRC_URI}Variable/Subset/${MY_PN}HK-VF.otf -> ${MY_PN}HK-VF-${PV}.otf
+					${SRC_URI}Variable/OTF/Subset/${MY_PN}HK-VF.otf -> ${MY_PN}HK-VF-${PV}.otf
 				)
 				l10n_zh-TW? (
-					${SRC_URI}Variable/Subset/${MY_PN}TW-VF.otf -> ${MY_PN}TW-VF-${PV}.otf
+					${SRC_URI}Variable/OTF/Subset/${MY_PN}TW-VF.otf -> ${MY_PN}TW-VF-${PV}.otf
 				)
 			)
 		)
 		font_types_ttc? (
 			variable? (
-				${SRC_URI}Variable/OTC/${MY_PN}-VF.ttc -> ${MY_PN}-VF-${PV}.ttc
+				${SRC_URI}Variable/OTC/${MY_PN}-VF.otf.ttc -> ${MY_PN}-VF-${PV}.ttc
 				half-width? (
-					${SRC_URI}Variable/OTC/${MY_PN}HW-VF.ttc -> ${MY_PN}HW-VF-${PV}.ttc
+					${SRC_URI}Variable/OTC/${MY_PN}HW-VF.otf.ttc -> ${MY_PN}HW-VF-${PV}.ttc
 				)
 			)
 			!variable? (
 				super-otc? (
-					${SRC_URI}SuperOTC/${MY_PN}.ttc.zip -> ${MY_PN}-${PV}.ttc.zip
+					${SRC_URIB}.ttc.zip -> ${MY_PN}-${PV}.ttc.zip
 				)
 				!super-otc? (
-					${SRC_URI}OTC/${MY_PN}OTC_EL-R.zip -> ${MY_PN}OTC_EL-R-${PV}.zip
-					${SRC_URI}OTC/${MY_PN}OTC_M-H.zip -> ${MY_PN}OTC_M-H-${PV}.zip
+					${SRC_URIB}OTC.zip
 				)
 			)
 		)
