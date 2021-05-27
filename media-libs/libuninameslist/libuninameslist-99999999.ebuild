@@ -1,10 +1,10 @@
-# Copyright 2004-2020 Gentoo Authors
+# Copyright 2004-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
 DISTUTILS_OPTIONAL=true
-PYTHON_COMPAT=( python3_{6,7,8} )
+PYTHON_COMPAT=( python3_{7..9} )
 
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
