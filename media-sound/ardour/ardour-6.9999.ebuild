@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -6,7 +6,7 @@ EAPI=7
 PLOCALES="
 cs de el en_GB es fr it ja nn pl pt pt_PT ru sv zh
 "
-PYTHON_COMPAT=( python3_{6,7,8} )
+PYTHON_COMPAT=( python3_{7..9} )
 PYTHON_REQ_USE='threads(+)'
 WAF_BINARY="${S}/waf"
 EGIT_REPO_URI="https://github.com/${PN^}/${PN}.git"
@@ -84,6 +84,7 @@ src_prepare() {
 	}
 	l10n_for_each_disabled_locale_do my_lcmsg
 	sed -e 's:AudioEditing:X-&:' -i gtk2_ardour/ardour.desktop.in
+	sed -e 's:share/appdata:share/metainfo:' -i gtk2_ardour/wscript
 	grep -rl '/\<lib\>' | xargs sed -e "s:/\<lib\>:/$(get_libdir):g" -i
 	default
 }
