@@ -1,7 +1,7 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit toolchain-funcs
 if [[ -z ${PV%%*9999} ]]; then
@@ -11,7 +11,6 @@ if [[ -z ${PV%%*9999} ]]; then
 		src/third_party/dtl/dtl
 	)
 else
-	inherit vcs-snapshot
 	MY_PV="b083be9"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	MY_D="dtl-33a68d8"
@@ -36,6 +35,7 @@ RDEPEND="
 	dev-libs/fribidi
 	>=media-libs/freetype-2.9:2
 	>=media-libs/harfbuzz-1.7.4[icu]
+	dev-libs/icu:=
 	x11-libs/cairo
 	dev-libs/expat
 "

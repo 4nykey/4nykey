@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{7,8} )
+PYTHON_COMPAT=( python3_{7..9} )
 PLOCALES="
 cs de el es fi fr he id it nb nl oc pl pt pt_BR ru sk sr sv tr uk
 "
