@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{7,8} )
+PYTHON_COMPAT=( python3_{7..9} )
 inherit distutils-r1
 MY_PN="abseil-py"
 if [[ -z ${PV%%*9999} ]]; then

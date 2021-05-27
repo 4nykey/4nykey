@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{7,8} )
+PYTHON_COMPAT=( python3_{7..9} )
 PYTHON_REQ_USE="xml(+)"
 
 inherit distutils-r1
@@ -52,7 +52,6 @@ RDEPEND="
 	symfont? ( dev-python/sympy[${PYTHON_USEDEP}] )
 	interpolatable? ( >=dev-python/scipy-1.5.4[${PYTHON_USEDEP}] )
 	reportlab? ( dev-python/reportlab[${PYTHON_USEDEP}] )
-	>=dev-python/ufoLib2-0.6.2[${PYTHON_USEDEP}]
 	>=dev-python/skia-pathops-0.5.1[${PYTHON_USEDEP}]
 "
 DEPEND="
@@ -60,6 +59,9 @@ DEPEND="
 "
 BDEPEND="
 	dev-python/cython[${PYTHON_USEDEP}]
+	test? (
+		>=dev-python/ufoLib2-0.6.2[${PYTHON_USEDEP}]
+	)
 "
 distutils_enable_sphinx Doc/source dev-python/sphinx_rtd_theme
 distutils_enable_tests pytest
