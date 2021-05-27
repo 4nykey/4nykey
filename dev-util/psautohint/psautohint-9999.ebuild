@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{7,8} )
+PYTHON_COMPAT=( python3_{7..9} )
 DISTUTILS_IN_SOURCE_BUILD=1
 
 MY_TD="psautohint-testdata-1e4c506"
