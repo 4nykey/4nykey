@@ -28,7 +28,7 @@ SLOT="0"
 IUSE="pcre"
 
 DEPEND="
-	>=net-misc/meganz-sdk-3.7.3:=[sodium(+),sqlite]
+	>=net-misc/meganz-sdk-3.8:=[sodium(+),sqlite]
 	pcre? ( dev-libs/libpcre:3[cxx] )
 	sys-libs/readline:0
 "
@@ -38,7 +38,8 @@ RDEPEND="
 BDEPEND="
 	sys-devel/autoconf-archive
 "
-DOCS=( README.md build/megacmd/megacmd.changes )
+DOCS=( {README,UserGuide}.md contrib/docs )
+PATCHES=( "${FILESDIR}"/sdk38.diff )
 
 src_prepare() {
 	sed \
