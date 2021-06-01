@@ -1,0 +1,10 @@
+--- a/src/gfx/freeimage.cpp
++++ b/src/gfx/freeimage.cpp
+@@ -188,7 +188,6 @@ bool GfxProcFreeImage::readbitmapFfmpeg(
+ 
+     // Force seeking to key frames
+     formatContext->seek2any = false;
+-    videoStream->skip_to_keyframe = true;
+     if (decoder->capabilities & CAP_TRUNCATED)
+     {
+         codecContext.flags |= CAP_TRUNCATED;

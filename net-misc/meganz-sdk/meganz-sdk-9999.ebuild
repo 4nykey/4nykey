@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit flag-o-matic qmake-utils autotools db-use
+inherit flag-o-matic qmake-utils autotools
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/${PN%-*}/${PN#*-}.git"
@@ -24,7 +24,7 @@ HOMEPAGE="https://github.com/meganz/sdk"
 
 LICENSE="BSD-2"
 # awk '/define/ {print $3}' include/mega/version.h|awk 'BEGIN{RS="";FS="\n"}{printf $1*10000+$2*100+$3}'
-SLOT="0/30703h"
+SLOT="0/30802"
 IUSE="examples ffmpeg freeimage fuse hardened inotify libuv mediainfo qt raw +sqlite test"
 REQUIRED_USE="
 	examples? ( sqlite )
@@ -41,7 +41,6 @@ RDEPEND="
 	net-dns/c-ares
 	net-misc/curl
 	sqlite? ( dev-db/sqlite:3 )
-	!sqlite? ( sys-libs/db:*[cxx] )
 	examples? (
 		sys-libs/readline:0
 		fuse? ( sys-fs/fuse:0 )
@@ -57,10 +56,6 @@ DEPEND="
 	${RDEPEND}
 	test? ( dev-cpp/gtest )
 "
-
-pkg_setup() {
-	use sqlite || append-cppflags "-I$(db_includedir)"
-}
 
 src_prepare() {
 	default
@@ -83,7 +78,6 @@ src_configure() {
 		$(use_enable inotify)
 		$(use_enable hardened gcc-hardening)
 		$(use_with libuv)
-		$(use_with !sqlite db)
 		$(use_with sqlite)
 		$(use_enable examples)
 		$(use_enable test tests)
@@ -107,6 +101,7 @@ src_test() {
 src_install() {
 	default
 	doheader -r include/mega
+	find "${ED}" -type f -name '*.la' -delete
 
 	use qt || return
 	insinto /usr/share/${PN}/bindings/qt
