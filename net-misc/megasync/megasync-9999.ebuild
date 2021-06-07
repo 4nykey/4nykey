@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_SUBMODULES=( -src/MEGASync/mega )
 	SRC_URI=
 else
-	MY_PV="a496109"
+	MY_PV="88d23d0"
 	SRC_URI="
 		mirror://githubcl/meganz/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
