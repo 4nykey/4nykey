@@ -3,6 +3,10 @@
 
 EAPI=7
 
+PLOCALES="
+	de fr hu it ja nl pt-BR ru sr tr zh-CN
+"
+inherit gnome2-utils l10n
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/ubuntu/${PN}.git"
@@ -36,23 +40,41 @@ RDEPEND="
 	x11-libs/gdk-pixbuf[introspection]
 	media-libs/clutter[introspection]
 "
+BDEPEND="
+	sys-devel/gettext
+"
 
-src_compile() { :; }
+src_compile() {
+	emake translations
+}
 
 src_install() {
 	local _u=$(awk -F'"' '/uuid/ {print $4}' metadata.json)
 	insinto /usr/share/gnome-shell/extensions/${_u}
 	doins -r interfaces-xml *.js{,on}
+	insinto /usr/share/glib-2.0/schemas
+	doins schemas/*.gschema.xml
 	dodoc {AUTHORS,README}.md
+	my_loc() {
+		insinto /usr/share/locale
+		doins -r locale/${1/-/_}
+	}
+	l10n_for_each_locale_do my_loc
+}
+
+pkg_preinst() {
+	gnome2_schemas_savelist
 }
 
 pkg_postinst() {
+	gnome2_schemas_update
 	ebegin "Updating list of installed extensions"
 	eselect gnome-shell-extensions update
 	eend $?
 }
 
 pkg_postrm() {
+	gnome2_schemas_update
 	ebegin "Updating list of installed extensions"
 	eselect gnome-shell-extensions update
 	eend $?
