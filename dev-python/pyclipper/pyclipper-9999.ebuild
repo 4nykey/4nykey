@@ -30,12 +30,14 @@ IUSE="test"
 BDEPEND="
 	dev-python/setuptools_scm[${PYTHON_USEDEP}]
 	dev-python/cython[${PYTHON_USEDEP}]
-	test? (
-		dev-python/unittest2[${PYTHON_USEDEP}]
-	)
 "
 distutils_enable_tests pytest
 
 pkg_setup() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${MY_PV}"
+}
+
+src_prepare() {
+	sed -e 's:unittest2:unittest:' -i tests/test_pyclipper.py
+	distutils-r1_src_prepare
 }
