@@ -1,0 +1,14 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -59,7 +59,10 @@ else()
+     set(TERA_CMD_NAME qdigidoc-tera)
+     set(TERA_GUI_NAME qdigidoc-tera-gui)
+ 
+-    find_package(PCSCLite REQUIRED)
++    find_package(PkgConfig REQUIRED)
++    pkg_check_modules(PCSCLITE REQUIRED libpcsclite)
++    set(PCSCLITE_INCLUDE_DIR ${PCSCLITE_INCLUDE_DIRS})
++    set(PCSCLITE_LIBRARY ${PCSCLITE_LIBRARIES})
+     find_package(Threads)
+     include_directories(${PCSCLITE_INCLUDE_DIR})
+     set(TERA_SCARD_LIBRARIES ${PCSCLITE_LIBRARY})

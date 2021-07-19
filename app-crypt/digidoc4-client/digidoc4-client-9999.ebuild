@@ -54,7 +54,6 @@ BDEPEND="
 	dev-util/cmake-openeid
 "
 DOCS=( {CONTRIBUTING,README,RELEASE-NOTES}.md )
-PATCHES=( "${FILESDIR}"/QPainterPath.diff )
 
 src_prepare() {
 	if [[ -n ${PV%%*9999} ]]; then

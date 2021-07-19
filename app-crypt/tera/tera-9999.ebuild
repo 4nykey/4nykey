@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -16,7 +16,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit cmake-utils xdg
+inherit cmake xdg
 
 DESCRIPTION="Time-stamping application"
 HOMEPAGE="https://id.ee"
@@ -39,10 +39,11 @@ BDEPEND="
 	dev-qt/linguist-tools:5
 	dev-util/cmake-openeid
 "
+PATCHES=( "${FILESDIR}"/cmake.diff )
 
 src_prepare() {
 	sed \
 		-e "s:\${CMAKE_SOURCE_DIR}/cmake/modules:/usr/share/cmake/openeid:" \
 		-i CMakeLists.txt
-	cmake-utils_src_prepare
+	cmake_src_prepare
 }

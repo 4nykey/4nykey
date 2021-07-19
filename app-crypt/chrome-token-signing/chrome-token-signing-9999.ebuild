@@ -48,7 +48,6 @@ DEPEND="
 "
 RDEPEND="
 	${DEPEND}
-	dev-libs/libdigidoc
 	www-plugins/firefox-pkcs11-loader
 	dev-libs/nss[utils]
 "
