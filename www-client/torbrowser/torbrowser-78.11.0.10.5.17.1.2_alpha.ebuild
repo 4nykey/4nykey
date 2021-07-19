@@ -14,8 +14,8 @@ WANT_AUTOCONF="2.1"
 
 VIRTUALX_REQUIRED="pgo"
 
-inherit autotools check-reqs desktop flag-o-matic gnome2-utils llvm \
-	multiprocessing pax-utils python-any-r1 toolchain-funcs \
+inherit autotools check-reqs desktop flag-o-matic gnome2-utils linux-info \
+	llvm multiprocessing pax-utils python-any-r1 toolchain-funcs \
 	virtualx xdg
 
 PATCH_URIS=(
@@ -32,12 +32,14 @@ fi
 TOR_REL="${TOR_REL%.0}"
 MY_P="$(ver_cut 1-3)esr-$(ver_cut 4-5)-$(ver_cut 7)-build$(ver_cut 8)"
 MY_P="firefox-tor-browser-${MY_P}"
-MY_EFF="2021.1.27"
-MY_NOS="11.2.4"
+MY_TL="src-tor-launcher-0.2.30"
+MY_EFF="2021.7.13"
+MY_NOS="11.2.9"
 MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
 MY_NOS="noscript-${MY_NOS}.xpi"
 SRC_URI="
-	mirror://tor/dist/${PN}/${TOR_REL}/src-${MY_P}.tar.xz -> ${P}.tar.xz
+	mirror://tor/${PN}/${TOR_REL}/src-${MY_P}.tar.xz -> ${P}.tar.xz
+	mirror://tor/${PN}/${TOR_REL}/${MY_TL}.tar.xz
 	https://www.eff.org/files/${MY_EFF}
 	https://secure.informaction.com/download/releases/${MY_NOS}
 	${PATCH_URIS[@]}
@@ -50,7 +52,7 @@ HOMEPAGE="https://www.torproject.org"
 SLOT="0/esr$(ver_cut 1)"
 LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
 LICENSE+=" BSD CC-BY-3.0"
-IUSE="clang cpu_flags_arm_neon dbus debug eme-free geckodriver +gmp-autoupdate
+IUSE="+clang cpu_flags_arm_neon dbus debug eme-free geckodriver +gmp-autoupdate
 	hardened hwaccel jack lto +openh264 pgo pulseaudio screencast selinux
 	+system-av1 +system-harfbuzz +system-icu +system-jpeg +system-libevent
 	+system-libvpx +system-webp wayland wifi"
@@ -188,19 +190,19 @@ S="${WORKDIR}/${MY_P}"
 
 llvm_check_deps() {
 	if ! has_version -b "sys-devel/clang:${LLVM_SLOT}" ; then
-		ewarn "sys-devel/clang:${LLVM_SLOT} is missing! Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
+		einfo "sys-devel/clang:${LLVM_SLOT} is missing! Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
 		return 1
 	fi
 
 	if use clang ; then
 		if ! has_version -b "=sys-devel/lld-${LLVM_SLOT}*" ; then
-			ewarn "=sys-devel/lld-${LLVM_SLOT}* is missing! Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
+			einfo "=sys-devel/lld-${LLVM_SLOT}* is missing! Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
 			return 1
 		fi
 
 		if use pgo ; then
 			if ! has_version -b "=sys-libs/compiler-rt-sanitizers-${LLVM_SLOT}*" ; then
-				ewarn "=sys-libs/compiler-rt-sanitizers-${LLVM_SLOT}* is missing! Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
+				einfo "=sys-libs/compiler-rt-sanitizers-${LLVM_SLOT}* is missing! Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
 				return 1
 			fi
 		fi
@@ -355,6 +357,10 @@ pkg_setup() {
 		# Ensure we use C locale when building, bug #746215
 		export LC_ALL=C
 	fi
+
+	CONFIG_CHECK="~SECCOMP"
+	WARNING_SECCOMP="CONFIG_SECCOMP not set! This system will be unable to play DRM-protected content."
+	linux-info_pkg_setup
 }
 
 src_prepare() {
@@ -366,15 +372,15 @@ src_prepare() {
 
 	append-cppflags "-DTOR_BROWSER_DATA_IN_HOME_DIR"
 	eapply "${FILESDIR}"/${PN}-profiledir.patch
-	sed -e '/if (gTorPane.enabled/,/^  }$/d' \
-		-i browser/components/preferences/preferences.js
-	sed -e '/\<torpreferences\>/d' \
-		-i browser/components/preferences/preferences.xhtml
 
 	# browser/components/BrowserGlue.jsm
-	local _h=toolkit/torproject/torbutton/chrome/content/extensions/https-everywhere
+	local _h="${WORKDIR}/eff/chrome/torbutton/content/extensions/https-everywhere"
 	mkdir -p "${_h}"
 	unzip -q "${DISTDIR}/${MY_EFF}" -d "${_h}" || die
+
+	mv "${WORKDIR}"/${MY_TL#src-} browser/extensions/tor-launcher
+
+	sed -e '/new-identity-button/d' -i browser/components/customizableui/CustomizableUI.jsm
 
 	# Make LTO respect MAKEOPTS
 	sed -i \
@@ -709,7 +715,7 @@ src_configure() {
 	mozconfig_add_options_ac 'torbrowser' --with-app-name=${PN}
 	mozconfig_add_options_ac 'torbrowser' --with-app-basename=${PN}
 	mozconfig_add_options_ac 'torbrowser' --disable-tor-browser-update
-	mozconfig_add_options_ac 'torbrowser' --disable-tor-launcher
+	mozconfig_add_options_ac 'torbrowser' --enable-tor-launcher
 	mozconfig_add_options_ac 'torbrowser' --with-tor-browser-version=${TOR_REL}
 	mozconfig_add_options_ac 'torbrowser' --disable-tor-browser-data-outside-app-dir
 	mozconfig_add_options_ac 'torbrowser' --with-branding=browser/branding/official
@@ -840,6 +846,13 @@ src_install() {
 		sticky_pref("gfx.font_rendering.graphite.enabled", true);
 		EOF
 	fi
+	cat >>"${GENTOO_PREFS}" <<-EOF
+		pref("extensions.torbutton.local_tor_check", false);
+		pref("extensions.torbutton.versioncheck_enabled", false);
+		pref("extensions.torlauncher.start_tor", false);
+		pref("extensions.torlauncher.prompt_at_startup", false);
+		pref("extensions.torlauncher.quickstart", true);
+	EOF
 
 	# Install geckodriver
 	if use geckodriver ; then
@@ -868,6 +881,9 @@ src_install() {
 
 	# Install .desktop for menu entry
 	make_desktop_entry ${PN} "Tor Browser" ${PN} "Network;WebBrowser" "StartupWMClass=Torbrowser"
+
+	cd "${WORKDIR}"/eff
+	find chrome | sort | zip -q -X -@ "${ED}${MOZILLA_FIVE_HOME}"/omni.ja
 }
 
 pkg_preinst() {
