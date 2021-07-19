@@ -27,10 +27,9 @@ SLOT="0"
 IUSE="apidocs pdf test"
 
 RDEPEND="
-	dev-libs/libdigidoc
 	dev-libs/xerces-c
+	dev-libs/xalan-c
 	dev-libs/xml-security-c
-	dev-util/cppunit
 	sys-libs/zlib[minizip]
 	pdf? ( <app-text/podofo-0.9.5 )
 "
@@ -56,8 +55,6 @@ src_prepare() {
 	use test || sed -i CMakeLists.txt -e '/add_subdirectory(test)/d'
 	has_version app-editors/vim-core || sed \
 		-e 's:xxd -i \(tslcert.\.crt\):xxdi.pl \1 >:' -i src/CMakeLists.txt
-	sed \
-		-e 's:XERCESC_LIBRARIES:XercesC_LIBRARIES:' -i src/CMakeLists.txt
 	rm -rf src/{minizip,openssl}
 	cmake_src_prepare
 }
@@ -67,7 +64,7 @@ src_configure() {
 		-DCMAKE_DISABLE_FIND_PACKAGE_Doxygen=$(usex !apidocs)
 		-DCMAKE_DISABLE_FIND_PACKAGE_PoDoFo=$(usex !pdf)
 		-DCMAKE_DISABLE_FIND_PACKAGE_SWIG=yes
-		-DCMAKE_INSTALL_SYSCONFDIR="${EROOT}etc"
+		-DCMAKE_DISABLE_FIND_PACKAGE_JNI=yes
 	)
 	cmake_src_configure
 }
