@@ -29,7 +29,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.24.4[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.25.1[ufo(-),${PYTHON_USEDEP}]
 	>=dev-python/defcon-0.8.1[${PYTHON_USEDEP}]
 	>=dev-python/compreffor-0.5.1[${PYTHON_USEDEP}]
 	dev-python/booleanOperations[${PYTHON_USEDEP}]
