@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -13,6 +13,7 @@ else
 	SRC_URI="https://wimlib.net/downloads/${PN}-${MY_PV}.tar.gz -> ${P}.tar.gz"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
 
 DESCRIPTION="The open source Windows Imaging (WIM) library"
@@ -21,7 +22,6 @@ HOMEPAGE="https://wimlib.net/"
 LICENSE="|| ( GPL-3+ LGPL-3+ ) CC0-1.0"
 SLOT="0"
 IUSE="cpu_flags_x86_ssse3 fuse ntfs openssl static-libs threads test yasm"
-REQUIRED_USE="cpu_flags_x86_ssse3? ( !openssl )"
 
 RDEPEND="
 	dev-libs/libxml2:2
@@ -49,13 +49,15 @@ src_configure() {
 	local myeconfargs=(
 		$(use_with ntfs ntfs-3g)
 		$(use_with fuse)
-		$(use_enable cpu_flags_x86_ssse3 ssse3-sha1)
 		$(use_with openssl libcrypto)
 		$(use_enable threads multithreaded-compression)
 		$(use_enable static-libs static)
 	)
+	use !openssl && myeconfargs+=(
+		$(use_enable cpu_flags_x86_ssse3 ssse3-sha1)
+	)
 	use test && myeconfargs+=( --enable-test-support )
-	ac_cv_prog_NASM="$(usex yasm yasm nasm)" \
+	ac_cv_prog_NASM="$(usex yasm y n)asm" \
 		econf "${myeconfargs[@]}"
 }
 
