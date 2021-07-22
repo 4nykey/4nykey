@@ -9,9 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}"
 else
-	MY_PV="v$(ver_rs 1-2 '-')"
-	MY_PV="$(ver_rs 5 '_' ${MY_PV})"
-	MY_PV="$(ver_rs 4 '-unicode' ${MY_PV})"
+	MY_PV="v${PV}"
 	[[ -z ${PV%%*_p*} ]] && MY_PV="ac1703e"
 	MY_P="${PN}-${MY_PV#v}"
 	SRC_URI="
@@ -60,6 +58,7 @@ src_prepare() {
 		-e 's:^\t@:\t:' \
 		-e '/\(C\|LD\)FLAGS =/s:=:+=:' \
 		-e 's:\<pkg-config\>:$(PKG_CONFIG):' \
+		-e 's: \$(EMOJI_WINDOWS).ttf::' \
 		-i Makefile
 }
 
