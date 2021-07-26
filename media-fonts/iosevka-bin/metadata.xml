@@ -68,6 +68,9 @@
 		<flag name="font_variants_ss17">
 			A variant stylized after Recursive Mono
 		</flag>
+		<flag name="font_variants_ss18">
+			A variant stylized after Input Mono
+		</flag>
 		<flag name="font_variants_aile">
 			A quasi-proportional variant
 		</flag>

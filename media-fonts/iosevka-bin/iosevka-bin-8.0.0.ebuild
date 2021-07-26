@@ -28,6 +28,7 @@ MY_FONT_VARIANTS=(
 	ss15
 	ss16
 	ss17
+	ss18
 	term
 )
 MY_PN="${PN%-*}"
@@ -77,6 +78,7 @@ font_types_ttf? (
 			font_variants_ss15? ( ${SRC_URI}ttf-${MY_PN}-term-ss15-${MY_PV}.zip )
 			font_variants_ss16? ( ${SRC_URI}ttf-${MY_PN}-term-ss16-${MY_PV}.zip )
 			font_variants_ss17? ( ${SRC_URI}ttf-${MY_PN}-term-ss17-${MY_PV}.zip )
+			font_variants_ss18? ( ${SRC_URI}ttf-${MY_PN}-term-ss18-${MY_PV}.zip )
 		)
 		font_variants_slab? (
 			font_variants_default? ( ${SRC_URI}ttf-${MY_PN}-slab-${MY_PV}.zip )
@@ -107,6 +109,10 @@ font_types_ttf? (
 		font_variants_ss12? ( ${SRC_URI}ttf-${MY_PN}-ss12-${MY_PV}.zip )
 		font_variants_ss13? ( ${SRC_URI}ttf-${MY_PN}-ss13-${MY_PV}.zip )
 		font_variants_ss14? ( ${SRC_URI}ttf-${MY_PN}-ss14-${MY_PV}.zip )
+		font_variants_ss15? ( ${SRC_URI}ttf-${MY_PN}-ss15-${MY_PV}.zip )
+		font_variants_ss16? ( ${SRC_URI}ttf-${MY_PN}-ss16-${MY_PV}.zip )
+		font_variants_ss17? ( ${SRC_URI}ttf-${MY_PN}-ss17-${MY_PV}.zip )
+		font_variants_ss18? ( ${SRC_URI}ttf-${MY_PN}-ss18-${MY_PV}.zip )
 		font_variants_aile? ( ${SRC_URI}ttf-${MY_PN}-aile-${MY_PV}.zip )
 		font_variants_etoile? ( ${SRC_URI}ttf-${MY_PN}-etoile-${MY_PV}.zip )
 	)
@@ -131,6 +137,7 @@ font_types_ttf? (
 			font_variants_ss15? ( ${SRC_URI}ttf-unhinted-${MY_PN}-fixed-ss15-${MY_PV}.zip )
 			font_variants_ss16? ( ${SRC_URI}ttf-unhinted-${MY_PN}-fixed-ss16-${MY_PV}.zip )
 			font_variants_ss17? ( ${SRC_URI}ttf-unhinted-${MY_PN}-fixed-ss17-${MY_PV}.zip )
+			font_variants_ss18? ( ${SRC_URI}ttf-unhinted-${MY_PN}-fixed-ss18-${MY_PV}.zip )
 		)
 		font_variants_term? (
 			${SRC_URI}ttf-unhinted-${MY_PN}-term-${MY_PV}.zip
@@ -184,6 +191,7 @@ font_types_ttf? (
 		font_variants_ss15? ( ${SRC_URI}ttf-unhinted-${MY_PN}-ss15-${MY_PV}.zip )
 		font_variants_ss16? ( ${SRC_URI}ttf-unhinted-${MY_PN}-ss16-${MY_PV}.zip )
 		font_variants_ss17? ( ${SRC_URI}ttf-unhinted-${MY_PN}-ss17-${MY_PV}.zip )
+		font_variants_ss18? ( ${SRC_URI}ttf-unhinted-${MY_PN}-ss18-${MY_PV}.zip )
 		font_variants_aile? ( ${SRC_URI}ttf-unhinted-${MY_PN}-aile-${MY_PV}.zip )
 		font_variants_etoile? ( ${SRC_URI}ttf-unhinted-${MY_PN}-etoile-${MY_PV}.zip )
 	)
@@ -214,6 +222,7 @@ font_types_ttc? (
 		font_variants_ss15? ( ${SRC_URI}super-ttc-${MY_PN}-ss15-${MY_PV}.zip )
 		font_variants_ss16? ( ${SRC_URI}super-ttc-${MY_PN}-ss16-${MY_PV}.zip )
 		font_variants_ss17? ( ${SRC_URI}super-ttc-${MY_PN}-ss17-${MY_PV}.zip )
+		font_variants_ss18? ( ${SRC_URI}super-ttc-${MY_PN}-ss18-${MY_PV}.zip )
 )
 "
 RESTRICT="primaryuri"
