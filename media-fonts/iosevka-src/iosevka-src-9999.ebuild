@@ -29,6 +29,7 @@ MY_FONT_VARIANTS=(
 	ss15
 	ss16
 	ss17
+	ss18
 	term
 )
 MY_PN="${PN%-*}"
