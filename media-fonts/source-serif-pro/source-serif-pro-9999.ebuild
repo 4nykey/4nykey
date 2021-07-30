@@ -48,12 +48,9 @@ pkg_setup() {
 	if [[ ${PV} == *9999* ]]; then
 		EGIT_BRANCH="$(usex binary release master)"
 	else
-		S="${WORKDIR}/${MY_PN}-$(usex binary ${MY_PVB} ${MY_PV})"
+		S="${S%/*}/${MY_PN}-$(usex binary ${MY_PVB} ${MY_PV})"
 	fi
-
 	FONT_S=( $(usex binary . target)/$(usex variable VAR $(usex font_types_otf OTF TTF)) )
-
-	use binary || PATCHES=( "${FILESDIR}"/buildVFs.diff )
 	font-r1_pkg_setup
 }
 

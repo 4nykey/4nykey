@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -18,6 +18,7 @@ RDEPEND="
 	cjk? (
 		font_variants_sans? ( media-fonts/source-han-sans )
 		font_variants_serif? ( media-fonts/source-han-serif )
+		font_variants_monospace? ( media-fonts/source-han-mono )
 	)
 	emoji? ( media-fonts/source-emoji )
 	font_variants_monospace? (

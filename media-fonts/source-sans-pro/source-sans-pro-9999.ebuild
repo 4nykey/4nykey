@@ -4,9 +4,10 @@
 EAPI=7
 
 MY_FONT_TYPES=( otf +ttf )
+MY_PN=${PN%-pro}
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/adobe-fonts/${PN}"
+	EGIT_REPO_URI="https://github.com/adobe-fonts/${MY_PN}"
 else
 	MY_PV="93fc257"
 	MY_PVB="5b44992"
@@ -16,11 +17,11 @@ else
 	fi
 	SRC_URI="
 		binary? (
-			mirror://githubcl/adobe-fonts/${PN}/tar.gz/${MY_PVB}
+			mirror://githubcl/adobe-fonts/${MY_PN}/tar.gz/${MY_PVB}
 			-> ${P}R.tar.gz
 		)
 		!binary? (
-			mirror://githubcl/adobe-fonts/${PN}/tar.gz/${MY_PV}
+			mirror://githubcl/adobe-fonts/${MY_PN}/tar.gz/${MY_PV}
 			-> ${P}.tar.gz
 		)
 	"
@@ -30,7 +31,7 @@ fi
 inherit font-r1
 
 DESCRIPTION="Sans serif font family for user interface environments"
-HOMEPAGE="https://adobe-fonts.github.io/${PN}"
+HOMEPAGE="https://adobe-fonts.github.io/${MY_PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
@@ -47,12 +48,9 @@ pkg_setup() {
 	if [[ ${PV} == *9999* ]]; then
 		EGIT_BRANCH="$(usex binary release master)"
 	else
-		S="${WORKDIR}/${PN}-$(usex binary ${MY_PVB} ${MY_PV})"
+		S="${S%/*}/${MY_PN}-$(usex binary ${MY_PVB} ${MY_PV})"
 	fi
-
 	FONT_S=( $(usex binary . target)/$(usex variable VAR $(usex font_types_otf OTF TTF)) )
-
-	use binary || PATCHES=( "${FILESDIR}"/buildVFs.diff )
 	font-r1_pkg_setup
 }
 

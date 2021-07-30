@@ -1,0 +1,21 @@
+--- a/COMMANDS.txt
++++ b/COMMANDS.txt
+@@ -6,6 +6,9 @@
+ ## (replace $dir with the weight name)
+ ##
+ ## Executed in {ExtraLight,Light,Normal,Regular,Medium,Bold,Heavy}/OTC/
++set -e
++for dir in {ExtraLight,Light,Normal,Regular,Medium,Bold,Heavy}; do
++cd "${S}"/${dir}/OTC
+ 
+ # Simplified Chinese -- Upright & Italic
+ 
+@@ -44,6 +46,8 @@ makeotf -f cidfont.ps.OTC.It.K -omitMacN
+ ## Executed in {ExtraLight,Light,Normal,Regular,Medium,Bold,Heavy}/OTC/
+ 
+ sfntedit -x CFF=CFF.$dir -d DSIG SourceHanMono-$dir.otf ; sfntedit -a CFF=CFF.$dir -d DSIG SourceHanMonoK-$dir.otf ; sfntedit -a CFF=CFF.$dir -d DSIG SourceHanMonoSC-$dir.otf ; sfntedit -a CFF=CFF.$dir -d DSIG SourceHanMonoTC-$dir.otf ; sfntedit -a CFF=CFF.$dir -d DSIG SourceHanMonoHC-$dir.otf ; sfntedit -a CFF=CFF.$dir -d DSIG SourceHanMono-${dir}It.otf ; sfntedit -a CFF=CFF.$dir -d DSIG SourceHanMonoK-${dir}It.otf ; sfntedit -a CFF=CFF.$dir -d DSIG SourceHanMonoSC-${dir}It.otf ; sfntedit -a CFF=CFF.$dir -d DSIG SourceHanMonoTC-${dir}It.otf ; sfntedit -a CFF=CFF.$dir -d DSIG SourceHanMonoHC-${dir}It.otf
++done
++cd "${S}"
+ 
+ ## Command line for building the Super OTC
+ ##
