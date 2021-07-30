@@ -14,7 +14,7 @@ else
 		inherit vcs-snapshot
 		MY_PV="3e8a1e2"
 	fi
-	MY_HB="harfbuzz-2.8.1"
+	MY_HB="harfbuzz-2.8.2"
 	SRC_URI="
 		mirror://githubcl/harfbuzz/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://githubcl/harfbuzz/${MY_HB%-*}/tar.gz/${MY_HB##*-}
