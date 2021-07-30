@@ -5,79 +5,51 @@ EAPI=7
 
 PYTHON_COMPAT=( python3_{7..9} )
 MY_FONT_TYPES=( otf +ttf )
+MY_PN="${PN^}"
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/i-tu/${PN}"
+	EGIT_REPO_URI="https://github.com/i-tu/${MY_PN}"
 	REQUIRED_USE="!binary"
 else
-	inherit vcs-snapshot
 	MY_PVB="${PV%_p*}"
 	MY_PVB="${MY_PVB//_/-}"
 	MY_PV="a94138e"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV//_/-}"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV//_/-}"
 	SRC_URI="
 		binary? (
-			https://github.com/i-tu/${PN}/releases/download/${MY_PVB}/${PN}-${MY_PVB}.zip
+			https://github.com/i-tu/${MY_PN}/releases/download/v${MY_PVB}/${MY_PN}-${MY_PVB}.zip
 		)
 		!binary? (
-			mirror://githubcl/i-tu/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+			mirror://githubcl/i-tu/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		)
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${MY_PN}-${MY_PV#v}"
 fi
 inherit python-any-r1 font-r1
-MY_MK="3c71e576827753fc395f44f4c2d91131-6eee6fa"
-SRC_URI+="
-	!binary? (
-		mirror://githubcl/gist/${MY_MK%-*}/tar.gz/${MY_MK#*-}
-		-> ${MY_MK}.tar.gz
-	)
-"
 
 DESCRIPTION="A code font with monospaced ligatures"
-HOMEPAGE="https://github.com/i-tu/${PN}"
+HOMEPAGE="https://github.com/i-tu/${MY_PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="+autohint +binary"
-REQUIRED_USE+="
-	binary? ( !font_types_ttf )
-"
+IUSE="+binary -variable"
 
 BDEPEND="
 	!binary? (
-		${PYTHON_DEPS}
-		$(python_gen_any_dep '
-			dev-util/afdko[${PYTHON_USEDEP}]
-		')
-		dev-python/opentype-svg
+		dev-util/afdko
+		variable? ( dev-util/fontmake )
 	)
 "
 
 pkg_setup() {
-	if use binary; then
-		S="${WORKDIR}"
-	else
-		python-any-r1_pkg_setup
-	fi
+	use binary && S="${S%/*}"
+	FONT_S=( $(usex binary . target)/$(usex variable VAR $(usex font_types_otf OTF TTF)) )
 	font-r1_pkg_setup
-}
-
-src_prepare() {
-	if use !binary; then
-		unpack ${MY_MK}.tar.gz
-		local PATCHES=( "${FILESDIR}"/${PN}-axes.diff )
-	fi
-	default
 }
 
 src_compile() {
 	use binary && return
-	local myemakeargs=(
-		$(usex autohint 'AUTOHINT=' '')
-		${FONT_SUFFIX}
-		-f ${MY_MK}/Makefile
-	)
-	emake "${myemakeargs[@]}"
+	. ./build$(usex variable 'VFs' '').sh || die
 }
