@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -18,10 +18,10 @@ else
 	KEYWORDS="~amd64 ~x86"
 	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
-inherit toolchain-funcs l10n
+inherit toolchain-funcs plocale
 
 DESCRIPTION="A GIMP plugin to apply a set of manipulations to groups of images"
-HOMEPAGE="http://www.alessandrofrancesconi.it/projects/bimp/"
+HOMEPAGE="https://www.alessandrofrancesconi.it/projects/bimp/"
 
 LICENSE="GPL-2+"
 SLOT="0"
@@ -49,6 +49,6 @@ src_install() {
 	}
 	exeinto $(gimptool-2.0 --gimpplugindir)/plug-ins
 	doexe bimp
-	l10n_for_each_locale_do mymo
+	plocale_for_each_locale mymo
 	einstalldocs
 }
