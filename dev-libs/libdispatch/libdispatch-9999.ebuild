@@ -41,3 +41,10 @@ pkg_setup() {
 	CXX=${CHOST}-clang++
 	strip-unsupported-flags
 }
+
+src_configure () {
+	local mycmakeargs=(
+		-DINSTALL_BLOCK_HEADERS_DIR="${EPREFIX}/usr/include/dispatch"
+	)
+	cmake_src_configure
+}
