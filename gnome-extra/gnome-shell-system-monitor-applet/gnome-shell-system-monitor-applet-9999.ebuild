@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -6,13 +6,13 @@ PLOCALES="
 ar ca cs de es_ES es_MX fa fi fr it ja pl pt pt_BR ro ru sk uk zh_CN
 "
 
-inherit gnome2-utils l10n
+inherit gnome2-utils plocale
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/paradoxxxzero/${PN}.git"
 	SRC_URI=""
 else
-	MY_PV="7f8f0a7"
+	MY_PV="35d3351"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/paradoxxxzero/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -35,6 +35,7 @@ DEPEND="
 RDEPEND="
 	${DEPEND}
 	gnome-base/gnome-shell
+	media-libs/clutter[introspection]
 	gnome-base/libgtop[introspection]
 	net-misc/networkmanager[introspection]
 "
@@ -48,14 +49,13 @@ BDEPEND="
 src_prepare() {
 	local PATCHES=(
 		"${FILESDIR}"/gssma-makefile.diff
-		"${FILESDIR}"/PR
 	)
 	sed -e '/UUID)\/README/d' -i Makefile
 	default
 	rm -rf system-monitor@paradoxxx.zero.gmail.com/locale
 	if use nls; then
 		my_loc() { rm -rf po/${1}; }
-		l10n_for_each_disabled_locale_do my_loc
+		plocale_for_each_disabled_locale my_loc
 	else
 		sed \
 			-e '/build:/s,translate,,' \

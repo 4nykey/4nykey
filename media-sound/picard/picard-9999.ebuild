@@ -23,7 +23,7 @@ else
 	RESTRICT="primaryuri"
 	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
-inherit eutils distutils-r1 l10n xdg
+inherit eutils distutils-r1 plocale xdg
 
 DESCRIPTION="A cross-platform music tagger"
 HOMEPAGE="https://picard.musicbrainz.org/"
@@ -57,7 +57,7 @@ src_prepare() {
 	myloc() {
 		rm -f po/{.,appstream,attributes,countries}/${1}.po
 	}
-	l10n_for_each_disabled_locale_do myloc
+	plocale_for_each_disabled_locale myloc
 	distutils-r1_python_prepare_all
 }
 

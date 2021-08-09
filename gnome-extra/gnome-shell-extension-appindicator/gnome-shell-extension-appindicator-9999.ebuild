@@ -6,22 +6,20 @@ EAPI=7
 PLOCALES="
 	de fr hu it ja nl pt-BR ru sr tr zh-CN
 "
-inherit gnome2-utils l10n
+inherit gnome2-utils plocale
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/ubuntu/${PN}.git"
 	SRC_URI=""
 else
-	MY_PV="v${PV}"
-	if [[ -z ${PV%%*_p*} ]]; then
-		inherit vcs-snapshot
-		MY_PV="87db22d"
-	fi
+	MY_PV="87db22d"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/ubuntu/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 
 DESCRIPTION="Adds AppIndicator support to gnome shell"
@@ -59,7 +57,7 @@ src_install() {
 		insinto /usr/share/locale
 		doins -r locale/${1/-/_}
 	}
-	l10n_for_each_locale_do my_loc
+	plocale_for_each_locale my_loc
 }
 
 pkg_preinst() {

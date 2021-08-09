@@ -10,7 +10,7 @@ PYTHON_COMPAT=( python3_{7..9} )
 PYTHON_REQ_USE='threads(+)'
 WAF_BINARY="${S}/waf"
 EGIT_REPO_URI="https://github.com/${PN^}/${PN}.git"
-inherit python-any-r1 l10n git-r3 toolchain-funcs multiprocessing desktop xdg
+inherit python-any-r1 plocale git-r3 toolchain-funcs multiprocessing desktop xdg
 if [[ -n ${PV%%*9999} ]]; then
 	MY_PV="f744b5f"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
@@ -82,7 +82,7 @@ src_prepare() {
 	my_lcmsg() {
 		rm -f {gtk2_ardour,gtk2_ardour/appdata,libs/ardour,libs/gtkmm2ext}/po/${1}.po
 	}
-	l10n_for_each_disabled_locale_do my_lcmsg
+	plocale_for_each_disabled_locale my_lcmsg
 	sed -e 's:AudioEditing:X-&:' -i gtk2_ardour/ardour.desktop.in
 	sed -e 's:share/appdata:share/metainfo:' -i gtk2_ardour/wscript
 	grep -rl '/\<lib\>' | xargs sed -e "s:/\<lib\>:/$(get_libdir):g" -i

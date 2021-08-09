@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -9,7 +9,7 @@ cs de el en_GB es fr it nn pl pt pt_PT ru sv zh
 PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE='threads(+)'
 EGIT_REPO_URI="https://github.com/${PN^}/${PN}.git"
-inherit gnome2 python-any-r1 waf-utils l10n git-r3 toolchain-funcs
+inherit gnome2 python-any-r1 waf-utils plocale git-r3 toolchain-funcs
 if [[ -n ${PV%%*9999} ]]; then
 	EGIT_COMMIT="${PV}"
 	SRC_URI="https://community.ardour.org/srctar/Ardour-${PV}.0.tar.bz2"
@@ -78,7 +78,7 @@ src_prepare() {
 	sed \
 		-e 's:AudioEditing:X-&:' \
 		-i gtk2_ardour/ardour.desktop.in
-	use nls && l10n_for_each_disabled_locale_do my_lcmsg
+	use nls && plocale_for_each_disabled_locale my_lcmsg
 	grep -rl '/\<lib\>' | xargs sed -e "s:/\<lib\>:/$(get_libdir):g" -i
 
 	use !bundled-libs && has_version '>=media-sound/fluidsynth-2.0.0' || return
