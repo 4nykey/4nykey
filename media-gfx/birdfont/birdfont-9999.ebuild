@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python3_{7..9} )
 PLOCALES="
 cs de el es fi fr he id it nb nl oc pl pt pt_BR ru sk sr sv tr uk
 "
-inherit python-any-r1 vala l10n toolchain-funcs xdg
+inherit python-any-r1 vala plocale toolchain-funcs xdg
 if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/johanmattssonm/${PN}.git"
 	inherit git-r3
@@ -47,7 +47,6 @@ DEPEND="
 BDEPEND="
 	nls? ( sys-devel/gettext )
 "
-PATCHES=( "${FILESDIR}"/fontconfig.diff )
 
 pkg_setup() {
 	python-any-r1_pkg_setup
@@ -59,7 +58,7 @@ src_prepare() {
 	}
 	default
 	vala_src_prepare
-	l10n_for_each_disabled_locale_do rmloc
+	plocale_for_each_disabled_locale rmloc
 	sed -e 's:freetype-config --libs:{pkg-config} --libs freetype2:' -i dodo.py
 	sed \
 		-e '/action="quit"/s:key="" ctrl="false:key="q" ctrl="true:' \
