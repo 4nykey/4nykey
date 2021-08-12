@@ -3,7 +3,7 @@
 
 EAPI="7"
 
-FIREFOX_PATCHSET="firefox-78esr-patches-15.tar.xz"
+FIREFOX_PATCHSET="firefox-78esr-patches-16.tar.xz"
 
 LLVM_MAX_SLOT=12
 
@@ -34,7 +34,7 @@ MY_P="$(ver_cut 1-3)esr-$(ver_cut 4-5)-$(ver_cut 7)-build$(ver_cut 8)"
 MY_P="firefox-tor-browser-${MY_P}"
 MY_TL="src-tor-launcher-0.2.30"
 MY_EFF="2021.7.13"
-MY_NOS="11.2.9"
+MY_NOS="11.2.11"
 MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
 MY_NOS="noscript-${MY_NOS}.xpi"
 SRC_URI="
