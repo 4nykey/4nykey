@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
-	MY_PV="5717e38"
+	MY_PV="aed94ea"
 	[[ -n ${PV%%*_*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -31,11 +31,11 @@ RDEPEND="
 	dev-cpp/antlr-cpp:4=
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 	>=dev-python/defcon-0.8.1[${PYTHON_USEDEP}]
-	>=dev-python/fontMath-0.6[${PYTHON_USEDEP}]
+	>=dev-python/fontMath-0.8.1[${PYTHON_USEDEP}]
 	dev-python/fontPens[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-4.22.1[ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.25.1[ufo(-),unicode(-),${PYTHON_USEDEP}]
 	>=dev-util/psautohint-2.3[${PYTHON_USEDEP}]
-	>=dev-python/tqdm-4.60[${PYTHON_USEDEP}]
+	>=dev-python/tqdm-4.61.2[${PYTHON_USEDEP}]
 	>=dev-python/ufoNormalizer-0.5.3[${PYTHON_USEDEP}]
 	>=dev-python/ufoProcessor-1.9[${PYTHON_USEDEP}]
 "

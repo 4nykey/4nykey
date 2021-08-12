@@ -53,7 +53,7 @@ pkg_setup() {
 		_v="$(ver_cut 1-3)${_v:0:1}$(ver_cut 5)"
 		export SETUPTOOLS_SCM_PRETEND_VERSION="${_v/p/.post}"
 	fi
-	MESON_BUILD_DIR="${WORKDIR}/${P}-build"
+	MESON_BUILD_DIR="${S%/*}/${P}-build"
 }
 
 python_prepare_all() {
@@ -67,8 +67,7 @@ python_prepare_all() {
 		-e "/build_exe': build_exe,/d" \
 		-i setup.py
 	sed -e '/-Werror/d' -i "${EMESON_SOURCE}"/meson.build
-	[[ -d "${WORKDIR}"/${MY_TD} ]] && \
-		mv "${WORKDIR}"/${MY_TD}/* "${S}"/tests/integration/data/
+	use test && mv ../${MY_TD}/* tests/integration/data/
 	distutils-r1_python_prepare_all
 }
 
