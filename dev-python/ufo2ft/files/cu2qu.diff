@@ -1,0 +1,73 @@
+--- a/Lib/ufo2ft/filters/cubicToQuadratic.py
++++ b/Lib/ufo2ft/filters/cubicToQuadratic.py
+@@ -1,7 +1,7 @@
+ import logging
+ 
+-from cu2qu.pens import Cu2QuPointPen
+-from cu2qu.ufo import CURVE_TYPE_LIB_KEY, DEFAULT_MAX_ERR
++from fontTools.pens.cu2quPen import Cu2QuPointPen
++from fontTools.cu2qu.ufo import CURVE_TYPE_LIB_KEY, DEFAULT_MAX_ERR
+ 
+ from ufo2ft.filters import BaseFilter
+ from ufo2ft.fontInfoData import getAttrWithFallback
+--- a/Lib/ufo2ft/preProcessor.py
++++ b/Lib/ufo2ft/preProcessor.py
+@@ -228,7 +228,7 @@ class TTFInterpolatablePreProcessor:
+         skipExportGlyphs=None,
+         filters=None,
+     ):
+-        from cu2qu.ufo import DEFAULT_MAX_ERR
++        from fontTools.cu2qu.ufo import DEFAULT_MAX_ERR
+ 
+         self.ufos = ufos
+         self.inplace = inplace
+@@ -267,7 +267,7 @@ class TTFInterpolatablePreProcessor:
+                 self.postFilters.append(post)
+ 
+     def process(self):
+-        from cu2qu.ufo import fonts_to_quadratic
++        from fontTools.cu2qu.ufo import fonts_to_quadratic
+ 
+         # first apply all custom pre-filters
+         for funcs, ufo, glyphSet in zip(self.preFilters, self.ufos, self.glyphSets):
+--- a/tests/outlineCompiler_test.py
++++ b/tests/outlineCompiler_test.py
+@@ -2,7 +2,7 @@ import logging
+ import os
+ 
+ import pytest
+-from cu2qu.ufo import font_to_quadratic
++from fontTools.cu2qu.ufo import font_to_quadratic
+ from fontTools.ttLib import TTFont
+ from fontTools.ttLib.tables._g_l_y_f import USE_MY_METRICS
+ 
+--- a/tests/preProcessor_test.py
++++ b/tests/preProcessor_test.py
+@@ -2,7 +2,7 @@ import logging
+ import os
+ 
+ import pytest
+-from cu2qu.ufo import CURVE_TYPE_LIB_KEY
++from fontTools.cu2qu.ufo import CURVE_TYPE_LIB_KEY
+ from fontTools import designspaceLib
+ 
+ import ufo2ft
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,6 +1,5 @@
+ fonttools[lxml,ufo]==4.26.1
+ defcon==0.8.1
+-cu2qu==1.6.7
+ compreffor==0.5.1
+ booleanOperations==0.9.0
+ cffsubr==0.2.8
+diff --git a/setup.py b/setup.py
+index 5dd40f3..b17aa69 100644
+@@ -30,7 +30,6 @@ setup(
+     tests_require=["pytest>=2.8"],
+     install_requires=[
+         "fonttools[ufo]>=4.26.1",
+-        "cu2qu>=1.6.7",
+         "cffsubr>=0.2.8",
+         "booleanOperations>=0.9.0",
+     ],

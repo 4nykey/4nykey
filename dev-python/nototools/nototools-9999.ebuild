@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}.git"
 else
-	MY_PV="39ff50d"
+	MY_PV="79d41e6"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -34,7 +34,6 @@ DEPEND="
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 	>=app-arch/brotli-1.0.7[python,${PYTHON_USEDEP}]
 	>=dev-python/click-7.1.2[${PYTHON_USEDEP}]
-	>=dev-python/cu2qu-1.6.7[${PYTHON_USEDEP}]
 	>=dev-python/defcon-0.6[${PYTHON_USEDEP}]
 	>=dev-python/fontMath-0.6[${PYTHON_USEDEP}]
 	>=dev-python/fontParts-0.9.2[${PYTHON_USEDEP}]
@@ -65,6 +64,7 @@ RDEPEND="
 BDEPEND="
 	dev-python/setuptools_scm[${PYTHON_USEDEP}]
 "
+PATCHES=( "${FILESDIR}"/UnicodeIO.diff )
 distutils_enable_tests pytest
 
 python_prepare_all() {

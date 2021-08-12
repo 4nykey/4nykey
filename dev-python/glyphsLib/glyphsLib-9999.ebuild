@@ -30,6 +30,7 @@ IUSE="test"
 RDEPEND="
 	>=dev-python/fonttools-4.19[ufo(-),unicode(-),${PYTHON_USEDEP}]
 	>=dev-python/ufoLib2-0.11.1[${PYTHON_USEDEP}]
+	>=dev-python/openstep-plist-0.2.2[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
