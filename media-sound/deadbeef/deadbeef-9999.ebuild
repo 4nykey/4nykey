@@ -6,7 +6,7 @@ EAPI=7
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/DeaDBeeF-Player/${PN}.git"
-	EGIT_SUBMODULES=( )
+	EGIT_SUBMODULES=( external/mp4p )
 	SRC_URI=""
 else
 	MY_PV="d2fc9ef"
