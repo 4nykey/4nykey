@@ -26,7 +26,7 @@ HOMEPAGE="https://www.antlr.org/"
 
 LICENSE="BSD"
 SLOT="${SLOT}/$(ver_cut 1-3)"
-DEPEND="
+BDEPEND="
 	dev-libs/utfcpp
 	sys-apps/util-linux
 "
