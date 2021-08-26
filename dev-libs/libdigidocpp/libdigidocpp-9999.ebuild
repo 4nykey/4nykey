@@ -37,7 +37,7 @@ DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
-	>=dev-cpp/xsd-4.0
+	>=dev-cpp/xsd-4.2.0_pre20210722
 	test? ( dev-libs/boost )
 	apidocs? ( app-doc/doxygen )
 	dev-util/cmake-openeid
@@ -65,6 +65,7 @@ src_configure() {
 		-DCMAKE_DISABLE_FIND_PACKAGE_PoDoFo=$(usex !pdf)
 		-DCMAKE_DISABLE_FIND_PACKAGE_SWIG=yes
 		-DCMAKE_DISABLE_FIND_PACKAGE_JNI=yes
+		-DXSD_EXECUTABLE="/usr/bin/codesynthesis-xsd"
 	)
 	cmake_src_configure
 }
