@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -7,7 +7,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://git.codesynthesis.com/${PN}/${PN}.git"
 else
-	MY_PV="dd5dbdd"
+	MY_PV="2056629"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV/_beta/-b.}"
 	SRC_URI="
 		https://git.codesynthesis.com/cgit/${PN}/${PN}/snapshot/${MY_PV}.tar.gz
@@ -23,7 +23,7 @@ DESCRIPTION="A collection of C++ libraries (successor of libcult)"
 HOMEPAGE="https://www.codesynthesis.com/projects/libcutl/"
 
 LICENSE="MIT"
-SLOT="0/${PV/_beta/-b.}"
+SLOT="0/1.11.0-b.8.z"
 IUSE="static-libs"
 
 RDEPEND="
@@ -32,12 +32,8 @@ DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
-	>=dev-util/build2-0.8.0
+	>=dev-util/build2-0.13.0
 "
-
-PATCHES=(
-	"${FILESDIR}"/${PN}-1.10.0-fix-c++14.patch
-)
 
 src_configure() {
 	local myconfigargs=(
