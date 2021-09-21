@@ -1,0 +1,10 @@
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -54,6 +54,7 @@ libuninameslist_fr_la_SOURCES = nameslis
+ libuninameslist_fr_la.$(OBJEXT): uninameslist-fr.h nameslist-dll.h buildnameslist.h
+ man_MANS += libuninameslist-fr.3
+ LIBADD += -luninameslist-fr
++EXTRA_libuninameslist_la_DEPENDENCIES = libuninameslist-fr.la
+ else
+ EXTRA_DIST += nameslist-fr.c uninameslist-fr.h libuninameslist-fr.3
+ endif

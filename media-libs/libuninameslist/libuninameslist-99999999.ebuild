@@ -24,7 +24,7 @@ else
 fi
 inherit autotools
 
-DESCRIPTION=" A library of Unicode names and annotation data"
+DESCRIPTION="A library of Unicode names and annotation data"
 HOMEPAGE="https://github.com/fontforge/${PN}"
 
 LICENSE="BSD"
@@ -37,6 +37,7 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 "
+PATCHES=( "${FILESDIR}"/frenchlib.diff )
 
 python_compile() {
 	cd py
@@ -56,6 +57,7 @@ src_prepare() {
 src_configure() {
 	local myeconfargs=(
 		$(use_enable static-libs static)
+		--enable-frenchlib
 	)
 	econf "${myeconfargs[@]}"
 }
