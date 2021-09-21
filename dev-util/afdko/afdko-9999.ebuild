@@ -30,13 +30,13 @@ IUSE="test"
 RDEPEND="
 	dev-cpp/antlr-cpp:4=
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
-	>=dev-python/defcon-0.8.1[${PYTHON_USEDEP}]
+	>=dev-python/defcon-0.9[${PYTHON_USEDEP}]
 	>=dev-python/fontMath-0.8.1[${PYTHON_USEDEP}]
 	dev-python/fontPens[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-4.25.1[ufo(-),unicode(-),${PYTHON_USEDEP}]
-	>=dev-util/psautohint-2.3[${PYTHON_USEDEP}]
-	>=dev-python/tqdm-4.61.2[${PYTHON_USEDEP}]
-	>=dev-python/ufoNormalizer-0.5.3[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.25.2[ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-util/psautohint-2.3.1[${PYTHON_USEDEP}]
+	>=dev-python/tqdm-4.62.2[${PYTHON_USEDEP}]
+	>=dev-python/ufoNormalizer-0.6[${PYTHON_USEDEP}]
 	>=dev-python/ufoProcessor-1.9[${PYTHON_USEDEP}]
 "
 DEPEND="
