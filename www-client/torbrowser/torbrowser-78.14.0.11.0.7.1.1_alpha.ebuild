@@ -3,7 +3,7 @@
 
 EAPI="7"
 
-FIREFOX_PATCHSET="firefox-78esr-patches-16.tar.xz"
+FIREFOX_PATCHSET="firefox-78esr-patches-17.tar.xz"
 
 LLVM_MAX_SLOT=12
 
@@ -365,6 +365,7 @@ pkg_setup() {
 
 src_prepare() {
 	use lto && rm -v "${WORKDIR}"/firefox-patches/*-LTO-Only-enable-LTO-*.patch
+	rm -f "${WORKDIR}"/firefox-patches/0045-bmo-1715254-Deny-clone3-to-force-glibc-fallback.patch
 	eapply "${WORKDIR}/firefox-patches"
 
 	# Allow user to apply any additional patches without modifing ebuild
