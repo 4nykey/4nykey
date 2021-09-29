@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -35,7 +35,7 @@ RDEPEND="
 	fuse? ( sys-fs/fuse:0 )
 	ncurses? ( sys-libs/ncurses:0 )
 	nilfs2? ( sys-fs/nilfs-utils )
-	ntfs? ( sys-fs/ntfs3g )
+	ntfs? ( sys-fs/ntfs3g:= )
 	reiserfs? ( sys-fs/progsreiserfs )
 	reiser4? ( sys-fs/reiser4progs )
 	xfs? ( sys-apps/util-linux )
@@ -64,6 +64,10 @@ src_prepare() {
 	default
 	eautoreconf
 	append-cflags -fno-strict-aliasing
+	sed \
+		-e "s:\<gcc\>:$(tc-getBUILD_CC) ${CFLAGS}:" \
+		-e "s:\<objcopy\>:$(tc-getBUILD_OBJCOPY):" \
+		-i fail-mbr/compile-mbr.sh
 }
 
 src_configure() {

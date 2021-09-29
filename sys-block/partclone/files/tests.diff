@@ -1,0 +1,22 @@
+--- a/tests/failmbr
++++ b/tests/failmbr
+@@ -1,5 +1,5 @@
+ #!/bin/bash
+ fail_mbr_dir="../fail-mbr"
+-hd $fail_mbr_dir/fail-mbr.bin > fail-mbr.hex
+-hd $fail_mbr_dir/fail-mbr.bin.orig > fail-mbr.hex.orig
++hexdump $fail_mbr_dir/fail-mbr.bin > fail-mbr.hex
++hexdump $fail_mbr_dir/fail-mbr.bin.orig > fail-mbr.hex.orig
+ diff fail-mbr.hex.orig fail-mbr.hex || true
+--- a/fail-mbr/compile-mbr.sh
++++ b/fail-mbr/compile-mbr.sh
+@@ -8,7 +8,7 @@ if dpkg-architecture -e amd64 || dpkg-ar
+     #gcc -Os -Wall -W -Wshadow -Wpointer-arith -Wmissing-prototypes -Wundef -Wstrict-prototypes -g -falign-jumps=1 -falign-loops=1 -falign-functions=1 -mno-mmx -mno-sse -mno-sse2 -mno-3dnow -fno-dwarf2-cfi-asm -fno-asynchronous-unwind-tables -m32 -fno-stack-protector -mno-stack-arg-probe -Werror -Wno-trampolines -DUSE_ASCII_FAILBACK=1 -DHAVE_UNIFONT_WIDTHSPEC=1  -mrtd -mregparm=3       -fno-builtin   -m32 -Wl,--build-id=none   -nostdlib -Wl,-N,-S -Wl,-N -Wl,-Ttext,0x7C00   -o fail-mbr.image fail-mbr.o
+ 
+     #echo "fail-mbr.bin [Done]. "
+-    gcc -c fail-mbr.S -o fail-mbr.image
++    ${CC} -c fail-mbr.S -o fail-mbr.image
+     objcopy  -O binary  --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .reginfo -R .rel.dyn fail-mbr.image fail-mbr.bin
+ else
+     echo "The architecture is not x86, so the file 'fail-mbr.bin' is not compiled"
+Двоичные файлы ./fail-mbr/fail-mbr.bin.orig и ./fail-mbr/fail-mbr.bin различаются
