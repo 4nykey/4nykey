@@ -30,11 +30,8 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.18.2[ufo(-),${PYTHON_USEDEP}]
-	>=dev-python/attrs-20.3[${PYTHON_USEDEP}]
-	$(python_gen_cond_dep \
-		'dev-python/typing-extensions[${PYTHON_USEDEP}]' python3_7
-	)
+	>=dev-python/fonttools-4.27[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/attrs-21.2[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
