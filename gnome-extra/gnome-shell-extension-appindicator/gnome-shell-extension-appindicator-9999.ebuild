@@ -3,10 +3,8 @@
 
 EAPI=7
 
-PLOCALES="
-	de fr hu it ja nl pt-BR ru sr tr zh-CN
-"
-inherit gnome2-utils plocale
+PYTHON_COMPAT=( python3_{7..9} )
+inherit gnome2 meson python-single-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/ubuntu/${PN}.git"
@@ -42,26 +40,16 @@ BDEPEND="
 	sys-devel/gettext
 "
 
-src_compile() {
-	emake translations
+src_prepare() {
+	sed -e 's:glib-compile-schemas:true:' -i schemas/meson.build
+	gnome2_src_prepare
 }
 
-src_install() {
-	local _u=$(awk -F'"' '/uuid/ {print $4}' metadata.json)
-	insinto /usr/share/gnome-shell/extensions/${_u}
-	doins -r interfaces-xml *.js{,on}
-	insinto /usr/share/glib-2.0/schemas
-	doins schemas/*.gschema.xml
-	dodoc {AUTHORS,README}.md
-	my_loc() {
-		insinto /usr/share/locale
-		doins -r locale/${1/-/_}
-	}
-	plocale_for_each_locale my_loc
-}
-
-pkg_preinst() {
-	gnome2_schemas_savelist
+src_configure() {
+	local emesonargs=(
+		-Dlocal_install=disabled
+	)
+	meson_src_configure
 }
 
 pkg_postinst() {
