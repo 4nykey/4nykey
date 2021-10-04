@@ -1,11 +1,11 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 MY_IN="Inconsolata-LGC-8adfef7" #20160404 https://github.com/MihailJP/Inconsolata-LGC
 MY_MI="migu-1m-20200307"        #20150712 https://osdn.net/pkg/mix-mplus-ipa/migu
-MY_MP="mplus-TESTFLIGHT-063"    #20171025 https://osdn.net/rel/mplus-fonts/TESTFLIGHT
+MY_MP="mplus-TESTFLIGHT-063a"    #20171025 https://osdn.net/rel/mplus-fonts/TESTFLIGHT
 S="${WORKDIR}"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3 cvs
@@ -33,7 +33,7 @@ LICENSE="OFL-1.1 IPAfont"
 SLOT="0"
 IUSE=""
 
-DEPEND="
+BDEPEND="
 	media-gfx/fontforge
 "
 
@@ -42,9 +42,9 @@ src_unpack() {
 		git-r3_src_unpack
 		EGIT_REPO_URI="https://github.com/MihailJP/Inconsolata-LGC.git" \
 		EGIT_CHECKOUT_DIR="${S}/${MY_IN}" git-r3_src_unpack
-		cvs_src_unpack
 		unpack ${MY_MP}.tar.xz
 		ln -s "${WORKDIR}"/${P}/files/${PN}_generator.sh "${S}"/${PN}_generator.sh
+		cvs_src_unpack
 	else
 		cp "${DISTDIR}"/${PN}_generator-${PV}.sh "${S}"/${PN}_generator.sh
 		unpack ${MY_IN}.tar.gz ${MY_MI}.zip
