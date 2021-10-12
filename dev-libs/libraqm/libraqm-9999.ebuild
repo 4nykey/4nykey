@@ -16,14 +16,14 @@ else
 	KEYWORDS="~amd64 ~x86"
 	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
-inherit autotools
+inherit meson
 
 DESCRIPTION="A library for complex text layout"
 HOMEPAGE="https://github.com/HOST-Oman/${PN}"
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="gtk-doc static-libs"
+IUSE="gtk-doc"
 
 RDEPEND="
 	media-libs/freetype:2
@@ -34,23 +34,12 @@ DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
-	dev-util/gtk-doc
+	gtk-doc? ( dev-util/gtk-doc )
 "
 
-src_prepare() {
-	default
-	eautoreconf
-}
-
 src_configure() {
-	local myeconfargs=(
-		$(use_enable gtk-doc)
-		$(use_enable static-libs static)
+	local emesonargs=(
+		$(meson_use gtk-doc docs)
 	)
-	econf "${myeconfargs[@]}"
-}
-
-src_install() {
-	default
-	find "${ED}" -type f -name '*.la' -delete
+	meson_src_configure
 }
