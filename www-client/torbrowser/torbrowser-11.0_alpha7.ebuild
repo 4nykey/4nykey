@@ -3,7 +3,9 @@
 
 EAPI="7"
 
-FIREFOX_PATCHSET="firefox-78esr-patches-17.tar.xz"
+MY_P="78.14.0"
+FIREFOX_PATCHSET="17"
+FIREFOX_PATCHSET="firefox-${MY_P%%.*}esr-patches-${FIREFOX_PATCHSET}.tar.xz"
 
 LLVM_MAX_SLOT=12
 
@@ -23,23 +25,25 @@ PATCH_URIS=(
 )
 
 # https://dist.torproject.org/torbrowser
-TOR_REL="$(ver_cut 4-6)"
-if [[ -z ${PV%%*_alpha} ]]; then
-	TOR_REL="$(ver_rs 2 a ${TOR_REL})"
+MY_PV="$(ver_cut 1-2)"
+MY_P+="esr-${MY_PV}-1-build1"
+if [[ -z ${PV%%*_alpha*} ]]; then
+	MY_PV+="a$(ver_cut 4)"
 else
+	MY_PV+=".$(ver_cut 3)"
 	KEYWORDS="~amd64 ~x86"
 fi
-TOR_REL="${TOR_REL%.0}"
-MY_P="$(ver_cut 1-3)esr-$(ver_cut 4-5)-$(ver_cut 7)-build$(ver_cut 8)"
+MY_PV="${MY_PV%.0}"
 MY_P="firefox-tor-browser-${MY_P}"
-MY_TL="src-tor-launcher-0.2.29"
+MY_TL="0.2.29"
+MY_TL="src-tor-launcher-${MY_TL}"
 MY_EFF="2021.7.13"
 MY_NOS="11.2.11"
 MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
 MY_NOS="noscript-${MY_NOS}.xpi"
 SRC_URI="
-	mirror://tor/${PN}/${TOR_REL}/src-${MY_P}.tar.xz -> ${P}.tar.xz
-	mirror://tor/${PN}/${TOR_REL}/${MY_TL}.tar.xz
+	mirror://tor/${PN}/${MY_PV}/src-${MY_P}.tar.xz
+	mirror://tor/${PN}/${MY_PV}/${MY_TL}.tar.xz
 	https://www.eff.org/files/${MY_EFF}
 	https://secure.informaction.com/download/releases/${MY_NOS}
 	${PATCH_URIS[@]}
@@ -49,7 +53,7 @@ RESTRICT="primaryuri"
 DESCRIPTION="The Tor Browser"
 HOMEPAGE="https://www.torproject.org"
 
-SLOT="0/esr$(ver_cut 1)"
+SLOT="0"
 LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
 LICENSE+=" BSD CC-BY-3.0"
 IUSE="+clang cpu_flags_arm_neon dbus debug eme-free geckodriver +gmp-autoupdate
@@ -717,7 +721,7 @@ src_configure() {
 	mozconfig_add_options_ac 'torbrowser' --with-app-basename=${PN}
 	mozconfig_add_options_ac 'torbrowser' --disable-tor-browser-update
 	mozconfig_add_options_ac 'torbrowser' --enable-tor-launcher
-	mozconfig_add_options_ac 'torbrowser' --with-tor-browser-version=${TOR_REL}
+	mozconfig_add_options_ac 'torbrowser' --with-tor-browser-version=${MY_PV}
 	mozconfig_add_options_ac 'torbrowser' --disable-tor-browser-data-outside-app-dir
 	mozconfig_add_options_ac 'torbrowser' --with-branding=browser/branding/official
 	mozconfig_add_options_ac 'torbrowser' --disable-webrtc
