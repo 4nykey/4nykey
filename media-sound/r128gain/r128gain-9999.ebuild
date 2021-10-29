@@ -40,6 +40,7 @@ DEPEND="
 "
 BDEPEND="
 	test? (
+		media-sound/sox[wavpack]
 		dev-python/requests[${PYTHON_USEDEP}]
 	)
 "
