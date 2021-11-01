@@ -4,6 +4,7 @@
 EAPI=7
 
 PYTHON_COMPAT=( python3_{7..9} )
+DISTUTILS_USE_SETUPTOOLS=pyproject.toml
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -28,9 +29,9 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.19[ufo(-),unicode(-),${PYTHON_USEDEP}]
-	>=dev-python/ufoLib2-0.11.1[${PYTHON_USEDEP}]
-	>=dev-python/openstep-plist-0.2.2[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.27.1[ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/ufoLib2-0.11.4[${PYTHON_USEDEP}]
+	>=dev-python/openstep-plist-0.3[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
@@ -42,9 +43,6 @@ BDEPEND="
 		>=app-text/xmldiff-2.2[${PYTHON_USEDEP}]
 	)
 "
-PATCHES=(
-	"${FILESDIR}"/${PN}-setup.diff
-)
 distutils_enable_tests pytest
 
 pkg_setup() {
