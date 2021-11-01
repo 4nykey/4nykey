@@ -3,13 +3,13 @@
 
 EAPI="7"
 
-MY_P="78.14.0"
-FIREFOX_PATCHSET="17"
+MY_P="78.15.0"
+FIREFOX_PATCHSET="19"
 FIREFOX_PATCHSET="firefox-${MY_P%%.*}esr-patches-${FIREFOX_PATCHSET}.tar.xz"
 
-LLVM_MAX_SLOT=12
+LLVM_MAX_SLOT=13
 
-PYTHON_COMPAT=( python3_{7..9} )
+PYTHON_COMPAT=( python3_{7..10} )
 PYTHON_REQ_USE="ncurses,sqlite,ssl"
 
 WANT_AUTOCONF="2.1"
@@ -26,7 +26,7 @@ PATCH_URIS=(
 
 # https://dist.torproject.org/torbrowser
 MY_PV="$(ver_cut 1-2)"
-MY_P+="esr-${MY_PV}-1-build1"
+MY_P+="esr-${MY_PV}-1-build3"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
 else
@@ -35,7 +35,7 @@ else
 fi
 MY_PV="${MY_PV%.0}"
 MY_P="firefox-tor-browser-${MY_P}"
-MY_TL="0.2.29"
+MY_TL="0.2.30"
 MY_TL="src-tor-launcher-${MY_TL}"
 MY_EFF="2021.7.13"
 MY_NOS="11.2.11"
@@ -73,6 +73,14 @@ BDEPEND="${PYTHON_DEPS}
 	virtual/pkgconfig
 	>=virtual/rust-1.41.0
 	|| (
+		(
+			sys-devel/clang:13
+			sys-devel/llvm:13
+			clang? (
+				=sys-devel/lld-13*
+				pgo? ( =sys-libs/compiler-rt-sanitizers-13*[profile] )
+			)
+		)
 		(
 			sys-devel/clang:12
 			sys-devel/llvm:12
