@@ -8,7 +8,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://git.codesynthesis.com/${PN}/${PN}.git"
 else
 	MY_PV="a54c695"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV/_beta/-b.}"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV/_beta/-b.}"
 	SRC_URI="
 		https://git.codesynthesis.com/cgit/${PN}/${PN}/snapshot/${MY_PV}.tar.gz
 		-> ${P}.tar.gz
@@ -27,21 +27,14 @@ SLOT="0"
 IUSE="static-libs"
 
 RDEPEND="
-	>=dev-cpp/libcutl-1.11.0_pre20210722:=
+	>=dev-cpp/libcutl-1.11.0_beta9:=
 "
 DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
-	>=dev-util/build2-0.13.0
+	>=dev-util/build2-0.14.0
 "
-
-src_prepare() {
-	default
-	tc-is-gcc && export CCACHE_DISABLE=1
-	touch cli/doc/cli.{1,xhtml}
-	sed -e '/\(html2ps\|ps2pdf14\)/d' -i cli/doc/doc.sh
-}
 
 src_configure() {
 	local myconfigargs=(
@@ -64,11 +57,10 @@ src_configure() {
 }
 
 src_compile() {
+	tc-is-gcc && local -x CCACHE_DISABLE=1
 	MAKE=b \
 	MAKEOPTS="--jobs $(makeopts_jobs) --verbose 3" \
 	emake cli/
-	cd cli/doc
-	sh ./doc.sh
 }
 
 src_test() {
@@ -81,5 +73,9 @@ src_install() {
 	MAKE=b \
 	MAKEOPTS="--jobs $(makeopts_jobs) --verbose 3" \
 	emake install: cli/
+if false; then
 	einstalldocs
+	mkdir -p "${ED}"/usr/share/doc/${PF}/html
+	mv -f "${ED}"/usr/share/doc/${PF}/*.xhtml "${ED}"/usr/share/doc/${PF}/html
+fi
 }
