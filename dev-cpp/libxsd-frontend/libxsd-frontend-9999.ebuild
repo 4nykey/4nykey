@@ -7,8 +7,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://git.codesynthesis.com/${PN}/${PN}.git"
 else
-	inherit vcs-snapshot
-	MY_PV="04fbe05"
+	MY_PV="949fad9"
 	[[ -n ${PV%%*_*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		https://git.codesynthesis.com/cgit/${PN}/${PN}/snapshot/${MY_PV}.tar.gz
@@ -16,18 +15,19 @@ else
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${MY_PV}"
 fi
 inherit toolchain-funcs multiprocessing
 
 DESCRIPTION="A compiler frontend for the W3C XML Schema definition language"
 HOMEPAGE="https://www.codesynthesis.com/projects/libxsd-frontend/"
 LICENSE="GPL-2"
-SLOT="0/2.1.0-b.1.z"
+SLOT="0/2.1.0-b.2"
 IUSE="static-libs"
 RDEPEND="
 	>=dev-libs/xerces-c-3.0.0
 	dev-libs/boost:=[threads]
-	>=dev-cpp/libcutl-1.11.0_pre20210722:=
+	>=dev-cpp/libcutl-1.11.0_beta9:=
 "
 DEPEND="
 	${RDEPEND}

@@ -23,7 +23,7 @@ DESCRIPTION="A collection of C++ libraries (successor of libcult)"
 HOMEPAGE="https://www.codesynthesis.com/projects/libcutl/"
 
 LICENSE="MIT"
-SLOT="0/1.11.0-b.8.z"
+SLOT="0/1.11.0-b.9"
 IUSE="static-libs"
 
 RDEPEND="
@@ -32,7 +32,7 @@ DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
-	>=dev-util/build2-0.13.0
+	>=dev-util/build2-0.14.0
 "
 
 src_configure() {

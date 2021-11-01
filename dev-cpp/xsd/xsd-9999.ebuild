@@ -7,7 +7,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://git.codesynthesis.com/${PN}/${PN}.git"
 else
-	MY_PV="4a6e690"
+	MY_PV="7ff03f4"
 	[[ -n ${PV%%*_*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		https://git.codesynthesis.com/cgit/${PN}/${PN}/snapshot/${MY_PV}.tar.gz
@@ -27,8 +27,8 @@ IUSE="doc examples test zlib"
 RDEPEND="
 	>=dev-libs/xerces-c-3.0.0
 	dev-libs/boost:=[threads]
-	>=dev-cpp/libcutl-1.11.0_pre20210722:=
-	>=dev-cpp/libxsd-frontend-2.1.0_pre20210722:=
+	>=dev-cpp/libcutl-1.11.0_beta9:=
+	>=dev-cpp/libxsd-frontend-2.1.0_beta2:=
 	zlib? ( sys-libs/zlib )
 "
 DEPEND="
@@ -39,8 +39,12 @@ BDEPEND="
 	dev-util/cli
 	doc? ( app-doc/doxygen )
 "
-# collision with xsd of dev-lang/mono
-PATCHES=( "${FILESDIR}"/b.diff )
+
+src_prepare() {
+	# collision with xsd of dev-lang/mono
+	grep -rl '{xsd}:'|xargs sed 's,{xsd}:,{codesynthesis-xsd}:,' -i
+	default
+}
 
 src_configure() {
 	local myconfigargs=(
