@@ -1,4 +1,4 @@
-# Copyright 2018-2020 Gentoo Authors
+# Copyright 2018-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -26,9 +26,14 @@ IUSE="test"
 
 RDEPEND="
 	dev-db/sqlite:3
-	virtual/pkgconfig
+	dev-util/pkgconf:=
 "
-DEPEND="${RDEPEND}"
+DEPEND="
+	${RDEPEND}
+"
+BDEPEND="
+	dev-util/cli
+"
 PATCHES=(
 	"${FILESDIR}"/${PN}-nousrlocal.diff
 )
@@ -52,57 +57,31 @@ myb() {
 	)
 
 	tc-is-gcc && export CCACHE_DISABLE=1
-	export LD_LIBRARY_PATH="${S}/libbutl/libbutl:${S}/libpkgconf/libpkgconf:${LD_LIBRARY_PATH}"
 	set -- "${@}" "${myconfigargs[@]}"
 	echo "${@}"
 	"${@}" || die "${@} failed"
 }
 
 src_prepare() {
-	local _b _pc="$(tc-getPKG_CONFIG)"
-
+	local _pc="$(tc-getPKG_CONFIG)"
 	printf 'cxx.libs += %s\ncxx.poptions += %s\n' \
 		"$(${_pc} sqlite3 --libs)" "$(${_pc} sqlite3 --cflags)" >> \
 		libodb-sqlite/buildfile
-	sed \
-		-e 's:libsqlite3[/]\?::' \
-		-i buildfile build/bootstrap.build
-
-	if has_version dev-util/pkgconf; then
-		for _b in build2/{lib,}build2/buildfile; do
-			printf 'cxx.libs += %s\ncxx.poptions += %s\n' \
-				"$(${_pc} libpkgconf --libs)" "$(${_pc} libpkgconf --cflags)" >> \
-				"${_b}"
-		done
-		sed \
-			-e 's:libpkgconf[/]\?::' \
-			-i buildfile build/bootstrap.build
-	fi
-
+	printf 'cxx.libs += %s\ncxx.poptions += %s\n' \
+		"$(${_pc} libpkgconf --libs)" "$(${_pc} libpkgconf --cflags)" >> \
+		build2/libbuild2/cc/buildfile
+	sed -e 's:lib\(pkgconf\|sqlite3\)/ ::g' -i buildfile
+	rm -rf libpkgconf libsqlite3
 	default
-	emake -C build2 -f bootstrap.gmake CXX=$(tc-getCXX)
-}
-
-src_configure() {
-	myb ./build2/build2/b-boot configure
 }
 
 src_compile() {
-	myb ./build2/build2/b-boot update-for-install
-
-	use test || return
-	cp -a build2 testdir
-	cd testdir
-	myb ./build2/b update-for-test
-}
-
-src_test() {
-	cd testdir
-	myb ./build2/b test
+	emake -C build2 -f bootstrap.gmake CXX=$(tc-getCXX)
+	myb "${S}"/build2/build2/b-boot configure
 }
 
 src_install() {
-	myb ./build2/build2/b-boot install
+	myb "${S}"/build2/build2/b-boot install: build2/ bpkg/ bdep/
 	mkdir -p "${ED}"/usr/share/doc/${PF}/html
 	mv -f "${ED}"/usr/share/doc/${PF}/*.xhtml "${ED}"/usr/share/doc/${PF}/html
 }
