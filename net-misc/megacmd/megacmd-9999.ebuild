@@ -28,7 +28,7 @@ SLOT="0"
 IUSE="pcre"
 
 DEPEND="
-	>=net-misc/meganz-sdk-3.8:=[sodium(+),sqlite]
+	>=net-misc/meganz-sdk-3.9:=[sodium(+),sqlite]
 	pcre? ( dev-libs/libpcre:3[cxx] )
 	sys-libs/readline:0
 "
@@ -39,13 +39,17 @@ BDEPEND="
 	sys-devel/autoconf-archive
 "
 DOCS=( {README,UserGuide}.md contrib/docs )
-PATCHES=( "${FILESDIR}"/sdk38.diff )
+PATCHES=(
+	"${FILESDIR}"/sdk39.diff
+	"${FILESDIR}"/autotools.diff
+)
 
 src_prepare() {
 	sed \
 		-e '/SUBDIRS.*sdk/d' \
 		-e '/sdk\/m4/d' \
 		-e 's:LMEGAINC=.*:PKG_CHECK_MODULES([MEGA],[libmega])\nLMEGAINC=${MEGA_CFLAGS}:' \
+		-e '/AX_CXX_COMPILE_STDCXX/d' \
 		-i Makefile.am configure.ac
 	sed \
 		-e 's:\$(top_builddir)/sdk/src/libmega\.la:$(MEGA_LIBS):' \
@@ -60,8 +64,8 @@ src_prepare() {
 
 src_configure() {
 	local myeconfargs=(
-		--with-readline="${EROOT}/usr/$(get_libdir)"
-		$(use_with pcre pcre "${EROOT}/usr")
+		--with-readline="/usr/$(get_libdir)"
+		$(use_with pcre pcre "/usr")
 	)
 	econf "${myeconfargs[@]}"
 }

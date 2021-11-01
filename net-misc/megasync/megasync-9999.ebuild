@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_SUBMODULES=( -src/MEGASync/mega )
 	SRC_URI=
 else
-	MY_PV="52c43e9"
+	MY_PV="563aa08"
 	SRC_URI="
 		mirror://githubcl/meganz/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -53,7 +53,9 @@ src_prepare() {
 	local PATCHES=(
 		"${FILESDIR}"/${PN}-qmake.diff
 	)
-	cp -r "${EROOT}"/usr/share/meganz-sdk/bindings "${S}"/src/MEGASync/mega/
+	sed \
+		-e "/include(/ s:mega/bindings/qt/:${EROOT}/usr/share/&:" \
+		-i src/MEGASync/MEGASync.pro
 	cmake_src_prepare
 	mv -f src/MEGAShellExtDolphin/CMakeLists{_kde5,}.txt
 	rm -f src/MEGAShellExtDolphin/megasync-plugin.moc
@@ -73,6 +75,7 @@ src_configure() {
 		CONFIG$(usex thunar + -)=with_thu
 		CONFIG-=with_updater
 		CONFIG-=with_tools
+		MEGASDK_BASE_PATH="${EROOT}/usr"
 	)
 	eqmake5 "${eqmakeargs[@]}"
 	use dolphin && cmake_src_configure

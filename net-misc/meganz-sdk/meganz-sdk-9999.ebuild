@@ -24,7 +24,7 @@ HOMEPAGE="https://github.com/meganz/sdk"
 
 LICENSE="BSD-2"
 # awk '/define/ {print $3}' include/mega/version.h|awk 'BEGIN{RS="";FS="\n"}{printf $1*10000+$2*100+$3}'
-SLOT="0/30802"
+SLOT="0/30908"
 IUSE="examples ffmpeg freeimage fuse hardened inotify libuv mediainfo qt raw +sqlite test"
 REQUIRED_USE="
 	examples? ( sqlite )
@@ -56,15 +56,21 @@ DEPEND="
 	${RDEPEND}
 	test? ( dev-cpp/gtest )
 "
+PATCHES=( "${FILESDIR}"/freeimage.diff )
 
 src_prepare() {
 	default
 	use qt && sed \
+		-e "/^MEGASDK_BASE_PATH =/ s:=.*:= ${EROOT}/usr/:" \
+		-e 's:VPATH += \$\$MEGASDK_BASE_PATH:&/share/mega:' \
+		-e '/^INCLUDEPATH +=/ s:/bindings/qt:/share/mega&:' \
 		-e '/SOURCES += src\// s:+:-:' \
-		-e '/!exists.*config.h/ s:!::' \
 		-e 's:CONFIG(USE_MEGAAPI) {:&\nLIBS += -lmega:' \
 		-e '/^unix:!macx {/,/^}/d' \
+		-e '/QMAKE_CXXFLAGS +=/d' \
 		-i bindings/qt/sdk.pri
+	printf 'unix { INCLUDEPATH += $$MEGASDK_BASE_PATH/include/mega/posix }\n' >> \
+		bindings/qt/sdk.pri
 	use test && sed \
 		-e 's:\$(GTEST_DIR)/lib/lib\([^ ]\+\)\.la:-l\1:g' \
 		-e 's: tests/tool_purge_account::' \
@@ -104,6 +110,6 @@ src_install() {
 	find "${ED}" -type f -name '*.la' -delete
 
 	use qt || return
-	insinto /usr/share/${PN}/bindings/qt
+	insinto /usr/share/mega/bindings/qt
 	doins bindings/qt/*.{h,cpp,pri}
 }

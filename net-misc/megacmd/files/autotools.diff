@@ -1,0 +1,22 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -46,7 +46,6 @@ AC_OUTPUT
+ # AC_GNU_SOURCE
+ AC_USE_SYSTEM_EXTENSIONS
+ 
+-AM_INIT_AUTOMAKE([1.11 foreign silent-rules])
+ AC_CONFIG_HEADERS([src/megacmdconfig.h]) #this avoids inline definitions of stuff already defined in sdk's config.h (e.g: -DPACKAGE_NAME)
+ 
+ LT_INIT([shared disable-static win32-dll])
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -35,9 +35,6 @@ if ANDROID
+ AM_LIBTOOLFLAGS="--tag=CXX"
+ endif
+ 
+-if LINUX
+-AM_LIBTOOLFLAGS="--tag=CXX"
+-endif
+ 
+ VERSION_INFO=$(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
+ 
