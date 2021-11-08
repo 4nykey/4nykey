@@ -3,13 +3,16 @@
 
 EAPI="7"
 
-MY_P="91.2.0"
-FIREFOX_PATCHSET="03"
-FIREFOX_PATCHSET="firefox-${MY_P%%.*}-patches-${FIREFOX_PATCHSET}.tar.xz"
+# https://dist.torproject.org/torbrowser
+MY_PV="$(ver_cut 1-2)"
+MY_P="91.3.0esr-${MY_PV}-1-build1"
+FIREFOX_PATCHSET="01"
+FIREFOX_PATCHSET="firefox-${MY_P%%.*}esr-patches-${FIREFOX_PATCHSET}.tar.xz"
+MY_P="firefox-tor-browser-${MY_P}"
 
 LLVM_MAX_SLOT=13
 
-PYTHON_COMPAT=( python3_{7..9} )
+PYTHON_COMPAT=( python3_{7..10} )
 PYTHON_REQ_USE="ncurses,sqlite,ssl"
 
 WANT_AUTOCONF="2.1"
@@ -21,12 +24,9 @@ inherit autotools check-reqs desktop flag-o-matic gnome2-utils linux-info \
 	virtualx xdg
 
 PATCH_URIS=(
-	https://dev.gentoo.org/~{axs,polynomial-c,whissi}/mozilla/patchsets/${FIREFOX_PATCHSET}
+	https://dev.gentoo.org/~{polynomial-c,whissi}/mozilla/patchsets/${FIREFOX_PATCHSET}
 )
 
-# https://dist.torproject.org/torbrowser
-MY_PV="$(ver_cut 1-2)"
-MY_P+="esr-${MY_PV}-1-build1"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
 else
@@ -34,7 +34,6 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 MY_PV="${MY_PV%.0}"
-MY_P="firefox-tor-browser-${MY_P}"
 MY_TL="0.2.31"
 MY_TL="src-tor-launcher-${MY_TL}"
 MY_EFF="2021.7.13"
@@ -56,13 +55,14 @@ HOMEPAGE="https://www.torproject.org"
 SLOT="0"
 LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
 LICENSE+=" BSD CC-BY-3.0"
-IUSE="+clang cpu_flags_arm_neon dbus debug eme-free geckodriver +gmp-autoupdate
-	hardened hwaccel jack lto +openh264 pgo pulseaudio screencast sndio selinux
-	+system-av1 +system-harfbuzz +system-icu +system-jpeg +system-libevent
-	+system-libvpx +system-webp wayland wifi"
+
+IUSE="+clang cpu_flags_arm_neon dbus debug eme-free hardened hwaccel"
+IUSE+=" jack lto +openh264 pgo pulseaudio sndio selinux"
+IUSE+=" +system-av1 +system-harfbuzz +system-icu +system-jpeg +system-libevent +system-libvpx +system-webp"
+IUSE+=" wayland wifi"
 
 REQUIRED_USE="debug? ( !system-av1 )
-	screencast? ( wayland )"
+	wifi? ( dbus )"
 
 BDEPEND="${PYTHON_DEPS}
 	app-arch/unzip
@@ -129,6 +129,7 @@ CDEPEND="
 	>=dev-libs/libffi-3.0.10:=
 	media-video/ffmpeg
 	x11-libs/libX11
+	x11-libs/libxcb
 	x11-libs/libXcomposite
 	x11-libs/libXdamage
 	x11-libs/libXext
@@ -139,7 +140,6 @@ CDEPEND="
 		sys-apps/dbus
 		dev-libs/dbus-glib
 	)
-	screencast? ( media-video/pipewire:0/0.3 )
 	system-av1? (
 		>=media-libs/dav1d-0.8.1:=
 		>=media-libs/libaom-1.0.0:=
@@ -176,6 +176,8 @@ RDEPEND="${CDEPEND}
 	selinux? ( sec-policy/selinux-mozilla )"
 
 DEPEND="${CDEPEND}
+	x11-libs/libICE
+	x11-libs/libSM
 	pulseaudio? (
 		|| (
 			media-sound/pulseaudio
@@ -359,6 +361,34 @@ pkg_setup() {
 		# Build system is using /proc/self/oom_score_adj, bug #604394
 		addpredict /proc/self/oom_score_adj
 
+		if use pgo ; then
+			# Allow access to GPU during PGO run
+			local ati_cards mesa_cards nvidia_cards render_cards
+			shopt -s nullglob
+
+			ati_cards=$(echo -n /dev/ati/card* | sed 's/ /:/g')
+			if [[ -n "${ati_cards}" ]] ; then
+				addpredict "${ati_cards}"
+			fi
+
+			mesa_cards=$(echo -n /dev/dri/card* | sed 's/ /:/g')
+			if [[ -n "${mesa_cards}" ]] ; then
+				addpredict "${mesa_cards}"
+			fi
+
+			nvidia_cards=$(echo -n /dev/nvidia* | sed 's/ /:/g')
+			if [[ -n "${nvidia_cards}" ]] ; then
+				addpredict "${nvidia_cards}"
+			fi
+
+			render_cards=$(echo -n /dev/dri/renderD128* | sed 's/ /:/g')
+			if [[ -n "${render_cards}" ]] ; then
+				addpredict "${render_cards}"
+			fi
+
+			shopt -u nullglob
+		fi
+
 		if ! mountpoint -q /dev/shm ; then
 			# If /dev/shm is not available, configure is known to fail with
 			# a traceback report referencing /usr/lib/pythonN.N/multiprocessing/synchronize.py
@@ -376,7 +406,6 @@ pkg_setup() {
 
 src_prepare() {
 	use lto && rm -v "${WORKDIR}"/firefox-patches/*-LTO-Only-enable-LTO-*.patch
-	rm -f "${WORKDIR}"/firefox-patches/00{11,34,35,36}-*.patch
 	eapply "${WORKDIR}/firefox-patches"
 
 	# Allow user to apply any additional patches without modifing ebuild
@@ -576,8 +605,6 @@ src_configure() {
 	mozconfig_use_enable dbus
 
 	use eme-free && mozconfig_add_options_ac '+eme-free' --disable-eme
-
-	mozconfig_use_enable geckodriver
 
 	if use hardened ; then
 		mozconfig_add_options_ac "+hardened" --enable-hardening
@@ -838,16 +865,6 @@ src_install() {
 		|| die "failed to add prefs to force hardware-accelerated rendering to all-gentoo.js"
 	fi
 
-	if ! use gmp-autoupdate ; then
-		local plugin
-		for plugin in "${MOZ_GMP_PLUGIN_LIST[@]}" ; do
-			einfo "Disabling auto-update for ${plugin} plugin ..."
-			cat >>"${GENTOO_PREFS}" <<-EOF || die "failed to disable autoupdate for ${plugin} media plugin"
-			pref("media.${plugin}.autoupdate",   false);
-			EOF
-		done
-	fi
-
 	# Force the graphite pref if USE=system-harfbuzz is enabled, since the pref cannot disable it
 	if use system-harfbuzz ; then
 		cat >>"${GENTOO_PREFS}" <<-EOF || die "failed to set gfx.font_rendering.graphite.enabled pref"
@@ -861,16 +878,6 @@ src_install() {
 		pref("extensions.torlauncher.prompt_at_startup", false);
 		pref("extensions.torlauncher.quickstart", true);
 	EOF
-
-	# Install geckodriver
-	if use geckodriver ; then
-		einfo "Installing geckodriver into ${ED}${MOZILLA_FIVE_HOME} ..."
-		pax-mark m "${BUILD_DIR}"/dist/bin/geckodriver
-		exeinto "${MOZILLA_FIVE_HOME}"
-		doexe "${BUILD_DIR}"/dist/bin/geckodriver
-
-		dosym ${MOZILLA_FIVE_HOME}/geckodriver /usr/bin/geckodriver
-	fi
 
 	# Install icons
 	local icon_srcdir="${S}/browser/branding/official"
@@ -917,16 +924,6 @@ pkg_preinst() {
 pkg_postinst() {
 	xdg_pkg_postinst
 
-	if ! use gmp-autoupdate ; then
-		elog "USE='-gmp-autoupdate' has disabled the following plugins from updating or"
-		elog "installing into new profiles:"
-		local plugin
-		for plugin in "${MOZ_GMP_PLUGIN_LIST[@]}" ; do
-			elog "\t ${plugin}"
-		done
-		elog
-	fi
-
 	if use pulseaudio && has_version ">=media-sound/apulse-0.1.12-r4" ; then
 		elog "Apulse was detected at merge time on this system and so it will always be"
 		elog "used for sound.  If you wish to use pulseaudio instead please unmerge"
@@ -934,25 +931,13 @@ pkg_postinst() {
 		elog
 	fi
 
-	local show_doh_information show_normandy_information
+	local show_doh_information
+	local show_normandy_information
 
 	if [[ -z "${REPLACING_VERSIONS}" ]] ; then
 		# New install; Tell user that DoH is disabled by default
 		show_doh_information=yes
 		show_normandy_information=yes
-	else
-		local replacing_version
-		for replacing_version in ${REPLACING_VERSIONS} ; do
-			if ver_test "${replacing_version}" -lt 70 ; then
-				# Tell user only once about our DoH default
-				show_doh_information=yes
-			fi
-
-			if ver_test "${replacing_version}" -lt 74.0-r2 ; then
-				# Tell user only once about our Normandy default
-				show_normandy_information=yes
-			fi
-		done
 	fi
 
 	if [[ -n "${show_doh_information}" ]] ; then
