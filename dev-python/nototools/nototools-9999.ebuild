@@ -30,7 +30,7 @@ DEPEND="
 	>=dev-util/afdko-3.4[${PYTHON_USEDEP}]
 	>=dev-python/appdirs-1.4.4[${PYTHON_USEDEP}]
 	>=dev-python/attrs-19.3[${PYTHON_USEDEP}]
-	>=dev-python/black-19.10_beta0[${PYTHON_USEDEP}]
+	>=dev-python/black-21.8_beta0[${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 	>=app-arch/brotli-1.0.7[python,${PYTHON_USEDEP}]
 	>=dev-python/click-7.1.2[${PYTHON_USEDEP}]
@@ -40,14 +40,14 @@ DEPEND="
 	>=dev-python/fontPens-0.2.4[${PYTHON_USEDEP}]
 	>=dev-python/fonttools-4.11[ufo(-),${PYTHON_USEDEP}]
 	>=dev-python/MutatorMath-3.0.1[${PYTHON_USEDEP}]
-	>=dev-python/pathspec-0.8[${PYTHON_USEDEP}]
-	>=dev-python/pillow-7.1.2[${PYTHON_USEDEP}]
-	>=dev-python/pyclipper-1.1.0_p1[${PYTHON_USEDEP}]
+	>=dev-python/pathspec-0.9[${PYTHON_USEDEP}]
+	>=dev-python/pillow-8.3.2[${PYTHON_USEDEP}]
+	>=dev-python/pyclipper-1.2.1[${PYTHON_USEDEP}]
 	>=dev-python/pytz-2020.1[${PYTHON_USEDEP}]
-	>=dev-python/regex-2020.4[${PYTHON_USEDEP}]
+	>=dev-python/regex-2020.5.14[${PYTHON_USEDEP}]
 	>=media-gfx/scour-0.37[${PYTHON_USEDEP}]
 	>=dev-python/toml-0.10.1[${PYTHON_USEDEP}]
-	>=dev-python/typed-ast-1.4.1[${PYTHON_USEDEP}]
+	>=dev-python/typed-ast-1.4.2[${PYTHON_USEDEP}]
 	>=dev-python/ufoNormalizer-0.4.1[${PYTHON_USEDEP}]
 	>=dev-python/ufoProcessor-1.9[${PYTHON_USEDEP}]
 	>=dev-python/py-zopfli-0.1.7[${PYTHON_USEDEP}]
@@ -64,7 +64,6 @@ RDEPEND="
 BDEPEND="
 	dev-python/setuptools_scm[${PYTHON_USEDEP}]
 "
-PATCHES=( "${FILESDIR}"/UnicodeIO.diff )
 distutils_enable_tests pytest
 
 python_prepare_all() {
@@ -79,14 +78,4 @@ python_prepare_all() {
 	grep -rl CLDR_DIR nototools | xargs sed -i \
 		-e "/CLDR_DIR =/s:=.*:= '${EROOT}/usr/share/unicode/cldr':"
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
-}
-
-python_test() {
-	cd tests
-	# ./run_tests
-	local _t
-	for _t in *_test.py; do
-		echo "Running ${_t}"
-		${EPYTHON} "${_t}" || die "${_t} failed with ${EPYTHON}"
-	done
 }
