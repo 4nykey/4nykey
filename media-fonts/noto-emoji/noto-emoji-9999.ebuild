@@ -32,12 +32,13 @@ BDEPEND="
 !binary? (
 	${PYTHON_DEPS}
 	$(python_gen_any_dep '
-		>=dev-python/nototools-0.2.13[${PYTHON_USEDEP}]
+		>=dev-python/nototools-0.2.16[${PYTHON_USEDEP}]
 	')
 	media-gfx/pngquant
 	virtual/imagemagick-tools[png]
 	app-arch/zopfli
 	x11-libs/cairo
+	>=app-i18n/unicode-emoji-14.0
 )
 "
 PATCHES=( "${FILESDIR}"/${PN}-makefile.diff )
@@ -53,6 +54,7 @@ pkg_setup() {
 
 src_prepare() {
 	default
+	rm -f fonts/NotoColorEmoji_WindowsCompatible.ttf
 	use binary && return
 	sed \
 		-e 's:^\t@:\t:' \
