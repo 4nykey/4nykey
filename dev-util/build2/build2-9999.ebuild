@@ -31,9 +31,6 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 "
-BDEPEND="
-	dev-util/cli
-"
 PATCHES=(
 	"${FILESDIR}"/${PN}-nousrlocal.diff
 )
