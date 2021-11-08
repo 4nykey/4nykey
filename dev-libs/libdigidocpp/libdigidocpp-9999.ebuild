@@ -37,7 +37,7 @@ DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
-	>=dev-cpp/xsd-4.2.0_pre20210722
+	>=dev-cpp/xsd-4.2.0_beta2
 	test? ( dev-libs/boost )
 	apidocs? ( app-doc/doxygen )
 	dev-util/cmake-openeid
