@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_SUBMODULES=( -src/MEGASync/mega )
 	SRC_URI=
 else
-	MY_PV="563aa08"
+	MY_PV="8d77d99"
 	SRC_URI="
 		mirror://githubcl/meganz/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -76,6 +76,7 @@ src_configure() {
 		CONFIG-=with_updater
 		CONFIG-=with_tools
 		MEGASDK_BASE_PATH="${EROOT}/usr"
+		CONFIG+=nofreeimage
 	)
 	eqmake5 "${eqmakeargs[@]}"
 	use dolphin && cmake_src_configure
