@@ -37,7 +37,7 @@ RDEPEND="
 	>=dev-python/lxml-4.5[${PYTHON_USEDEP}]
 	>=app-arch/brotli-1.0.9[python,${PYTHON_USEDEP}]
 	woff? (
-		dev-python/py-zopfli[${PYTHON_USEDEP}]
+		>=dev-python/py-zopfli-0.1.9[${PYTHON_USEDEP}]
 	)
 	ufo? (
 		>=dev-python/fs-2.4.11[${PYTHON_USEDEP}]
@@ -50,7 +50,7 @@ RDEPEND="
 	graphite? ( dev-python/lz4[${PYTHON_USEDEP}] )
 	plot? ( dev-python/matplotlib[${PYTHON_USEDEP}] )
 	symfont? ( dev-python/sympy[${PYTHON_USEDEP}] )
-	interpolatable? ( >=dev-python/scipy-1.5.4[${PYTHON_USEDEP}] )
+	interpolatable? ( >=dev-python/scipy-1.7.2[${PYTHON_USEDEP}] )
 	reportlab? ( dev-python/reportlab[${PYTHON_USEDEP}] )
 	>=dev-python/skia-pathops-0.5.1[${PYTHON_USEDEP}]
 "
@@ -60,7 +60,7 @@ DEPEND="
 BDEPEND="
 	dev-python/cython[${PYTHON_USEDEP}]
 	test? (
-		>=dev-python/ufoLib2-0.6.2[${PYTHON_USEDEP}]
+		>=dev-python/ufoLib2-0.12.1[${PYTHON_USEDEP}]
 	)
 "
 distutils_enable_sphinx Doc/source dev-python/sphinx_rtd_theme

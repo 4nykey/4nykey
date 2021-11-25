@@ -32,7 +32,14 @@ RDEPEND=""
 DEPEND="
 	${RDEPEND}
 "
+BDEPEND="
+	dev-python/setuptools_scm[${PYTHON_USEDEP}]
+"
 distutils_enable_tests setup.py
+
+pkg_setup() {
+	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV/_p/.post}"
+}
 
 python_prepare_all() {
 	[[ -n ${PV%%*9999} ]] && mv "${WORKDIR}"/${MY_ZP}/src "${S}"/zopfli

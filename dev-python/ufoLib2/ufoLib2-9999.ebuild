@@ -4,6 +4,7 @@
 EAPI=7
 
 PYTHON_COMPAT=( python3_{7..9} )
+DISTUTILS_USE_SETUPTOOLS=pyproject.toml
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -30,7 +31,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.27[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.28.1[ufo(-),${PYTHON_USEDEP}]
 	>=dev-python/attrs-21.2[${PYTHON_USEDEP}]
 "
 DEPEND="
