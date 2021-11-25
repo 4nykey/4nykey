@@ -3,9 +3,10 @@
 
 EAPI="7"
 
-# https://dist.torproject.org/torbrowser
 MY_PV="$(ver_cut 1-2)"
-MY_P="91.3.0esr-${MY_PV}-1-build2"
+# https://dist.torproject.org/torbrowser
+MY_P="91.3.0esr-${MY_PV}-1-build4"
+MY_TL="0.2.32"
 FIREFOX_PATCHSET="01"
 FIREFOX_PATCHSET="firefox-${MY_P%%.*}esr-patches-${FIREFOX_PATCHSET}.tar.xz"
 MY_P="firefox-tor-browser-${MY_P}"
@@ -34,7 +35,6 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 MY_PV="${MY_PV%.0}"
-MY_TL="0.2.31"
 MY_TL="src-tor-launcher-${MY_TL}"
 MY_EFF="2021.7.13"
 MY_NOS="11.2.11"
