@@ -164,7 +164,7 @@ RDEPEND="
 	media-gfx/ttfautohint
 	media-libs/woff2
 	app-shells/zsh
-	dev-libs/libgit2[ssh]
+	dev-libs/libgit2:=[ssh]
 	dev-vcs/git
 "
 DEPEND="
