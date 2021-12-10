@@ -26,7 +26,7 @@ SLOT="0"
 IUSE="doc examples test zlib"
 RDEPEND="
 	>=dev-libs/xerces-c-3.0.0
-	dev-libs/boost:=[threads]
+	dev-libs/boost:=[threads(+)]
 	>=dev-cpp/libcutl-1.11.0_beta9:=
 	>=dev-cpp/libxsd-frontend-2.1.0_beta2:=
 	zlib? ( sys-libs/zlib )

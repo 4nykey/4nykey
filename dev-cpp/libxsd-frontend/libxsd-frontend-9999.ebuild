@@ -26,7 +26,7 @@ SLOT="0/2.1.0-b.2"
 IUSE="static-libs"
 RDEPEND="
 	>=dev-libs/xerces-c-3.0.0
-	dev-libs/boost:=[threads]
+	dev-libs/boost:=[threads(+)]
 	>=dev-cpp/libcutl-1.11.0_beta9:=
 "
 DEPEND="
