@@ -9,12 +9,9 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/harfbuzz/${PN}.git"
 else
-	MY_PV="v${PV}"
-	if [[ -z ${PV%%*_p*} ]]; then
-		inherit vcs-snapshot
-		MY_PV="3e8a1e2"
-	fi
-	MY_HB="harfbuzz-2.9.0"
+	MY_PV="3e8a1e2"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
+	MY_HB="harfbuzz-3.1.2"
 	SRC_URI="
 		mirror://githubcl/harfbuzz/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://githubcl/harfbuzz/${MY_HB%-*}/tar.gz/${MY_HB##*-}
