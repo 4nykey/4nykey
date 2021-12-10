@@ -51,6 +51,7 @@ pkg_setup() {
 		python-single-r1_pkg_setup
 		FONT_S=( sfd )
 		DOCS+=" notes/*.txt"
+		PATCHES+=( "${FILESDIR}"/tools.diff )
 	fi
 
 	font-r1_pkg_setup

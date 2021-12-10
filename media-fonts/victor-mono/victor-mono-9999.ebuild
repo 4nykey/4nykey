@@ -24,7 +24,7 @@ inherit fontmake
 DESCRIPTION="A free programming font with cursive italics and ligatures"
 HOMEPAGE="https://rubjo.github.io/victor-mono"
 
-LICENSE="MIT"
+LICENSE="OFL-1.1"
 SLOT="0"
 IUSE=""
 BDEPEND="

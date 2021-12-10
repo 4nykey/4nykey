@@ -1,0 +1,63 @@
+--- a/tools/generate/tweeks/OpenType/checksum.py
++++ b/tools/generate/tweeks/OpenType/checksum.py
+@@ -62,7 +62,7 @@ class BigEndian32BitList:
+ 				self.accumByte( 0xFF & ( v >> shift ) )
+ 		elif size == 10:
+ 			for i in range( 0, size ):
+-				v = ord( val[i] )
++				v = ord( chr(val[i]) )
+ 				#print( "FLAG",  "{0:d}".format( v ) )
+ 				self.accumByte( 0xFF & v )
+ 		else:
+--- a/tools/generate/tweeks/OpenType/table.py
++++ b/tools/generate/tweeks/OpenType/table.py
+@@ -103,10 +103,7 @@ class BaseTable( object ):
+ 			return self.__dict__[name]
+ 		if not '_struct' in self.__dict__:
+ 			raise Exception( "No _struct member: " + str( self ) )
+-		if name in self._struct.__dict__:
+-			return self._struct.__dict__[name]
+-		else:
+-			raise KeyError( "item " + name + " not found" )
++		return self._struct.__getattribute__(name)
+ 
+ 	def __setattr__( self, name, value ):
+ 		if( '_struct' in self.__dict__
+--- a/tools/generate/tweeks/correct_fsSelection.py
++++ b/tools/generate/tweeks/correct_fsSelection.py
+@@ -90,14 +90,14 @@ try:
+ 	ht.writeInto( buf, entry.offset )
+ 
+ 	outfile = open( filePath, 'wb' )
+-	outfile.write( str( buf ) )
++	outfile.write( buf )
+ 	outfile.flush()
+ 
+ 	csa = get_file32Bit_checkSumAdjustment( filePath )
+ 	outfile = open( filePath, 'wb' )
+ 	ht.checkSumAdjustment = csa
+ 	ht.writeInto( buf, entry.offset )
+-	outfile.write( str( buf ) )
++	outfile.write( buf )
+ 	outfile.flush()
+ 
+ except Exception as e:
+--- a/tools/generate/tweeks/set_isFixedPitch.py
++++ b/tools/generate/tweeks/set_isFixedPitch.py
+@@ -75,14 +75,14 @@ try:
+ 	ht.writeInto( buf, entry.offset )
+ 
+ 	outfile = open( filePath, 'wb' )
+-	outfile.write( str( buf ) )
++	outfile.write( buf )
+ 	outfile.flush()
+ 
+ 	csa = get_file32Bit_checkSumAdjustment( filePath )
+ 	outfile = open( filePath, 'wb' )
+ 	ht.checkSumAdjustment = csa
+ 	ht.writeInto( buf, entry.offset )
+-	outfile.write( str( buf ) )
++	outfile.write( buf )
+ 	outfile.flush()
+ 
+ except Exception as e:
