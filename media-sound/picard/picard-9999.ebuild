@@ -40,7 +40,9 @@ RDEPEND="
 		dev-python/fasteners[${PYTHON_MULTI_USEDEP}]
 		dev-python/markdown[${PYTHON_MULTI_USEDEP}]
 		>=media-libs/mutagen-1.37[${PYTHON_MULTI_USEDEP}]
+		>=dev-python/pyjwt-2[${PYTHON_MULTI_USEDEP}]
 		dev-python/PyQt5[${PYTHON_MULTI_USEDEP},gui]
+		dev-python/pyyaml[${PYTHON_MULTI_USEDEP}]
 	')
 	acoustid? ( >=media-libs/chromaprint-1.0[tools] )
 "
