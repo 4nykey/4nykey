@@ -1,0 +1,11 @@
+--- a/Lib/glyphsLib/builder/features.py
++++ b/Lib/glyphsLib/builder/features.py
+@@ -230,7 +230,7 @@ def _to_ufo_features(
+         if notes:
+             lines.append("# notes:")
+             lines.extend("# " + line for line in notes.splitlines())
+-        if feature_names:
++        if feature_names and re.match('^ss[0-9]{2}', feature.name):
+             lines.extend(feature_names)
+         if feature.automatic:
+             lines.append("# automatic")

@@ -45,7 +45,7 @@ distutils_enable_tests pytest
 pkg_setup() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
 	export BUILD_SKIA_FROM_SOURCE=0
-	append-cxxflags "-I${EROOT}/usr/include/skia"
+	append-cppflags "-I${EROOT}/usr/include/skia"
 }
 
 python_prepare_all() {

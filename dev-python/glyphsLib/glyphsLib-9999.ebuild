@@ -43,6 +43,9 @@ BDEPEND="
 		>=app-text/xmldiff-2.2[${PYTHON_USEDEP}]
 	)
 "
+PATCHES=(
+	"${FILESDIR}"/featureNames.diff
+)
 distutils_enable_tests pytest
 
 pkg_setup() {
