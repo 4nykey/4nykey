@@ -12,7 +12,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	MY_P="${MY_PN}-${PV}"
 	SRC_URI="
-		mirror://gnome/sources/${MY_PN}/${PV}/${MY_P}.tar.xz
+		mirror://gnome/sources/${MY_PN}/$(ver_cut 1-2)/${MY_P}.tar.xz
 	"
 	KEYWORDS="~amd64 ~x86"
 	S="${WORKDIR}/${MY_P}"
@@ -35,7 +35,6 @@ src_prepare() {
 	default
 	use autohint || sed \
 		-e "/find_program/s:'psautohint':'true':" -i meson.build
-	sed -e '/^$/,/^)/d' -i src/meson.build
 }
 
 src_configure() {
@@ -43,6 +42,10 @@ src_configure() {
 		$(meson_use binary useprebuilt)
 		-Dfontsdir=${FONTDIR}
 		-Dbuildappstream=false
+	)
+	use binary || emesonargs+=(
+		$(meson_use variable buildvf)
+		$(meson_use !variable buildstatics)
 	)
 	meson_src_configure
 }
