@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -24,7 +24,7 @@ HOMEPAGE="https://github.com/meganz/sdk"
 
 LICENSE="BSD-2"
 # awk '/define/ {print $3}' include/mega/version.h|awk 'BEGIN{RS="";FS="\n"}{printf $1*10000+$2*100+$3}'
-SLOT="0/30908"
+SLOT="0/30912"
 IUSE="examples ffmpeg freeimage fuse hardened inotify libuv mediainfo qt raw +sqlite test"
 REQUIRED_USE="
 	examples? ( sqlite )
@@ -61,7 +61,7 @@ PATCHES=( "${FILESDIR}"/freeimage.diff )
 src_prepare() {
 	default
 	use qt && sed \
-		-e "/^MEGASDK_BASE_PATH =/ s:=.*:= ${EROOT}/usr/:" \
+		-e "/^MEGASDK_BASE_PATH =/ s:=.*:= ${EPREFIX}/usr/:" \
 		-e 's:VPATH += \$\$MEGASDK_BASE_PATH:&/share/mega:' \
 		-e '/^INCLUDEPATH +=/ s:/bindings/qt:/share/mega&:' \
 		-e '/SOURCES += src\// s:+:-:' \
@@ -109,7 +109,8 @@ src_install() {
 	doheader -r include/mega
 	find "${ED}" -type f -name '*.la' -delete
 
-	use qt || return
+	insinto /usr/share/mega
+	doins -r m4
 	insinto /usr/share/mega/bindings/qt
 	doins bindings/qt/*.{h,cpp,pri}
 }

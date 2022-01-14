@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_SUBMODULES=( -src/MEGASync/mega )
 	SRC_URI=
 else
-	MY_PV="a317a8e"
+	MY_PV="7b94390"
 	SRC_URI="
 		mirror://githubcl/meganz/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -32,7 +32,7 @@ SLOT="0"
 IUSE="dolphin nautilus thunar"
 
 RDEPEND="
-	>=net-misc/meganz-sdk-3.8.2c:=[libuv,qt,sodium(+),sqlite]
+	>=net-misc/meganz-sdk-3.9.6b:=[libuv,qt,sodium(+),sqlite]
 	dev-qt/qtsvg:5
 	dev-qt/qtx11extras:5
 	dev-qt/qtdbus:5
@@ -54,7 +54,7 @@ src_prepare() {
 		"${FILESDIR}"/${PN}-qmake.diff
 	)
 	sed \
-		-e "/include(/ s:mega/bindings/qt/:${EROOT}/usr/share/&:" \
+		-e "/include(/ s:mega/bindings/qt/:${EPREFIX}/usr/share/&:" \
 		-i src/MEGASync/MEGASync.pro
 	cmake_src_prepare
 	mv -f src/MEGAShellExtDolphin/CMakeLists{_kde5,}.txt
@@ -75,7 +75,7 @@ src_configure() {
 		CONFIG$(usex thunar + -)=with_thu
 		CONFIG-=with_updater
 		CONFIG-=with_tools
-		MEGASDK_BASE_PATH="${EROOT}/usr"
+		MEGASDK_BASE_PATH="${EPREFIX}/usr"
 		CONFIG+=nofreeimage
 	)
 	eqmake5 "${eqmakeargs[@]}"
