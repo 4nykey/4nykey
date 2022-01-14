@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -40,14 +40,9 @@ DOCS=(
 	README.md
 	docs/{DesignDoc,HowToFix,HowToTest}.md
 )
-
-src_prepare() {
-	local PATCHES=(
-		"${FILESDIR}"/meson-gtest.diff
-	)
-	default
-	sed -e 's:fc-list:false:' -i tests/test_good_fonts.sh
-}
+PATCHES=(
+	"${FILESDIR}"/meson-gtest.diff
+)
 
 src_configure() {
 	local emesonargs=(
