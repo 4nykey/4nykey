@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -16,7 +16,7 @@ else
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
-	S="${WORKDIR}/${PN}-${PV}"
+	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
 
 DESCRIPTION="A set of UFO based objects for use in font editing applications"
@@ -27,7 +27,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.26.2[ufo(+),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.28.5[ufo(+),${PYTHON_USEDEP}]
 	dev-python/compositor[${PYTHON_USEDEP}]
 "
 DEPEND="
