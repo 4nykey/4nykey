@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
-	MY_PV="db0dac3"
+	MY_PV="c771321"
 	[[ -n ${PV%%*_*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -35,7 +35,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.25.1[ufo(+),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.28.5[ufo(+),${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
@@ -67,6 +67,7 @@ python_prepare_all() {
 		-e "/build_exe': build_exe,/d" \
 		-i setup.py
 	sed -e '/-Werror/d' -i "${EMESON_SOURCE}"/meson.build
+	sed -e '/-n auto/d' -i pytest.ini
 	use test && mv ../${MY_TD}/* tests/integration/data/
 	distutils-r1_python_prepare_all
 }
@@ -99,5 +100,5 @@ python_test() {
 		PATH="${BUILD_DIR}/test/scripts:${MESON_BUILD_DIR}l:${PATH}" \
 		LD_LIBRARY_PATH="${MESON_BUILD_DIR}"
 	distutils_install_for_testing
-	pytest -v || die
+	epytest
 }
