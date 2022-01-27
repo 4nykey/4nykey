@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
-	MY_PV="b57e37a"
+	MY_PV="a539c41"
 	[[ -n ${PV%%*_*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -30,10 +30,10 @@ IUSE="test"
 RDEPEND="
 	dev-cpp/antlr-cpp:4=
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
-	>=dev-python/defcon-0.9[${PYTHON_USEDEP}]
-	>=dev-python/fontMath-0.8.1[${PYTHON_USEDEP}]
+	>=dev-python/defcon-0.10[${PYTHON_USEDEP}]
+	>=dev-python/fontMath-0.9.1[${PYTHON_USEDEP}]
 	dev-python/fontPens[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-4.27.1[ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.28.5[ufo(+),unicode(-),woff(-),${PYTHON_USEDEP}]
 	>=dev-util/psautohint-2.3.1[${PYTHON_USEDEP}]
 	>=dev-python/tqdm-4.62.3[${PYTHON_USEDEP}]
 	>=dev-python/ufoNormalizer-0.6.1[${PYTHON_USEDEP}]
@@ -76,5 +76,5 @@ python_test() {
 		PYTHONPATH="${S}/python:${PYTHONPATH}" \
 		PATH="${S}/bin:${BUILD_DIR}/test/scripts:${PATH}"
 	distutils_install_for_testing
-	pytest -v || die
+	epytest
 }
