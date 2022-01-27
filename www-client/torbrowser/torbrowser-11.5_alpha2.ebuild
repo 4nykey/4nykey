@@ -1,11 +1,11 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="7"
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="91.4.0esr-${MY_PV}-1-build1"
+MY_P="91.5.0esr-${MY_PV}-1-build1"
 MY_TL="0.2.32"
 FIREFOX_PATCHSET="03"
 FIREFOX_PATCHSET="firefox-${MY_P%%.*}esr-patches-${FIREFOX_PATCHSET}.tar.xz"
@@ -37,7 +37,7 @@ fi
 MY_PV="${MY_PV%.0}"
 MY_TL="src-tor-launcher-${MY_TL}"
 MY_EFF="2021.7.13"
-MY_NOS="11.2.11"
+MY_NOS="11.2.15"
 MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
 MY_NOS="noscript-${MY_NOS}.xpi"
 SRC_URI="
