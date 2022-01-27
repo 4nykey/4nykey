@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -40,19 +40,20 @@ RDEPEND="
 		>=dev-python/py-zopfli-0.1.9[${PYTHON_USEDEP}]
 	)
 	ufo? (
-		>=dev-python/fs-2.4.11[${PYTHON_USEDEP}]
+		>=dev-python/fs-2.4.14[${PYTHON_USEDEP}]
 	)
 	unicode? (
-		>=dev-python/unicodedata2-13[${PYTHON_USEDEP}]
+		>=dev-python/unicodedata2-14[${PYTHON_USEDEP}]
 	)
 	qt5? ( dev-python/PyQt5[${PYTHON_USEDEP}] )
 	gtk? ( dev-python/pygobject:3[${PYTHON_USEDEP}] )
 	graphite? ( dev-python/lz4[${PYTHON_USEDEP}] )
 	plot? ( dev-python/matplotlib[${PYTHON_USEDEP}] )
 	symfont? ( dev-python/sympy[${PYTHON_USEDEP}] )
-	interpolatable? ( >=dev-python/scipy-1.7.2[${PYTHON_USEDEP}] )
+	interpolatable? ( >=dev-python/scipy-1.7.3[${PYTHON_USEDEP}] )
 	reportlab? ( dev-python/reportlab[${PYTHON_USEDEP}] )
-	>=dev-python/skia-pathops-0.5.1[${PYTHON_USEDEP}]
+	>=dev-python/skia-pathops-0.7.2[${PYTHON_USEDEP}]
+	>=dev-python/freetype-py-2.2[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
@@ -60,7 +61,7 @@ DEPEND="
 BDEPEND="
 	dev-python/cython[${PYTHON_USEDEP}]
 	test? (
-		>=dev-python/ufoLib2-0.12.1[${PYTHON_USEDEP}]
+		>=dev-python/ufoLib2-0.13[${PYTHON_USEDEP}]
 	)
 "
 distutils_enable_sphinx Doc/source dev-python/sphinx_rtd_theme

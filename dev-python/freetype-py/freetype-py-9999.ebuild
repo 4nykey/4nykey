@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -9,13 +9,14 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/rougier/${PN}.git"
 else
-	MY_P="${PN}-${PV/_p/.post}"
+	MY_PV="v${PV}"
+	[[ -z ${PV%%*_p*} ]] && MY_PV="aeae566"
 	SRC_URI="
-		mirror://pypi/${PN:0:1}/${PN}/${MY_P}.tar.gz
+		mirror://githubcl/rougier/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
-	S="${WORKDIR}/${MY_P}"
+	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 
 DESCRIPTION="Python bindings for the freetype library"
@@ -31,11 +32,8 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 "
-BDEPEND="
-	test? ( dev-python/pytest[${PYTHON_USEDEP}] )
-"
+distutils_enable_tests pytest
 
-python_test() {
-	cd tests
-	pytest -v || die
+pkg_setup() {
+	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
 }
