@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -31,15 +31,15 @@ IUSE=""
 
 RDEPEND="
 	>=dev-python/fonttools-4.28.5[ufo(-),unicode(-),${PYTHON_USEDEP}]
-	>=dev-python/glyphsLib-6.0.1[${PYTHON_USEDEP}]
+	>=dev-python/glyphsLib-6.0.4[${PYTHON_USEDEP}]
 	>=dev-python/ufo2ft-2.25.2[cffsubr(+),${PYTHON_USEDEP}]
 	>=dev-python/MutatorMath-3.0.1[${PYTHON_USEDEP}]
-	>=dev-python/fontMath-0.8.1[${PYTHON_USEDEP}]
-	>=dev-python/defcon-0.9[${PYTHON_USEDEP}]
+	>=dev-python/fontMath-0.9.1[${PYTHON_USEDEP}]
+	>=dev-python/defcon-0.10[${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 	dev-python/skia-pathops[${PYTHON_USEDEP}]
 	>=dev-python/ufoLib2-0.13[${PYTHON_USEDEP}]
-	>=dev-python/attrs-21.2[${PYTHON_USEDEP}]
+	>=dev-python/attrs-21.4[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
