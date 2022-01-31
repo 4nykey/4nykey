@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -10,25 +10,25 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/adobe-fonts/${PN}"
 else
 	SRC_URI="mirror://githubraw/adobe-fonts/${PN}/${PV}R/"
-	SRC_URIB="https://github.com/adobe-fonts/${PN}/releases/download/${PV}R/${MY_PN}"
+	SRC_URIB="https://github.com/adobe-fonts/${PN}/releases/download/${PV}R/"
 	SRC_URI="
 	binary? (
 		font_types_otf? (
 			!variable? (
 				l10n_ja? (
-					${SRC_URIB}JP.zip -> ${MY_PN}JP-${PV}.zip
+					${SRC_URIB}12_${MY_PN}JP.zip -> ${MY_PN}JP-${PV}.zip
 				)
 				l10n_ko? (
-					${SRC_URIB}KR.zip -> ${MY_PN}KR-${PV}.zip
+					${SRC_URIB}13_${MY_PN}KR.zip -> ${MY_PN}KR-${PV}.zip
 				)
 				l10n_zh-CN? (
-					${SRC_URIB}CN.zip -> ${MY_PN}CN-${PV}.zip
+					${SRC_URIB}14_${MY_PN}CN.zip -> ${MY_PN}CN-${PV}.zip
 				)
 				l10n_zh-HK? (
-					${SRC_URIB}HK.zip -> ${MY_PN}HK-${PV}.zip
+					${SRC_URIB}16_${MY_PN}HK.zip -> ${MY_PN}HK-${PV}.zip
 				)
 				l10n_zh-TW? (
-					${SRC_URIB}TC.zip -> ${MY_PN}TC-${PV}.zip
+					${SRC_URIB}15_${MY_PN}TW.zip -> ${MY_PN}TW-${PV}.zip
 				)
 			)
 			variable? (
@@ -55,10 +55,10 @@ else
 			)
 			!variable? (
 				super-otc? (
-					${SRC_URIB}.ttc.zip -> ${MY_PN}-${PV}.ttc.zip
+					${SRC_URIB}01_${MY_PN}.ttc.zip -> ${MY_PN}-${PV}.ttc.zip
 				)
 				!super-otc? (
-					${SRC_URIB}OTC.zip
+					${SRC_URIB}03_${MY_PN}OTC.zip -> ${MY_PN}OTC-${PV}.zip
 				)
 			)
 		)
