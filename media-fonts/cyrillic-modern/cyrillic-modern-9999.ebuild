@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -38,8 +38,8 @@ BDEPEND="
 	!binary? (
 		$(python_gen_cond_dep '
 			media-gfx/fontforge[python,${PYTHON_SINGLE_USEDEP}]
-			dev-python/fonttools[${PYTHON_MULTI_USEDEP}]
-			font_types_ttc? ( dev-util/afdko[${PYTHON_MULTI_USEDEP}] )
+			dev-python/fonttools[${PYTHON_USEDEP}]
+			font_types_ttc? ( dev-util/afdko[${PYTHON_USEDEP}] )
 		')
 		dev-util/font-helpers
 		latex? (
