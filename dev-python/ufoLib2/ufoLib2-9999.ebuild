@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -31,8 +31,9 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.28.3[ufo(-),${PYTHON_USEDEP}]
-	>=dev-python/attrs-21.2[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.29.1[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/attrs-21.4[${PYTHON_USEDEP}]
+	>=dev-python/cattrs-1.10[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
