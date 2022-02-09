@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -29,7 +29,7 @@ DEPEND="
 	${PYTHON_DEPS}
 	$(python_gen_cond_dep '
 		media-gfx/fontforge[python,${PYTHON_SINGLE_USEDEP}]
-		dev-libs/libxml2[python,${PYTHON_MULTI_USEDEP}]
+		dev-libs/libxml2[python,${PYTHON_USEDEP}]
 	')
 "
 RDEPEND="
