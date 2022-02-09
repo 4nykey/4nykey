@@ -5,15 +5,15 @@ EAPI="7"
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="91.5.0esr-${MY_PV}-1-build1"
-MY_TL="0.2.32"
-FIREFOX_PATCHSET="03"
+MY_P="91.6.0esr-${MY_PV}-1-build1"
+MY_TL="0.2.33"
+FIREFOX_PATCHSET="05j"
 FIREFOX_PATCHSET="firefox-${MY_P%%.*}esr-patches-${FIREFOX_PATCHSET}.tar.xz"
 MY_P="firefox-tor-browser-${MY_P}"
 
 LLVM_MAX_SLOT=13
 
-PYTHON_COMPAT=( python3_{7..10} )
+PYTHON_COMPAT=( python3_{8..10} )
 PYTHON_REQ_USE="ncurses,sqlite,ssl"
 
 WANT_AUTOCONF="2.1"
@@ -37,7 +37,7 @@ fi
 MY_PV="${MY_PV%.0}"
 MY_TL="src-tor-launcher-${MY_TL}"
 MY_EFF="2021.7.13"
-MY_NOS="11.2.14"
+MY_NOS="11.2.16"
 MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
 MY_NOS="noscript-${MY_NOS}.xpi"
 SRC_URI="
