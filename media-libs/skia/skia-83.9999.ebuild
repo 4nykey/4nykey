@@ -10,16 +10,16 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/google/${PN}.git"
 	EGIT_BRANCH="chrome/m$(ver_cut 1)"
 else
-	inherit vcs-snapshot
 	MY_PV="c3d05a7"
 	SRC_URI="
 		mirror://githubcl/google/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
 
-DESCRIPTION="A complete 2D graphic library for drawing Text, Geometries, and Images"
+DESCRIPTION="A complete 2D graphic library for drawing Text, Geometries and Images"
 HOMEPAGE="https://skia.org"
 
 LICENSE="BSD"
@@ -32,13 +32,13 @@ webp xml
 RDEPEND="
 	xml? ( dev-libs/expat )
 	ffmpeg? ( media-video/ffmpeg )
-	icu? ( dev-libs/icu )
+	icu? ( dev-libs/icu:= )
 	fontconfig? ( media-libs/fontconfig )
 	truetype? ( media-libs/freetype )
 	harfbuzz? ( media-libs/harfbuzz )
 	jpeg? ( media-libs/libjpeg-turbo )
 	png? ( media-libs/libpng )
-	webp? ( media-libs/libwebp )
+	webp? ( media-libs/libwebp:= )
 	sys-libs/zlib
 	opengl? ( virtual/opengl )
 "

@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{7..9} )
+PYTHON_COMPAT=( python3_{8..10} )
 
 inherit toolchain-funcs distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
@@ -36,7 +36,7 @@ RDEPEND="
 	app-eselect/eselect-cdparanoia
 	app-cdr/cdrdao
 	dev-python/pygobject:3[${PYTHON_USEDEP}]
-	dev-python/python-musicbrainz-ngs[${PYTHON_USEDEP}]
+	dev-python/python-musicbrainzngs[${PYTHON_USEDEP}]
 	media-libs/mutagen[${PYTHON_USEDEP}]
 	dev-python/pycdio[${PYTHON_USEDEP}]
 	dev-python/ruamel-yaml[${PYTHON_USEDEP}]

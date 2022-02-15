@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..9} )
+PYTHON_COMPAT=( python3_{8..10} )
 DISTUTILS_SINGLE_IMPL=1
 inherit distutils-r1
 MY_PN=tools
@@ -47,12 +47,15 @@ RDEPEND="
 		dev-python/browserstack-local-python[${PYTHON_USEDEP}]
 		dev-python/pybrowserstack-screenshots[${PYTHON_USEDEP}]
 		dev-python/glyphsLib[${PYTHON_USEDEP}]
+		dev-python/glyphsets[${PYTHON_USEDEP}]
 		dev-python/ots-python[${PYTHON_USEDEP}]
 		dev-python/pygit2[${PYTHON_USEDEP}]
 		dev-python/requests[${PYTHON_USEDEP}]
 		dev-python/strictyaml[${PYTHON_USEDEP}]
 		dev-python/tabulate[${PYTHON_USEDEP}]
 		dev-python/unidecode[${PYTHON_USEDEP}]
+		dev-python/jinja[${PYTHON_USEDEP}]
+		dev-python/hyperglot[${PYTHON_USEDEP}]
 	')
 "
 DEPEND="
@@ -70,7 +73,6 @@ BDEPEND="
 	)
 "
 PATCHES=(
-	"${FILESDIR}"/${PN}-setup.diff
 	"${FILESDIR}"/${PN}-tests.diff
 )
 distutils_enable_tests pytest
@@ -93,5 +95,5 @@ python_test() {
 		PYTHONPATH="${BUILD_DIR}/lib:${PYTHONPATH}" \
 		PATH="${S}:${PATH}"
 	distutils_install_for_testing
-	pytest -vv || die "Tests fail with ${EPYTHON}"
+	epytest
 }

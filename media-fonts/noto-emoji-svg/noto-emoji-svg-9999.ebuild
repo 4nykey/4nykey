@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{7..9} )
+PYTHON_COMPAT=( python3_{8..10} )
 FONT_SUFFIX=otf
 FONT_S=( fonts )
 inherit python-any-r1 font-r1

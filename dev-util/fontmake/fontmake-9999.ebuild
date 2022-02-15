@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{7..9} )
+PYTHON_COMPAT=( python3_{8..10} )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -40,6 +40,7 @@ RDEPEND="
 	dev-python/skia-pathops[${PYTHON_USEDEP}]
 	>=dev-python/ufoLib2-0.13[${PYTHON_USEDEP}]
 	>=dev-python/attrs-21.4[${PYTHON_USEDEP}]
+	>=dev-python/ttfautohint-py-0.5[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}

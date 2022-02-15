@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{7..9} )
+PYTHON_COMPAT=( python3_{8..10} )
 FONT_SUFFIX=otf
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -39,6 +39,7 @@ BDEPEND="
 		>=dev-util/fontship-0.7[${PYTHON_SINGLE_USEDEP}]
 	)
 "
+PATCHES=( "${FILESDIR}"/ufolib2.diff )
 
 pkg_setup() {
 	if use binary; then

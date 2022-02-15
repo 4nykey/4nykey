@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{7..9} )
+PYTHON_COMPAT=( python3_{8..10} )
 MY_FONT_TYPES=( otf +ttf )
 inherit python-single-r1 font-r1
 if [[ ${PV} == *9999* ]]; then

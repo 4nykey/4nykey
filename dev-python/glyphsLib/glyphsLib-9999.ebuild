@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{7..9} )
+PYTHON_COMPAT=( python3_{8..10} )
 DISTUTILS_USE_SETUPTOOLS=pyproject.toml
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
@@ -40,6 +40,7 @@ BDEPEND="
 	dev-python/setuptools_scm[${PYTHON_USEDEP}]
 	test? (
 		dev-python/ufoNormalizer[${PYTHON_USEDEP}]
+		dev-python/ufo2ft[${PYTHON_USEDEP}]
 		>=app-text/xmldiff-2.2[${PYTHON_USEDEP}]
 	)
 "

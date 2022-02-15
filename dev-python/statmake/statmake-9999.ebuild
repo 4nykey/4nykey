@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{7..9} )
+PYTHON_COMPAT=( python3_{8..10} )
 DISTUTILS_USE_SETUPTOOLS=pyproject.toml
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
@@ -35,14 +35,3 @@ DEPEND="
 	${RDEPEND}
 "
 distutils_enable_tests pytest
-
-python_install() {
-	distutils-r1_python_install \
-		--skip-build
-	python_domodule src/${PN}
-}
-
-python_test() {
-	local -x PYTHONPATH="${S}/src:${PYTHONPATH}"
-	pytest -vv || die "Tests fail with ${EPYTHON}"
-}

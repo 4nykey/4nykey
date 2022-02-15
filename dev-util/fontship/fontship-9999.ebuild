@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{7..9} )
+PYTHON_COMPAT=( python3_{8..10} )
 inherit autotools python-single-r1 cargo
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -170,12 +170,12 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 "
-PATCHES=(
-	"${FILESDIR}"/rustversion.diff
-)
 
 src_prepare() {
-	[[ -n ${PV%%*9999} ]] && echo "${PV%_p*}" > .tarball-version
+	if [[ -n ${PV%%*9999} ]]; then
+		echo "${PV%_p*}" > .tarball-version
+		eapply "${FILESDIR}"/rustversion.diff
+	fi
 	./build-aux/git-version-gen .tarball-version > .version
 	default
 	sed -e '/sfnt2woff-zopfli/d' -i configure.ac
