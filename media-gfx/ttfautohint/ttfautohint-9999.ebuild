@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -9,14 +9,9 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="https://repo.or.cz/${PN}.git"
 	MY_G="${P}/.gnulib"
 else
-	inherit vcs-snapshot
-	MY_G="gnulib-91584ed"
-	MY_PV="7fa4bca"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
-		https://repo.or.cz/ttfautohint.git/snapshot/${MY_PV}.tar.gz
-		-> ${P}.tar.gz
-		https://git.savannah.gnu.org/cgit/${MY_G%-*}.git/snapshot/${MY_G}.tar.gz
+		https://download.savannah.gnu.org/releases/freetype/${P}.tar.gz
+		mirror://sourceforge/freetype/${PN}/${PV}/${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -43,22 +38,19 @@ BDEPEND="
 
 src_prepare() {
 	default
-	[[ -n ${PV%%*9999} ]] && sed \
-		-e "s:m4_esyscmd.*VERSION]):${PV//_/-}:" -i configure.ac
 
+	[[ -f configure ]] && return
 	AUTORECONF=true \
 	autotools_run_tool ./bootstrap --no-bootstrap-sync --no-git --skip-po \
-		--gnulib-srcdir="${WORKDIR}/${MY_G}" --force
+		--force
 	eautoreconf
 }
 
 src_configure() {
-	local _q="$(qt5_get_bindir)" \
-	myeconfargs=(
+	local myeconfargs=(
 		--without-doc
 		$(use_with qt5 qt)
 	)
-	QMAKE="${_q}/qmake" MOC="${_q}/moc" UIC="${_q}/uic" RCC="${_q}/rcc" \
 	econf "${myeconfargs[@]}"
 }
 
