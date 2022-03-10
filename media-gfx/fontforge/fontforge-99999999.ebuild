@@ -1,4 +1,4 @@
-# Copyright 2004-2021 Gentoo Authors
+# Copyright 2004-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -23,7 +23,7 @@ HOMEPAGE="https://fontforge.org/"
 
 LICENSE="BSD GPL-3+"
 SLOT="0"
-IUSE="doc truetype-debugger gif gtk jpeg png +python readline test tiff svg unicode woff2 X"
+IUSE="doc truetype-debugger gif gtk jpeg png +python readline test tiff svg woff2 X"
 IUSE+=" extras libspiro"
 RESTRICT="!test? ( test )"
 RESTRICT+=" primaryuri"
@@ -50,7 +50,6 @@ RDEPEND="
 	)
 	python? ( ${PYTHON_DEPS} )
 	readline? ( sys-libs/readline:0= )
-	unicode? ( media-libs/libuninameslist:0= )
 	woff2? ( media-libs/woff2:0= )
 	libspiro? ( media-libs/libspiro )
 "
@@ -94,7 +93,6 @@ src_configure() {
 		-DENABLE_LIBREADLINE=$(usex readline ON OFF)
 		-DENABLE_LIBSPIRO=OFF # No package in Gentoo
 		-DENABLE_LIBTIFF=$(usex tiff ON OFF)
-		-DENABLE_LIBUNINAMESLIST=$(usex unicode ON OFF)
 		-DENABLE_MAINTAINER_TOOLS=OFF
 		-DENABLE_PYTHON_EXTENSION=$(usex python ON OFF)
 		-DENABLE_PYTHON_SCRIPTING=$(usex python ON OFF)
