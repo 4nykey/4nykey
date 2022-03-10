@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -12,7 +12,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/paradoxxxzero/${PN}.git"
 	SRC_URI=""
 else
-	MY_PV="35d3351"
+	MY_PV="11d43a8"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/paradoxxxzero/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -35,6 +35,7 @@ DEPEND="
 RDEPEND="
 	${DEPEND}
 	gnome-base/gnome-shell
+	gnome-extra/gnome-system-monitor
 	media-libs/clutter[introspection]
 	gnome-base/libgtop[introspection]
 	net-misc/networkmanager[introspection]
