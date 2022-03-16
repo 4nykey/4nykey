@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -11,7 +11,7 @@ else
 	MY_PV="${PV^^}"
 	MY_PV="v${MY_PV/_/-}"
 	[[ -z ${PV%%*_p*} ]] && MY_PV="a4da0d3"
-	MY_QC="qt-common-e1b79bd"
+	MY_QC="qt-common-f814a56"
 	MY_EX="digidoc-extensions-963dfab"
 	SRC_URI="${SRC_URI}
 		mirror://githubcl/open-eid/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -32,7 +32,7 @@ SLOT="0"
 IUSE="nautilus"
 
 DEPEND="
-	dev-libs/libdigidocpp
+	>=dev-libs/libdigidocpp-3.14.8
 	sys-apps/pcsc-lite
 	net-nds/openldap
 	dev-libs/openssl:0
