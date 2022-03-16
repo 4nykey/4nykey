@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-MY_PN="Playfair-Display"
+MY_PN="Playfair"
 EMAKE_EXTRA_ARGS=(
 	glyphs='sources/Playfair-2-Italic.glyphs sources/Playfair-2-Roman.glyphs'
 )
@@ -15,7 +15,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/clauseggers/${MY_PN}.git"
 else
-	MY_PV="65e767a"
+	MY_PV="0a1a00b"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/clauseggers/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
