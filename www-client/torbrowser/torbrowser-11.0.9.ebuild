@@ -5,7 +5,7 @@ EAPI="7"
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="91.7.0esr-${MY_PV}-1-build3"
+MY_P="91.7.0esr-${MY_PV}-1-build4"
 MY_TL="0.2.33"
 FIREFOX_PATCHSET="05j"
 FIREFOX_PATCHSET="firefox-${MY_P%%.*}esr-patches-${FIREFOX_PATCHSET}.tar.xz"
@@ -406,6 +406,7 @@ src_prepare() {
 
 	append-cppflags "-DTOR_BROWSER_DATA_IN_HOME_DIR"
 	eapply "${FILESDIR}"/${PN}11-profiledir.patch
+	eapply "${FILESDIR}"/dav1d-1.0.diff
 
 	# browser/components/BrowserGlue.jsm
 	local _h="${WORKDIR}/eff/chrome/torbutton/content/extensions/https-everywhere"
