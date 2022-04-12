@@ -1,9 +1,9 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit autotools
+inherit autotools flag-o-matic
 if [[ ${PV} = *9999* ]]; then
 	inherit subversion
 	ESVN_REPO_URI="https://svn.savannah.nongnu.org/svn/fbi-improved/trunk"
@@ -26,11 +26,6 @@ IUSE="
 aalib archive debug dia djvu exif fbcon gif graphicsmagick imagemagick imlib
 jpeg pdf png postscript readline +screen sdl svg tiff truetype xfig
 "
-
-PATCHES=(
-	"${FILESDIR}"/${PN}-poppler.diff
-	"${FILESDIR}"/${PN}-string.diff
-)
 
 DEPEND="
 	graphicsmagick? ( media-gfx/graphicsmagick )
@@ -63,9 +58,15 @@ DEPEND="
 	virtual/yacc
 "
 DOCS=( doc/FIM.TXT )
+PATCHES=(
+	"${FILESDIR}"/${PN}-poppler.diff
+	"${FILESDIR}"/${PN}-string.diff
+	"${FILESDIR}"/CommandConsole.diff
+)
 
 src_prepare() {
 	default
+	append-cxxflags '-std=c++17'
 	sed \
 		-e "s:esyscmd.*:${ESVN_WC_REVISION:--1}):" \
 		-e '/LIBS/s:GraphicsMagick.*`:pkg-config GraphicsMagick --libs`:' \
@@ -76,8 +77,10 @@ src_prepare() {
 	sed \
 		-e '/SUBDIRS = /s:\<doc\>::' \
 		-i Makefile.am
-	eautoreconf
+	sed -e '/FIM_WANT_BACKGROUND_LOAD/d' -i src/fim.h
+	sed -e 's:°: degree:' -i src/fim.cpp
 	sed -e 's:\(FIM_DEFAULT_CONSOLEFONT\)o:\1:' -i src/FontServer.cpp
+	eautoreconf
 }
 
 src_configure() {
@@ -123,6 +126,7 @@ src_configure() {
 		--enable-stdin-image-reading
 		--enable-windows
 		--enable-custom-status-bar
+		--enable-c++17
 	)
 	econf "${myeconfargs[@]}"
 }

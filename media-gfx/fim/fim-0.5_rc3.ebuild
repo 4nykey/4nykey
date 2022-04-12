@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -76,6 +76,7 @@ src_prepare() {
 		-e 's:htmldir = \$(docdir)$:&/html:' \
 		-e 's:\(MAN2HTML=\).*:\1man2html:' \
 		-i doc/Makefile.am
+	sed -e 's:°: degree:' -i src/fim.cpp
 	eautoreconf
 }
 

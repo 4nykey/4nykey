@@ -1,0 +1,11 @@
+--- a/src/CommandConsole.cpp
++++ b/src/CommandConsole.cpp
+@@ -1179,7 +1179,7 @@ rlnull:
+ 		return quit(return_code_);
+ 	}
+ 
+-	FIM_NORETURN void CommandConsole::exit(fim_perr_t i)const
++	void CommandConsole::exit(fim_perr_t i)const
+ 	{
+ 		/*
+ 		 *	Exit the program as a whole.
