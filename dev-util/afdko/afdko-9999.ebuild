@@ -28,14 +28,14 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	dev-cpp/antlr-cpp:4=
+	~dev-cpp/antlr-cpp-4.9.3:4=
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 	>=dev-python/defcon-0.10[${PYTHON_USEDEP}]
 	>=dev-python/fontMath-0.9.1[${PYTHON_USEDEP}]
 	dev-python/fontPens[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-4.29.1[ufo(+),unicode(-),woff(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.32[ufo(+),unicode(-),woff(-),${PYTHON_USEDEP}]
 	>=dev-util/psautohint-2.4[${PYTHON_USEDEP}]
-	>=dev-python/tqdm-4.62.3[${PYTHON_USEDEP}]
+	>=dev-python/tqdm-4.64[${PYTHON_USEDEP}]
 	>=dev-python/ufoNormalizer-0.6.1[${PYTHON_USEDEP}]
 	>=dev-python/ufoProcessor-1.9[${PYTHON_USEDEP}]
 "
@@ -50,10 +50,16 @@ python_prepare_all() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${_v/_p/.post}"
 
 	local _p=(
-		"${FILESDIR}"/system-antlr.diff
 		"${FILESDIR}"/setup.diff
 	)
 	eapply "${_p[@]}"
+	sed \
+		-e '/-DANTLR4CPP_STATIC/d' \
+		-e '/ExternalAntlr4Cpp/d' \
+		-i CMakeLists.txt
+	sed \
+		-e 's:\<antlr4_static\>:antlr4-runtime:' \
+		-i c/makeotf/lib/hotconv/CMakeLists.txt
 
 	rm -f docs/*.{yml,plist}
 	cmake_src_prepare
