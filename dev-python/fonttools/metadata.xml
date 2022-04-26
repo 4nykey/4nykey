@@ -8,6 +8,9 @@
 		<flag name="graphite">
 			Enable support for graphite type tables (Silf, Glat, Gloc)
 		</flag>
+		<flag name="harfbuzz">
+			Use Harfbuzz Repacker for packing GSUB/GPOS tables
+		</flag>
 		<flag name="interpolatable">
 			Enable support for finding wrong contour/component order between different masters
 		</flag>
@@ -16,6 +19,9 @@
 		</flag>
 		<flag name="reportlab">
 			Enable support for drawing glyphs as PNG images
+		</flag>
+		<flag name="skia">
+			Use skia-pathops to remove overlaps in TTF fonts
 		</flag>
 		<flag name="symfont">
 			Enable support for symbolic font statistics analysis

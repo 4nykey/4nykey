@@ -26,7 +26,7 @@ HOMEPAGE="https://github.com/${PN}/${PN}"
 
 LICENSE="BSD"
 SLOT="0"
-IUSE="doc graphite gtk interpolatable plot png qt5 reportlab symfont +ufo +unicode woff"
+IUSE="doc graphite harfbuzz interpolatable plot png qt5 reportlab skia symfont +ufo +unicode woff"
 DOCS=( {README,NEWS}.rst )
 PATCHES=(
 	"${FILESDIR}"/${PN}-xattr.diff
@@ -46,14 +46,14 @@ RDEPEND="
 		>=dev-python/unicodedata2-14[${PYTHON_USEDEP}]
 	)
 	qt5? ( dev-python/PyQt5[${PYTHON_USEDEP}] )
-	gtk? ( dev-python/pygobject:3[${PYTHON_USEDEP}] )
 	graphite? ( dev-python/lz4[${PYTHON_USEDEP}] )
 	plot? ( dev-python/matplotlib[${PYTHON_USEDEP}] )
 	symfont? ( dev-python/sympy[${PYTHON_USEDEP}] )
 	interpolatable? ( >=dev-python/scipy-1.7.3[${PYTHON_USEDEP}] )
 	reportlab? ( dev-python/reportlab[${PYTHON_USEDEP}] )
-	>=dev-python/skia-pathops-0.7.2[${PYTHON_USEDEP}]
+	skia? ( >=dev-python/skia-pathops-0.7.2[${PYTHON_USEDEP}] )
 	>=dev-python/freetype-py-2.2[${PYTHON_USEDEP}]
+	harfbuzz? ( >=dev-python/uharfbuzz-0.24.1[${PYTHON_USEDEP}] )
 "
 DEPEND="
 	${RDEPEND}
