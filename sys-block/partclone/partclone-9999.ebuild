@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -43,7 +43,6 @@ RDEPEND="
 		dev-libs/openssl:*[static-libs]
 		e2fs? (
 			sys-fs/e2fsprogs[static-libs]
-			sys-libs/e2fsprogs-libs[static-libs]
 		)
 		btrfs? ( sys-apps/util-linux[static-libs] )
 		fuse? ( sys-fs/fuse:0[static-libs] )
