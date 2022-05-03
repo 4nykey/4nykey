@@ -5,7 +5,7 @@ EAPI="7"
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="91.8.0esr-${MY_PV}-1-build1"
+MY_P="91.9.0esr-${MY_PV}-1-build1"
 MY_TL="0.2.33"
 FIREFOX_PATCHSET="06j"
 FIREFOX_PATCHSET="firefox-${MY_P%%.*}esr-patches-${FIREFOX_PATCHSET}.tar.xz"
@@ -37,7 +37,7 @@ fi
 MY_PV="${MY_PV%.0}"
 MY_TL="src-tor-launcher-${MY_TL}"
 MY_EFF="2021.7.13"
-MY_NOS="11.4.3"
+MY_NOS="11.4.5"
 MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
 MY_NOS="noscript-${MY_NOS}.xpi"
 SRC_URI="
