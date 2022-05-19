@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -31,7 +31,7 @@ LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
 IUSE="
 alsa oss pulseaudio gtk curl sid mad mac vorbis ffmpeg flac sndfile
-wavpack cdda gme libnotify musepack midi tta dts aac mms libsamplerate X imlib
+wavpack cdda gme libnotify musepack midi tta dts aac mms libsamplerate X
 zip nls threads gtk3 dumb shorten alac wma opus lastfm clang
 "
 REQUIRED_USE="
@@ -58,11 +58,10 @@ RDEPEND="
 	sndfile? ( media-libs/libsndfile )
 	curl? ( net-misc/curl )
 	cdda? ( dev-libs/libcdio media-libs/libcddb )
-	gtk? ( x11-libs/gtk+:2 dev-libs/jansson )
-	gtk3? ( x11-libs/gtk+:3 dev-libs/jansson )
+	gtk? ( x11-libs/gtk+:2 dev-libs/jansson:= )
+	gtk3? ( x11-libs/gtk+:3 dev-libs/jansson:= )
 	X? ( x11-libs/libX11 )
 	pulseaudio? ( media-sound/pulseaudio )
-	imlib? ( media-libs/imlib2[jpeg,png] )
 	libsamplerate? ( media-libs/libsamplerate )
 	musepack? ( media-sound/musepack-tools )
 	aac? ( media-libs/faad2 )
@@ -116,7 +115,6 @@ src_configure() {
 		$(use_enable gtk3)
 		$(use_enable curl vfs-curl)
 		$(use_enable lastfm lfm)
-		$(use_enable imlib artwork)
 		$(use_enable sid)
 		$(use_enable mad libmad)
 		$(use_enable mac ffap)
@@ -143,7 +141,6 @@ src_configure() {
 		$(use_enable wma)
 		$(use_enable opus)
 	)
-	use imlib && myconf+=( $(use_enable curl artwork-network) )
 	econf "${myconf[@]}"
 }
 
