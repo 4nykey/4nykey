@@ -3,15 +3,14 @@
 
 EAPI="7"
 
+FIREFOX_PATCHSET="firefox-91esr-patches-06j.tar.xz"
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="91.9.0esr-${MY_PV}-1-build1"
-MY_TL="0.2.33"
-FIREFOX_PATCHSET="06j"
-FIREFOX_PATCHSET="firefox-${MY_P%%.*}esr-patches-${FIREFOX_PATCHSET}.tar.xz"
+MY_P="91.9.0esr-${MY_PV}-1-build3"
+MY_TL="0.2.35"
 MY_P="firefox-tor-browser-${MY_P}"
 
-LLVM_MAX_SLOT=13
+LLVM_MAX_SLOT=14
 
 PYTHON_COMPAT=( python3_{8..10} )
 PYTHON_REQ_USE="ncurses,sqlite,ssl"
@@ -74,6 +73,15 @@ BDEPEND="${PYTHON_DEPS}
 	>=virtual/rust-1.51.0
 	|| (
 		(
+			sys-devel/clang:14
+			sys-devel/llvm:14
+			clang? (
+				=sys-devel/lld-14*
+				pgo? ( =sys-libs/compiler-rt-sanitizers-14*[profile] )
+			sys-devel/clang:14
+			)
+		)
+		(
 			sys-devel/clang:13
 			sys-devel/llvm:13
 			clang? (
@@ -89,19 +97,11 @@ BDEPEND="${PYTHON_DEPS}
 				pgo? ( =sys-libs/compiler-rt-sanitizers-12*[profile] )
 			)
 		)
-		(
-			sys-devel/clang:11
-			sys-devel/llvm:11
-			clang? (
-				=sys-devel/lld-11*
-				pgo? ( =sys-libs/compiler-rt-sanitizers-11*[profile] )
-			)
-		)
 	)
 	amd64? ( >=dev-lang/nasm-2.13 )
 	x86? ( >=dev-lang/nasm-2.13 )"
 
-CDEPEND="
+DEPEND="
 	>=dev-libs/nss-3.68
 	>=dev-libs/nspr-4.32
 	dev-libs/atk
@@ -157,7 +157,8 @@ CDEPEND="
 	selinux? ( sec-policy/selinux-mozilla )
 	sndio? ( media-sound/sndio )"
 
-RDEPEND="${CDEPEND}
+RDEPEND="
+	${DEPEND}
 	jack? ( virtual/jack )
 	openh264? ( media-libs/openh264:*[plugin] )
 	pulseaudio? (
@@ -168,7 +169,7 @@ RDEPEND="${CDEPEND}
 	)
 	selinux? ( sec-policy/selinux-mozilla )"
 
-DEPEND="${CDEPEND}
+DEPEND+="
 	x11-libs/libICE
 	x11-libs/libSM
 	pulseaudio? (
@@ -180,8 +181,7 @@ DEPEND="${CDEPEND}
 	wayland? ( >=x11-libs/gtk+-3.11:3[wayland] )
 	amd64? ( virtual/opengl )
 	x86? ( virtual/opengl )"
-RDEPEND="
-	${RDEPEND}
+RDEPEND+="
 	net-vpn/tor
 "
 
@@ -317,6 +317,8 @@ pkg_setup() {
 				eerror "  - Manually switch rust version using 'eselect rust' to match used LLVM version"
 				eerror "  - Switch to dev-lang/rust[system-llvm] which will guarantee matching version"
 				eerror "  - Build ${CATEGORY}/${PN} without USE=lto"
+				eerror "  - Rebuild lld with llvm that was used to build rust (may need to rebuild the whole "
+				eerror "    llvm/clang/lld/rust chain depending on your @world updates)"
 				die "LLVM version used by Rust (${version_llvm_rust}) does not match with ld.lld version (${version_lld})!"
 			fi
 		fi
@@ -544,8 +546,8 @@ src_configure() {
 		--with-system-zlib \
 		--with-toolchain-prefix="${CHOST}-" \
 		--with-unsigned-addon-scopes=app,system \
-		--x-includes="${SYSROOT}${EPREFIX}/usr/include" \
-		--x-libraries="${SYSROOT}${EPREFIX}/usr/$(get_libdir)"
+		--x-includes="${ESYSROOT}/usr/include" \
+		--x-libraries="${ESYSROOT}/usr/$(get_libdir)"
 
 	# Set update channel
 	local update_channel=release
@@ -597,7 +599,7 @@ src_configure() {
 	mozconfig_use_with system-harfbuzz system-graphite2
 	mozconfig_use_with system-icu
 	mozconfig_use_with system-jpeg
-	mozconfig_use_with system-libevent system-libevent "${SYSROOT}${EPREFIX}/usr"
+	mozconfig_use_with system-libevent system-libevent "${ESYSROOT}/usr"
 	mozconfig_use_with system-libvpx
 	mozconfig_use_with system-png
 	mozconfig_use_with system-webp
