@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<maintainer type="person">
 		<email>4nykey@gmail.com</email>
 	</maintainer>
 	<use>
-		<flag name="acoustid">Use media-libs/chromaprint for acoustic fingerprinting</flag>
+		<flag name="discid">Enable reading the ID of the inserted CD</flag>
+		<flag name="fingerprints">Enable calculation and lookup of AcoustID fingerprints</flag>
 	</use>
 </pkgmetadata>
