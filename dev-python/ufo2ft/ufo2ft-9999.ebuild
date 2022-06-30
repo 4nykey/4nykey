@@ -9,8 +9,11 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlei18n/${PN}.git"
 else
-	MY_PV="5c8ce69"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
+	MY_PV="2886fa4"
+	if [[ -n ${PV%%*_p*} ]]; then
+		MY_PV=$(ver_cut 4)
+		MY_PV="v$(ver_cut 1-3)${MY_PV:0:1}$(ver_cut 5)"
+	fi
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -28,7 +31,7 @@ IUSE="test"
 PATCHES=( "${FILESDIR}"/cu2qu.diff )
 
 RDEPEND="
-	>=dev-python/fonttools-4.29.1[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.33.3[ufo(-),${PYTHON_USEDEP}]
 	>=dev-python/defcon-0.10[${PYTHON_USEDEP}]
 	>=dev-python/compreffor-0.5.1[${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
@@ -45,5 +48,5 @@ BDEPEND="
 distutils_enable_tests pytest
 
 pkg_setup() {
-	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV/_p/.post}"
+	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
 }

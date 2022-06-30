@@ -12,7 +12,7 @@
  from ufo2ft.fontInfoData import getAttrWithFallback
 --- a/Lib/ufo2ft/preProcessor.py
 +++ b/Lib/ufo2ft/preProcessor.py
-@@ -228,7 +228,7 @@ class TTFInterpolatablePreProcessor:
+@@ -267,7 +267,7 @@ class TTFInterpolatablePreProcessor:
          skipExportGlyphs=None,
          filters=None,
      ):
@@ -21,15 +21,34 @@
  
          self.ufos = ufos
          self.inplace = inplace
-@@ -267,7 +267,7 @@ class TTFInterpolatablePreProcessor:
-                 self.postFilters.append(post)
+@@ -304,7 +304,7 @@ class TTFInterpolatablePreProcessor:
+         self.postFilters = [[f for f in filters if not f.pre] for filters in filterses]
  
      def process(self):
 -        from cu2qu.ufo import fonts_to_quadratic
 +        from fontTools.cu2qu.ufo import fonts_to_quadratic
  
-         # first apply all custom pre-filters
-         for funcs, ufo, glyphSet in zip(self.preFilters, self.ufos, self.glyphSets):
+         needs_decomposition = set()
+ 
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,6 +1,5 @@
+ fonttools[lxml,ufo]==4.33.3
+ defcon==0.10.0
+-cu2qu==1.6.7.post1
+ compreffor==0.5.1.post1
+ booleanOperations==0.9.0
+ cffsubr==0.2.9.post1
+--- a/setup.py
++++ b/setup.py
+@@ -30,7 +30,6 @@ setup(
+     tests_require=["pytest>=2.8"],
+     install_requires=[
+         "fonttools[ufo]>=4.33.3",
+-        "cu2qu>=1.6.7",
+         "cffsubr>=0.2.8",
+         "booleanOperations>=0.9.0",
+     ],
 --- a/tests/outlineCompiler_test.py
 +++ b/tests/outlineCompiler_test.py
 @@ -2,7 +2,7 @@ import logging
@@ -52,22 +71,3 @@
  from fontTools import designspaceLib
  
  import ufo2ft
---- a/requirements.txt
-+++ b/requirements.txt
-@@ -1,6 +1,5 @@
- fonttools[ufo,lxml]==4.28.5
- defcon==0.10.0
--cu2qu==1.6.7.post1
- compreffor==0.5.1.post1
- booleanOperations==0.9.0
- cffsubr==0.2.9.post1
---- a/setup.py
-+++ b/setup.py
-@@ -30,7 +30,6 @@ setup(
-     tests_require=["pytest>=2.8"],
-     install_requires=[
-         "fonttools[ufo]>=4.28.5",
--        "cu2qu>=1.6.7",
-         "cffsubr>=0.2.8",
-         "booleanOperations>=0.9.0",
-     ],
