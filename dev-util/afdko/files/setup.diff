@@ -42,3 +42,18 @@
                'install': InstallPlatlib,
            },
            )
+--- a/cmake/ExternalAntlr4Cpp.cmake
++++ b/cmake/ExternalAntlr4Cpp.cmake
+@@ -132,10 +132,10 @@ ExternalProject_Add_Step(
+     WORKING_DIRECTORY ${ANTLR4_BUILD_DIR})
+ ExternalProject_Add_StepTargets(antlr4_runtime build_static)
+ 
+-add_library(antlr4_static STATIC IMPORTED)
++add_library(antlr4_static SHARED IMPORTED)
+ add_dependencies(antlr4_static antlr4_runtime-build_static)
+ set_target_properties(antlr4_static PROPERTIES
+-                      IMPORTED_LOCATION ${ANTLR4_STATIC_LIBRARIES})
++                      IMPORTED_LOCATION ${ANTLR4_LIBRARIES})
+ 
+ ExternalProject_Add_Step(
+     antlr4_runtime

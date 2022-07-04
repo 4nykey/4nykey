@@ -30,10 +30,10 @@ IUSE="test"
 RDEPEND="
 	~dev-cpp/antlr-cpp-4.9.3:4=
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
-	>=dev-python/defcon-0.10[${PYTHON_USEDEP}]
-	>=dev-python/fontMath-0.9.1[${PYTHON_USEDEP}]
+	>=dev-python/defcon-0.10.1[${PYTHON_USEDEP}]
+	>=dev-python/fontMath-0.9.2[${PYTHON_USEDEP}]
 	dev-python/fontPens[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-4.32[ufo(+),unicode(-),woff(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.33.3[ufo(+),unicode(-),woff(-),${PYTHON_USEDEP}]
 	>=dev-util/psautohint-2.4[${PYTHON_USEDEP}]
 	>=dev-python/tqdm-4.64[${PYTHON_USEDEP}]
 	>=dev-python/ufoNormalizer-0.6.1[${PYTHON_USEDEP}]
@@ -53,13 +53,15 @@ python_prepare_all() {
 		"${FILESDIR}"/setup.diff
 	)
 	eapply "${_p[@]}"
+	# revert https://github.com/adobe-type-tools/afdko/commit/257a832
+	eapply -R "${FILESDIR}"/257a832.diff
 	sed \
 		-e '/-DANTLR4CPP_STATIC/d' \
 		-e '/ExternalAntlr4Cpp/d' \
 		-i CMakeLists.txt
 	sed \
 		-e 's:\<antlr4_static\>:antlr4-runtime:' \
-		-i c/makeotf/lib/hotconv/CMakeLists.txt
+		-i c/makeotf/lib/{cffread,hotconv}/CMakeLists.txt
 
 	rm -f docs/*.{yml,plist}
 	cmake_src_prepare

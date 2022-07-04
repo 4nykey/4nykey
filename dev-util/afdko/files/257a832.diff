@@ -1,0 +1,145 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -42,13 +42,16 @@ set(ANTLR4_WITH_STATIC_CRT OFF)
+ set(ANTLR4_TAG tags/4.9.3)
+ include(ExternalAntlr4Cpp)
+ 
++
+ FIND_PACKAGE(LibXml2)
+-IF (NOT ${LibXml2_FOUND})
+-   MESSAGE(STATUS "Could not locate LibXml2, will install externally.")
++IF ((NOT ${LibXml2_FOUND}) OR "${CMAKE_SYSTEM}" MATCHES "Linux")
++   MESSAGE(STATUS "Could not locate LibXml2 or system is Linux, will install externally & statically link")
+    set(LIBXML2_TAG tags/v2.9.13)
+    include(ExternalLibXML2)
+-ENDIF(NOT ${LibXml2_FOUND})
+-include_directories(${LIBXML2_INCLUDE_DIR})
++   include_directories(${LIBXML2_STATIC_INCLUDE_DIR})
++ELSE ((NOT ${LibXml2_FOUND}) OR "${CMAKE_SYSTEM}" MATCHES "Linux")
++   include_directories(${LIBXML2_INCLUDE_DIR})
++ENDIF((NOT ${LibXml2_FOUND}) OR "${CMAKE_SYSTEM}" MATCHES "Linux")
+ 
+ # sanitizer support
+ # work around https://github.com/pypa/setuptools/issues/1928 with environment
+--- a/c/makeotf/lib/cffread/CMakeLists.txt
++++ b/c/makeotf/lib/cffread/CMakeLists.txt
+@@ -2,7 +2,7 @@ add_library(makeotf_cffread STATIC cffread.c)
+ 
+ target_include_directories(makeotf_cffread PRIVATE AFTER $<$<COMPILE_LANGUAGE:CXX>:${ANTLR4_INCLUDE_DIRS}>)
+ 
+-if (${LibXml2_FOUND})
++if ((${LibXml2_FOUND}) AND (NOT "${CMAKE_SYSTEM}" MATCHES "Linux"))
+     target_link_libraries(makeotf_cffread PUBLIC ${LIBXML2_LIBRARY})
+ else ()
+     add_dependencies(makeotf_cffread ${LIBXML2_TARGET})
+--- a/c/makeotf/lib/hotconv/CMakeLists.txt
++++ b/c/makeotf/lib/hotconv/CMakeLists.txt
+@@ -71,7 +71,7 @@ set_property(TARGET hotconv PROPERTY C_STANDARD 99)
+ target_include_directories(hotconv PRIVATE AFTER $<$<COMPILE_LANGUAGE:CXX>:${ANTLR4_INCLUDE_DIRS}>)
+ target_link_libraries(hotconv PUBLIC antlr4_static)
+ 
+-if (${LibXml2_FOUND})
++if ((${LibXml2_FOUND}) AND (NOT "${CMAKE_SYSTEM}" MATCHES "Linux"))
+     target_link_libraries(hotconv PUBLIC ${LIBXML2_LIBRARY})
+ else ()
+     add_dependencies(hotconv ${LIBXML2_TARGET})
+--- a/c/makeotf/lib/pstoken/CMakeLists.txt
++++ b/c/makeotf/lib/pstoken/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ add_library(makeotf_pstoken STATIC pstoken.c)
+ 
+-if (${LibXml2_FOUND})
++if ((${LibXml2_FOUND}) AND (NOT "${CMAKE_SYSTEM}" MATCHES "Linux"))
+     target_link_libraries(makeotf_pstoken PUBLIC ${LIBXML2_LIBRARY})
+ else ()
+     add_dependencies(makeotf_pstoken ${LIBXML2_TARGET})
+--- a/c/makeotf/lib/typecomp/CMakeLists.txt
++++ b/c/makeotf/lib/typecomp/CMakeLists.txt
+@@ -45,7 +45,7 @@ add_library(typecomp STATIC
+     tc.c
+ )
+ 
+-if (${LibXml2_FOUND})
++if ((${LibXml2_FOUND}) AND (NOT "${CMAKE_SYSTEM}" MATCHES "Linux"))
+     target_link_libraries(typecomp PUBLIC ${LIBXML2_LIBRARY})
+ else ()
+     add_dependencies(typecomp ${LIBXML2_TARGET})
+--- a/c/makeotf/source/CMakeLists.txt
++++ b/c/makeotf/source/CMakeLists.txt
+@@ -27,7 +27,7 @@ if (HAVE_M_LIB)
+     target_link_libraries(makeotfexe PRIVATE m)
+ endif ()
+ 
+-if (${LibXml2_FOUND})
++if ((${LibXml2_FOUND}) AND (NOT "${CMAKE_SYSTEM}" MATCHES "Linux"))
+     target_link_libraries(makeotfexe PUBLIC ${LIBXML2_LIBRARY})
+ else ()
+     if (WIN32)
+--- a/c/mergefonts/source/CMakeLists.txt
++++ b/c/mergefonts/source/CMakeLists.txt
+@@ -9,7 +9,7 @@ target_include_directories(mergefonts PRIVATE ../../shared/include ../../shared/
+ 
+ target_link_libraries(mergefonts PUBLIC tx_shared)
+ 
+-if (${LibXml2_FOUND})
++if ((${LibXml2_FOUND}) AND (NOT "${CMAKE_SYSTEM}" MATCHES "Linux"))
+     target_link_libraries(mergefonts PUBLIC ${LIBXML2_LIBRARY})
+ else ()
+     add_dependencies(mergefonts ${LIBXML2_TARGET})
+--- a/c/rotatefont/source/CMakeLists.txt
++++ b/c/rotatefont/source/CMakeLists.txt
+@@ -9,7 +9,7 @@ target_include_directories(rotatefont PRIVATE ../../shared/include ../../shared/
+ 
+ target_link_libraries(rotatefont PUBLIC tx_shared)
+ 
+-if(${LibXml2_FOUND})
++if ((${LibXml2_FOUND}) AND (NOT "${CMAKE_SYSTEM}" MATCHES "Linux"))
+     target_link_libraries(rotatefont PUBLIC ${LIBXML2_LIBRARY})
+ else()
+     add_dependencies(rotatefont ${LIBXML2_TARGET})
+--- a/c/shared/source/CMakeLists.txt
++++ b/c/shared/source/CMakeLists.txt
+@@ -3,9 +3,9 @@ include_directories(../include ../resource)
+ MACRO(ADD_AFDKOLIB lm)
+     file(GLOB sl_sources "${lm}/*")
+     add_library(${lm} STATIC ${sl_sources})
+-    if(NOT ${LibXml2_FOUND})
++    if((NOT ${LibXml2_FOUND}) OR "${CMAKE_SYSTEM}" MATCHES "Linux")
+         add_dependencies(${lm} ${LIBXML2_TARGET})
+-    endif(NOT ${LibXml2_FOUND})
++    endif((NOT ${LibXml2_FOUND}) OR "${CMAKE_SYSTEM}" MATCHES "Linux")
+ ENDMACRO(ADD_AFDKOLIB)
+ 
+ ADD_AFDKOLIB(absfont)
+@@ -47,7 +48,7 @@ target_compile_definitions(t1write PRIVATE $<$<CONFIG:Debug>:T1W_DEBUG=1>)
+ target_compile_definitions(ttread PRIVATE $<$<CONFIG:Debug>:TTR_DEBUG=1>)
+ target_compile_definitions(tx_shared PRIVATE $<$<CONFIG:Debug>:CFW_DEBUG=1>)
+ 
+-if(${LibXml2_FOUND})
++if ((${LibXml2_FOUND}) AND (NOT "${CMAKE_SYSTEM}" MATCHES "Linux"))
+     target_link_libraries(tx_shared PUBLIC ${LIBXML2_LIBRARY})
+ else()
+     target_compile_definitions(tx_shared PUBLIC -DLIBXML_STATIC)
+--- a/c/tx/source/CMakeLists.txt
++++ b/c/tx/source/CMakeLists.txt
+@@ -8,7 +8,7 @@ add_executable(tx
+ target_include_directories(tx PRIVATE ../../shared/include ../../shared/resource ../../shared/source/tx_shared)
+ target_link_libraries(tx PUBLIC tx_shared)
+ 
+-if(${LibXml2_FOUND})
++if ((${LibXml2_FOUND}) AND (NOT "${CMAKE_SYSTEM}" MATCHES "Linux"))
+     target_link_libraries(tx PUBLIC ${LIBXML2_LIBRARY})
+ else()
+     add_dependencies(tx ${LIBXML2_TARGET})
+--- a/docs/FDK_Build_Notes.md
++++ b/docs/FDK_Build_Notes.md
+@@ -48,6 +48,9 @@ Note that unless you are using macOS or Windows you must have `libuuid` and its
+ 
+ If the build is successful each program (e.g. makeotfexe) will be built as `build/bin/[program]`.  If you would like to install them in `/usr/local/bin` you can then run `cmake --build build -- install`.
+ 
++AFDKO uses libxml2 for parsing in tx. If libxml2 is not found in the system, it will be installed through CMake externally in `ExternalLibXML2.cmake` and statically linked. This is usually the case for Windows. 
++Currently, libxml2 will also be statically linked in Linux due to a [bug found in the linux python wheels when dynamically linked](https://github.com/adobe-type-tools/afdko/issues/1525).
++
+ ### Noted CMake options
+ 
+ These options can be added to the end of the first CMake command above:
