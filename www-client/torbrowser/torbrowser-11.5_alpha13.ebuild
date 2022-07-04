@@ -1,12 +1,12 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="7"
+EAPI="8"
 
-FIREFOX_PATCHSET="firefox-91esr-patches-06j.tar.xz"
+FIREFOX_PATCHSET="firefox-91esr-patches-08j.tar.xz"
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="91.9.0esr-${MY_PV}-1-build4"
+MY_P="91.10.0esr-${MY_PV}-1-build2"
 MY_TL="0.2.35"
 MY_P="firefox-tor-browser-${MY_P}"
 
@@ -24,7 +24,7 @@ inherit autotools check-reqs desktop flag-o-matic gnome2-utils linux-info \
 	virtualx xdg
 
 PATCH_URIS=(
-	https://dev.gentoo.org/~{polynomial-c,whissi}/mozilla/patchsets/${FIREFOX_PATCHSET}
+	https://dev.gentoo.org/~{juippis,polynomial-c,whissi}/mozilla/patchsets/${FIREFOX_PATCHSET}
 )
 
 if [[ -z ${PV%%*_alpha*} ]]; then
@@ -35,14 +35,11 @@ else
 fi
 MY_PV="${MY_PV%.0}"
 MY_TL="src-tor-launcher-${MY_TL}"
-MY_EFF="2021.7.13"
-MY_NOS="11.4.5"
-MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
+MY_NOS="11.4.6"
 MY_NOS="noscript-${MY_NOS}.xpi"
 SRC_URI="
 	mirror://tor/${PN}/${MY_PV}/src-${MY_P}.tar.xz
 	mirror://tor/${PN}/${MY_PV}/${MY_TL}.tar.xz
-	https://www.eff.org/files/${MY_EFF}
 	https://secure.informaction.com/download/releases/${MY_NOS}
 	${PATCH_URIS[@]}
 "
@@ -67,7 +64,7 @@ REQUIRED_USE="debug? ( !system-av1 )
 BDEPEND="${PYTHON_DEPS}
 	app-arch/unzip
 	app-arch/zip
-	>=dev-util/cbindgen-0.19.0
+	>=dev-util/cbindgen-0.24.0
 	>=net-libs/nodejs-10.23.1
 	virtual/pkgconfig
 	>=virtual/rust-1.51.0
@@ -411,12 +408,7 @@ src_prepare() {
 	export CARGO_BUILD_JOBS="$(makeopts_jobs)"
 
 	append-cppflags "-DTOR_BROWSER_DATA_IN_HOME_DIR"
-	eapply "${FILESDIR}"/${PN}11-profiledir.patch
-
-	# browser/components/BrowserGlue.jsm
-	local _h="${WORKDIR}/eff/chrome/torbutton/content/extensions/https-everywhere"
-	mkdir -p "${_h}"
-	unzip -q "${DISTDIR}/${MY_EFF}" -d "${_h}" || die
+	eapply "${FILESDIR}"/${PN}11.5-profiledir.patch
 
 	mv "${WORKDIR}"/${MY_TL#src-} browser/extensions/tor-launcher
 
@@ -457,7 +449,7 @@ src_prepare() {
 	BUILD_DIR="${WORKDIR}/${PN}_build"
 	mkdir -p "${BUILD_DIR}" || die
 
-	xdg_src_prepare
+	xdg_environment_reset
 }
 
 src_configure() {
@@ -757,7 +749,7 @@ src_configure() {
 	mozconfig_add_options_ac 'torbrowser' --disable-tor-browser-update
 	mozconfig_add_options_ac 'torbrowser' --enable-tor-launcher
 	mozconfig_add_options_ac 'torbrowser' --with-tor-browser-version=${MY_PV}
-	mozconfig_add_options_ac 'torbrowser' --disable-tor-browser-data-outside-app-dir
+	mozconfig_add_options_ac 'torbrowser' --enable-tor-browser-data-outside-app-dir
 	mozconfig_add_options_ac 'torbrowser' --with-branding=browser/branding/official
 	mozconfig_add_options_ac 'torbrowser' --disable-webrtc
 
