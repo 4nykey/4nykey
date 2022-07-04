@@ -4,7 +4,4 @@
 	<maintainer type="person">
 		<email>4nykey@gmail.com</email>
 	</maintainer>
-	<use>
-		<flag name="gtk3">Use GTK+3 instead of GTK+2</flag>
-	</use>
 </pkgmetadata>

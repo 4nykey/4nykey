@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -24,15 +24,14 @@ HOMEPAGE="https://github.com/googlefonts/${PN}"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE="gtk3"
+IUSE=""
 
 RDEPEND="
 	dev-libs/fribidi
 	dev-libs/libraqm
 	media-libs/freetype:2
 	media-libs/harfbuzz
-	!gtk3? ( x11-libs/wxGTK:3.0 )
-	gtk3? ( || ( x11-libs/wxGTK:3.0-gtk3 x11-libs/wxGTK:3.1 ) )
+	x11-libs/wxGTK:=
 "
 DEPEND="
 	${RDEPEND}
@@ -41,11 +40,8 @@ DEPEND="
 "
 
 pkg_setup() {
-	local _w=( 2 3.0 )
-	if use gtk3; then
-		_w=( 3 3.0-gtk3 )
-		has_version x11-libs/wxGTK:3.1 && _w=( 3 3.1 )
-	fi
+	local _w=( 3 3.0-gtk3 )
+	has_version x11-libs/wxGTK:3.2 && _w=( 3 3.2 )
 	_w="gtk${_w[0]}-unicode-${_w[1]}"
 	WX_CONFIG="${EPREFIX}/usr/$(get_libdir)/wx/config/${_w}"
 	einfo "Using wxWidgets:            ${_w}"
