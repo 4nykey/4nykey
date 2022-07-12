@@ -37,10 +37,10 @@ RDEPEND="
 	>=dev-python/lxml-4.5[${PYTHON_USEDEP}]
 	>=app-arch/brotli-1.0.9[python,${PYTHON_USEDEP}]
 	woff? (
-		>=dev-python/py-zopfli-0.1.9[${PYTHON_USEDEP}]
+		>=dev-python/py-zopfli-0.2.1[${PYTHON_USEDEP}]
 	)
 	ufo? (
-		>=dev-python/fs-2.4.14[${PYTHON_USEDEP}]
+		>=dev-python/fs-2.4.16[${PYTHON_USEDEP}]
 	)
 	unicode? (
 		>=dev-python/unicodedata2-14[${PYTHON_USEDEP}]
@@ -49,11 +49,11 @@ RDEPEND="
 	graphite? ( dev-python/lz4[${PYTHON_USEDEP}] )
 	plot? ( dev-python/matplotlib[${PYTHON_USEDEP}] )
 	symfont? ( dev-python/sympy[${PYTHON_USEDEP}] )
-	interpolatable? ( >=dev-python/scipy-1.7.3[${PYTHON_USEDEP}] )
+	interpolatable? ( >=dev-python/scipy-1.8.1[${PYTHON_USEDEP}] )
 	reportlab? ( dev-python/reportlab[${PYTHON_USEDEP}] )
 	skia? ( >=dev-python/skia-pathops-0.7.2[${PYTHON_USEDEP}] )
-	>=dev-python/freetype-py-2.2[${PYTHON_USEDEP}]
-	harfbuzz? ( >=dev-python/uharfbuzz-0.24.1[${PYTHON_USEDEP}] )
+	>=dev-python/freetype-py-2.3[${PYTHON_USEDEP}]
+	harfbuzz? ( >=dev-python/uharfbuzz-0.26[${PYTHON_USEDEP}] )
 "
 DEPEND="
 	${RDEPEND}

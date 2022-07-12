@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -29,6 +29,8 @@ IUSE=""
 
 RDEPEND="
 	>=dev-python/fonttools-4.28.1[${PYTHON_USEDEP}]
+	dev-python/glyphsLib[${PYTHON_USEDEP}]
+	dev-python/defcon[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}

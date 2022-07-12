@@ -31,7 +31,7 @@ IUSE="test"
 PATCHES=( "${FILESDIR}"/cu2qu.diff )
 
 RDEPEND="
-	>=dev-python/fonttools-4.33.3[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.34[ufo(-),${PYTHON_USEDEP}]
 	>=dev-python/defcon-0.10[${PYTHON_USEDEP}]
 	>=dev-python/compreffor-0.5.1[${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
