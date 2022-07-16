@@ -1,1 +1,0 @@
-papirus-smplayer-theme-9999.ebuild

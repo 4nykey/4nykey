@@ -1,15 +1,21 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
 inherit qmake-utils
 if [[ -z ${PV%%*9999} ]]; then
-	inherit subversion
-	ESVN_REPO_URI="https://subversion.assembla.com/svn/${PN%-*}/${PN}/trunk/"
+	inherit git-r3
+	ESVN_REPO_URI="https://github.com/smplayer-dev/${PN}"
 else
-	SRC_URI="mirror://sourceforge/${PN%-*}/${P}.tar.bz2"
+	MY_PV="a5345e6"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
+	SRC_URI="
+		mirror://githubcl/smplayer-dev/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+	"
+	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 
 DESCRIPTION="Icon themes for smplayer"
@@ -18,13 +24,13 @@ HOMEPAGE="https://www.smplayer.info"
 LICENSE="CC-BY-2.5 CC-BY-SA-2.5 CC-BY-SA-3.0 CC0-1.0 GPL-2 GPL-3+ LGPL-3"
 SLOT="0"
 IUSE=""
-DEPEND="
+BDEPEND="
 	dev-qt/qtcore:5
 "
 RDEPEND="
 	media-video/smplayer
 "
-DOCS=( Changelog README.txt )
+DOCS=( Changelog.md README.txt )
 
 src_prepare() {
 	default
