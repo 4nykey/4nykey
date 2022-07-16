@@ -3,11 +3,11 @@
 
 EAPI="8"
 
-FIREFOX_PATCHSET="firefox-91esr-patches-08j.tar.xz"
+FIREFOX_PATCHSET="firefox-91esr-patches-10j.tar.xz"
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="91.10.0esr-${MY_PV}-1-build1"
-MY_TL="0.2.33"
+MY_P="91.11.0esr-${MY_PV}-1-build1"
+MY_TL="0.2.37"
 MY_P="firefox-tor-browser-${MY_P}"
 
 LLVM_MAX_SLOT=14
@@ -35,14 +35,11 @@ else
 fi
 MY_PV="${MY_PV%.0}"
 MY_TL="src-tor-launcher-${MY_TL}"
-MY_EFF="2021.7.13"
 MY_NOS="11.4.6"
-MY_EFF="https-everywhere-${MY_EFF}-eff.xpi"
 MY_NOS="noscript-${MY_NOS}.xpi"
 SRC_URI="
 	mirror://tor/${PN}/${MY_PV}/src-${MY_P}.tar.xz
 	mirror://tor/${PN}/${MY_PV}/${MY_TL}.tar.xz
-	https://www.eff.org/files/${MY_EFF}
 	https://secure.informaction.com/download/releases/${MY_NOS}
 	${PATCH_URIS[@]}
 "
@@ -169,7 +166,8 @@ RDEPEND="
 	)
 	selinux? ( sec-policy/selinux-mozilla )"
 
-DEPEND+="
+DEPEND="
+	${DEPEND}
 	x11-libs/libICE
 	x11-libs/libSM
 	pulseaudio? (
@@ -411,12 +409,7 @@ src_prepare() {
 	export CARGO_BUILD_JOBS="$(makeopts_jobs)"
 
 	append-cppflags "-DTOR_BROWSER_DATA_IN_HOME_DIR"
-	eapply "${FILESDIR}"/${PN}11-profiledir.patch
-
-	# browser/components/BrowserGlue.jsm
-	local _h="${WORKDIR}/eff/chrome/torbutton/content/extensions/https-everywhere"
-	mkdir -p "${_h}"
-	unzip -q "${DISTDIR}/${MY_EFF}" -d "${_h}" || die
+	eapply "${FILESDIR}"/${PN}11.5-profiledir.patch
 
 	mv "${WORKDIR}"/${MY_TL#src-} browser/extensions/tor-launcher
 
@@ -757,7 +750,7 @@ src_configure() {
 	mozconfig_add_options_ac 'torbrowser' --disable-tor-browser-update
 	mozconfig_add_options_ac 'torbrowser' --enable-tor-launcher
 	mozconfig_add_options_ac 'torbrowser' --with-tor-browser-version=${MY_PV}
-	mozconfig_add_options_ac 'torbrowser' --disable-tor-browser-data-outside-app-dir
+	mozconfig_add_options_ac 'torbrowser' --enable-tor-browser-data-outside-app-dir
 	mozconfig_add_options_ac 'torbrowser' --with-branding=browser/branding/official
 	mozconfig_add_options_ac 'torbrowser' --disable-webrtc
 
