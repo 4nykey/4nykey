@@ -161,3 +161,15 @@
                      megaCmdListener->wait();
                      if (checkNoErrors(megaCmdListener->getError(), "sync folder", static_cast<SyncError>(megaCmdListener->getRequest()->getNumDetails())))
                      {
+--- a/src/megacmd.cpp
++++ b/src/megacmd.cpp
+@@ -4990,9 +4990,6 @@ int main(int argc, char* argv[])
+ 
+     NullBuffer null_buffer;
+     std::ostream null_stream(&null_buffer);
+-#ifndef ENABLE_LOG_PERFORMANCE
+-    SimpleLogger::setAllOutputs(&null_stream);
+-#endif
+     SimpleLogger::setLogLevel(logMax); // do not filter anything here, log level checking is done by loggerCMD
+ 
+     loggerCMD = new MegaCMDLogger();
