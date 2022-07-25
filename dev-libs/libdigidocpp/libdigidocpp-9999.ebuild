@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -40,7 +40,7 @@ BDEPEND="
 	>=dev-cpp/xsd-4.2.0_beta2
 	test? ( dev-libs/boost )
 	apidocs? ( app-doc/doxygen )
-	dev-util/cmake-openeid
+	>=dev-util/cmake-openeid-0_p20220223
 	|| (
 		dev-util/xxdi
 		app-editors/vim-core
