@@ -6,7 +6,7 @@ EAPI="8"
 FIREFOX_PATCHSET="firefox-91esr-patches-10j.tar.xz"
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="91.11.0esr-${MY_PV}-1-build1"
+MY_P="91.12.0esr-${MY_PV}-1-build1"
 MY_TL="0.2.37"
 MY_P="firefox-tor-browser-${MY_P}"
 
@@ -24,7 +24,7 @@ inherit autotools check-reqs desktop flag-o-matic gnome2-utils linux-info \
 	virtualx xdg
 
 PATCH_URIS=(
-	https://dev.gentoo.org/~{juippis,polynomial-c,whissi}/mozilla/patchsets/${FIREFOX_PATCHSET}
+	https://dev.gentoo.org/~{juippis,whissi}/mozilla/patchsets/${FIREFOX_PATCHSET}
 )
 
 if [[ -z ${PV%%*_alpha*} ]]; then
@@ -84,14 +84,6 @@ BDEPEND="${PYTHON_DEPS}
 			clang? (
 				=sys-devel/lld-13*
 				pgo? ( =sys-libs/compiler-rt-sanitizers-13*[profile] )
-			)
-		)
-		(
-			sys-devel/clang:12
-			sys-devel/llvm:12
-			clang? (
-				=sys-devel/lld-12*
-				pgo? ( =sys-libs/compiler-rt-sanitizers-12*[profile] )
 			)
 		)
 	)
