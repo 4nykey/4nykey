@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -46,7 +46,7 @@ BDEPEND="
 
 pkg_setup() {
 	if [[ ${PV} == *9999* ]]; then
-		EGIT_BRANCH="$(usex binary release master)"
+		EGIT_BRANCH="$(usex binary release main)"
 	else
 		S="${S%/*}/${MY_PN}-$(usex binary ${MY_PVB} ${MY_PV})"
 	fi

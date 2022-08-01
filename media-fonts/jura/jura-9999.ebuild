@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -7,7 +7,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/ossobuffo/${PN}.git"
 else
-	MY_PV="c2eda90"
+	MY_PV="f9df75d"
 	SRC_URI="
 		mirror://githubcl/ossobuffo/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -22,7 +22,7 @@ HOMEPAGE="https://github.com/ossobuffo/${PN}"
 LICENSE="GPL-3 OFL-1.1"
 SLOT="0"
 REQUIRED_USE+="
-	binary? ( !font_types_otf )
+	binary? ( variable? ( !font_types_otf ) )
 "
 
 pkg_setup() {

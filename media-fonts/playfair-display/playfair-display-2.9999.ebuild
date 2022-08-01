@@ -8,14 +8,14 @@ EMAKE_EXTRA_ARGS=(
 	glyphs='sources/Playfair-2-Italic.glyphs sources/Playfair-2-Roman.glyphs'
 )
 HELPER_ARGS=( mutatormath )
-FONTDIR_BIN=( fonts/{CF,TT}F )
+FONTDIR_BIN=( fonts/VF-TTF )
 SLOT="2"
 FONT_PN="${PN}-${SLOT}"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/clauseggers/${MY_PN}.git"
 else
-	MY_PV="0a1a00b"
+	MY_PV="e810924"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/clauseggers/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -29,4 +29,6 @@ DESCRIPTION="An Open Source typeface family for display and titling use"
 HOMEPAGE="https://github.com/clauseggers/${MY_PN}"
 
 LICENSE="OFL-1.1"
-REQUIRED_USE="!binary"
+REQUIRED_USE+="
+	binary? ( variable font_types_ttf )
+"

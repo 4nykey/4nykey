@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -7,8 +7,9 @@ MY_PN="Sofia-Sans"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/lettersoup/${MY_PN}.git"
+	EGIT_REPO_URI="https://github.com/vv-monsalve/${MY_PN}.git"
 else
-	MY_PV="cba178c"
+	MY_PV="888b575"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV/_/-}"
 	SRC_URI="
 		mirror://githubcl/lettersoup/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -28,6 +29,6 @@ REQUIRED_USE+="
 "
 
 pkg_setup() {
-	use font_types_ttf && use !variable && FONTDIR_BIN=( fonts/ttf/static )
+	use variable && FONTDIR_BIN=( fonts/variable )
 	fontmake_pkg_setup
 }

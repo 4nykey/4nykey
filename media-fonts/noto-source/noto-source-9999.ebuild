@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}"
 	EGIT_SUBMODULES=( )
 else
-	MY_PV="b1e8999"
+	MY_PV="e173b59"
 	SRC_URI="
 		mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -32,10 +32,10 @@ RDEPEND="
 
 src_prepare() {
 	use clean-as-you-go && HELPER_ARGS=( clean )
-	local _g
-	rm -f src/NotoSansTifinagh-Regular.glyphs
-	for _g in NotoNaskhArabic{,UI}; do
-		ln -s ${_g}/${_g}.glyphs src/${_g}.glyphs
-	done
+	# rm duplicates
+	rm \
+		src/NotoSansMalayalam-MM.glyphs \
+		src/NotoSansGujarati-MM.glyphs \
+		-f
 	fontmake_src_prepare
 }

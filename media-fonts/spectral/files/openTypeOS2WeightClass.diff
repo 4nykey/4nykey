@@ -1,0 +1,22 @@
+--- a/sources/spectral-build-italic.designspace
++++ b/sources/spectral-build-italic.designspace
+@@ -27,7 +27,7 @@
+     <instances>
+         <instance familyname="Spectral" filename="instances/spectral-extralightitalic.ufo" postscriptfontname="Spectral-ExtraLightItalic" stylemapfamilyname="Spectral ExtraLight" stylemapstylename="italic" stylename="ExtraLight Italic">
+             <location>
+-                <dimension name="weight" xvalue="0" />
++                <dimension name="weight" xvalue="1" />
+             </location>
+             <kerning />
+             <info />
+--- a/sources/spectral-build-roman.designspace
++++ b/sources/spectral-build-roman.designspace
+@@ -27,7 +27,7 @@
+     <instances>
+         <instance familyname="Spectral" filename="instances/spectral-extralight.ufo" postscriptfontname="Spectral-ExtraLight" stylemapfamilyname="Spectral ExtraLight" stylemapstylename="regular" stylename="ExtraLight">
+             <location>
+-                <dimension name="weight" xvalue="0" />
++                <dimension name="weight" xvalue="1" />
+             </location>
+             <kerning />
+             <info />

@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${MY_PN}.git"
 else
-	MY_PV="c071e96"
+	MY_PV="ebedbda"
 	SRC_URI="
 		mirror://githubcl/googlefonts/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -27,5 +27,6 @@ REQUIRED_USE="binary? ( !font_types_otf )"
 
 pkg_setup() {
 	use variable && FONTDIR_BIN=( fonts/variable )
+	use binary || PATCHES=( "${FILESDIR}"/designspace.diff )
 	fontmake_pkg_setup
 }
