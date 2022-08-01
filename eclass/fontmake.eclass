@@ -4,7 +4,7 @@
 # @ECLASS: fontmake.eclass
 # @MAINTAINER:
 # 4nykey@gmail.com
-# @SUPPORTED_EAPIS: 5 6 7
+# @SUPPORTED_EAPIS: 7 8
 # @BLURB: An eclass to build fonts from sources using dev-util/fontmake
 
 # @VARIABLE: FONT_SRCDIR
@@ -42,7 +42,7 @@ inherit python-any-r1 font-r1
 
 EXPORT_FUNCTIONS pkg_setup src_prepare src_compile
 
-MY_MK="3fb0e57"
+MY_MK="7a286dc"
 MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-${MY_MK}"
 SRC_URI+="
 !binary? (
@@ -55,14 +55,13 @@ DEPEND="
 !binary? (
 	${PYTHON_DEPS}
 	$(python_gen_any_dep '
-		>=dev-util/fontmake-2.4[${PYTHON_USEDEP}]
+		>=dev-util/fontmake-3.4[${PYTHON_USEDEP}]
 	')
 	autohint? ( media-gfx/ttfautohint )
 )
 "
 case ${EAPI:-0} in
-	5|6) ;;
-	7) BDEPEND="${DEPEND}"; DEPEND="" ;;
+	7|8) BDEPEND="${DEPEND}"; DEPEND="" ;;
 	*) die "${ECLASS}: EAPI ${EAPI} not supported" ;;
 esac
 
