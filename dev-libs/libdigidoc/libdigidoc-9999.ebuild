@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -21,7 +21,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit flag-o-matic cmake-utils
+inherit flag-o-matic cmake
 
 DESCRIPTION="DigiDoc digital signature library"
 HOMEPAGE="https://id.ee"
@@ -53,7 +53,7 @@ src_prepare() {
 		-e "/CMAKE_INSTALL_DOCDIR/s:${PN}:${PF}:" \
 		-e 's:\${CMAKE_SOURCE_DIR}/cmake/modules:/usr/share/cmake/openeid:' \
 		-i CMakeLists.txt
-	cmake-utils_src_prepare
+	cmake_src_prepare
 	append-cppflags '-DOF=_Z_OF'
 }
 
@@ -62,5 +62,5 @@ src_configure() {
 		-DCMAKE_INSTALL_SYSCONFDIR="${EPREFIX}/etc"
 		-DCMAKE_DISABLE_FIND_PACKAGE_Doxygen=$(usex !apidocs)
 	)
-	cmake-utils_src_configure
+	cmake_src_configure
 }
