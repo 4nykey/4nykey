@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -6,13 +6,13 @@ EAPI=7
 MY_FONT_TYPES=( otf +ttf )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/googlefonts/${PN}.git"
+	EGIT_REPO_URI="https://github.com/notofonts/${PN}.git"
 else
 	MY_PV="phase3"
 	MY_PV="v${PV//.}-${MY_PV}"
-	[[ -z ${PV%%*_p*} ]] && MY_PV="0723a59"
+	[[ -z ${PV%%*_p*} ]] && MY_PV="0c78c83"
 	SRC_URI="
-		mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV}
+		mirror://githubcl/notofonts/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
@@ -22,7 +22,7 @@ fi
 inherit font-r1
 
 DESCRIPTION="A font family that aims to support all the world's languages"
-HOMEPAGE="https://www.google.com/get/noto"
+HOMEPAGE="https://notofonts.github.io"
 
 LICENSE="OFL-1.1"
 SLOT="0"
