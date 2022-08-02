@@ -4,8 +4,13 @@
 # @ECLASS: font-r1.eclass
 # @MAINTAINER:
 # 4nykey@gmail.com
-# @SUPPORTED_EAPIS: 5 6 7
+# @SUPPORTED_EAPIS: 7 8
 # @BLURB: Eclass to make font installation uniform
+
+case ${EAPI:-0} in
+	[7-8]) ;;
+	*) die "${ECLASS}: EAPI ${EAPI} not supported" ;;
+esac
 
 EXPORT_FUNCTIONS pkg_setup src_install pkg_postinst pkg_postrm
 
@@ -84,12 +89,6 @@ DEPEND="
 	)
 	sys-apps/findutils
 "
-case ${EAPI:-0} in
-	5) inherit eutils ;;
-	6) ;;
-	7) BDEPEND="${DEPEND}"; DEPEND="" ;;
-	*) die "${ECLASS}: EAPI ${EAPI} not supported" ;;
-esac
 
 RDEPEND=""
 RESTRICT+=" strip binchecks"

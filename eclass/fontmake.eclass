@@ -61,7 +61,7 @@ DEPEND="
 )
 "
 case ${EAPI:-0} in
-	7|8) BDEPEND="${DEPEND}"; DEPEND="" ;;
+	7|8) ;;
 	*) die "${ECLASS}: EAPI ${EAPI} not supported" ;;
 esac
 
