@@ -44,7 +44,7 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	dev-libs/breakpad
+	dev-util/breakpad
 "
 BDEPEND="
 	dev-qt/linguist-tools:5
