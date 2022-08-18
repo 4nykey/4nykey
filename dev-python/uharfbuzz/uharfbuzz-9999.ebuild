@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	MY_PV="3e8a1e2"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
-	MY_HB="harfbuzz-5.0.0"
+	MY_HB="harfbuzz-5.1.0"
 	SRC_URI="
 		mirror://githubcl/harfbuzz/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://githubcl/harfbuzz/${MY_HB%-*}/tar.gz/${MY_HB##*-}

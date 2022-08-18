@@ -49,11 +49,11 @@ RDEPEND="
 	graphite? ( dev-python/lz4[${PYTHON_USEDEP}] )
 	plot? ( dev-python/matplotlib[${PYTHON_USEDEP}] )
 	symfont? ( dev-python/sympy[${PYTHON_USEDEP}] )
-	interpolatable? ( >=dev-python/scipy-1.8.1[${PYTHON_USEDEP}] )
+	interpolatable? ( dev-python/scipy[${PYTHON_USEDEP}] )
 	reportlab? ( dev-python/reportlab[${PYTHON_USEDEP}] )
 	skia? ( >=dev-python/skia-pathops-0.7.2[${PYTHON_USEDEP}] )
 	>=dev-python/freetype-py-2.3[${PYTHON_USEDEP}]
-	harfbuzz? ( >=dev-python/uharfbuzz-0.26[${PYTHON_USEDEP}] )
+	harfbuzz? ( >=dev-python/uharfbuzz-0.30[${PYTHON_USEDEP}] )
 "
 DEPEND="
 	${RDEPEND}
@@ -61,7 +61,7 @@ DEPEND="
 BDEPEND="
 	dev-python/cython[${PYTHON_USEDEP}]
 	test? (
-		>=dev-python/ufoLib2-0.13[${PYTHON_USEDEP}]
+		>=dev-python/ufoLib2-0.13.1[${PYTHON_USEDEP}]
 	)
 "
 distutils_enable_sphinx Doc/source dev-python/sphinx_rtd_theme
