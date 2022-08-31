@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI=""
 else
 	MY_PV="d2fc9ef"
-	MY_MP="mp4p-82291e4"
+	MY_MP="mp4p-a80941d"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/DeaDBeeF-Player/${PN}/tar.gz/${MY_PV}
@@ -32,7 +32,7 @@ SLOT="0"
 IUSE="
 alsa oss pulseaudio gtk curl sid mad mac vorbis ffmpeg flac sndfile
 wavpack cdda gme libnotify musepack midi tta dts aac mms libsamplerate X
-zip nls threads gtk3 dumb shorten alac wma opus lastfm clang
+zip nls threads gtk3 dumb shorten alac wma opus lastfm +clang
 "
 REQUIRED_USE="
 	lastfm? ( curl clang )
@@ -82,11 +82,18 @@ BDEPEND="
 	mac? ( dev-lang/yasm )
 	clang? ( sys-devel/clang )
 "
+PATCHES=(
+	"${FILESDIR}"/1bb94a3.patch
+)
 
 pkg_setup() {
 	if use clang && ! tc-is-clang; then
+		AR=llvm-ar
 		CC=${CHOST}-clang
 		CXX=${CHOST}-clang++
+		NM=llvm-nm
+		RANLIB=llvm-ranlib
+
 		strip-unsupported-flags
 	fi
 }
