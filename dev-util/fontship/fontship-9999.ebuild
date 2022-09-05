@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -170,6 +170,9 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 "
+BDEPEND="
+	app-misc/jq
+"
 
 src_prepare() {
 	if [[ -n ${PV%%*9999} ]]; then
@@ -182,6 +185,7 @@ src_prepare() {
 	sed \
 		-e '/dist_license_DATA = /d' \
 		-e '/docdir = /d' \
+		-e 's:\<cp\> -bf:cp -f:' \
 		-i Makefile.am
 	eautoreconf
 }
