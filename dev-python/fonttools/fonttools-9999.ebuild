@@ -17,7 +17,7 @@ else
 		mirror://githubcl/${PN}/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
 
@@ -49,7 +49,7 @@ RDEPEND="
 	graphite? ( dev-python/lz4[${PYTHON_USEDEP}] )
 	plot? ( dev-python/matplotlib[${PYTHON_USEDEP}] )
 	symfont? ( dev-python/sympy[${PYTHON_USEDEP}] )
-	interpolatable? ( dev-python/scipy[${PYTHON_USEDEP}] )
+	interpolatable? ( >=dev-python/scipy-1.9[${PYTHON_USEDEP}] )
 	reportlab? ( dev-python/reportlab[${PYTHON_USEDEP}] )
 	skia? ( >=dev-python/skia-pathops-0.7.2[${PYTHON_USEDEP}] )
 	>=dev-python/freetype-py-2.3[${PYTHON_USEDEP}]
