@@ -3,7 +3,6 @@
 
 EAPI=7
 
-FONTDIR_BIN=( fonts/static )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}.git"
