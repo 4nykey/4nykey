@@ -1,0 +1,21 @@
+--- a/setup.py
++++ b/setup.py
+@@ -48,9 +48,7 @@ setup(
+         "toml>=0.10.1",
+         "ufo2ft[cffsubr]>=2.24.0",
+         "ufoLib2>=0.6.2",
+-        "resvg-cli>=0.22.0.post3",
+         "zopfli>=0.2.1",
+-        "pngquant-cli>=2.17.0.post5",
+     ],
+     extras_require=extras_require,
+     # this is so we can use the built-in dataclasses module
+@@ -58,7 +56,7 @@ setup(
+ 
+     # this is for type checker to use our inline type hints:
+     # https://www.python.org/dev/peps/pep-0561/#id18
+-    package_data={"picosvg": ["py.typed"]},
++    package_data={"picosvg": ["py.typed"], "nanoemoji": ["data/_default.toml"]},
+ 
+     # metadata to display on PyPI
+     author="Rod S",

@@ -49,7 +49,7 @@ RDEPEND="
 	graphite? ( dev-python/lz4[${PYTHON_USEDEP}] )
 	plot? ( dev-python/matplotlib[${PYTHON_USEDEP}] )
 	symfont? ( dev-python/sympy[${PYTHON_USEDEP}] )
-	interpolatable? ( >=dev-python/scipy-1.9[${PYTHON_USEDEP}] )
+	interpolatable? ( >=dev-python/scipy-1.9.1[${PYTHON_USEDEP}] )
 	reportlab? ( dev-python/reportlab[${PYTHON_USEDEP}] )
 	skia? ( >=dev-python/skia-pathops-0.7.2[${PYTHON_USEDEP}] )
 	>=dev-python/freetype-py-2.3[${PYTHON_USEDEP}]

@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -16,7 +16,7 @@ else
 		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
 
@@ -28,7 +28,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.28.5[ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.37.1[ufo(-),unicode(-),${PYTHON_USEDEP}]
 	dev-python/fontMath[${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
 	dev-python/booleanOperations[${PYTHON_USEDEP}]

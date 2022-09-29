@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -41,5 +41,6 @@ distutils_enable_tests pytest
 
 python_prepare_all() {
 	sed -e '/\<pytest-runner\>/d' -i setup.py
+	sed -e 's:collections.Iterable:collections.abc.Iterable:' -i ffmpeg/_run.py
 	distutils-r1_python_prepare_all
 }

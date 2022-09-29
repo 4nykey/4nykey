@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -15,7 +15,7 @@ else
 		mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 
@@ -27,30 +27,30 @@ SLOT="0"
 IUSE=""
 
 DEPEND="
-	>=dev-util/afdko-3.4[${PYTHON_USEDEP}]
+	>=dev-util/afdko-3.9.1[${PYTHON_USEDEP}]
 	>=dev-python/appdirs-1.4.4[${PYTHON_USEDEP}]
-	>=dev-python/attrs-19.3[${PYTHON_USEDEP}]
-	>=dev-python/black-21.8_beta0[${PYTHON_USEDEP}]
+	>=dev-python/attrs-21.4[${PYTHON_USEDEP}]
+	>=dev-python/black-22.6[${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
-	>=app-arch/brotli-1.0.7[python,${PYTHON_USEDEP}]
-	>=dev-python/click-7.1.2[${PYTHON_USEDEP}]
-	>=dev-python/defcon-0.6[${PYTHON_USEDEP}]
-	>=dev-python/fontMath-0.6[${PYTHON_USEDEP}]
-	>=dev-python/fontParts-0.9.2[${PYTHON_USEDEP}]
+	>=app-arch/brotli-1.0.9[python,${PYTHON_USEDEP}]
+	>=dev-python/click-8.1.3[${PYTHON_USEDEP}]
+	>=dev-python/defcon-0.10.2[${PYTHON_USEDEP}]
+	>=dev-python/fontMath-0.9.2[${PYTHON_USEDEP}]
+	>=dev-python/fontParts-0.10.7[${PYTHON_USEDEP}]
 	>=dev-python/fontPens-0.2.4[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-4.11[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.34.4[ufo(-),${PYTHON_USEDEP}]
 	>=dev-python/MutatorMath-3.0.1[${PYTHON_USEDEP}]
 	>=dev-python/pathspec-0.9[${PYTHON_USEDEP}]
-	>=dev-python/pillow-8.3.2[${PYTHON_USEDEP}]
-	>=dev-python/pyclipper-1.2.1[${PYTHON_USEDEP}]
-	>=dev-python/pytz-2020.1[${PYTHON_USEDEP}]
-	>=dev-python/regex-2020.5.14[${PYTHON_USEDEP}]
-	>=media-gfx/scour-0.37[${PYTHON_USEDEP}]
-	>=dev-python/toml-0.10.1[${PYTHON_USEDEP}]
+	>=dev-python/pillow-9.2[${PYTHON_USEDEP}]
+	>=dev-python/pyclipper-1.3[${PYTHON_USEDEP}]
+	>=dev-python/pytz-2022.1[${PYTHON_USEDEP}]
+	>=dev-python/regex-2022.7.25[${PYTHON_USEDEP}]
+	>=media-gfx/scour-0.38.2[${PYTHON_USEDEP}]
+	>=dev-python/toml-0.10.2[${PYTHON_USEDEP}]
 	>=dev-python/typed-ast-1.4.2[${PYTHON_USEDEP}]
-	>=dev-python/ufoNormalizer-0.4.1[${PYTHON_USEDEP}]
+	>=dev-python/ufoNormalizer-0.6.1[${PYTHON_USEDEP}]
 	>=dev-python/ufoProcessor-1.9[${PYTHON_USEDEP}]
-	>=dev-python/py-zopfli-0.1.7[${PYTHON_USEDEP}]
+	>=dev-python/py-zopfli-0.2.1[${PYTHON_USEDEP}]
 	dev-python/unicodedata2[${PYTHON_USEDEP}]
 	dev-python/freetype-py[${PYTHON_USEDEP}]
 	media-libs/harfbuzz
@@ -58,8 +58,8 @@ DEPEND="
 RDEPEND="
 	${DEPEND}
 	>=app-i18n/unicode-cldr-37
-	>=app-i18n/unicode-data-13
-	>=app-i18n/unicode-emoji-13.1
+	>=app-i18n/unicode-data-15
+	>=app-i18n/unicode-emoji-15
 "
 BDEPEND="
 	dev-python/setuptools_scm[${PYTHON_USEDEP}]
