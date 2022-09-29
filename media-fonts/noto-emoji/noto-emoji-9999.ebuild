@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -17,7 +17,7 @@ else
 		-> ${MY_P}.tar.gz
 	"
 	RESTRICT="primaryuri"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 	S="${WORKDIR}/${MY_P}"
 fi
 
@@ -32,13 +32,13 @@ BDEPEND="
 !binary? (
 	${PYTHON_DEPS}
 	$(python_gen_any_dep '
-		>=dev-python/nototools-0.2.16[${PYTHON_USEDEP}]
+		>=dev-python/nototools-0.2.17[${PYTHON_USEDEP}]
 	')
-	media-gfx/pngquant
+	>=dev-python/nanoemoji-0.14.3
 	virtual/imagemagick-tools[png]
 	app-arch/zopfli
 	x11-libs/cairo
-	>=app-i18n/unicode-emoji-14.0
+	>=app-i18n/unicode-emoji-15
 )
 "
 PATCHES=( "${FILESDIR}"/${PN}-makefile.diff )
@@ -66,9 +66,13 @@ src_prepare() {
 
 src_compile() {
 	use binary && return
+	addpredict /proc/self/comm
 	tc-env_build emake \
 		PNGQUANT=/usr/bin/pngquant \
 		PYTHON="${EPYTHON}" \
 		VIRTUAL_ENV=1
 	rm -f *.tmpl.ttf
+	nanoemoji colrv1/*.toml
+	cp build/NotoColorEmoji.ttf Noto-COLRv1.ttf
+	cp build/NotoColorEmoji-noflags.ttf Noto-COLRv1-noflags.ttf
 }
