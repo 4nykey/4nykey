@@ -1,18 +1,18 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="8"
+EAPI=8
 
-FIREFOX_PATCHSET="firefox-91esr-patches-08j.tar.xz"
+FIREFOX_PATCHSET="firefox-102esr-patches-03j.tar.xz"
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="91.10.0esr-${MY_PV}-1-build2"
-MY_TL="0.2.35"
+MY_P="102.3.0esr-${MY_PV}-1-build2"
+MY_TL="0.2.39"
 MY_P="firefox-tor-browser-${MY_P}"
 
 LLVM_MAX_SLOT=14
 
-PYTHON_COMPAT=( python3_{8..10} )
+PYTHON_COMPAT=( python3_{8..11} )
 PYTHON_REQ_USE="ncurses,sqlite,ssl"
 
 WANT_AUTOCONF="2.1"
@@ -35,7 +35,7 @@ else
 fi
 MY_PV="${MY_PV%.0}"
 MY_TL="src-tor-launcher-${MY_TL}"
-MY_NOS="11.4.6"
+MY_NOS="11.4.11"
 MY_NOS="noscript-${MY_NOS}.xpi"
 SRC_URI="
 	mirror://tor/${PN}/${MY_PV}/src-${MY_P}.tar.xz
@@ -53,8 +53,8 @@ LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
 LICENSE+=" BSD CC-BY-3.0"
 
 IUSE="+clang cpu_flags_arm_neon dbus debug eme-free hardened hwaccel"
-IUSE+=" jack lto +openh264 pgo pulseaudio sndio selinux"
-IUSE+=" +system-av1 +system-harfbuzz +system-icu +system-jpeg +system-libevent +system-libvpx system-png +system-webp"
+IUSE+=" jack libproxy lto +openh264 pgo pulseaudio sndio selinux"
+IUSE+=" +system-av1 +system-harfbuzz +system-icu +system-jpeg +system-libevent +system-libvpx system-png system-python-libs +system-webp"
 IUSE+=" wayland wifi"
 
 REQUIRED_USE="debug? ( !system-av1 )
@@ -64,10 +64,10 @@ REQUIRED_USE="debug? ( !system-av1 )
 BDEPEND="${PYTHON_DEPS}
 	app-arch/unzip
 	app-arch/zip
-	>=dev-util/cbindgen-0.24.0
-	>=net-libs/nodejs-10.23.1
+	>=dev-util/cbindgen-0.24.3
+	net-libs/nodejs
 	virtual/pkgconfig
-	>=virtual/rust-1.51.0
+	virtual/rust
 	|| (
 		(
 			sys-devel/clang:14
@@ -75,7 +75,6 @@ BDEPEND="${PYTHON_DEPS}
 			clang? (
 				=sys-devel/lld-14*
 				pgo? ( =sys-libs/compiler-rt-sanitizers-14*[profile] )
-			sys-devel/clang:14
 			)
 		)
 		(
@@ -87,67 +86,73 @@ BDEPEND="${PYTHON_DEPS}
 			)
 		)
 	)
-	amd64? ( >=dev-lang/nasm-2.13 )
-	x86? ( >=dev-lang/nasm-2.13 )"
+	amd64? ( >=dev-lang/nasm-2.14 )
+	x86? ( >=dev-lang/nasm-2.14 )"
 
-DEPEND="
-	>=dev-libs/nss-3.68
-	>=dev-libs/nspr-4.32
+COMMON_DEPEND="
 	dev-libs/atk
 	dev-libs/expat
-	>=x11-libs/cairo-1.10[X]
-	>=x11-libs/gtk+-3.4.0:3[X]
-	x11-libs/gdk-pixbuf
-	>=x11-libs/pango-1.22.0
-	>=media-libs/mesa-10.2:*
+	dev-libs/glib:2
+	dev-libs/libffi:=
+	>=dev-libs/nss-3.79.1
+	>=dev-libs/nspr-4.34
+	media-libs/alsa-lib
 	media-libs/fontconfig
-	>=media-libs/freetype-2.4.10
-	kernel_linux? ( !pulseaudio? ( media-libs/alsa-lib ) )
-	virtual/freedesktop-icon-theme
-	>=x11-libs/pixman-0.19.2
-	>=dev-libs/glib-2.26:2
-	>=sys-libs/zlib-1.2.3
-	>=dev-libs/libffi-3.0.10:=
+	media-libs/freetype
+	media-libs/mesa
 	media-video/ffmpeg
+	sys-libs/zlib
+	virtual/freedesktop-icon-theme
+	virtual/opengl
+	x11-libs/cairo[X]
+	x11-libs/gdk-pixbuf
+	x11-libs/gtk+:3[X]
 	x11-libs/libX11
-	x11-libs/libxcb:=
 	x11-libs/libXcomposite
 	x11-libs/libXdamage
 	x11-libs/libXext
 	x11-libs/libXfixes
-	x11-libs/libXrender
-	x11-libs/libXt
+	x11-libs/libXrandr
+	x11-libs/libXtst
+	x11-libs/libxcb:=
+	x11-libs/libxkbcommon[X]
+	x11-libs/pango
+	x11-libs/pixman
 	dbus? (
-		sys-apps/dbus
 		dev-libs/dbus-glib
+		sys-apps/dbus
 	)
+	jack? ( virtual/jack )
+	libproxy? ( net-libs/libproxy )
+	sndio? ( >=media-sound/sndio-1.8.0-r1 )
 	system-av1? (
-		>=media-libs/dav1d-0.8.1:=
+		>=media-libs/dav1d-1.0.0:=
 		>=media-libs/libaom-1.0.0:=
 	)
 	system-harfbuzz? (
-		>=media-libs/harfbuzz-2.8.1:0=
 		>=media-gfx/graphite2-1.3.13
+		>=media-libs/harfbuzz-2.8.1:0=
 	)
-	system-icu? ( >=dev-libs/icu-69.1:= )
+	system-icu? ( >=dev-libs/icu-71.1:= )
 	system-jpeg? ( >=media-libs/libjpeg-turbo-1.2.1 )
 	system-libevent? ( >=dev-libs/libevent-2.0:0=[threads] )
 	system-libvpx? ( >=media-libs/libvpx-1.8.2:0=[postproc] )
 	system-png? ( >=media-libs/libpng-1.6.35:0=[apng] )
 	system-webp? ( >=media-libs/libwebp-1.1.0:0= )
+	wayland? (
+		x11-libs/gtk+:3[wayland]
+		x11-libs/libdrm
+		x11-libs/libxkbcommon[wayland]
+	)
 	wifi? (
 		kernel_linux? (
-			sys-apps/dbus
 			dev-libs/dbus-glib
 			net-misc/networkmanager
+			sys-apps/dbus
 		)
-	)
-	jack? ( virtual/jack )
-	selinux? ( sec-policy/selinux-mozilla )
-	sndio? ( media-sound/sndio )"
+	)"
 
-RDEPEND="
-	${DEPEND}
+RDEPEND="${COMMON_DEPEND}
 	jack? ( virtual/jack )
 	openh264? ( media-libs/openh264:*[plugin] )
 	pulseaudio? (
@@ -155,11 +160,9 @@ RDEPEND="
 			media-sound/pulseaudio
 			>=media-sound/apulse-0.1.12-r4
 		)
-	)
-	selinux? ( sec-policy/selinux-mozilla )"
+	)"
 
-DEPEND="
-	${DEPEND}
+DEPEND="${COMMON_DEPEND}
 	x11-libs/libICE
 	x11-libs/libSM
 	pulseaudio? (
@@ -167,10 +170,7 @@ DEPEND="
 			media-sound/pulseaudio
 			>=media-sound/apulse-0.1.12-r4[sdk]
 		)
-	)
-	wayland? ( >=x11-libs/gtk+-3.11:3[wayland] )
-	amd64? ( virtual/opengl )
-	x86? ( virtual/opengl )"
+	)"
 RDEPEND+="
 	net-vpn/tor
 "
@@ -198,6 +198,21 @@ llvm_check_deps() {
 	fi
 
 	einfo "Using LLVM slot ${LLVM_SLOT} to build" >&2
+}
+
+moz_clear_vendor_checksums() {
+	debug-print-function ${FUNCNAME} "$@"
+
+	if [[ ${#} -ne 1 ]] ; then
+		die "${FUNCNAME} requires exact one argument"
+	fi
+
+	einfo "Clearing cargo checksums for ${1} ..."
+
+	sed -i \
+		-e 's/\("files":{\)[^}]*/\1/' \
+		"${S}"/third_party/rust/${1}/.cargo-checksum.json \
+		|| die
 }
 
 mozconfig_add_options_ac() {
@@ -266,7 +281,7 @@ pkg_pretend() {
 		if use pgo || use lto || use debug ; then
 			CHECKREQS_DISK_BUILD="13500M"
 		else
-			CHECKREQS_DISK_BUILD="6400M"
+			CHECKREQS_DISK_BUILD="6600M"
 		fi
 
 		check-reqs_pkg_pretend
@@ -311,13 +326,6 @@ pkg_setup() {
 				eerror "    llvm/clang/lld/rust chain depending on your @world updates)"
 				die "LLVM version used by Rust (${version_llvm_rust}) does not match with ld.lld version (${version_lld})!"
 			fi
-		fi
-
-		if ! use clang && [[ $(gcc-major-version) -eq 11 ]] \
-			&& ! has_version -b ">sys-devel/gcc-11.1.0:11" ; then
-			# bug 792705
-			eerror "Using GCC 11 to compile firefox is currently known to be broken (see bug #792705)."
-			die "Set USE=clang or select <gcc-11 to build ${CATEGORY}/${P}."
 		fi
 
 		python-any-r1_pkg_setup
@@ -384,14 +392,6 @@ src_prepare() {
 		rm -v "${WORKDIR}"/firefox-patches/*-LTO-Only-enable-LTO-*.patch || die
 	fi
 
-	if use system-av1 && has_version "<media-libs/dav1d-1.0.0"; then
-		rm -v "${WORKDIR}"/firefox-patches/0033-bgo-835788-dav1d-1.0.0-support.patch || die
-		elog "<media-libs/dav1d-1.0.0 detected, removing 1.0.0 compat patch."
-	elif ! use system-av1; then
-		rm -v "${WORKDIR}"/firefox-patches/0033-bgo-835788-dav1d-1.0.0-support.patch || die
-		elog "-system-av1 USE flag detected, removing 1.0.0 compat patch."
-	fi
-
 	eapply "${WORKDIR}/firefox-patches"
 
 	# Allow user to apply any additional patches without modifing ebuild
@@ -433,11 +433,6 @@ src_prepare() {
 	einfo "Removing pre-built binaries ..."
 	find "${S}"/third_party -type f \( -name '*.so' -o -name '*.o' \) -print -delete || die
 
-	# Clearing checksums where we have applied patches
-	sed -e 's/\("files":{\)[^}]*/\1/' \
-		-i "${S}"/third_party/rust/target-lexicon-0.9.0/.cargo-checksum.json \
-		|| die
-
 	# Create build dir
 	BUILD_DIR="${WORKDIR}/${PN}_build"
 	mkdir -p "${BUILD_DIR}" || die
@@ -459,6 +454,7 @@ src_configure() {
 		einfo "Enforcing the use of clang due to USE=clang ..."
 		have_switched_compiler=yes
 		AR=llvm-ar
+		AS=llvm-as
 		CC=${CHOST}-clang
 		CXX=${CHOST}-clang++
 		NM=llvm-nm
@@ -512,9 +508,13 @@ src_configure() {
 		--allow-addon-sideload \
 		--disable-cargo-incremental \
 		--disable-crashreporter \
+		--disable-gpsd \
 		--disable-install-strip \
+		--disable-parental-controls \
 		--disable-strip \
 		--disable-updater \
+		--enable-negotiateauth \
+		--enable-new-pass-manager \
 		--enable-official-branding \
 		--enable-release \
 		--enable-system-ffi \
@@ -524,6 +524,7 @@ src_configure() {
 		--prefix="${EPREFIX}/usr" \
 		--target="${CHOST}" \
 		--without-ccache \
+		--without-wasm-sandboxed-libraries \
 		--with-intl-api \
 		--with-libclang-path="$(llvm-config --libdir)" \
 		--with-system-nspr \
@@ -538,34 +539,6 @@ src_configure() {
 	local update_channel=release
 	[[ -n ${MOZ_ESR} ]] && update_channel=esr
 	mozconfig_add_options_ac '' --update-channel=${update_channel}
-
-	if ! use x86 && [[ ${CHOST} != armv*h* ]] ; then
-		mozconfig_add_options_ac '' --enable-rust-simd
-	fi
-
-	if [[ -s "${S}/api-google.key" ]] ; then
-		local key_origin="Gentoo default"
-		if [[ $(cat "${S}/api-google.key" | md5sum | awk '{ print $1 }') != 709560c02f94b41f9ad2c49207be6c54 ]] ; then
-			key_origin="User value"
-		fi
-
-		mozconfig_add_options_ac "${key_origin}" \
-			--with-google-safebrowsing-api-keyfile="${S}/api-google.key"
-	else
-		einfo "Building without Google API key ..."
-	fi
-
-	if [[ -s "${S}/api-location.key" ]] ; then
-		local key_origin="Gentoo default"
-		if [[ $(cat "${S}/api-location.key" | md5sum | awk '{ print $1 }') != ffb7895e35dedf832eb1c5d420ac7420 ]] ; then
-			key_origin="User value"
-		fi
-
-		mozconfig_add_options_ac "${key_origin}" \
-			--with-google-location-service-api-keyfile="${S}/api-location.key"
-	else
-		einfo "Building without Location API key ..."
-	fi
 
 	if [[ -s "${S}/api-mozilla.key" ]] ; then
 		local key_origin="Gentoo default"
@@ -584,12 +557,13 @@ src_configure() {
 	mozconfig_use_with system-harfbuzz system-graphite2
 	mozconfig_use_with system-icu
 	mozconfig_use_with system-jpeg
-	mozconfig_use_with system-libevent system-libevent "${ESYSROOT}/usr"
+	mozconfig_use_with system-libevent
 	mozconfig_use_with system-libvpx
 	mozconfig_use_with system-png
 	mozconfig_use_with system-webp
 
 	mozconfig_use_enable dbus
+	mozconfig_use_enable libproxy
 
 	use eme-free && mozconfig_add_options_ac '+eme-free' --disable-eme
 
@@ -598,22 +572,20 @@ src_configure() {
 		append-ldflags "-Wl,-z,relro -Wl,-z,now"
 	fi
 
-	mozconfig_use_enable jack
+	local myaudiobackends=""
+	use jack && myaudiobackends+="jack,"
+	use sndio && myaudiobackends+="sndio,"
+	use pulseaudio && myaudiobackends+="pulseaudio,"
+	! use pulseaudio && myaudiobackends+="alsa,"
 
-	mozconfig_use_enable pulseaudio
-	# force the deprecated alsa sound code if pulseaudio is disabled
-	if use kernel_linux && ! use pulseaudio ; then
-		mozconfig_add_options_ac '-pulseaudio' --enable-alsa
-	fi
-
-	mozconfig_use_enable sndio
+	mozconfig_add_options_ac '--enable-audio-backends' --enable-audio-backends="${myaudiobackends::-1}"
 
 	mozconfig_use_enable wifi necko-wifi
 
 	if use wayland ; then
-		mozconfig_add_options_ac '+wayland' --enable-default-toolkit=cairo-gtk3-wayland
+		mozconfig_add_options_ac '+x11+wayland' --enable-default-toolkit=cairo-gtk3-x11-wayland
 	else
-		mozconfig_add_options_ac '' --enable-default-toolkit=cairo-gtk3
+		mozconfig_add_options_ac '+x11' --enable-default-toolkit=cairo-gtk3
 	fi
 
 	if use lto ; then
@@ -622,10 +594,8 @@ src_configure() {
 			mozconfig_add_options_ac "forcing ld=lld due to USE=clang and USE=lto" --enable-linker=lld
 
 			mozconfig_add_options_ac '+lto' --enable-lto=cross
-		else
-			# ld.gold is known to fail:
-			# /usr/lib/gcc/x86_64-pc-linux-gnu/11.2.1/../../../../x86_64-pc-linux-gnu/bin/ld.gold: internal error in set_xindex, at /var/tmp/portage/sys-devel/binutils-2.37_p1-r1/work/binutils-2.37/gold/object.h:1050
 
+		else
 			# ThinLTO is currently broken, see bmo#1644409
 			mozconfig_add_options_ac '+lto' --enable-lto=full
 			mozconfig_add_options_ac "linker is set to bfd" --enable-linker=bfd
@@ -745,10 +715,16 @@ src_configure() {
 	mozconfig_add_options_ac 'torbrowser' --enable-tor-browser-data-outside-app-dir
 	mozconfig_add_options_ac 'torbrowser' --with-branding=browser/branding/official
 	mozconfig_add_options_ac 'torbrowser' --disable-webrtc
+	mozconfig_add_options_ac 'torbrowser' --enable-sandbox
 
 	# Use system's Python environment
-	export MACH_USE_SYSTEM_PYTHON=1
-	export PIP_NO_CACHE_DIR=off
+	PIP_NETWORK_INSTALL_RESTRICTED_VIRTUALENVS=mach
+
+	if use system-python-libs; then
+		export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE="system"
+	else
+		export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE="none"
+	fi
 
 	# Disable notification when build system has finished
 	export MOZ_NOSPAM=1
@@ -841,9 +817,9 @@ src_install() {
 	# Install system-wide preferences
 	local PREFS_DIR="${MOZILLA_FIVE_HOME}/browser/defaults/preferences"
 	insinto "${PREFS_DIR}"
-	newins "${FILESDIR}"/gentoo-default-prefs.js all-gentoo.js
+	newins "${FILESDIR}"/gentoo-default-prefs.js gentoo-prefs.js
 
-	local GENTOO_PREFS="${ED}${PREFS_DIR}/all-gentoo.js"
+	local GENTOO_PREFS="${ED}${PREFS_DIR}/gentoo-prefs.js"
 
 	# Set dictionary path to use system hunspell
 	cat >>"${GENTOO_PREFS}" <<-EOF || die "failed to set spellchecker.dictionary_path pref"
@@ -852,9 +828,19 @@ src_install() {
 
 	# Force hwaccel prefs if USE=hwaccel is enabled
 	if use hwaccel ; then
-		cat "${FILESDIR}"/gentoo-hwaccel-prefs.js \
+		cat "${FILESDIR}"/gentoo-hwaccel-prefs.js-r2 \
 		>>"${GENTOO_PREFS}" \
 		|| die "failed to add prefs to force hardware-accelerated rendering to all-gentoo.js"
+
+		if use wayland; then
+			cat >>"${GENTOO_PREFS}" <<-EOF || die "failed to set hwaccel wayland prefs"
+			pref("gfx.x11-egl.force-enabled",          false);
+			EOF
+		else
+			cat >>"${GENTOO_PREFS}" <<-EOF || die "failed to set hwaccel x11 prefs"
+			pref("gfx.x11-egl.force-enabled",          true);
+			EOF
+		fi
 	fi
 
 	# Force the graphite pref if USE=system-harfbuzz is enabled, since the pref cannot disable it
@@ -888,9 +874,6 @@ src_install() {
 
 	# Install .desktop for menu entry
 	make_desktop_entry ${PN} "Tor Browser" ${PN} "Network;WebBrowser" "StartupWMClass=Torbrowser"
-
-	cd "${WORKDIR}"/eff
-	find chrome | sort | zip -q -X -@ "${ED}${MOZILLA_FIVE_HOME}"/omni.ja
 }
 
 pkg_preinst() {
