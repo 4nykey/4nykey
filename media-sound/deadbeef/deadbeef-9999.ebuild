@@ -83,7 +83,7 @@ BDEPEND="
 	clang? ( sys-devel/clang )
 "
 PATCHES=(
-	"${FILESDIR}"/1bb94a3.patch
+#	"${FILESDIR}"/1bb94a3.patch
 )
 
 pkg_setup() {
