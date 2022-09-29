@@ -17,7 +17,7 @@ else
 		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 	S="${WORKDIR}/${MY_PN}-${MY_PV}"
 fi
 
@@ -40,7 +40,7 @@ BDEPEND="
 	sys-devel/autoconf-archive
 "
 PATCHES=(
-	"${FILESDIR}"/sdk-3.9.16.diff
+	"${FILESDIR}"/sdk4.diff
 )
 
 src_prepare() {

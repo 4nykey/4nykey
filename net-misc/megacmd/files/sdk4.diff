@@ -29,6 +29,18 @@
      constexpr bool isHidden = true;
      constexpr bool reportExisting = false;
      if (!is_file_exist(configFolder.c_str()) && !fsAccess->mkdirlocal(localConfigFolder, isHidden, reportExisting))
+--- a/src/megacmd.cpp
++++ b/src/megacmd.cpp
+@@ -4990,9 +4990,6 @@ int main(int argc, char* argv[])
+ 
+     NullBuffer null_buffer;
+     std::ostream null_stream(&null_buffer);
+-#ifndef ENABLE_LOG_PERFORMANCE
+-    SimpleLogger::setAllOutputs(&null_stream);
+-#endif
+     SimpleLogger::setLogLevel(logMax); // do not filter anything here, log level checking is done by loggerCMD
+ 
+     loggerCMD = new MegaCMDLogger();
 --- a/src/megacmdexecuter.cpp
 +++ b/src/megacmdexecuter.cpp
 @@ -1480,7 +1480,7 @@ void MegaCmdExecuter::dumpNodeSummary(MegaNode *n, const char *timeFormat, std::
@@ -78,7 +90,17 @@
          return false;
      }
  
-@@ -3184,7 +3184,7 @@ void MegaCmdExecuter::uploadNode(string path, MegaApi* api, MegaNode *node, stri
+@@ -3161,7 +3161,8 @@ void MegaCmdExecuter::downloadNode(string source, string path, MegaApi* api, Meg
+ #endif
+     LOG_debug << "Starting download: " << node->getName() << " to : " << path;
+ 
+-    api->startDownload(node, path.c_str(), new ATransferListener(multiTransferListener, source));
++    MegaCancelToken* cancelToken = nullptr;
++    api->startDownload(node, path.c_str(), NULL, NULL, NULL, cancelToken, new ATransferListener(multiTransferListener, source));
+ }
+ 
+ void MegaCmdExecuter::uploadNode(string path, MegaApi* api, MegaNode *node, string newname,
+@@ -3184,7 +3185,7 @@ void MegaCmdExecuter::uploadNode(string path, MegaApi* api, MegaNode *node, stri
      }
      unescapeifRequired(path);
  
@@ -87,7 +109,25 @@
      std::unique_ptr<FileAccess> fa = fsAccessCMD->newfileaccess();
      if (!fa->fopen(locallocal, true, false))
      {
-@@ -3964,7 +3964,7 @@ bool MegaCmdExecuter::IsFolder(string path)
+@@ -3220,14 +3221,15 @@ void MegaCmdExecuter::uploadNode(string path, MegaApi* api, MegaNode *node, stri
+     LOG_debug << "Starting upload: " << path << " to : " << node->getName() << (newname.size()?"/":"") << newname;
+ 
+ 
++    MegaCancelToken* cancelToken = nullptr;
+     if (newname.size())
+     {
+ 
+-        api->startUpload(removeTrailingSeparators(path).c_str(), node, newname.c_str(), thelistener);
++        api->startUpload(removeTrailingSeparators(path).c_str(), node, newname.c_str(), 0, NULL, NULL, NULL, cancelToken, thelistener);
+     }
+     else
+     {
+-        api->startUpload(removeTrailingSeparators(path).c_str(), node, thelistener);
++        api->startUpload(removeTrailingSeparators(path).c_str(), node, NULL, 0, NULL, NULL, NULL, cancelToken, thelistener);
+     }
+ 
+     if (singleNonBackgroundTransferListener)
+@@ -3964,7 +3966,7 @@ bool MegaCmdExecuter::IsFolder(string path)
  #ifdef _WIN32
      replaceAll(path,"/","\\");
  #endif
@@ -96,7 +136,7 @@
      std::unique_ptr<FileAccess> fa = fsAccessCMD->newfileaccess();
      return fa->isfolder(localpath);
  }
-@@ -4467,7 +4467,7 @@ void MegaCmdExecuter::printSync(MegaSync *sync, long long nfiles, long long nfol
+@@ -4467,7 +4469,7 @@ void MegaCmdExecuter::printSync(MegaSync *sync, long long nfiles, long long nfol
          pathLocalFolder = rtrim(pathLocalFolder, '\\');
      #endif
          string localizedLocalPath;
@@ -105,7 +145,7 @@
  
          int statepath = api->syncPathState(&localizedLocalPath);
          pathstate = getSyncPathStateStr(statepath);
-@@ -4547,11 +4547,11 @@ string MegaCmdExecuter::getLPWD()
+@@ -4547,11 +4549,11 @@ string MegaCmdExecuter::getLPWD()
  {
      string relativePath = ".";
      string absolutePath = "Unknown";
@@ -119,7 +159,7 @@
      }
  
      return absolutePath;
-@@ -4886,12 +4886,12 @@ bool MegaCmdExecuter::establishBackup(string pathToBackup, MegaNode *n, int64_t
+@@ -4886,12 +4888,12 @@ bool MegaCmdExecuter::establishBackup(string pathToBackup, MegaNode *n, int64_t
  {
      bool attendpastbackups = true; //TODO: receive as parameter
      static int backupcounter = 0;
@@ -134,7 +174,7 @@
      megaCmdListener->wait();
      if (checkNoErrors(megaCmdListener->getError(), "establish backup"))
      {
-@@ -7077,7 +7077,7 @@ void MegaCmdExecuter::executecommand(vector<string> words, map<string, int> *clf
+@@ -7077,7 +7079,7 @@ void MegaCmdExecuter::executecommand(vector<string> words, map<string, int> *clf
      {
          if (words.size() > 1)
          {
@@ -143,7 +183,7 @@
              if (fsAccessCMD->chdirlocal(localpath)) // maybe this is already checked in chdir
              {
                  LOG_debug << "Local folder changed to: " << words[1];
-@@ -7735,7 +7735,7 @@ void MegaCmdExecuter::executecommand(vector<string> words, map<string, int> *clf
+@@ -7735,7 +7737,7 @@ void MegaCmdExecuter::executecommand(vector<string> words, map<string, int> *clf
          bool headershown = false;
          if (words.size() == 3) //add a sync
          {
@@ -152,7 +192,7 @@
              LocalPath localAbsolutePath = localRelativePath;
              fsAccessCMD->expanselocalpath(localRelativePath, localAbsolutePath);
  
-@@ -7749,7 +7749,7 @@ void MegaCmdExecuter::executecommand(vector<string> words, map<string, int> *clf
+@@ -7749,7 +7751,7 @@ void MegaCmdExecuter::executecommand(vector<string> words, map<string, int> *clf
                  else if (api->getAccess(n) >= MegaShare::ACCESS_FULL)
                  {
                      MegaCmdListener *megaCmdListener = new MegaCmdListener(NULL);
@@ -161,15 +201,3 @@
                      megaCmdListener->wait();
                      if (checkNoErrors(megaCmdListener->getError(), "sync folder", static_cast<SyncError>(megaCmdListener->getRequest()->getNumDetails())))
                      {
---- a/src/megacmd.cpp
-+++ b/src/megacmd.cpp
-@@ -4990,9 +4990,6 @@ int main(int argc, char* argv[])
- 
-     NullBuffer null_buffer;
-     std::ostream null_stream(&null_buffer);
--#ifndef ENABLE_LOG_PERFORMANCE
--    SimpleLogger::setAllOutputs(&null_stream);
--#endif
-     SimpleLogger::setLogLevel(logMax); // do not filter anything here, log level checking is done by loggerCMD
- 
-     loggerCMD = new MegaCMDLogger();
