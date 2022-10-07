@@ -12,7 +12,7 @@ else
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v$(ver_rs 2 -)"
 	SRC_URI="
 		binary? (
-			https://github.com/rsms/${PN}/releases/download/${MY_PV}/Inter-4.00-3f174fcef6.zip
+			https://github.com/rsms/${PN}/releases/download/${MY_PV}/Inter-${MY_PV#v}.zip
 		)
 		!binary? (
 			mirror://githubcl/rsms/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -46,9 +46,9 @@ pkg_setup() {
 }
 
 src_prepare() {
+	mkdir sources
 	fontmake_src_prepare
 	use binary && return
-	mkdir sources
 	glyphspkg -o sources src/Inter-Roman.glyphspackage || die
 	glyphspkg -o sources src/Inter-Italic.glyphspackage || die
 	local _d
