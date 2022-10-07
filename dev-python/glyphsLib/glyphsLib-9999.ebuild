@@ -17,7 +17,7 @@ else
 		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 
@@ -29,7 +29,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.32[ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.34.4[ufo(-),unicode(-),${PYTHON_USEDEP}]
 	>=dev-python/ufoLib2-0.13.1[${PYTHON_USEDEP}]
 	>=dev-python/openstep-plist-0.3[${PYTHON_USEDEP}]
 "
