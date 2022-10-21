@@ -5,13 +5,12 @@
 		<email>4nykey@gmail.com</email>
 	</maintainer>
 	<use>
-		<flag name="vst">Enable VST plugin support</flag>
-		<flag name="sse">Build runtime checked assembler code</flag>
-		<flag name="sanitize">Turn on AddressSanitizer (requires GCC >= 4.8 or clang >= 3.1)</flag>
-		<flag name="phone-home">Contact ardour.org at startup for new announcements</flag>
-		<flag name="lv2">Add support for Ladspa V2</flag>
-		<flag name="hid">Add support for <pkg>dev-libs/hidapi</pkg></flag>
-		<flag name="c++0x">Compile using the C++11 standard</flag>
 		<flag name="bundled-libs">Use bundled libs instead of system installed</flag>
+		<flag name="hid">Add support for <pkg>dev-libs/hidapi</pkg></flag>
+		<flag name="phone-home">Contact ardour.org at startup for new announcements</flag>
+		<flag name="sanitize">Turn on AddressSanitizer (requires GCC >= 4.8 or clang >= 3.1)</flag>
+		<flag name="sse">Build runtime checked assembler code</flag>
+		<flag name="vst">Enable VST plugin support</flag>
+		<flag name="websockets">Enable support for WebSocket protocol</flag>
 	</use>
 </pkgmetadata>
