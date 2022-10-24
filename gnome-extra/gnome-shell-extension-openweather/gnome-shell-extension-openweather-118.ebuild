@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://gitlab.com/skrewball/${MY_PN}.git"
 	SRC_URI=""
 else
-	KEYWORDS= #"~amd64"
+	KEYWORDS="~amd64 ~x86"
 	MY_PV="d714eb1"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
@@ -30,7 +30,7 @@ IUSE="nls"
 
 DEPEND="
 	app-eselect/eselect-gnome-shell-extensions
-	net-libs/libsoup:3.0[introspection]
+	net-libs/libsoup:2.4[introspection]
 "
 RDEPEND="
 	${DEPEND}
