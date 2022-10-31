@@ -42,7 +42,7 @@ inherit python-any-r1 font-r1
 
 EXPORT_FUNCTIONS pkg_setup src_prepare src_compile
 
-MY_MK="7a286dc"
+MY_MK="2cd3458"
 MY_MK="9ef5512cdd3177cc8d4667bcf5a58346-${MY_MK}"
 SRC_URI+="
 !binary? (
@@ -55,7 +55,7 @@ DEPEND="
 !binary? (
 	${PYTHON_DEPS}
 	$(python_gen_any_dep '
-		>=dev-util/fontmake-3.4[${PYTHON_USEDEP}]
+		>=dev-util/fontmake-3.5[${PYTHON_USEDEP}]
 	')
 	autohint? ( media-gfx/ttfautohint )
 )
