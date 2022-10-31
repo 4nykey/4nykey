@@ -3,6 +3,8 @@
 
 EAPI=7
 
+FONT_SRCDIR=src
+FONTMAKE_EXTRA_ARGS=( '--fea-include-dir=src' )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/rsms/${PN}.git"
@@ -31,7 +33,6 @@ LICENSE="OFL-1.1"
 SLOT="0"
 BDEPEND="
 	binary? ( app-arch/unzip )
-	!binary? ( dev-python/glyphspkg )
 "
 REQUIRED_USE+="
 	binary? ( variable? ( !font_types_otf ) )
@@ -43,17 +44,4 @@ pkg_setup() {
 	use font_types_ttf && FONTDIR_BIN=( 'Desktop with TrueType hints' )
 	use variable && FONTDIR_BIN=( 'Variable' )
 	fontmake_pkg_setup
-}
-
-src_prepare() {
-	mkdir sources
-	fontmake_src_prepare
-	use binary && return
-	glyphspkg -o sources src/Inter-Roman.glyphspackage || die
-	glyphspkg -o sources src/Inter-Italic.glyphspackage || die
-	local _d
-	for _d in Inter-{Italic,Roman}/master_ufo; do
-		mkdir -p ${_d}
-		ln -s {../../src,${_d}}/features
-	done
 }
