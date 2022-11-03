@@ -1,7 +1,7 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 CRATES="
 	adler-1.0.2
@@ -17,26 +17,26 @@ CRATES="
 	flate2-1.0.24
 	float-cmp-0.9.0
 	fontconfig-parser-0.5.1
-	fontdb-0.9.2
+	fontdb-0.9.3
 	gif-0.11.4
 	jpeg-decoder-0.3.0
 	kurbo-0.8.3
-	libc-0.2.135
+	libc-0.2.137
 	log-0.4.17
 	memmap2-0.5.7
 	miniz_oxide-0.5.4
-	once_cell-1.15.0
+	once_cell-1.16.0
 	pico-args-0.5.0
 	png-0.17.6
 	rctree-0.5.0
 	rgb-0.8.34
 	roxmltree-0.15.1
-	rustybuzz-0.5.2
+	rustybuzz-0.6.0
 	simplecss-0.2.1
 	siphasher-0.3.10
 	smallvec-1.10.0
 	strict-num-0.1.0
-	svgtypes-0.8.1
+	svgtypes-0.8.2
 	tiny-skia-0.8.2
 	tiny-skia-path-0.8.2
 	ttf-parser-0.17.1
