@@ -6,7 +6,7 @@ EAPI="8"
 FIREFOX_PATCHSET="firefox-91esr-patches-10j.tar.xz"
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="91.13.0esr-${MY_PV}-1-build5"
+MY_P="91.13.0esr-${MY_PV}-1-build6"
 MY_TL="0.2.37"
 MY_P="firefox-tor-browser-${MY_P}"
 
