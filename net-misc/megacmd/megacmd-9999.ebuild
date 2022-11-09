@@ -29,7 +29,7 @@ SLOT="0"
 IUSE="pcre"
 
 DEPEND="
-	>=net-misc/meganz-sdk-3.9.16:=
+	>=net-misc/meganz-sdk-4.5:=
 	pcre? ( dev-libs/libpcre:3[cxx] )
 	sys-libs/readline:0
 "
@@ -41,6 +41,7 @@ BDEPEND="
 "
 PATCHES=(
 	"${FILESDIR}"/sdk4.diff
+	"${FILESDIR}"/sdk45.diff
 )
 
 src_prepare() {

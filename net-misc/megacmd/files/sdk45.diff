@@ -1,0 +1,73 @@
+--- a/src/comunicationsmanagerfilesockets.cpp
++++ b/src/comunicationsmanagerfilesockets.cpp
+@@ -48,12 +48,12 @@ int ComunicationsManagerFileSockets::initialize()
+ 
+     fsAccess->setdefaultfolderpermissions(0700);
+     fsAccess->rmdirlocal(socketsFolder);
+-    LOG_debug << "CREATING sockets folder: " << socketsFolder.toPath() << "!!!";
++    LOG_debug << "CREATING sockets folder: " << socketsFolder.toPath(false) << "!!!";
+     constexpr bool isHidden = false;
+     constexpr bool logExisting  = false;
+     if (!fsAccess->mkdirlocal(socketsFolder, isHidden, logExisting))
+     {
+-        LOG_fatal << "ERROR CREATING sockets folder: " << socketsFolder.toPath() << ": " << errno;
++        LOG_fatal << "ERROR CREATING sockets folder: " << socketsFolder.toPath(false) << ": " << errno;
+     }
+     delete fsAccess;
+ 
+--- a/src/megacmdexecuter.cpp
++++ b/src/megacmdexecuter.cpp
+@@ -1823,14 +1823,14 @@ bool MegaCmdExecuter::TestCanWriteOnContainingFolder(string *path)
+     if (!fa->isfolder(containingFolder))
+     {
+         setCurrentOutCode(MCMD_INVALIDTYPE);
+-        LOG_err << containingFolder.toPath() << " is not a valid Download Folder";
++        LOG_err << containingFolder.toPath(false) << " is not a valid Download Folder";
+         return false;
+     }
+ 
+     if (!canWrite(containingFolder.platformEncoded()))
+     {
+         setCurrentOutCode(MCMD_NOTPERMITTED);
+-        LOG_err << "Write not allowed in " << containingFolder.toPath();
++        LOG_err << "Write not allowed in " << containingFolder.toPath(false);
+         return false;
+     }
+ 
+@@ -4553,7 +4553,7 @@ string MegaCmdExecuter::getLPWD()
+     LocalPath localAbsolutePath;
+     if (fsAccessCMD->expanselocalpath(localRelativePath, localAbsolutePath))
+     {
+-        absolutePath = localAbsolutePath.toPath();
++        absolutePath = localAbsolutePath.toPath(false);
+     }
+ 
+     return absolutePath;
+@@ -4893,7 +4893,7 @@ bool MegaCmdExecuter::establishBackup(string pathToBackup, MegaNode *n, int64_t
+     fsAccessCMD->expanselocalpath(localrelativepath, localabsolutepath);
+ 
+     MegaCmdListener *megaCmdListener = new MegaCmdListener(api, NULL);
+-    api->setScheduledCopy(localabsolutepath.toPath().c_str(), n, attendpastbackups, period, speriod.c_str(), numBackups, megaCmdListener);
++    api->setScheduledCopy(localabsolutepath.toPath(false).c_str(), n, attendpastbackups, period, speriod.c_str(), numBackups, megaCmdListener);
+     megaCmdListener->wait();
+     if (checkNoErrors(megaCmdListener->getError(), "establish backup"))
+     {
+@@ -7751,7 +7751,7 @@ void MegaCmdExecuter::executecommand(vector<string> words, map<string, int> *clf
+                 else if (api->getAccess(n) >= MegaShare::ACCESS_FULL)
+                 {
+                     MegaCmdListener *megaCmdListener = new MegaCmdListener(NULL);
+-                    api->syncFolder(MegaSync::TYPE_TWOWAY, localAbsolutePath.toPath().c_str(), nullptr, n->getHandle(), nullptr, megaCmdListener);
++                    api->syncFolder(MegaSync::TYPE_TWOWAY, localAbsolutePath.toPath(false).c_str(), nullptr, n->getHandle(), nullptr, megaCmdListener);
+                     megaCmdListener->wait();
+                     if (checkNoErrors(megaCmdListener->getError(), "sync folder", static_cast<SyncError>(megaCmdListener->getRequest()->getNumDetails())))
+                     {
+@@ -7828,7 +7828,8 @@ void MegaCmdExecuter::executecommand(vector<string> words, map<string, int> *clf
+             else if (remove)
+             {
+                 auto megaCmdListener = ::mega::make_unique<MegaCmdListener>(nullptr);
+-                api->removeSync(sync.get(), megaCmdListener.get());
++                MegaHandle backupDestination = INVALID_HANDLE;
++                api->removeSync(sync.get(), backupDestination, megaCmdListener.get());
+                 megaCmdListener->wait();
+                 if (checkNoErrors(megaCmdListener->getError(), "remove sync", static_cast<SyncError>(megaCmdListener->getRequest()->getNumDetails())))
+                 {
