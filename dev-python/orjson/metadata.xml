@@ -4,12 +4,4 @@
 	<maintainer type="person">
 		<email>4nykey@gmail.com</email>
 	</maintainer>
-	<use>
-		<flag name="msgpack">
-			Enable msgpack support
-		</flag>
-		<flag name="orjson">
-			Use orjson in place of built-in json library
-		</flag>
-	</use>
 </pkgmetadata>

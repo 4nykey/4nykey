@@ -28,27 +28,26 @@ HOMEPAGE="https://github.com/fonttools/${PN}"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE="test"
+IUSE="msgpack orjson test"
+REQUIRED_USE="test? ( msgpack orjson )"
 
 RDEPEND="
 	>=dev-python/fonttools-4.29.1[ufo(-),${PYTHON_USEDEP}]
-	>=dev-python/attrs-21.4[${PYTHON_USEDEP}]
-	>=dev-python/cattrs-1.10[${PYTHON_USEDEP}]
+	>=dev-python/attrs-22.1[${PYTHON_USEDEP}]
+	>=dev-python/cattrs-22.2[${PYTHON_USEDEP}]
+	msgpack? ( >=dev-python/msgpack-1.0.4[${PYTHON_USEDEP}] )
+	orjson? ( dev-python/orjson[${PYTHON_USEDEP}] )
 "
 DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
 	dev-python/setuptools_scm[${PYTHON_USEDEP}]
+	test? ( dev-python/orjson[${PYTHON_USEDEP}] )
 "
 distutils_enable_tests pytest
 
 pkg_setup() {
 	[[ -n ${PV%%*9999} ]] && \
 		export SETUPTOOLS_SCM_PRETEND_VERSION="${PV/_p/.post}"
-}
-
-python_prepare_all() {
-	sed -e '/\<wheel\>/d' -i setup.cfg
-	distutils-r1_python_prepare_all
 }
