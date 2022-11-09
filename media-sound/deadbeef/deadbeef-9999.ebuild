@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI=""
 else
 	MY_PV="d2fc9ef"
-	MY_MP="mp4p-a80941d"
+	MY_MP="mp4p-814f747"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/DeaDBeeF-Player/${PN}/tar.gz/${MY_PV}
@@ -82,9 +82,6 @@ BDEPEND="
 	mac? ( dev-lang/yasm )
 	clang? ( sys-devel/clang )
 "
-PATCHES=(
-#	"${FILESDIR}"/1bb94a3.patch
-)
 
 pkg_setup() {
 	if use clang && ! tc-is-clang; then
