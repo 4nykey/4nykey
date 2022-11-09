@@ -5,7 +5,7 @@ EAPI=7
 
 PYTHON_COMPAT=( python3_{8..10} )
 inherit distutils-r1
-MY_NI="ninja-1.10.2"
+MY_NI="ninja-1.11.1"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/scikit-build/${PN}.git"
@@ -31,6 +31,7 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 "
+
 python_prepare_all() {
 	sed \
 		-e '/import setup/ s:skbuild:setuptools:' \
