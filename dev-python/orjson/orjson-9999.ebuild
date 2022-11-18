@@ -59,7 +59,6 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
-	dev-python/ujson[${PYTHON_USEDEP}]
 "
 DEPEND="${RDEPEND}"
 distutils_enable_tests pytest
