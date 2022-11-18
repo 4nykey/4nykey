@@ -33,6 +33,7 @@ IUSE=""
 
 RDEPEND="
 	$(python_gen_cond_dep '
+		dev-python/axisregistry[${PYTHON_USEDEP}]
 		dev-python/fonttools[${PYTHON_USEDEP},ufo(-)]
 		dev-python/absl-py[${PYTHON_USEDEP}]
 		dev-python/protobuf-python[${PYTHON_USEDEP}]
@@ -56,6 +57,8 @@ RDEPEND="
 		dev-python/unidecode[${PYTHON_USEDEP}]
 		dev-python/jinja[${PYTHON_USEDEP}]
 		dev-python/hyperglot[${PYTHON_USEDEP}]
+		dev-python/vharfbuzz[${PYTHON_USEDEP}]
+		dev-python/nanoemoji[${PYTHON_USEDEP}]
 	')
 "
 DEPEND="
@@ -72,9 +75,6 @@ BDEPEND="
 		')
 	)
 "
-PATCHES=(
-	"${FILESDIR}"/${PN}-tests.diff
-)
 distutils_enable_tests pytest
 
 pkg_pretend() {
@@ -87,13 +87,16 @@ python_prepare_all() {
 		mv "${WORKDIR}"/${MY_GL}/*.xml Lib/${PN}/util/${MY_GL%-*}
 		export SETUPTOOLS_SCM_PRETEND_VERSION="${PV/_p/.post}"
 	fi
+	sed -e '/"gftools-build-font2ttf",/d' -i bin/test_args.py
 	distutils-r1_python_prepare_all
 }
 
 python_test() {
-	local -x \
-		PYTHONPATH="${BUILD_DIR}/lib:${PYTHONPATH}" \
-		PATH="${S}:${PATH}"
 	distutils_install_for_testing
-	epytest
+	# .github/workflows/test.yml
+	epytest \
+		Lib/gftools/tests/test_usage.py \
+		Lib/gftools/tests/test_fix.py \
+		Lib/gftools/tests/test_html.py \
+		Lib/gftools/tests/test_instancer.py
 }
