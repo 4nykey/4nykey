@@ -27,6 +27,7 @@ SLOT="0"
 IUSE="apidocs pdf test"
 
 RDEPEND="
+	dev-libs/openssl:=
 	dev-libs/xerces-c
 	dev-libs/xalan-c
 	dev-libs/xml-security-c

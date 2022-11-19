@@ -30,6 +30,7 @@ IUSE="nls"
 
 DEPEND="
 	app-eselect/eselect-gnome-shell-extensions
+	gui-libs/libadwaita[introspection]
 	net-libs/libsoup:2.4[introspection]
 "
 RDEPEND="

@@ -38,6 +38,7 @@ RDEPEND="
 "
 BDEPEND="
 	sys-devel/gettext
+	app-misc/jq
 "
 
 src_prepare() {

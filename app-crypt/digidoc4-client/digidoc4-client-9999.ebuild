@@ -35,7 +35,7 @@ DEPEND="
 	>=dev-libs/libdigidocpp-3.14.8
 	sys-apps/pcsc-lite
 	net-nds/openldap
-	dev-libs/openssl:0
+	dev-libs/openssl:=
 	dev-qt/qtwidgets:5
 	dev-qt/qtprintsupport:5
 	dev-qt/qtsvg:5

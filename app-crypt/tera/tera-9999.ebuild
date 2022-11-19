@@ -29,7 +29,7 @@ RDEPEND="
 	dev-qt/qtwidgets:5
 	dev-qt/qtconcurrent:5
 	dev-libs/libzip
-	dev-libs/openssl:0
+	dev-libs/openssl:=
 	sys-apps/pcsc-lite
 "
 DEPEND="

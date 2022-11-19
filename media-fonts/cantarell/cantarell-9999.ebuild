@@ -3,6 +3,7 @@
 
 EAPI=7
 
+PYTHON_COMPAT=( python3_{8..10} )
 MY_PN="${PN}-fonts"
 MY_FONT_TYPES=( otf )
 if [[ -z ${PV%%*9999} ]]; then
@@ -17,19 +18,31 @@ else
 	KEYWORDS="~amd64 ~x86"
 	S="${WORKDIR}/${MY_P}"
 fi
-inherit fontmake meson
+inherit python-any-r1 font-r1 meson
 
 DESCRIPTION="Default fontset for GNOME Shell"
 HOMEPAGE="https://wiki.gnome.org/Projects/CantarellFonts"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-DEPEND="
+IUSE="autohint +binary variable"
+BDEPEND="
 	!binary? (
+		$(python_gen_any_dep '
+			dev-python/fontMath[${PYTHON_USEDEP}]
+			dev-python/ufo2ft[${PYTHON_USEDEP}]
+			dev-python/ufoLib2[${PYTHON_USEDEP}]
+			variable? ( dev-python/statmake[${PYTHON_USEDEP}] )
+		')
 		autohint? ( dev-util/psautohint )
 	)
 "
 DOCS=( NEWS README.md )
+
+pkg_setup() {
+	font-r1_pkg_setup
+	use binary && python-any-r1_pkg_setup
+}
 
 src_prepare() {
 	default

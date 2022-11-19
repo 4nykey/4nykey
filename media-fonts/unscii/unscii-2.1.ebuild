@@ -8,7 +8,7 @@ MY_FONT_VARIANTS=( alt fantasy mcr tall thin )
 inherit toolchain-funcs font-r1
 
 DESCRIPTION="A bitmapped Unicode font based on classic system fonts"
-HOMEPAGE="http://pelulamu.net/${PN}/"
+HOMEPAGE="http://viznut.fi/${PN}/"
 SRC_URI="
 	${HOMEPAGE}${P}-src.tar.gz
 	binary? (

@@ -1,7 +1,7 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -29,6 +29,9 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
+"
+BDEPEND="
+	virtual/pkgconfig
 "
 
 src_prepare() {
