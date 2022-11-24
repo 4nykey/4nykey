@@ -17,13 +17,13 @@ CRATES="
 	flate2-1.0.24
 	float-cmp-0.9.0
 	fontconfig-parser-0.5.1
-	fontdb-0.9.3
+	fontdb-0.10.0
 	gif-0.11.4
 	jpeg-decoder-0.3.0
 	kurbo-0.8.3
 	libc-0.2.137
 	log-0.4.17
-	memmap2-0.5.7
+	memmap2-0.5.8
 	miniz_oxide-0.5.4
 	once_cell-1.16.0
 	pico-args-0.5.0
