@@ -24,13 +24,12 @@ HOMEPAGE="https://santuario.apache.org/"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE="debug examples nss static-libs xalan"
+IUSE="debug examples nss static-libs"
 
 RDEPEND="
 	>=dev-libs/xerces-c-3.2
 	dev-libs/openssl:=
 	nss? ( dev-libs/nss )
-	xalan? ( dev-libs/xalan-c )
 "
 DEPEND="${RDEPEND}"
 BDEPEND="virtual/pkgconfig"
@@ -46,7 +45,7 @@ src_configure() {
 		--with-openssl
 		$(use_enable static-libs static)
 		$(use_enable debug)
-		$(use_with xalan)
+		--without-xalan
 		$(use_with nss)
 	)
 	econf "${myeconfargs[@]}"

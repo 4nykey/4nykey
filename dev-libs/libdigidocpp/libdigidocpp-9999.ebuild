@@ -24,15 +24,13 @@ HOMEPAGE="https://id.ee"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-IUSE="apidocs pdf test"
+IUSE="apidocs test"
 
 RDEPEND="
 	dev-libs/openssl:=
 	dev-libs/xerces-c
-	dev-libs/xalan-c
 	dev-libs/xml-security-c
 	sys-libs/zlib[minizip]
-	pdf? ( <app-text/podofo-0.9.5 )
 "
 DEPEND="
 	${RDEPEND}
@@ -41,7 +39,7 @@ BDEPEND="
 	>=dev-cpp/xsd-4.2.0_beta2
 	test? ( dev-libs/boost )
 	apidocs? ( app-doc/doxygen )
-	>=dev-util/cmake-openeid-0_p20220223
+	>=dev-util/cmake-openeid-0_p20220726
 	|| (
 		dev-util/xxdi
 		app-editors/vim-core
@@ -63,7 +61,7 @@ src_prepare() {
 src_configure() {
 	local mycmakeargs=(
 		-DCMAKE_DISABLE_FIND_PACKAGE_Doxygen=$(usex !apidocs)
-		-DCMAKE_DISABLE_FIND_PACKAGE_PoDoFo=$(usex !pdf)
+		-DCMAKE_DISABLE_FIND_PACKAGE_PoDoFo=yes
 		-DCMAKE_DISABLE_FIND_PACKAGE_SWIG=yes
 		-DCMAKE_DISABLE_FIND_PACKAGE_JNI=yes
 		-DXSD_EXECUTABLE="/usr/bin/codesynthesis-xsd"

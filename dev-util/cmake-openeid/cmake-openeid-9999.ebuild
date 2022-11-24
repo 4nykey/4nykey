@@ -8,7 +8,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/open-eid/${MY_PN}.git"
 else
-	MY_PV="eececc0"
+	MY_PV="587667b"
 	SRC_URI="
 		mirror://githubcl/open-eid/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -26,6 +26,7 @@ IUSE=""
 
 RDEPEND=""
 DEPEND=""
+PATCHES=( "${FILESDIR}"/xalanc.diff )
 
 src_install() {
 	insinto /usr/share/cmake/${PN#*-}
