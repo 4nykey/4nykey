@@ -59,6 +59,7 @@ RDEPEND="
 		dev-python/hyperglot[${PYTHON_USEDEP}]
 		dev-python/vharfbuzz[${PYTHON_USEDEP}]
 		dev-python/nanoemoji[${PYTHON_USEDEP}]
+		dev-python/gflanguages[${PYTHON_USEDEP}]
 	')
 "
 DEPEND="
