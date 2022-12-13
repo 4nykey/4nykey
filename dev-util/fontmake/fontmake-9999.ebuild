@@ -34,7 +34,7 @@ RDEPEND="
 	>=dev-python/glyphsLib-6.1[${PYTHON_USEDEP}]
 	>=dev-python/ufo2ft-2.29[cffsubr(+),${PYTHON_USEDEP}]
 	>=dev-python/MutatorMath-3.0.1[${PYTHON_USEDEP}]
-	>=dev-python/fontMath-0.9.1[${PYTHON_USEDEP}]
+	>=dev-python/fontMath-0.9.3[${PYTHON_USEDEP}]
 	>=dev-python/defcon-0.10[${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 	dev-python/skia-pathops[${PYTHON_USEDEP}]
