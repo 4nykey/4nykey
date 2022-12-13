@@ -103,7 +103,6 @@ src_compile() {
 }
 
 src_install() {
-	cargo_src_install --path ./usvg
 	cargo_src_install
 	dolib.so target/$(usex debug debug release)/libresvg.so
 	doheader c-api/*.h
