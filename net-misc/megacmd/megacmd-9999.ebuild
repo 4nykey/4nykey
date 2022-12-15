@@ -1,7 +1,7 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 AT_M4DIR="${EROOT}/usr/share/mega/m4"
 inherit autotools
@@ -29,7 +29,7 @@ SLOT="0"
 IUSE="pcre"
 
 DEPEND="
-	>=net-misc/meganz-sdk-4.5:=
+	>=net-misc/meganz-sdk-4.7.1:=
 	pcre? ( dev-libs/libpcre:3[cxx] )
 	sys-libs/readline:0
 "
@@ -42,6 +42,7 @@ BDEPEND="
 PATCHES=(
 	"${FILESDIR}"/sdk4.diff
 	"${FILESDIR}"/sdk45.diff
+	"${FILESDIR}"/sdk47.diff
 )
 
 src_prepare() {

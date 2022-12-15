@@ -1,7 +1,7 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit flag-o-matic qmake-utils autotools
 if [[ -z ${PV%%*9999} ]]; then
@@ -24,7 +24,7 @@ HOMEPAGE="https://github.com/meganz/sdk"
 
 LICENSE="BSD-2"
 # awk '/define/ {print $3}' include/mega/version.h|awk 'BEGIN{RS="";FS="\n"}{printf $1*10000+$2*100+$3}'
-SLOT="0/40500"
+SLOT="0/40701"
 IUSE="examples ffmpeg freeimage fuse hardened inotify libuv mediainfo qt raw +sqlite test"
 REQUIRED_USE="
 	examples? ( sqlite )
@@ -60,21 +60,32 @@ PATCHES=( "${FILESDIR}"/freeimage.diff )
 
 src_prepare() {
 	default
-	use qt && sed \
+
+	if use qt; then
+		sed \
 		-e "/^MEGASDK_BASE_PATH =/ s:=.*:= ${EPREFIX}/usr/:" \
-		-e 's:VPATH += \$\$MEGASDK_BASE_PATH:&/share/mega:' \
-		-e '/^INCLUDEPATH +=/ s:/bindings/qt:/share/mega&:' \
+		-e 's:VPATH += \$\$MEGASDK_BASE_PATH:&/include/mega:' \
+		-e '/INCLUDEPATH +=/ s:+:-:' \
 		-e '/SOURCES += src\// s:+:-:' \
-		-e 's:CONFIG(USE_MEGAAPI) {:&\nLIBS += -lmega:' \
 		-e '/^unix:!macx {/,/^}/d' \
 		-e '/QMAKE_CXXFLAGS +=/d' \
 		-i bindings/qt/sdk.pri
-	printf 'unix { INCLUDEPATH += $$MEGASDK_BASE_PATH/include/mega/posix }\n' >> \
-		bindings/qt/sdk.pri
+	printf 'unix {
+	LIBS += -lmega
+	INCLUDEPATH += $$MEGASDK_BASE_PATH/include/mega \
+	$$MEGASDK_BASE_PATH/include/mega/posix \
+	$$MEGASDK_BASE_PATH/include/mega/bindings/qt
+}' >> bindings/qt/sdk.pri
+	local _b=include/mega/bindings/qt
+	mkdir -p ${_b}
+	cp -a bindings/qt/*.{h,cpp,pri} ${_b}
+	fi
+
 	use test && sed \
 		-e 's:\$(GTEST_DIR)/lib/lib\([^ ]\+\)\.la:-l\1:g' \
 		-e 's: tests/tool_purge_account::' \
 		-i tests/include.am
+
 	eautoreconf
 }
 
@@ -108,9 +119,8 @@ src_install() {
 	default
 	doheader -r include/mega
 	find "${ED}" -type f -name '*.la' -delete
+	rm -rf "${ED}"/usr/include/mega/{osx,win32,wincurl,wp8}
 
 	insinto /usr/share/mega
 	doins -r m4
-	insinto /usr/share/mega/bindings/qt
-	doins bindings/qt/*.{h,cpp,pri}
 }

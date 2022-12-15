@@ -1,0 +1,11 @@
+--- a/src/megacmdexecuter.cpp
++++ b/src/megacmdexecuter.cpp
+@@ -7829,7 +7829,7 @@ void MegaCmdExecuter::executecommand(vec
+             {
+                 auto megaCmdListener = ::mega::make_unique<MegaCmdListener>(nullptr);
+                 MegaHandle backupDestination = INVALID_HANDLE;
+-                api->removeSync(sync.get(), backupDestination, megaCmdListener.get());
++                api->removeSync(backupDestination, megaCmdListener.get());
+                 megaCmdListener->wait();
+                 if (checkNoErrors(megaCmdListener->getError(), "remove sync", static_cast<SyncError>(megaCmdListener->getRequest()->getNumDetails())))
+                 {
