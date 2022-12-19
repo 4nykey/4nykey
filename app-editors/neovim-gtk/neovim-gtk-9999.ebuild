@@ -8,8 +8,6 @@ CRATES="
 	ansi_term-0.12.1
 	anyhow-1.0.57
 	async-trait-0.1.56
-	atk-0.15.1
-	atk-sys-0.15.1
 	atty-0.2.14
 	autocfg-1.1.0
 	bitflags-1.3.2
@@ -37,10 +35,10 @@ CRATES="
 	futures-sink-0.3.21
 	futures-task-0.3.21
 	futures-util-0.3.21
-	gdk-0.15.4
 	gdk-pixbuf-0.15.11
 	gdk-pixbuf-sys-0.15.10
-	gdk-sys-0.15.1
+	gdk4-0.4.8
+	gdk4-sys-0.4.8
 	getrandom-0.1.16
 	getrandom-0.2.6
 	gio-0.15.11
@@ -49,9 +47,13 @@ CRATES="
 	glib-macros-0.15.11
 	glib-sys-0.15.10
 	gobject-sys-0.15.10
-	gtk-0.15.5
-	gtk-sys-0.15.3
-	gtk3-macros-0.15.4
+	graphene-rs-0.15.1
+	graphene-sys-0.15.10
+	gsk4-0.4.8
+	gsk4-sys-0.4.8
+	gtk4-0.4.8
+	gtk4-macros-0.4.8
+	gtk4-sys-0.4.8
 	heck-0.4.0
 	hermit-abi-0.1.19
 	htmlescape-0.3.1
@@ -92,6 +94,7 @@ CRATES="
 	proc-macro-error-attr-1.0.4
 	proc-macro2-1.0.39
 	quick-error-1.2.3
+	quick-xml-0.22.0
 	quote-1.0.18
 	rand-0.7.3
 	rand-0.8.5
@@ -160,7 +163,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/Lyude/${PN}.git"
 else
-	MY_PV="05ccfd8"
+	MY_PV="f048109"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/Lyude/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -179,7 +182,7 @@ SLOT="0"
 IUSE=""
 
 DEPEND="
-	x11-libs/gtk+:3
+	gui-libs/gtk:4
 "
 RDEPEND="
 	${DEPEND}
@@ -188,6 +191,6 @@ RDEPEND="
 
 src_install() {
 	cargo_src_install
-	emake install-resources DESTDIR="${ED}" PREFIX="/usr"
+	emake install-resources DESTDIR="${D}" PREFIX="${EPREFIX}/usr"
 	einstalldocs
 }
