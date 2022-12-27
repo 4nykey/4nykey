@@ -1,7 +1,7 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools flag-o-matic
 if [[ ${PV} = *9999* ]]; then
@@ -9,16 +9,16 @@ if [[ ${PV} = *9999* ]]; then
 	ESVN_REPO_URI="https://svn.savannah.nongnu.org/svn/fbi-improved/trunk"
 	KEYWORDS=""
 else
-	inherit vcs-snapshot
 	MY_P="${P/_pre*/-trunk}"
 	MY_P="${MY_P/_/-}"
 	SRC_URI="mirror://nongnu/fbi-improved/${MY_P}.tar.bz2 -> ${P}.tar.bz2"
 	RESTRICT="primaryuri"
 	KEYWORDS="~x86 ~amd64"
+	S="${WORKDIR}/${MY_P}"
 fi
 
 DESCRIPTION="Fbi IMproved is a framebuffer image viewer"
-HOMEPAGE="http://www.nongnu.org/fbi-improved"
+HOMEPAGE="https://www.nongnu.org/fbi-improved"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -31,7 +31,7 @@ DEPEND="
 	graphicsmagick? ( media-gfx/graphicsmagick )
 	imlib? ( media-libs/imlib2 )
 	gif? ( media-libs/giflib )
-	tiff? ( media-libs/tiff:0 )
+	tiff? ( media-libs/tiff:= )
 	readline? ( sys-libs/readline:0 )
 	jpeg? ( virtual/jpeg )
 	postscript? ( app-text/libspectre )
@@ -55,7 +55,7 @@ RDEPEND="
 DEPEND="
 	${DEPEND}
 	sys-devel/flex
-	virtual/yacc
+	app-alternatives/yacc
 "
 DOCS=( doc/FIM.TXT )
 PATCHES=(

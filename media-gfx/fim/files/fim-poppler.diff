@@ -1,15 +1,99 @@
---- a/src/FbiStuffPdf.cpp	2015-02-14 17:12:38.011095448 +0200
-+++ b/src/FbiStuffPdf.cpp	2015-02-14 17:18:32.337628238 +0200
-@@ -199,7 +199,11 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -845,7 +845,7 @@ if test x$fim_handle_pdf != xno ; then
+   have_poppler=yes
+         if test x$with_libpoppler != xno && test -z "$LIBPOPPLER"; then
+ dnl FIXME : the following is a dirty hack
+-          AC_CHECK_LIB(poppler, gfree,
++          AC_CHECK_LIB(poppler, free,
+             have_poppler=yes,
+             have_poppler=no
+       AC_MSG_WARN([*** POPPLER loader will not be built (POPPLER library not found) ***]) )
+--- a/src/FbiStuffPdf.cpp
++++ b/src/FbiStuffPdf.cpp
+@@ -32,6 +32,10 @@
+ #include "FbiStuffLoader.h"
+ 
+ #ifdef HAVE_LIBPOPPLER
++#define GBool  bool
++#define Guchar unsigned char
++#define gTrue  true
++#define gFalse false
+ 
+ /*
+  * Note : at the time of writing this, the poppler API is unstable,
+@@ -41,21 +45,14 @@
+  * And please don't blame me (fim's author)!
+  */
+ #include <poppler/cpp/poppler-version.h>
+-#if (POPPLER_VERSION_MINOR>=21)
+-#if (POPPLER_VERSION_MINOR< 24)
+ #include <poppler/splash/SplashBitmap.h>
+ #include <poppler/splash/SplashTypes.h>
+-#else
+-#include <splash/SplashBitmap.h>
+-#include <splash/SplashTypes.h>
+-#endif /* (POPPLER_VERSION_MINOR< 24) */
+ #include <poppler/poppler-config.h>
+ #include <poppler/OutputDev.h>
+ #include <poppler/PDFDoc.h>
+ #include <poppler/SplashOutputDev.h>
+ #include <poppler/Page.h>
+ #include <poppler/GlobalParams.h>	/* globalParams lives here */
+-#endif /* (POPPLER_VERSION_MINOR>=21) */
+ 
+ #if HAVE_FILENO
+ #define FIM_PDF_USE_FILENO 1
+@@ -179,17 +176,14 @@ pdf_init(FILE *fp, const fim_char_t *fil
+ 	SplashColorsInit();
+ 
+ 	// WARNING : a global variable from libpoppler! damn!!
+-	globalParams = new GlobalParams();
++	globalParams.reset(new GlobalParams());
+ 	if (!globalParams)
+ 		goto err;
+ 
+ 	globalParams->setErrQuiet(gFalse);
+ 
+-#if defined(POPPLER_VERSION_MINOR) && (POPPLER_VERSION_MINOR<22)
+-	globalParams->setBaseDir(_);
+-#endif /* defined(POPPLER_VERSION_MINOR) && (POPPLER_VERSION_MINOR<22) */
+ 
+-	ds->pd = new PDFDoc(new GooString(filename), FIM_NULL, FIM_NULL, (void*)FIM_NULL);
++	ds->pd = new PDFDoc(std::make_unique<GooString>(filename));
+ 	if (!ds->pd)
+         	goto err;
+ 
+@@ -199,15 +193,11 @@ pdf_init(FILE *fp, const fim_char_t *fil
  	if (!ds->od)
  	{
          	GBool bitmapTopDown = gTrue;
 -        	ds->od = new SplashOutputDev(gSplashColorMode, /*4*/3, gFalse, gBgColor, bitmapTopDown,gFalse/*antialias*/);
-+        	ds->od = new SplashOutputDev(gSplashColorMode, /*4*/3, gFalse, gBgColor, bitmapTopDown
-+#if defined(POPPLER_VERSION_MINOR) && (POPPLER_VERSION_MINOR<31)
-+            ,gFalse/*antialias*/
-+#endif
-+            );
++        	ds->od = new SplashOutputDev(gSplashColorMode, /*4*/3, gFalse, gBgColor, bitmapTopDown);
  	        if (ds->od)
- #ifdef POPPLER_VERSION	/* as of 0.20.2, from poppler/poppler-config.h */
+-#ifdef POPPLER_VERSION	/* as of 0.20.2, from poppler/poppler-config.h */
  			/* FIXME: this is an incomplete fix (triggered on 20120719's email on fim-devel);
+ 			  I don't really know which version of poppler defines this macro first, but I assume 0.20.2 or so */
+ 			ds->od->startDoc(ds->pd);
+-#else /* POPPLER_VERSION */
+-			ds->od->startDoc(ds->pd->getXRef());
+-#endif /* POPPLER_VERSION */
+     	}
+         if (!ds->od)
+ 		goto err;
+@@ -239,7 +229,6 @@ err:
+ 
+ 	if(ds->pd)		delete ds->pd ;
+ 	if(ds->od)	delete ds->od ;
+-	if (globalParams)	delete globalParams;
+ 	globalParams = FIM_NULL;
+ 	if(ds)fim_free(ds);
+ retnull:
+@@ -267,7 +256,6 @@ pdf_done(void *data)
+ 
+ 	if(ds->pd)		delete ds->pd ;
+ 	if(ds->od)	delete ds->od ;
+-	if (globalParams)	delete globalParams;
+ 	globalParams = FIM_NULL;
+ 
+ 	fim_free(ds);
