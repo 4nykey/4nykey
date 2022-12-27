@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -8,10 +8,10 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://git.codesynthesis.com/${PN}/${PN}.git"
 else
 	MY_PV="7ff03f4"
-	[[ -n ${PV%%*_*} ]] && MY_PV="${PV}"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV/_beta/-b.}"
 	SRC_URI="
-		https://git.codesynthesis.com/cgit/${PN}/${PN}/snapshot/${MY_PV}.tar.gz
-		-> ${P}.tar.gz
+		https://git.codesynthesis.com/cgit/${PN}/${PN}/snapshot/${MY_PV}.tar.xz
+		-> ${P}.tar.xz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -26,7 +26,7 @@ SLOT="0"
 IUSE="doc examples test zlib"
 RDEPEND="
 	>=dev-libs/xerces-c-3.0.0
-	dev-libs/boost:=[threads(+)]
+	dev-libs/boost:=
 	>=dev-cpp/libcutl-1.11.0_beta9:=
 	>=dev-cpp/libxsd-frontend-2.1.0_beta2:=
 	zlib? ( sys-libs/zlib )
@@ -35,14 +35,14 @@ DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
-	dev-util/build2
+	>=dev-util/build2-0.15
 	dev-util/cli
 	doc? ( app-doc/doxygen )
 "
 
 src_prepare() {
 	# collision with xsd of dev-lang/mono
-	grep -rl '{xsd}:'|xargs sed 's,{xsd}:,{codesynthesis-xsd}:,' -i
+	sed 's,{xsd}:,{codesynthesis-xsd}:,' -i xsd/doc/buildfile
 	default
 }
 
@@ -54,6 +54,7 @@ src_configure() {
 		config.bin.ar="$(tc-getAR)"
 		config.bin.ranlib="$(tc-getRANLIB)"
 		config.install.root="${ED}/usr/"
+		config.install.bin="exec_root/libexec/codesynthesis"
 		config.install.lib="exec_root/$(get_libdir)"
 		config.install.doc="data_root/share/doc/${PF}"
 	)
