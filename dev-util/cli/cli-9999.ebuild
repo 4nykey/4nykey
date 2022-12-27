@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -10,8 +10,8 @@ else
 	MY_PV="a54c695"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV/_beta/-b.}"
 	SRC_URI="
-		https://git.codesynthesis.com/cgit/${PN}/${PN}/snapshot/${MY_PV}.tar.gz
-		-> ${P}.tar.gz
+		https://git.codesynthesis.com/cgit/${PN}/${PN}/snapshot/${MY_PV}.tar.xz
+		-> ${P}.tar.xz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -33,7 +33,7 @@ DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
-	>=dev-util/build2-0.14.0
+	>=dev-util/build2-0.15
 "
 
 src_configure() {
