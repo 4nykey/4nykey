@@ -1,7 +1,7 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
@@ -36,10 +36,10 @@ DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
-	>=dev-cpp/xsd-4.2.0_beta2
+	>=dev-cpp/xsd-4.2.0_beta4
 	test? ( dev-libs/boost )
 	apidocs? ( app-doc/doxygen )
-	>=dev-util/cmake-openeid-0_p20220726
+	>=dev-util/cmake-openeid-0_p20220810
 	|| (
 		dev-util/xxdi
 		app-editors/vim-core
@@ -64,7 +64,7 @@ src_configure() {
 		-DCMAKE_DISABLE_FIND_PACKAGE_PoDoFo=yes
 		-DCMAKE_DISABLE_FIND_PACKAGE_SWIG=yes
 		-DCMAKE_DISABLE_FIND_PACKAGE_JNI=yes
-		-DXSD_EXECUTABLE="/usr/bin/codesynthesis-xsd"
+		-DXSD_EXECUTABLE="/usr/libexec/codesynthesis/xsd"
 	)
 	cmake_src_configure
 }
