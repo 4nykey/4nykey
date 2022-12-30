@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/kkroening/${PN}.git"
 else
-	MY_PV="78fb6cf"
+	MY_PV="df129c7"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/kkroening/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -28,6 +28,7 @@ IUSE="test"
 
 DEPEND="
 	media-video/ffmpeg
+	dev-python/future[${PYTHON_USEDEP}]
 "
 RDEPEND="
 	${DEPEND}
@@ -38,9 +39,3 @@ BDEPEND="
 	)
 "
 distutils_enable_tests pytest
-
-python_prepare_all() {
-	sed -e '/\<pytest-runner\>/d' -i setup.py
-	sed -e 's:collections.Iterable:collections.abc.Iterable:' -i ffmpeg/_run.py
-	distutils-r1_python_prepare_all
-}
