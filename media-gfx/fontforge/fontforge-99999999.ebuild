@@ -1,9 +1,9 @@
-# Copyright 2004-2022 Gentoo Authors
+# Copyright 2004-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
-PYTHON_COMPAT=( python3_{8..10} )
+EAPI=8
 
+PYTHON_COMPAT=( python3_{8..10} )
 inherit python-single-r1 xdg cmake
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -34,18 +34,18 @@ RDEPEND="
 	dev-libs/glib:2
 	dev-libs/libxml2:2=
 	>=media-libs/freetype-2.3.7:2=
-	gif? ( media-libs/giflib:0= )
-	jpeg? ( virtual/jpeg:0 )
-	png? ( media-libs/libpng:0= )
-	tiff? ( media-libs/tiff:0= )
+	gif? ( media-libs/giflib:= )
+	jpeg? ( media-libs/libjpeg-turbo:= )
+	png? ( media-libs/libpng:= )
+	tiff? ( media-libs/tiff:= )
 	truetype-debugger? ( >=media-libs/freetype-2.3.8:2[fontforge,-bindist(-)] )
 	gtk? ( >=x11-libs/gtk+-3.10:3 )
 	!gtk? (
 		X? (
 			>=x11-libs/cairo-1.6:0=
 			>=x11-libs/pango-1.10:0=[X]
-			x11-libs/libX11:0=
-			x11-libs/libXi:0=
+			x11-libs/libX11:=
+			x11-libs/libXi:=
 		)
 	)
 	python? ( ${PYTHON_DEPS} )
