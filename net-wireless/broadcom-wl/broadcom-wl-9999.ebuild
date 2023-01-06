@@ -1,21 +1,21 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-inherit eutils linux-info linux-mod
+inherit linux-info linux-mod
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/antoineco/${PN}.git"
 else
-	inherit vcs-snapshot
-	MY_PV="f3b8105"
+	MY_PV="452d163"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/antoineco/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64"
+	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
 
 DESCRIPTION="Broadcom Linux hybrid wireless driver"
@@ -53,7 +53,8 @@ pkg_setup() {
 
 	linux-mod_pkg_setup
 
-	BUILD_PARAMS="-C ${KV_DIR} M=${S}"
+	BUILD_PARAMS="CC=\"$(tc-getBUILD_CC)\" KERN_DIR=${KV_DIR} KERN_VER=${KV_FULL} O=${KV_OUT_DIR} V=1 KBUILD_VERBOSE=1"
+	BUILD_PARAMS+=" -C ${KV_DIR} M=${S}"
 	BUILD_TARGETS="wl.ko"
 }
 
