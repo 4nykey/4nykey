@@ -1,89 +1,48 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=8
 
-inherit eutils autotools
+CMAKE_MAKEFILE_GENERATOR="emake"
+inherit cmake
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://git.code.sf.net/p/mp3gain/code"
+	EGIT_REPO_URI="https://github.com/dgilman/${PN}.git"
 else
-	MY_MPG="mp3gain-1.6.2"
+	MY_PV="0421ca2"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
+	MY_FAA="faad2-3918dee" # 2.10.1
+	MY_MP4="mp4v2-339f1da" # 5.0.1
 	SRC_URI="
-		http://sbriesen.de/gentoo/distfiles/${P}.tar.xz
-		mirror://sourceforge/${MY_MPG%-*}/${MY_MPG//./_}-src.zip
+		mirror://githubcl/dgilman/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/knik0/${MY_FAA%-*}/tar.gz/${MY_FAA##*-} -> ${MY_FAA}.tar.gz
+		mirror://githubcl/TechSmith/${MY_MP4%-*}/tar.gz/${MY_MP4##*-} -> ${MY_MP4}.tar.gz
 	"
+	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
-	PATCHES=( "${FILESDIR}"/mp3gain-ctype.diff )
+	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
 
-MY_FAA="faad2-2.7"
-MY_MP4="mp4v2-1.9.1"
-SRC_URI+="
-	mirror://gcarchive/mp4v2/${MY_MP4}.tar.bz2
-	mirror://sourceforge/faac/${MY_FAA}.tar.gz
-"
-
 DESCRIPTION="Normalize perceived loudness of AAC audio files"
-HOMEPAGE="http://aacgain.altosdesign.com/"
+HOMEPAGE="https://github.com/dgilman/${PN}"
 
-LICENSE="GPL-2"
+LICENSE="GPL-2+"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RDEPEND=""
 DEPEND=""
 
-PATCHES+=(
-	${PN}/mp4v2.patch
-	"${FILESDIR}"/${PN}-1.9-derefptr.patch
-	"${FILESDIR}"/${PN}-mp4v2_m4.diff
-	"${FILESDIR}"/${PN}-autotools.diff
+PATCHES=(
+	"${FILESDIR}"/mp3gain-1.6.2-CVE-2019-18359-plus.patch
 )
-DOCS="${PN}/README"
-
-src_unpack() {
-	if [[ -z ${PV%%*9999} ]]; then
-		git-r3_fetch
-		git-r3_checkout "${EGIT_REPO_URI}" '' '' ${PN} mp3gain
-	fi
-	mkdir -p "${S}"/mp3gain
-	cd "${S}"/mp3gain
-	unpack ${A}
-	mv ${MY_MP4} ../${MY_MP4%-*}
-	mv ${MY_FAA} ../${MY_FAA%-*}
-	[[ -d ${PN} ]] && mv ${PN} ..
-}
 
 src_prepare() {
-	default
-	mv -f faad2/configure.{in,ac}
-	cp aacgain/linux/Makefile.am.mp3gain mp3gain/Makefile.am
-	cp aacgain/linux/Makefile.am.topsrcdir Makefile.am
-	cp aacgain/linux/configure.ac .
-	eautoreconf
-}
-
-src_configure() {
-	local myeconfargs=(
-		--disable-dependency-tracking
-		--disable-shared --enable-static
-		--without-xmms --without-mpeg4ip
-		--disable-util --disable-gch
-	)
-	econf "${myeconfargs[@]}"
-}
-
-src_install() {
-	dobin ${PN}/${PN}
-	einstalldocs
-}
-
-pkg_postinst() {
-	ewarn
-	ewarn "BACK UP YOUR MUSIC FILES BEFORE USING AACGAIN!"
-	ewarn "THIS IS EXPERIMENTAL SOFTWARE. THERE HAVE BEEN"
-	ewarn "BUGS IN PAST RELEASES THAT CORRUPTED MUSIC FILES."
-	ewarn
+	cmake_src_prepare
+	tc-export CC CXX
+	[[ -z ${PV%%*9999} ]] && return
+	mv ../${MY_FAA}/* 3rdparty/faad2/
+	mv ../${MY_MP4}/* 3rdparty/mp4v2/
+	cd 3rdparty/mp4v2
+	eapply "${FILESDIR}"/libmp4v2-2.0.0-unsigned-int-cast.patch
 }
