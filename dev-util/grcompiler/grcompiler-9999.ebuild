@@ -1,31 +1,32 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
-EAPI=6
+EAPI=8
 
-inherit autotools
+inherit cmake
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/silnrsi/${PN}.git"
 else
-	inherit vcs-snapshot
+	MY_PV="0f3b355"
+	[[ -n ${PV%%*_*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/silnrsi/${PN}/tar.gz/v${PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 
 DESCRIPTION="The SIL Graphite compiler"
-HOMEPAGE="https://github.com/silnrsi/${PN}"
+HOMEPAGE="http://graphite.sil.org"
 
 LICENSE="|| ( CPL-0.5 LGPL-2.1+ )"
 SLOT="0"
 IUSE=""
 
 RDEPEND="
-	dev-libs/icu
+	dev-libs/icu:=
 "
 DEPEND="
 	${RDEPEND}
@@ -33,12 +34,8 @@ DEPEND="
 "
 
 src_prepare() {
-	default
 	sed \
-		-e '/^@ GrcRegressionTest_LDFLAGS/d' \
-		-i "${S}"/test/GrcRegressionTest/Makefile.am || die
-	sed \
-		-e 's:\(pkgdocdir = \).*:\1$(docdir):' \
-		-i "${S}"/doc/Makefile.am || die
-	eautoreconf
+		-e '/^FetchContent_Declare(/,/^endif()/d' \
+		-i compiler/CMakeLists.txt
+	cmake_src_prepare
 }
