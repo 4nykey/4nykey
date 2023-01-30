@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -6,12 +6,12 @@ EAPI=8
 FIREFOX_PATCHSET="firefox-102esr-patches-07j.tar.xz"
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="102.6.0esr-${MY_PV}-1-build2"
+MY_P="102.7.0esr-${MY_PV}-1-build1"
 MY_P="firefox-tor-browser-${MY_P}"
 
 LLVM_MAX_SLOT=15
 
-PYTHON_COMPAT=( python3_{8..11} )
+PYTHON_COMPAT=( python3_{9..11} )
 PYTHON_REQ_USE="ncurses,sqlite,ssl"
 
 WANT_AUTOCONF="2.1"
@@ -33,7 +33,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 MY_PV="${MY_PV%.0}"
-MY_NOS="11.4.13"
+MY_NOS="11.4.14"
 MY_NOS="noscript-${MY_NOS}.xpi"
 SRC_URI="
 	mirror://tor/${PN}/${MY_PV}/src-${MY_P}.tar.xz
@@ -124,6 +124,12 @@ COMMON_DEPEND="
 	)
 	jack? ( virtual/jack )
 	libproxy? ( net-libs/libproxy )
+	pulseaudio? (
+		|| (
+			media-sound/pulseaudio
+			>=media-sound/apulse-0.1.12-r4
+		)
+	)
 	sndio? ( >=media-sound/sndio-1.8.0-r1 )
 	system-av1? (
 		>=media-libs/dav1d-1.0.0:=
@@ -154,23 +160,13 @@ COMMON_DEPEND="
 
 RDEPEND="${COMMON_DEPEND}
 	jack? ( virtual/jack )
-	openh264? ( media-libs/openh264:*[plugin] )
-	pulseaudio? (
-		|| (
-			media-sound/pulseaudio
-			>=media-sound/apulse-0.1.12-r4
-		)
-	)"
+	openh264? ( media-libs/openh264:*[plugin] )"
 
 DEPEND="${COMMON_DEPEND}
+	x11-base/xorg-proto
 	x11-libs/libICE
-	x11-libs/libSM
-	pulseaudio? (
-		|| (
-			media-sound/pulseaudio
-			>=media-sound/apulse-0.1.12-r4[sdk]
-		)
-	)"
+	x11-libs/libSM"
+
 RDEPEND+="
 	net-vpn/tor
 "
