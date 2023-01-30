@@ -1,9 +1,9 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-PYTHON_COMPAT=( python3_{8..10} )
+PYTHON_COMPAT=( python3_{9..10} )
 CMAKE_IN_SOURCE_BUILD=1
 inherit cmake distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
@@ -31,7 +31,7 @@ RDEPEND="
 	~dev-cpp/antlr-cpp-4.9.3:4=
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 	>=dev-python/defcon-0.10.1[${PYTHON_USEDEP}]
-	>=dev-python/fontMath-0.9.2[${PYTHON_USEDEP}]
+	>=dev-python/fontMath-0.9.3[${PYTHON_USEDEP}]
 	dev-python/fontPens[${PYTHON_USEDEP}]
 	>=dev-python/fonttools-4.33.3[ufo(+),unicode(-),woff(-),${PYTHON_USEDEP}]
 	>=dev-util/psautohint-2.4[${PYTHON_USEDEP}]
@@ -53,8 +53,6 @@ python_prepare_all() {
 		"${FILESDIR}"/setup.diff
 	)
 	eapply "${_p[@]}"
-	# revert https://github.com/adobe-type-tools/afdko/commit/257a832
-	eapply -R "${FILESDIR}"/257a832.diff
 	sed \
 		-e '/-DANTLR4CPP_STATIC/d' \
 		-e '/ExternalAntlr4Cpp/d' \
@@ -72,6 +70,7 @@ python_configure_all() {
 	local mycmakeargs=(
 		-DANTLR4_INCLUDE_DIRS="${EPREFIX}/usr/include/antlr4-runtime"
 	)
+	FORCE_SYSTEM_LIBXML2=1 \
 	cmake_src_configure
 }
 
