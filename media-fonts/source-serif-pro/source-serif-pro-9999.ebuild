@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -35,7 +35,7 @@ HOMEPAGE="https://adobe-fonts.github.io/${MY_PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="+binary variable"
+IUSE="autohint +binary variable"
 
 BDEPEND="
 	!binary? (
@@ -56,5 +56,12 @@ pkg_setup() {
 
 src_compile() {
 	use binary && return
-	. ./build$(usex variable 'VFs' '').sh || die
+	if use variable; then
+		./buildVFs.py \
+			--verbose \
+			$(usex autohint --hinted '') \
+			|| die
+	else
+		./build.sh || die
+	fi
 }
