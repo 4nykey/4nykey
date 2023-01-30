@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -29,7 +29,7 @@ SLOT="0"
 IUSE="pcre"
 
 DEPEND="
-	>=net-misc/meganz-sdk-4.7.1:=
+	>=net-misc/meganz-sdk-4.9:=
 	pcre? ( dev-libs/libpcre:3[cxx] )
 	sys-libs/readline:0
 "
@@ -43,6 +43,7 @@ PATCHES=(
 	"${FILESDIR}"/sdk4.diff
 	"${FILESDIR}"/sdk45.diff
 	"${FILESDIR}"/sdk47.diff
+	"${FILESDIR}"/sdk49.diff
 )
 
 src_prepare() {

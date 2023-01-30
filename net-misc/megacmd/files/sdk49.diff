@@ -1,0 +1,93 @@
+diff --git a/src/listeners.cpp b/src/listeners.cpp
+index 8ab5a2f..c138474 100644
+--- a/src/listeners.cpp
++++ b/src/listeners.cpp
+@@ -451,10 +451,9 @@ void MegaCmdMegaListener::onSyncAdded(MegaApi *api, MegaSync *sync, int addition
+ void MegaCmdMegaListener::onSyncDisabled(MegaApi *api, MegaSync *sync)
+ {
+     if (sync->getError() != MegaSync::LOGGED_OUT
+-           && (sync->getError() != MegaSync::NO_SYNC_ERROR || sync->isTemporaryDisabled()) )
++           && (sync->getError() != MegaSync::NO_SYNC_ERROR || sync->getRunState() != ::mega::MegaSync::RUNSTATE_RUNNING) )
+     {
+-        string msg = "Your sync has been ";
+-        msg.append(sync->isTemporaryDisabled() ? "temporarily": "permanently");
++        string msg = "Your sync has been";
+         msg.append(" disabled: ");
+         msg.append(sync->getLocalFolder());
+         msg.append(" to: ");
+diff --git a/src/megacmdexecuter.cpp b/src/megacmdexecuter.cpp
+index e8cee42..a8c7e63 100644
+--- a/src/megacmdexecuter.cpp
++++ b/src/megacmdexecuter.cpp
+@@ -4438,26 +4438,18 @@ void MegaCmdExecuter::printSync(MegaSync *sync, long long nfiles, long long nfol
+     cd.addValue("REMOTEPATH", sync->getLastKnownMegaFolder());
+ 
+     string state;
+-    if (sync->isTemporaryDisabled())
+-    {
+-        state = "TempDisabled";
+-    }
+-    else if (sync->isActive())
++    if (sync->getRunState() == ::mega::MegaSync::RUNSTATE_RUNNING)
+     {
+         state = "Enabled";
+     }
+-    else if (!sync->isEnabled())
+-    {
+-        state = "Disabled";
+-    }
+     else
+     {
+-        state = "Failed";
++        state = "Disabled";
+     }
+     cd.addValue("ACTIVE", state);
+ 
+     string pathstate;
+-    if (!sync->isActive())
++    if (state == "Disabled")
+     {
+         pathstate = "Inactive";
+     }
+@@ -4717,12 +4709,12 @@ void MegaCmdExecuter::restartsyncs()
+     for (int i = 0; i < syncs->size(); i++)
+     {
+         MegaSync *sync = syncs->get(i);
+-        if (sync->isActive())
++        if (sync->getRunState() == ::mega::MegaSync::RUNSTATE_RUNNING)
+         {
+             LOG_info << "Restarting sync "<< sync->getLocalFolder() << " to " << sync->getLastKnownMegaFolder();
+ 
+             auto megaCmdListener = ::mega::make_unique<MegaCmdListener>(nullptr);
+-            api->disableSync(sync, megaCmdListener.get());
++            api->setSyncRunState(sync->getBackupId(), MegaSync::RUNSTATE_DISABLED, megaCmdListener.get());
+             megaCmdListener->wait();
+ 
+             if (checkNoErrors(megaCmdListener->getError(), "disable sync"))
+@@ -4730,7 +4722,7 @@ void MegaCmdExecuter::restartsyncs()
+                 LOG_verbose << "Disabled sync "<< sync->getLocalFolder() << " to " << sync->getLastKnownMegaFolder();
+ 
+                 auto megaCmdListener = ::mega::make_unique<MegaCmdListener>(nullptr);
+-                api->enableSync(sync, megaCmdListener.get());
++                api->setSyncRunState(sync->getBackupId(), MegaSync::RUNSTATE_RUNNING, megaCmdListener.get());
+                 megaCmdListener->wait();
+ 
+                 if (checkNoErrors(megaCmdListener->getError(), "re-enable sync"))
+@@ -7808,7 +7800,7 @@ void MegaCmdExecuter::executecommand(vector<string> words, map<string, int> *clf
+             if (stop)
+             {
+                 auto megaCmdListener = ::mega::make_unique<MegaCmdListener>(nullptr);
+-                api->disableSync(sync.get(), megaCmdListener.get());
++                api->setSyncRunState(sync->getBackupId(), MegaSync::RUNSTATE_DISABLED, megaCmdListener.get());
+                 megaCmdListener->wait();
+                 if (checkNoErrors(megaCmdListener->getError(), "stop sync", static_cast<SyncError>(megaCmdListener->getRequest()->getNumDetails())))
+                 {
+@@ -7818,7 +7810,7 @@ void MegaCmdExecuter::executecommand(vector<string> words, map<string, int> *clf
+             else if (resume)
+             {
+                 auto megaCmdListener = ::mega::make_unique<MegaCmdListener>(nullptr);
+-                api->enableSync(sync.get(), megaCmdListener.get());
++                api->setSyncRunState(sync->getBackupId(), MegaSync::RUNSTATE_RUNNING, megaCmdListener.get());
+                 megaCmdListener->wait();
+                 if (checkNoErrors(megaCmdListener->getError(), "enable sync", static_cast<SyncError>(megaCmdListener->getRequest()->getNumDetails())))
+                 {

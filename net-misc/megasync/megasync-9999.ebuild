@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_SUBMODULES=( -src/MEGASync/mega )
 	SRC_URI=
 else
-	MY_PV="a477444"
+	MY_PV="10e4750"
 	SRC_URI="
 		mirror://githubcl/meganz/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -32,7 +32,7 @@ SLOT="0"
 IUSE="dolphin nautilus thunar"
 
 RDEPEND="
-	>=net-misc/meganz-sdk-4.7.1:=[libuv,qt,sodium(+),sqlite]
+	>=net-misc/meganz-sdk-4.9:=[libuv,qt,sodium(+),sqlite]
 	dev-qt/qtsvg:5
 	dev-qt/qtx11extras:5
 	dev-qt/qtdbus:5
