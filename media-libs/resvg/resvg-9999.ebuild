@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -7,40 +7,42 @@ CRATES="
 	adler-1.0.2
 	arrayref-0.3.6
 	arrayvec-0.7.2
-	base64-0.13.1
+	base64-0.21.0
 	bitflags-1.3.2
-	bytemuck-1.12.1
+	bytemuck-1.13.0
 	cfg-if-1.0.0
 	color_quant-1.1.0
 	crc32fast-1.3.2
 	data-url-0.2.0
-	flate2-1.0.24
+	flate2-1.0.25
 	float-cmp-0.9.0
 	fontconfig-parser-0.5.1
-	fontdb-0.10.0
-	gif-0.11.4
+	fontdb-0.12.0
+	gif-0.12.0
+	imagesize-0.11.0
 	jpeg-decoder-0.3.0
-	kurbo-0.8.3
-	libc-0.2.137
+	kurbo-0.9.0
+	libc-0.2.139
 	log-0.4.17
 	memmap2-0.5.8
-	miniz_oxide-0.5.4
-	once_cell-1.16.0
+	miniz_oxide-0.6.2
+	once_cell-1.17.0
 	pico-args-0.5.0
-	png-0.17.6
+	png-0.17.7
 	rctree-0.5.0
 	rgb-0.8.34
 	roxmltree-0.15.1
-	rustybuzz-0.6.0
+	roxmltree-0.18.0
+	rustybuzz-0.7.0
 	simplecss-0.2.1
 	siphasher-0.3.10
 	smallvec-1.10.0
 	strict-num-0.1.0
-	svgtypes-0.8.2
-	tiny-skia-0.8.2
-	tiny-skia-path-0.8.2
-	ttf-parser-0.17.1
-	unicode-bidi-0.3.8
+	svgtypes-0.10.0
+	tiny-skia-0.8.3
+	tiny-skia-path-0.8.3
+	ttf-parser-0.18.1
+	unicode-bidi-0.3.10
 	unicode-bidi-mirroring-0.1.0
 	unicode-ccc-0.1.2
 	unicode-general-category-0.6.0
