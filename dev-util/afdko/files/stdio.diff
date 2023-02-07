@@ -1,0 +1,31 @@
+--- a/c/spot/source/opt.c
++++ b/c/spot/source/opt.c
+@@ -15,8 +15,6 @@
+ #include "opt.h"
+ 
+ /* Missing prototypes */
+-extern int fprintf(FILE *stream, const char *format, ...);
+-extern int sscanf(const char *s, const char *format, ...);
+ 
+ #define opt_PRESENT (1 << 7) /* Flags if option was present */
+ 
+--- a/c/spot/source/global.h
++++ b/c/spot/source/global.h
+@@ -147,6 +147,5 @@ extern long strtol(const char *str, char
+ #ifndef __MWERKS__
+ extern double strtod(const char *str, char **ptr);
+ #endif
+-extern int fprintf(FILE *stream, const char *format, ...);
+ 
+ #endif /* GLOBAL_H */
+--- a/c/sfntdiff/source/Dopt.c
++++ b/c/sfntdiff/source/Dopt.c
+@@ -13,8 +13,6 @@
+ #include "Dopt.h"
+ 
+ /* Missing prototypes */
+-extern int fprintf(FILE *stream, const char *format, ...);
+-extern int sscanf(const char *s, const char *format, ...);
+ 
+ #define opt_PRESENT (1 << 7) /* Flags if option was present */
+ 

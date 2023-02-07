@@ -51,6 +51,7 @@ python_prepare_all() {
 
 	local _p=(
 		"${FILESDIR}"/setup.diff
+		"${FILESDIR}"/stdio.diff
 	)
 	eapply "${_p[@]}"
 	sed \
