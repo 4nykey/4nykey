@@ -3,10 +3,10 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-102esr-patches-07j.tar.xz"
+FIREFOX_PATCHSET="firefox-102esr-patches-08j.tar.xz"
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="102.7.0esr-${MY_PV}-1-build1"
+MY_P="102.8.0esr-${MY_PV}-1-build2"
 MY_P="firefox-tor-browser-${MY_P}"
 
 LLVM_MAX_SLOT=15
@@ -33,7 +33,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 MY_PV="${MY_PV%.0}"
-MY_NOS="11.4.14"
+MY_NOS="11.4.16"
 MY_NOS="noscript-${MY_NOS}.xpi"
 SRC_URI="
 	mirror://tor/${PN}/${MY_PV}/src-${MY_P}.tar.xz
@@ -141,7 +141,7 @@ COMMON_DEPEND="
 	)
 	system-icu? ( >=dev-libs/icu-71.1:= )
 	system-jpeg? ( >=media-libs/libjpeg-turbo-1.2.1 )
-	system-libevent? ( >=dev-libs/libevent-2.1.12:0=[threads] )
+	system-libevent? ( >=dev-libs/libevent-2.1.12:0=[threads(+)] )
 	system-libvpx? ( >=media-libs/libvpx-1.8.2:0=[postproc] )
 	system-png? ( >=media-libs/libpng-1.6.35:0=[apng] )
 	system-webp? ( >=media-libs/libwebp-1.1.0:0= )
@@ -392,6 +392,7 @@ src_prepare() {
 	if use lto; then
 		rm -v "${WORKDIR}"/firefox-patches/*-LTO-Only-enable-LTO-*.patch || die
 	fi
+	rm -f "${WORKDIR}"/firefox-patches/003[12]-bmo-1769631-python-3.11-compatibility.patch
 
 	eapply "${WORKDIR}/firefox-patches"
 
