@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -55,7 +55,7 @@ RDEPEND="
 DEPEND="
 	${DEPEND}
 	sys-devel/flex
-	app-alternatives/yacc
+	sys-devel/bison
 "
 DOCS=( doc/FIM.TXT )
 PATCHES=(
@@ -128,5 +128,6 @@ src_configure() {
 		--enable-custom-status-bar
 		--enable-c++17
 	)
+	YACC='bison -y' \
 	econf "${myeconfargs[@]}"
 }

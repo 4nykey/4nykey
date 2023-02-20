@@ -1,9 +1,9 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-PYTHON_COMPAT=( python3_{8..10} )
+PYTHON_COMPAT=( python3_{9..11} )
 DISTUTILS_USE_PEP517=poetry
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
@@ -29,7 +29,7 @@ IUSE="test"
 
 RDEPEND="
 	dev-python/fonttools[ufo(-),${PYTHON_USEDEP}]
-	dev-python/cattrs[${PYTHON_USEDEP}]
+	>=dev-python/cattrs-22.2[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}

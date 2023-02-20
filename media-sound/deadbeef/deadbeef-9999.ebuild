@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -11,32 +11,37 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	MY_PV="d2fc9ef"
 	MY_MP="mp4p-97ab728"
+	MY_LR="ddb_dsp_libretro-b092190"
+	MY_PW="ddb_output_pw-14a3fc6"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/DeaDBeeF-Player/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
 		mirror://githubcl/DeaDBeeF-Player/${MY_MP%-*}/tar.gz/${MY_MP##*-}
 		-> ${MY_MP}.tar.gz
+		mirror://githubcl/DeaDBeeF-Player/${MY_LR%-*}/tar.gz/${MY_LR##*-}
+		-> ${MY_LR}.tar.gz
+		mirror://githubcl/DeaDBeeF-Player/${MY_PW%-*}/tar.gz/${MY_PW##*-}
+		-> ${MY_PW}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
-inherit autotools flag-o-matic xdg
+inherit autotools flag-o-matic toolchain-funcs xdg
 
 DESCRIPTION="A music player for *nix-like systems and OSX"
-HOMEPAGE="https://github.com/DeaDBeeF-Player/${PN}"
+HOMEPAGE="https://deadbeef.sourceforge.io"
 LICENSE="GPL-2 LGPL-2.1"
 
 SLOT="0"
 IUSE="
 alsa oss pulseaudio gtk curl sid mad mac vorbis ffmpeg flac sndfile
 wavpack cdda gme libnotify musepack midi tta dts aac mms libsamplerate X
-zip nls threads gtk3 dumb shorten alac wma opus lastfm +clang
+zip nls threads gtk3 dumb shorten alac wma opus lastfm libretro pipewire
 "
 REQUIRED_USE="
-	lastfm? ( curl clang )
-	libnotify? ( clang )
+	lastfm? ( curl )
 "
 
 RDEPEND="
@@ -50,8 +55,8 @@ RDEPEND="
 	shorten? ( media-sound/shorten )
 	alac? ( media-sound/alac_decoder )
 	alsa? ( media-libs/alsa-lib )
-	ffmpeg? ( media-video/ffmpeg )
-	mad? ( media-libs/libmad )
+	ffmpeg? ( media-video/ffmpeg:= )
+	mad? ( media-libs/libmad:= )
 	vorbis? ( media-libs/libvorbis )
 	flac? ( media-libs/flac )
 	wavpack? ( media-sound/wavpack )
@@ -70,7 +75,8 @@ RDEPEND="
 	gme? ( sys-libs/zlib )
 	midi? ( media-sound/timidity-freepats )
 	opus? ( media-libs/opusfile )
-	clang? ( dev-libs/libdispatch )
+	dev-libs/libdispatch
+	pipewire? ( media-video/pipewire:= )
 "
 DEPEND="
 	${RDEPEND}
@@ -80,17 +86,16 @@ BDEPEND="
 	dev-util/intltool
 	oss? ( virtual/libc )
 	mac? ( dev-lang/yasm )
-	clang? ( sys-devel/clang )
+	sys-devel/clang
 "
 
 pkg_setup() {
-	if use clang && ! tc-is-clang; then
+	if ! tc-is-clang; then
 		AR=llvm-ar
 		CC=${CHOST}-clang
 		CXX=${CHOST}-clang++
 		NM=llvm-nm
 		RANLIB=llvm-ranlib
-
 		strip-unsupported-flags
 	fi
 }
@@ -98,7 +103,9 @@ pkg_setup() {
 src_prepare() {
 	xdg_src_prepare
 	if [[ -n ${PV%%*9999} ]]; then
-		mv "${WORKDIR}"/${MY_MP}/* "${S}"/external/mp4p
+		mv "${WORKDIR}"/${MY_MP}/* "${S}"/external/${MY_MP%-*}
+		mv "${WORKDIR}"/${MY_LR}/* "${S}"/external/${MY_LR%-*}
+		mv "${WORKDIR}"/${MY_PW}/* "${S}"/external/${MY_PW%-*}
 	fi
 	local _t=/usr/share/timidity/freepats/timidity.cfg
 	sed \
@@ -144,6 +151,8 @@ src_configure() {
 		$(use_enable alac)
 		$(use_enable wma)
 		$(use_enable opus)
+		$(use_enable libretro)
+		$(use_enable pipewire)
 	)
 	econf "${myconf[@]}"
 }

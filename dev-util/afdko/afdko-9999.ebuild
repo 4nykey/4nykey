@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{9..10} )
+PYTHON_COMPAT=( python3_{9..11} )
 CMAKE_IN_SOURCE_BUILD=1
 inherit cmake distutils-r1
 if [[ -z ${PV%%*9999} ]]; then

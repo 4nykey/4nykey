@@ -1,10 +1,11 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..10} )
+PYTHON_COMPAT=( python3_{10..11} )
 DISTUTILS_SINGLE_IMPL=1
+DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1
 MY_PN=tools
 if [[ -z ${PV%%*9999} ]]; then
@@ -33,33 +34,34 @@ IUSE=""
 
 RDEPEND="
 	$(python_gen_cond_dep '
-		dev-python/axisregistry[${PYTHON_USEDEP}]
 		dev-python/fonttools[${PYTHON_USEDEP},ufo(-)]
+		dev-python/axisregistry[${PYTHON_USEDEP}]
 		dev-python/absl-py[${PYTHON_USEDEP}]
-		dev-python/protobuf-python[${PYTHON_USEDEP}]
+		dev-python/glyphsLib[${PYTHON_USEDEP}]
+		dev-python/gflanguages[${PYTHON_USEDEP}]
+		dev-python/glyphsets[${PYTHON_USEDEP}]
 		dev-python/PyGithub[${PYTHON_USEDEP}]
+		dev-python/pillow[${PYTHON_USEDEP}]
+		dev-python/protobuf-python[${PYTHON_USEDEP}]
+		dev-python/requests[${PYTHON_USEDEP}]
+		dev-python/tabulate[${PYTHON_USEDEP}]
+		dev-python/unidecode[${PYTHON_USEDEP}]
+		dev-python/ots-python[${PYTHON_USEDEP}]
 		dev-python/vttLib[${PYTHON_USEDEP}]
+		dev-python/pygit2[${PYTHON_USEDEP}]
+		dev-python/strictyaml[${PYTHON_USEDEP}]
+		dev-util/fontmake[${PYTHON_USEDEP}]
 		dev-python/statmake[${PYTHON_USEDEP}]
 		dev-python/pyyaml[${PYTHON_USEDEP}]
 		dev-python/babelfont[${PYTHON_USEDEP}]
 		dev-python/ttfautohint-py[${PYTHON_USEDEP}]
-		dev-util/fontmake[${PYTHON_USEDEP}]
 		app-arch/brotli[python,${PYTHON_USEDEP}]
-		dev-python/browserstack-local-python[${PYTHON_USEDEP}]
-		dev-python/pybrowserstack-screenshots[${PYTHON_USEDEP}]
-		dev-python/glyphsLib[${PYTHON_USEDEP}]
-		dev-python/glyphsets[${PYTHON_USEDEP}]
-		dev-python/ots-python[${PYTHON_USEDEP}]
-		dev-python/pygit2[${PYTHON_USEDEP}]
-		dev-python/requests[${PYTHON_USEDEP}]
-		dev-python/strictyaml[${PYTHON_USEDEP}]
-		dev-python/tabulate[${PYTHON_USEDEP}]
-		dev-python/unidecode[${PYTHON_USEDEP}]
 		dev-python/jinja[${PYTHON_USEDEP}]
 		dev-python/hyperglot[${PYTHON_USEDEP}]
+		dev-python/fontFeatures[${PYTHON_USEDEP}]
 		dev-python/vharfbuzz[${PYTHON_USEDEP}]
 		dev-python/nanoemoji[${PYTHON_USEDEP}]
-		dev-python/gflanguages[${PYTHON_USEDEP}]
+		dev-python/font-v[${PYTHON_USEDEP}]
 	')
 "
 DEPEND="
@@ -93,11 +95,5 @@ python_prepare_all() {
 }
 
 python_test() {
-	distutils_install_for_testing
-	# .github/workflows/test.yml
-	epytest \
-		Lib/gftools/tests/test_usage.py \
-		Lib/gftools/tests/test_fix.py \
-		Lib/gftools/tests/test_html.py \
-		Lib/gftools/tests/test_instancer.py
+	epytest "${S}"/tests
 }

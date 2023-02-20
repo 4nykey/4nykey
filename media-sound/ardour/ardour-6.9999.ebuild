@@ -52,7 +52,6 @@ RDEPEND="
 	pulseaudio? ( media-sound/pulseaudio )
 	!bundled-libs? (
 		media-libs/libltc
-		media-libs/qm-dsp
 		hid? ( dev-libs/hidapi )
 		>=media-sound/fluidsynth-2.0.1
 	)
@@ -85,6 +84,7 @@ src_prepare() {
 	plocale_for_each_disabled_locale my_lcmsg
 	sed -e 's:AudioEditing:X-&:' -i gtk2_ardour/ardour.desktop.in
 	sed -e 's:share/appdata:share/metainfo:' -i gtk2_ardour/wscript
+	sed -e 's:USE_EXTERNAL_LIBS:DONT_USE_EXTERNAL_LIB:' -i libs/qm-dsp/wscript
 	grep -rl '/\<lib\>' | xargs sed -e "s:/\<lib\>:/$(get_libdir):g" -i
 	default
 }

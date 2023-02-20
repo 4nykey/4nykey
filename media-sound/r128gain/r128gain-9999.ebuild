@@ -1,9 +1,9 @@
-# Copyright 2018-2021 Gentoo Authors
+# Copyright 2018-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..10} )
+PYTHON_COMPAT=( python3_{9..11} )
 DISTUTILS_USE_SETUPTOOLS=rdepend
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
@@ -44,7 +44,7 @@ BDEPEND="
 		dev-python/requests[${PYTHON_USEDEP}]
 	)
 "
-distutils_enable_tests setup.py
+distutils_enable_tests unittest
 
 pkg_pretend() {
 	use test && has network-sandbox ${FEATURES} && die \
