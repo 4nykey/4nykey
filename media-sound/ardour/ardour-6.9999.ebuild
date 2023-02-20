@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -6,7 +6,7 @@ EAPI=7
 PLOCALES="
 cs de el en_GB es fr it ja nn pl pt pt_PT ru sv zh
 "
-PYTHON_COMPAT=( python3_{8..10} )
+PYTHON_COMPAT=( python3_{9..11} )
 PYTHON_REQ_USE='threads(+)'
 WAF_BINARY="${S}/waf"
 EGIT_REPO_URI="https://github.com/${PN^}/${PN}.git"
@@ -15,7 +15,7 @@ if [[ -n ${PV%%*9999} ]]; then
 	MY_PV="f744b5f"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	EGIT_COMMIT="${MY_PV/_/-}"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 fi
 SRC_URI=""
 
