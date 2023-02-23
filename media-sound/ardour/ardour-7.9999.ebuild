@@ -4,7 +4,7 @@
 EAPI=8
 
 PLOCALES="
-cs de el en_GB es eu fr it ja ko nn pl pt pt_PT ru sv zh
+ca cs de el en_GB es eu fr it ja ko nn pl pt pt_PT ru sv zh
 "
 PYTHON_COMPAT=( python3_{9..11} )
 PYTHON_REQ_USE='threads(+)'
@@ -27,6 +27,8 @@ SLOT="${PV%%.*}"
 IUSE="
 alsa bindist bundled-libs debug doc jack hid nls pulseaudio phone-home
 sanitize sse vst websockets
+cpu_flags_x86_avx
+cpu_flags_x86_avx512f
 "
 REQUIRED_USE="
 	|| ( alsa jack pulseaudio )
@@ -43,7 +45,7 @@ RDEPEND="
 	dev-libs/libxml2:2
 	media-libs/libsamplerate
 	media-libs/lv2
-	media-libs/suil
+	media-libs/suil[gtk2]
 	media-libs/lilv
 	media-libs/liblrdf
 	net-misc/curl
@@ -77,10 +79,17 @@ src_prepare() {
 		rm -f {gtk2_ardour,gtk2_ardour/appdata,libs/ardour,libs/gtkmm2ext}/po/${1}.po
 	}
 	plocale_for_each_disabled_locale my_lcmsg
+
 	sed -e 's:AudioEditing:X-&:' -i gtk2_ardour/ardour.desktop.in
 	sed -e 's:share/appdata:share/metainfo:' -i gtk2_ardour/wscript
 	sed -e 's:USE_EXTERNAL_LIBS:DONT_USE_EXTERNAL_LIB:' -i libs/qm-dsp/wscript
 	grep -rl '/\<lib\>' | xargs sed -e "s:/\<lib\>:/$(get_libdir):g" -i
+
+	local _c=()
+	use cpu_flags_x86_avx || _c+=( -e '/define_name =/ s:\<FPU_AVX_FMA_SUPPORT\>:NO_&:' )
+	use cpu_flags_x86_avx512f || _c+=( -e '/define_name =/ s:\<FPU_AVX512F_SUPPORT\>:NO_&:' )
+	sed "${_c[@]}" -i wscript
+
 	default
 }
 
@@ -107,6 +116,7 @@ src_configure() {
 		$(usex sanitize '--address-sanitizer' '')
 		$(usex bundled-libs '' '--use-external-libs')
 		$(usex doc '--docs' '')
+		--ptformat
 	)
 
 	tc-export AR CC CPP CXX RANLIB

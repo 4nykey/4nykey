@@ -43,7 +43,7 @@ RDEPEND="
 	dev-libs/libxml2:2
 	media-libs/libsamplerate
 	media-libs/lv2
-	media-libs/suil
+	media-libs/suil[gtk2]
 	media-libs/lilv
 	media-libs/liblrdf
 	net-misc/curl
