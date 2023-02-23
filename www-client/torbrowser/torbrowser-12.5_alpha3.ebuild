@@ -3,10 +3,10 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-102esr-patches-07j.tar.xz"
+FIREFOX_PATCHSET="firefox-102esr-patches-09j.tar.xz"
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="102.7.0esr-${MY_PV}-1-build1"
+MY_P="102.8.0esr-${MY_PV}-1-build3"
 MY_P="firefox-tor-browser-${MY_P}"
 
 LLVM_MAX_SLOT=15
@@ -33,7 +33,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 MY_PV="${MY_PV%.0}"
-MY_NOS="11.4.14"
+MY_NOS="11.4.16"
 MY_NOS="noscript-${MY_NOS}.xpi"
 SRC_URI="
 	mirror://tor/${PN}/${MY_PV}/src-${MY_P}.tar.xz
@@ -401,9 +401,6 @@ src_prepare() {
 	# Make cargo respect MAKEOPTS
 	export CARGO_BUILD_JOBS="$(makeopts_jobs)"
 
-	append-cppflags "-DTOR_BROWSER_DATA_IN_HOME_DIR"
-	eapply "${FILESDIR}"/${PN}12.5-profiledir.patch
-
 	sed -e '/new-identity-button/d' -i browser/components/customizableui/CustomizableUI.jsm
 
 	# Make LTO respect MAKEOPTS
@@ -716,7 +713,6 @@ src_configure() {
 	mozconfig_add_options_ac 'torbrowser' --disable-tor-browser-update
 	mozconfig_add_options_ac 'torbrowser' --with-tor-browser-version=${MY_PV}
 	mozconfig_add_options_ac 'torbrowser' --enable-tor-browser-data-outside-app-dir
-	mozconfig_add_options_ac 'torbrowser' --with-relative-data-dir=1
 	mozconfig_add_options_ac 'torbrowser' --with-branding=browser/branding/official
 	mozconfig_add_options_ac 'torbrowser' --disable-webrtc
 	mozconfig_add_options_ac 'torbrowser' --enable-sandbox
@@ -945,4 +941,7 @@ pkg_postinst() {
 		elog
 		elog "in about:config."
 	fi
+	elog
+	elog "The user data directory is now \"~/.tor project/${PN}\""
+	elog "instead of \"~/.mozilla/${PN}\"."
 }

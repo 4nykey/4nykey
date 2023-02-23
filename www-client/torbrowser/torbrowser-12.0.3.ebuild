@@ -3,7 +3,7 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-102esr-patches-08j.tar.xz"
+FIREFOX_PATCHSET="firefox-102esr-patches-09j.tar.xz"
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
 MY_P="102.8.0esr-${MY_PV}-1-build2"
@@ -392,7 +392,6 @@ src_prepare() {
 	if use lto; then
 		rm -v "${WORKDIR}"/firefox-patches/*-LTO-Only-enable-LTO-*.patch || die
 	fi
-	rm -f "${WORKDIR}"/firefox-patches/003[12]-bmo-1769631-python-3.11-compatibility.patch
 
 	eapply "${WORKDIR}/firefox-patches"
 
