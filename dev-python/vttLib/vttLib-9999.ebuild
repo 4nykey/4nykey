@@ -36,7 +36,7 @@ DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
-	dev-python/setuptools_scm[${PYTHON_USEDEP}]
+	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 	test? (
 		dev-python/ufo2ft[${PYTHON_USEDEP}]
 		dev-python/black[${PYTHON_USEDEP}]

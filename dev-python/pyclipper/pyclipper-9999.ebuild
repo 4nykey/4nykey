@@ -28,7 +28,7 @@ SLOT="0"
 IUSE="test"
 
 BDEPEND="
-	dev-python/setuptools_scm[${PYTHON_USEDEP}]
+	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 	dev-python/cython[${PYTHON_USEDEP}]
 "
 distutils_enable_tests pytest

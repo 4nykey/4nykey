@@ -48,7 +48,7 @@ DEPEND="
 "
 BDEPEND="
 	test? ( dev-python/twisted[${PYTHON_USEDEP}] )
-	dev-python/setuptools_scm[${PYTHON_USEDEP}]
+	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 	dev-python/cython[${PYTHON_USEDEP}]
 "
 DOCS=( {CHANGELOG,README}.md HACKING TODO )

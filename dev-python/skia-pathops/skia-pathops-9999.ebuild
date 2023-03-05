@@ -38,7 +38,7 @@ DEPEND="
 "
 BDEPEND="
 	>=dev-python/cython-0.28.4[${PYTHON_USEDEP}]
-	dev-python/setuptools_scm[${PYTHON_USEDEP}]
+	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 "
 distutils_enable_tests pytest
 
