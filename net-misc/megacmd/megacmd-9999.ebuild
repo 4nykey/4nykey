@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/meganz/${MY_PN}.git"
 	EGIT_SUBMODULES=( )
 else
-	MY_PV="7886433"
+	MY_PV="94a5c0a"
 	SRC_URI="
 		mirror://githubcl/meganz/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -29,7 +29,7 @@ SLOT="0"
 IUSE="pcre"
 
 DEPEND="
-	>=net-misc/meganz-sdk-4.9:=
+	>=net-misc/meganz-sdk-4.16:=
 	pcre? ( dev-libs/libpcre:3[cxx] )
 	sys-libs/readline:0
 "
@@ -40,10 +40,6 @@ BDEPEND="
 	sys-devel/autoconf-archive
 "
 PATCHES=(
-	"${FILESDIR}"/sdk4.diff
-	"${FILESDIR}"/sdk45.diff
-	"${FILESDIR}"/sdk47.diff
-	"${FILESDIR}"/sdk49.diff
 )
 
 src_prepare() {
