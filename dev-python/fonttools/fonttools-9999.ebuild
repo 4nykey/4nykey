@@ -43,16 +43,16 @@ RDEPEND="
 		>=dev-python/fs-2.4.16[${PYTHON_USEDEP}]
 	)
 	unicode? (
-		>=dev-python/unicodedata2-14[${PYTHON_USEDEP}]
+		>=dev-python/unicodedata2-15[${PYTHON_USEDEP}]
 	)
 	qt5? ( dev-python/PyQt5[${PYTHON_USEDEP}] )
 	graphite? ( dev-python/lz4[${PYTHON_USEDEP}] )
 	plot? ( dev-python/matplotlib[${PYTHON_USEDEP}] )
-	interpolatable? ( >=dev-python/scipy-1.9.1[${PYTHON_USEDEP}] )
+	interpolatable? ( >=dev-python/scipy-1.9.3[${PYTHON_USEDEP}] )
 	reportlab? ( dev-python/reportlab[${PYTHON_USEDEP}] )
-	skia? ( >=dev-python/skia-pathops-0.7.2[${PYTHON_USEDEP}] )
+	skia? ( >=dev-python/skia-pathops-0.7.3[${PYTHON_USEDEP}] )
 	>=dev-python/freetype-py-2.3[${PYTHON_USEDEP}]
-	harfbuzz? ( >=dev-python/uharfbuzz-0.30[${PYTHON_USEDEP}] )
+	harfbuzz? ( >=dev-python/uharfbuzz-0.32[${PYTHON_USEDEP}] )
 "
 DEPEND="
 	${RDEPEND}
@@ -60,7 +60,7 @@ DEPEND="
 BDEPEND="
 	dev-python/cython[${PYTHON_USEDEP}]
 	test? (
-		>=dev-python/ufoLib2-0.13.1[${PYTHON_USEDEP}]
+		>=dev-python/ufoLib2-0.14[${PYTHON_USEDEP}]
 	)
 "
 distutils_enable_sphinx Doc/source dev-python/sphinx-rtd-theme
