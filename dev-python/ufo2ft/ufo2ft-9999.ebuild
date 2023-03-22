@@ -31,13 +31,13 @@ IUSE="test"
 PATCHES=( "${FILESDIR}"/cu2qu.diff )
 
 RDEPEND="
-	>=dev-python/fonttools-4.38[ufo(-),${PYTHON_USEDEP}]
-	>=dev-python/defcon-0.10[${PYTHON_USEDEP}]
-	>=dev-python/compreffor-0.5.1[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.39.2[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/defcon-0.10.2[${PYTHON_USEDEP}]
+	>=dev-python/compreffor-0.5.3[${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 	>=dev-python/cffsubr-0.2.9[${PYTHON_USEDEP}]
-	>=dev-python/skia-pathops-0.7.2[${PYTHON_USEDEP}]
-	>=dev-python/ufoLib2-0.13.1[${PYTHON_USEDEP}]
+	>=dev-python/skia-pathops-0.7.4[${PYTHON_USEDEP}]
+	>=dev-python/ufoLib2-0.14[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
