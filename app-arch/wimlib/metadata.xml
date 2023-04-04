@@ -7,7 +7,6 @@
 	<use>
 		<flag name="fuse">Support mounting WIMs via <pkg>sys-fs/fuse</pkg></flag>
 		<flag name="ntfs">Support direct manipulation on a NTFS volume via <pkg>sys-fs/ntfs3g</pkg></flag>
-		<flag name="openssl">Use SHA-1 implementation from libcrypto (<pkg>dev-libs/openssl</pkg>)</flag>
 		<flag name="yasm">Prefer <pkg>dev-lang/yasm</pkg> over <pkg>dev-lang/nasm</pkg></flag>
 	</use>
 </pkgmetadata>
