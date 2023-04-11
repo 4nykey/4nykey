@@ -1,8 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
+PYTHON_COMPAT=( python3_{9..11} )
 MY_FONT_TYPES=( +otf ttf )
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
@@ -10,10 +11,20 @@ if [[ ${PV} == *9999* ]]; then
 else
 	MY_PVB="678cc31"
 	MY_PV="024350a"
+	if [[ -n ${PV%%*_p*} ]]; then
+		MY_PV="${PV}-u/1060-i/1024-vf"
+		MY_PVB="${PV}R-u/1.060R-i/1.024R-vf"
+	fi
+	SRC_URI="https://github.com/adobe-fonts/${PN}/releases/download/${MY_PVB}/"
+	MY_PVB="${MY_PVB//\//_}"
+	MY_PVB="${MY_PVB//-vf/vf}"
 	SRC_URI="
 		binary? (
-			mirror://githubcl/adobe-fonts/${PN}/tar.gz/${MY_PVB}
-			-> ${P%_p*}R.tar.gz
+			variable? ( ${SRC_URI}VF-${PN}-${MY_PVB}.zip )
+			!variable? (
+				font_types_otf? ( ${SRC_URI}OTF-${PN}-${MY_PVB}.zip )
+				font_types_ttf? ( ${SRC_URI}TTF-${PN}-${MY_PVB}.zip )
+			)
 		)
 		!binary? (
 			mirror://githubcl/adobe-fonts/${PN}/tar.gz/${MY_PV}
@@ -23,7 +34,7 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit font-r1
+inherit python-any-r1 font-r1
 
 DESCRIPTION="Monospaced font family for user interface and coding environments"
 HOMEPAGE="https://adobe-fonts.github.io/${PN}"
@@ -35,7 +46,6 @@ IUSE="+binary variable"
 BDEPEND="
 	!binary? (
 		dev-util/afdko
-		dev-python/opentype-svg
 		variable? ( dev-util/fontmake )
 	)
 "
@@ -44,23 +54,30 @@ pkg_setup() {
 	if [[ ${PV} == *9999* ]]; then
 		EGIT_BRANCH="$(usex binary release master)"
 	else
-		S="${WORKDIR}/${PN}-$(usex binary ${MY_PVB} ${MY_PV})"
+		S="${S%/*}/$(usex binary '' ${PN}-${MY_PV//\//-})"
 	fi
 
-	FONT_S=( $(usex binary . target)/$(usex variable VAR $(usex font_types_otf OTF TTF)) )
+	FONT_S=( $(usex binary . target)/$(usex variable VF $(usex font_types_otf OTF TTF)) )
 
 	font-r1_pkg_setup
+	use binary || python-any-r1_pkg_setup
 }
 
 src_prepare() {
 	default
 	use binary && return
-	sed \
-		-e 's:"\$addSVG" \(.*\) \(.*\)$:addsvg -s \2 \1:' \
-		-i build*.sh
+	sed -e "s:/tmp/:${T}/:g" -i buildVFs.py
+	local _d _n=glyphs.com.adobe.type.processedGlyphs
+	find -type d -name ${_n} | while read _d; do
+		mv "${_d}" "${_d/G/g}"
+	done
 }
 
 src_compile() {
 	use binary && return
-	. ./build$(usex variable 'VFs' '').sh || die
+	if use variable; then
+		${EPYTHON} ./buildVFs.py || die
+	else
+		sh ./build.sh || die
+	fi
 }
