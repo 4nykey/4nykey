@@ -12,15 +12,16 @@ else
 	MY_PVB="678cc31"
 	MY_PV="024350a"
 	if [[ -n ${PV%%*_p*} ]]; then
-		MY_PV="${PV}-u/1060-i/1024-vf"
-		MY_PVB="${PV}R-u/1.060R-i/1.024R-vf"
+		MY_PV="${PV}-u/1.062-i/1.026-vf"
+		MY_PVB="${MY_PV//-/R-}"
 	fi
 	SRC_URI="https://github.com/adobe-fonts/${PN}/releases/download/${MY_PVB}/"
 	MY_PVB="${MY_PVB//\//_}"
 	MY_PVB="${MY_PVB//-vf/vf}"
+	MY_PVB="${MY_PVB//i_*/i}"
 	SRC_URI="
 		binary? (
-			variable? ( ${SRC_URI}VF-${PN}-${MY_PVB}.zip )
+			variable? ( ${SRC_URI}VF-source-code-VF-1.026R.zip )
 			!variable? (
 				font_types_otf? ( ${SRC_URI}OTF-${PN}-${MY_PVB}.zip )
 				font_types_ttf? ( ${SRC_URI}TTF-${PN}-${MY_PVB}.zip )
