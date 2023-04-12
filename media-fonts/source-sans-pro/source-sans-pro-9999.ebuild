@@ -64,7 +64,6 @@ src_prepare() {
 	default
 	use binary && return
 	sed -e "s:/tmp/:${T}/:g" -i buildVFs.py
-	eapply "${FILESDIR}"/build.diff
 	local _d _n=glyphs.com.adobe.type.processedGlyphs
 	find -type d -name ${_n} | while read _d; do
 		mv "${_d}"/*.* "${_d/G/g}"
