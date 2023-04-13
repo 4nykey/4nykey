@@ -1,7 +1,7 @@
 # Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 PYTHON_COMPAT=( python3_{9..11} )
 PLOCALES="
@@ -12,11 +12,14 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/johanmattssonm/${PN}.git"
 	inherit git-r3
 else
+	MY_PV="3d8d358"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
-		mirror://githubcl/johanmattssonm/${PN}/tar.gz/v${PV} -> ${P}.tar.gz
+		mirror://githubcl/johanmattssonm/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 
 DESCRIPTION="A font editor which can generate fonts in TTF, EOT, SVG and BF format"
@@ -35,8 +38,8 @@ RDEPEND="
 	x11-libs/cairo
 	x11-libs/gdk-pixbuf:2
 	x11-libs/gtk+:3
-	net-libs/webkit-gtk:4
-	net-libs/libsoup:2.4
+	net-libs/webkit-gtk:4.1
+	net-libs/libsoup:3.0
 	x11-libs/libnotify
 "
 DEPEND="
@@ -49,6 +52,7 @@ BDEPEND="
 "
 
 pkg_setup() {
+	vala_setup
 	python-any-r1_pkg_setup
 }
 
@@ -57,9 +61,12 @@ src_prepare() {
 		rm -f "${S}"/po/${1}.po
 	}
 	default
-	vala_src_prepare
 	plocale_for_each_disabled_locale rmloc
-	sed -e 's:freetype-config --libs:{pkg-config} --libs freetype2:' -i dodo.py
+	sed \
+		-e 's:freetype-config --libs:{pkg-config} --libs freetype2:' \
+		-e '/webkit2gtk-/s:4\.0:4.1:' \
+		-e '/libsoup-/s:2\.4:3.0:' \
+		-i configure dodo.py
 	sed \
 		-e '/action="quit"/s:key="" ctrl="false:key="q" ctrl="true:' \
 		-i resources/key_bindings.xml
