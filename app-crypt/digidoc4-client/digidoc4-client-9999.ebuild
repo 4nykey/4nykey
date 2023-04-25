@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -11,8 +11,8 @@ else
 	MY_PV="${PV^^}"
 	MY_PV="v${MY_PV/_/-}"
 	[[ -z ${PV%%*_p*} ]] && MY_PV="a4da0d3"
-	MY_QC="qt-common-e653783"
-	MY_EX="digidoc-extensions-f221e82"
+	MY_QC="qt-common-a84bdde"
+	MY_EX="digidoc-extensions-d428a88"
 	SRC_URI="${SRC_URI}
 		mirror://githubcl/open-eid/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://githubcl/open-eid/${MY_QC%-*}/tar.gz/${MY_QC##*-} -> ${MY_QC}.tar.gz
@@ -25,7 +25,7 @@ fi
 inherit cmake xdg
 
 DESCRIPTION="An application for digitally signing and encrypting documents"
-HOMEPAGE="https://id.ee"
+HOMEPAGE="https://open-eid.github.io"
 
 LICENSE="LGPL-2.1 Nokia-Qt-LGPL-Exception-1.1"
 SLOT="0"
