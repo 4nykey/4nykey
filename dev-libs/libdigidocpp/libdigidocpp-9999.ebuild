@@ -20,7 +20,7 @@ fi
 inherit cmake
 
 DESCRIPTION="DigiDoc digital signature library"
-HOMEPAGE="https://id.ee"
+HOMEPAGE="https://open-eid.github.io"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
@@ -61,7 +61,6 @@ src_prepare() {
 src_configure() {
 	local mycmakeargs=(
 		-DCMAKE_DISABLE_FIND_PACKAGE_Doxygen=$(usex !apidocs)
-		-DCMAKE_DISABLE_FIND_PACKAGE_PoDoFo=yes
 		-DCMAKE_DISABLE_FIND_PACKAGE_SWIG=yes
 		-DCMAKE_DISABLE_FIND_PACKAGE_JNI=yes
 		-DXSD_EXECUTABLE="/usr/libexec/codesynthesis/xsd"
