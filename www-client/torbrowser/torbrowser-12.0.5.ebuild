@@ -3,11 +3,7 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-102esr-patches-09j.tar.xz"
-MY_PV="$(ver_cut 1-2)"
-# https://dist.torproject.org/torbrowser
-MY_P="102.9.0esr-${MY_PV}-1-build2"
-MY_P="firefox-tor-browser-${MY_P}"
+FIREFOX_PATCHSET="firefox-102esr-patches-10j.tar.xz"
 
 LLVM_MAX_SLOT=15
 
@@ -26,6 +22,10 @@ PATCH_URIS=(
 	https://dev.gentoo.org/~{juippis,whissi,slashbeast}/mozilla/patchsets/${FIREFOX_PATCHSET}
 )
 
+MY_PV="$(ver_cut 1-2)"
+# https://dist.torproject.org/torbrowser
+MY_P="102.10.0esr-${MY_PV}-1-build2"
+MY_P="firefox-tor-browser-${MY_P}"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
 else
@@ -33,7 +33,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 MY_PV="${MY_PV%.0}"
-MY_NOS="11.4.18"
+MY_NOS="11.4.21"
 MY_NOS="noscript-${MY_NOS}.xpi"
 SRC_URI="
 	mirror://tor/${PN}/${MY_PV}/src-${MY_P}.tar.xz
