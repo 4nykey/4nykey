@@ -8,7 +8,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="git://wimlib.net/${PN}"
 else
-	MY_PV="05fa75f"
+	MY_PV="97db529"
 	SRC_URI="
 		https://wimlib.net/git/?p=${PN};a=snapshot;h=${MY_PV};sf=tgz -> ${P}.tar.gz
 	"
