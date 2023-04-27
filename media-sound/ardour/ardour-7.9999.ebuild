@@ -36,12 +36,12 @@ REQUIRED_USE="
 
 RDEPEND="
 	dev-cpp/gtkmm:2.4
-	sci-libs/fftw:3.0[threads]
-	media-libs/flac
+	sci-libs/fftw:3.0=[threads]
+	media-libs/flac:=
 	media-libs/libogg
 	media-libs/fontconfig
 	alsa? ( media-libs/alsa-lib )
-	media-libs/aubio
+	media-libs/aubio:=
 	dev-libs/libxml2:2
 	media-libs/libsamplerate
 	media-libs/lv2
