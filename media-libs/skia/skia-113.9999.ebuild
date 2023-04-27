@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/google/${PN}.git"
 	EGIT_BRANCH="chrome/m$(ver_cut 1)"
 else
-	MY_PV="3dc0b86"
+	MY_PV="1195e70"
 	SRC_URI="
 		mirror://githubcl/google/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -25,8 +25,8 @@ HOMEPAGE="https://skia.org"
 LICENSE="BSD"
 SLOT="0/$(ver_cut 1)"
 IUSE="
-egl ffmpeg fontconfig harfbuzz icu jpeg lottie opengl png static-libs truetype
-webp xml
+debug egl ffmpeg fontconfig harfbuzz icu jpeg lottie opengl png static-libs
+truetype webp xml
 "
 
 RDEPEND="
@@ -48,7 +48,6 @@ DEPEND="
 BDEPEND="
 	dev-util/gn
 "
-PATCHES=( "${FILESDIR}"/ffmpeg5.diff )
 
 src_prepare() {
 	default
@@ -88,7 +87,18 @@ src_configure() {
 		ar=\"${AR}\"
 		cc=\"${CC}\"
 		cxx=\"${CXX}\"
-		is_official_build=true
+		is_debug=$(my_usex debug)
+		is_official_build=$(my_usex !debug)
+		skia_use_system_expat=true
+		skia_use_system_freetype2=true
+		skia_use_system_harfbuzz=true
+		skia_use_system_icu=true
+		skia_use_system_libjpeg_turbo=true
+		skia_use_system_libpng=true
+		skia_use_system_libwebp=true
+		skia_use_system_lua=true
+		skia_use_system_zlib=true
+		skia_enable_spirv_validation=false
 		skia_enable_pdf=false
 		skia_use_dng_sdk=false
 		is_component_build=true
@@ -111,6 +121,7 @@ src_configure() {
 		skia_use_libwebp_decode=$(my_usex webp)
 		skia_use_libwebp_encode=$(my_usex webp)
 		skia_use_sfntly=false
+		skia_use_wuffs=false
 	)
 
 	myconf_gn="${myconf_gn[@]} ${EXTRA_GN}"
