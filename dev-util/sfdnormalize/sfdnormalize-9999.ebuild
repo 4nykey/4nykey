@@ -4,6 +4,7 @@
 EAPI=7
 
 PYTHON_COMPAT=( python3_{9..11} )
+DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -27,6 +28,7 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
+	dev-python/sfdutf7[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
