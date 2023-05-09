@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -10,9 +10,9 @@ if [[ ${PV} = *9999* ]]; then
 else
 	MY_PV="80485b8"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v$(ver_rs 3 -)"
-	MY_LEI="libelectronic-id-5b66d84"
-	MY_LPC="libpcsc-cpp-e7d702b"
-	MY_LPM="libpcsc-mock-b0c9bc0"
+	MY_LEI="libelectronic-id-b2adf1b"
+	MY_LPC="libpcsc-cpp-257d5f5"
+	MY_LPM="libpcsc-mock-efd96d6"
 	SRC_URI="
 		mirror://githubcl/web-eid/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://githubcl/web-eid/${MY_LEI%-*}/tar.gz/${MY_LEI##*-}
