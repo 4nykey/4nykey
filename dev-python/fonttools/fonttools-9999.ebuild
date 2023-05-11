@@ -5,6 +5,7 @@ EAPI=7
 
 PYTHON_COMPAT=( python3_{9..11} )
 PYTHON_REQ_USE="xml(+)"
+DISTUTILS_EXT=1
 
 inherit distutils-r1 optfeature
 if [[ -z ${PV%%*9999} ]]; then
@@ -61,6 +62,7 @@ BDEPEND="
 	dev-python/cython[${PYTHON_USEDEP}]
 	test? (
 		>=dev-python/ufoLib2-0.14[${PYTHON_USEDEP}]
+		>=dev-python/glyphsLib-6.2.1[${PYTHON_USEDEP}]
 	)
 "
 distutils_enable_sphinx Doc/source dev-python/sphinx-rtd-theme

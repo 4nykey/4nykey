@@ -4,6 +4,7 @@
 EAPI=7
 
 PYTHON_COMPAT=( python3_{9..11} )
+DISTUTILS_EXT=1
 inherit distutils-r1 flag-o-matic
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3

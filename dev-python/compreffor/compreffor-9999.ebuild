@@ -5,6 +5,7 @@ EAPI=7
 
 PYTHON_COMPAT=( python3_{9..11} )
 DISTUTILS_IN_SOURCE_BUILD=1
+DISTUTILS_EXT=1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}.git"
