@@ -7,7 +7,7 @@ FIREFOX_PATCHSET="firefox-102esr-patches-10j.tar.xz"
 
 LLVM_MAX_SLOT=15
 
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{10..11} )
 PYTHON_REQ_USE="ncurses,sqlite,ssl"
 
 WANT_AUTOCONF="2.1"
@@ -24,7 +24,7 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="102.10.0esr-${MY_PV}-1-build3"
+MY_P="102.11.0esr-${MY_PV}-1-build3"
 MY_P="firefox-tor-browser-${MY_P}"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
@@ -400,8 +400,6 @@ src_prepare() {
 
 	# Make cargo respect MAKEOPTS
 	export CARGO_BUILD_JOBS="$(makeopts_jobs)"
-
-	sed -e '/new-identity-button/d' -i browser/components/customizableui/CustomizableUI.jsm
 
 	# Make LTO respect MAKEOPTS
 	sed -i \
