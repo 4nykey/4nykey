@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{10..11} )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -15,7 +15,7 @@ else
 		mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 
@@ -46,7 +46,6 @@ DEPEND="
 	>=dev-python/pytz-2022.1[${PYTHON_USEDEP}]
 	>=dev-python/regex-2022.7.25[${PYTHON_USEDEP}]
 	>=media-gfx/scour-0.38.2[${PYTHON_USEDEP}]
-	>=dev-python/toml-0.10.2[${PYTHON_USEDEP}]
 	>=dev-python/typed-ast-1.4.2[${PYTHON_USEDEP}]
 	>=dev-python/ufoNormalizer-0.6.1[${PYTHON_USEDEP}]
 	>=dev-python/ufoProcessor-1.9[${PYTHON_USEDEP}]

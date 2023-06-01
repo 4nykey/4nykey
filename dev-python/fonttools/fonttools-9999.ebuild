@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{10..11} )
 PYTHON_REQ_USE="xml(+)"
 DISTUTILS_EXT=1
 
@@ -18,7 +18,7 @@ else
 		mirror://githubcl/${PN}/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
 

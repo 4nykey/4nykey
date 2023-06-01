@@ -3,20 +3,20 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{10..11} )
 DISTUTILS_USE_PEP517=poetry
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/simoncozens/${PN}.git"
 else
-	MY_PV="668f8ed"
+	MY_PV="2dad9cc"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/simoncozens/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 

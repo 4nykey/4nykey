@@ -3,19 +3,19 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{10..11} )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}.git"
 else
-	MY_PV="79d41e6"
+	MY_PV="daf7239"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 
@@ -32,7 +32,7 @@ DEPEND="
 	dev-python/picosvg[${PYTHON_USEDEP}]
 	dev-python/pillow[${PYTHON_USEDEP}]
 	dev-python/regex[${PYTHON_USEDEP}]
-	>=dev-python/toml-0.10.1[${PYTHON_USEDEP}]
+	dev-python/tomlkit[${PYTHON_USEDEP}]
 	dev-python/ufo2ft[${PYTHON_USEDEP}]
 	dev-python/py-zopfli[${PYTHON_USEDEP}]
 	dev-python/ninja-python-distributions[${PYTHON_USEDEP}]

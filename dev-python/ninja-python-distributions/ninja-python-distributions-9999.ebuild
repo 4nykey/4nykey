@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{10..11} )
 inherit distutils-r1
 MY_NI="ninja-1.11.1"
 if [[ -z ${PV%%*9999} ]]; then
@@ -15,7 +15,7 @@ else
 		mirror://githubcl/ninja-build/ninja/tar.gz/v${MY_NI#*-} -> ${MY_NI}.tar.gz
 	"
 	RESTRICT="primaryuri"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 fi
 
 DESCRIPTION="A tool to build Ninja Python wheels"

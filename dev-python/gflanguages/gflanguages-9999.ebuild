@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{10..11} )
 inherit distutils-r1
 MY_PN="lang"
 if [[ -z ${PV%%*9999} ]]; then
@@ -17,7 +17,7 @@ else
 		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 	S="${WORKDIR}/${MY_PN}-${MY_PV#v}"
 fi
 
@@ -36,8 +36,18 @@ DEPEND="
 "
 BDEPEND="
 	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+	test? (
+		dev-python/uharfbuzz[${PYTHON_USEDEP}]
+		dev-python/youseedee[${PYTHON_USEDEP}]
+	)
 "
 distutils_enable_tests pytest
+PATCHES=( "${FILESDIR}"/protobuf.diff )
+
+pkg_pretend() {
+	use test && has network-sandbox ${FEATURES} && die \
+	"Tests require network access"
+}
 
 python_prepare_all() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"

@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{10..11} )
 DISTUTILS_EXT=1
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
@@ -18,7 +18,7 @@ else
 		https://github.com/harfbuzz/harfbuzz/releases/download/${MY_HB#*-}/${MY_HB}.tar.xz
 	"
 	RESTRICT="primaryuri"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 fi
 
 DESCRIPTION="Streamlined Cython bindings for the HarfBuzz shaping engine"

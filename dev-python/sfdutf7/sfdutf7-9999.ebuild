@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{10..11} )
 DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1
 MY_PN="${PN}.py"
@@ -17,7 +17,7 @@ else
 		mirror://githubcl/MFEK/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 	S="${WORKDIR}/${MY_PN}-${MY_PV#v}"
 fi
 
