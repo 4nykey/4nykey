@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{10..11} )
 inherit python-single-r1 xdg cmake
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
