@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{10..11} )
 inherit python-any-r1 font-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -41,7 +41,7 @@ BDEPEND="
 	>=app-i18n/unicode-emoji-15
 )
 "
-PATCHES=( "${FILESDIR}"/${PN}-makefile.diff )
+PATCHES=( "${FILESDIR}"/pyimp.diff )
 
 pkg_setup() {
 	if use binary; then

@@ -15,7 +15,7 @@ else
 	SRC_URI="
 		mirror://githubcl/rubjo/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 	RESTRICT="primaryuri"
 	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi

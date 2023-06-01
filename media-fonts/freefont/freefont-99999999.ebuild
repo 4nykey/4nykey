@@ -4,7 +4,7 @@
 EAPI=7
 
 MY_FONT_TYPES=( otf +ttf )
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{10..11} )
 if [[ ${PV} == *9999* ]]; then
 	inherit subversion
 	ESVN_REPO_URI="svn://svn.sv.gnu.org/${PN}/trunk/${PN}"

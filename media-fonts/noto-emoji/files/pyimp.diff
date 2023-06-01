@@ -1,0 +1,11 @@
+--- a/add_glyphs.py
++++ b/add_glyphs.py
+@@ -27,7 +27,7 @@ import add_aliases
+ 
+ sys.path.append(
+     path.join(os.path.dirname(__file__), 'third_party', 'color_emoji'))
+-from png import PNG
++from third_party.color_emoji.png import PNG
+ 
+ 
+ def get_seq_to_file(image_dir, prefix, suffix):

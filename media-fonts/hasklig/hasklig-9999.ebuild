@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{10..11} )
 MY_FONT_TYPES=( otf +ttf )
 MY_PN="${PN^}"
 if [[ ${PV} == *9999* ]]; then
@@ -24,7 +24,7 @@ else
 		)
 	"
 	RESTRICT="primaryuri"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 	S="${WORKDIR}/${MY_PN}-${MY_PV#v}"
 fi
 inherit python-any-r1 font-r1

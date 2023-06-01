@@ -26,7 +26,7 @@ else
 		)
 	"
 	RESTRICT="primaryuri"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 fi
 inherit font-r1
 

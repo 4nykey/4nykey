@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{10..11} )
 MY_FONT_TYPES=( +otf ttc )
 inherit python-single-r1
 if [[ -z ${PV%%*9999} ]]; then
@@ -23,7 +23,7 @@ else
 		mirror://gcarchive/${PN}/source-archive.zip -> ${P}.zip
 	)
 	"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 fi
 inherit latex-package font-r1
 

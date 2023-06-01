@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{10..11} )
 MY_FONT_TYPES=( pfb otf +ttf )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit subversion

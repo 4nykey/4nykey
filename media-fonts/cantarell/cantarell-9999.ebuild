@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{10..11} )
 MY_PN="${PN}-fonts"
 MY_FONT_TYPES=( otf )
 if [[ -z ${PV%%*9999} ]]; then
@@ -15,7 +15,7 @@ else
 	SRC_URI="
 		mirror://gnome/sources/${MY_PN}/$(ver_cut 1-2)/${MY_P}.tar.xz
 	"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 	S="${WORKDIR}/${MY_P}"
 fi
 inherit python-any-r1 font-r1 meson

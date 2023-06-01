@@ -14,7 +14,7 @@ else
 	SRC_URI="
 		mirror://githubcl/cyrealtype/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 	S="${WORKDIR}/${MY_PN}-${MY_PV#v}"
 fi
 inherit fontmake

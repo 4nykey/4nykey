@@ -1,4 +1,4 @@
-# Copyright 2019-2021 Gentoo Authors
+# Copyright 2019-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -14,7 +14,7 @@ else
 	SRC_URI="
 		mirror://githubcl/kosbarts/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 	RESTRICT="primaryuri"
 	S="${WORKDIR}/${MY_PN}-${MY_PV}"
 fi
