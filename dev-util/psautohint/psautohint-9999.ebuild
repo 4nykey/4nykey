@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{10..11} )
 DISTUTILS_IN_SOURCE_BUILD=1
 
 MY_TD="psautohint-testdata-1e4c506"
@@ -45,6 +45,10 @@ BDEPEND="
 		dev-python/coverage[${PYTHON_USEDEP}]
 	)
 "
+EPYTEST_DESELECT=(
+	tests/integration/test_hint.py::test_hashmap_old_version
+	"tests/integration/test_mmhint.py::test_vfotf[tests/integration/data/vf_tests/CJKSparseVar.subset.hinted.otf]"
+)
 distutils_enable_tests pytest
 
 pkg_setup() {

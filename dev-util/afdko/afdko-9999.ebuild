@@ -3,20 +3,28 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{9..11} )
-CMAKE_IN_SOURCE_BUILD=1
-inherit cmake distutils-r1
+MY_AN="antlr4-cpp-runtime-4.9.3-source.zip"
+SRC_URI="
+	https://www.antlr.org/download/${MY_AN}
+"
+PYTHON_COMPAT=( python3_{10..11} )
+DISTUTILS_USE_PEP517=setuptools
+DISTUTILS_ARGS=(
+	-DCMAKE_VERBOSE_MAKEFILE=ON
+	-DANTLR4_ZIP_REPOSITORY="${DISTDIR}/${MY_AN}"
+)
+inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
 	MY_PV="a539c41"
 	[[ -n ${PV%%*_*} ]] && MY_PV="${PV}"
-	SRC_URI="
+	SRC_URI+="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
 
@@ -28,7 +36,6 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	~dev-cpp/antlr-cpp-4.9.3:4=
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 	>=dev-python/defcon-0.10.1[${PYTHON_USEDEP}]
 	>=dev-python/fontMath-0.9.3[${PYTHON_USEDEP}]
@@ -42,47 +49,17 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 "
+BDEPEND="
+	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+"
 DOCS=( {README,NEWS}.md docs )
+PATCHES=( "${FILESDIR}"/setup.diff )
 distutils_enable_tests pytest
 
 python_prepare_all() {
 	local _v="${PV/_pre/.dev}"
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${_v/_p/.post}"
 
-	local _p=(
-		"${FILESDIR}"/setup.diff
-		"${FILESDIR}"/stdio.diff
-	)
-	eapply "${_p[@]}"
-	sed \
-		-e '/-DANTLR4CPP_STATIC/d' \
-		-e '/ExternalAntlr4Cpp/d' \
-		-i CMakeLists.txt
-	sed \
-		-e 's:\<antlr4_static\>:antlr4-runtime:' \
-		-i c/makeotf/lib/{cffread,hotconv}/CMakeLists.txt
-
 	rm -f docs/*.{yml,plist}
-	cmake_src_prepare
 	distutils-r1_python_prepare_all
-}
-
-python_configure_all() {
-	local mycmakeargs=(
-		-DANTLR4_INCLUDE_DIRS="${EPREFIX}/usr/include/antlr4-runtime"
-	)
-	FORCE_SYSTEM_LIBXML2=1 \
-	cmake_src_configure
-}
-
-python_compile_all() {
-	cmake_src_compile
-}
-
-python_test() {
-	local -x \
-		PYTHONPATH="${S}/python:${PYTHONPATH}" \
-		PATH="${S}/bin:${BUILD_DIR}/test/scripts:${PATH}"
-	distutils_install_for_testing
-	epytest
 }
