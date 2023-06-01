@@ -89,6 +89,7 @@ RDEPEND="
 	${DEPEND}
 	media-libs/fontconfig
 "
+PATCHES=( "${FILESDIR}"/inc.diff )
 
 src_configure() {
 	cargo_src_configure
@@ -106,8 +107,8 @@ src_compile() {
 }
 
 src_install() {
-	cargo_src_install
+	cargo_src_install --path crates/resvg
 	dolib.so target/$(usex debug debug release)/libresvg.so
-	doheader c-api/*.h
+	doheader crates/c-api/*.h
 	use qt5 && dobin viewsvg
 }
