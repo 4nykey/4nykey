@@ -1,9 +1,10 @@
-# Copyright 2019-2022 Gentoo Authors
+# Copyright 2019-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
 FONT_SRCDIR=src
+FONTDIR_BIN=( . )
 FONTMAKE_EXTRA_ARGS=( '--fea-include-dir=src' )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -20,7 +21,7 @@ else
 			mirror://githubcl/rsms/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		)
 	"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 	RESTRICT="primaryuri"
 	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
@@ -40,8 +41,13 @@ REQUIRED_USE+="
 
 pkg_setup() {
 	use binary && S="${S%/*}"
-	use font_types_otf && FONTDIR_BIN=( 'Desktop' )
-	use font_types_ttf && FONTDIR_BIN=( 'Desktop with TrueType hints' )
-	use variable && FONTDIR_BIN=( 'Variable' )
 	fontmake_pkg_setup
+}
+
+src_prepare() {
+	fontmake_src_prepare
+	use binary || return
+	use variable || FONT_SUFFIX=ttc
+	use font_types_otf || rm -f Inter.ttc
+	use font_types_ttf || rm -f 'Inter TrueType.ttc'
 }
