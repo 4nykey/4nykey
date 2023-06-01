@@ -3,8 +3,9 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{10..11} )
 DISTUTILS_SINGLE_IMPL=1
+DISTUTILS_EXT=1
 PLOCALES="
 af ar ast bn bg ca cs cy da de el en_CA en_GB en eo es et fa fi fo fr_CA fr fy gl
 he hi hr hu id is it ja kn ko lt mr nb nds ne nl oc pa pl pt_BR pt ro ru sco sk

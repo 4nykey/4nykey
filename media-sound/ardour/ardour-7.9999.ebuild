@@ -6,7 +6,7 @@ EAPI=8
 PLOCALES="
 ca cs de el en_GB es eu fr it ja ko nn pl pt pt_PT ru sv zh
 "
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{10..11} )
 PYTHON_REQ_USE='threads(+)'
 WAF_BINARY="${S}/waf"
 EGIT_REPO_URI="https://github.com/${PN^}/${PN}.git"
