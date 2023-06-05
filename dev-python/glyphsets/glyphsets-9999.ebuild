@@ -28,7 +28,7 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
-	>=dev-python/fonttools-4.28.1[${PYTHON_USEDEP}]
+	dev-python/fonttools[ufo(-),${PYTHON_USEDEP}]
 	dev-python/glyphsLib[${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
 "
@@ -38,6 +38,7 @@ DEPEND="
 BDEPEND="
 	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 "
+distutils_enable_tests pytest
 
 python_prepare_all() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"

@@ -32,7 +32,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	media-libs/skia:=
+	media-libs/skia:0/113
 "
 DEPEND="
 	${RDEPEND}
