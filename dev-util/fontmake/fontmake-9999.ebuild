@@ -30,17 +30,17 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
-	>=dev-python/fonttools-4.38[skia(-),ufo(-),unicode(-),${PYTHON_USEDEP}]
-	>=dev-python/glyphsLib-6.1[${PYTHON_USEDEP}]
-	>=dev-python/ufo2ft-2.29[cffsubr(+),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.40[skia(-),ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/glyphsLib-6.2.1[${PYTHON_USEDEP}]
+	>=dev-python/ufo2ft-2.32[cffsubr(+),${PYTHON_USEDEP}]
 	>=dev-python/MutatorMath-3.0.1[${PYTHON_USEDEP}]
 	>=dev-python/fontMath-0.9.3[${PYTHON_USEDEP}]
-	>=dev-python/defcon-0.10[${PYTHON_USEDEP}]
+	>=dev-python/defcon-0.10.2[${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 	dev-python/skia-pathops[${PYTHON_USEDEP}]
-	>=dev-python/ufoLib2-0.13.1[${PYTHON_USEDEP}]
-	>=dev-python/attrs-21.4[${PYTHON_USEDEP}]
-	>=dev-python/ttfautohint-py-0.5[${PYTHON_USEDEP}]
+	>=dev-python/ufoLib2-0.14[${PYTHON_USEDEP}]
+	>=dev-python/attrs-22.1[${PYTHON_USEDEP}]
+	>=dev-python/ttfautohint-py-0.5.1[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}

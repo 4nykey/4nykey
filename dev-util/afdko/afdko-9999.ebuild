@@ -37,12 +37,12 @@ IUSE="test"
 
 RDEPEND="
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
-	>=dev-python/defcon-0.10.1[${PYTHON_USEDEP}]
+	>=dev-python/defcon-0.10.2[${PYTHON_USEDEP}]
 	>=dev-python/fontMath-0.9.3[${PYTHON_USEDEP}]
 	dev-python/fontPens[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-4.33.3[ufo(+),unicode(-),woff(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.39.4[ufo(+),unicode(-),woff(-),${PYTHON_USEDEP}]
 	>=dev-util/psautohint-2.4[${PYTHON_USEDEP}]
-	>=dev-python/tqdm-4.64[${PYTHON_USEDEP}]
+	>=dev-python/tqdm-4.65[${PYTHON_USEDEP}]
 	>=dev-python/ufoNormalizer-0.6.1[${PYTHON_USEDEP}]
 	>=dev-python/ufoProcessor-1.9[${PYTHON_USEDEP}]
 "
