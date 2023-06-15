@@ -43,6 +43,7 @@ DEPEND="
 "
 RDEPEND="
 	${DEPEND}
+	dev-util/ninja
 "
 BDEPEND="
 	dev-python/setuptools-scm[${PYTHON_USEDEP}]

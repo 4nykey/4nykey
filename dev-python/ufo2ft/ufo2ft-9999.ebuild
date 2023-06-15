@@ -28,10 +28,9 @@ HOMEPAGE="https://github.com/googlei18n/${PN}"
 LICENSE="MIT"
 SLOT="0"
 IUSE="test"
-PATCHES=( "${FILESDIR}"/cu2qu.diff )
 
 RDEPEND="
-	>=dev-python/fonttools-4.39.2[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.40[ufo(-),${PYTHON_USEDEP}]
 	>=dev-python/defcon-0.10.2[${PYTHON_USEDEP}]
 	>=dev-python/compreffor-0.5.3[${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
