@@ -1,4 +1,4 @@
-# Copyright 2019-2022 Gentoo Authors
+# Copyright 2019-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -26,7 +26,7 @@ SLOT="0"
 IUSE=""
 
 DEPEND="
-	>=media-sound/deadbeef-1.9.1-r1
+	>=media-sound/deadbeef-1.9.1-r1[artwork]
 "
 RDEPEND="${DEPEND}"
 BDEPEND=""
