@@ -20,5 +20,9 @@
 		<flag name="shorten">Enable the shorten decoder plugin</flag>
 		<flag name="libretro">Enable Libretro resampler plugin</flag>
 		<flag name="pipewire">Enable Pipewire output plugin</flag>
+		<flag name="adplug">Enable adplug plugin</flag>
+		<flag name="artwork">Enable albumart plugin</flag>
+		<flag name="psf">Enable AOSDK-based PSF plugin</flag>
+		<flag name="sc68">Enable Atari ST and Amiga music player</flag>
 	</use>
 </pkgmetadata>

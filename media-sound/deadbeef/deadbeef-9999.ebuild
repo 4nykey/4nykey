@@ -1,7 +1,7 @@
 # Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -36,9 +36,10 @@ LICENSE="GPL-2 LGPL-2.1"
 
 SLOT="0"
 IUSE="
-alsa oss pulseaudio gtk curl sid mad mac vorbis ffmpeg flac sndfile
-wavpack cdda gme libnotify musepack midi tta dts aac mms libsamplerate X
-zip nls threads gtk3 dumb shorten alac wma opus lastfm libretro pipewire
+X aac adplug alac alsa artwork cdda curl dts dumb ffmpeg flac gme gtk gtk3
+lastfm libnotify libretro libsamplerate mac mad midi mms musepack nls opus
+oss pipewire psf pulseaudio sc68 shorten sid sndfile threads tta vorbis
+wavpack wma zip
 "
 REQUIRED_USE="
 	lastfm? ( curl )
@@ -66,13 +67,14 @@ RDEPEND="
 	gtk? ( x11-libs/gtk+:2 dev-libs/jansson:= )
 	gtk3? ( x11-libs/gtk+:3 dev-libs/jansson:= )
 	X? ( x11-libs/libX11 )
-	pulseaudio? ( media-sound/pulseaudio )
+	pulseaudio? ( media-libs/libpulse )
 	libsamplerate? ( media-libs/libsamplerate )
 	musepack? ( media-sound/musepack-tools )
 	aac? ( media-libs/faad2 )
 	libnotify? ( x11-libs/libnotify sys-apps/dbus )
 	zip? ( sys-libs/zlib dev-libs/libzip )
 	gme? ( sys-libs/zlib )
+	psf? ( sys-libs/zlib )
 	midi? ( media-sound/timidity-freepats )
 	opus? ( media-libs/opusfile )
 	dev-libs/libdispatch
@@ -88,6 +90,7 @@ BDEPEND="
 	mac? ( dev-lang/yasm )
 	sys-devel/clang
 "
+PATCHES=( "${FILESDIR}"/adplug.diff )
 
 pkg_setup() {
 	if ! tc-is-clang; then
@@ -101,7 +104,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	xdg_src_prepare
+	default
 	if [[ -n ${PV%%*9999} ]]; then
 		mv "${WORKDIR}"/${MY_MP}/* "${S}"/external/${MY_MP%-*}
 		mv "${WORKDIR}"/${MY_LR}/* "${S}"/external/${MY_LR%-*}
@@ -153,6 +156,11 @@ src_configure() {
 		$(use_enable opus)
 		$(use_enable libretro)
 		$(use_enable pipewire)
+		$(use_enable adplug)
+		$(use_enable artwork)
+		--enable-artwork-network=$(usex artwork $(usex curl))
+		$(use_enable psf)
+		$(use_enable sc68)
 	)
 	econf "${myconf[@]}"
 }
