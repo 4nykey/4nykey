@@ -24,7 +24,7 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="102.12.0esr-${MY_PV}-1-build2"
+MY_P="102.12.0esr-${MY_PV}-1-build4"
 MY_P="firefox-tor-browser-${MY_P}"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
@@ -126,7 +126,7 @@ COMMON_DEPEND="
 	libproxy? ( net-libs/libproxy )
 	pulseaudio? (
 		|| (
-			media-sound/pulseaudio
+			media-libs/libpulse
 			>=media-sound/apulse-0.1.12-r4
 		)
 	)
@@ -400,11 +400,6 @@ src_prepare() {
 
 	# Make cargo respect MAKEOPTS
 	export CARGO_BUILD_JOBS="$(makeopts_jobs)"
-
-	append-cppflags "-DTOR_BROWSER_DATA_IN_HOME_DIR"
-	eapply "${FILESDIR}"/${PN}11.5-profiledir.patch
-
-	sed -e '/new-identity-button/d' -i browser/components/customizableui/CustomizableUI.jsm
 
 	# Make LTO respect MAKEOPTS
 	sed -i \
@@ -713,9 +708,8 @@ src_configure() {
 	# Rename the install directory and the executable
 	mozconfig_add_options_ac 'torbrowser' --with-app-name=${PN}
 	mozconfig_add_options_ac 'torbrowser' --with-app-basename=${PN}
-	mozconfig_add_options_ac 'torbrowser' --disable-tor-browser-update
-	mozconfig_add_options_ac 'torbrowser' --with-tor-browser-version=${MY_PV}
-	mozconfig_add_options_ac 'torbrowser' --enable-tor-browser-data-outside-app-dir
+	mozconfig_add_options_ac 'torbrowser' --disable-base-browser-update
+	mozconfig_add_options_ac 'torbrowser' --with-base-browser-version=${MY_PV}
 	mozconfig_add_options_ac 'torbrowser' --with-branding=browser/branding/official
 	mozconfig_add_options_ac 'torbrowser' --disable-webrtc
 	mozconfig_add_options_ac 'torbrowser' --enable-sandbox
@@ -861,19 +855,19 @@ src_install() {
 	EOF
 
 	# Install icons
-	local icon_srcdir="${S}/browser/branding/official"
-	local icon size
-	for icon in "${icon_srcdir}"/default*.png ; do
-		size=${icon%.png}
-		size=${size##*/default}
+	local _d="browser/branding/tb-release" _i _s
+	[[ -z ${PV%%*_alpha*} ]] && _d="${_d%-*}-alpha"
+	for _i in "${_d}"/default*.png ; do
+		_s=${_i%.png}
+		_s=${_s##*/default}
 
-		if [[ ${size} -eq 48 ]] ; then
-			newicon "${icon}" ${PN}.png
+		if [[ ${_s} -eq 48 ]] ; then
+			newicon "${_i}" ${PN}.png
 		fi
 
-		newicon -s ${size} "${icon}" ${PN}.png
+		newicon -s ${_s} "${_i}" ${PN}.png
 	done
-	newicon -s scalable "${icon_srcdir}/firefox.svg" ${PN}.svg
+	newicon -s scalable "${_d}/firefox.svg" ${PN}.svg
 
 	# Install .desktop for menu entry
 	make_desktop_entry ${PN} "Tor Browser" ${PN} "Network;WebBrowser" "StartupWMClass=Torbrowser"
@@ -944,4 +938,7 @@ pkg_postinst() {
 		elog
 		elog "in about:config."
 	fi
+	elog
+	elog "The user data directory is now \"~/.tor project/${PN}\""
+	elog "instead of \"~/.mozilla/${PN}\"."
 }
