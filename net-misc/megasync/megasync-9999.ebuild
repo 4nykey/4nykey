@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_SUBMODULES=( -src/MEGASync/mega )
 	SRC_URI=
 else
-	MY_PV="5f6e149"
+	MY_PV="165d506"
 	SRC_URI="
 		mirror://githubcl/meganz/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -29,10 +29,10 @@ HOMEPAGE="https://github.com/meganz/MEGAsync"
 LICENSE="EULA"
 LICENSE_URL="https://raw.githubusercontent.com/meganz/MEGAsync/master/LICENCE.md"
 SLOT="0"
-IUSE="dolphin nautilus thunar"
+IUSE="dolphin ffmpeg mediainfo nautilus raw thunar"
 
 RDEPEND="
-	>=net-misc/meganz-sdk-4.16:=[libuv,qt,sodium(+),sqlite]
+	>=net-misc/meganz-sdk-4.21:=[ffmpeg?,libuv,mediainfo?,qt,raw?,sqlite]
 	dev-qt/qtsvg:5
 	dev-qt/qtx11extras:5
 	dev-qt/qtdbus:5
@@ -57,15 +57,10 @@ src_prepare() {
 		-e "/include(/ s:mega/bindings/qt/:${EPREFIX}/usr/include/&:" \
 		-i src/MEGASync/MEGASync.pro
 	cmake_src_prepare
-	mv -f src/MEGAShellExtDolphin/CMakeLists{_kde5,}.txt
-	rm -f src/MEGAShellExtDolphin/megasync-plugin.moc
 	printf 'CONFIG += link_pkgconfig
 		PKGCONFIG += breakpad-client
 		DEFINES += __STDC_FORMAT_MACROS\n' > \
 		src/MEGASync/google_breakpad/google_breakpad.pri
-	sed \
-		-e "/USE_\(FFMPEG\|LIBRAW\|MEDIAINFO\)/s:+:-:" \
-		-i src/MEGASync/MEGASync.pro
 }
 
 src_configure() {
@@ -77,6 +72,10 @@ src_configure() {
 		CONFIG-=with_tools
 		MEGASDK_BASE_PATH="${EPREFIX}/usr"
 		CONFIG+=nofreeimage
+		CONFIG-=FULLREQUIREMENTS
+		CONFIG$(usex ffmpeg + -)=USE_FFMPEG
+		CONFIG$(usex raw + -)=USE_LIBRAW
+		CONFIG$(usex mediainfo + -)=USE_MEDIAINFO
 	)
 	eqmake5 "${eqmakeargs[@]}"
 	use dolphin && cmake_src_configure
