@@ -51,7 +51,7 @@ RDEPEND="
 	net-misc/curl
 	media-libs/libsndfile
 	jack? ( virtual/jack )
-	pulseaudio? ( media-sound/pulseaudio )
+	pulseaudio? ( media-libs/libpulse )
 	!bundled-libs? (
 		media-libs/libltc
 		hid? ( dev-libs/hidapi )
