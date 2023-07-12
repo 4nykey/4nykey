@@ -11,15 +11,14 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/tonsky/${MY_PN}"
 	REQUIRED_USE="!binary"
 else
-	MY_PV="47b8186"
+	MY_PV="ba21c00"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
-	MY_PVB="${MY_PV%_p*}"
 	SRC_URI="
 	!binary? (
 		mirror://githubcl/tonsky/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	)
 	binary? (
-		https://github.com/tonsky/${MY_PN}/releases/download/${MY_PVB}/Fira_Code_v${MY_PVB}.zip
+		https://github.com/tonsky/${MY_PN}/releases/download/${PV%_p*}/Fira_Code_v${PV%_p*}.zip
 	)
 	"
 	KEYWORDS="~amd64"
