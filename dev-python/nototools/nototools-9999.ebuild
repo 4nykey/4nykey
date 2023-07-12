@@ -46,7 +46,6 @@ DEPEND="
 	>=dev-python/pytz-2022.1[${PYTHON_USEDEP}]
 	>=dev-python/regex-2022.7.25[${PYTHON_USEDEP}]
 	>=media-gfx/scour-0.38.2[${PYTHON_USEDEP}]
-	>=dev-python/typed-ast-1.4.2[${PYTHON_USEDEP}]
 	>=dev-python/ufoNormalizer-0.6.1[${PYTHON_USEDEP}]
 	>=dev-python/ufoProcessor-1.9[${PYTHON_USEDEP}]
 	>=dev-python/py-zopfli-0.2.1[${PYTHON_USEDEP}]
@@ -77,4 +76,8 @@ python_prepare_all() {
 	grep -rl CLDR_DIR nototools | xargs sed -i \
 		-e "/CLDR_DIR =/s:=.*:= '${EROOT}/usr/share/unicode/cldr':"
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
+}
+
+python_test() {
+	epytest tests
 }
