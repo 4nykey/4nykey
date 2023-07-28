@@ -5,7 +5,7 @@ EAPI=8
 
 FIREFOX_PATCHSET="firefox-102esr-patches-10j.tar.xz"
 
-LLVM_MAX_SLOT=15
+LLVM_MAX_SLOT=16
 
 PYTHON_COMPAT=( python3_{10..11} )
 PYTHON_REQ_USE="ncurses,sqlite,ssl"
@@ -15,7 +15,7 @@ WANT_AUTOCONF="2.1"
 VIRTUALX_REQUIRED="pgo"
 
 inherit autotools check-reqs desktop flag-o-matic gnome2-utils linux-info \
-	llvm multiprocessing pax-utils python-any-r1 toolchain-funcs \
+	llvm multiprocessing optfeature pax-utils python-any-r1 toolchain-funcs \
 	virtualx xdg
 
 PATCH_URIS=(
@@ -61,6 +61,18 @@ REQUIRED_USE="debug? ( !system-av1 )
 
 BDEPEND="${PYTHON_DEPS}
 	|| (
+	(
+			sys-devel/clang:16
+			sys-devel/llvm:16
+			clang? (
+				|| (
+					sys-devel/lld:16
+					sys-devel/mold
+				)
+				virtual/rust:0/llvm-16
+				pgo? ( =sys-libs/compiler-rt-sanitizers-16*[profile] )
+			)
+		)
 		(
 			sys-devel/clang:15
 			sys-devel/llvm:15
@@ -620,7 +632,7 @@ src_configure() {
 	fi
 
 	# LTO flag was handled via configure
-	filter-flags '-flto*'
+	filter-lto
 
 	mozconfig_use_enable debug
 	if use debug ; then
@@ -942,4 +954,8 @@ pkg_postinst() {
 	elog
 	elog "The user data directory is now \"~/.tor project/${PN}\""
 	elog "instead of \"~/.mozilla/${PN}\"."
+
+	optfeature_header "Optional programs for extra features:"
+	optfeature "desktop notifications" x11-libs/libnotify
+	optfeature "fallback mouse cursor theme e.g. on WMs" gnome-base/gsettings-desktop-schemas
 }
