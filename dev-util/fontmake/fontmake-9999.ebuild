@@ -1,13 +1,14 @@
 # Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 PYTHON_COMPAT=( python3_{10..11} )
+DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/googlei18n/${PN}.git"
+	EGIT_REPO_URI="https://github.com/googlefonts/${PN}.git"
 else
 	[[ -z ${PV%%*_*} ]] && inherit vcs-snapshot
 	MY_PV="1ef915d"
@@ -16,22 +17,22 @@ else
 		MY_PV="v$(ver_cut 1-3)${MY_PV:0:1}$(ver_cut 5)"
 	fi
 	SRC_URI="
-		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64"
 fi
 
 DESCRIPTION="A wrapper for several Python libraries to compile fonts from sources"
-HOMEPAGE="https://github.com/googlei18n/${PN}"
+HOMEPAGE="https://github.com/googlefonts/${PN}"
 
 LICENSE="Apache-2.0"
 SLOT="0"
 IUSE=""
 
 RDEPEND="
-	>=dev-python/fonttools-4.40[skia(-),ufo(-),unicode(-),${PYTHON_USEDEP}]
-	>=dev-python/glyphsLib-6.2.1[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.41[skia(-),ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/glyphsLib-6.2.5[${PYTHON_USEDEP}]
 	>=dev-python/ufo2ft-2.32[cffsubr(+),${PYTHON_USEDEP}]
 	>=dev-python/MutatorMath-3.0.1[${PYTHON_USEDEP}]
 	>=dev-python/fontMath-0.9.3[${PYTHON_USEDEP}]
@@ -39,7 +40,7 @@ RDEPEND="
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 	dev-python/skia-pathops[${PYTHON_USEDEP}]
 	>=dev-python/ufoLib2-0.14[${PYTHON_USEDEP}]
-	>=dev-python/attrs-22.1[${PYTHON_USEDEP}]
+	>=dev-python/attrs-23.1[${PYTHON_USEDEP}]
 	>=dev-python/ttfautohint-py-0.5.1[${PYTHON_USEDEP}]
 "
 DEPEND="
