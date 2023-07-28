@@ -1,7 +1,7 @@
 # Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 PYTHON_COMPAT=( python3_{10..11} )
 DISTUTILS_USE_PEP517=setuptools
@@ -26,7 +26,6 @@ HOMEPAGE="https://github.com/googlei18n/${PN}"
 
 LICENSE="Apache-2.0 MIT"
 SLOT="0"
-IUSE="test"
 
 RDEPEND="
 	>=dev-python/fonttools-4.38[ufo(-),unicode(-),${PYTHON_USEDEP}]
@@ -45,15 +44,10 @@ BDEPEND="
 	)
 "
 PATCHES=(
-	"${FILESDIR}"/featureNames.diff
+	"${FILESDIR}"/custom_params.diff
 )
 distutils_enable_tests pytest
 
 pkg_setup() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
-}
-
-python_prepare_all() {
-	sed -e '/\<wheel\>/d' -i setup.cfg
-	distutils-r1_python_prepare_all
 }
