@@ -28,20 +28,24 @@ HOMEPAGE="https://github.com/googlefonts/${PN}"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE=""
+IUSE="json"
 
 RDEPEND="
-	>=dev-python/fonttools-4.41[skia(-),ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.42[skia(-),ufo(-),unicode(-),${PYTHON_USEDEP}]
 	>=dev-python/glyphsLib-6.2.5[${PYTHON_USEDEP}]
-	>=dev-python/ufo2ft-2.32[cffsubr(+),${PYTHON_USEDEP}]
+	>=dev-python/ufo2ft-2.33.4[cffsubr(+),${PYTHON_USEDEP}]
 	>=dev-python/MutatorMath-3.0.1[${PYTHON_USEDEP}]
 	>=dev-python/fontMath-0.9.3[${PYTHON_USEDEP}]
 	>=dev-python/defcon-0.10.2[${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 	dev-python/skia-pathops[${PYTHON_USEDEP}]
-	>=dev-python/ufoLib2-0.14[${PYTHON_USEDEP}]
+	>=dev-python/ufoLib2-0.16[${PYTHON_USEDEP}]
 	>=dev-python/attrs-23.1[${PYTHON_USEDEP}]
 	>=dev-python/ttfautohint-py-0.5.1[${PYTHON_USEDEP}]
+	json? (
+		>=dev-python/cattrs-23.1.2[${PYTHON_USEDEP}]
+		>=dev-python/orjson-3.9.2[${PYTHON_USEDEP}]
+	)
 "
 DEPEND="
 	${RDEPEND}
