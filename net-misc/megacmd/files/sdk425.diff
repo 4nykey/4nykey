@@ -1,0 +1,11 @@
+--- a/src/megacmdexecuter.cpp
++++ b/src/megacmdexecuter.cpp
+@@ -3374,6 +3374,8 @@ void MegaCmdExecuter::downloadNode(string source, string path, MegaApi* api, Meg
+                 nullptr,//const char *appData,
+                 false,//bool startFirst,
+                 nullptr,//MegaCancelToken *cancelToken,
++                MegaTransfer::COLLISION_CHECK_FINGERPRINT,
++                MegaTransfer::COLLISION_RESOLUTION_NEW_WITH_N,
+                 new ATransferListener(multiTransferListener, source));
+ }
+ 
