@@ -11,7 +11,7 @@ else
 	MY_PV="${PV^^}"
 	MY_PV="v${MY_PV/_/-}"
 	[[ -z ${PV%%*_p*} ]] && MY_PV="a4da0d3"
-	MY_QC="qt-common-a84bdde"
+	MY_QC="qt-common-2842d66"
 	MY_EX="digidoc-extensions-d428a88"
 	SRC_URI="${SRC_URI}
 		mirror://githubcl/open-eid/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
