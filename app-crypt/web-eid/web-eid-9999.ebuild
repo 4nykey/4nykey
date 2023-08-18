@@ -10,9 +10,9 @@ if [[ ${PV} = *9999* ]]; then
 else
 	MY_PV="80485b8"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v$(ver_rs 3 -)"
-	MY_LEI="libelectronic-id-b2adf1b"
-	MY_LPC="libpcsc-cpp-257d5f5"
-	MY_LPM="libpcsc-mock-efd96d6"
+	MY_LEI="libelectronic-id-fb84aa8"
+	MY_LPC="libpcsc-cpp-6f04aac"
+	MY_LPM="libpcsc-mock-488cb42"
 	SRC_URI="
 		mirror://githubcl/web-eid/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://githubcl/web-eid/${MY_LEI%-*}/tar.gz/${MY_LEI##*-}
@@ -46,7 +46,6 @@ DEPEND="
 	${RDEPEND}
 	test? ( dev-cpp/gtest )
 "
-PATCHES=( "${FILESDIR}"/xpi.diff )
 
 src_prepare() {
 	if [[ -n ${PV%%*9999} ]]; then
@@ -69,7 +68,9 @@ src_install() {
 	dosym \
 		../../../usr/share/google-chrome/extensions/ncibgoaomkmdpilpocfeponihegamlic.json \
 		/etc/chromium/extensions/ncibgoaomkmdpilpocfeponihegamlic.json
+}
 
-	insinto /etc/firefox/policies
-	doins "${FILESDIR}"/policies.json
+pkg_postinst() {
+	einfo "Firefox extension is available at"
+	einfo "https://addons.mozilla.org/firefox/addon/web-eid-webextension"
 }
