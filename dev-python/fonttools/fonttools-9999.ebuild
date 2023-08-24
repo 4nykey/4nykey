@@ -6,6 +6,7 @@ EAPI=8
 PYTHON_COMPAT=( python3_{10..11} )
 PYTHON_REQ_USE="xml(+)"
 DISTUTILS_EXT=1
+DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1 optfeature
 if [[ -z ${PV%%*9999} ]]; then
