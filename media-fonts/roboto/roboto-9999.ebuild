@@ -22,7 +22,7 @@ else
 	"
 	KEYWORDS="~amd64"
 	S="${WORKDIR}/${MY_PN}-${MY_PV#v}"
-	[[ -z ${USE##*binary*} ]] && S="${WORKDIR}"
+	[[ -z ${USE##*binary*} ]] && S="${WORKDIR}/${PN^}_${MY_PV}"
 	if [[ -z ${USE##*autohint*} ]]; then
 		if [[ -z ${USE##*variable*} ]]; then
 			FONTDIR_BIN=( hinted )

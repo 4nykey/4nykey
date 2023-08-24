@@ -35,14 +35,14 @@ mirror://githubcl/notofonts/cypro-minoan/tar.gz/6f286af -> noto-cypro-minoan-6f2
 mirror://githubcl/notofonts/deseret/tar.gz/ea3eb37 -> noto-deseret-ea3eb37.tar.gz
 mirror://githubcl/notofonts/devanagari/tar.gz/f8f27e4 -> noto-devanagari-f8f27e4.tar.gz
 mirror://githubcl/notofonts/dives-akuru/tar.gz/6115d3d -> noto-dives-akuru-6115d3d.tar.gz
-mirror://githubcl/notofonts/dogra/tar.gz/2c86e4f -> noto-dogra-2c86e4f.tar.gz
+mirror://githubcl/notofonts/dogra/tar.gz/75e6568 -> noto-dogra-75e6568.tar.gz
 mirror://githubcl/notofonts/duployan/tar.gz/7c72b99 -> noto-duployan-7c72b99.tar.gz
 mirror://githubcl/notofonts/egyptian-hieroglyphs/tar.gz/4565d57 -> noto-egyptian-hieroglyphs-4565d57.tar.gz
 mirror://githubcl/notofonts/elbasan/tar.gz/5b95413 -> noto-elbasan-5b95413.tar.gz
-mirror://githubcl/notofonts/elymaic/tar.gz/816979c -> noto-elymaic-816979c.tar.gz
+mirror://githubcl/notofonts/elymaic/tar.gz/6e52784 -> noto-elymaic-6e52784.tar.gz
 mirror://githubcl/notofonts/ethiopic/tar.gz/1cc6933 -> noto-ethiopic-1cc6933.tar.gz
 mirror://githubcl/notofonts/georgian/tar.gz/d2b52e1 -> noto-georgian-d2b52e1.tar.gz
-mirror://githubcl/notofonts/glagolitic/tar.gz/2efe5a7 -> noto-glagolitic-2efe5a7.tar.gz
+mirror://githubcl/notofonts/glagolitic/tar.gz/74db9a5 -> noto-glagolitic-74db9a5.tar.gz
 mirror://githubcl/notofonts/gothic/tar.gz/a30a2ad -> noto-gothic-a30a2ad.tar.gz
 mirror://githubcl/notofonts/grantha/tar.gz/7daa56c -> noto-grantha-7daa56c.tar.gz
 mirror://githubcl/notofonts/gujarati/tar.gz/786af29 -> noto-gujarati-786af29.tar.gz
@@ -58,13 +58,13 @@ mirror://githubcl/notofonts/inscriptional-pahlavi/tar.gz/4c2649d -> noto-inscrip
 mirror://githubcl/notofonts/inscriptional-parthian/tar.gz/299cabd -> noto-inscriptional-parthian-299cabd.tar.gz
 mirror://githubcl/notofonts/javanese/tar.gz/308e82a -> noto-javanese-308e82a.tar.gz
 mirror://githubcl/notofonts/kaithi/tar.gz/ffaba8b -> noto-kaithi-ffaba8b.tar.gz
-mirror://githubcl/notofonts/kawi/tar.gz/83d11ae -> noto-kawi-83d11ae.tar.gz
+mirror://githubcl/notofonts/kawi/tar.gz/8d243cd -> noto-kawi-8d243cd.tar.gz
 mirror://githubcl/notofonts/kannada/tar.gz/0c2a7a4 -> noto-kannada-0c2a7a4.tar.gz
 mirror://githubcl/notofonts/kayah-li/tar.gz/98b87d4 -> noto-kayah-li-98b87d4.tar.gz
 mirror://githubcl/notofonts/kharoshthi/tar.gz/8f50ada -> noto-kharoshthi-8f50ada.tar.gz
 mirror://githubcl/notofonts/khitan-small-script/tar.gz/fa1dd1cb -> noto-khitan-small-script-fa1dd1cb.tar.gz
 mirror://githubcl/notofonts/khmer/tar.gz/63b9cea -> noto-khmer-63b9cea.tar.gz
-mirror://githubcl/notofonts/khojki/tar.gz/8e08cb3 -> noto-khojki-8e08cb3.tar.gz
+mirror://githubcl/notofonts/khojki/tar.gz/360e44e -> noto-khojki-360e44e.tar.gz
 mirror://githubcl/notofonts/khudawadi/tar.gz/9219227 -> noto-khudawadi-9219227.tar.gz
 mirror://githubcl/notofonts/lao/tar.gz/ab77daf -> noto-lao-ab77daf.tar.gz
 mirror://githubcl/notofonts/latin-greek-cyrillic/tar.gz/6c77017e5 -> noto-latin-greek-cyrillic-6c77017e5.tar.gz
@@ -73,7 +73,7 @@ mirror://githubcl/notofonts/limbu/tar.gz/6b002f7 -> noto-limbu-6b002f7.tar.gz
 mirror://githubcl/notofonts/linear-a/tar.gz/bdfcca0 -> noto-linear-a-bdfcca0.tar.gz
 mirror://githubcl/notofonts/linear-b/tar.gz/bae4d3f -> noto-linear-b-bae4d3f.tar.gz
 mirror://githubcl/notofonts/lisu/tar.gz/e1f0c06 -> noto-lisu-e1f0c06.tar.gz
-mirror://githubcl/notofonts/lycian/tar.gz/bbe7f20 -> noto-lycian-bbe7f20.tar.gz
+mirror://githubcl/notofonts/lycian/tar.gz/ebd5550 -> noto-lycian-ebd5550.tar.gz
 mirror://githubcl/notofonts/lydian/tar.gz/91c7f24 -> noto-lydian-91c7f24.tar.gz
 mirror://githubcl/notofonts/mahajani/tar.gz/fc19654 -> noto-mahajani-fc19654.tar.gz
 mirror://githubcl/notofonts/makasar/tar.gz/3b46257 -> noto-makasar-3b46257.tar.gz
@@ -98,7 +98,7 @@ mirror://githubcl/notofonts/myanmar/tar.gz/bd34805 -> noto-myanmar-bd34805.tar.g
 mirror://githubcl/notofonts/nabataean/tar.gz/b2c44e7 -> noto-nabataean-b2c44e7.tar.gz
 mirror://githubcl/notofonts/nag-mundari/tar.gz/5a5a8eb -> noto-nag-mundari-5a5a8eb.tar.gz
 mirror://githubcl/notofonts/nandinagari/tar.gz/ab99160 -> noto-nandinagari-ab99160.tar.gz
-mirror://githubcl/notofonts/nastaliq/tar.gz/ee207e8 -> noto-nastaliq-ee207e8.tar.gz
+mirror://githubcl/notofonts/nastaliq/tar.gz/1d3bee9 -> noto-nastaliq-1d3bee9.tar.gz
 mirror://githubcl/notofonts/new-tai-lue/tar.gz/2a391c3 -> noto-new-tai-lue-2a391c3.tar.gz
 mirror://githubcl/notofonts/newa/tar.gz/f56d175 -> noto-newa-f56d175.tar.gz
 mirror://githubcl/notofonts/nko/tar.gz/9779705 -> noto-nko-9779705.tar.gz
@@ -115,11 +115,11 @@ mirror://githubcl/notofonts/old-persian/tar.gz/81cc54a -> noto-old-persian-81cc5
 mirror://githubcl/notofonts/old-sogdian/tar.gz/c11da34 -> noto-old-sogdian-c11da34.tar.gz
 mirror://githubcl/notofonts/old-south-arabian/tar.gz/5e48951 -> noto-old-south-arabian-5e48951.tar.gz
 mirror://githubcl/notofonts/old-turkic/tar.gz/ea64559 -> noto-old-turkic-ea64559.tar.gz
-mirror://githubcl/notofonts/old-uyghur/tar.gz/32ba53c -> noto-old-uyghur-32ba53c.tar.gz
+mirror://githubcl/notofonts/old-uyghur/tar.gz/3d86522 -> noto-old-uyghur-3d86522.tar.gz
 mirror://githubcl/notofonts/oriya/tar.gz/b8bd327 -> noto-oriya-b8bd327.tar.gz
 mirror://githubcl/notofonts/osage/tar.gz/6c8b4a4 -> noto-osage-6c8b4a4.tar.gz
 mirror://githubcl/notofonts/osmanya/tar.gz/dc466ed -> noto-osmanya-dc466ed.tar.gz
-mirror://githubcl/notofonts/ottoman-siyaq-numbers/tar.gz/83a14dc -> noto-ottoman-siyaq-numbers-83a14dc.tar.gz
+mirror://githubcl/notofonts/ottoman-siyaq-numbers/tar.gz/bdeea78 -> noto-ottoman-siyaq-numbers-bdeea78.tar.gz
 mirror://githubcl/notofonts/pahawh-hmong/tar.gz/a602899 -> noto-pahawh-hmong-a602899.tar.gz
 mirror://githubcl/notofonts/palmyrene/tar.gz/3f47763 -> noto-palmyrene-3f47763.tar.gz
 mirror://githubcl/notofonts/pau-cin-hau/tar.gz/24e7d48 -> noto-pau-cin-hau-24e7d48.tar.gz
@@ -179,8 +179,13 @@ LICENSE="OFL-1.1"
 SLOT="0"
 IUSE="clean-as-you-go"
 PATCHES=( "${FILESDIR}"/math.diff )
+BDEPEND="
+	variable? ( app-misc/yq )
+"
 
 src_prepare() {
+	use variable && export SKIP_VF="$(grep -rl 'buildVariable.*false' \
+		--include=config-*.yaml | xargs yq -r '.sources[]')"
 	use clean-as-you-go && HELPER_ARGS=( clean )
 	mkdir -p src
 	mv -t src */sources/*
