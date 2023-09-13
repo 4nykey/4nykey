@@ -1,1 +1,0 @@
-libdigidoc-9999.ebuild
