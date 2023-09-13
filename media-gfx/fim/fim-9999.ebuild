@@ -60,26 +60,23 @@ DEPEND="
 DOCS=( doc/FIM.TXT )
 PATCHES=(
 	"${FILESDIR}"/${PN}-poppler.diff
-	"${FILESDIR}"/${PN}-string.diff
 	"${FILESDIR}"/CommandConsole.diff
 )
 
 src_prepare() {
 	default
-	append-cxxflags '-std=c++17'
+	local _p="$(tc-getPKG_CONFIG)"
 	sed \
 		-e "s:esyscmd.*:${ESVN_WC_REVISION:--1}):" \
-		-e '/LIBS/s:GraphicsMagick.*`:pkg-config GraphicsMagick --libs`:' \
-		-e '/CXXFLAGS/s:GraphicsMagick.*`:pkg-config GraphicsMagick --cflags`:'\
-		-e 's:imlib2-config --libs.*`:pkg-config imlib2 x11 --libs`:' \
+		-e "/LIBS/s:GraphicsMagick.*\`:${_p} GraphicsMagick --libs\`:" \
+		-e "/CXXFLAGS/s:GraphicsMagick.*\`:${_p} GraphicsMagick --cflags\`:" \
+		-e "s:imlib2-config --libs.*\`:${_p} imlib2 x11 --libs\`:" \
 		-e '/LIBSDL_CONFIG_FLAGS=/s:static-::' \
 		-i configure.ac
 	sed \
 		-e '/SUBDIRS = /s:\<doc\>::' \
 		-i Makefile.am
 	sed -e '/FIM_WANT_BACKGROUND_LOAD/d' -i src/fim.h
-	sed -e 's:°: degree:' -i src/fim.cpp
-	sed -e 's:\(FIM_DEFAULT_CONSOLEFONT\)o:\1:' -i src/FontServer.cpp
 	eautoreconf
 }
 

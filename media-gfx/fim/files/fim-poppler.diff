@@ -1,14 +1,3 @@
---- a/configure.ac
-+++ b/configure.ac
-@@ -845,7 +845,7 @@ if test x$fim_handle_pdf != xno ; then
-   have_poppler=yes
-         if test x$with_libpoppler != xno && test -z "$LIBPOPPLER"; then
- dnl FIXME : the following is a dirty hack
--          AC_CHECK_LIB(poppler, gfree,
-+          AC_CHECK_LIB(poppler, free,
-             have_poppler=yes,
-             have_poppler=no
-       AC_MSG_WARN([*** POPPLER loader will not be built (POPPLER library not found) ***]) )
 --- a/src/FbiStuffPdf.cpp
 +++ b/src/FbiStuffPdf.cpp
 @@ -32,6 +32,10 @@
@@ -22,7 +11,7 @@
  
  /*
   * Note : at the time of writing this, the poppler API is unstable,
-@@ -41,21 +45,14 @@
+@@ -41,22 +45,15 @@
   * And please don't blame me (fim's author)!
   */
  #include <poppler/cpp/poppler-version.h>
@@ -40,11 +29,12 @@
  #include <poppler/SplashOutputDev.h>
  #include <poppler/Page.h>
  #include <poppler/GlobalParams.h>	/* globalParams lives here */
+ #include <glib.h>
 -#endif /* (POPPLER_VERSION_MINOR>=21) */
  
  #if HAVE_FILENO
  #define FIM_PDF_USE_FILENO 1
-@@ -179,17 +176,14 @@ pdf_init(FILE *fp, const fim_char_t *fil
+@@ -179,19 +176,14 @@ pdf_init(FILE *fp, const fim_char_t *fil
  	SplashColorsInit();
  
  	// WARNING : a global variable from libpoppler! damn!!
@@ -56,6 +46,8 @@
  	globalParams->setErrQuiet(gFalse);
  
 -#if defined(POPPLER_VERSION_MINOR) && (POPPLER_VERSION_MINOR<22)
+-	fim_char_t _[1];
+-	_[0]='\0';
 -	globalParams->setBaseDir(_);
 -#endif /* defined(POPPLER_VERSION_MINOR) && (POPPLER_VERSION_MINOR<22) */
  
@@ -68,7 +60,7 @@
  	if (!ds->od)
  	{
          	GBool bitmapTopDown = gTrue;
--        	ds->od = new SplashOutputDev(gSplashColorMode, /*4*/3, gFalse, gBgColor, bitmapTopDown,gFalse/*antialias*/);
+-        	ds->od = new SplashOutputDev(gSplashColorMode, /*4*/3, gFalse, gBgColor, bitmapTopDown, splashThinLineDefault/*antialias*/);
 +        	ds->od = new SplashOutputDev(gSplashColorMode, /*4*/3, gFalse, gBgColor, bitmapTopDown);
  	        if (ds->od)
 -#ifdef POPPLER_VERSION	/* as of 0.20.2, from poppler/poppler-config.h */
