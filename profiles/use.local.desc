@@ -2,50 +2,27 @@
 # your descriptions to your package's metadata.xml ONLY.
 # * generated automatically using egencache *
 
+app-arch/7-zip:asm - Enable assembly for optimization
+app-arch/7-zip:rar - Enable support for non-free rar decoder
 app-arch/wimlib:fuse - Support mounting WIMs via sys-fs/fuse
 app-arch/wimlib:ntfs - Support direct manipulation on a NTFS volume via sys-fs/ntfs3g
-app-arch/wimlib:openssl - Use SHA-1 implementation from libcrypto (dev-libs/openssl)
 app-arch/wimlib:yasm - Prefer dev-lang/yasm over dev-lang/nasm
 app-crypt/digidoc4-client:nautilus - Install gnome-base/nautilus extension
-app-text/podofo:boost - Add support for boost
-app-text/podofo:tools - Build and install commandline tools.
-dev-libs/libdigidocpp:pdf - Experimental PDF Signing/validating support
 dev-libs/xml-security-c:nss - Use dev-libs/nss for certain crypto operations (configureable at runtime)
-dev-libs/xml-security-c:xalan - Enable support for XSLT and XPath parsing by dev-libs/xalan-c
 dev-python/compreffor:cython - Generate cpp sources with dev-python/cython
-dev-python/cu2qu:cython - Use cython to build an (optional) optimized extension module
 dev-python/fonttools:graphite - Enable support for graphite type tables (Silf, Glat, Gloc)
+dev-python/fonttools:harfbuzz - Use Harfbuzz Repacker for packing GSUB/GPOS tables
 dev-python/fonttools:interpolatable - Enable support for finding wrong contour/component order between different masters
 dev-python/fonttools:plot - Enable support for visualizing DesignSpaceDocument and resulting VariationModel
 dev-python/fonttools:reportlab - Enable support for drawing glyphs as PNG images
-dev-python/fonttools:symfont - Enable support for symbolic font statistics analysis
+dev-python/fonttools:skia - Use skia-pathops to remove overlaps in TTF fonts
 dev-python/fonttools:ufo - Enable support for reading and writing UFO source files
 dev-python/fonttools:woff - Enable compression support for WOFF 1.0/2.0 webfonts
-dev-python/ufo2ft:cffsubr - Enable support for subroutinizing CFF/CFF2 table with cffsubr library
+dev-python/ufoLib2:msgpack - Enable msgpack support
+dev-python/ufoLib2:orjson - Use orjson in place of built-in json library
+dev-util/fontmake:json - Enable support for ufoLib2's .ufo.json files
 dev-util/ots:graphite - Sanitize Graphite tables
-media-fonts/iosevka-bin:font_variants_aile - A quasi-proportional variant
-media-fonts/iosevka-bin:font_variants_curly - A variant with curly leg shapes
-media-fonts/iosevka-bin:font_variants_default - The default variant with ligatures and semantic full-width glyphs
-media-fonts/iosevka-bin:font_variants_etoile - A quasi-proportional slab-serif variant
-media-fonts/iosevka-bin:font_variants_fixed - Exact monospace font without ligatures and wide glyphs
-media-fonts/iosevka-bin:font_variants_ss01 - A variant stylized after Andale Mono
-media-fonts/iosevka-bin:font_variants_ss02 - A variant stylized after Anonymous Pro
-media-fonts/iosevka-bin:font_variants_ss03 - A variant stylized after Consolas
-media-fonts/iosevka-bin:font_variants_ss04 - A variant stylized after Menlo
-media-fonts/iosevka-bin:font_variants_ss05 - A variant stylized after Fira Mono
-media-fonts/iosevka-bin:font_variants_ss06 - A variant stylized after Liberation Mono
-media-fonts/iosevka-bin:font_variants_ss07 - A variant stylized after Monaco
-media-fonts/iosevka-bin:font_variants_ss08 - A variant stylized after Pragmata Pro
-media-fonts/iosevka-bin:font_variants_ss09 - A variant stylized after Source Code Pro
-media-fonts/iosevka-bin:font_variants_ss10 - A variant stylized after Envy Code R
-media-fonts/iosevka-bin:font_variants_ss11 - A variant stylized after X Windows Fixed
-media-fonts/iosevka-bin:font_variants_ss12 - A variant stylized after Ubuntu Mono
-media-fonts/iosevka-bin:font_variants_ss13 - A variant stylized after Lucida
-media-fonts/iosevka-bin:font_variants_ss14 - A variant stylized after JetBrains Mono
-media-fonts/iosevka-bin:font_variants_ss15 - A variant stylized after IBM Plex Mono
-media-fonts/iosevka-bin:font_variants_ss16 - A variant stylized after PT Mono
-media-fonts/iosevka-bin:font_variants_ss17 - A variant stylized after Recursive Mono
-media-fonts/iosevka-bin:font_variants_term - A narrower variant focusing terminal uses
+media-fonts/adobe-source:emoji - Install emoji fonts
 media-fonts/iosevka-src:font_variants_aile - A quasi-proportional variant
 media-fonts/iosevka-src:font_variants_curly - A variant with curly leg shapes
 media-fonts/iosevka-src:font_variants_custom - User customized variant
@@ -69,15 +46,18 @@ media-fonts/iosevka-src:font_variants_ss14 - A variant stylized after JetBrains 
 media-fonts/iosevka-src:font_variants_ss15 - A variant stylized after IBM Plex Mono
 media-fonts/iosevka-src:font_variants_ss16 - A variant stylized after PT Mono
 media-fonts/iosevka-src:font_variants_ss17 - A variant stylized after Recursive Mono
+media-fonts/iosevka-src:font_variants_ss18 - A variant stylized after Input Mono
 media-fonts/iosevka-src:font_variants_term - A narrower variant focusing terminal uses
 media-fonts/noto:emoji - Install additional emoji fonts
+media-fonts/noto-cjk-sans:super-otc - Install single combined Super OTC collection
 media-fonts/noto-source:clean-as-you-go - Clean intermediate ufos after they were built (useful when PORTAGE_TMPDIR resides on a tmpfs)
-media-fonts/noto-source:interpolate - Interpolate to get more font weights (significantly increases build time and diskspace requirements)
 media-fonts/sarasa-gothic:classical - Classical orthography
 media-fonts/sarasa-gothic:font_variants_fixed - A variant without ligatures and half-width glyphs
 media-fonts/sarasa-gothic:font_variants_monospace - A variant with ligatures and full-width glyphs
 media-fonts/sarasa-gothic:font_variants_term - A variant with ligatures and half-width glyphs
-media-fonts/source-pro:emoji - Install emoji fonts
+media-fonts/source-han-sans:half-width - Install fonts that use half-width glyphs for ASCII by default
+media-fonts/source-han-sans:super-otc - Install single combined Super OTC collection
+media-fonts/source-han-serif:super-otc - Install single combined Super OTC collection
 media-fonts/unscii:utils - Install bm2uns util to convert a bitmap image to unscii art
 media-gfx/fim:archive - Enable archive support using app-arch/libarchive
 media-gfx/fim:dia - Enable DIA file support via app-office/dia
@@ -88,29 +68,32 @@ media-gfx/fontforge:extras - Build and install programs from the contrib directo
 media-gfx/fontforge:libspiro - Add support for media-libs/libspiro
 media-gfx/fontforge:truetype-debugger - Enable truetype debugger in fontforge
 media-gfx/fontforge:woff2 - Enable WOFF2 support
-media-gfx/fontview:gtk3 - Use GTK+3 instead of GTK+2
 media-libs/skia:egl - Enable EGL support
 media-libs/skia:harfbuzz - Enable OpenType shaping via media-libs/harfbuzz
 media-libs/skia:lottie - Enable Lottie animation support
 media-plugins/deadbeef-spectrum-plugin:gtk3 - Enable support for GTK+3
 media-plugins/deadbeef-statusnotifier-plugin:gtk3 - Enable support for GTK+3
 media-sound/ardour:bundled-libs - Use bundled libs instead of system installed
-media-sound/ardour:c++0x - Compile using the C++11 standard
 media-sound/ardour:hid - Add support for dev-libs/hidapi
-media-sound/ardour:lv2 - Add support for Ladspa V2
 media-sound/ardour:phone-home - Contact ardour.org at startup for new announcements
 media-sound/ardour:sanitize - Turn on AddressSanitizer (requires GCC >= 4.8 or clang >= 3.1)
 media-sound/ardour:sse - Build runtime checked assembler code
 media-sound/ardour:vst - Enable VST plugin support
+media-sound/ardour:websockets - Enable support for WebSocket protocol
+media-sound/deadbeef:adplug - Enable adplug plugin
 media-sound/deadbeef:alac - Add support for Apple Lossless Audio Codec files
-media-sound/deadbeef:clang - Build with Clang compiler
+media-sound/deadbeef:artwork - Enable albumart plugin
 media-sound/deadbeef:dumb - Enable media-libs/dumb module library support
 media-sound/deadbeef:gme - Add support for playing various video game music formats
 media-sound/deadbeef:gtk3 - Enable support for GTK+3
 media-sound/deadbeef:lastfm - Enable last.fm support
+media-sound/deadbeef:libretro - Enable Libretro resampler plugin
 media-sound/deadbeef:mac - Add support for decoding Monkey's Audio files
 media-sound/deadbeef:midi - Enables MIDI support
 media-sound/deadbeef:opus - Enable Opus audio codec support
+media-sound/deadbeef:pipewire - Enable Pipewire output plugin
+media-sound/deadbeef:psf - Enable AOSDK-based PSF plugin
+media-sound/deadbeef:sc68 - Enable Atari ST and Amiga music player
 media-sound/deadbeef:shorten - Enable the shorten decoder plugin
 media-sound/deadbeef:sid - Build with SID (Commodore 64 Audio) support
 media-sound/deadbeef:tta - Add support for decoding True Audio input files
@@ -118,13 +101,15 @@ media-sound/deadbeef:wma - Add support for decoding Windows Media Audio files
 media-sound/deadbeef:zip - Build vfs_zip plugin
 media-sound/flactag:gcrypt - Use libgcrypt for low-level crypto
 media-sound/flactag:scripts - Install additional scripts to /usr/bin
-media-sound/picard:acoustid - Use media-libs/chromaprint for acoustic fingerprinting
+media-sound/picard:discid - Enable reading the ID of the inserted CD
+media-sound/picard:fingerprints - Enable calculation and lookup of AcoustID fingerprints
 net-misc/meganz-sdk:freeimage - Enable support for image I/O via media-libs/freeimage
 net-misc/meganz-sdk:fuse - Build FUSE-based example client
 net-misc/meganz-sdk:libuv - Support asynchronous I/O via dev-libs/libuv
 net-misc/meganz-sdk:mediainfo - Use media-libs/libmediainfo for media files
 net-misc/meganz-sdk:qt - Install QT bindings
 net-misc/megasync:dolphin - Install the kde-apps/dolphin extension
+net-misc/megasync:mediainfo - Use media-libs/libmediainfo for media files
 net-misc/megasync:nautilus - Install the gnome-base/nautilus extension
 net-misc/megasync:thunar - Install the xfce-base/thunar extension
 sys-block/partclone:apfs - Include APFS support
@@ -142,27 +127,19 @@ sys-block/partclone:reiser4 - Include ReiserFS4 support
 sys-block/partclone:reiserfs - Include ReiserFS support
 sys-block/partclone:xfs - Include XFS support
 www-client/torbrowser:clang - Use Clang compiler instead of GCC
-www-client/torbrowser:eme-free - Disable EME (DRM plugin) cabability at build time
-www-client/torbrowser:geckodriver - Enable WebDriver support
-www-client/torbrowser:gmp-autoupdate - Allow Gecko Media Plugins (binary blobs) to be automatically downloaded and kept up-to-date in user profiles
+www-client/torbrowser:eme-free - Disable EME (DRM plugin) capability at build time
 www-client/torbrowser:hwaccel - Force-enable hardware-accelerated rendering (Mozilla bug 594876)
-www-client/torbrowser:lto - Enable Link Time Optimization (LTO). Requires Gold linker when using GCC or LDD linker when using Clang
-www-client/torbrowser:openh264 - Use media-libs/openh264 for H.264 support instead of downloading binary blob from Mozilla at runtime
-www-client/torbrowser:pgo - Add support for profile-guided optimization using gcc-4.5, for faster binaries. This option will double the compile time.
-www-client/torbrowser:screencast - Enable support for remote desktop and screen cast using media-video/pipewire
-www-client/torbrowser:system-av1 - Use the system-wide media-libs/dav1d and media-libs/libaom library instead of bundled.
-www-client/torbrowser:system-harfbuzz - Use the system-wide media-libs/harfbuzz and media-gfx/graphite2 instead of bundled.
-www-client/torbrowser:system-icu - Use the system-wide dev-libs/icu instead of bundled.
-www-client/torbrowser:system-jpeg - Use the system-wide media-libs/libjpeg-turbo instead of bundled.
-www-client/torbrowser:system-libevent - Use the system-wide dev-libs/libevent instead of bundled.
-www-client/torbrowser:system-libvpx - Use the system-wide media-libs/libvpx instead of bundled.
-www-client/torbrowser:system-webp - Use the system-wide media-libs/libwebp instead of bundled.
-x11-themes/adapta-gtk-theme:cinnamon - Install Cinnamon theme
-x11-themes/adapta-gtk-theme:mate - Install MATE theme
-x11-themes/adapta-gtk-theme:openbox - Install Openbox theme
-x11-themes/adapta-gtk-theme:telegram - Install telegram-desktop theme
-x11-themes/adapta-gtk-theme:xfce - Install Xfce4 theme
-x11-themes/adapta-kde:konsole - Install konsole theme
-x11-themes/adapta-kde:kvantum - Install kvantum theme
-x11-themes/arc-kde:konsole - Install konsole theme
-x11-themes/arc-kde:kvantum - Install kvantum theme
+www-client/torbrowser:libproxy - Enable libproxy support
+www-client/torbrowser:lto - Enable Link Time Optimization (LTO)
+www-client/torbrowser:openh264 - Use media-libs/openh264 for H264 support instead of downloading binary blob from Mozilla at runtime
+www-client/torbrowser:pgo - Add support for profile-guided optimization for faster binaries - this option will double the compile time
+www-client/torbrowser:sndio - Enable support for the media-sound/sndio backend
+www-client/torbrowser:system-av1 - Use the system-wide media-libs/dav1d and media-libs/libaom library instead of bundled
+www-client/torbrowser:system-harfbuzz - Use the system-wide media-libs/harfbuzz and media-gfx/graphite2 instead of bundled
+www-client/torbrowser:system-icu - Use the system-wide dev-libs/icu instead of bundled
+www-client/torbrowser:system-jpeg - Use the system-wide media-libs/libjpeg-turbo instead of bundled
+www-client/torbrowser:system-libevent - Use the system-wide dev-libs/libevent instead of bundled
+www-client/torbrowser:system-libvpx - Use the system-wide media-libs/libvpx instead of bundled
+www-client/torbrowser:system-png - Use the system-wide media-libs/libpng instead of bundled (requires APNG patches)
+www-client/torbrowser:system-python-libs - Use system's python site instead of bundled python libraries
+www-client/torbrowser:system-webp - Use the system-wide media-libs/libwebp instead of bundled
