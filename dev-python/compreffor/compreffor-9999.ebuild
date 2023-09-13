@@ -1,7 +1,7 @@
 # Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 PYTHON_COMPAT=( python3_{10..11} )
 DISTUTILS_IN_SOURCE_BUILD=1
@@ -29,7 +29,7 @@ SLOT="0"
 IUSE="cython test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.2[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.42.1[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}

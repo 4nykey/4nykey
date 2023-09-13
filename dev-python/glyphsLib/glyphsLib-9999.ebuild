@@ -28,7 +28,7 @@ LICENSE="Apache-2.0 MIT"
 SLOT="0"
 
 RDEPEND="
-	>=dev-python/fonttools-4.38[ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.42.1[ufo(-),unicode(-),${PYTHON_USEDEP}]
 	>=dev-python/ufoLib2-0.14[${PYTHON_USEDEP}]
 	>=dev-python/openstep-plist-0.3[${PYTHON_USEDEP}]
 "
@@ -38,8 +38,8 @@ DEPEND="
 BDEPEND="
 	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 	test? (
-		dev-python/ufoNormalizer[${PYTHON_USEDEP}]
-		dev-python/ufo2ft[${PYTHON_USEDEP}]
+		>=dev-python/ufoNormalizer-0.6.1[${PYTHON_USEDEP}]
+		>=dev-python/ufo2ft-2.33.4[${PYTHON_USEDEP}]
 		>=app-text/xmldiff-2.2[${PYTHON_USEDEP}]
 	)
 "
