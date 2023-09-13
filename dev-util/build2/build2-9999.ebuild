@@ -1,7 +1,7 @@
-# Copyright 2018-2022 Gentoo Authors
+# Copyright 2018-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit toolchain-funcs multiprocessing
 MY_PN="${PN}-toolchain"
@@ -26,7 +26,7 @@ IUSE="test"
 
 RDEPEND="
 	dev-db/sqlite:3
-	dev-util/pkgconf:=
+	dev-util/pkgconf
 "
 DEPEND="
 	${RDEPEND}
@@ -51,25 +51,14 @@ myb() {
 		config.install.root="${ED}/usr/"
 		config.install.lib="exec_root/$(get_libdir)"
 		config.install.doc="data_root/share/doc/${PF}"
+		config.import.libpkgconf=
+		config.import.libsqlite3=
 	)
 
 	tc-is-gcc && export CCACHE_DISABLE=1
 	set -- "${@}" "${myconfigargs[@]}"
 	echo "${@}"
 	"${@}" || die "${@} failed"
-}
-
-src_prepare() {
-	local _pc="$(tc-getPKG_CONFIG)"
-	printf 'cxx.libs += %s\ncxx.poptions += %s\n' \
-		"$(${_pc} sqlite3 --libs)" "$(${_pc} sqlite3 --cflags)" >> \
-		libodb-sqlite/buildfile
-	printf 'cxx.libs += %s\ncxx.poptions += %s\n' \
-		"$(${_pc} libpkgconf --libs)" "$(${_pc} libpkgconf --cflags)" >> \
-		build2/libbuild2/cc/buildfile
-	sed -e 's:lib\(pkgconf\|sqlite3\)/ ::g' -i buildfile
-	rm -rf libpkgconf libsqlite3
-	default
 }
 
 src_compile() {
