@@ -96,7 +96,7 @@ src_prepare() {
 
 src_configure() {
 	my_use() {
-		usex $1 --${2:-${1}} --no-${2:-${1}}
+		usex $1 '' --no-${2:-${1}}
 	}
 	local wafargs=(
 		--prefix="${EPREFIX}/usr"
