@@ -3,7 +3,7 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-115esr-patches-06.tar.xz"
+FIREFOX_PATCHSET="firefox-102esr-patches-13.tar.xz"
 
 LLVM_MAX_SLOT=16
 
@@ -12,19 +12,19 @@ PYTHON_REQ_USE="ncurses,sqlite,ssl"
 
 WANT_AUTOCONF="2.1"
 
-VIRTUALX_REQUIRED="manual"
+VIRTUALX_REQUIRED="pgo"
 
 inherit autotools check-reqs desktop flag-o-matic gnome2-utils linux-info \
 	llvm multiprocessing optfeature pax-utils python-any-r1 toolchain-funcs \
 	virtualx xdg
 
 PATCH_URIS=(
-	https://dev.gentoo.org/~juippis/mozilla/patchsets/${FIREFOX_PATCHSET}
+	https://dev.gentoo.org/~{juippis,whissi,slashbeast}/mozilla/patchsets/${FIREFOX_PATCHSET}
 )
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="115.2.1esr-${MY_PV}-1-build2"
+MY_P="102.15.1esr-${MY_PV}-1-build3"
 MY_P="firefox-tor-browser-${MY_P}"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
@@ -52,20 +52,23 @@ LICENSE+=" BSD CC-BY-3.0"
 IUSE="+clang cpu_flags_arm_neon dbus debug eme-free hardened hwaccel"
 IUSE+=" jack libproxy lto openh264 pgo pulseaudio sndio selinux"
 IUSE+=" +system-av1 +system-harfbuzz +system-icu +system-jpeg +system-libevent +system-libvpx system-png system-python-libs +system-webp"
-IUSE+=" wayland wifi +X"
+IUSE+=" wayland wifi"
 
-REQUIRED_USE="|| ( X wayland )
-	debug? ( !system-av1 )
+REQUIRED_USE="debug? ( !system-av1 )
 	pgo? ( lto )
+	wayland? ( dbus )
 	wifi? ( dbus )"
 
 BDEPEND="${PYTHON_DEPS}
 	|| (
-		(
+	(
 			sys-devel/clang:16
 			sys-devel/llvm:16
 			clang? (
-				sys-devel/lld:16
+				|| (
+					sys-devel/lld:16
+					sys-devel/mold
+				)
 				virtual/rust:0/llvm-16
 				pgo? ( =sys-libs/compiler-rt-sanitizers-16*[profile] )
 			)
@@ -79,34 +82,32 @@ BDEPEND="${PYTHON_DEPS}
 				pgo? ( =sys-libs/compiler-rt-sanitizers-15*[profile] )
 			)
 		)
+		(
+			sys-devel/clang:14
+			sys-devel/llvm:14
+			clang? (
+				sys-devel/lld:14
+				virtual/rust:0/llvm-14
+				pgo? ( =sys-libs/compiler-rt-sanitizers-14*[profile] )
+			)
+		)
 	)
-	app-alternatives/awk
+	!clang? ( virtual/rust )
 	app-arch/unzip
 	app-arch/zip
 	>=dev-util/cbindgen-0.24.3
 	net-libs/nodejs
 	virtual/pkgconfig
-	!clang? ( >=virtual/rust-1.65 )
 	amd64? ( >=dev-lang/nasm-2.14 )
-	x86? ( >=dev-lang/nasm-2.14 )
-	pgo? (
-		X? (
-			sys-devel/gettext
-			x11-base/xorg-server[xvfb]
-			x11-apps/xhost
-		)
-		!X? (
-			>=gui-libs/wlroots-0.15.1-r1[tinywl]
-			x11-misc/xkeyboard-config
-		)
-	)"
+	x86? ( >=dev-lang/nasm-2.14 )"
+
 COMMON_DEPEND="
 	>=app-accessibility/at-spi2-core-2.46.0:2
 	dev-libs/expat
 	dev-libs/glib:2
 	dev-libs/libffi:=
-	>=dev-libs/nss-3.90
-	>=dev-libs/nspr-4.35
+	>=dev-libs/nss-3.79.2
+	>=dev-libs/nspr-4.34
 	media-libs/alsa-lib
 	media-libs/fontconfig
 	media-libs/freetype
@@ -114,8 +115,19 @@ COMMON_DEPEND="
 	media-video/ffmpeg
 	sys-libs/zlib
 	virtual/freedesktop-icon-theme
-	x11-libs/cairo
+	virtual/opengl
+	x11-libs/cairo[X]
 	x11-libs/gdk-pixbuf
+	x11-libs/gtk+:3[X]
+	x11-libs/libX11
+	x11-libs/libXcomposite
+	x11-libs/libXdamage
+	x11-libs/libXext
+	x11-libs/libXfixes
+	x11-libs/libXrandr
+	x11-libs/libXtst
+	x11-libs/libxcb:=
+	x11-libs/libxkbcommon[X]
 	x11-libs/pango
 	x11-libs/pixman
 	dbus? (
@@ -123,14 +135,13 @@ COMMON_DEPEND="
 		sys-apps/dbus
 	)
 	jack? ( virtual/jack )
+	libproxy? ( net-libs/libproxy )
 	pulseaudio? (
 		|| (
 			media-libs/libpulse
-			>=media-sound/apulse-0.1.12-r4[sdk]
+			>=media-sound/apulse-0.1.12-r4
 		)
 	)
-	libproxy? ( net-libs/libproxy )
-	selinux? ( sec-policy/selinux-mozilla )
 	sndio? ( >=media-sound/sndio-1.8.0-r1 )
 	system-av1? (
 		>=media-libs/dav1d-1.0.0:=
@@ -140,15 +151,15 @@ COMMON_DEPEND="
 		>=media-gfx/graphite2-1.3.13
 		>=media-libs/harfbuzz-2.8.1:0=
 	)
-	system-icu? ( >=dev-libs/icu-73.1:= )
+	system-icu? ( >=dev-libs/icu-71.1:= )
 	system-jpeg? ( >=media-libs/libjpeg-turbo-1.2.1 )
 	system-libevent? ( >=dev-libs/libevent-2.1.12:0=[threads(+)] )
 	system-libvpx? ( >=media-libs/libvpx-1.8.2:0=[postproc] )
 	system-png? ( >=media-libs/libpng-1.6.35:0=[apng] )
 	system-webp? ( >=media-libs/libwebp-1.1.0:0= )
 	wayland? (
-		>=media-libs/libepoxy-1.5.10-r1
 		x11-libs/gtk+:3[wayland]
+		x11-libs/libdrm
 		x11-libs/libxkbcommon[wayland]
 	)
 	wifi? (
@@ -157,34 +168,16 @@ COMMON_DEPEND="
 			net-misc/networkmanager
 			sys-apps/dbus
 		)
-	)
-	X? (
-		virtual/opengl
-		x11-libs/cairo[X]
-		x11-libs/gtk+:3[X]
-		x11-libs/libX11
-		x11-libs/libXcomposite
-		x11-libs/libXdamage
-		x11-libs/libXext
-		x11-libs/libXfixes
-		x11-libs/libxkbcommon[X]
-		x11-libs/libXrandr
-		x11-libs/libXtst
-		x11-libs/libxcb:=
 	)"
+
 RDEPEND="${COMMON_DEPEND}
-	hwaccel? (
-		media-video/libva-utils
-		sys-apps/pciutils
-	)
 	jack? ( virtual/jack )
 	openh264? ( media-libs/openh264:*[plugin] )"
+
 DEPEND="${COMMON_DEPEND}
-	X? (
-		x11-base/xorg-proto
-		x11-libs/libICE
-		x11-libs/libSM
-	)"
+	x11-base/xorg-proto
+	x11-libs/libICE
+	x11-libs/libSM"
 
 RDEPEND+="
 	net-vpn/tor
@@ -327,7 +320,7 @@ pkg_setup() {
 
 		llvm_pkg_setup
 
-		if use clang && use lto && tc-ld-is-lld ; then
+		if use clang && use lto ; then
 			local version_lld=$(ld.lld --version 2>/dev/null | awk '{ print $2 }')
 			[[ -n ${version_lld} ]] && version_lld=$(ver_cut 1 "${version_lld}")
 			[[ -z ${version_lld} ]] && die "Failed to read ld.lld version!"
@@ -365,14 +358,6 @@ pkg_setup() {
 		addpredict /proc/self/oom_score_adj
 
 		if use pgo ; then
-			# Update 105.0: "/proc/self/oom_score_adj" isn't enough anymore with pgo, but not sure
-			# whether that's due to better OOM handling by Firefox (bmo#1771712), or portage
-			# (PORTAGE_SCHEDULING_POLICY) update...
-			addpredict /proc
-
-			# May need a wider addpredict when using wayland+pgo.
-			addpredict /dev/dri
-
 			# Allow access to GPU during PGO run
 			local ati_cards mesa_cards nvidia_cards render_cards
 			shopt -s nullglob
@@ -419,10 +404,7 @@ src_prepare() {
 	if use lto; then
 		rm -v "${WORKDIR}"/firefox-patches/*-LTO-Only-enable-LTO-*.patch || die
 	fi
-
-	if ! use ppc64; then
-		rm -v "${WORKDIR}"/firefox-patches/*ppc64*.patch || die
-	fi
+	rm "${WORKDIR}"/firefox-patches/0035-bgo-902025-gcc-13-fixes.patch
 
 	eapply "${WORKDIR}/firefox-patches"
 
@@ -456,8 +438,10 @@ src_prepare() {
 		|| die "sed failed to disable ccache stats call"
 
 	einfo "Removing pre-built binaries ..."
-
 	find "${S}"/third_party -type f \( -name '*.so' -o -name '*.o' \) -print -delete || die
+
+	# Clearing crate checksums where we have applied patches
+	moz_clear_vendor_checksums bindgen
 
 	# Create build dir
 	BUILD_DIR="${WORKDIR}/${PN}_build"
@@ -478,21 +462,14 @@ src_configure() {
 	if use clang; then
 		# Force clang
 		einfo "Enforcing the use of clang due to USE=clang ..."
-
-		local version_clang=$(clang --version 2>/dev/null | grep -F -- 'clang version' | awk '{ print $3 }')
-		[[ -n ${version_clang} ]] && version_clang=$(ver_cut 1 "${version_clang}")
-		[[ -z ${version_clang} ]] && die "Failed to read clang version!"
-
 		if tc-is-gcc; then
 			have_switched_compiler=yes
 		fi
-
 		AR=llvm-ar
-		CC=${CHOST}-clang-${version_clang}
-		CXX=${CHOST}-clang++-${version_clang}
+		CC=${CHOST}-clang
+		CXX=${CHOST}-clang++
 		NM=llvm-nm
 		RANLIB=llvm-ranlib
-
 	elif ! use clang && ! tc-is-gcc ; then
 		# Force gcc
 		have_switched_compiler=yes
@@ -510,8 +487,7 @@ src_configure() {
 		strip-unsupported-flags
 	fi
 
-	# Ensure we use correct toolchain,
-	# AS is used in a non-standard way by upstream, #bmo1654031
+	# Ensure we use correct toolchain
 	export HOST_CC="$(tc-getBUILD_CC)"
 	export HOST_CXX="$(tc-getBUILD_CXX)"
 	export AS="$(tc-getCC) -c"
@@ -536,9 +512,10 @@ src_configure() {
 
 	# Initialize MOZCONFIG
 	mozconfig_add_options_ac '' --enable-application=browser
-	mozconfig_add_options_ac '' --enable-project=browser
 
 	# Set Gentoo defaults
+	export MOZILLA_OFFICIAL=1
+
 	mozconfig_add_options_ac 'Gentoo default' \
 		--allow-addon-sideload \
 		--disable-cargo-incremental \
@@ -547,17 +524,13 @@ src_configure() {
 		--disable-install-strip \
 		--disable-parental-controls \
 		--disable-strip \
-		--disable-tests \
 		--disable-updater \
-		--disable-wmf \
-		--enable-legacy-profile-creation \
 		--enable-negotiateauth \
 		--enable-new-pass-manager \
 		--enable-official-branding \
 		--enable-release \
 		--enable-system-ffi \
 		--enable-system-pixman \
-		--enable-system-policies \
 		--host="${CBUILD:-${CHOST}}" \
 		--libdir="${EPREFIX}/usr/$(get_libdir)" \
 		--prefix="${EPREFIX}/usr" \
@@ -578,10 +551,6 @@ src_configure() {
 	local update_channel=release
 	[[ -n ${MOZ_ESR} ]] && update_channel=esr
 	mozconfig_add_options_ac '' --update-channel=${update_channel}
-
-	if ! use x86 && [[ ${CHOST} != armv*h* ]] ; then
-		mozconfig_add_options_ac '' --enable-rust-simd
-	fi
 
 	if [[ -s "${S}/api-mozilla.key" ]] ; then
 		local key_origin="Gentoo default"
@@ -625,10 +594,8 @@ src_configure() {
 
 	mozconfig_use_enable wifi necko-wifi
 
-	if use X && use wayland ; then
+	if use wayland ; then
 		mozconfig_add_options_ac '+x11+wayland' --enable-default-toolkit=cairo-gtk3-x11-wayland
-	elif ! use X && use wayland ; then
-		mozconfig_add_options_ac '+wayland' --enable-default-toolkit=cairo-gtk3-wayland-only
 	else
 		mozconfig_add_options_ac '+x11' --enable-default-toolkit=cairo-gtk3
 	fi
@@ -670,10 +637,7 @@ src_configure() {
 	mozconfig_use_enable debug
 	if use debug ; then
 		mozconfig_add_options_ac '+debug' --disable-optimize
-		mozconfig_add_options_ac '+debug' --enable-real-time-tracing
 	else
-		mozconfig_add_options_ac 'Gentoo defaults' --disable-real-time-tracing
-
 		if is-flag '-g*' ; then
 			if use clang ; then
 				mozconfig_add_options_ac 'from CFLAGS' --enable-debug-symbols=$(get-flag '-g*')
@@ -817,26 +781,19 @@ src_configure() {
 src_compile() {
 	local virtx_cmd=
 
-	if use pgo; then
+	if use pgo ; then
+		virtx_cmd=virtx
+
 		# Reset and cleanup environment variables used by GNOME/XDG
 		gnome2_environment_reset
 
 		addpredict /root
-
-		if ! use X; then
-			virtx_cmd=virtwl
-		else
-			virtx_cmd=virtx
-		fi
 	fi
 
-	if ! use X; then
-		local -x GDK_BACKEND=wayland
-	else
-		local -x GDK_BACKEND=x11
-	fi
+	local -x GDK_BACKEND=x11
 
-	${virtx_cmd} ./mach build --verbose || die
+	${virtx_cmd} ./mach build --verbose \
+		|| die
 }
 
 src_install() {
