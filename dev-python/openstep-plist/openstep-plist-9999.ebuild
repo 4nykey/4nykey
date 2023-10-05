@@ -1,9 +1,10 @@
 # Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 PYTHON_COMPAT=( python3_{10..11} )
+DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_EXT=1
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
@@ -34,7 +35,7 @@ DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
-	<dev-python/cython-3[${PYTHON_USEDEP}]
+	dev-python/cython[${PYTHON_USEDEP}]
 	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 "
 distutils_enable_tests pytest

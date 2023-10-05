@@ -1,9 +1,10 @@
 # Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 PYTHON_COMPAT=( python3_{10..11} )
+DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_EXT=1
 inherit distutils-r1 flag-o-matic
 if [[ -z ${PV%%*9999} ]]; then
@@ -11,7 +12,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/fonttools/${PN}.git"
 	EGIT_SUBMODULES=( )
 else
-	MY_PV="5c4e5ae"
+	MY_PV="815070e"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v$(ver_rs 3 '.post')"
 	SRC_URI="
 		mirror://githubcl/fonttools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -38,13 +39,13 @@ DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
-	<dev-python/cython-3[${PYTHON_USEDEP}]
+	dev-python/cython[${PYTHON_USEDEP}]
 	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 "
 distutils_enable_tests pytest
 
 pkg_setup() {
-	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
+	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV/_p/.post}"
 	export BUILD_SKIA_FROM_SOURCE=0
 	append-cppflags "-I${EROOT}/usr/include/skia"
 }
