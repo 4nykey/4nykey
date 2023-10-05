@@ -56,7 +56,7 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 "
-DOCS=( AUTHORS ChangeLog HACKING NEWS README.md TODO )
+DOCS=( AUTHORS ChangeLog HACKING IMAGE_FORMATS.md NEWS README.md )
 PATCHES=( "${FILESDIR}"/${PN}-reiserfs.diff )
 
 src_prepare() {
