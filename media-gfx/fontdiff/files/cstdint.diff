@@ -1,0 +1,10 @@
+--- a/src/fontdiff/font.h
++++ b/src/fontdiff/font.h
+@@ -20,6 +20,7 @@
+ #include <string>
+ #include <unordered_map>
+ #include <vector>
++#include <cstdint>
+ 
+ #include <ft2build.h>
+ #include FT_GLYPH_H
