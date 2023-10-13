@@ -70,6 +70,9 @@ BDEPEND="
 	python? ( ${PYTHON_DEPS} )
 	test? ( ${RDEPEND} )
 "
+PATCHES=(
+	"${FILESDIR}"/55d58f8.patch
+)
 
 pkg_setup() {
 	:
