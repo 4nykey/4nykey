@@ -18,7 +18,12 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/metabrainz/${PN}.git"
 else
 	MY_PV=$(ver_cut 4)
-	MY_PV="release-$(ver_cut 0-3)${MY_PV:0:1}$(ver_cut 5)"
+	case ${MY_PV} in
+		alpha|beta)
+			MY_PV=${MY_PV:0:1}
+			;;
+	esac
+	MY_PV="release-$(ver_cut 0-3)${MY_PV}$(ver_cut 5)"
 	SRC_URI="
 		mirror://githubcl/metabrainz/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
