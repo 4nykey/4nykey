@@ -3,9 +3,9 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-115esr-patches-06.tar.xz"
+FIREFOX_PATCHSET="firefox-115esr-patches-07.tar.xz"
 
-LLVM_MAX_SLOT=16
+LLVM_MAX_SLOT=17
 
 PYTHON_COMPAT=( python3_{10..11} )
 PYTHON_REQ_USE="ncurses,sqlite,ssl"
@@ -23,7 +23,7 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="115.3.1esr-${MY_PV}-1-build2"
+MY_P="115.4.0esr-${MY_PV}-1-build2"
 MY_P="firefox-tor-browser-${MY_P}"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
@@ -60,6 +60,15 @@ REQUIRED_USE="|| ( X wayland )
 
 BDEPEND="${PYTHON_DEPS}
 	|| (
+		(
+			sys-devel/clang:17
+			sys-devel/llvm:17
+			clang? (
+				sys-devel/lld:17
+				virtual/rust:0/llvm-17
+				pgo? ( =sys-libs/compiler-rt-sanitizers-17*[profile] )
+			)
+		)
 		(
 			sys-devel/clang:16
 			sys-devel/llvm:16
@@ -458,6 +467,10 @@ src_prepare() {
 
 	find "${S}"/third_party -type f \( -name '*.so' -o -name '*.o' \) -print -delete || die
 
+	# Clear cargo checksums from crates we have patched
+	# moz_clear_vendor_checksums crate
+	moz_clear_vendor_checksums audio_thread_priority
+
 	# Create build dir
 	BUILD_DIR="${WORKDIR}/${PN}_build"
 	mkdir -p "${BUILD_DIR}" || die
@@ -731,11 +744,6 @@ src_configure() {
 
 		if [[ -n ${disable_elf_hack} ]] ; then
 			mozconfig_add_options_ac 'elf-hack is broken when using Clang' --disable-elf-hack
-		fi
-	elif tc-is-gcc ; then
-		if ver_test $(gcc-fullversion) -ge 10 ; then
-			einfo "Forcing -fno-tree-loop-vectorize to workaround GCC bug, see bug 758446 ..."
-			append-cxxflags -fno-tree-loop-vectorize
 		fi
 	fi
 
