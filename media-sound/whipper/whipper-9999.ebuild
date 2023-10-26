@@ -1,20 +1,19 @@
 # Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 PYTHON_COMPAT=( python3_{10..11} )
+DISTUTILS_EXT=1
 
 inherit toolchain-funcs distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/whipper-team/${PN}.git"
 else
-	MY_PV="v${PV}"
-	if [[ -z ${PV%%*_p*} ]]; then
-		inherit vcs-snapshot
-		MY_PV="158fab2"
-	fi
+
+	MY_PV="158fab2"
+	[[ -z ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/whipper-team/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -35,8 +34,7 @@ RDEPEND="
 	)
 	app-eselect/eselect-cdparanoia
 	app-cdr/cdrdao
-	dev-python/pygobject:3[${PYTHON_USEDEP}]
-	dev-python/python-musicbrainzngs[${PYTHON_USEDEP}]
+	dev-python/musicbrainzngs[${PYTHON_USEDEP}]
 	media-libs/mutagen[${PYTHON_USEDEP}]
 	dev-python/pycdio[${PYTHON_USEDEP}]
 	dev-python/ruamel-yaml[${PYTHON_USEDEP}]
