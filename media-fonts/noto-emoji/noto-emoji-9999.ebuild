@@ -9,8 +9,8 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}"
 else
-	MY_PV="v${PV}"
-	[[ -z ${PV%%*_p*} ]] && MY_PV="ac1703e"
+	MY_PV="934a570"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	MY_P="${PN}-${MY_PV#v}"
 	SRC_URI="
 		mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV}
@@ -70,6 +70,7 @@ src_compile() {
 	tc-env_build emake \
 		PNGQUANT=/usr/bin/pngquant \
 		PYTHON="${EPYTHON}" \
+		BYPASS_SEQUENCE_CHECK='True' \
 		VIRTUAL_ENV=1
 	rm -f *.tmpl.ttf
 	nanoemoji colrv1/*.toml
