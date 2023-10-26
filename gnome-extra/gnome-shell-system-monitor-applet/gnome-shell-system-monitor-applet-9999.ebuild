@@ -1,7 +1,7 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 PLOCALES="
 ar ca cs de es_ES es_MX fa fi fr it ja pl pt pt_BR ro ru sk uk zh_CN
 "
@@ -9,13 +9,13 @@ ar ca cs de es_ES es_MX fa fi fr it ja pl pt pt_BR ro ru sk uk zh_CN
 inherit gnome2-utils plocale
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/paradoxxxzero/${PN}.git"
+	EGIT_REPO_URI="https://github.com/mgalgs/${PN}.git"
 	SRC_URI=""
 else
-	MY_PV="11d43a8"
+	MY_PV="e881d93"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
-		mirror://githubcl/paradoxxxzero/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/mgalgs/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -23,7 +23,7 @@ else
 fi
 
 DESCRIPTION="An extension for displaying sensors information in GNOME Shell"
-HOMEPAGE="https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet"
+HOMEPAGE="https://github.com/mgalgs/gnome-shell-system-monitor-applet"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -34,7 +34,7 @@ DEPEND="
 "
 RDEPEND="
 	${DEPEND}
-	gnome-base/gnome-shell
+	>=gnome-base/gnome-shell-45
 	gnome-extra/gnome-system-monitor
 	media-libs/clutter[introspection]
 	gnome-base/libgtop[introspection]
@@ -53,7 +53,7 @@ src_prepare() {
 	)
 	sed -e '/UUID)\/README/d' -i Makefile
 	default
-	rm -rf system-monitor@paradoxxx.zero.gmail.com/locale
+	rm -rf system-monitor-next@paradoxxx.zero.gmail.com/locale
 	if use nls; then
 		my_loc() { rm -rf po/${1}; }
 		plocale_for_each_disabled_locale my_loc
