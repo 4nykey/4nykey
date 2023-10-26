@@ -24,7 +24,7 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="
 aalib archive debug dia djvu exif fbcon gif graphicsmagick imagemagick imlib
-jpeg pdf png postscript readline +screen sdl svg tiff truetype xfig
+jpeg jpeg2k pdf png postscript readline +screen sdl svg tiff truetype xfig
 "
 
 DEPEND="
@@ -34,9 +34,10 @@ DEPEND="
 	tiff? ( media-libs/tiff:= )
 	readline? ( sys-libs/readline:0 )
 	jpeg? ( virtual/jpeg )
+	jpeg2k? ( media-libs/jasper:= )
 	postscript? ( app-text/libspectre )
 	djvu? ( app-text/djvu )
-	pdf? ( app-text/poppler[cairo] )
+	pdf? ( app-text/poppler:=[cairo] )
 	png? ( media-libs/libpng:0 )
 	exif? ( media-libs/libexif )
 	aalib? ( media-libs/aalib )
@@ -89,6 +90,7 @@ src_configure() {
 		$(use_enable tiff)
 		$(use_enable readline)
 		$(use_enable jpeg)
+		$(use_enable jpeg2k jasper)
 		$(use_enable postscript ps)
 		$(use_enable djvu)
 		$(use_enable pdf)
