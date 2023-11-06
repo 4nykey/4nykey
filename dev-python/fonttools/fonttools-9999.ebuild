@@ -45,7 +45,7 @@ RDEPEND="
 		>=dev-python/fs-2.4.16[${PYTHON_USEDEP}]
 	)
 	unicode? (
-		>=dev-python/unicodedata2-15[${PYTHON_USEDEP}]
+		>=dev-python/unicodedata2-15.1[${PYTHON_USEDEP}]
 	)
 	qt5? ( dev-python/PyQt5[${PYTHON_USEDEP}] )
 	graphite? ( dev-python/lz4[${PYTHON_USEDEP}] )
