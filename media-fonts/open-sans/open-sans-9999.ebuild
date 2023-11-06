@@ -1,7 +1,7 @@
 # Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 MY_PN="opensans"
 EMAKE_EXTRA_ARGS=( glyphs='sources/OpenSans-Roman.designspace sources/OpenSans-Italic.designspace' )
@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${MY_PN}.git"
 else
-	MY_PV="ebedbda"
+	MY_PV="3d45774"
 	SRC_URI="
 		mirror://githubcl/googlefonts/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -27,6 +27,5 @@ REQUIRED_USE="binary? ( !font_types_otf )"
 
 pkg_setup() {
 	use variable && FONTDIR_BIN=( fonts/variable )
-	use binary || PATCHES=( "${FILESDIR}"/designspace.diff )
 	fontmake_pkg_setup
 }

@@ -1,7 +1,7 @@
 # Copyright 2019-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 FONT_SRCDIR=src
 FONTDIR_BIN=( . )
@@ -11,11 +11,11 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/rsms/${PN}.git"
 	REQUIRED_USE="!binary"
 else
-	MY_PV="1cd1e1a"
+	MY_PV="20f232c"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v$(ver_rs 2 -)"
 	SRC_URI="
 		binary? (
-			https://github.com/rsms/${PN}/releases/download/${MY_PV}/Inter-${MY_PV#v}.zip
+			https://github.com/rsms/inter/releases/download/v4.0-beta9h/Inter-4.0-beta9.zip
 		)
 		!binary? (
 			mirror://githubcl/rsms/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -48,6 +48,4 @@ src_prepare() {
 	fontmake_src_prepare
 	use binary || return
 	use variable || FONT_SUFFIX=ttc
-	use font_types_otf || rm -f Inter.ttc
-	use font_types_ttf || rm -f 'Inter TrueType.ttc'
 }

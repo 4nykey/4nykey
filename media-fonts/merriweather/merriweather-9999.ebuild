@@ -1,15 +1,14 @@
 # Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 MY_PN="${PN^}"
-FONTDIR_BIN=( fonts/ttfs )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/SorkinType/${MY_PN}.git"
 else
-	MY_PV="e50a9c5"
+	MY_PV="7614879"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/SorkinType/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -24,7 +23,11 @@ HOMEPAGE="https://github.com/SorkinType/${MY_PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-REQUIRED_USE="binary? ( !font_types_otf )"
+REQUIRED_USE="
+	binary? (
+		variable? ( !font_types_otf )
+	)
+"
 
 pkg_setup() {
 	use variable && FONTDIR_BIN=( fonts/variable )

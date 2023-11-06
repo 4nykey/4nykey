@@ -1,18 +1,18 @@
 # Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 MY_FONT_TYPES=( otf +ttf )
 FONTDIR_BIN=( fonts/otf fonts/TTF )
 FONT_SRCDIR='source'
+FONTMAKE_EXTRA_ARGS=( '--no-check-compatibility' )
 MY_PN="${PN^}"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/impallari/${MY_PN}"
-	EGIT_REPO_URI="https://github.com/alexeiva/${MY_PN}"
 else
-	MY_PV="2d26d92"
+	MY_PV="7e0be84"
 	SRC_URI="
 		mirror://githubcl/impallari/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
