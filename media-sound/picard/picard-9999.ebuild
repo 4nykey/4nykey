@@ -4,6 +4,7 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{10..11} )
+DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_EXT=1
 PLOCALES="
@@ -49,7 +50,7 @@ RDEPEND="
 		dev-python/python-dateutil[${PYTHON_USEDEP}]
 		dev-python/pyyaml[${PYTHON_USEDEP}]
 		media-libs/mutagen[${PYTHON_USEDEP}]
-		discid? ( dev-python/python-discid[${PYTHON_USEDEP}] )
+		discid? ( dev-python/discid[${PYTHON_USEDEP}] )
 		dev-python/markdown[${PYTHON_USEDEP}]
 		dev-python/pyjwt[${PYTHON_USEDEP}]
 	')
