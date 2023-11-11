@@ -10,9 +10,9 @@ if [[ -z ${PV%%*9999} ]]; then
 	SRC_URI=""
 else
 	MY_PV="d2fc9ef"
-	MY_MP="mp4p-97ab728"
-	MY_LR="ddb_dsp_libretro-b092190"
-	MY_PW="ddb_output_pw-14a3fc6"
+	MY_MP="mp4p-156195c"
+	MY_LR="ddb_dsp_libretro-b4d3db1"
+	MY_PW="ddb_output_pw-0b099d1"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/DeaDBeeF-Player/${PN}/tar.gz/${MY_PV}
@@ -90,7 +90,6 @@ BDEPEND="
 	mac? ( dev-lang/yasm )
 	sys-devel/clang
 "
-PATCHES=( "${FILESDIR}"/adplug.diff )
 
 pkg_setup() {
 	if ! tc-is-clang; then
@@ -114,6 +113,7 @@ src_prepare() {
 	sed \
 		-e "s,#define DEFAULT_TIMIDITY_CONFIG \",&${_t}:," \
 		-i plugins/wildmidi/wildmidiplug.c
+	sed -e 's:Toggle Pause:Toggle-Pause:' -i deadbeef.desktop.in
 	eautopoint --force
 	eautoreconf
 }
