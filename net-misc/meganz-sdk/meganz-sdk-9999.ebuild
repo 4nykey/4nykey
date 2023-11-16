@@ -7,6 +7,7 @@ inherit flag-o-matic qmake-utils autotools
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/${PN%-*}/${PN#*-}.git"
+	SLOT="0/99999"
 else
 	MY_PV="1ef93bb"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
@@ -17,14 +18,13 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64"
 	S="${WORKDIR}/sdk-${MY_PV#v}"
+	SLOT="0/$(( $(ver_cut 1)*10000 + $(ver_cut 2)*100 + $(ver_cut 3) ))"
 fi
 
 DESCRIPTION="MEGA C++ SDK"
 HOMEPAGE="https://github.com/meganz/sdk"
 
 LICENSE="BSD-2"
-# awk '/define/ {print $3}' include/mega/version.h|awk 'BEGIN{RS="";FS="\n"}{printf $1*10000+$2*100+$3}'
-SLOT="0/42803"
 IUSE="examples ffmpeg freeimage fuse inotify libuv mediainfo qt raw +sqlite test"
 REQUIRED_USE="
 	examples? ( sqlite )
