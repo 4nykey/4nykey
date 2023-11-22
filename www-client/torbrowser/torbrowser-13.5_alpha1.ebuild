@@ -36,7 +36,7 @@ MY_NOS="11.4.28"
 MY_NOS="noscript-${MY_NOS}.xpi"
 SRC_URI="
 	mirror://tor/${PN}/${MY_PV}/src-${MY_P}.tar.xz
-	https://secure.informaction.com/download/releases/${MY_NOS}
+	https://noscript.net/download/releases/${MY_NOS}
 	${PATCH_URIS[@]}
 "
 RESTRICT="primaryuri"
