@@ -1,7 +1,7 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -37,8 +37,11 @@ BDEPEND="
 "
 
 src_configure() {
+	local _c='gcc'
+	tc-is-clang && _c='clang'
 	local myconfigargs=(
 		config.cxx="$(tc-getCXX)"
+		config.cxx.id="${_c}"
 		config.cxx.coptions="${CXXFLAGS}"
 		config.cxx.loptions="${LDFLAGS}"
 		config.bin.ar="$(tc-getAR)"
