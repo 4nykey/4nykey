@@ -1,7 +1,7 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -39,16 +39,14 @@ BDEPEND="
 	dev-util/cli
 	doc? ( app-doc/doxygen )
 "
-
-src_prepare() {
-	# collision with xsd of dev-lang/mono
-	sed 's,{xsd}:,{codesynthesis-xsd}:,' -i xsd/doc/buildfile
-	default
-}
+PATCHES=( "${FILESDIR}"/packages.diff )
 
 src_configure() {
+	local _c='gcc'
+	tc-is-clang && _c='clang'
 	local myconfigargs=(
 		config.cxx="$(tc-getCXX)"
+		config.cxx.id="${_c}"
 		config.cxx.coptions="${CXXFLAGS}"
 		config.cxx.loptions="${LDFLAGS}"
 		config.bin.ar="$(tc-getAR)"
@@ -57,6 +55,7 @@ src_configure() {
 		config.install.bin="exec_root/libexec/codesynthesis"
 		config.install.lib="exec_root/$(get_libdir)"
 		config.install.doc="data_root/share/doc/${PF}"
+		config.install.legal="${T}"
 	)
 
 	MAKE=b \
@@ -67,7 +66,7 @@ src_configure() {
 }
 
 src_compile() {
-	tc-is-gcc && export CCACHE_DISABLE=1
+	export CCACHE_DISABLE=1
 	MAKE=b \
 	MAKEOPTS="--jobs $(makeopts_jobs) --verbose 3" \
 	emake libxsd/ xsd/
@@ -83,5 +82,6 @@ src_install() {
 	MAKE=b \
 	MAKEOPTS="--jobs $(makeopts_jobs) --verbose 3" \
 	emake install
-	einstalldocs
+	rm -rf "${ED}"/usr/share/man/man1
+	newman xsd/doc/pregenerated/xsd.1 codesynthesis-xsd.1
 }

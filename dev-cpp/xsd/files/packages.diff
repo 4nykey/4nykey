@@ -1,0 +1,13 @@
+--- a/packages.manifest
++++ b/packages.manifest
+@@ -1,10 +1,4 @@
+ : 1
+ location: libxsd/
+ :
+-location: libxsd-tests/
+-:
+ location: xsd/
+-:
+-location: xsd-tests/
+-:
+-location: xsd-examples/

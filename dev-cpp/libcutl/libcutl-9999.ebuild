@@ -1,7 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -23,7 +23,7 @@ DESCRIPTION="A collection of C++ libraries (successor of libcult)"
 HOMEPAGE="https://www.codesynthesis.com/projects/libcutl/"
 
 LICENSE="MIT"
-SLOT="0/1.11.0-b.9"
+SLOT="0/1.11"
 IUSE="static-libs"
 
 RDEPEND="
@@ -36,8 +36,11 @@ BDEPEND="
 "
 
 src_configure() {
+	local _c='gcc'
+	tc-is-clang && _c='clang'
 	local myconfigargs=(
 		config.cxx="$(tc-getCXX)"
+		config.cxx.id="${_c}"
 		config.cxx.coptions="${CXXFLAGS}"
 		config.cxx.loptions="${LDFLAGS}"
 		config.bin.ar="$(tc-getAR)"
