@@ -6,7 +6,7 @@ EAPI=8
 PLOCALES="
 ca cs de el en_GB es eu fr it ja ko nn pl pt pt_PT ru sv zh
 "
-PYTHON_COMPAT=( python3_{10..11} )
+PYTHON_COMPAT=( python3_{10..12} )
 PYTHON_REQ_USE='threads(+)'
 WAF_BINARY="${S}/waf"
 EGIT_REPO_URI="https://github.com/${PN^}/${PN}.git"
@@ -25,13 +25,14 @@ HOMEPAGE="https://ardour.org/"
 LICENSE="GPL-2"
 SLOT="${PV%%.*}"
 IUSE="
-alsa bindist bundled-libs debug doc jack hid nls pulseaudio phone-home
+alsa bindist bundled-libs dbus debug doc jack hid nls pulseaudio phone-home
 sanitize sse vst websockets
 cpu_flags_x86_avx
 cpu_flags_x86_avx512f
 "
 REQUIRED_USE="
 	|| ( alsa jack pulseaudio )
+	dbus? ( alsa )
 "
 
 RDEPEND="
@@ -42,6 +43,7 @@ RDEPEND="
 	media-libs/fontconfig
 	alsa? ( media-libs/alsa-lib )
 	media-libs/aubio:=
+	dev-libs/libsigc++:2
 	dev-libs/libxml2:2
 	media-libs/libsamplerate
 	media-libs/lv2
@@ -50,6 +52,8 @@ RDEPEND="
 	media-libs/liblrdf
 	net-misc/curl
 	media-libs/libsndfile
+	sys-libs/readline:0=
+	virtual/libusb:1
 	jack? ( virtual/jack )
 	pulseaudio? ( media-libs/libpulse )
 	!bundled-libs? (
@@ -63,6 +67,7 @@ RDEPEND="
 	media-libs/rubberband
 	sys-apps/util-linux
 	websockets? ( net-libs/libwebsockets )
+	dbus? ( sys-apps/dbus )
 "
 DEPEND="
 	${RDEPEND}
@@ -82,9 +87,11 @@ src_prepare() {
 
 	sed -e 's:AudioEditing:X-&:' -i gtk2_ardour/ardour.desktop.in
 	sed -e 's:share/appdata:share/metainfo:' -i gtk2_ardour/wscript
-	sed -e 's:USE_EXTERNAL_LIBS:DONT_USE_EXTERNAL_LIB:' -i libs/qm-dsp/wscript
 	grep -rl '/\<lib\>' | xargs sed -e "s:/\<lib\>:/$(get_libdir):g" -i
 	sed -e "/obj\.target/s:${PN}\.xml:${PN}${SLOT}.xml:" -i gtk2_ardour/wscript
+	# no qm-dsp, libaaf
+	sed -e 's:USE_EXTERNAL_LIBS:DONT_&:' -i libs/qm-dsp/wscript
+	sed -e 's:USE_EXTERNAL_LIBS:DONT_&:' -i {libs/aaf,session_utils}/wscript
 
 	local _c=()
 	use cpu_flags_x86_avx || _c+=( -e '/define_name =/ s:\<FPU_AVX_FMA_SUPPORT\>:NO_&:' )
