@@ -1,4 +1,4 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -18,7 +18,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
-	MY_PV="a539c41"
+	MY_PV="21d8b26"
 	[[ -n ${PV%%*_*} ]] && MY_PV="${PV}"
 	SRC_URI+="
 		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -40,8 +40,7 @@ RDEPEND="
 	>=dev-python/defcon-0.10.3[${PYTHON_USEDEP}]
 	>=dev-python/fontMath-0.9.3[${PYTHON_USEDEP}]
 	dev-python/fontPens[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-4.42.1[ufo(+),unicode(-),woff(-),${PYTHON_USEDEP}]
-	>=dev-util/psautohint-2.4[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.43[ufo(+),unicode(-),woff(-),${PYTHON_USEDEP}]
 	>=dev-python/tqdm-4.66.1[${PYTHON_USEDEP}]
 	>=dev-python/ufoNormalizer-0.6.1[${PYTHON_USEDEP}]
 	>=dev-python/ufoProcessor-1.9[${PYTHON_USEDEP}]
