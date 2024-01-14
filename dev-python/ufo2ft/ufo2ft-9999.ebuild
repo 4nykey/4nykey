@@ -1,4 +1,4 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -30,13 +30,13 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.40[ufo(-),${PYTHON_USEDEP}]
-	>=dev-python/defcon-0.10.2[${PYTHON_USEDEP}]
-	>=dev-python/compreffor-0.5.3[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.47[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/defcon-0.10.3[${PYTHON_USEDEP}]
+	>=dev-python/compreffor-0.5.5[${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 	>=dev-python/cffsubr-0.2.9[${PYTHON_USEDEP}]
-	>=dev-python/skia-pathops-0.7.4[${PYTHON_USEDEP}]
-	>=dev-python/ufoLib2-0.14[${PYTHON_USEDEP}]
+	>=dev-python/skia-pathops-0.8[${PYTHON_USEDEP}]
+	>=dev-python/ufoLib2-0.16[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
