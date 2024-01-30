@@ -1,4 +1,4 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -179,7 +179,7 @@ else
 	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 
-DESCRIPTION="GTK ui for neovim written in rust using gtk-rs bindings"
+DESCRIPTION="GTK UI for neovim written in rust using gtk-rs bindings"
 HOMEPAGE="https://github.com/Lyude/${PN}"
 
 LICENSE="GPL-3"
@@ -193,6 +193,15 @@ RDEPEND="
 	${DEPEND}
 	app-editors/neovim
 "
+
+src_unpack() {
+	if [[ -z ${PV%%*9999} ]]; then
+		git-r3_src_unpack
+		cargo_live_src_unpack
+	else
+		cargo_src_unpack
+	fi
+}
 
 src_install() {
 	cargo_src_install
