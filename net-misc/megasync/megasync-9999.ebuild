@@ -38,6 +38,7 @@ RDEPEND="
 	dev-qt/qtdbus:5
 	dev-qt/qtconcurrent:5
 	dev-qt/qtimageformats:5
+	dev-qt/qtnetwork:5
 	dolphin? ( kde-apps/dolphin )
 	nautilus? ( >=gnome-base/nautilus-3 )
 	thunar? ( xfce-base/thunar )
