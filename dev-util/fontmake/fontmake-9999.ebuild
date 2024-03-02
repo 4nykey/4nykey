@@ -31,20 +31,20 @@ SLOT="0"
 IUSE="json"
 
 RDEPEND="
-	>=dev-python/fonttools-4.47.2[skia(-),ufo(-),unicode(-),${PYTHON_USEDEP}]
-	>=dev-python/glyphsLib-6.6.1[${PYTHON_USEDEP}]
-	>=dev-python/ufo2ft-2.33.4[cffsubr(+),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.48.1[skia(-),ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/glyphsLib-6.6.3[${PYTHON_USEDEP}]
+	>=dev-python/ufo2ft-3.0.1[cffsubr(+),${PYTHON_USEDEP}]
 	>=dev-python/MutatorMath-3.0.1[${PYTHON_USEDEP}]
 	>=dev-python/fontMath-0.9.3[${PYTHON_USEDEP}]
 	>=dev-python/defcon-0.10.2[${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 	dev-python/skia-pathops[${PYTHON_USEDEP}]
 	>=dev-python/ufoLib2-0.16[${PYTHON_USEDEP}]
-	>=dev-python/attrs-23.1[${PYTHON_USEDEP}]
+	>=dev-python/attrs-23.2[${PYTHON_USEDEP}]
 	>=dev-python/ttfautohint-py-0.5.1[${PYTHON_USEDEP}]
 	json? (
-		>=dev-python/cattrs-23.1.2[${PYTHON_USEDEP}]
-		>=dev-python/orjson-3.9.2[${PYTHON_USEDEP}]
+		>=dev-python/cattrs-23.2.3[${PYTHON_USEDEP}]
+		>=dev-python/orjson-3.9.13[${PYTHON_USEDEP}]
 	)
 "
 DEPEND="
