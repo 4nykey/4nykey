@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python3_{10..11} )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/googlei18n/${PN}.git"
+	EGIT_REPO_URI="https://github.com/googlefonts/${PN}.git"
 else
 	MY_PV="2886fa4"
 	if [[ -n ${PV%%*_p*} ]]; then
@@ -15,7 +15,7 @@ else
 		MY_PV="v$(ver_cut 1-3)${MY_PV:0:1}$(ver_cut 5)"
 	fi
 	SRC_URI="
-		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64"
@@ -23,14 +23,14 @@ else
 fi
 
 DESCRIPTION="A bridge from UFOs to FontTool objects"
-HOMEPAGE="https://github.com/googlei18n/${PN}"
+HOMEPAGE="https://github.com/googlefonts/${PN}"
 
 LICENSE="MIT"
 SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.47.2[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.49[ufo(-),${PYTHON_USEDEP}]
 	>=dev-python/defcon-0.10.3[${PYTHON_USEDEP}]
 	>=dev-python/compreffor-0.5.5[${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]

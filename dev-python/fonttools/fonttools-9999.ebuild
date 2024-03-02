@@ -36,7 +36,7 @@ PATCHES=(
 
 # README.rst: Optional Requirements
 RDEPEND="
-	>=dev-python/lxml-4.9.3[${PYTHON_USEDEP}]
+	>=dev-python/lxml-5.1[${PYTHON_USEDEP}]
 	>=app-arch/brotli-1.1[python,${PYTHON_USEDEP}]
 	woff? (
 		>=dev-python/py-zopfli-0.2.3[${PYTHON_USEDEP}]
@@ -50,7 +50,7 @@ RDEPEND="
 	qt5? ( dev-python/PyQt5[${PYTHON_USEDEP}] )
 	graphite? ( dev-python/lz4[${PYTHON_USEDEP}] )
 	plot? ( dev-python/matplotlib[${PYTHON_USEDEP}] )
-	interpolatable? ( >=dev-python/scipy-1.11.3[${PYTHON_USEDEP}] )
+	interpolatable? ( >=dev-python/scipy-1.11.4[${PYTHON_USEDEP}] )
 	reportlab? ( dev-python/reportlab[${PYTHON_USEDEP}] )
 	skia? ( >=dev-python/skia-pathops-0.8[${PYTHON_USEDEP}] )
 	>=dev-python/freetype-py-2.4[${PYTHON_USEDEP}]
@@ -63,7 +63,7 @@ BDEPEND="
 	dev-python/cython[${PYTHON_USEDEP}]
 	test? (
 		>=dev-python/ufoLib2-0.16[${PYTHON_USEDEP}]
-		>=dev-python/glyphsLib-6.4[${PYTHON_USEDEP}]
+		>=dev-python/glyphsLib-6.6[${PYTHON_USEDEP}]
 	)
 "
 distutils_enable_sphinx Doc/source dev-python/sphinx-rtd-theme
