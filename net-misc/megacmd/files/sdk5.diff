@@ -1,0 +1,29 @@
+--- a/src/megacmdexecuter.cpp
++++ b/src/megacmdexecuter.cpp
+@@ -2623,7 +2623,7 @@ int MegaCmdExecuter::actUponLogin(Synchr
+         ConfigurationManager::loadExcludedNames();
+         ConfigurationManager::loadConfiguration(false);
+         std::vector<string> vexcludednames(ConfigurationManager::excludedNames.begin(), ConfigurationManager::excludedNames.end());
+-        api->setExcludedNames(&vexcludednames);
++        api->setLegacyExcludedNames(&vexcludednames);
+ 
+         long long maxspeeddownload = ConfigurationManager::getConfigurationValue("maxspeeddownload", -1);
+         if (maxspeeddownload != -1) api->setMaxDownloadSpeed(maxspeeddownload);
+@@ -7871,7 +7871,7 @@ void MegaCmdExecuter::executecommand(vec
+             if (words.size()>1)
+             {
+                 std::vector<string> vexcludednames(ConfigurationManager::excludedNames.begin(), ConfigurationManager::excludedNames.end());
+-                api->setExcludedNames(&vexcludednames);
++                api->setLegacyExcludedNames(&vexcludednames);
+             }
+             else
+             {
+@@ -7889,7 +7889,7 @@ void MegaCmdExecuter::executecommand(vec
+             if (words.size()>1)
+             {
+                 std::vector<string> vexcludednames(ConfigurationManager::excludedNames.begin(), ConfigurationManager::excludedNames.end());
+-                api->setExcludedNames(&vexcludednames);
++                api->setLegacyExcludedNames(&vexcludednames);
+             }
+             else
+             {
