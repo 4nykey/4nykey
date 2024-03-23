@@ -30,4 +30,7 @@
 			Enable compression support for WOFF 1.0/2.0 webfonts
 		</flag>
 	</use>
+	<upstream>
+		<remote-id type="github">fonttools/fonttools</remote-id>
+	</upstream>
 </pkgmetadata>
