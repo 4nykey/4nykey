@@ -1,1 +1,0 @@
-gnome-shell-extension-openweather-9999.ebuild
