@@ -7,7 +7,7 @@ MY_AN="antlr4-cpp-runtime-4.9.3-source.zip"
 SRC_URI="
 	https://www.antlr.org/download/${MY_AN}
 "
-PYTHON_COMPAT=( python3_{10..11} )
+PYTHON_COMPAT=( python3_{10..12} )
 DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_ARGS=(
 	-DCMAKE_VERBOSE_MAKEFILE=ON

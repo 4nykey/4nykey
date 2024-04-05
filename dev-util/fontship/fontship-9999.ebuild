@@ -1,9 +1,9 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{10..11} )
+PYTHON_COMPAT=( python3_{10..12} )
 inherit autotools python-single-r1 cargo
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -170,7 +170,6 @@ RDEPEND="
 	app-shells/zsh
 	dev-libs/libgit2:=[ssh]
 	dev-vcs/git
-	<sys-devel/make-4.4
 "
 DEPEND="
 	${RDEPEND}
