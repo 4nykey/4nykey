@@ -1,16 +1,17 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-PYTHON_COMPAT=( python3_{10..11} )
+PYTHON_COMPAT=( python3_{10..12} )
+DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/rougier/${PN}.git"
 else
 	MY_PV="v${PV}"
-	[[ -z ${PV%%*_p*} ]] && MY_PV="aeae566"
+	[[ -z ${PV%%*_p*} ]] && MY_PV="f7344d3"
 	SRC_URI="
 		mirror://githubcl/rougier/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
@@ -36,4 +37,8 @@ distutils_enable_tests pytest
 
 pkg_setup() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
+}
+
+python_test() {
+	epytest tests
 }

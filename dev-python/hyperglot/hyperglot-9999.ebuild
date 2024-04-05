@@ -1,9 +1,10 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-PYTHON_COMPAT=( python3_{10..11} )
+PYTHON_COMPAT=( python3_{10..12} )
+DISTUTILS_USE_PEP517=setuptools
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/rosettatype/${PN}.git"
@@ -27,13 +28,11 @@ SLOT="0"
 IUSE=""
 
 DEPEND="
-	$(python_gen_cond_dep '
-		dev-python/fonttools[${PYTHON_USEDEP}]
-		dev-python/click[${PYTHON_USEDEP}]
-		dev-python/pyyaml[${PYTHON_USEDEP}]
-		dev-python/unicodedata2[${PYTHON_USEDEP}]
-		dev-python/colorlog[${PYTHON_USEDEP}]
-	')
+	dev-python/fonttools[${PYTHON_USEDEP}]
+	dev-python/click[${PYTHON_USEDEP}]
+	dev-python/pyyaml[${PYTHON_USEDEP}]
+	dev-python/unicodedata2[${PYTHON_USEDEP}]
+	dev-python/colorlog[${PYTHON_USEDEP}]
 "
 RDEPEND="${DEPEND}"
 distutils_enable_tests pytest

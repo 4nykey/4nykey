@@ -3,7 +3,8 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..11} )
+PYTHON_COMPAT=( python3_{10..12} )
+DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -36,8 +37,6 @@ DEPEND="
 	dev-python/ufo2ft[${PYTHON_USEDEP}]
 	dev-python/py-zopfli[${PYTHON_USEDEP}]
 	dev-python/ninja-python-distributions[${PYTHON_USEDEP}]
-	$(python_gen_cond_dep \
-		'dev-python/importlib_resources[${PYTHON_USEDEP}]' python3_8)
 	media-gfx/pngquant
 	media-libs/resvg
 "
