@@ -1,0 +1,85 @@
+From 30aefd826b56d0517d446426abce1cad9c3e8190 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Anna=20=E2=80=9CCyberTailor=E2=80=9D?= <cyber@sysrq.in>
+Date: Mon, 22 May 2023 15:56:40 +0500
+Subject: [PATCH] Switch from deprecated "toml" library
+
+Fixes #451
+---
+ setup.py                |  2 +-
+ src/nanoemoji/config.py | 27 ++++++++++++++++++++++-----
+ 2 files changed, 23 insertions(+), 6 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 66984bbf..5ac3067d 100644
+--- a/setup.py
++++ b/setup.py
+@@ -45,7 +45,7 @@
+         "picosvg>=0.20.4",
+         "pillow>=7.2.0",
+         "regex>=2020.4.4",
+-        "toml>=0.10.1",
++        "tomlkit",
+         "ufo2ft[cffsubr]>=2.24.0",
+         "ufoLib2>=0.6.2",
+         "resvg-cli>=0.22.0.post3",
+diff --git a/src/nanoemoji/config.py b/src/nanoemoji/config.py
+index 0d18c0d5..a44d22a4 100644
+--- a/src/nanoemoji/config.py
++++ b/src/nanoemoji/config.py
+@@ -20,9 +20,9 @@
+     import importlib_resources as resources  # pytype: disable=import-error
+ 
+ import itertools
++import tomlkit
+ from pathlib import Path
+ from picosvg.svg_transform import Affine2D
+-import toml
+ from typing import Any, Iterable, MutableMapping, NamedTuple, Optional, Tuple, Sequence
+ 
+ from nanoemoji import util
+@@ -247,6 +247,20 @@ def default(self) -> MasterConfig:
+         raise ValueError("Must have a default master")
+ 
+ 
++def toml_strip(data):
++    """
++    Workaround for:
++    https://github.com/sdispater/tomlkit/issues/240
++    """
++    new_data = {}
++    for key, val in data.items():
++        if isinstance(val, dict):
++            val = toml_strip(val)
++        if val is not None:
++            new_data[key] = val
++    return new_data
++
++
+ def write(dest: Path, config: FontConfig):
+     toml_cfg = {
+         "family": config.family,
+@@ -288,7 +302,8 @@ def write(dest: Path, config: FontConfig):
+             for m in config.masters
+         },
+     }
+-    dest.write_text(toml.dumps(toml_cfg))
++    with open(dest, "w") as toml_file:
++        tomlkit.dump(toml_strip(toml_cfg), toml_file)
+ 
+ 
+ def _resolve_config(
+@@ -296,9 +311,11 @@ def _resolve_config(
+ ) -> Tuple[Optional[Path], MutableMapping[str, Any]]:
+     if config_file is None:
+         with resources.path("nanoemoji.data", _DEFAULT_CONFIG_FILE) as config_file:
+-            # no config_dir in this context; bad input if we need it
+-            return None, toml.load(config_file)
+-    return config_file.parent, toml.load(config_file)
++            with open(config_file) as file:
++                # no config_dir in this context; bad input if we need it
++                return None, tomlkit.load(file)
++    with open(config_file) as file:
++        return config_file.parent, tomlkit.load(file)
+ 
+ 
+ def _resolve_src(relative_base: Optional[Path], src: str) -> Iterable[Path]:

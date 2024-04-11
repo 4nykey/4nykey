@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/robotools/${PN}.git"
 else
-	MY_PV="9f6ff05"
+	MY_PV="7c75231"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/robotools/${PN}/tar.gz/${MY_PV}

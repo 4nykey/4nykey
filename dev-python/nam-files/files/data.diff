@@ -1,0 +1,8 @@
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -31,3 +28,5 @@ dev = [
+ 
+ [tool.setuptools.package-dir]
+ gfsubsets = "Lib/gfsubsets"
++[tool.setuptools.package-data]
++gfsubsets = ["data/*.nam"]
