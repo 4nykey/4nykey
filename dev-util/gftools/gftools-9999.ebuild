@@ -30,7 +30,6 @@ HOMEPAGE="https://github.com/googlefonts/${MY_PN}"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE=""
 
 RDEPEND="
 	$(python_gen_cond_dep '
@@ -50,7 +49,7 @@ RDEPEND="
 		dev-python/vttLib[${PYTHON_USEDEP}]
 		dev-python/pygit2[${PYTHON_USEDEP}]
 		dev-python/strictyaml[${PYTHON_USEDEP}]
-		dev-util/fontmake[${PYTHON_USEDEP}]
+		dev-util/fontmake[json,${PYTHON_USEDEP}]
 		dev-python/statmake[${PYTHON_USEDEP}]
 		dev-python/pyyaml[${PYTHON_USEDEP}]
 		dev-python/babelfont[${PYTHON_USEDEP}]
@@ -62,6 +61,10 @@ RDEPEND="
 		dev-python/vharfbuzz[${PYTHON_USEDEP}]
 		dev-python/nanoemoji[${PYTHON_USEDEP}]
 		dev-python/font-v[${PYTHON_USEDEP}]
+		dev-util/afdko[${PYTHON_USEDEP}]
+		dev-python/beautifulsoup4[${PYTHON_USEDEP}]
+		dev-python/nam-files[${PYTHON_USEDEP}]
+		dev-python/networkx[${PYTHON_USEDEP}]
 	')
 "
 DEPEND="
@@ -79,6 +82,10 @@ BDEPEND="
 	)
 "
 PATCHES=( "${FILESDIR}"/setup.diff )
+EPYTEST_DESELECT=(
+	tests/push/test_servers.py
+	tests/test_gfgithub.py
+)
 distutils_enable_tests pytest
 
 pkg_pretend() {
