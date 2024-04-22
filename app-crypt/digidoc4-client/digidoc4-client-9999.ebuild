@@ -1,7 +1,7 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 MY_PN="DigiDoc4-Client"
 if [[ -z ${PV%%*9999} ]]; then
@@ -29,31 +29,44 @@ HOMEPAGE="https://open-eid.github.io"
 
 LICENSE="LGPL-2.1 Nokia-Qt-LGPL-Exception-1.1"
 SLOT="0"
-IUSE="nautilus"
+IUSE="nautilus qt6"
 
 DEPEND="
-	>=dev-libs/libdigidocpp-3.14.8
+	>=dev-libs/libdigidocpp-3.17
 	sys-apps/pcsc-lite
 	net-nds/openldap
 	dev-libs/openssl:=
-	dev-qt/qtwidgets:5
-	dev-qt/qtprintsupport:5
-	dev-qt/qtsvg:5
+	qt6? (
+		dev-qt/qtbase:6=[gui,network,widgets]
+		dev-qt/qt5compat:6=
+		dev-qt/qtsvg:6=
+	)
+	!qt6? (
+		dev-qt/qtwidgets:5=
+		dev-qt/qtprintsupport:5=
+		dev-qt/qtsvg:5=
+		dev-qt/qtnetwork:5=
+	)
 "
 RDEPEND="
 	${DEPEND}
 	dev-libs/opensc[pcsc-lite]
 	nautilus? ( gnome-base/nautilus )
-	!app-crypt/qdigidoc
 "
 DEPEND="
 	${DEPEND}
 "
 BDEPEND="
-	dev-qt/linguist-tools:5
+	qt6? (
+		dev-qt/qttools:6[linguist]
+	)
+	!qt6? (
+		dev-qt/linguist-tools:5
+	)
 	>=dev-util/cmake-openeid-0_p20220810
 "
-DOCS=( {CONTRIBUTING,README,RELEASE-NOTES}.md )
+DOCS=( {README,RELEASE-NOTES}.md )
+PATCHES=( "${FILESDIR}"/optional.diff )
 
 src_prepare() {
 	if [[ -n ${PV%%*9999} ]]; then
@@ -64,6 +77,7 @@ src_prepare() {
 		-e "s:doc/${PN}:doc/${PF}:" \
 		-e "s:\${CMAKE_SOURCE_DIR}/cmake/modules:/usr/share/cmake/openeid:" \
 		-i CMakeLists.txt
+	use qt6 && sed -e '/QT NAMES/s: Qt5::' -i CMakeLists.txt
 	cmake_src_prepare
 }
 
