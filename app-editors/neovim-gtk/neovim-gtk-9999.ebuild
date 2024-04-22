@@ -182,9 +182,8 @@ fi
 DESCRIPTION="GTK UI for neovim written in rust using gtk-rs bindings"
 HOMEPAGE="https://github.com/Lyude/${PN}"
 
-LICENSE="GPL-3"
+LICENSE="GPL-3 MIT BSD LGPL-3"
 SLOT="0"
-IUSE=""
 
 DEPEND="
 	gui-libs/gtk:4
@@ -204,7 +203,7 @@ src_unpack() {
 }
 
 src_install() {
-	cargo_src_install
+	dobin target/$(usex debug debug release)/nvim-gtk
 	emake install-resources DESTDIR="${D}" PREFIX="${EPREFIX}/usr"
 	einstalldocs
 }
