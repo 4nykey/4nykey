@@ -31,7 +31,7 @@ DEPEND="
 "
 RDEPEND="
 	${DEPEND}
-	>=gnome-base/gnome-shell-45_alpha
+	>=gnome-base/gnome-shell-45
 	x11-libs/gdk-pixbuf[introspection]
 	media-libs/clutter[introspection]
 "
