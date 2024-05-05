@@ -23,7 +23,7 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="115.9.0esr-${MY_PV}-1-build2"
+MY_P="115.10.0esr-${MY_PV}-1-build2"
 MY_P="firefox-tor-browser-${MY_P}"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
@@ -489,11 +489,20 @@ src_prepare() {
 		rm -v "${WORKDIR}"/firefox-patches/*ppc64*.patch || die
 	fi
 
+	if use x86 && use elibc_glibc ; then
+		rm -v "${WORKDIR}"/firefox-patches/*-musl-non-lfs64-api-on-audio_thread_priority-crate.patch || die
+	fi
+
 	# Workaround for bgo#917599
 	if has_version ">=dev-libs/icu-74.1" && use system-icu ; then
 		eapply "${WORKDIR}"/firefox-patches/0029-bmo-1862601-system-icu-74.patch
 	fi
 	rm -v "${WORKDIR}"/firefox-patches/0029-bmo-1862601-system-icu-74.patch || die
+
+	# Workaround for bgo#915651 on musl
+	if use elibc_glibc ; then
+		rm -v "${WORKDIR}"/firefox-patches/*bgo-748849-RUST_TARGET_override.patch || die
+	fi
 
 	eapply "${WORKDIR}/firefox-patches"
 
@@ -502,6 +511,17 @@ src_prepare() {
 
 	# Make cargo respect MAKEOPTS
 	export CARGO_BUILD_JOBS="$(makeopts_jobs)"
+
+	# Workaround for bgo#915651
+	if ! use elibc_glibc ; then
+		if use amd64 ; then
+			export RUST_TARGET="x86_64-unknown-linux-musl"
+		elif use x86 ; then
+			export RUST_TARGET="i686-unknown-linux-musl"
+		else
+			die "Unknown musl chost, please post your rustc -vV along with emerge --info on Gentoo's bug #915651"
+		fi
+	fi
 
 	# Make LTO respect MAKEOPTS
 	sed -i \
@@ -1017,7 +1037,7 @@ src_install() {
 
 		newicon -s ${_s} "${_i}" ${PN}.png
 	done
-	newicon -s scalable "${_d}/content/tor-browser-logo.svg" ${PN}.svg
+	newicon -s scalable "${_d}/content/about-logo.svg" ${PN}.svg
 
 	# Install .desktop for menu entry
 	make_desktop_entry ${PN} "Tor Browser" ${PN} "Network;WebBrowser" "StartupWMClass=Torbrowser"
