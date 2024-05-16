@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -11,7 +11,7 @@ if [[ ${PV} == *9999* ]]; then
 else
 	SRC_URI="
 		https://download.savannah.gnu.org/releases/freetype/${P}.tar.gz
-		mirror://sourceforge/freetype/${PN}/${PV}/${P}.tar.gz
+		https://downloads.sourceforge.net/freetype/${PN}/${PV}/${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"

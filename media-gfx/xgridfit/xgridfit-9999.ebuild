@@ -13,7 +13,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	ECVS_SERVER="${PN}.cvs.sourceforge.net:/cvsroot/${PN}"
 	ECVS_MODULE="${PN}"
 else
-	SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
+	SRC_URI="https://downloads.sourceforge.net/${PN}/${P}.tar.gz"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 fi
