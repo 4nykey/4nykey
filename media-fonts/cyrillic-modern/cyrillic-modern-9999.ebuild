@@ -16,8 +16,8 @@ else
 	MY_PV="${PV%_p*}"
 	SRC_URI="
 	binary? (
-		mirror://sourceforge/cyrillic-modern/nm-otf+ttc-${MY_PV}.tar.xz
-		latex? ( mirror://sourceforge/cyrillic-modern/nm-${MY_PV}.tar.xz )
+		https://downloads.sourceforge.net/cyrillic-modern/nm-otf+ttc-${MY_PV}.tar.xz
+		latex? ( https://downloads.sourceforge.net/cyrillic-modern/nm-${MY_PV}.tar.xz )
 	)
 	!binary? (
 		mirror://gcarchive/${PN}/source-archive.zip -> ${P}.zip

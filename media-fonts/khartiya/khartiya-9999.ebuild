@@ -13,15 +13,15 @@ else
 	S="${WORKDIR}"
 	SRC_URI="
 	binary? (
-		font_types_pfb? ( mirror://sourceforge/${PN}/${PN}-pfb-${PV}.tar.xz )
-		font_types_otf? ( mirror://sourceforge/${PN}/${PN}-otf-${PV}.tar.xz )
-		font_types_ttf? ( mirror://sourceforge/${PN}/${PN}-ttf-${PV}.tar.xz )
+		font_types_pfb? ( https://downloads.sourceforge.net/${PN}/${PN}-pfb-${PV}.tar.xz )
+		font_types_otf? ( https://downloads.sourceforge.net/${PN}/${PN}-otf-${PV}.tar.xz )
+		font_types_ttf? ( https://downloads.sourceforge.net/${PN}/${PN}-ttf-${PV}.tar.xz )
 		latex? (
-			mirror://sourceforge/${PN}/${PN}-tex-${PV}.tar.xz
+			https://downloads.sourceforge.net/${PN}/${PN}-tex-${PV}.tar.xz
 		)
 	)
 	!binary? (
-		mirror://sourceforge/${PN}/${PN}-src-${PV}.tar.xz
+		https://downloads.sourceforge.net/${PN}/${PN}-src-${PV}.tar.xz
 	)
 	"
 	KEYWORDS="~amd64 ~x86"

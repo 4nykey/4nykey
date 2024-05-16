@@ -12,11 +12,11 @@ else
 	S="${WORKDIR}"
 	SRC_URI="
 	binary? (
-		mirror://sourceforge/lib-ka/${PN}-ttf-${PV}.tar.xz
-		latex? ( mirror://sourceforge/lib-ka/${PN}-tex-${PV}.tar.xz )
+		https://downloads.sourceforge.net/lib-ka/${PN}-ttf-${PV}.tar.xz
+		latex? ( https://downloads.sourceforge.net/lib-ka/${PN}-tex-${PV}.tar.xz )
 	)
 	!binary? (
-		mirror://sourceforge/lib-ka/${PN}-src-${PV}.tar.xz
+		https://downloads.sourceforge.net/lib-ka/${PN}-src-${PV}.tar.xz
 	)
 	"
 	KEYWORDS="~amd64 ~x86"

@@ -12,11 +12,11 @@ else
 	MY_PV="${PV%_p*}"
 	SRC_URI="
 	binary? (
-		mirror://sourceforge/${PN}/${PN}-ttf-${MY_PV}.tar.xz
-		latex? ( mirror://sourceforge/${PN}/${PN}-tex-${MY_PV}.tar.xz )
+		https://downloads.sourceforge.net/${PN}/${PN}-ttf-${MY_PV}.tar.xz
+		latex? ( https://downloads.sourceforge.net/${PN}/${PN}-tex-${MY_PV}.tar.xz )
 	)
 	!binary? (
-		mirror://sourceforge/${PN}/${PN}-src-${MY_PV}.tar.xz
+		https://downloads.sourceforge.net/${PN}/${PN}-src-${MY_PV}.tar.xz
 	)
 	"
 	RESTRICT="primaryuri"
