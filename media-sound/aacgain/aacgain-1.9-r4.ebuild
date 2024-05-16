@@ -1,4 +1,4 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -11,7 +11,7 @@ else
 	MY_MPG="mp3gain-1.6.2"
 	SRC_URI="
 		mirror://githubcl/mecke/${PN}/tar.gz/v${PV} -> ${P}.tar.gz
-		mirror://sourceforge/${MY_MPG%-*}/${MY_MPG//./_}-src.zip
+		https://downloads.sourceforge.net/${MY_MPG%-*}/${MY_MPG//./_}-src.zip
 	"
 	KEYWORDS="~amd64 ~x86"
 fi
@@ -20,7 +20,7 @@ MY_FAA="faad2-2.7"
 MY_MP4="mp4v2-1.9.1"
 SRC_URI+="
 	mirror://gcarchive/mp4v2/${MY_MP4}.tar.bz2
-	mirror://sourceforge/faac/${MY_FAA}.tar.gz
+	https://downloads.sourceforge.net/faac/${MY_FAA}.tar.gz
 "
 RESTRICT="primaryuri"
 
