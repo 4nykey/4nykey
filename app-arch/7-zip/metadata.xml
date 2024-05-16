@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-  <maintainer type="person">
-    <email>4nykey@gmail.com</email>
-  </maintainer>
-  <use>
-    <flag name="asm">Enable assembly for optimization</flag>
-    <flag name="rar">Enable support for non-free rar decoder</flag>
-  </use>
+	<maintainer type="person">
+		<email>4nykey@gmail.com</email>
+	</maintainer>
+	<use>
+		<flag name="asm">Enable assembly for optimization</flag>
+		<flag name="rar">Enable support for non-free rar decoder</flag>
+	</use>
+	<upstream>
+		<remote-id type="sourceforge">sevenzip</remote-id>
+	</upstream>
 </pkgmetadata>

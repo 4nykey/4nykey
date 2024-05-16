@@ -1,24 +1,25 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-inherit toolchain-funcs
+inherit toolchain-funcs unpacker
 
 DESCRIPTION="A file archiver with a high compression ratio"
 HOMEPAGE="https://7-zip.org"
-SRC_URI="mirror://sourceforge/project/sevenzip/7-Zip/${PV}/7z$(ver_rs 1 '')-src.tar.xz"
-RESTRICT="primaryuri"
+SRC_URI="
+	https://downloads.sourceforge.net/sevenzip/7-Zip/${PV}/7z$(ver_rs 1 '')-src.7z
+"
 S="${WORKDIR}"
+RESTRICT="primaryuri"
 
 LICENSE="LGPL-2.1 BSD rar? ( unRAR )"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE="asm rar static"
 
-RDEPEND=""
-DEPEND="${RDEPEND}"
 BDEPEND="
+	app-arch/p7zip
 	asm? ( dev-lang/asmc )
 "
 
@@ -32,7 +33,7 @@ DOCS=(
 )
 
 src_prepare() {
-	sed -e 's: -\(O2\|s\) ::' -i CPP/7zip/7zip_gcc.mak
+	sed -e 's: -\(O2\|s\)::' -i CPP/7zip/7zip_gcc.mak
 	default
 }
 
