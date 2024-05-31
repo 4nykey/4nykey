@@ -54,7 +54,7 @@ RDEPEND="
 	reportlab? ( dev-python/reportlab[${PYTHON_USEDEP}] )
 	skia? ( >=dev-python/skia-pathops-0.8[${PYTHON_USEDEP}] )
 	>=dev-python/freetype-py-2.4[${PYTHON_USEDEP}]
-	harfbuzz? ( >=dev-python/uharfbuzz-0.37.3[${PYTHON_USEDEP}] )
+	harfbuzz? ( >=dev-python/uharfbuzz-0.39.1[${PYTHON_USEDEP}] )
 "
 DEPEND="
 	${RDEPEND}
@@ -63,8 +63,8 @@ BDEPEND="
 	dev-python/cython[${PYTHON_USEDEP}]
 	test? (
 		>=dev-python/ufoLib2-0.16[${PYTHON_USEDEP}]
-		>=dev-python/ufo2ft-3.1[${PYTHON_USEDEP}]
-		>=dev-python/glyphsLib-6.6.5[${PYTHON_USEDEP}]
+		>=dev-python/ufo2ft-3.2.1[${PYTHON_USEDEP}]
+		>=dev-python/glyphsLib-6.7.1[${PYTHON_USEDEP}]
 	)
 "
 distutils_enable_sphinx Doc/source dev-python/sphinx-rtd-theme

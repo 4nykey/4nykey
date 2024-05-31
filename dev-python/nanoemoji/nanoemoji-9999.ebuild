@@ -10,7 +10,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}.git"
 else
-	MY_PV="daf7239"
+	MY_PV="fbd1a35"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -48,6 +48,7 @@ BDEPEND="
 "
 PATCHES=(
 	"${FILESDIR}"/setup.diff
+	"${FILESDIR}"/a205dfd.patch
 )
 distutils_enable_tests pytest
 
