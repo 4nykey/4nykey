@@ -11,7 +11,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/meganz/${MY_PN}.git"
 	EGIT_SUBMODULES=( )
 else
-	MY_PV="98bb180"
+	MY_PV="48f96ed"
 	SRC_URI="
 		mirror://githubcl/meganz/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -29,7 +29,7 @@ SLOT="0"
 IUSE="pcre"
 
 DEPEND="
-	>=net-misc/meganz-sdk-4.25:=
+	net-misc/meganz-sdk:=
 	pcre? ( dev-libs/libpcre:3[cxx] )
 	sys-libs/readline:0
 "
@@ -37,8 +37,6 @@ RDEPEND="
 	${DEPEND}
 "
 PATCHES=(
-	"${FILESDIR}"/sdk425.diff
-	"${FILESDIR}"/sdk5.diff
 )
 
 src_prepare() {
@@ -50,8 +48,7 @@ src_prepare() {
 		-i Makefile.am configure.ac
 	sed \
 		-e 's:\$(top_builddir)/sdk/src/libmega\.la:$(MEGA_LIBS):' \
-		-e 's:mega_cmd_LDADD = .*:&$(MEGA_LIBS):' \
-		-e 's:^mega_exec_CXXFLAGS.*:&\nmega_exec_LDADD=$(MEGA_LIBS):' \
+		-e 's:mega_\(cmd\|exec\)_LDADD = .*:& $(MEGA_LIBS):' \
 		-e 's:sdk/include/mega/[^ ]\+\.h::g' \
 		-e '/sdk\/src\/[^ ]\+\.cpp/d' \
 		-i src/include.am
