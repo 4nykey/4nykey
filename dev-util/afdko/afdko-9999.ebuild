@@ -50,6 +50,7 @@ DEPEND="
 "
 BDEPEND="
 	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+	dev-python/scikit-build[${PYTHON_USEDEP}]
 "
 DOCS=( {README,NEWS}.md docs )
 PATCHES=( "${FILESDIR}"/setup.diff )
