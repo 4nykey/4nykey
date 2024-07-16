@@ -8,7 +8,7 @@ inherit toolchain-funcs unpacker
 DESCRIPTION="A file archiver with a high compression ratio"
 HOMEPAGE="https://7-zip.org"
 SRC_URI="
-	https://downloads.sourceforge.net/sevenzip/7-Zip/${PV}/7z$(ver_rs 1 '')-src.7z
+	https://downloads.sourceforge.net/sevenzip/7-Zip/${PV}/7z$(ver_rs 1 '')-src.tar.xz
 "
 S="${WORKDIR}"
 RESTRICT="primaryuri"
@@ -19,7 +19,6 @@ KEYWORDS="~amd64"
 IUSE="asm rar static"
 
 BDEPEND="
-	app-arch/p7zip
 	asm? ( dev-lang/asmc )
 "
 
