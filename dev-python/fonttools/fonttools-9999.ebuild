@@ -50,11 +50,11 @@ RDEPEND="
 	qt5? ( dev-python/PyQt5[${PYTHON_USEDEP}] )
 	graphite? ( dev-python/lz4[${PYTHON_USEDEP}] )
 	plot? ( dev-python/matplotlib[${PYTHON_USEDEP}] )
-	interpolatable? ( >=dev-python/scipy-1.12[${PYTHON_USEDEP}] )
+	interpolatable? ( >=dev-python/scipy-1.14[${PYTHON_USEDEP}] )
 	reportlab? ( dev-python/reportlab[${PYTHON_USEDEP}] )
 	skia? ( >=dev-python/skia-pathops-0.8[${PYTHON_USEDEP}] )
 	>=dev-python/freetype-py-2.4[${PYTHON_USEDEP}]
-	harfbuzz? ( >=dev-python/uharfbuzz-0.39.1[${PYTHON_USEDEP}] )
+	harfbuzz? ( >=dev-python/uharfbuzz-0.39.2[${PYTHON_USEDEP}] )
 "
 DEPEND="
 	${RDEPEND}
@@ -63,7 +63,7 @@ BDEPEND="
 	dev-python/cython[${PYTHON_USEDEP}]
 	test? (
 		>=dev-python/ufoLib2-0.16[${PYTHON_USEDEP}]
-		>=dev-python/ufo2ft-3.2.1[${PYTHON_USEDEP}]
+		>=dev-python/ufo2ft-3.2.5[${PYTHON_USEDEP}]
 		>=dev-python/glyphsLib-6.7.1[${PYTHON_USEDEP}]
 	)
 "
