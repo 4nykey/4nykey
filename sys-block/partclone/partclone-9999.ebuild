@@ -37,7 +37,6 @@ RDEPEND="
 	nilfs2? ( sys-fs/nilfs-utils )
 	ntfs? ( sys-fs/ntfs3g:= )
 	reiserfs? ( sys-fs/progsreiserfs )
-	reiser4? ( sys-fs/reiser4progs )
 	xfs? ( sys-apps/util-linux )
 	static? (
 		dev-libs/openssl:*[static-libs]
@@ -50,7 +49,6 @@ RDEPEND="
 		nilfs2? ( sys-fs/nilfs-utils[static-libs] )
 		ntfs? ( sys-fs/ntfs3g[static-libs] )
 		reiserfs? ( sys-fs/progsreiserfs[static-libs] )
-		reiser4? ( sys-fs/reiser4progs[static-libs] )
 	)
 "
 DEPEND="
