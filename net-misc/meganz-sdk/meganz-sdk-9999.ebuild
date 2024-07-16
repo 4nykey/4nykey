@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit flag-o-matic qmake-utils autotools
+inherit cmake flag-o-matic
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/${PN%-*}/${PN#*-}.git"
@@ -25,10 +25,9 @@ DESCRIPTION="MEGA C++ SDK"
 HOMEPAGE="https://github.com/meganz/sdk"
 
 LICENSE="BSD-2"
-IUSE="examples ffmpeg freeimage fuse inotify libuv mediainfo qt raw +sqlite test"
+IUSE="c-ares debug examples ffmpeg freeimage fuse inotify libuv mediainfo qt raw readline +sqlite test"
 REQUIRED_USE="
-	examples? ( sqlite )
-	fuse? ( examples )
+	examples? ( readline sqlite )
 "
 # tests require a working mega.nz account and login details provided via $MEGA_EMAIL and $MEGA_PWD
 RESTRICT+=" test"
@@ -38,73 +37,51 @@ RDEPEND="
 	sys-libs/zlib
 	dev-libs/libpcre:3[cxx]
 	dev-libs/openssl:0
-	net-dns/c-ares
 	net-misc/curl
 	sqlite? ( dev-db/sqlite:3 )
 	examples? (
 		sys-libs/readline:0
-		fuse? ( sys-fs/fuse:0 )
 	)
+	fuse? ( sys-fs/fuse:0 )
 	freeimage? ( media-libs/freeimage )
 	libuv? ( dev-libs/libuv )
 	dev-libs/libsodium
 	mediainfo? ( media-libs/libmediainfo )
 	ffmpeg? ( media-video/ffmpeg )
 	raw? ( media-libs/libraw )
+	c-ares? ( net-dns/c-ares )
+	readline? ( sys-libs/readline )
 "
 DEPEND="
 	${RDEPEND}
 	test? ( dev-cpp/gtest )
 "
-
-src_prepare() {
-	default
-
-	if use qt; then
-		sed \
-		-e "/^MEGASDK_BASE_PATH =/ s:=.*:= ${EPREFIX}/usr/:" \
-		-e 's:VPATH += \$\$MEGASDK_BASE_PATH:&/include/mega:' \
-		-e '/INCLUDEPATH +=/ s:+:-:' \
-		-e '/SOURCES += src\// s:+:-:' \
-		-e '/^unix:!macx {/,/^}/d' \
-		-e '/QMAKE_CXXFLAGS +=/d' \
-		-i bindings/qt/sdk.pri
-	printf 'unix {
-	LIBS += -lmega
-	INCLUDEPATH += $$MEGASDK_BASE_PATH/include/mega \
-	$$MEGASDK_BASE_PATH/include/mega/posix \
-	$$MEGASDK_BASE_PATH/include/mega/bindings/qt
-}' >> bindings/qt/sdk.pri
-	local _b=include/mega/bindings/qt
-	mkdir -p ${_b}
-	cp -a bindings/qt/*.{h,cpp,pri} ${_b}
-	fi
-
-	use test && sed \
-		-e 's:\$(GTEST_DIR)/lib/lib\([^ ]\+\)\.la:-l\1:g' \
-		-e 's: tests/tool_purge_account::' \
-		-i tests/include.am
-
-	eautoreconf
-}
+PATCHES=(
+	"${FILESDIR}"/cmake.diff
+)
 
 src_configure() {
-	local myeconfargs=(
-		$(use_enable inotify)
-		$(use_with libuv)
-		$(use_with sqlite)
-		$(use_enable examples)
-		$(use_enable test tests)
-		$(use_with freeimage)
-		$(use_with fuse)
-		$(use_with mediainfo libmediainfo)
-		$(use_with ffmpeg)
-		$(use_with raw libraw)
+	use debug || append-cppflags '-DNDEBUG'
+	local mycmakeargs=(
+		-DSDKLIB_STANDALONE=yes
+		-DENABLE_LOG_PERFORMANCE=yes
+		-DENABLE_SDKLIB_EXAMPLES=$(usex examples)
+		-DENABLE_SDKLIB_TESTS=$(usex test)
+		-DENABLE_SDKLIB_WERROR=no
+		-DENABLE_QT_BINDINGS=$(usex qt)
+		-DHAVE_LIBRAW=$(usex qt $(usex raw))
+		-DUSE_MEDIAINFO=$(usex mediainfo)
+		-DUSE_FREEIMAGE=$(usex freeimage)
+		-DENABLE_ISOLATED_GFX=$(usex freeimage)
+		-DHAVE_FFMPEG=$(usex ffmpeg)
+		-DUSE_LIBUV=$(usex libuv)
+		-DUSE_PDFIUM=no
+		-DUSE_C_ARES=$(usex c-ares)
+		-DUSE_READLINE=$(usex readline)
+		-DWITH_FUSE=$(usex fuse)
+		-DUSE_SQLITE=$(usex sqlite)
 	)
-	use test && myeconfargs+=(
-		--with-gtest="${EPREFIX}/usr"
-	)
-	econf "${myeconfargs[@]}"
+	cmake_src_configure
 }
 
 src_test() {
@@ -113,11 +90,13 @@ src_test() {
 }
 
 src_install() {
-	default
+	cmake_src_install
+	cp -a include/mega{,api_impl}.h include/mega
 	doheader -r include/mega
-	find "${ED}" -type f -name '*.la' -delete
 	rm -rf "${ED}"/usr/include/mega/{osx,win32,wincurl,wp8}
 
 	insinto /usr/share/mega
 	doins -r m4
+	insinto /usr/share/mega/cmake
+	doins contrib/cmake/modules/*.cmake
 }

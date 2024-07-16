@@ -1,0 +1,263 @@
+--- a/src/configurationmanager.cpp
++++ b/src/configurationmanager.cpp
+@@ -111,7 +111,7 @@ void ConfigurationManager::loadConfigDir()
+         return;
+     }
+ 
+-    auto fsAccess = ::mega::make_unique<MegaFileSystemAccess>();
++    auto fsAccess = ::std::make_unique<MegaFileSystemAccess>();
+     fsAccess->setdefaultfolderpermissions(0700);
+     LocalPath localConfigFolder = LocalPath::fromAbsolutePath(mConfigFolder);
+     constexpr bool isHidden = true;
+@@ -132,7 +132,7 @@ std::string ConfigurationManager::getAndCreateConfigDir()
+         throw std::runtime_error("Could not get config directory path");
+     }
+ 
+-    auto fsAccess = ::mega::make_unique<MegaFileSystemAccess>();
++    auto fsAccess = ::std::make_unique<MegaFileSystemAccess>();
+     fsAccess->setdefaultfolderpermissions(0700);
+     LocalPath localConfigDir = LocalPath::fromAbsolutePath(configDir);
+     if (!pathIsExistingDir(configDir.c_str()) && !fsAccess->mkdirlocal(localConfigDir, false, false))
+@@ -153,7 +153,7 @@ std::string ConfigurationManager::getAndCreateRuntimeDir()
+         throw std::runtime_error("Could not get runtime directory path");
+     }
+ 
+-    auto fsAccess = ::mega::make_unique<MegaFileSystemAccess>();
++    auto fsAccess = ::std::make_unique<MegaFileSystemAccess>();
+     fsAccess->setdefaultfolderpermissions(0700);
+     LocalPath localRuntimeDir = LocalPath::fromAbsolutePath(runtimeDir);
+     if (!pathIsExistingDir(runtimeDir.c_str()) && !fsAccess->mkdirlocal(localRuntimeDir, false, false))
+@@ -287,7 +287,7 @@ void ConfigurationManager::migrateSyncConfig(MegaApi *api)
+ 
+             sync_struct *thesync = ((sync_struct*)( *itr ).second );
+ 
+-            auto newListenerPair = listeners.emplace(thesync, ::make_unique<MegaCmdListener>(api));
++            auto newListenerPair = listeners.emplace(thesync, ::std::make_unique<MegaCmdListener>(api));
+ 
+             api->copySyncDataToCache(thesync->localpath.c_str(), thesync->handle, nullptr,
+                                      thesync->fingerprint, thesync->active, false, newListenerPair.first->second.get());
+--- a/src/megacmd.cpp
++++ b/src/megacmd.cpp
+@@ -4377,7 +4377,7 @@ void megacmd()
+                             s += " and " + getReadableTime(warningsList->get(warningsList->size() - 1),"%b %e %Y");
+                         }
+                         std::unique_ptr<MegaNode> rootNode(api->getRootNode());
+-                        auto listener = ::mega::make_unique<SynchronousRequestListener>();
++                        auto listener = ::std::make_unique<SynchronousRequestListener>();
+                         api->getFolderInfo(rootNode.get(), listener.get());
+                         listener->wait();
+                         auto error = listener->getError();
+--- a/src/megacmd_server_main.cpp
++++ b/src/megacmd_server_main.cpp
+@@ -198,12 +198,12 @@ int main(int argc, char* argv[])
+     std::unique_ptr<megacmd::LoggedStream> loggedStream;
+     if (logToFile)
+     {
+-        loggedStream = ::mega::make_unique<megacmd::LoggedStreamDefaultFile>();
++        loggedStream = ::std::make_unique<megacmd::LoggedStreamDefaultFile>();
+     }
+     else
+     {
+         // log to stdout
+-        loggedStream = ::mega::make_unique<megacmd::LoggedStreamOutStream>(&COUT);
++        loggedStream = ::std::make_unique<megacmd::LoggedStreamOutStream>(&COUT);
+     }
+ 
+     return megacmd::executeServer(argc, argv, std::move(loggedStream),
+--- a/src/megacmdexecuter.cpp
++++ b/src/megacmdexecuter.cpp
+@@ -947,7 +947,7 @@ bool MegaCmdExecuter::decryptLinkIfEncrypted(MegaApi *api, std::string &publicLi
+ 
+         if (linkPass.size())
+         {
+-            std::unique_ptr<MegaCmdListener>megaCmdListener = ::mega::make_unique<MegaCmdListener>(nullptr);
++            std::unique_ptr<MegaCmdListener>megaCmdListener = ::std::make_unique<MegaCmdListener>(nullptr);
+             api->decryptPasswordProtectedLink(publicLink.c_str(), linkPass.c_str(), megaCmdListener.get());
+             megaCmdListener->wait();
+             if (checkNoErrors(megaCmdListener->getError(), "decrypt password protected link"))
+@@ -2709,7 +2709,7 @@ void MegaCmdExecuter::fetchNodes(MegaApi *api, int clientID)
+     if (!api) api = this->api;
+ 
+     sandboxCMD->mNodesCurrentPromise.initiatePromise();
+-    auto megaCmdListener = ::mega::make_unique<MegaCmdListener>(api, nullptr, clientID);
++    auto megaCmdListener = ::std::make_unique<MegaCmdListener>(api, nullptr, clientID);
+     api->fetchNodes(megaCmdListener.get());
+ 
+     if (!actUponFetchNodes(api, megaCmdListener.get()))
+@@ -2754,7 +2754,7 @@ void MegaCmdExecuter::fetchNodes(MegaApi *api, int clientID)
+     if (ConfigurationManager::getConfigurationValue("ask4storage", true))
+     {
+         ConfigurationManager::savePropertyValue("ask4storage",false);
+-        auto megaCmdListener = ::mega::make_unique<MegaCmdListener>(nullptr);
++        auto megaCmdListener = ::std::make_unique<MegaCmdListener>(nullptr);
+         api->getAccountDetails(megaCmdListener.get());
+         megaCmdListener->wait();
+         // we don't call getAccountDetails on startup always: we ask on first login (no "ask4storage") or previous state was STATE_RED | STATE_ORANGE
+@@ -2924,7 +2924,7 @@ void MegaCmdExecuter::cleanSlateTranfers()
+ 
+     if (downloads_cleanslate)
+     {
+-        auto megaCmdListener = ::mega::make_unique<MegaCmdListener>(nullptr);
++        auto megaCmdListener = ::std::make_unique<MegaCmdListener>(nullptr);
+         api->cancelTransfers(MegaTransfer::TYPE_DOWNLOAD, megaCmdListener.get());
+         megaCmdListener->wait();
+         if (checkNoErrors(megaCmdListener->getError(), "cancel all download transfers"))
+@@ -3454,7 +3454,7 @@ bool MegaCmdExecuter::amIPro()
+     }
+ #endif
+ 
+-    auto megaCmdListener = ::mega::make_unique<MegaCmdListener>(api, nullptr);
++    auto megaCmdListener = ::std::make_unique<MegaCmdListener>(api, nullptr);
+     api->getAccountDetails(megaCmdListener.get());
+     megaCmdListener->wait();
+ 
+@@ -3509,7 +3509,7 @@ void MegaCmdExecuter::exportNode(MegaNode *n, int64_t expireTime, std::string pa
+         ConfigurationManager::savePropertyValue("copyrightAccepted", true);
+     }
+ 
+-    auto megaCmdListener = ::mega::make_unique<MegaCmdListener>(api, nullptr);
++    auto megaCmdListener = ::std::make_unique<MegaCmdListener>(api, nullptr);
+     api->exportNode(n, expireTime, writable, megaHosted, megaCmdListener.get());
+     megaCmdListener->wait();
+ 
+@@ -3894,7 +3894,7 @@ long long MegaCmdExecuter::getVersionsSize(MegaNode *n)
+ 
+ void MegaCmdExecuter::getInfoFromFolder(MegaNode *n, MegaApi *api, long long *nfiles, long long *nfolders, long long *nversions)
+ {
+-    std::unique_ptr<MegaCmdListener>megaCmdListener = ::mega::make_unique<MegaCmdListener>(nullptr);
++    std::unique_ptr<MegaCmdListener>megaCmdListener = ::std::make_unique<MegaCmdListener>(nullptr);
+     api->getFolderInfo(n, megaCmdListener.get());
+     *nfiles = 0;
+     *nfolders = 0;
+@@ -4659,7 +4659,7 @@ void MegaCmdExecuter::printBackupHistory(MegaScheduledCopy *backup, const char *
+                 if (backupInstanceNode)
+                 {
+                     backupInstanceStatus = backupInstanceNode->getCustomAttr("BACKST");
+-                    auto listener = ::mega::make_unique<SynchronousRequestListener>();
++                    auto listener = ::std::make_unique<SynchronousRequestListener>();
+                     api->getFolderInfo(backupInstanceNode.get(), listener.get());
+                     listener->wait();
+                     if (checkNoErrors(listener->getError(), "get folder info"))
+@@ -7961,7 +7961,7 @@ void MegaCmdExecuter::executecommand(vector<string> words, map<string, int> *clf
+ 
+             if (stop)
+             {
+-                auto megaCmdListener = ::mega::make_unique<MegaCmdListener>(nullptr);
++                auto megaCmdListener = ::std::make_unique<MegaCmdListener>(nullptr);
+                 api->setSyncRunState(sync.get()->getBackupId(), MegaSync::RUNSTATE_DISABLED , megaCmdListener.get());
+                 megaCmdListener->wait();
+                 if (checkNoErrors(megaCmdListener->getError(), "stop sync", static_cast<SyncError>(megaCmdListener->getRequest()->getNumDetails())))
+@@ -7971,7 +7971,7 @@ void MegaCmdExecuter::executecommand(vector<string> words, map<string, int> *clf
+             }
+             else if (resume)
+             {
+-                auto megaCmdListener = ::mega::make_unique<MegaCmdListener>(nullptr);
++                auto megaCmdListener = ::std::make_unique<MegaCmdListener>(nullptr);
+                 api->setSyncRunState(sync.get()->getBackupId(), MegaSync::RUNSTATE_RUNNING, megaCmdListener.get());
+                 megaCmdListener->wait();
+                 if (checkNoErrors(megaCmdListener->getError(), "enable sync", static_cast<SyncError>(megaCmdListener->getRequest()->getNumDetails())))
+@@ -7981,7 +7981,7 @@ void MegaCmdExecuter::executecommand(vector<string> words, map<string, int> *clf
+             }
+             else if (remove)
+             {
+-                auto megaCmdListener = ::mega::make_unique<MegaCmdListener>(nullptr);
++                auto megaCmdListener = ::std::make_unique<MegaCmdListener>(nullptr);
+                 api->removeSync(sync->getBackupId(), megaCmdListener.get());
+                 megaCmdListener->wait();
+                 if (checkNoErrors(megaCmdListener->getError(), "remove sync", static_cast<SyncError>(megaCmdListener->getRequest()->getNumDetails())))
+@@ -8461,7 +8461,7 @@ void MegaCmdExecuter::executecommand(vector<string> words, map<string, int> *clf
+                 return;
+             }
+ 
+-            auto megaCmdListener = ::mega::make_unique<MegaCmdListener>(nullptr);
++            auto megaCmdListener = ::std::make_unique<MegaCmdListener>(nullptr);
+             if (unverify)
+             {
+                 api->resetCredentials(user.get(), megaCmdListener.get());
+@@ -8517,7 +8517,7 @@ void MegaCmdExecuter::executecommand(vector<string> words, map<string, int> *clf
+                 return;
+             }
+ 
+-            auto megaCmdListener = ::mega::make_unique<MegaCmdListener>(nullptr);
++            auto megaCmdListener = ::std::make_unique<MegaCmdListener>(nullptr);
+             api->getUserCredentials(user.get(), megaCmdListener.get());
+             megaCmdListener->wait();
+             if (!checkNoErrors(megaCmdListener->getError(), "get user credentials"))
+@@ -8613,7 +8613,7 @@ void MegaCmdExecuter::executecommand(vector<string> words, map<string, int> *clf
+                         if (getFlag(clflags,"n")) //Show Names
+                         {
+                             // name:
+-                            auto megaCmdListener = ::mega::make_unique<MegaCmdListener>(nullptr);
++                            auto megaCmdListener = ::std::make_unique<MegaCmdListener>(nullptr);
+                             api->getUserAttribute(user, ATTR_FIRSTNAME, megaCmdListener.get());
+                             megaCmdListener->wait();
+                             if (megaCmdListener->getError()->getErrorCode() == MegaError::API_OK
+@@ -8954,7 +8954,7 @@ void MegaCmdExecuter::executecommand(vector<string> words, map<string, int> *clf
+                 return;
+             }
+ 
+-            auto megaCmdListener = ::mega::make_unique<MegaCmdListener>(nullptr);
++            auto megaCmdListener = ::std::make_unique<MegaCmdListener>(nullptr);
+             if (forceCustom || !isOfficial(attribute))
+             {
+                 const char *cattrValue = removingAttr ? NULL : attrValue.c_str();
+@@ -9475,7 +9475,7 @@ void MegaCmdExecuter::executecommand(vector<string> words, map<string, int> *clf
+                 std::unique_ptr<::mega::MegaAccountDetails> storageDetails;
+                 std::unique_ptr<::mega::MegaAccountDetails> extAccountDetails;
+                 {
+-                    auto megaCmdListener = ::mega::make_unique<MegaCmdListener>(nullptr);
++                    auto megaCmdListener = ::std::make_unique<MegaCmdListener>(nullptr);
+                     api->getAccountDetails(megaCmdListener.get());
+                     megaCmdListener->wait();
+                     if (checkNoErrors(megaCmdListener->getError(), "failed to get account details"))
+@@ -9484,7 +9484,7 @@ void MegaCmdExecuter::executecommand(vector<string> words, map<string, int> *clf
+                     }
+                 }
+                 {
+-                    auto megaCmdListener = ::mega::make_unique<MegaCmdListener>(nullptr);
++                    auto megaCmdListener = ::std::make_unique<MegaCmdListener>(nullptr);
+                     api->getExtendedAccountDetails(true, true, true, megaCmdListener.get());
+                     megaCmdListener->wait();
+                     if (checkNoErrors(megaCmdListener->getError(), "get extended account details"))
+@@ -9995,7 +9995,7 @@ void MegaCmdExecuter::executecommand(vector<string> words, map<string, int> *clf
+     {
+         if (getFlag(clflags, "security"))
+         {
+-            auto megaCmdListener = ::mega::make_unique<MegaCmdListener>(nullptr);
++            auto megaCmdListener = ::std::make_unique<MegaCmdListener>(nullptr);
+             api->upgradeSecurity(megaCmdListener.get());
+             megaCmdListener->wait();
+             if (checkNoErrors(megaCmdListener->getError(), "confirm security upgrade"))
+--- a/src/megacmdlogger.cpp
++++ b/src/megacmdlogger.cpp
+@@ -311,7 +311,7 @@ OUTFSTREAMTYPE streamForDefaultFile()
+     auto dirs = PlatformDirectories::getPlatformSpecificDirectories();
+     path = dirs->configDirPath();
+ 
+-    auto fsAccess = ::mega::make_unique<MegaFileSystemAccess>();
++    auto fsAccess = ::std::make_unique<MegaFileSystemAccess>();
+     fsAccess->setdefaultfolderpermissions(0700);
+     LocalPath localconfigDir = LocalPath::fromAbsolutePath(path);
+     if (!fsAccess->mkdirlocal(localconfigDir, false, false))
+--- a/src/megacmdlogger.h
++++ b/src/megacmdlogger.h
+@@ -85,7 +85,7 @@ public:
+     {
+         if (!mTheStream)
+         {
+-            mTheStream = ::mega::make_unique<LoggedStreamNull>();
++            mTheStream = ::std::make_unique<LoggedStreamNull>();
+         }
+         assert(mTheStream);
+         return *mTheStream.get();
+--- a/tests/integration/main.cpp
++++ b/tests/integration/main.cpp
+@@ -70,7 +70,7 @@ int main (int argc, char *argv[])
+         };
+ 
+         megacmd::executeServer(1, args.data(),
+-                               ::mega::make_unique<megacmd::LoggedStreamDefaultFile>());
++                               ::std::make_unique<megacmd::LoggedStreamDefaultFile>());
+     });
+ 
+     using TI = TestInstruments;

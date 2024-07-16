@@ -29,7 +29,7 @@ SLOT="0"
 IUSE="pcre"
 
 DEPEND="
-	net-misc/meganz-sdk:=
+	>=net-misc/meganz-sdk-7.1.2:=
 	pcre? ( dev-libs/libpcre:3[cxx] )
 	sys-libs/readline:0
 "
@@ -37,13 +37,14 @@ RDEPEND="
 	${DEPEND}
 "
 PATCHES=(
+	"${FILESDIR}"/sdk7.diff
 )
 
 src_prepare() {
 	sed \
 		-e '/SUBDIRS.*sdk/d' \
 		-e '/sdk\/m4/d' \
-		-e 's:LMEGAINC=.*:PKG_CHECK_MODULES([MEGA],[libmega])\nLMEGAINC=${MEGA_CFLAGS}:' \
+		-e 's:LMEGAINC=.*:PKG_CHECK_MODULES([MEGA],[sdklib])\nLMEGAINC=${MEGA_CFLAGS}:' \
 		-e '/AX_CXX_COMPILE_STDCXX/d' \
 		-i Makefile.am configure.ac
 	sed \

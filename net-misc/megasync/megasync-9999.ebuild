@@ -8,9 +8,8 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/meganz/${MY_PN}.git"
 	EGIT_SUBMODULES=( -src/MEGASync/mega )
-	SRC_URI=
 else
-	MY_PV="9937e80"
+	MY_PV="a795610"
 	SRC_URI="
 		mirror://githubcl/meganz/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -19,9 +18,7 @@ else
 	KEYWORDS="~amd64"
 	S="${WORKDIR}/${MY_PN}-${MY_PV}"
 fi
-CMAKE_USE_DIR="${S}/src/MEGAShellExtDolphin"
-CMAKE_IN_SOURCE_BUILD=y
-inherit cmake qmake-utils xdg
+inherit cmake xdg
 
 DESCRIPTION="Easy automated syncing with MEGA Cloud Drive"
 HOMEPAGE="https://github.com/meganz/MEGAsync"
@@ -29,10 +26,10 @@ HOMEPAGE="https://github.com/meganz/MEGAsync"
 LICENSE="EULA"
 LICENSE_URL="https://raw.githubusercontent.com/meganz/MEGAsync/master/LICENCE.md"
 SLOT="0"
-IUSE="dolphin ffmpeg mediainfo nautilus raw thunar"
+IUSE="ffmpeg mediainfo raw"
 
 RDEPEND="
-	>=net-misc/meganz-sdk-5.2.3:=[ffmpeg?,libuv,mediainfo?,qt,raw?,sqlite]
+	>=net-misc/meganz-sdk-7.1.2:=[ffmpeg?,libuv,mediainfo?,qt,raw?,sqlite]
 	dev-qt/qtsvg:5
 	dev-qt/qtx11extras:5
 	dev-qt/qtdbus:5
@@ -40,9 +37,6 @@ RDEPEND="
 	dev-qt/qtimageformats:5
 	dev-qt/qtnetwork:5
 	dev-qt/qtdeclarative:5[widgets]
-	dolphin? ( kde-apps/dolphin )
-	nautilus? ( >=gnome-base/nautilus-3 )
-	thunar? ( xfce-base/thunar )
 "
 DEPEND="
 	${RDEPEND}
@@ -51,48 +45,22 @@ DEPEND="
 BDEPEND="
 	dev-qt/linguist-tools:5
 "
+PATCHES=(
+	"${FILESDIR}"/cmake.diff
+)
+
 src_prepare() {
-	local PATCHES=(
-		"${FILESDIR}"/${PN}-qmake.diff
-	)
-	sed \
-		-e "/include(/ s:mega/bindings/qt/:${EPREFIX}/usr/include/&:" \
-		-i src/MEGASync/MEGASync.pro
+	sed -e \
+		"s:\${CMAKE_CURRENT_LIST_DIR}/src/MEGASync/mega/contrib/cmake/modules:${EPREFIX}/usr/share/mega/cmake:" \
+		-i CMakeLists.txt
 	cmake_src_prepare
-	printf 'CONFIG += link_pkgconfig
-		PKGCONFIG += breakpad-client
-		DEFINES += __STDC_FORMAT_MACROS\n' > \
-		src/MEGASync/google_breakpad/google_breakpad.pri
 }
 
 src_configure() {
-	cd src
-	local eqmakeargs=(
-		CONFIG$(usex nautilus + -)=with_ext
-		CONFIG$(usex thunar + -)=with_thu
-		CONFIG-=with_updater
-		CONFIG-=with_tools
-		MEGASDK_BASE_PATH="${EPREFIX}/usr"
-		CONFIG+=nofreeimage
-		CONFIG-=FULLREQUIREMENTS
-		CONFIG$(usex ffmpeg + -)=USE_FFMPEG
-		CONFIG$(usex raw + -)=USE_LIBRAW
-		CONFIG$(usex mediainfo + -)=USE_MEDIAINFO
+	local mycmakeargs=(
+		-DENABLE_DESKTOP_APP=yes
+		-DENABLE_DESKTOP_UPDATE_GEN=no
+		-DENABLE_DESKTOP_UPDATER=no
 	)
-	eqmake5 "${eqmakeargs[@]}"
-	use dolphin && cmake_src_configure
-}
-
-src_compile() {
-	cd src
-	$(qt5_get_bindir)/lrelease \
-		MEGASync/MEGASync.pro
-	emake
-	use dolphin && cmake_src_compile
-}
-
-src_install() {
-	einstalldocs
-	emake -C src INSTALL_ROOT="${D}" install
-	use dolphin && cmake_src_install
+	cmake_src_configure
 }

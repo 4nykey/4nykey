@@ -5,10 +5,11 @@
 		<email>4nykey@gmail.com</email>
 	</maintainer>
 	<use>
-		<flag name="freeimage">Enable support for image I/O via media-libs/freeimage</flag>
+		<flag name="c-ares">Use <pkg>net-dns/c-ares</pkg> for DNS lookups</flag>
+		<flag name="freeimage">Enable support for image I/O via <pkg>media-libs/freeimage</pkg></flag>
 		<flag name="fuse">Build FUSE-based example client</flag>
-		<flag name="libuv">Support asynchronous I/O via dev-libs/libuv</flag>
-		<flag name="mediainfo">Use media-libs/libmediainfo for media files</flag>
+		<flag name="libuv">Support asynchronous I/O via <pkg>dev-libs/libuv</pkg></flag>
+		<flag name="mediainfo">Use <pkg>media-libs/libmediainfo</pkg> for media files</flag>
 		<flag name="qt">Install QT bindings</flag>
 	</use>
 </pkgmetadata>

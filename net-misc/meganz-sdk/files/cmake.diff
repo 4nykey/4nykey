@@ -1,0 +1,124 @@
+--- a/bindings/qt/CMakeLists.txt
++++ b/bindings/qt/CMakeLists.txt
+@@ -1,14 +1,16 @@
+ add_library(SDKQtBindings)
+ add_library(MEGA::SDKQtBindings ALIAS SDKQtBindings)
+ 
+-target_sources(SDKQtBindings
+-    PRIVATE
++set(SDKLIBQT_HEADERS
+     QTMegaEvent.h
+     QTMegaGlobalListener.h
+     QTMegaListener.h
+     QTMegaRequestListener.h
+     QTMegaTransferListener.h
+-
++)
++target_sources(SDKQtBindings
++    PRIVATE
++    ${SDKLIBQT_HEADERS}
+     QTMegaEvent.cpp
+     QTMegaGlobalListener.cpp
+     QTMegaListener.cpp
+@@ -48,3 +50,5 @@ if(ENABLE_CHATLIB_WERROR)
+                                  -Wno-error=deprecated-declarations> # Kept as a warning, do not promote to error.
+     )
+ endif()
++install(TARGETS SDKQtBindings)
++install(FILES ${SDKLIBQT_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/mega/bindings/qt)
+--- a/contrib/cmake/modules/Config.cmake.in
++++ b/contrib/cmake/modules/Config.cmake.in
+@@ -2,6 +2,9 @@
+ 
+ include(CMakeFindDependencyMacro)
+ 
++find_package(PkgConfig REQUIRED)
++pkg_check_modules(cryptopp REQUIRED IMPORTED_TARGET libcryptopp)
++
+ include(${CMAKE_CURRENT_LIST_DIR}/sdklibTargets.cmake)
+ 
+ check_required_components(SDKlib)
+--- a/contrib/cmake/modules/sdklib_libraries.cmake
++++ b/contrib/cmake/modules/sdklib_libraries.cmake
+@@ -95,7 +95,7 @@ macro(load_sdklib_libraries)
+ 
+         find_package(PkgConfig REQUIRED) # For libraries loaded using pkg-config
+ 
+-        pkg_check_modules(cryptopp REQUIRED IMPORTED_TARGET libcrypto++)
++        pkg_check_modules(cryptopp REQUIRED IMPORTED_TARGET libcryptopp)
+         target_link_libraries(SDKlib PUBLIC PkgConfig::cryptopp) # TODO: Private for SDK core
+ 
+         pkg_check_modules(sodium REQUIRED IMPORTED_TARGET libsodium)
+--- a/contrib/cmake/modules/sdklib_target.cmake
++++ b/contrib/cmake/modules/sdklib_target.cmake
+@@ -280,8 +280,10 @@ target_sources_conditional(SDKlib
+ target_include_directories(SDKlib
+     PUBLIC
+         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> # For the top level projects.
+-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}> # For the external projects.
+-#    PRIVATE # TODO: Private for SDK core
++        $<INSTALL_INTERFACE:include/mega>
++        $<INSTALL_INTERFACE:include/mega/posix>
++        $<$<BOOL:${ENABLE_QT_BINDINGS}>:$<INSTALL_INTERFACE:include/mega/bindings/qt>>
++    PRIVATE # TODO: Private for SDK core
+         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+         $<$<BOOL:${APPLE}>:${CMAKE_CURRENT_SOURCE_DIR}/include/mega/osx>
+         $<$<BOOL:${WIN32}>:${CMAKE_CURRENT_SOURCE_DIR}/include/mega/win32>
+@@ -426,13 +427,13 @@ if(SDKLIB_STANDALONE)
+     install(EXPORT "sdklibTargets"
+         FILE "sdklibTargets.cmake"
+         NAMESPACE MEGA::
+-        DESTINATION cmake
++        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/sdklib"
+         )
+ 
+     # Install config files
+-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/sdklibConfig.cmake DESTINATION cmake)
+-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/sdklib.pc DESTINATION pkgconfig)
+-    install(FILES ${SDKLIB_PUB_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
++    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/sdklibConfig.cmake DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/sdklib")
++    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/sdklib.pc DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
++    install(FILES ${SDKLIB_PUB_HEADERS} ${PROJECT_BINARY_DIR}/mega/config.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/mega)
+ 
+     # Export targets to be used from the build directory.
+     export(EXPORT "sdklibTargets"
+--- a/examples/CMakeLists.txt
++++ b/examples/CMakeLists.txt
+@@ -7,6 +7,10 @@ add_executable(megacli
+ # Link with SDKlib.
+ # megacli does not use the intermediate layer.
+ target_link_libraries(megacli PRIVATE MEGA::SDKlib)
++target_include_directories(megacli PRIVATE
++    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/mega/posix>
++    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
++)
+ 
+ # Adjust compilation flags for warnings and errors
+ target_platform_compile_options(
+@@ -27,6 +28,8 @@ endif()
+ if(APPLE AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS "15.0")
+     target_link_options(megacli PRIVATE LINKER:-no_warn_duplicate_libraries)
+ endif()
++target_link_libraries(megacli PRIVATE ${readline_LIBRARIES})
++install(TARGETS megacli RUNTIME)
+ 
+ if(TARGET gfxworker)
+     add_custom_command(
+--- a/tools/gfxworker/CMakeLists.txt
++++ b/tools/gfxworker/CMakeLists.txt
+@@ -33,6 +33,7 @@ target_include_directories(libgfxworker
+ target_link_libraries(libgfxworker
+     PUBLIC
+     MEGA::SDKlib
++    z
+ )
+ 
+ if (WIN32)
+--- a/contrib/cmake/modules/sdklib.pc.in
++++ b/contrib/cmake/modules/sdklib.pc.in
+@@ -9,4 +9,4 @@ Version: @PROJECT_VERSION@
+ 
+ Requires:
+ Libs: -L${libdir} -l@SDKLIB_NAME@
+-Cflags: -I${includedir}
++Cflags: -I${includedir}/mega -I${includedir}/mega/posix
