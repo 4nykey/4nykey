@@ -37,7 +37,7 @@ RDEPEND="
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 	>=dev-python/cffsubr-0.3[${PYTHON_USEDEP}]
 	>=dev-python/skia-pathops-0.8[${PYTHON_USEDEP}]
-	>=dev-python/fontMath-0.9.3[${PYTHON_USEDEP}]
+	>=dev-python/fontMath-0.9.4[${PYTHON_USEDEP}]
 	>=dev-python/ufoLib2-0.16[${PYTHON_USEDEP}]
 "
 DEPEND="
