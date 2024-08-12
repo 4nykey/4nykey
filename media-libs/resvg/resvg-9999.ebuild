@@ -110,7 +110,8 @@ src_compile() {
 
 src_install() {
 	cargo_src_install --path crates/resvg
-	dolib.so target/$(usex debug debug release)/libresvg.so
+	cargo_src_install --path crates/usvg
+	dolib.so target/$(rust_abi)/$(usex debug debug release)/libresvg.so
 	doheader crates/c-api/*.h
 	use qt5 && dobin viewsvg
 }
