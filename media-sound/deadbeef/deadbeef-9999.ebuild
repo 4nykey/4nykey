@@ -1,4 +1,4 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_SUBMODULES=( external/mp4p )
 	SRC_URI=""
 else
-	MY_PV="d2fc9ef"
+	MY_PV="d4cca56"
 	MY_MP="mp4p-156195c"
 	MY_LR="ddb_dsp_libretro-b4d3db1"
 	MY_PW="ddb_output_pw-0b099d1"
