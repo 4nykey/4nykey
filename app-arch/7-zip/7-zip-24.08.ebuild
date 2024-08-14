@@ -19,7 +19,7 @@ KEYWORDS="~amd64"
 IUSE="asm rar static"
 
 BDEPEND="
-	asm? ( dev-lang/asmc )
+	asm? ( dev-lang/jwasm )
 "
 
 DOCS=(
@@ -32,7 +32,7 @@ DOCS=(
 )
 
 src_prepare() {
-	sed -e 's: -\(O2\|s\)::' -i CPP/7zip/7zip_gcc.mak
+	sed -e 's: -\(O2\|\<s\>\)::' -i CPP/7zip/7zip_gcc.mak
 	default
 }
 
@@ -43,6 +43,7 @@ src_compile() {
 		CFLAGS_WARN_WALL='-Wall -Wextra'
 		IS_X64=1
 		USE_ASM=$(usex asm 1 '')
+		USE_JWASM=$(usex asm 1 '')
 		COMPL_STATIC=$(usex static 1 '')
 		O="${S}"
 		DISABLE_RAR=$(usex rar '' 1)
