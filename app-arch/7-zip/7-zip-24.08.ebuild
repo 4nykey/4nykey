@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit toolchain-funcs unpacker
+inherit toolchain-funcs
 
 DESCRIPTION="A file archiver with a high compression ratio"
 HOMEPAGE="https://7-zip.org"
