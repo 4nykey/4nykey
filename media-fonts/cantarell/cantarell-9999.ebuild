@@ -1,7 +1,7 @@
 # Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 PYTHON_COMPAT=( python3_{10..12} )
 MY_PN="${PN}-fonts"
@@ -34,10 +34,11 @@ BDEPEND="
 			dev-python/ufoLib2[${PYTHON_USEDEP}]
 			variable? ( dev-python/statmake[${PYTHON_USEDEP}] )
 		')
-		autohint? ( dev-util/psautohint )
+		autohint? ( dev-util/afdko )
 	)
 "
 DOCS=( NEWS README.md )
+PATCHES=( "${FILESDIR}"/autohint.diff )
 
 pkg_setup() {
 	font-r1_pkg_setup
