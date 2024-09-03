@@ -24,7 +24,7 @@ HOMEPAGE="https://partclone.org"
 LICENSE="GPL-2"
 SLOT="0"
 IUSE="
-apfs btrfs +e2fs exfat f2fs fat fuse hfs minix ncurses nilfs2 ntfs reiser4
+apfs btrfs +e2fs exfat f2fs fat fuse hfs minix ncurses nilfs2 ntfs
 reiserfs static xfs
 "
 
@@ -82,7 +82,6 @@ src_configure() {
 		$(use_enable nilfs2)
 		$(use_enable ntfs)
 		$(use_enable reiserfs)
-		$(use_enable reiser4)
 		$(use_enable static)
 		$(use_enable xfs)
 	)

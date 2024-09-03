@@ -38,9 +38,6 @@
 		<flag name="ntfs">
 			Include NTFS support
 		</flag>
-		<flag name="reiser4">
-			Include ReiserFS4 support
-		</flag>
 		<flag name="reiserfs">
 			Include ReiserFS support
 		</flag>
