@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>4nykey@gmail.com</email>
+	</maintainer>
+	<use>
+		<flag name="opentype">Support for embedding ttf/otf fonts</flag>
+		<flag name="pillow">Support for embedding images</flag>
+		<flag name="pkcs11">PKCS#11 integration via <pkg>dev-python/python-pkcs11</pkg></flag>
+	</use>
+</pkgmetadata>
