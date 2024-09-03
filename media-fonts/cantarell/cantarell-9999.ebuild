@@ -21,7 +21,7 @@ fi
 inherit python-any-r1 font-r1 meson
 
 DESCRIPTION="Default fontset for GNOME Shell"
-HOMEPAGE="https://wiki.gnome.org/Projects/CantarellFonts"
+HOMEPAGE="https://cantarell.gnome.org"
 
 LICENSE="OFL-1.1"
 SLOT="0"
