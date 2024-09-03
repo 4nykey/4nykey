@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>4nykey@gmail.com</email>
+	</maintainer>
+	<use>
+		<flag name="aafigure">ASCII art figure rendering via <pkg>dev-python/aafigure</pkg></flag>
+		<flag name="html">Rendering of raw HTML via <pkg>dev-python/xhtml2pdf</pkg></flag>
+		<flag name="matplotlib">Add support for <pkg>dev-python/matplotlib</pkg></flag>
+		<flag name="plantuml">Add support for <pkg>media-gfx/plantuml</pkg></flag>
+	</use>
+</pkgmetadata>
