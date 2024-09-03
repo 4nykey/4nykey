@@ -29,13 +29,14 @@ HOMEPAGE="https://github.com/complexlogic/${PN}"
 
 LICENSE="BSD-2"
 SLOT="0"
+IUSE="std_format"
 
 RDEPEND="
 	media-video/ffmpeg:=
 	media-libs/taglib
 	media-libs/libebur128
 	dev-libs/inih
-	dev-libs/libfmt:=
+	!std_format? ( dev-libs/libfmt:= )
 "
 RDEPEND="
 	${DEPEND}
@@ -43,3 +44,23 @@ RDEPEND="
 BDEPEND="
 	virtual/pkgconfig
 "
+
+pkg_pretend() {
+	use std_format || return
+	if [[ $(tc-get-cxx-stdlib) == libc++ ]]; then
+		if ver_test $(clang-version) -lt 18; then
+			die "clang-18 and up is required for std_format"
+		fi
+	else
+		if ver_test $(gcc-version) -lt 14; then
+			die "gcc-14 and up is required for std_format"
+		fi
+	fi
+}
+
+src_configure() {
+	local mycmakeargs=(
+	-DUSE_STD_FORMAT=$(usex std_format)
+	)
+	cmake_src_configure
+}
