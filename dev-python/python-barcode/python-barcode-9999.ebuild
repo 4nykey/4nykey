@@ -27,6 +27,12 @@ HOMEPAGE="https://python-barcode.readthedocs.io"
 LICENSE="MIT"
 SLOT="0"
 
+DEPEND="
+	dev-python/pillow[${PYTHON_USEDEP}]
+"
+RDEPEND="
+	${DEPEND}
+"
 BDEPEND="
 	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 	test? (

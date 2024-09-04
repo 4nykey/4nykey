@@ -9,12 +9,12 @@ DISTUTILS_EXT=1
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/danni/${PN}.git"
+	EGIT_REPO_URI="https://github.com/pyauth/${PN}.git"
 else
 	MY_PV="78694f2"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
-		mirror://githubcl/danni/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/pyauth/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -22,7 +22,7 @@ else
 fi
 
 DESCRIPTION="PKCS#11/Cryptoki support for Python"
-HOMEPAGE="https://github.com/danni/${PN}"
+HOMEPAGE="https://python-pkcs11.readthedocs.io"
 
 LICENSE="MIT"
 SLOT="0"

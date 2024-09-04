@@ -46,7 +46,7 @@ fi
 RESTRICT+=" test"
 
 DESCRIPTION="BiDi layout implementation in pure python"
-HOMEPAGE="https://github.com/MeirKriheli/${PN}"
+HOMEPAGE="https://python-bidi.readthedocs.org"
 
 LICENSE="LGPL-3"
 SLOT="0"

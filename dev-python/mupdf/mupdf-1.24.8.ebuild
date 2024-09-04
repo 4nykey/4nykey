@@ -3,23 +3,19 @@
 
 EAPI=8
 
-# Please check upstream git regularly for relevant security-related commits
-# to backport.
-
 PYTHON_COMPAT=( python3_{10..12} )
 DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_EXT=1
 inherit distutils-r1
 
-DESCRIPTION="A lightweight PDF viewer and toolkit written in portable C"
-HOMEPAGE="https://mupdf.com/ https://git.ghostscript.com/?p=mupdf.git"
+DESCRIPTION="Python bindings for the MuPDF library"
+HOMEPAGE="https://mupdf.com"
 SRC_URI="https://mupdf.com/downloads/archive/${P}-source.tar.gz"
 S="${WORKDIR}/${P}-source"
 
 LICENSE="AGPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
-REQUIRED_USE="( ${PYTHON_REQUIRED_USE} )"
 
 DEPEND="
 	~app-text/mupdf-${PV}
@@ -36,11 +32,6 @@ PATCHES=(
 )
 distutils_enable_tests pytest
 
-python_prepare_all() {
-	python_setup
-	distutils-r1_python_prepare_all
-}
-
 _buildpy() {
 	"${EPYTHON}" ./scripts/mupdfwrap.py \
 		-d "build/shared-release-${EPYTHON}" "${@}" || die
@@ -52,8 +43,7 @@ python_compile() {
 
 src_compile() {
 	# libmupdfcpp
-	"${EPYTHON}" ./scripts/mupdfwrap.py \
-		-d "build/shared-release" -b 01 || die
+	./scripts/mupdfwrap.py -d "build/shared-release" -b 01 || die
 	mv build/shared-release/libmupdfcpp.so{,.${PV}} .
 	# _mupdf.so
 	distutils-r1_src_compile

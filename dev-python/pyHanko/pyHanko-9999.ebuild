@@ -22,7 +22,7 @@ fi
 RESTRICT+=" test"
 
 DESCRIPTION="A Python library to sign and stamp PDF files"
-HOMEPAGE="https://github.com/MatthiasValvekens/${MY_PN}"
+HOMEPAGE="https://pyhanko.readthedocs.io"
 
 LICENSE="MIT"
 SLOT="0"

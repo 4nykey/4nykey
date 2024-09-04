@@ -22,7 +22,7 @@ else
 fi
 
 DESCRIPTION="An ASCII art to image converter"
-HOMEPAGE="https://github.com/${PN}/${PN}"
+HOMEPAGE="https://aafigure.readthedocs.io"
 
 LICENSE="BSD"
 SLOT="0"
