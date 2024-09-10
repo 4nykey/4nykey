@@ -3,7 +3,7 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-128esr-patches-02.tar.xz"
+FIREFOX_PATCHSET="firefox-128esr-patches-03.tar.xz"
 
 LLVM_COMPAT=( 17 18 )
 
@@ -23,7 +23,7 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="128.2.0esr-${MY_PV}-1-build2"
+MY_P="128.2.0esr-${MY_PV}-1-build3"
 MY_P="firefox-tor-browser-${MY_P}"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
@@ -32,7 +32,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 MY_PV="${MY_PV%.0}"
-MY_NOS="11.4.34"
+MY_NOS="11.4.35"
 MY_NOS="noscript-${MY_NOS}.xpi"
 SRC_URI="
 	mirror://tor/${PN}/${MY_PV}/src-${MY_P}.tar.xz
@@ -142,7 +142,10 @@ COMMON_DEPEND="
 	)
 	wifi? (
 		kernel_linux? (
-			net-misc/networkmanager
+			|| (
+				net-misc/networkmanager
+				net-misc/connman[networkmanager]
+			)
 			sys-apps/dbus
 		)
 	)
@@ -276,40 +279,6 @@ mozconfig_use_with() {
 	mozconfig_add_options_ac "$(use ${1} && echo +${1} || echo -${1})" "${flag}"
 }
 
-# This is a straight copypaste from toolchain-funcs.eclass's 'tc-ld-is-lld', and is temporarily
-# placed here until toolchain-funcs.eclass gets an official support for mold linker.
-# Please see:
-# https://github.com/gentoo/gentoo/pull/28366 ||
-# https://github.com/gentoo/gentoo/pull/28355
-tc-ld-is-mold() {
-	local out
-
-	# Ensure ld output is in English.
-	local -x LC_ALL=C
-
-	# First check the linker directly.
-	out=$($(tc-getLD "$@") --version 2>&1)
-	if [[ ${out} == *"mold"* ]] ; then
-		return 0
-	fi
-
-	# Then see if they're selecting mold via compiler flags.
-	# Note: We're assuming they're using LDFLAGS to hold the
-	# options and not CFLAGS/CXXFLAGS.
-	local base="${T}/test-tc-linker"
-	cat <<-EOF > "${base}.c"
-	int main() { return 0; }
-	EOF
-	out=$($(tc-getCC "$@") ${CFLAGS} ${CPPFLAGS} ${LDFLAGS} -Wl,--version "${base}.c" -o "${base}" 2>&1)
-	rm -f "${base}"*
-	if [[ ${out} == *"mold"* ]] ; then
-		return 0
-	fi
-
-	# No mold here!
-	return 1
-}
-
 virtwl() {
 	debug-print-function ${FUNCNAME} "$@"
 
@@ -435,11 +404,6 @@ src_prepare() {
 	if use lto; then
 		rm -v "${WORKDIR}"/firefox-patches/*-LTO-Only-enable-LTO-*.patch || die
 	fi
-	rm \
-		"${WORKDIR}"/firefox-patches/0026-bmo-1898476-nvidia-wayland-egl-sync.patch \
-		"${WORKDIR}"/firefox-patches/0028-bmo-1902227-backport-ffmpeg-av1-vaapi-fixes-for-mesa-24.0.7plus.patch \
-		"${WORKDIR}"/firefox-patches/0029-bmo-1912663-cbindgen-0.27.0-fixes.patch \
-		-f
 
 	# Workaround for bgo#917599
 	if has_version ">=dev-libs/icu-74.1" && use system-icu ; then
