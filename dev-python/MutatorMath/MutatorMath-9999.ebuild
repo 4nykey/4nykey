@@ -27,7 +27,6 @@ HOMEPAGE="https://github.com/LettError/${PN}"
 
 LICENSE="BSD"
 SLOT="0"
-IUSE=""
 
 RDEPEND="
 	>=dev-python/fonttools-3.32[ufo(-),${PYTHON_USEDEP}]
@@ -37,7 +36,7 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 "
-BDEPEND="
-	test? ( dev-python/pytest[${PYTHON_USEDEP}] )
-"
-distutils_enable_tests setup.py
+
+python_test() {
+	"${EPYTHON}" Lib/mutatorMath/test/run.py -v
+}
