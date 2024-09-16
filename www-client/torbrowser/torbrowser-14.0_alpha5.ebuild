@@ -23,7 +23,7 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="128.2.0esr-${MY_PV}-1-build3"
+MY_P="128.2.0esr-${MY_PV}-1-build5"
 MY_P="firefox-tor-browser-${MY_P}"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
@@ -32,24 +32,25 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 MY_PV="${MY_PV%.0}"
-MY_NOS="11.4.35"
+MY_NOS="11.4.37"
 MY_NOS="noscript-${MY_NOS}.xpi"
+
+DESCRIPTION="The Tor Browser"
+HOMEPAGE="https://www.torproject.org"
 SRC_URI="
 	mirror://tor/${PN}/${MY_PV}/src-${MY_P}.tar.xz
 	https://noscript.net/download/releases/${MY_NOS}
 	${PATCH_URIS[@]}
 "
-RESTRICT="primaryuri"
 
-DESCRIPTION="The Tor Browser"
-HOMEPAGE="https://www.torproject.org"
-
-SLOT="0"
+S="${WORKDIR}/${MY_P}"
 LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
 LICENSE+=" BSD CC-BY-3.0"
+SLOT="0"
 IUSE="+clang dbus debug eme-free hardened hwaccel jack +jumbo-build libproxy lto openh264 pgo"
 IUSE+=" pulseaudio selinux sndio +system-av1 +system-harfbuzz +system-icu +system-jpeg"
 IUSE+=" +system-libevent +system-libvpx system-png +system-webp +telemetry wayland wifi +X"
+RESTRICT="primaryuri"
 
 REQUIRED_USE="|| ( X wayland )
 	debug? ( !system-av1 )
@@ -178,8 +179,6 @@ DEPEND="${COMMON_DEPEND}
 RDEPEND+="
 	net-vpn/tor
 "
-
-S="${WORKDIR}/${MY_P}"
 
 llvm_check_deps() {
 	if ! has_version -b "sys-devel/clang:${LLVM_SLOT}" ; then
