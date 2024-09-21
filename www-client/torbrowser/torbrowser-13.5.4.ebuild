@@ -23,7 +23,7 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="115.15.0esr-${MY_PV}-1-build3"
+MY_P="115.15.0esr-${MY_PV}-1-build4"
 MY_P="firefox-tor-browser-${MY_P}"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
@@ -32,7 +32,7 @@ else
 	KEYWORDS="~amd64"
 fi
 MY_PV="${MY_PV%.0}"
-MY_NOS="11.4.35"
+MY_NOS="11.4.37"
 MY_NOS="noscript-${MY_NOS}.xpi"
 SRC_URI="
 	mirror://tor/${PN}/${MY_PV}/src-${MY_P}.tar.xz
