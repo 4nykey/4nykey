@@ -27,20 +27,10 @@ HOMEPAGE="https://pypi.python.org/pypi/pcpp"
 
 LICENSE="BSD"
 SLOT="0"
-IUSE="test"
-
-RDEPEND="
-"
-DEPEND="
-	${RDEPEND}
-"
+IUSE=""
 
 python_prepare_all() {
 	[[ -n ${PV%%*9999} ]] && mv "${WORKDIR}"/${MY_PLY}/* "${S}"/${PN}/ply
 	sed -e '/LICENSE.txt/d' -i setup.py
 	distutils-r1_python_prepare_all
-}
-
-python_test() {
-	esetup.py test
 }

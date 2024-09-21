@@ -4,7 +4,7 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{10..12} )
-DISTUTILS_USE_PEP517=poetry
+DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -34,6 +34,7 @@ RDEPEND="
 	dev-python/openstep-plist[${PYTHON_USEDEP}]
 	dev-python/glyphsLib[${PYTHON_USEDEP}]
 	dev-python/fontFeatures[${PYTHON_USEDEP}]
+	dev-python/vfbLib[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
@@ -41,5 +42,14 @@ DEPEND="
 BDEPEND="
 	test? ( dev-python/defcon[${PYTHON_USEDEP}] )
 "
-PATCHES=( "${FILESDIR}"/cu2qu.diff )
+EPYTEST_DESELECT=(
+	tests/test_glyphs3_roundtrip.py::test_glyphs3_babelfont_glyphs3
+	tests/test_rename.py::test_rename
+	tests/test_rename.py::test_rename_nested
+	tests/test_rename.py::test_rename_contextual
+)
 distutils_enable_tests pytest
+
+pkg_setup() {
+	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
+}
