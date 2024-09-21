@@ -3,28 +3,27 @@
 
 EAPI=8
 
+PYTHON_COMPAT=( python3_{10..12} )
 FONT_SUFFIX=otf
-FONT_S=( static/OTF )
+EGIT_REPO_URI="https://github.com/alerque/${PN}.git"
 if [[ -z ${PV%%*9999} ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/alerque/${PN}.git"
 	REQUIRED_USE="!binary"
 else
-	MY_PV="983ab6c"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
-		!binary? (
-			mirror://githubcl/alerque/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
-		)
 		binary? (
-			https://github.com/alerque/${PN}/releases/download/v${PV%_p*}/${PN^}-${PV%_p*}.tar.xz
+			https://github.com/alerque/${PN}/releases/download/v${PV%_p*}/${PN^}-${PV%_p*}.tar.zst
 		)
 	"
 	RESTRICT="primaryuri"
+	if has binary ${USE}; then
+		S="${WORKDIR}/${PN^}-${PV%_p*}"
+	else
+		EGIT_COMMIT="758651b"
+		[[ -n ${PV%%*_p*} ]] && EGIT_COMMIT="v${PV}"
+	fi
 	KEYWORDS="~amd64"
-	S="${WORKDIR}/${PN^}-${PV%_p*}"
 fi
-inherit font-r1
+inherit git-r3 unpacker python-single-r1 font-r1
 
 DESCRIPTION="A fork of the Linux Libertine and Linux Biolinum fonts"
 HOMEPAGE="https://github.com/alerque/${PN}"
@@ -32,3 +31,37 @@ HOMEPAGE="https://github.com/alerque/${PN}"
 LICENSE="OFL-1.1"
 SLOT="0"
 IUSE="+binary"
+
+BDEPEND="
+	!binary? (
+		${PYTHON_DEPS}
+		dev-util/fontship[${PYTHON_SINGLE_USEDEP}]
+	)
+"
+
+pkg_setup() {
+	if use binary; then
+		FONT_S=( static/OTF )
+	else
+		python-single-r1_pkg_setup
+		DOCS="*.linuxlibertine.txt"
+	fi
+	font-r1_pkg_setup
+}
+
+src_unpack() {
+	if use binary; then
+		unpacker_src_unpack
+	else
+		git-r3_src_unpack
+	fi
+}
+
+src_compile() {
+	use binary && return
+	local _args=(
+		STATICWOFF2=
+		PROJECT="${PN^}"
+	)
+	fontship -v make -- "${_args[@]}" || die
+}
