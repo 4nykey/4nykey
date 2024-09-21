@@ -1,0 +1,52 @@
+--- a/build-aux/que_rust_boilerplate.am
++++ b/build-aux/que_rust_boilerplate.am
+@@ -33,10 +33,10 @@ cargo_verbose_ = $(cargo_verbose_$(AM_DEFAULT_VERBOSITY))
+ cargo_verbose_0 =
+ cargo_verbose_1 = --verbose
+ 
+-$(COMPLETIONS_OUT_DIR):
++$(COMPLETIONS_OUT_DIR): $(_RUST_OUT)
+ 	$(MKDIR_P) $@
+ 
+-$(PACKAGE_NAME).1: $(CARGO_BIN)
++$(PACKAGE_NAME).1: $(_RUST_OUT)
+ 	$(INSTALL) -m644 $$(cat $(_RUST_OUT))/$@ $@
+ 
+ $(COMPLETIONS_OUT_DIR)/$(TRANSFORMED_PACKAGE_NAME): $(CARGO_BIN) | $(COMPLETIONS_OUT_DIR)
+@@ -54,12 +54,13 @@ $(COMPLETIONS_OUT_DIR)/_$(TRANSFORMED_PACKAGE_NAME).ps1: $(CARGO_BIN) | $(COMPLE
+ $(COMPLETIONS_OUT_DIR)/_$(TRANSFORMED_PACKAGE_NAME): $(CARGO_BIN) | $(COMPLETIONS_OUT_DIR)
+ 	$(INSTALL) -m755 $$(cat $(_RUST_OUT))/$(COMPLETIONS_OUT_DIR)/_$(PACKAGE_NAME) $@
+ 
+-$(_RUST_OUT) $(CARGO_BIN): $(@PACKAGE_VAR@_SOURCES) $(EXTRA_@PACKAGE_VAR@_SOURCES)
++$(CARGO_BIN): $(@PACKAGE_VAR@_SOURCES) $(EXTRA_@PACKAGE_VAR@_SOURCES)
+ 	set -e
+ 	export AUTOTOOLS_DEPENDENCIES="$^"
+ 	$(CARGO_ENV) $(CARGO) build $(CARGO_VERBOSE) $(CARGO_FEATURE_ARGS) $(CARGO_RELEASE_ARGS)
+-	$(CARGO_ENV) $(CARGO) build --quiet --message-format=json $(CARGO_FEATURE_ARGS) $(CARGO_RELEASE_ARGS) | \
+-		$(JQ) -sr 'map(select(.reason == "build-script-executed")) | last | .out_dir' > $(_RUST_OUT)
++
++$(_RUST_OUT): $(CARGO_BIN)
++	echo $(dir $(wildcard target/*/build/fontship-*/out/fontship.1)) > $(_RUST_OUT)
+ 
+ RUST_DEVELOPER_TARGETS = cargo-test clippy rustfmt
+ .PHONY: $(RUST_DEVELOPER_TARGETS)
+--- a/build-aux/que_rust_boilerplate.m4
++++ b/build-aux/que_rust_boilerplate.m4
+@@ -13,7 +13,6 @@ AC_DEFUN_ONCE([QUE_RUST_BOILERPLATE], [
+         AC_PROG_INSTALL
+         AC_PROG_SED
+         QUE_PROGVAR([cargo])
+-        QUE_PROGVAR([jq])
+         QUE_PROGVAR([rustc])
+         QUE_PROGVAR([cmp])
+         QUE_PROGVAR([xargs])
+--- a/configure.ac
++++ b/configure.ac
+@@ -17,7 +17,6 @@ AC_PROG_GREP
+ AC_PROG_SED
+ QUE_PROGVAR([cmp])
+ QUE_PROGVAR([find])
+-QUE_PROGVAR([jq])
+ QUE_PROGVAR([sort])
+ QUE_PROGVAR([xargs])
+ 

@@ -1,0 +1,22 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -41,7 +41,7 @@ AM_COND_IF([DEPENDENCY_CHECKS], [
+     QUE_PROGVAR([fontv], [font-v])
+     QUE_PROGVAR([gftools])
+     QUE_PROGVAR([git])
+-    QUE_PROGVAR([psautohint])
++    QUE_PROGVAR([otfautohint])
+     QUE_PROGVAR([sfd2ufo])
+     QUE_PROGVAR([sfdnormalize])
+     QUE_PROGVAR([sfnt2woffzopfli], [sfnt2woff-zopfli])
+--- a/rules/fontship.mk.in
++++ b/rules/fontship.mk.in
+@@ -51,7 +51,7 @@ GFTOOLS ?= @GFTOOLS@
+ FIND ?= @FIND@
+ GIT ?= @GIT@
+ GREP ?= @GREP@
+-PSAUTOHINT ?= @PSAUTOHINT@
++PSAUTOHINT ?= @OTFAUTOHINT@
+ PYTHON ?= @PYTHON@
+ SED ?= @SED@
+ SFDNORMALIZE ?= @SFDNORMALIZE@
