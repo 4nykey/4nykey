@@ -70,6 +70,11 @@ BDEPEND="
 distutils_enable_sphinx Doc/source dev-python/sphinx-rtd-theme
 distutils_enable_tests pytest
 
+python_test() {
+	local -x PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
+	distutils-r1_python_test
+}
+
 pkg_postinst() {
 	optfeature "symbolic font statistics analysis" dev-python/sympy
 }

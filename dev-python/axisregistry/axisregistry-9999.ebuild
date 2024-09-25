@@ -35,13 +35,13 @@ DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
-	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+	dev-libs/protobuf[protoc(+)]
 "
 distutils_enable_tests pytest
-PATCHES=( "${FILESDIR}"/protobuf.diff )
 
 python_prepare_all() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
-	sed -e '/setuptools_scm/ s:,<6.1::' -i setup.py
+	protoc -I ./Lib/${PN} --python_out=./Lib/${PN} \
+		./Lib/${PN}/axes.proto
 	distutils-r1_python_prepare_all
 }

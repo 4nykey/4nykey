@@ -11,15 +11,18 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${MY_PN}.git"
 else
-	MY_PV="6a61e1d"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
-	SRC_URI="
-		mirror://githubcl/googlefonts/${MY_PN}/tar.gz/${MY_PV}
-		-> ${P}.tar.gz
-	"
+	if [[ -z ${PV%%*_p*} ]]; then
+		MY_PV="26f1b69"
+		SRC_URI="
+			mirror://githubcl/googlefonts/${MY_PN}/tar.gz/${MY_PV}
+			-> ${P}.tar.gz
+		"
+		S="${WORKDIR}/${MY_PN}-${MY_PV#v}"
+	else
+		inherit pypi
+	fi
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64"
-	S="${WORKDIR}/${MY_PN}-${MY_PV#v}"
 fi
 
 DESCRIPTION="A Python API to evaluate language support in the Google Fonts collection"
@@ -36,14 +39,13 @@ DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
-	dev-python/setuptools-scm[${PYTHON_USEDEP}]
+	dev-libs/protobuf[protoc(+)]
 	test? (
 		dev-python/uharfbuzz[${PYTHON_USEDEP}]
 		dev-python/youseedee[${PYTHON_USEDEP}]
 	)
 "
 distutils_enable_tests pytest
-PATCHES=( "${FILESDIR}"/protobuf.diff )
 
 pkg_pretend() {
 	use test && has network-sandbox ${FEATURES} && die \
@@ -51,7 +53,8 @@ pkg_pretend() {
 }
 
 python_prepare_all() {
-	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
-	sed -e '/setuptools_scm/ s:,<6.1::' -i setup.py
+	[[ -z ${PV%%*_p*} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
+	protoc -I ./Lib/gflanguages --python_out=./Lib/gflanguages \
+		./Lib/gflanguages/languages_public.proto
 	distutils-r1_python_prepare_all
 }
