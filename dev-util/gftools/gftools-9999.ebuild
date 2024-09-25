@@ -14,11 +14,8 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	MY_PV="40fbad7"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
-	MY_GL="GlyphsInfo-e33ccf3"
 	SRC_URI="
 		mirror://githubcl/googlefonts/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
-		mirror://githubcl/schriftgestalt/${MY_GL%-*}/tar.gz/${MY_GL##*-}
-		-> ${MY_GL}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64"
@@ -71,6 +68,7 @@ DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
+	dev-libs/protobuf[protoc(+)]
 	$(python_gen_cond_dep '
 		dev-python/setuptools-scm[${PYTHON_USEDEP}]
 	')
@@ -95,11 +93,15 @@ pkg_pretend() {
 
 python_prepare_all() {
 	if [[ -n ${PV%%*9999} ]]; then
-		mv "${WORKDIR}"/${MY_GL}/*.xml Lib/${PN}/util/${MY_GL%-*}
 		export SETUPTOOLS_SCM_PRETEND_VERSION="${PV/_p/.post}"
 	fi
 	sed -e '/"gftools-build-font2ttf",/d' -i bin/test_args.py
 	distutils-r1_python_prepare_all
+	cd Lib/${PN}
+	local _p
+	for _p in *.proto; do
+		protoc -I ./ --python_out=./ ./${_p}
+	done
 }
 
 python_test() {
