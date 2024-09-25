@@ -44,10 +44,10 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	${PYTHON_DEPS}
-	$(vala_depend)
 "
 BDEPEND="
+	${PYTHON_DEPS}
+	$(vala_depend)
 	nls? ( sys-devel/gettext )
 "
 
