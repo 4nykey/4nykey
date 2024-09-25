@@ -24,11 +24,14 @@ HOMEPAGE="https://birdfont.org/xmlbird.php"
 
 LICENSE="LGPL-3"
 SLOT="0"
-IUSE=""
 
-RDEPEND=""
+RDEPEND="
+	dev-libs/glib
+"
 DEPEND="
 	${RDEPEND}
+"
+BDEPEND="
 	${PYTHON_DEPS}
 	$(vala_depend)
 "
