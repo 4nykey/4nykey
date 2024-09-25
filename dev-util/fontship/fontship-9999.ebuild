@@ -275,7 +275,7 @@ fi
 DESCRIPTION="A font development toolkit"
 HOMEPAGE="https://github.com/theleagueof/${PN}"
 
-LICENSE="AGPL-3"
+LICENSE="GPL-3"
 SLOT="0"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
