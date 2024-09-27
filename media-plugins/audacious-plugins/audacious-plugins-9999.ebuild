@@ -64,7 +64,6 @@ DEPEND="
 	dev-libs/libxml2:2
 	dev-qt/qtbase:6[gui,opengl,network,widgets]
 	dev-qt/qtmultimedia:6
-	dev-qt/qtwidgets:5
 	~media-sound/audacious-${PV}
 	sys-libs/zlib
 	x11-libs/gdk-pixbuf:2
