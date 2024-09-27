@@ -4,7 +4,7 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{10..12} )
-FONT_SUFFIX=otf
+MY_FONT_TYPES=( +otf ttf )
 EGIT_REPO_URI="https://github.com/alerque/${PN}.git"
 if [[ -z ${PV%%*9999} ]]; then
 	REQUIRED_USE="!binary"
@@ -42,6 +42,7 @@ BDEPEND="
 pkg_setup() {
 	if use binary; then
 		FONT_S=( static/OTF )
+		use font_types_ttf && FONT_S=( static/TTF )
 	else
 		python-single-r1_pkg_setup
 		DOCS="*.linuxlibertine.txt"
@@ -61,6 +62,7 @@ src_compile() {
 	use binary && return
 	local _args=(
 		STATICWOFF2=
+		$(usev font_types_otf STATICTTF=)
 		PROJECT="${PN^}"
 	)
 	fontship -v make -- "${_args[@]}" || die
