@@ -28,8 +28,13 @@ SLOT="0"
 
 RDEPEND="
 	dev-python/requests[${PYTHON_USEDEP}]
+	dev-python/filelock[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
 "
 distutils_enable_tests pytest
+
+pkg_setup() {
+	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
+}

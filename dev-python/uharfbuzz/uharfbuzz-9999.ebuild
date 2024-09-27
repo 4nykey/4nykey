@@ -35,7 +35,6 @@ DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
-	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 	dev-python/cython[${PYTHON_USEDEP}]
 "
 distutils_enable_tests pytest

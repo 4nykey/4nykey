@@ -34,7 +34,6 @@ RDEPEND="
 	${DEPEND}
 "
 BDEPEND="
-	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 	dev-python/cython[${PYTHON_USEDEP}]
 "
 

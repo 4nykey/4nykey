@@ -25,12 +25,12 @@ HOMEPAGE="https://github.com/simoncozens/${PN}"
 
 LICENSE="BSD"
 SLOT="0"
-RESTRICT+=" test"
 
 RDEPEND="
 	dev-python/glyphtools[${PYTHON_USEDEP}]
 	dev-python/fonttools[ufo(-),${PYTHON_USEDEP}]
 	dev-python/beziers[${PYTHON_USEDEP}]
+	dev-python/youseedee[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
@@ -38,4 +38,10 @@ DEPEND="
 BDEPEND="
 	test? ( dev-python/babelfont[${PYTHON_USEDEP}] )
 "
+PATCHES=( "${FILESDIR}"/babelfont-305.diff )
 distutils_enable_tests pytest
+
+pkg_pretend() {
+	use test && has network-sandbox ${FEATURES} && die \
+	"Tests require network access"
+}

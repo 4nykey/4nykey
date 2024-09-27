@@ -36,7 +36,6 @@ DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
-	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 	test? (
 		>=dev-python/ufoNormalizer-0.6.1[${PYTHON_USEDEP}]
 		>=dev-python/ufo2ft-3.0.0_beta1[${PYTHON_USEDEP}]

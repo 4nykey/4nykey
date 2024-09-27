@@ -36,7 +36,6 @@ DEPEND="
 "
 PDEPEND="
 	dev-python/fontPens[${PYTHON_USEDEP}]
-	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 "
 distutils_enable_tests pytest
 

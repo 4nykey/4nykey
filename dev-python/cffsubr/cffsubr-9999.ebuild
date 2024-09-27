@@ -29,9 +29,6 @@ IUSE=""
 RDEPEND="
 	>=dev-util/afdko-3.6.1[${PYTHON_USEDEP}]
 "
-BDEPEND="
-	dev-python/setuptools-scm[${PYTHON_USEDEP}]
-"
 PATCHES=( "${FILESDIR}"/${PN}-system_tx.diff )
 distutils_enable_tests pytest
 

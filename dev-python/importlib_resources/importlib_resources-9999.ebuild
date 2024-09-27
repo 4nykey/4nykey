@@ -33,7 +33,6 @@ DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
-	dev-python/setuptools-scm[${PYTHON_USEDEP}]
 	test? (
 		dev-python/jaraco-test[${PYTHON_USEDEP}]
 	)

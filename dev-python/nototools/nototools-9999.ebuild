@@ -60,9 +60,6 @@ RDEPEND="
 	>=app-i18n/unicode-data-15
 	>=app-i18n/unicode-emoji-15
 "
-BDEPEND="
-	dev-python/setuptools-scm[${PYTHON_USEDEP}]
-"
 distutils_enable_tests pytest
 
 python_prepare_all() {

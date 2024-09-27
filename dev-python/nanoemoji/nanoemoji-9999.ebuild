@@ -43,9 +43,6 @@ DEPEND="
 RDEPEND="
 	${DEPEND}
 "
-BDEPEND="
-	dev-python/setuptools-scm[${PYTHON_USEDEP}]
-"
 PATCHES=(
 	"${FILESDIR}"/setup.diff
 	"${FILESDIR}"/a205dfd.patch

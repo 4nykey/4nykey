@@ -33,9 +33,6 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 "
-BDEPEND="
-	dev-python/setuptools-scm[${PYTHON_USEDEP}]
-"
 PATCHES=( "${FILESDIR}"/data.diff )
 
 python_prepare_all() {
