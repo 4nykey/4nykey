@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/meganz/${MY_PN}.git"
 	EGIT_SUBMODULES=( -src/MEGASync/mega )
 else
-	MY_PV="243d77e"
+	MY_PV="d7b3648"
 	SRC_URI="
 		mirror://githubcl/meganz/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -26,10 +26,10 @@ HOMEPAGE="https://github.com/meganz/MEGAsync"
 LICENSE="EULA"
 LICENSE_URL="https://raw.githubusercontent.com/meganz/MEGAsync/master/LICENCE.md"
 SLOT="0"
-IUSE="dolphin ffmpeg mediainfo raw"
+IUSE="ffmpeg mediainfo raw"
 
 RDEPEND="
-	>=net-misc/meganz-sdk-7.3:=[ffmpeg?,libuv,mediainfo?,qt,raw?,sqlite]
+	>=net-misc/meganz-sdk-7.10.1:=[ffmpeg?,libuv,mediainfo?,qt,raw?,sqlite]
 	dev-qt/qtsvg:5
 	dev-qt/qtx11extras:5
 	dev-qt/qtdbus:5
@@ -37,7 +37,6 @@ RDEPEND="
 	dev-qt/qtimageformats:5
 	dev-qt/qtnetwork:5
 	dev-qt/qtdeclarative:5[widgets]
-	dolphin? ( kde-apps/dolphin:5 )
 "
 DEPEND="
 	${RDEPEND}
@@ -63,7 +62,6 @@ src_configure() {
 		-DENABLE_DESKTOP_APP=yes
 		-DENABLE_DESKTOP_UPDATE_GEN=no
 		-DENABLE_DESKTOP_UPDATER=no
-		-DENABLE_LINUX_EXT=$(usex dolphin)
 	)
 	cmake_src_configure
 }
