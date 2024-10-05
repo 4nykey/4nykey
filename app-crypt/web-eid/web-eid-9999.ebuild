@@ -10,61 +10,72 @@ if [[ ${PV} = *9999* ]]; then
 else
 	MY_PV="80485b8"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v$(ver_rs 3 -)"
-	MY_LEI="libelectronic-id-28a157e"
-	MY_LPC="libpcsc-cpp-fd79af3"
-	MY_LPM="libpcsc-mock-488cb42"
+	MY_LEI="libelectronic-id-7991e0e"
 	SRC_URI="
 		mirror://githubcl/web-eid/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://githubcl/web-eid/${MY_LEI%-*}/tar.gz/${MY_LEI##*-}
 		-> ${MY_LEI}.tar.gz
-		mirror://githubcl/web-eid/${MY_LPC%-*}/tar.gz/${MY_LPC##*-}
-		-> ${MY_LPC}.tar.gz
-		test? (
-			mirror://githubcl/web-eid/${MY_LPM%-*}/tar.gz/${MY_LPM##*-}
-			-> ${MY_LPM}.tar.gz
-		)
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 	S="${WORKDIR}/${MY_PN}-${MY_PV#v}"
 fi
-inherit cmake
+inherit virtualx cmake
 
 DESCRIPTION="Native messaging host for the Web eID browser extension"
 HOMEPAGE="https://web-eid.eu"
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="test"
+IUSE="qt6 test"
 
 RDEPEND="
 	dev-libs/openssl:=
 	sys-apps/pcsc-lite
-	dev-qt/qtsvg:5=
+	!qt6? (
+		dev-qt/qtsvg:5=
+	)
+	qt6? (
+		dev-qt/qtbase:6=[network,test?,widgets]
+		dev-qt/qtsvg:6=
+	)
 "
 DEPEND="
 	${RDEPEND}
 	test? ( dev-cpp/gtest )
+	!qt6? (
+		dev-qt/linguist-tools:5
+	)
+	qt6? (
+		dev-qt/qttools:6[linguist]
+	)
 "
 
 src_prepare() {
 	if [[ -n ${PV%%*9999} ]]; then
 		mv "${WORKDIR}"/${MY_LEI}/* lib/libelectronic-id/
-		mv "${WORKDIR}"/${MY_LPC}/* lib/libelectronic-id/lib/libpcsc-cpp/
-		use test && mv "${WORKDIR}"/${MY_LPM}/* lib/libelectronic-id/lib/libpcsc-cpp/tests/lib/libpcsc-mock/
 	fi
 	use test || sed -e '/enable_testing()/,$d' -i \
 		{lib/libelectronic-id,lib/libelectronic-id/lib/libpcsc-cpp,.}/CMakeLists.txt
+	use qt6 && sed -e 's:Qt6 Qt5:Qt6:' -i CMakeLists.txt
 	cmake_src_prepare
+}
+
+src_configure() {
+	local mycmakeargs=(
+		-DCMAKE_INSTALL_SYSCONFDIR="${EPREFIX}/etc"
+		-DQT_VERSION_MAJOR=$(usex qt6 6 5)
+	)
+	cmake_src_configure
+}
+
+src_test() {
+	virtx cmake_src_test
 }
 
 src_install() {
 	cmake_src_install
 
-	dosym ../../../../usr/share/web-eid/eu.webeid.json \
-		/etc/opt/chrome/native-messaging-hosts/eu.webeid.json
-	dosym ../../../usr/share/web-eid/eu.webeid.json \
-		/etc/chromium/native-messaging-hosts/eu.webeid.json
 	dosym \
 		../../../usr/share/google-chrome/extensions/ncibgoaomkmdpilpocfeponihegamlic.json \
 		/etc/chromium/extensions/ncibgoaomkmdpilpocfeponihegamlic.json
