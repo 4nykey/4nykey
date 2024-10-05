@@ -1,10 +1,11 @@
 # Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 PYTHON_COMPAT=( python3_{10..12} )
-inherit python-any-r1 font-r1
+FONT_S=( fonts )
+inherit toolchain-funcs python-any-r1 font-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}"
@@ -33,22 +34,19 @@ BDEPEND="
 	${PYTHON_DEPS}
 	$(python_gen_any_dep '
 		>=dev-python/nototools-0.2.17[${PYTHON_USEDEP}]
+		>=dev-python/nanoemoji-0.14.3[${PYTHON_USEDEP}]
 	')
-	>=dev-python/nanoemoji-0.14.3
 	virtual/imagemagick-tools[png]
 	app-arch/zopfli
 	x11-libs/cairo
-	>=app-i18n/unicode-emoji-15
+	media-libs/harfbuzz
+	>=app-i18n/unicode-emoji-16
 )
 "
 PATCHES=( "${FILESDIR}"/pyimp.diff )
 
 pkg_setup() {
-	if use binary; then
-		FONT_S=( fonts )
-	else
-		python-any-r1_pkg_setup
-	fi
+	use binary || python-any-r1_pkg_setup
 	font-r1_pkg_setup
 }
 
@@ -56,6 +54,7 @@ src_prepare() {
 	default
 	rm -f fonts/NotoColorEmoji_WindowsCompatible.ttf
 	use binary && return
+	rm -f fonts/*.ttf
 	sed \
 		-e 's:^\t@:\t:' \
 		-e '/\(C\|LD\)FLAGS =/s:=:+=:' \
@@ -66,14 +65,26 @@ src_prepare() {
 
 src_compile() {
 	use binary && return
+
 	addpredict /proc/self/comm
+
+	# full_rebuild.sh
 	tc-env_build emake \
 		PNGQUANT=/usr/bin/pngquant \
 		PYTHON="${EPYTHON}" \
 		BYPASS_SEQUENCE_CHECK='True' \
 		VIRTUAL_ENV=1
-	rm -f *.tmpl.ttf
-	nanoemoji colrv1/*.toml
-	cp build/NotoColorEmoji.ttf Noto-COLRv1.ttf
-	cp build/NotoColorEmoji-noflags.ttf Noto-COLRv1-noflags.ttf
+	mv NotoColorEmoji.ttf fonts
+	${EPYTHON} ./drop_flags.py fonts/NotoColorEmoji.ttf || die
+	hb-subset \
+		--unicodes-file=flags-only-unicodes.txt \
+		--output-file=fonts/NotoColorEmoji-flagsonly.ttf \
+		fonts/NotoColorEmoji.ttf || die
+	${EPYTHON} ./update_flag_name.py || die
+
+	${EPYTHON} ./colrv1_generate_configs.py || die
+	nanoemoji colrv1/*.toml || die
+	mv build/NotoColorEmoji.ttf fonts/Noto-COLRv1.ttf
+	mv build/NotoColorEmoji-noflags.ttf fonts/Noto-COLRv1-noflags.ttf
+	${EPYTHON} ./colrv1_postproc.py || die
 }
