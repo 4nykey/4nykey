@@ -11,12 +11,10 @@ else
 	MY_PV="${PV^^}"
 	MY_PV="v${MY_PV/_/-}"
 	[[ -z ${PV%%*_p*} ]] && MY_PV="a4da0d3"
-	MY_QC="qt-common-2842d66"
-	MY_EX="digidoc-extensions-d428a88"
+	MY_QC="qt-common-8e4034f"
 	SRC_URI="${SRC_URI}
 		mirror://githubcl/open-eid/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://githubcl/open-eid/${MY_QC%-*}/tar.gz/${MY_QC##*-} -> ${MY_QC}.tar.gz
-		mirror://githubcl/open-eid/${MY_EX%-*}/tar.gz/${MY_EX##*-} -> ${MY_EX}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -32,7 +30,7 @@ SLOT="0"
 IUSE="nautilus qt6"
 
 DEPEND="
-	>=dev-libs/libdigidocpp-3.17
+	>=dev-libs/libdigidocpp-4
 	sys-apps/pcsc-lite
 	net-nds/openldap
 	dev-libs/openssl:=
@@ -53,9 +51,6 @@ RDEPEND="
 	dev-libs/opensc[pcsc-lite]
 	nautilus? ( gnome-base/nautilus )
 "
-DEPEND="
-	${DEPEND}
-"
 BDEPEND="
 	qt6? (
 		dev-qt/qttools:6[linguist]
@@ -63,15 +58,13 @@ BDEPEND="
 	!qt6? (
 		dev-qt/linguist-tools:5
 	)
-	>=dev-util/cmake-openeid-0_p20220810
+	>=dev-util/cmake-openeid-0_p20240821
 "
 DOCS=( {README,RELEASE-NOTES}.md )
-PATCHES=( "${FILESDIR}"/optional.diff )
 
 src_prepare() {
 	if [[ -n ${PV%%*9999} ]]; then
 		mv "${WORKDIR}"/${MY_QC}/* "${S}"/common/
-		mv "${WORKDIR}"/${MY_EX}/* "${S}"/extensions/
 	fi
 	sed \
 		-e "s:doc/${PN}:doc/${PF}:" \
