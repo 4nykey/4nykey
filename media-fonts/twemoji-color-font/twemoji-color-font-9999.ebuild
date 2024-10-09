@@ -1,7 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -21,7 +21,7 @@ else
 		)
 	"
 	RESTRICT="primaryuri"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 fi
 inherit font-r1
 
@@ -43,7 +43,7 @@ BDEPEND="
 "
 
 pkg_setup() {
-	local _fc="fontconfig/56-${PN%-*}.conf"
+	local _fc="fontconfig/46-${PN%-*}.conf"
 	if use binary; then
 		S="${WORKDIR}/${MY_P}"
 		FONT_CONF="${S}/${_fc}"
