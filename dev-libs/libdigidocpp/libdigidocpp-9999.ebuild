@@ -27,23 +27,16 @@ SLOT="0"
 IUSE="apidocs test"
 
 RDEPEND="
-	dev-libs/openssl:=
-	dev-libs/xerces-c
-	dev-libs/xml-security-c
+	dev-libs/xmlsec:=[openssl]
 	sys-libs/zlib[minizip]
 "
 DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
-	>=dev-cpp/xsd-4.2.0_beta4
 	test? ( dev-libs/boost )
 	apidocs? ( app-text/doxygen )
-	>=dev-util/cmake-openeid-0_p20220810
-	|| (
-		dev-util/xxdi
-		app-editors/vim-core
-	)
+	>=dev-util/cmake-openeid-0_p20240821
 "
 DOCS=( AUTHORS README.md RELEASE-NOTES.md )
 
@@ -52,8 +45,6 @@ src_prepare() {
 		-e 's:\${CMAKE_SOURCE_DIR}/cmake/modules:/usr/share/cmake/openeid:' \
 		-i CMakeLists.txt
 	use test || sed -i CMakeLists.txt -e '/add_subdirectory(test)/d'
-	has_version app-editors/vim-core || sed \
-		-e 's:xxd -i \(tslcert.\.crt\):xxdi.pl \1 >:' -i src/CMakeLists.txt
 	rm -rf src/{minizip,openssl}
 	cmake_src_prepare
 }
@@ -62,13 +53,6 @@ src_configure() {
 	local mycmakeargs=(
 		-DCMAKE_DISABLE_FIND_PACKAGE_Doxygen=$(usex !apidocs)
 		-DCMAKE_DISABLE_FIND_PACKAGE_SWIG=yes
-		-DCMAKE_DISABLE_FIND_PACKAGE_JNI=yes
-		-DXSD_EXECUTABLE="/usr/libexec/codesynthesis/xsd"
 	)
 	cmake_src_configure
-}
-
-src_test() {
-	local myctestargs=( -j1 )
-	cmake_src_test
 }
