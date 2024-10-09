@@ -78,10 +78,6 @@ BDEPEND="
 	doc? ( app-text/doxygen )
 "
 
-PATCHES=(
-	"${FILESDIR}/${PN}-6.8-boost-1.85.patch"
-)
-
 pkg_setup() {
 	python-any-r1_pkg_setup
 }
