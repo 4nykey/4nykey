@@ -4,4 +4,12 @@
 	<maintainer type="person">
 		<email>4nykey@gmail.com</email>
 	</maintainer>
+	<use>
+		<flag name="font_variants_cbdt">
+			Install Color Bitmap Data Table fonts (raster graphics)
+		</flag>
+		<flag name="font_variants_colrv1">
+			Install COLRv1 fonts (vector graphics)
+		</flag>
+	</use>
 </pkgmetadata>
