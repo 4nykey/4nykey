@@ -23,16 +23,16 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="128.3.0esr-${MY_PV}-1-build4"
+MY_P="128.3.0esr-${MY_PV}-1-build6"
 MY_P="firefox-tor-browser-${MY_P}"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
 else
 	MY_PV+=".$(ver_cut 3)"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 fi
 MY_PV="${MY_PV%.0}"
-MY_NOS="11.4.40"
+MY_NOS="11.4.42"
 MY_NOS="noscript-${MY_NOS}.xpi"
 
 DESCRIPTION="The Tor Browser"
