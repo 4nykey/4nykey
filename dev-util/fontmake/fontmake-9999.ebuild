@@ -31,11 +31,11 @@ SLOT="0"
 IUSE="json"
 
 RDEPEND="
-	>=dev-python/fonttools-4.50[skia(-),ufo(-),unicode(-),${PYTHON_USEDEP}]
-	>=dev-python/glyphsLib-6.7[${PYTHON_USEDEP}]
-	>=dev-python/ufo2ft-3.2[cffsubr(+),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.54.1[skia(-),ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/glyphsLib-6.9.2[${PYTHON_USEDEP}]
+	>=dev-python/ufo2ft-3.3.1[cffsubr(+),${PYTHON_USEDEP}]
 	>=dev-python/MutatorMath-3.0.1[${PYTHON_USEDEP}]
-	>=dev-python/fontMath-0.9.3[${PYTHON_USEDEP}]
+	>=dev-python/fontMath-0.9.4[${PYTHON_USEDEP}]
 	>=dev-python/defcon-0.10.2[${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 	dev-python/skia-pathops[${PYTHON_USEDEP}]
