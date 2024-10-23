@@ -29,7 +29,7 @@ SLOT="0"
 IUSE="cython test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.42.1[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.54.1[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
