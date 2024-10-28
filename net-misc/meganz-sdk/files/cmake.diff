@@ -1,6 +1,6 @@
 --- a/bindings/qt/CMakeLists.txt
 +++ b/bindings/qt/CMakeLists.txt
-@@ -1,14 +1,16 @@
+@@ -1,15 +1,17 @@
  add_library(SDKQtBindings)
  add_library(MEGA::SDKQtBindings ALIAS SDKQtBindings)
  
@@ -12,6 +12,7 @@
      QTMegaListener.h
      QTMegaRequestListener.h
      QTMegaTransferListener.h
+     QTMegaApiManager.h
 -
 +)
 +target_sources(SDKQtBindings

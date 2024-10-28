@@ -1,3 +1,11 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -63,5 +63,3 @@ include(desktopapp_configuration)
+ # Load the MEGA targets
+ add_subdirectory(src)
+ 
+-include(get_clang_format)
+-get_clang_format()
 --- a/contrib/cmake/modules/desktopapp_configuration.cmake
 +++ b/contrib/cmake/modules/desktopapp_configuration.cmake
 @@ -29,8 +29,6 @@ if(UNIX AND NOT APPLE)
@@ -85,8 +93,8 @@
 +    z
  )
  
- # Install MEGAsync binary, dynamic libraries and, if needed, deploy Qt dependencies.
-@@ -142,13 +146,6 @@ if (UNIX AND NOT APPLE)
+ ## Adjust compilation flags for warnings and errors ##
+@@ -163,13 +167,6 @@ if (UNIX AND NOT APPLE)
  
      set(vcpkg_lib_folder "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/$<$<CONFIG:Debug>:debug/>lib/")
  
