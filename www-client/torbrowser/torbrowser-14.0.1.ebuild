@@ -3,9 +3,9 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-128esr-patches-03.tar.xz"
+FIREFOX_PATCHSET="firefox-128esr-patches-04.tar.xz"
 
-LLVM_COMPAT=( 17 18 )
+LLVM_COMPAT=( 17 18 19 )
 
 PYTHON_COMPAT=( python3_{10..12} )
 PYTHON_REQ_USE="ncurses,sqlite,ssl"
@@ -23,7 +23,7 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="128.3.0esr-${MY_PV}-1-build6"
+MY_P="128.4.0esr-${MY_PV}-1-build2"
 MY_P="firefox-tor-browser-${MY_P}"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
@@ -47,7 +47,7 @@ S="${WORKDIR}/${MY_P}"
 LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
 LICENSE+=" BSD CC-BY-3.0"
 SLOT="0"
-IUSE="+clang dbus debug eme-free hardened hwaccel jack +jumbo-build libproxy lto openh264 pgo"
+IUSE="clang dbus debug eme-free hardened hwaccel jack +jumbo-build libproxy lto openh264 pgo"
 IUSE+=" pulseaudio selinux sndio +system-av1 +system-harfbuzz +system-icu +system-jpeg"
 IUSE+=" +system-libevent +system-libvpx system-png +system-webp +telemetry wayland wifi +X"
 RESTRICT="primaryuri"
@@ -680,8 +680,11 @@ src_configure() {
 		mozconfig_add_options_ac '+x11' --enable-default-toolkit=cairo-gtk3-x11-only
 	fi
 
-	# LTO is handled via configure
+	# LTO is handled via configure.
+	# -Werror=lto-type-mismatch -Werror=odr are going to fail with GCC,
+	# bmo#1516758, bgo#942288
 	filter-lto
+	filter-flags -Werror=lto-type-mismatch -Werror=odr
 
 	if use lto ; then
 		if use clang ; then
@@ -794,10 +797,6 @@ src_configure() {
 
 	# System-av1 fix
 	use system-av1 && append-ldflags "-Wl,--undefined-version"
-
-	# Allow elfhack to work in combination with unstripped binaries
-	# when they would normally be larger than 2GiB.
-	append-ldflags "-Wl,--compress-debug-sections=zlib"
 
 	# Make revdep-rebuild.sh happy; Also required for musl
 	append-ldflags -Wl,-rpath="${MOZILLA_FIVE_HOME}",--enable-new-dtags
