@@ -63,7 +63,7 @@ RDEPEND="
 	media-libs/liblo
 	media-libs/taglib
 	media-libs/vamp-plugin-sdk
-	media-libs/rubberband
+	media-libs/rubberband:=
 	sys-apps/util-linux
 	websockets? ( net-libs/libwebsockets )
 	dbus? ( sys-apps/dbus )
