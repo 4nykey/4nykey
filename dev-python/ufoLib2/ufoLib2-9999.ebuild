@@ -32,11 +32,11 @@ IUSE="msgpack orjson test"
 REQUIRED_USE="test? ( msgpack orjson )"
 
 RDEPEND="
-	>=dev-python/fonttools-4.29.1[ufo(-),${PYTHON_USEDEP}]
-	>=dev-python/attrs-22.1[${PYTHON_USEDEP}]
-	>=dev-python/cattrs-22.2[${PYTHON_USEDEP}]
-	msgpack? ( >=dev-python/msgpack-1.0.4[${PYTHON_USEDEP}] )
-	orjson? ( dev-python/orjson[${PYTHON_USEDEP}] )
+	>=dev-python/fonttools-4.54.1[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/attrs-24.2[${PYTHON_USEDEP}]
+	>=dev-python/cattrs-24.1.2[${PYTHON_USEDEP}]
+	msgpack? ( >=dev-python/msgpack-1.1[${PYTHON_USEDEP}] )
+	orjson? ( >=dev-python/orjson-3.10.10[${PYTHON_USEDEP}] )
 "
 DEPEND="
 	${RDEPEND}
