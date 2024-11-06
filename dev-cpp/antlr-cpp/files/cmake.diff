@@ -1,0 +1,50 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -93,11 +93,6 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+   set(CMAKE_CXX_FLAGS_MINSIZEREL     "${CMAKE_CXX_FLAGS_MINSIZEREL} /O1 /Oi /Ob2 /Gy /MP /DNDEBUG ${MY_CXX_WARNING_FLAGS}")
+   set(CMAKE_CXX_FLAGS_RELEASE        "${CMAKE_CXX_FLAGS_RELEASE} /O2 /Oi /Ob2 /Gy /MP /DNDEBUG ${MY_CXX_WARNING_FLGAS}")
+   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /O2 /Oi /Ob2 /Gy /MP /Zi ${MY_CXX_WARNING_FLAGS}")
+-else()
+-  set(CMAKE_CXX_FLAGS_DEBUG          "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g ${MY_CXX_WARNING_FLAGS}")
+-  set(CMAKE_CXX_FLAGS_MINSIZEREL     "${CMAKE_CXX_FLAGS_MINSIZEREL} -Os -DNDEBUG ${MY_CXX_WARNING_FLAGS}")
+-  set(CMAKE_CXX_FLAGS_RELEASE        "${CMAKE_CXX_FLAGS_RELEASE} -O3 -DNDEBUG ${MY_CXX_WARNING_FLGAS}")
+-  set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -O2 -g ${MY_CXX_WARNING_FLAGS}")
+ endif()
+ 
+ # Compiler-specific C++17 activation.
+@@ -200,16 +195,9 @@ if (ANTLR4_INSTALL)
+ 
+ endif(ANTLR4_INSTALL)
+ 
+-if(EXISTS LICENSE.txt)
+-install(FILES LICENSE.txt
+-        DESTINATION "share/doc/libantlr4")
+-elseif(EXISTS ../../LICENSE.txt)
+-install(FILES ../../LICENSE.txt
+-    DESTINATION "share/doc/libantlr4")
+-endif()
+ 
+ install(FILES README.md VERSION
+-    DESTINATION "share/doc/libantlr4")
++    DESTINATION ${CMAKE_INSTALL_DOCDIR})
+ 
+ set(CPACK_PACKAGE_CONTACT "antlr-discussion@googlegroups.com")
+ set(CPACK_PACKAGE_VERSION ${ANTLR_VERSION})
+--- a/runtime/CMakeLists.txt
++++ b/runtime/CMakeLists.txt
+@@ -77,7 +77,6 @@ if (ANTLR_BUILD_CPP_TESTS)
+     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+   endif()
+ 
+-  FetchContent_MakeAvailable(googletest)
+ 
+   file(GLOB libantlrcpp_TESTS
+     "${PROJECT_SOURCE_DIR}/runtime/tests/*.cpp"
+@@ -92,6 +91,7 @@ if (ANTLR_BUILD_CPP_TESTS)
+     antlr4_tests
+ 	$<IF:$<TARGET_EXISTS:antlr4_static>,antlr4_static,antlr4_shared>
+     gtest_main
++    gtest
+   )
+ 
+   include(GoogleTest)
