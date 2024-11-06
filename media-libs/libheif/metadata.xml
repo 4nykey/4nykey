@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>4nykey@gmail.com</email>
+	</maintainer>
+	<use>
+	<flag name="aom">Use <pkg>media-libs/libaom</pkg> for AVIF encoding/decoding</flag>
+	<flag name="gdk-pixbuf">Enable <pkg>x11-libs/gdk-pixbuf</pkg> plugin</flag>
+	<flag name="go">Enable building <pkg>dev-lang/go</pkg> code/examples</flag>
+	<flag name="openh264">Enable support for <pkg>media-libs/openh264</pkg></flag>
+	<flag name="openjph">Enable support for HT-J2K via <pkg>media-libs/openjph</pkg></flag>
+	<flag name="rav1e">Use <pkg>media-video/rav1e</pkg> for AVIF encoding</flag>
+	<flag name="svt-av1">Enable support for the SVT-AV1 encoder</flag>
+	<flag name="uvg266">Enable support for VVC via <pkg>media-libs/uvg266</pkg></flag>
+	<flag name="vvdec">Enable support for VVC via <pkg>media-libs/vvdec</pkg></flag>
+	<flag name="vvenc">Enable support for VVC via <pkg>media-libs/vvenc</pkg></flag>
+	<flag name="x265">Use <pkg> media-libs/x265</pkg> for HEIF encoding</flag>
+	</use>
+	<upstream>
+		<bugs-to>https://github.com/strukturag/libheif/issues</bugs-to>
+		<remote-id type="github">strukturag/libheif</remote-id>
+	</upstream>
+</pkgmetadata>

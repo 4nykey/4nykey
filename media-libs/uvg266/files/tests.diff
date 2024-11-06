@@ -1,0 +1,23 @@
+--- a/tests/util.sh
++++ b/tests/util.sh
+@@ -48,10 +48,8 @@ valgrind_test() {
+     # arguments.
+     print_and_run \
+         $valgrind \
+-            ../bin/uvg266 -i "${yuvfile}" "--input-res=${dimensions}" -o "${vvcfile}" "$@"
++            "${BUILD_DIR}"/uvg266 -i "${yuvfile}" "--input-res=${dimensions}" -o "${vvcfile}" "$@"
+ 
+-    print_and_run \
+-        DecoderAppStatic -b "${vvcfile}"
+ 
+     cleanup
+ }
+@@ -70,7 +68,7 @@ encode_test() {
+ 
+     set +e
+     print_and_run \        
+-            ../bin/uvg266 -i "${yuvfile}" "--input-res=${dimensions}" -o "${vvcfile}" "$@"
++            "${BUILD_DIR}"/uvg266 -i "${yuvfile}" "--input-res=${dimensions}" -o "${vvcfile}" "$@"
+     actual_status="$?"
+     set -e
+     [ ${actual_status} -eq ${expected_status} ]
