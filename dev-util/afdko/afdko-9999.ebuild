@@ -3,25 +3,29 @@
 
 EAPI=8
 
-MY_AN="antlr4-cpp-runtime-4.9.3-source.zip"
-SRC_URI="
-	https://www.antlr.org/download/${MY_AN}
-"
 PYTHON_COMPAT=( python3_{10..12} )
 DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_ARGS=(
 	-DCMAKE_VERBOSE_MAKEFILE=ON
-	-DANTLR4_ZIP_REPOSITORY="${DISTDIR}/${MY_AN}"
+	-DANTLR4_INCLUDE_DIRS="${EPREFIX}/usr/include/antlr4-runtime"
 )
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adobe-type-tools/${PN}.git"
 else
-	MY_PV="21d8b26"
-	[[ -n ${PV%%*_*} ]] && MY_PV="${PV}"
+	MY_PV="$(ver_cut 1-3)"
+	case $(ver_cut 4) in
+		alpha)
+			MY_PV="${MY_PV}a$(ver_cut 5)" ;;
+		beta)
+			MY_PV="${MY_PV}b$(ver_cut 5)" ;;
+		p*)
+			MY_PV="8f6b6da" ;;
+	esac
 	SRC_URI+="
-		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/adobe-type-tools/${PN}/tar.gz/${MY_PV}
+		-> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64"
@@ -33,7 +37,6 @@ HOMEPAGE="https://adobe-type-tools.github.io/afdko"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE="test"
 
 RDEPEND="
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
@@ -44,6 +47,7 @@ RDEPEND="
 	>=dev-python/tqdm-4.66.1[${PYTHON_USEDEP}]
 	>=dev-python/ufoNormalizer-0.6.1[${PYTHON_USEDEP}]
 	>=dev-python/ufoProcessor-1.9[${PYTHON_USEDEP}]
+	dev-cpp/antlr-cpp:4=
 "
 DEPEND="
 	${RDEPEND}
@@ -53,7 +57,10 @@ BDEPEND="
 	dev-python/scikit-build[${PYTHON_USEDEP}]
 "
 DOCS=( {README,NEWS}.md docs )
-PATCHES=( "${FILESDIR}"/setup.diff )
+PATCHES=(
+	"${FILESDIR}"/setup.diff
+	"${FILESDIR}"/antlr4.diff
+)
 distutils_enable_tests pytest
 
 python_prepare_all() {
