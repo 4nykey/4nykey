@@ -52,11 +52,6 @@ BDEPEND="
 "
 PATCHES=( "${FILESDIR}"/tests.diff )
 
-src_prepare() {
-	cmake_src_prepare
-	use test || return
-}
-
 multilib_src_configure() {
 	local mycmakeargs=(
 		-DOJPH_ENABLE_TIFF_SUPPORT=$(usex tiff)
@@ -77,5 +72,5 @@ multilib_src_configure() {
 		)
 	fi
 	cmake_src_configure
-	ln -sf ../../${MY_TST} tests/${MY_TST%-*}
+	use test && ln -sf ../../${MY_TST} tests/${MY_TST%-*}
 }
