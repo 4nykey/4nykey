@@ -10,12 +10,17 @@ LLVM_COMPAT=( 17 18 19 )
 PYTHON_COMPAT=( python3_{10..12} )
 PYTHON_REQ_USE="ncurses,sqlite,ssl"
 
+# This will also filter rust versions that don't match LLVM_COMPAT in the non-clang path; this is fine.
+RUST_NEEDS_LLVM=1
+# If not building with clang we need at least rust 1.76
+RUST_MIN_VER=1.77.1
+
 WANT_AUTOCONF="2.1"
 
 VIRTUALX_REQUIRED="manual"
 
 inherit autotools check-reqs desktop flag-o-matic gnome2-utils linux-info llvm-r1 multiprocessing \
-	optfeature pax-utils python-any-r1 readme.gentoo-r1 toolchain-funcs virtualx xdg
+	optfeature pax-utils python-any-r1 readme.gentoo-r1 rust toolchain-funcs virtualx xdg
 
 PATCH_URIS=(
 	https://dev.gentoo.org/~juippis/mozilla/patchsets/${FIREFOX_PATCHSET}
@@ -54,7 +59,6 @@ RESTRICT="primaryuri"
 
 REQUIRED_USE="|| ( X wayland )
 	debug? ( !system-av1 )
-	pgo? ( lto )
 	wayland? ( dbus )
 	wifi? ( dbus )"
 
@@ -64,7 +68,6 @@ BDEPEND="${PYTHON_DEPS}
 		sys-devel/llvm:${LLVM_SLOT}
 		clang? (
 			sys-devel/lld:${LLVM_SLOT}
-			virtual/rust:0/llvm-${LLVM_SLOT}
 		)
 		pgo? ( sys-libs/compiler-rt-sanitizers:${LLVM_SLOT}[profile] )
 	')
@@ -74,8 +77,6 @@ BDEPEND="${PYTHON_DEPS}
 	>=dev-util/cbindgen-0.26.0
 	net-libs/nodejs
 	virtual/pkgconfig
-	!clang? ( >=virtual/rust-1.76 )
-	!elibc_glibc? ( dev-lang/rust )
 	amd64? ( >=dev-lang/nasm-2.14 )
 	x86? ( >=dev-lang/nasm-2.14 )
 	pgo? (
@@ -192,11 +193,6 @@ llvm_check_deps() {
 			return 1
 		fi
 
-		if ! has_version -b "virtual/rust:0/llvm-${LLVM_SLOT}" ; then
-			einfo "virtual/rust:0/llvm-${LLVM_SLOT} is missing! Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
-			return 1
-		fi
-
 		if use pgo ; then
 			if ! has_version -b "=sys-libs/compiler-rt-sanitizers-${LLVM_SLOT}*[profile]" ; then
 				einfo "=sys-libs/compiler-rt-sanitizers-${LLVM_SLOT}*[profile] is missing!" >&2
@@ -308,7 +304,7 @@ pkg_pretend() {
 		fi
 
 		# Ensure we have enough disk space to compile
-		if use pgo || use lto || use debug ; then
+		if use pgo || tc-is-lto || use debug ; then
 			CHECKREQS_DISK_BUILD="13500M"
 		else
 			CHECKREQS_DISK_BUILD="6600M"
@@ -319,15 +315,34 @@ pkg_pretend() {
 }
 
 pkg_setup() {
+
+	# Get LTO from environment; export after this phase for use in src_configure (etc)
+	use_lto=no
+
 	if [[ ${MERGE_TYPE} != binary ]] ; then
+
+		if tc-is-lto; then
+			use_lto=yes
+			# LTO is handled via configure
+			# -Werror=lto-type-mismatch -Werror=odr are going to fail with GCC,
+			# bmo#1516758, bgo#942288
+			filter-lto
+			filter-flags -Werror=lto-type-mismatch -Werror=odr
+		fi
+
 		if use pgo ; then
+			if [[ ${use_lto} == "no" ]]; then
+				elog "Building ${PN} with USE=pgo requires LTO, however this was not detected in your environment."
+				elog "Forcing LTO, however it is recommended to enable LTO explicitly."
+				use_lto=yes
+			fi
 			if ! has userpriv ${FEATURES} ; then
 				eerror "Building ${PN} with USE=pgo and FEATURES=-userpriv is not supported!"
 			fi
 		fi
 
 		# Ensure we have enough disk space to compile
-		if use pgo || use lto || use debug ; then
+		if use pgo || [[ ${use_lto} == "yes" ]] || use debug ; then
 			CHECKREQS_DISK_BUILD="13500M"
 		else
 			CHECKREQS_DISK_BUILD="6400M"
@@ -336,8 +351,9 @@ pkg_setup() {
 		check-reqs_pkg_setup
 
 		llvm-r1_pkg_setup
+		rust_pkg_setup
 
-		if use clang && use lto && tc-ld-is-lld ; then
+		if use clang && [[ ${use_lto} == "yes" ]] && tc-ld-is-lld ; then
 			local version_lld=$(ld.lld --version 2>/dev/null | awk '{ print $2 }')
 			[[ -n ${version_lld} ]] && version_lld=$(ver_cut 1 "${version_lld}")
 			[[ -z ${version_lld} ]] && die "Failed to read ld.lld version!"
@@ -351,7 +367,7 @@ pkg_setup() {
 				eerror "You will be unable to link ${CATEGORY}/${PN}. To proceed you have the following options:"
 				eerror "  - Manually switch rust version using 'eselect rust' to match used LLVM version"
 				eerror "  - Switch to dev-lang/rust[system-llvm] which will guarantee matching version"
-				eerror "  - Build ${CATEGORY}/${PN} without USE=lto"
+				eerror "  - Build ${CATEGORY}/${PN} without lto"
 				eerror "  - Rebuild lld with llvm that was used to build rust (may need to rebuild the whole "
 				eerror "    llvm/clang/lld/rust chain depending on your @world updates)"
 				die "LLVM version used by Rust (${version_llvm_rust}) does not match with ld.lld version (${version_lld})!"
@@ -394,13 +410,15 @@ pkg_setup() {
 		export LC_ALL=C
 	fi
 
+	export use_lto
+
 	CONFIG_CHECK="~SECCOMP"
 	WARNING_SECCOMP="CONFIG_SECCOMP not set! This system will be unable to play DRM-protected content."
 	linux-info_pkg_setup
 }
 
 src_prepare() {
-	if use lto; then
+	if [[ ${use_lto} == "yes" ]]; then
 		rm -v "${WORKDIR}"/firefox-patches/*-LTO-Only-enable-LTO-*.patch || die
 	fi
 
@@ -462,13 +480,11 @@ src_prepare() {
 	# sed-in toolchain prefix
 	sed -i \
 		-e "s/objdump/${CHOST}-objdump/" \
-		"${S}"/python/mozbuild/mozbuild/configure/check_debug_ranges.py \
-		|| die "sed failed to set toolchain prefix"
+		"${S}"/python/mozbuild/mozbuild/configure/check_debug_ranges.py || die "sed failed to set toolchain prefix"
 
 	sed -i \
 		-e 's/ccache_stats = None/return None/' \
-		"${S}"/python/mozbuild/mozbuild/controller/building.py \
-		|| die "sed failed to disable ccache stats call"
+		"${S}"/python/mozbuild/mozbuild/controller/building.py || die "sed failed to disable ccache stats call"
 
 	einfo "Removing pre-built binaries ..."
 
@@ -680,13 +696,7 @@ src_configure() {
 		mozconfig_add_options_ac '+x11' --enable-default-toolkit=cairo-gtk3-x11-only
 	fi
 
-	# LTO is handled via configure.
-	# -Werror=lto-type-mismatch -Werror=odr are going to fail with GCC,
-	# bmo#1516758, bgo#942288
-	filter-lto
-	filter-flags -Werror=lto-type-mismatch -Werror=odr
-
-	if use lto ; then
+	if [[ ${use_lto} == "yes" ]]; then
 		if use clang ; then
 			# Upstream only supports lld or mold when using clang.
 			if tc-ld-is-mold ; then
@@ -870,7 +880,7 @@ src_configure() {
 src_compile() {
 	local virtx_cmd=
 
-	if tc-ld-is-mold && use lto; then
+	if tc-ld-is-mold && [[ ${use_lto} == "yes" ]]; then
 		# increase ulimit with mold+lto, bugs #892641, #907485
 		if ! ulimit -n 16384 1>/dev/null 2>&1 ; then
 			ewarn "Unable to modify ulimits - building with mold+lto might fail due to low ulimit -n resources."
@@ -1003,35 +1013,8 @@ src_install() {
 	make_desktop_entry ${PN} "Tor Browser" ${PN} "Network;WebBrowser" "StartupWMClass=Torbrowser"
 }
 
-pkg_preinst() {
-	xdg_pkg_preinst
-
-	# If the apulse libs are available in MOZILLA_FIVE_HOME then apulse
-	# does not need to be forced into the LD_LIBRARY_PATH
-	if use pulseaudio && has_version ">=media-sound/apulse-0.1.12-r4" ; then
-		einfo "APULSE found; Generating library symlinks for sound support ..."
-		local lib
-		pushd "${ED}${MOZILLA_FIVE_HOME}" &>/dev/null || die
-		for lib in ../apulse/libpulse{.so{,.0},-simple.so{,.0}} ; do
-			# A quickpkg rolled by hand will grab symlinks as part of the package,
-			# so we need to avoid creating them if they already exist.
-			if [[ ! -L ${lib##*/} ]] ; then
-				ln -s "${lib}" ${lib##*/} || die
-			fi
-		done
-		popd &>/dev/null || die
-	fi
-}
-
 pkg_postinst() {
 	xdg_pkg_postinst
-
-	if use pulseaudio && has_version ">=media-sound/apulse-0.1.12-r4" ; then
-		elog "Apulse was detected at merge time on this system and so it will always be"
-		elog "used for sound.  If you wish to use pulseaudio instead please unmerge"
-		elog "media-sound/apulse."
-		elog
-	fi
 
 	# bug 835078
 	if use hwaccel && has_version "x11-drivers/xf86-video-nouveau"; then
