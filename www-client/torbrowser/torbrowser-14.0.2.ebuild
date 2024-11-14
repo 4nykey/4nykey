@@ -28,7 +28,7 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="128.4.0esr-${MY_PV}-1-build2"
+MY_P="128.4.0esr-${MY_PV}-1-build3"
 MY_P="firefox-tor-browser-${MY_P}"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
@@ -37,7 +37,7 @@ else
 	KEYWORDS="~amd64"
 fi
 MY_PV="${MY_PV%.0}"
-MY_NOS="11.4.42"
+MY_NOS="11.5.2"
 MY_NOS="noscript-${MY_NOS}.xpi"
 
 DESCRIPTION="The Tor Browser"
@@ -216,8 +216,7 @@ moz_clear_vendor_checksums() {
 
 	sed -i \
 		-e 's/\("files":{\)[^}]*/\1/' \
-		"${S}"/third_party/rust/${1}/.cargo-checksum.json \
-		|| die
+		"${S}"/third_party/rust/${1}/.cargo-checksum.json || die
 }
 
 mozconfig_add_options_ac() {
@@ -324,10 +323,7 @@ pkg_setup() {
 		if tc-is-lto; then
 			use_lto=yes
 			# LTO is handled via configure
-			# -Werror=lto-type-mismatch -Werror=odr are going to fail with GCC,
-			# bmo#1516758, bgo#942288
 			filter-lto
-			filter-flags -Werror=lto-type-mismatch -Werror=odr
 		fi
 
 		if use pgo ; then
@@ -339,6 +335,12 @@ pkg_setup() {
 			if ! has userpriv ${FEATURES} ; then
 				eerror "Building ${PN} with USE=pgo and FEATURES=-userpriv is not supported!"
 			fi
+		fi
+
+		if [[ ${use_lto} = yes ]]; then
+			# -Werror=lto-type-mismatch -Werror=odr are going to fail with GCC,
+			# bmo#1516758, bgo#942288
+			filter-flags -Werror=lto-type-mismatch -Werror=odr
 		fi
 
 		# Ensure we have enough disk space to compile
