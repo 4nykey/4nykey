@@ -32,7 +32,7 @@ REQUIRED_USE="test? ( aafigure plantuml svg )"
 DEPEND="
 	dev-python/docutils[${PYTHON_USEDEP}]
 	dev-python/importlib-metadata[${PYTHON_USEDEP}]
-	dev-python/jinja[${PYTHON_USEDEP}]
+	dev-python/jinja2[${PYTHON_USEDEP}]
 	dev-python/packaging[${PYTHON_USEDEP}]
 	dev-python/pygments[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
