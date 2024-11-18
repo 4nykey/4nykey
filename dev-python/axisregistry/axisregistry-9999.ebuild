@@ -29,7 +29,7 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
-	dev-python/protobuf-python[${PYTHON_USEDEP}]
+	dev-python/protobuf[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
