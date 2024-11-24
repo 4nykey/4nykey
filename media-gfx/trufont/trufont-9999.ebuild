@@ -36,7 +36,7 @@ RDEPEND="
 		>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 		>=dev-python/defcon-0.7.2[${PYTHON_USEDEP}]
 		>=dev-python/hsluv-5[${PYTHON_USEDEP}]
-		dev-python/PyQt5[${PYTHON_USEDEP}]
+		dev-python/pyqt5[${PYTHON_USEDEP}]
 		>=dev-python/extractor-0.3[${PYTHON_USEDEP}]
 		>=dev-python/ufo2ft-2.16[${PYTHON_USEDEP}]
 	')
