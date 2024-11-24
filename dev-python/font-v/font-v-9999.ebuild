@@ -28,7 +28,7 @@ SLOT="0"
 
 RDEPEND="
 	>=dev-python/fonttools-4.28.1[${PYTHON_USEDEP}]
-	>=dev-python/GitPython-3.1.24[${PYTHON_USEDEP}]
+	>=dev-python/gitpython-3.1.24[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}

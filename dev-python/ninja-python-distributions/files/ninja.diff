@@ -1,0 +1,12 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -54,9 +54,7 @@ FetchContent_Declare(
+   DOWNLOAD_DIR ${ARCHIVE_DOWNLOAD_DIR}
+   ${ep_download_no_progress_args}
+ )
+-FetchContent_MakeAvailable(ninja)
+ 
+-install(TARGETS ninja COMPONENT python DESTINATION "${SKBUILD_SCRIPTS_DIR}")
+ install(FILES "${ninja_SOURCE_DIR}/misc/ninja_syntax.py" COMPONENT python DESTINATION ninja)
+ 
+ message(STATUS "<<< Gentoo configuration >>>

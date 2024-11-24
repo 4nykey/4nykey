@@ -47,7 +47,7 @@ RDEPEND="
 	unicode? (
 		>=dev-python/unicodedata2-15.1[${PYTHON_USEDEP}]
 	)
-	qt5? ( dev-python/PyQt5[${PYTHON_USEDEP}] )
+	qt5? ( dev-python/pyqt5[${PYTHON_USEDEP}] )
 	graphite? ( dev-python/lz4[${PYTHON_USEDEP}] )
 	plot? ( dev-python/matplotlib[${PYTHON_USEDEP}] )
 	interpolatable? ( >=dev-python/scipy-1.14.1[${PYTHON_USEDEP}] )
