@@ -36,7 +36,7 @@ RDEPEND="
 		dev-python/glyphsLib[${PYTHON_USEDEP}]
 		dev-python/gflanguages[${PYTHON_USEDEP}]
 		dev-python/glyphsets[${PYTHON_USEDEP}]
-		dev-python/PyGithub[${PYTHON_USEDEP}]
+		dev-python/pygithub[${PYTHON_USEDEP}]
 		dev-python/pillow[${PYTHON_USEDEP}]
 		dev-python/protobuf[${PYTHON_USEDEP}]
 		dev-python/requests[${PYTHON_USEDEP}]
