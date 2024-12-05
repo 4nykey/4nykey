@@ -13,7 +13,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	MY_PV="b083be9"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
-	MY_D="dtl-33a68d8"
+	MY_D="dtl-32567bb"
 	SRC_URI="
 		mirror://githubcl/googlei18n/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://githubcl/cubicdaiya/${MY_D%-*}/tar.gz/${MY_D##*-}
@@ -34,7 +34,7 @@ IUSE=""
 RDEPEND="
 	dev-libs/fribidi
 	>=media-libs/freetype-2.9:2
-	>=media-libs/harfbuzz-1.7.4[icu]
+	>=media-libs/harfbuzz-1.7.4:=[icu]
 	dev-libs/icu:=
 	x11-libs/cairo
 	dev-libs/expat
@@ -57,6 +57,7 @@ src_prepare() {
 	fi
 	sed \
 		-e '/\/\(freetype\|icu\|cairo\|expat\|harfbuzz\)/d' \
+		-e 's:-std=c++11::' \
 		-i "${S}"/src/fontdiff/fontdiff.gyp || die
 }
 
