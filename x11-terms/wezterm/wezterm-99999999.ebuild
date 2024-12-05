@@ -727,7 +727,6 @@ BDEPEND="
 	dev-build/cmake
 	dev-vcs/git
 	virtual/pkgconfig
-	virtual/rust
 "
 
 src_unpack() {
