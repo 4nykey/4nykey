@@ -4,7 +4,7 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{10..12} )
-DISTUTILS_USE_PEP517=scikit-build-core
+DISTUTILS_USE_PEP517=standalone
 inherit cmake distutils-r1
 MY_NI="ninja-1.11.1"
 SRC_URI="
@@ -35,6 +35,7 @@ DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
+	dev-python/scikit-build-core[${PYTHON_USEDEP}]
 	test? ( dev-python/path[${PYTHON_USEDEP}] )
 "
 distutils_enable_tests pytest
@@ -46,12 +47,7 @@ src_unpack() {
 
 src_prepare() {
 	eapply "${FILESDIR}"/ninja.diff
+	sed -e "s:@_NINJA_SRC_DIR_@:${WORKDIR}/${MY_NI}:" -i CMakeLists.txt
 	cmake_src_prepare
 	distutils-r1_src_prepare
-}
-
-src_configure() {
-	DISTUTILS_ARGS=(
-		-Dninja_SOURCE_DIR="${WORKDIR}/${MY_NI}"
-	)
 }
