@@ -6,6 +6,7 @@ EAPI=8
 inherit cmake-multilib
 
 MY_PN="OpenJPH"
+# https://github.com/aous72/jp2k_test_codestreams
 MY_TST="jp2k_test_codestreams-dabb847"
 SRC_URI="
 	test? (
