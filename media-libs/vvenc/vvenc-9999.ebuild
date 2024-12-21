@@ -28,3 +28,4 @@ LICENSE="BSD"
 IUSE="test"
 RESTRICT="!test? ( test )"
 RESTRICT+=" primaryuri"
+PATCHES=( "${FILESDIR}"/tests.diff )
