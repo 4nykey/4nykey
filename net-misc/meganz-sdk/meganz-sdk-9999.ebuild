@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -29,7 +29,8 @@ IUSE="c-ares debug examples ffmpeg freeimage fuse inotify libuv mediainfo qt raw
 REQUIRED_USE="
 	examples? ( readline sqlite )
 "
-# tests require a working mega.nz account and login details provided via $MEGA_EMAIL and $MEGA_PWD
+# tests require working mega.nz account and login details provided via $MEGA_EMAIL and $MEGA_PWD
+# and they are dectructive
 RESTRICT+=" test"
 
 RDEPEND="
@@ -95,8 +96,6 @@ src_install() {
 	doheader -r include/mega
 	rm -rf "${ED}"/usr/include/mega/{osx,win32,wincurl,wp8}
 
-	insinto /usr/share/mega
-	doins -r m4
 	insinto /usr/share/mega/cmake
-	doins contrib/cmake/modules/*.cmake
+	doins cmake/modules/*.cmake
 }

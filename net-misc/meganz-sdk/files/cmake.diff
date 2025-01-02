@@ -27,8 +27,8 @@
  endif()
 +install(TARGETS SDKQtBindings)
 +install(FILES ${SDKLIBQT_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/mega/bindings/qt)
---- a/contrib/cmake/modules/Config.cmake.in
-+++ b/contrib/cmake/modules/Config.cmake.in
+--- a/cmake/modules/Config.cmake.in
++++ b/cmake/modules/Config.cmake.in
 @@ -2,6 +2,9 @@
  
  include(CMakeFindDependencyMacro)
@@ -39,8 +39,8 @@
  include(${CMAKE_CURRENT_LIST_DIR}/sdklibTargets.cmake)
  
  check_required_components(SDKlib)
---- a/contrib/cmake/modules/sdklib_libraries.cmake
-+++ b/contrib/cmake/modules/sdklib_libraries.cmake
+--- a/cmake/modules/sdklib_libraries.cmake
++++ b/cmake/modules/sdklib_libraries.cmake
 @@ -95,7 +95,7 @@ macro(load_sdklib_libraries)
  
          find_package(PkgConfig REQUIRED) # For libraries loaded using pkg-config
@@ -50,8 +50,8 @@
          target_link_libraries(SDKlib PUBLIC PkgConfig::cryptopp) # TODO: Private for SDK core
  
          pkg_check_modules(sodium REQUIRED IMPORTED_TARGET libsodium)
---- a/contrib/cmake/modules/sdklib_target.cmake
-+++ b/contrib/cmake/modules/sdklib_target.cmake
+--- a/cmake/modules/sdklib_target.cmake
++++ b/cmake/modules/sdklib_target.cmake
 @@ -280,8 +280,10 @@ target_sources_conditional(SDKlib
  target_include_directories(SDKlib
      PUBLIC
@@ -115,8 +115,8 @@
  )
  
  if (WIN32)
---- a/contrib/cmake/modules/sdklib.pc.in
-+++ b/contrib/cmake/modules/sdklib.pc.in
+--- a/cmake/modules/sdklib.pc.in
++++ b/cmake/modules/sdklib.pc.in
 @@ -9,4 +9,4 @@ Version: @PROJECT_VERSION@
  
  Requires:

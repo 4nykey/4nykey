@@ -6,8 +6,8 @@
  
 -include(get_clang_format)
 -get_clang_format()
---- a/contrib/cmake/modules/desktopapp_configuration.cmake
-+++ b/contrib/cmake/modules/desktopapp_configuration.cmake
+--- a/cmake/modules/desktopapp_configuration.cmake
++++ b/cmake/modules/desktopapp_configuration.cmake
 @@ -29,8 +29,6 @@ if(UNIX AND NOT APPLE)
      # Note: using cmake --install --prefix /some/prefix will keep the RPATH as configured above.
      #       Used for building packages: in which install dir is a path construction folder that will not be there in packages
@@ -70,7 +70,7 @@
 @@ -117,12 +117,15 @@ else()
  endif()
  
- find_package(Qt5 REQUIRED COMPONENTS Widgets Core Gui Network Qml Quick)
+ find_package(Qt5 REQUIRED COMPONENTS Widgets Core Gui Network Qml Quick QuickWidgets)
 +find_package(sdklib REQUIRED)
 +find_package(PkgConfig REQUIRED)
 +pkg_check_modules(breakpad REQUIRED IMPORTED_TARGET breakpad breakpad-client)
@@ -85,9 +85,9 @@
      $<$<BOOL:${APPLE}>:Qt5::MacExtras>
      $<$<BOOL:${UNIX}>:Qt5::Svg>
 @@ -132,7 +135,8 @@ target_link_libraries(MEGAsync
-     Qt5::Network
      Qt5::Qml
      Qt5::Quick
+     Qt5::QuickWidgets
 -    MEGA::google_breakpad
 +    PkgConfig::breakpad
 +    z

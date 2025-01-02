@@ -1,9 +1,8 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-AT_M4DIR="${EROOT}/usr/share/mega/m4"
 inherit autotools
 MY_PN="MEGAcmd"
 if [[ -z ${PV%%*9999} ]]; then
@@ -46,6 +45,7 @@ src_prepare() {
 		-e '/sdk\/m4/d' \
 		-e 's:LMEGAINC=.*:PKG_CHECK_MODULES([MEGA],[sdklib])\nLMEGAINC=${MEGA_CFLAGS}:' \
 		-e '/AX_CXX_COMPILE_STDCXX/d' \
+		-e '/CHECK_ATOMIC()/d' \
 		-i Makefile.am configure.ac
 	sed \
 		-e 's:\$(top_builddir)/sdk/src/libmega\.la:$(MEGA_LIBS):' \
@@ -59,8 +59,8 @@ src_prepare() {
 
 src_configure() {
 	local myeconfargs=(
-		--with-readline="/usr/$(get_libdir)"
-		$(use_with pcre pcre "/usr")
+		--with-readline="${EPREFIX}/usr/$(get_libdir)"
+		$(use_with pcre pcre "${EPREFIX}/usr")
 	)
 	econf "${myeconfargs[@]}"
 }
