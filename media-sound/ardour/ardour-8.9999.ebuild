@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -61,7 +61,7 @@ RDEPEND="
 		>=media-sound/fluidsynth-2.0.1
 	)
 	media-libs/liblo
-	media-libs/taglib
+	media-libs/taglib:=
 	media-libs/vamp-plugin-sdk
 	media-libs/rubberband:=
 	sys-apps/util-linux
