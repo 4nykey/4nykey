@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -53,9 +53,11 @@ BDEPEND="
 		dev-python/PyMuPDF[${PYTHON_USEDEP}]
 	)
 "
+PATCHES=( "${FILESDIR}"/setuptools.diff )
 distutils_enable_tests pytest
 
 src_prepare() {
+	rm -rf snap tests/input/sphinx-*
 	local _v="${PV/_pre/.dev}"
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${_v/_p/.post}"
 	default
