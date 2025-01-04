@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -27,6 +27,8 @@ SLOT="0"
 IUSE="apidocs test"
 
 RDEPEND="
+	dev-libs/opensc:=
+	dev-libs/libxml2
 	dev-libs/xmlsec:=[openssl]
 	sys-libs/zlib[minizip]
 "
@@ -36,16 +38,11 @@ DEPEND="
 BDEPEND="
 	test? ( dev-libs/boost )
 	apidocs? ( app-text/doxygen )
-	>=dev-util/cmake-openeid-0_p20240821
 "
 DOCS=( AUTHORS README.md RELEASE-NOTES.md )
 
 src_prepare() {
-	sed \
-		-e 's:\${CMAKE_SOURCE_DIR}/cmake/modules:/usr/share/cmake/openeid:' \
-		-i CMakeLists.txt
-	use test || sed -i CMakeLists.txt -e '/add_subdirectory(test)/d'
-	rm -rf src/{minizip,openssl}
+	rm -rf src/minizip
 	cmake_src_prepare
 }
 
