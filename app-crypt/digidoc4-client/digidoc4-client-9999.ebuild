@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -11,9 +11,11 @@ else
 	MY_PV="${PV^^}"
 	MY_PV="v${MY_PV/_/-}"
 	[[ -z ${PV%%*_p*} ]] && MY_PV="a4da0d3"
-	MY_QC="qt-common-8e4034f"
+	MY_CM="cmake-4caaffc"
+	MY_QC="qt-common-c04bf62"
 	SRC_URI="${SRC_URI}
 		mirror://githubcl/open-eid/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/open-eid/${MY_CM%-*}/tar.gz/${MY_CM##*-} -> ${MY_CM}.tar.gz
 		mirror://githubcl/open-eid/${MY_QC%-*}/tar.gz/${MY_QC##*-} -> ${MY_QC}.tar.gz
 	"
 	RESTRICT="primaryuri"
@@ -30,10 +32,11 @@ SLOT="0"
 IUSE="nautilus qt6"
 
 DEPEND="
-	>=dev-libs/libdigidocpp-4
+	>=dev-libs/libdigidocpp-4.1
 	sys-apps/pcsc-lite
 	net-nds/openldap
 	dev-libs/openssl:=
+	dev-libs/flatbuffers:=
 	qt6? (
 		dev-qt/qtbase:6=[gui,network,widgets]
 		dev-qt/qt5compat:6=
@@ -58,17 +61,16 @@ BDEPEND="
 	!qt6? (
 		dev-qt/linguist-tools:5
 	)
-	>=dev-util/cmake-openeid-0_p20240821
 "
 DOCS=( {README,RELEASE-NOTES}.md )
 
 src_prepare() {
 	if [[ -n ${PV%%*9999} ]]; then
-		mv "${WORKDIR}"/${MY_QC}/* "${S}"/common/
+		mv ../${MY_CM}/* ./cmake/
+		mv ../${MY_QC}/* ./common/
 	fi
 	sed \
 		-e "s:doc/${PN}:doc/${PF}:" \
-		-e "s:\${CMAKE_SOURCE_DIR}/cmake/modules:/usr/share/cmake/openeid:" \
 		-i CMakeLists.txt
 	use qt6 && sed -e '/QT NAMES/s: Qt5::' -i CMakeLists.txt
 	cmake_src_prepare
