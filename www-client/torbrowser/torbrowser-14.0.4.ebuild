@@ -1,9 +1,9 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-128esr-patches-04.tar.xz"
+FIREFOX_PATCHSET="firefox-128esr-patches-07.tar.xz"
 
 LLVM_COMPAT=( 17 18 19 )
 
@@ -19,6 +19,11 @@ WANT_AUTOCONF="2.1"
 
 VIRTUALX_REQUIRED="manual"
 
+# Information about the bundled wasm toolchain from
+# https://github.com/WebAssembly/wasi-sdk/
+WASI_SDK_VER=24.0
+WASI_SDK_LLVM_VER=18
+
 inherit autotools check-reqs desktop flag-o-matic gnome2-utils linux-info llvm-r1 multiprocessing \
 	optfeature pax-utils python-any-r1 readme.gentoo-r1 rust toolchain-funcs virtualx xdg
 
@@ -28,7 +33,7 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="128.5.0esr-${MY_PV}-1-build2"
+MY_P="128.6.0esr-${MY_PV}-1-build1"
 MY_P="firefox-tor-browser-${MY_P}"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
@@ -37,7 +42,7 @@ else
 	KEYWORDS="~amd64"
 fi
 MY_PV="${MY_PV%.0}"
-MY_NOS="11.5.2"
+MY_NOS="12.1.1"
 MY_NOS="noscript-${MY_NOS}.xpi"
 
 DESCRIPTION="The Tor Browser"
@@ -46,30 +51,35 @@ SRC_URI="
 	mirror://tor/${PN}/${MY_PV}/src-${MY_P}.tar.xz
 	https://noscript.net/download/releases/${MY_NOS}
 	${PATCH_URIS[@]}
+	wasm? (
+		https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-${WASI_SDK_VER/.*/}/wasi-sdk-${WASI_SDK_VER}-x86_64-linux.tar.gz
+	)
 "
-
 S="${WORKDIR}/${MY_P}"
 LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
 LICENSE+=" BSD CC-BY-3.0"
 SLOT="0"
-IUSE="clang dbus debug eme-free hardened hwaccel jack +jumbo-build libproxy lto openh264 pgo"
-IUSE+=" pulseaudio selinux sndio +system-av1 +system-harfbuzz +system-icu +system-jpeg"
-IUSE+=" +system-libevent +system-libvpx system-png +system-webp +telemetry wayland wifi +X"
+IUSE="+clang dbus debug eme-free hardened hwaccel jack libproxy pgo pulseaudio selinux sndio"
+IUSE+=" +system-av1 +system-harfbuzz +system-icu +system-jpeg +system-libevent +system-libvpx"
+IUSE+=" system-png +system-webp wayland wifi +X"
+IUSE+=" +jumbo-build openh264 wasm"
 RESTRICT="primaryuri"
 
 REQUIRED_USE="|| ( X wayland )
 	debug? ( !system-av1 )
+	pgo? ( jumbo-build )
 	wayland? ( dbus )
 	wifi? ( dbus )"
 
 BDEPEND="${PYTHON_DEPS}
 	$(llvm_gen_dep '
-		sys-devel/clang:${LLVM_SLOT}
-		sys-devel/llvm:${LLVM_SLOT}
+		llvm-core/clang:${LLVM_SLOT}
+		llvm-core/llvm:${LLVM_SLOT}
 		clang? (
-			sys-devel/lld:${LLVM_SLOT}
+			llvm-core/lld:${LLVM_SLOT}
+			pgo? ( llvm-runtimes/compiler-rt-sanitizers:${LLVM_SLOT}[profile] )
 		)
-		pgo? ( sys-libs/compiler-rt-sanitizers:${LLVM_SLOT}[profile] )
+		wasm? ( llvm-core/lld:${LLVM_SLOT} )
 	')
 	app-alternatives/awk
 	app-arch/unzip
@@ -129,8 +139,8 @@ COMMON_DEPEND="
 		>=media-libs/libaom-1.0.0:=
 	)
 	system-harfbuzz? (
-		>=media-gfx/graphite2-1.3.13
 		>=media-libs/harfbuzz-2.8.1:0=
+		!wasm? ( >=media-gfx/graphite2-1.3.13 )
 	)
 	system-icu? ( >=dev-libs/icu-73.1:= )
 	system-jpeg? ( >=media-libs/libjpeg-turbo-1.2.1:= )
@@ -169,7 +179,8 @@ RDEPEND="${COMMON_DEPEND}
 		sys-apps/pciutils
 	)
 	jack? ( virtual/jack )
-	openh264? ( media-libs/openh264:*[plugin] )"
+	openh264? ( media-libs/openh264:*[plugin] )
+"
 DEPEND="${COMMON_DEPEND}
 	X? (
 		x11-base/xorg-proto
@@ -182,23 +193,23 @@ RDEPEND+="
 "
 
 llvm_check_deps() {
-	if ! has_version -b "sys-devel/clang:${LLVM_SLOT}" ; then
-		einfo "sys-devel/clang:${LLVM_SLOT} is missing! Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
+	if ! has_version -b "llvm-core/clang:${LLVM_SLOT}" ; then
+		einfo "llvm-core/clang:${LLVM_SLOT} is missing! Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
 		return 1
 	fi
 
 	if use clang && ! tc-ld-is-mold ; then
-		if ! has_version -b "sys-devel/lld:${LLVM_SLOT}" ; then
-			einfo "sys-devel/lld:${LLVM_SLOT} is missing! Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
+		if ! has_version -b "llvm-core/lld:${LLVM_SLOT}" ; then
+			einfo "llvm-core/lld:${LLVM_SLOT} is missing! Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
 			return 1
 		fi
+	fi
 
-		if use pgo ; then
-			if ! has_version -b "=sys-libs/compiler-rt-sanitizers-${LLVM_SLOT}*[profile]" ; then
-				einfo "=sys-libs/compiler-rt-sanitizers-${LLVM_SLOT}*[profile] is missing!" >&2
-				einfo "Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
-				return 1
-			fi
+	if use pgo ; then
+		if ! has_version -b "=llvm-runtimes/compiler-rt-sanitizers-${LLVM_SLOT}*[profile]" ; then
+			einfo "=llvm-runtimes/compiler-rt-sanitizers-${LLVM_SLOT}*[profile] is missing!" >&2
+			einfo "Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
+			return 1
 		fi
 	fi
 
@@ -327,11 +338,6 @@ pkg_setup() {
 		fi
 
 		if use pgo ; then
-			if [[ ${use_lto} == "no" ]]; then
-				elog "Building ${PN} with USE=pgo requires LTO, however this was not detected in your environment."
-				elog "Forcing LTO, however it is recommended to enable LTO explicitly."
-				use_lto=yes
-			fi
 			if ! has userpriv ${FEATURES} ; then
 				eerror "Building ${PN} with USE=pgo and FEATURES=-userpriv is not supported!"
 			fi
@@ -351,31 +357,8 @@ pkg_setup() {
 		fi
 
 		check-reqs_pkg_setup
-
 		llvm-r1_pkg_setup
 		rust_pkg_setup
-
-		if use clang && [[ ${use_lto} == "yes" ]] && tc-ld-is-lld ; then
-			local version_lld=$(ld.lld --version 2>/dev/null | awk '{ print $2 }')
-			[[ -n ${version_lld} ]] && version_lld=$(ver_cut 1 "${version_lld}")
-			[[ -z ${version_lld} ]] && die "Failed to read ld.lld version!"
-
-			local version_llvm_rust=$(rustc -Vv 2>/dev/null | grep -F -- 'LLVM version:' | awk '{ print $3 }')
-			[[ -n ${version_llvm_rust} ]] && version_llvm_rust=$(ver_cut 1 "${version_llvm_rust}")
-			[[ -z ${version_llvm_rust} ]] && die "Failed to read used LLVM version from rustc!"
-
-			if ver_test "${version_lld}" -ne "${version_llvm_rust}" ; then
-				eerror "Rust is using LLVM version ${version_llvm_rust} but ld.lld version belongs to LLVM version ${version_lld}."
-				eerror "You will be unable to link ${CATEGORY}/${PN}. To proceed you have the following options:"
-				eerror "  - Manually switch rust version using 'eselect rust' to match used LLVM version"
-				eerror "  - Switch to dev-lang/rust[system-llvm] which will guarantee matching version"
-				eerror "  - Build ${CATEGORY}/${PN} without lto"
-				eerror "  - Rebuild lld with llvm that was used to build rust (may need to rebuild the whole "
-				eerror "    llvm/clang/lld/rust chain depending on your @world updates)"
-				die "LLVM version used by Rust (${version_llvm_rust}) does not match with ld.lld version (${version_lld})!"
-			fi
-		fi
-
 		python-any-r1_pkg_setup
 
 		# Avoid PGO profiling problems due to enviroment leakage
@@ -423,6 +406,7 @@ src_prepare() {
 	if [[ ${use_lto} == "yes" ]]; then
 		rm -v "${WORKDIR}"/firefox-patches/*-LTO-Only-enable-LTO-*.patch || die
 	fi
+	rm -f "${WORKDIR}"/firefox-patches/0031-bmo-1935621-python-3.12.8-mach-fix.patch
 
 	# Workaround for bgo#917599
 	if has_version ">=dev-libs/icu-74.1" && use system-icu ; then
@@ -452,6 +436,22 @@ src_prepare() {
 		else
 			die "Unknown musl chost, please post your rustc -vV along with emerge --info on Gentoo's bug #915651"
 		fi
+	fi
+
+	# Pre-built wasm path manipulation.
+	if use wasm ; then
+		if use amd64 ; then
+			export wasi_arch="x86_64"
+		else
+			die "wasm enabled on unknown/unsupported arch!"
+		fi
+
+		sed -i \
+			-e "s:%%PORTAGE_WORKDIR%%:${WORKDIR}:" \
+			-e "s:%%WASI_ARCH%%:${wasi_arch}:" \
+			-e "s:%%WASI_SDK_VER%%:${WASI_SDK_VER}:" \
+			-e "s:%%WASI_SDK_LLVM_VER%%:${WASI_SDK_LLVM_VER}:" \
+			toolkit/moz.configure || die "Failed to update wasi-related paths."
 	fi
 
 	# Make LTO respect MAKEOPTS
@@ -623,7 +623,6 @@ src_configure() {
 		--prefix="${EPREFIX}/usr" \
 		--target="${CHOST}" \
 		--without-ccache \
-		--without-wasm-sandboxed-libraries \
 		--with-intl-api \
 		--with-libclang-path="$(llvm-config --libdir)" \
 		--with-system-nspr \
@@ -657,7 +656,6 @@ src_configure() {
 
 	mozconfig_use_with system-av1
 	mozconfig_use_with system-harfbuzz
-	mozconfig_use_with system-harfbuzz system-graphite2
 	mozconfig_use_with system-icu
 	mozconfig_use_with system-jpeg
 	mozconfig_use_with system-libevent
@@ -698,7 +696,16 @@ src_configure() {
 		mozconfig_add_options_ac '+x11' --enable-default-toolkit=cairo-gtk3-x11-only
 	fi
 
-	if [[ ${use_lto} == "yes" ]]; then
+	# wasm
+	# Since graphite2 is one of the sandboxed libraries, system-graphite2 obviously can't work with +wasm.
+	if use wasm ; then
+		mozconfig_add_options_ac '+wasm' --with-wasi-sysroot="${WORKDIR}/wasi-sdk-${WASI_SDK_VER}-${wasi_arch}-linux/share/wasi-sysroot/"
+	else
+		mozconfig_add_options_ac 'no wasm-sandbox' --without-wasm-sandboxed-libraries
+		mozconfig_use_with system-harfbuzz system-graphite2
+	fi
+
+	if [[ ${use_lto} == "yes" ]] ; then
 		if use clang ; then
 			# Upstream only supports lld or mold when using clang.
 			if tc-ld-is-mold ; then
@@ -718,14 +725,6 @@ src_configure() {
 			mozconfig_add_options_ac "linker is set to bfd" --enable-linker=bfd
 		fi
 
-		if use pgo ; then
-			mozconfig_add_options_ac '+pgo' MOZ_PGO=1
-
-			if use clang ; then
-				# Used in build/pgo/profileserver.py
-				export LLVM_PROFDATA="llvm-profdata"
-			fi
-		fi
 	else
 		# Avoid auto-magic on linker
 		if use clang ; then
@@ -742,6 +741,16 @@ src_configure() {
 			else
 				mozconfig_add_options_ac "linker is set to bfd due to USE=-clang" --enable-linker=bfd
 			fi
+		fi
+	fi
+
+	# PGO was moved outside lto block to allow building pgo without lto.
+	if use pgo ; then
+		mozconfig_add_options_ac '+pgo' MOZ_PGO=1
+
+		if use clang ; then
+			# Used in build/pgo/profileserver.py
+			export LLVM_PROFDATA="llvm-profdata"
 		fi
 	fi
 
@@ -882,7 +891,7 @@ src_configure() {
 src_compile() {
 	local virtx_cmd=
 
-	if tc-ld-is-mold && [[ ${use_lto} == "yes" ]]; then
+	if [[ ${use_lto} == "yes" ]] && tc-ld-is-mold ; then
 		# increase ulimit with mold+lto, bugs #892641, #907485
 		if ! ulimit -n 16384 1>/dev/null 2>&1 ; then
 			ewarn "Unable to modify ulimits - building with mold+lto might fail due to low ulimit -n resources."
@@ -932,7 +941,7 @@ src_install() {
 	rm "${ED}${MOZILLA_FIVE_HOME}/${PN}-bin" || die
 	dosym ${PN} ${MOZILLA_FIVE_HOME}/${PN}-bin
 
-	# Don't install llvm-symbolizer from sys-devel/llvm package
+	# Don't install llvm-symbolizer from llvm-core/llvm package
 	if [[ -f "${ED}${MOZILLA_FIVE_HOME}/llvm-symbolizer" ]] ; then
 		rm -v "${ED}${MOZILLA_FIVE_HOME}/llvm-symbolizer" || die
 	fi

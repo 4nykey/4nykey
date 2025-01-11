@@ -1,9 +1,9 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-128esr-patches-06.tar.xz"
+FIREFOX_PATCHSET="firefox-128esr-patches-07.tar.xz"
 
 LLVM_COMPAT=( 17 18 19 )
 
@@ -18,6 +18,11 @@ RUST_MIN_VER=1.77.1
 WANT_AUTOCONF="2.1"
 
 VIRTUALX_REQUIRED="manual"
+
+# Information about the bundled wasm toolchain from
+# https://github.com/WebAssembly/wasi-sdk/
+WASI_SDK_VER=24.0
+WASI_SDK_LLVM_VER=18
 
 inherit autotools check-reqs desktop flag-o-matic gnome2-utils linux-info llvm-r1 multiprocessing \
 	optfeature pax-utils python-any-r1 readme.gentoo-r1 rust toolchain-funcs virtualx xdg
@@ -46,8 +51,10 @@ SRC_URI="
 	mirror://tor/${PN}/${MY_PV}/src-${MY_P}.tar.xz
 	https://noscript.net/download/releases/${MY_NOS}
 	${PATCH_URIS[@]}
+	wasm? (
+		https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-${WASI_SDK_VER/.*/}/wasi-sdk-${WASI_SDK_VER}-x86_64-linux.tar.gz
+	)
 "
-RESTRICT="primaryuri"
 S="${WORKDIR}/${MY_P}"
 LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
 LICENSE+=" BSD CC-BY-3.0"
@@ -55,21 +62,24 @@ SLOT="0"
 IUSE="+clang dbus debug eme-free hardened hwaccel jack libproxy pgo pulseaudio selinux sndio"
 IUSE+=" +system-av1 +system-harfbuzz +system-icu +system-jpeg +system-libevent +system-libvpx"
 IUSE+=" system-png +system-webp wayland wifi +X"
-IUSE+=" +jumbo-build"
+IUSE+=" +jumbo-build openh264 wasm"
+RESTRICT="primaryuri"
 
 REQUIRED_USE="|| ( X wayland )
 	debug? ( !system-av1 )
+	pgo? ( jumbo-build )
 	wayland? ( dbus )
 	wifi? ( dbus )"
 
 BDEPEND="${PYTHON_DEPS}
 	$(llvm_gen_dep '
-		sys-devel/clang:${LLVM_SLOT}
-		sys-devel/llvm:${LLVM_SLOT}
+		llvm-core/clang:${LLVM_SLOT}
+		llvm-core/llvm:${LLVM_SLOT}
 		clang? (
-			sys-devel/lld:${LLVM_SLOT}
-			pgo? ( sys-libs/compiler-rt-sanitizers:${LLVM_SLOT}[profile] )
+			llvm-core/lld:${LLVM_SLOT}
+			pgo? ( llvm-runtimes/compiler-rt-sanitizers:${LLVM_SLOT}[profile] )
 		)
+		wasm? ( llvm-core/lld:${LLVM_SLOT} )
 	')
 	app-alternatives/awk
 	app-arch/unzip
@@ -130,7 +140,7 @@ COMMON_DEPEND="
 	)
 	system-harfbuzz? (
 		>=media-libs/harfbuzz-2.8.1:0=
-		>=media-gfx/graphite2-1.3.13
+		!wasm? ( >=media-gfx/graphite2-1.3.13 )
 	)
 	system-icu? ( >=dev-libs/icu-73.1:= )
 	system-jpeg? ( >=media-libs/libjpeg-turbo-1.2.1:= )
@@ -169,6 +179,7 @@ RDEPEND="${COMMON_DEPEND}
 		sys-apps/pciutils
 	)
 	jack? ( virtual/jack )
+	openh264? ( media-libs/openh264:*[plugin] )
 "
 DEPEND="${COMMON_DEPEND}
 	X? (
@@ -182,21 +193,21 @@ RDEPEND+="
 "
 
 llvm_check_deps() {
-	if ! has_version -b "sys-devel/clang:${LLVM_SLOT}" ; then
-		einfo "sys-devel/clang:${LLVM_SLOT} is missing! Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
+	if ! has_version -b "llvm-core/clang:${LLVM_SLOT}" ; then
+		einfo "llvm-core/clang:${LLVM_SLOT} is missing! Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
 		return 1
 	fi
 
 	if use clang && ! tc-ld-is-mold ; then
-		if ! has_version -b "sys-devel/lld:${LLVM_SLOT}" ; then
-			einfo "sys-devel/lld:${LLVM_SLOT} is missing! Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
+		if ! has_version -b "llvm-core/lld:${LLVM_SLOT}" ; then
+			einfo "llvm-core/lld:${LLVM_SLOT} is missing! Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
 			return 1
 		fi
 	fi
 
 	if use pgo ; then
-		if ! has_version -b "=sys-libs/compiler-rt-sanitizers-${LLVM_SLOT}*[profile]" ; then
-			einfo "=sys-libs/compiler-rt-sanitizers-${LLVM_SLOT}*[profile] is missing!" >&2
+		if ! has_version -b "=llvm-runtimes/compiler-rt-sanitizers-${LLVM_SLOT}*[profile]" ; then
+			einfo "=llvm-runtimes/compiler-rt-sanitizers-${LLVM_SLOT}*[profile] is missing!" >&2
 			einfo "Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
 			return 1
 		fi
@@ -421,19 +432,25 @@ src_prepare() {
 			export RUST_TARGET="x86_64-unknown-linux-musl"
 		elif use x86 ; then
 			export RUST_TARGET="i686-unknown-linux-musl"
-		elif use arm64 ; then
-			export RUST_TARGET="aarch64-unknown-linux-musl"
-		elif use ppc64 ; then
-			export RUST_TARGET="powerpc64le-unknown-linux-musl"
-		elif use riscv ; then
-			# We can pretty safely rule out any 32-bit riscvs, but 64-bit riscvs also have tons of
-			# different ABIs available. riscv64gc-unknown-linux-musl seems to be the best working
-			# guess right now though.
-			elog "riscv detected, forcing a riscv64 target for now."
-			export RUST_TARGET="riscv64gc-unknown-linux-musl"
 		else
-			die "Unknown musl chost, please post a new bug with your rustc -vV along with emerge --info"
+			die "Unknown musl chost, please post your rustc -vV along with emerge --info on Gentoo's bug #915651"
 		fi
+	fi
+
+	# Pre-built wasm path manipulation.
+	if use wasm ; then
+		if use amd64 ; then
+			export wasi_arch="x86_64"
+		else
+			die "wasm enabled on unknown/unsupported arch!"
+		fi
+
+		sed -i \
+			-e "s:%%PORTAGE_WORKDIR%%:${WORKDIR}:" \
+			-e "s:%%WASI_ARCH%%:${wasi_arch}:" \
+			-e "s:%%WASI_SDK_VER%%:${WASI_SDK_VER}:" \
+			-e "s:%%WASI_SDK_LLVM_VER%%:${WASI_SDK_LLVM_VER}:" \
+			toolkit/moz.configure || die "Failed to update wasi-related paths."
 	fi
 
 	# Make LTO respect MAKEOPTS
@@ -638,7 +655,6 @@ src_configure() {
 
 	mozconfig_use_with system-av1
 	mozconfig_use_with system-harfbuzz
-	mozconfig_use_with system-harfbuzz system-graphite2
 	mozconfig_use_with system-icu
 	mozconfig_use_with system-jpeg
 	mozconfig_use_with system-libevent
@@ -681,7 +697,9 @@ src_configure() {
 
 	# wasm
 	# Since graphite2 is one of the sandboxed libraries, system-graphite2 obviously can't work with +wasm.
-	if true; then
+	if use wasm ; then
+		mozconfig_add_options_ac '+wasm' --with-wasi-sysroot="${WORKDIR}/wasi-sdk-${WASI_SDK_VER}-${wasi_arch}-linux/share/wasi-sysroot/"
+	else
 		mozconfig_add_options_ac 'no wasm-sandbox' --without-wasm-sandboxed-libraries
 		mozconfig_use_with system-harfbuzz system-graphite2
 	fi
@@ -922,7 +940,7 @@ src_install() {
 	rm "${ED}${MOZILLA_FIVE_HOME}/${PN}-bin" || die
 	dosym ${PN} ${MOZILLA_FIVE_HOME}/${PN}-bin
 
-	# Don't install llvm-symbolizer from sys-devel/llvm package
+	# Don't install llvm-symbolizer from llvm-core/llvm package
 	if [[ -f "${ED}${MOZILLA_FIVE_HOME}/llvm-symbolizer" ]] ; then
 		rm -v "${ED}${MOZILLA_FIVE_HOME}/llvm-symbolizer" || die
 	fi
