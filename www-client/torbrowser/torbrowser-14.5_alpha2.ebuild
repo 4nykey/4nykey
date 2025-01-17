@@ -3,7 +3,7 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-128esr-patches-07.tar.xz"
+FIREFOX_PATCHSET="firefox-128esr-patches-08.tar.xz"
 
 LLVM_COMPAT=( 17 18 19 )
 
@@ -19,10 +19,10 @@ WANT_AUTOCONF="2.1"
 
 VIRTUALX_REQUIRED="manual"
 
-# Information about the bundled wasm toolchain from
+# Information about the bundled wasi toolchain from
 # https://github.com/WebAssembly/wasi-sdk/
-WASI_SDK_VER=24.0
-WASI_SDK_LLVM_VER=18
+WASI_SDK_VER=25.0
+WASI_SDK_LLVM_VER=19
 
 inherit autotools check-reqs desktop flag-o-matic gnome2-utils linux-info llvm-r1 multiprocessing \
 	optfeature pax-utils python-any-r1 readme.gentoo-r1 rust toolchain-funcs virtualx xdg
@@ -33,7 +33,7 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="128.5.0esr-${MY_PV}-1-build3"
+MY_P="128.6.0esr-${MY_PV}-1-build2"
 MY_P="firefox-tor-browser-${MY_P}"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
@@ -42,7 +42,7 @@ else
 	KEYWORDS="~amd64"
 fi
 MY_PV="${MY_PV%.0}"
-MY_NOS="11.5.2"
+MY_NOS="12.1.1"
 MY_NOS="noscript-${MY_NOS}.xpi"
 
 DESCRIPTION="The Tor Browser"
@@ -51,7 +51,10 @@ SRC_URI="
 	mirror://tor/${PN}/${MY_PV}/src-${MY_P}.tar.xz
 	https://noscript.net/download/releases/${MY_NOS}
 	${PATCH_URIS[@]}
-	wasm? (
+	vanilla? (
+		mirror://tor/${PN}/${MY_PV}/tor-browser-linux-x86_64-${MY_PV}.tar.xz
+	)
+	wasm-sandbox? (
 		https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-${WASI_SDK_VER/.*/}/wasi-sdk-${WASI_SDK_VER}-x86_64-linux.tar.gz
 	)
 "
@@ -62,14 +65,18 @@ SLOT="0"
 IUSE="+clang dbus debug eme-free hardened hwaccel jack libproxy pgo pulseaudio selinux sndio"
 IUSE+=" +system-av1 +system-harfbuzz +system-icu +system-jpeg +system-libevent +system-libvpx"
 IUSE+=" system-png +system-webp wayland wifi +X"
-IUSE+=" +jumbo-build openh264 wasm"
+IUSE+=" +jumbo-build openh264 vanilla wasm-sandbox"
 RESTRICT="primaryuri"
 
 REQUIRED_USE="|| ( X wayland )
 	debug? ( !system-av1 )
 	pgo? ( jumbo-build )
+	wasm-sandbox? ( llvm_slot_19 )
 	wayland? ( dbus )
 	wifi? ( dbus )"
+REQUIRED_USE+="
+	vanilla? ( !wasm-sandbox )
+"
 
 BDEPEND="${PYTHON_DEPS}
 	$(llvm_gen_dep '
@@ -79,7 +86,7 @@ BDEPEND="${PYTHON_DEPS}
 			llvm-core/lld:${LLVM_SLOT}
 			pgo? ( llvm-runtimes/compiler-rt-sanitizers:${LLVM_SLOT}[profile] )
 		)
-		wasm? ( llvm-core/lld:${LLVM_SLOT} )
+		wasm-sandbox? ( llvm-core/lld:${LLVM_SLOT} )
 	')
 	app-alternatives/awk
 	app-arch/unzip
@@ -140,7 +147,7 @@ COMMON_DEPEND="
 	)
 	system-harfbuzz? (
 		>=media-libs/harfbuzz-2.8.1:0=
-		!wasm? ( >=media-gfx/graphite2-1.3.13 )
+		!wasm-sandbox? ( >=media-gfx/graphite2-1.3.13 )
 	)
 	system-icu? ( >=dev-libs/icu-73.1:= )
 	system-jpeg? ( >=media-libs/libjpeg-turbo-1.2.1:= )
@@ -187,9 +194,13 @@ DEPEND="${COMMON_DEPEND}
 		x11-libs/libICE
 		x11-libs/libSM
 	)"
-
 RDEPEND+="
 	net-vpn/tor
+	!vanilla? (
+		media-fonts/croscorefonts
+		media-fonts/noto
+		media-fonts/stix-fonts
+	)
 "
 
 llvm_check_deps() {
@@ -418,6 +429,7 @@ src_prepare() {
 		rm -v "${WORKDIR}"/firefox-patches/*bgo-748849-RUST_TARGET_override.patch || die
 	fi
 
+	use vanilla || \
 	eapply "${WORKDIR}/firefox-patches"
 
 	# Allow user to apply any additional patches without modifing ebuild
@@ -433,16 +445,16 @@ src_prepare() {
 		elif use x86 ; then
 			export RUST_TARGET="i686-unknown-linux-musl"
 		else
-			die "Unknown musl chost, please post your rustc -vV along with emerge --info on Gentoo's bug #915651"
+			die "Unknown musl chost, please post a new bug with your rustc -vV along with emerge --info"
 		fi
 	fi
 
-	# Pre-built wasm path manipulation.
-	if use wasm ; then
+	# Pre-built wasm-sandbox path manipulation.
+	if use wasm-sandbox ; then
 		if use amd64 ; then
 			export wasi_arch="x86_64"
 		else
-			die "wasm enabled on unknown/unsupported arch!"
+			die "wasm-sandbox enabled on unknown/unsupported arch!"
 		fi
 
 		sed -i \
@@ -653,8 +665,10 @@ src_configure() {
 		einfo "Building without Mozilla API key ..."
 	fi
 
+	if use !vanilla; then
 	mozconfig_use_with system-av1
 	mozconfig_use_with system-harfbuzz
+	fi
 	mozconfig_use_with system-icu
 	mozconfig_use_with system-jpeg
 	mozconfig_use_with system-libevent
@@ -695,12 +709,13 @@ src_configure() {
 		mozconfig_add_options_ac '+x11' --enable-default-toolkit=cairo-gtk3-x11-only
 	fi
 
-	# wasm
-	# Since graphite2 is one of the sandboxed libraries, system-graphite2 obviously can't work with +wasm.
-	if use wasm ; then
-		mozconfig_add_options_ac '+wasm' --with-wasi-sysroot="${WORKDIR}/wasi-sdk-${WASI_SDK_VER}-${wasi_arch}-linux/share/wasi-sysroot/"
+	# wasm-sandbox
+	# Since graphite2 is one of the sandboxed libraries, system-graphite2 obviously can't work with +wasm-sandbox.
+	if use wasm-sandbox ; then
+		mozconfig_add_options_ac '+wasm-sandbox' --with-wasi-sysroot="${WORKDIR}/wasi-sdk-${WASI_SDK_VER}-${wasi_arch}-linux/share/wasi-sysroot/"
 	else
 		mozconfig_add_options_ac 'no wasm-sandbox' --without-wasm-sandboxed-libraries
+		use !vanilla && \
 		mozconfig_use_with system-harfbuzz system-graphite2
 	fi
 
@@ -1019,6 +1034,12 @@ src_install() {
 	done
 	newicon -s scalable "${_d}/content/about-logo.svg" ${PN}.svg
 
+	if use vanilla; then
+		insinto "${MOZILLA_FIVE_HOME}/fonts"
+		doins ../tor-browser/Browser/fonts/*.[ot]tf
+	else
+		rm -f "${ED}/${MOZILLA_FIVE_HOME}/fonts/fonts.conf"
+	fi
 	# Install .desktop for menu entry
 	make_desktop_entry ${PN} "Tor Browser" ${PN} "Network;WebBrowser" "StartupWMClass=Torbrowser"
 }

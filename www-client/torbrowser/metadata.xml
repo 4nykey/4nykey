@@ -33,6 +33,6 @@
 		instead of bundled (requires APNG patches)</flag>
 	<flag name="system-webp">Use the system-wide <pkg>media-libs/libwebp</pkg>
 		instead of bundled</flag>
-	<flag name="wasm">Sandbox certain third-party libraries through WebAssembly using RLBox</flag>
+	<flag name="wasm-sandbox">Sandbox certain third-party libraries through WebAssembly using RLBox</flag>
 </use>
 </pkgmetadata>
