@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -14,7 +14,7 @@ SRC_URI="https://mupdf.com/downloads/archive/${P}-source.tar.gz"
 S="${WORKDIR}/${P}-source"
 
 LICENSE="AGPL-3"
-SLOT="0"
+SLOT="0/${PV}"
 KEYWORDS="~amd64"
 
 DEPEND="
@@ -24,7 +24,7 @@ RDEPEND="
 	${DEPEND}
 "
 BDEPEND="
-	dev-python/clang-python[${PYTHON_USEDEP}]
+	dev-python/clang[${PYTHON_USEDEP}]
 	dev-lang/swig
 "
 PATCHES=(
