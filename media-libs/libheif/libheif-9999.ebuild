@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -53,11 +53,11 @@ DEPEND="
 	openh264? ( media-libs/openh264:=[${MULTILIB_USEDEP}] )
 	openjph? ( media-libs/openjph:=[${MULTILIB_USEDEP}] )
 	uvg266? ( media-libs/uvg266[${MULTILIB_USEDEP}] )
-	vvenc? ( media-libs/vvenc[${MULTILIB_USEDEP}] )
-	vvdec? ( media-libs/vvdec[${MULTILIB_USEDEP}] )
+	vvenc? ( media-libs/vvenc:=[${MULTILIB_USEDEP}] )
+	vvdec? ( media-libs/vvdec:=[${MULTILIB_USEDEP}] )
 	webp? ( media-libs/libwebp:=[${MULTILIB_USEDEP}] )
-	media-libs/openjpeg[${MULTILIB_USEDEP}]
-	media-libs/kvazaar[${MULTILIB_USEDEP}]
+	media-libs/openjpeg:=[${MULTILIB_USEDEP}]
+	media-libs/kvazaar:=[${MULTILIB_USEDEP}]
 "
 RDEPEND="${DEPEND}"
 
