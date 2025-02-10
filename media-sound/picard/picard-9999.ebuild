@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -45,14 +45,15 @@ BDEPEND="
 "
 RDEPEND="
 	$(python_gen_cond_dep '
+		discid? ( dev-python/discid[${PYTHON_USEDEP}] )
 		dev-python/fasteners[${PYTHON_USEDEP}]
+		dev-python/markdown[${PYTHON_USEDEP}]
+		media-libs/mutagen[${PYTHON_USEDEP}]
+		dev-python/pyjwt[${PYTHON_USEDEP}]
 		dev-python/pyqt5[declarative,gui,network,widgets,${PYTHON_USEDEP}]
 		dev-python/python-dateutil[${PYTHON_USEDEP}]
 		dev-python/pyyaml[${PYTHON_USEDEP}]
-		media-libs/mutagen[${PYTHON_USEDEP}]
-		discid? ( dev-python/discid[${PYTHON_USEDEP}] )
-		dev-python/markdown[${PYTHON_USEDEP}]
-		dev-python/pyjwt[${PYTHON_USEDEP}]
+		dev-python/charset-normalizer[${PYTHON_USEDEP}]
 	')
 	fingerprints? ( media-libs/chromaprint[tools] )
 "

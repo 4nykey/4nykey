@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -33,8 +33,8 @@ IUSE="std_format"
 
 RDEPEND="
 	media-video/ffmpeg:=
-	media-libs/taglib
-	media-libs/libebur128
+	media-libs/taglib:=
+	media-libs/libebur128:=
 	dev-libs/inih
 	!std_format? ( dev-libs/libfmt:= )
 "
@@ -60,7 +60,7 @@ pkg_pretend() {
 
 src_configure() {
 	local mycmakeargs=(
-	-DUSE_STD_FORMAT=$(usex std_format)
+		-DUSE_STD_FORMAT=$(usex std_format)
 	)
 	cmake_src_configure
 }
