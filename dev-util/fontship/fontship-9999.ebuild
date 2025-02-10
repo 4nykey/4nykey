@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -8,252 +8,314 @@ CRATES="
 	adler2@2.0.0
 	ahash@0.8.11
 	aho-corasick@1.1.3
-	allocator-api2@0.2.18
-	anstream@0.6.15
-	anstyle@1.0.8
-	anstyle-parse@0.2.5
-	anstyle-query@1.1.1
-	anstyle-wincon@3.0.4
-	anyhow@1.0.89
+	allocator-api2@0.2.21
+	anstream@0.6.18
+	anstyle-parse@0.2.6
+	anstyle-query@1.1.2
+	anstyle-wincon@3.0.7
+	anstyle@1.0.10
+	anyhow@1.0.95
 	arc-swap@1.7.1
-	async-trait@0.1.82
-	autocfg@1.3.0
-	bitflags@2.6.0
+	arraydeque@0.5.1
+	async-trait@0.1.85
+	autocfg@1.4.0
+	bitflags@2.8.0
 	block-buffer@0.10.4
-	bstr@1.10.0
+	bstr@1.11.3
+	bumpalo@3.16.0
 	camino@1.1.9
-	cargo-platform@0.1.8
+	cargo-platform@0.1.9
 	cargo_metadata@0.18.1
-	cc@1.1.19
+	cargo_metadata@0.19.1
+	cc@1.2.10
 	cfg-if@1.0.0
 	chunky-vec@0.1.0
-	clap@4.5.17
-	clap_builder@4.5.17
-	clap_complete@4.5.26
-	clap_derive@4.5.13
-	clap_lex@0.7.2
-	clap_mangen@0.2.23
+	clap@4.5.27
+	clap_builder@4.5.27
+	clap_complete@4.5.42
+	clap_derive@4.5.24
+	clap_lex@0.7.4
+	clap_mangen@0.2.26
 	clru@0.6.2
-	colorchoice@1.0.2
-	config@0.14.0
-	console@0.15.8
-	cpufeatures@0.2.14
+	colorchoice@1.0.3
+	config@0.14.1
+	console@0.15.10
+	cpufeatures@0.2.17
 	crc32fast@1.4.2
-	crossbeam-deque@0.8.5
+	crossbeam-deque@0.8.6
 	crossbeam-epoch@0.9.18
-	crossbeam-utils@0.8.20
+	crossbeam-utils@0.8.21
 	crypto-common@0.1.6
 	darling@0.20.10
 	darling_core@0.20.10
 	darling_macro@0.20.10
 	deranged@0.3.11
-	derive_builder@0.20.1
-	derive_builder_core@0.20.1
-	derive_builder_macro@0.20.1
+	derive_builder@0.20.2
+	derive_builder_core@0.20.2
+	derive_builder_macro@0.20.2
 	digest@0.10.7
 	displaydoc@0.2.5
 	dunce@1.0.5
 	either@1.13.0
-	encode_unicode@0.3.6
-	errno@0.3.9
+	encode_unicode@1.0.0
+	encoding_rs@0.8.35
+	errno@0.3.10
 	faster-hex@0.9.0
-	fastrand@2.1.1
+	fastrand@2.3.0
 	filetime@0.2.25
-	flate2@1.0.33
-	fluent@0.16.1
+	flate2@1.0.35
 	fluent-bundle@0.15.3
 	fluent-fallback@0.7.1
 	fluent-langneg@0.13.0
 	fluent-syntax@0.11.1
+	fluent@0.16.1
 	fnv@1.0.7
 	form_urlencoded@1.2.1
-	futures@0.3.30
-	futures-channel@0.3.30
-	futures-core@0.3.30
-	futures-executor@0.3.30
-	futures-io@0.3.30
-	futures-macro@0.3.30
-	futures-sink@0.3.30
-	futures-task@0.3.30
-	futures-util@0.3.30
+	futures-channel@0.3.31
+	futures-core@0.3.31
+	futures-executor@0.3.31
+	futures-io@0.3.31
+	futures-macro@0.3.31
+	futures-sink@0.3.31
+	futures-task@0.3.31
+	futures-util@0.3.31
+	futures@0.3.31
 	generic-array@0.14.7
-	getset@0.1.3
-	git-warp-time@0.8.3
-	git2@0.19.0
-	gix@0.63.0
+	getrandom@0.2.15
+	git-warp-time@0.8.5
+	git2@0.20.0
 	gix-actor@0.31.5
-	gix-bitmap@0.2.11
-	gix-chunk@0.4.8
+	gix-actor@0.33.2
+	gix-bitmap@0.2.14
+	gix-chunk@0.4.11
+	gix-command@0.4.1
 	gix-commitgraph@0.24.3
+	gix-commitgraph@0.25.1
+	gix-config-value@0.14.11
 	gix-config@0.37.0
-	gix-config-value@0.14.8
+	gix-config@0.42.0
 	gix-date@0.8.7
+	gix-date@0.9.3
 	gix-diff@0.44.1
+	gix-diff@0.49.0
 	gix-discover@0.32.0
+	gix-discover@0.37.0
 	gix-features@0.38.2
+	gix-features@0.39.1
 	gix-fs@0.11.3
+	gix-fs@0.12.1
 	gix-glob@0.16.5
+	gix-glob@0.17.1
 	gix-hash@0.14.2
+	gix-hash@0.15.1
 	gix-hashtable@0.5.2
+	gix-hashtable@0.6.0
 	gix-index@0.33.1
+	gix-index@0.37.0
 	gix-lock@14.0.0
+	gix-lock@15.0.1
 	gix-macros@0.1.5
 	gix-object@0.42.3
+	gix-object@0.46.1
 	gix-odb@0.61.1
+	gix-odb@0.66.0
 	gix-pack@0.51.1
-	gix-path@0.10.11
-	gix-quote@0.4.12
+	gix-pack@0.56.0
+	gix-packetline@0.18.3
+	gix-path@0.10.14
+	gix-protocol@0.47.0
+	gix-quote@0.4.15
 	gix-ref@0.44.1
+	gix-ref@0.49.1
 	gix-refspec@0.23.1
+	gix-refspec@0.27.0
 	gix-revision@0.27.2
+	gix-revision@0.31.1
 	gix-revwalk@0.13.2
-	gix-sec@0.10.8
+	gix-revwalk@0.17.0
+	gix-sec@0.10.11
+	gix-shallow@0.1.0
 	gix-tempfile@14.0.2
-	gix-trace@0.1.10
+	gix-tempfile@15.0.0
+	gix-trace@0.1.12
+	gix-transport@0.44.0
 	gix-traverse@0.39.2
+	gix-traverse@0.43.1
 	gix-url@0.27.5
-	gix-utils@0.1.12
+	gix-url@0.28.2
+	gix-utils@0.1.14
 	gix-validate@0.8.5
+	gix-validate@0.9.3
+	gix@0.63.0
+	gix@0.69.1
 	hashbrown@0.14.5
+	hashlink@0.8.4
 	heck@0.5.0
 	hermit-abi@0.3.9
-	home@0.5.9
+	home@0.5.11
+	icu_collections@1.5.0
+	icu_locid@1.5.0
+	icu_locid_transform@1.5.0
+	icu_locid_transform_data@1.5.0
+	icu_normalizer@1.5.0
+	icu_normalizer_data@1.5.0
+	icu_properties@1.5.1
+	icu_properties_data@1.5.0
+	icu_provider@1.5.0
+	icu_provider_macros@1.5.0
 	ident_case@1.0.1
-	idna@0.5.0
-	indicatif@0.17.8
-	instant@0.1.13
+	idna@1.0.3
+	idna_adapter@1.2.0
+	indicatif@0.17.9
 	intl-memoizer@0.5.2
 	intl_pluralrules@7.0.2
 	is_terminal_polyfill@1.70.1
 	itertools@0.13.0
-	itoa@1.0.11
+	itoa@1.0.14
+	jiff-tzdb-platform@0.1.2
+	jiff-tzdb@0.1.2
+	jiff@0.1.26
 	jobserver@0.1.32
+	js-sys@0.3.77
 	lazy_static@1.5.0
-	libc@0.2.158
-	libgit2-sys@0.17.0+1.8.1
+	libc@0.2.169
+	libgit2-sys@0.18.0+1.9.0
 	libredox@0.1.3
-	libz-sys@1.1.20
-	linked-hash-map@0.5.6
-	linux-raw-sys@0.4.14
+	libz-sys@1.1.21
+	linux-raw-sys@0.4.15
+	litemap@0.7.4
 	lock_api@0.4.12
-	log@0.4.22
+	log@0.4.25
+	maybe-async@0.2.10
 	memchr@2.7.4
 	memmap2@0.9.5
 	minimal-lexical@0.2.1
-	miniz_oxide@0.8.0
+	miniz_oxide@0.8.3
 	nom@7.1.3
 	num-conv@0.1.0
 	num_cpus@1.16.0
 	num_threads@0.1.7
 	number_prefix@0.4.0
-	once_cell@1.19.0
+	once_cell@1.20.2
 	parking_lot@0.12.3
 	parking_lot_core@0.9.10
-	pathdiff@0.2.1
+	pathdiff@0.2.3
 	percent-encoding@2.3.1
 	pin-cell@0.2.0
-	pin-project-lite@0.2.14
+	pin-project-lite@0.2.16
 	pin-utils@0.1.0
-	pkg-config@0.3.30
-	portable-atomic@1.7.0
+	pkg-config@0.3.31
+	portable-atomic-util@0.2.4
+	portable-atomic@1.10.0
 	powerfmt@0.2.0
-	proc-macro-error-attr2@2.0.0
-	proc-macro-error2@2.0.1
-	proc-macro2@1.0.86
+	proc-macro2@1.0.93
 	prodash@28.0.0
-	quote@1.0.37
-	rayon@1.10.0
+	prodash@29.0.0
+	quote@1.0.38
 	rayon-core@1.12.1
-	redox_syscall@0.5.3
-	regex@1.10.6
-	regex-automata@0.4.7
-	regex-syntax@0.8.4
+	rayon@1.10.0
+	redox_syscall@0.5.8
+	regex-automata@0.4.9
+	regex-syntax@0.8.5
+	regex@1.11.1
 	roff@0.2.2
-	rust-embed@8.5.0
 	rust-embed-impl@8.5.0
 	rust-embed-utils@8.5.0
+	rust-embed@8.5.0
 	rustc-hash@1.1.0
 	rustc_version@0.4.1
-	rustix@0.38.37
-	rustversion@1.0.17
+	rustix@0.38.44
+	rustversion@1.0.19
 	ryu@1.0.18
 	same-file@1.0.6
 	scopeguard@1.2.0
 	self_cell@0.10.3
-	self_cell@1.0.4
-	semver@1.0.23
-	serde@1.0.210
-	serde_derive@1.0.210
-	serde_json@1.0.128
+	self_cell@1.1.0
+	semver@1.0.25
+	serde@1.0.217
+	serde_derive@1.0.217
+	serde_json@1.0.137
 	sha1_smol@1.0.1
 	sha2@0.10.8
+	shell-words@1.1.0
 	shlex@1.3.0
-	signal-hook@0.3.17
 	signal-hook-registry@1.4.2
+	signal-hook@0.3.17
 	slab@0.4.9
 	smallvec@1.13.2
-	snafu@0.8.4
-	snafu-derive@0.8.4
+	snafu-derive@0.8.5
+	snafu@0.8.5
+	stable_deref_trait@1.2.0
 	strsim@0.11.1
 	subprocess@0.2.9
-	syn@2.0.77
-	tempfile@3.12.0
-	terminal_size@0.3.0
-	thiserror@1.0.63
-	thiserror-impl@1.0.63
-	time@0.3.36
+	syn@2.0.96
+	synstructure@0.13.1
+	tempfile@3.15.0
+	terminal_size@0.4.1
+	thiserror-impl@1.0.69
+	thiserror-impl@2.0.11
+	thiserror@1.0.69
+	thiserror@2.0.11
 	time-core@0.1.2
-	time-macros@0.2.18
+	time-macros@0.2.19
+	time@0.3.37
 	tinystr@0.7.6
-	tinyvec@1.8.0
+	tinyvec@1.8.1
 	tinyvec_macros@0.1.1
 	type-map@0.5.0
 	typenum@1.17.0
-	unic-langid@0.9.5
 	unic-langid-impl@0.9.5
-	unicode-bidi@0.3.15
+	unic-langid@0.9.5
 	unicode-bom@2.0.3
-	unicode-ident@1.0.13
-	unicode-normalization@0.1.23
+	unicode-ident@1.0.15
+	unicode-normalization@0.1.24
 	unicode-segmentation@1.12.0
-	unicode-width@0.1.13
-	url@2.5.2
+	unicode-width@0.2.0
+	url@2.5.4
+	utf16_iter@1.0.5
+	utf8_iter@1.0.4
 	utf8parse@0.2.2
 	vcpkg@0.2.15
+	vergen-gix@1.0.6
+	vergen-lib@0.1.6
 	vergen@8.3.2
-	vergen@9.0.0
-	vergen-gix@1.0.1
-	vergen-lib@0.1.3
+	vergen@9.0.4
 	version_check@0.9.5
 	walkdir@2.5.0
-	winapi@0.3.9
+	wasi@0.11.0+wasi-snapshot-preview1
+	wasm-bindgen-backend@0.2.100
+	wasm-bindgen-macro-support@0.2.100
+	wasm-bindgen-macro@0.2.100
+	wasm-bindgen-shared@0.2.100
+	wasm-bindgen@0.2.100
+	web-time@1.1.0
 	winapi-i686-pc-windows-gnu@0.4.0
 	winapi-util@0.1.9
 	winapi-x86_64-pc-windows-gnu@0.4.0
-	windows-sys@0.48.0
+	winapi@0.3.9
 	windows-sys@0.52.0
 	windows-sys@0.59.0
-	windows-targets@0.48.5
 	windows-targets@0.52.6
-	windows_aarch64_gnullvm@0.48.5
 	windows_aarch64_gnullvm@0.52.6
-	windows_aarch64_msvc@0.48.5
 	windows_aarch64_msvc@0.52.6
-	windows_i686_gnu@0.48.5
 	windows_i686_gnu@0.52.6
 	windows_i686_gnullvm@0.52.6
-	windows_i686_msvc@0.48.5
 	windows_i686_msvc@0.52.6
-	windows_x86_64_gnu@0.48.5
 	windows_x86_64_gnu@0.52.6
-	windows_x86_64_gnullvm@0.48.5
 	windows_x86_64_gnullvm@0.52.6
-	windows_x86_64_msvc@0.48.5
 	windows_x86_64_msvc@0.52.6
-	winnow@0.6.18
-	yaml-rust@0.4.5
-	zerocopy@0.7.35
+	winnow@0.6.24
+	write16@1.0.0
+	writeable@0.5.5
+	yaml-rust2@0.8.1
+	yoke-derive@0.7.5
+	yoke@0.7.5
 	zerocopy-derive@0.7.35
+	zerocopy@0.7.35
+	zerofrom-derive@0.1.5
+	zerofrom@0.1.5
+	zerovec-derive@0.10.3
+	zerovec@0.10.4
 "
 PYTHON_COMPAT=( python3_{10..12} )
 inherit bash-completion-r1 autotools python-single-r1 cargo
