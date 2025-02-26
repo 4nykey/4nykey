@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -19,6 +19,7 @@ else
 		mirror://githubraw/rictyfonts/rictyfonts.github.io/11f3cc6/files/${PN}_generator-${PV}.sh
 		mirror://githubcl/MihailJP/${MY_IN%-*}/tar.gz/${MY_IN##*-}
 		-> ${MY_IN}.tar.gz
+		https://jaist.dl.osdn.jp/mix-mplus-ipa/72511/${MY_MI}.zip
 		https://osdn.net/dl/mix-mplus-ipa/${MY_MI}.zip
 	"
 	KEYWORDS="~amd64 ~x86"
