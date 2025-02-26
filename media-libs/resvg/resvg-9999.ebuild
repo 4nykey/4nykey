@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -63,7 +63,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	MY_PV="55888a5"
 	if [[ -n ${PV%%*_p*} ]]; then
-		MY_PV="v${PV}"
+		MY_PV="${PV}"
 		SRC_URI="
 			https://github.com/RazrFalcon/${PN}/releases/download/${MY_PV}/${P}.tar.xz
 		"
@@ -93,6 +93,11 @@ RDEPEND="
 	media-libs/fontconfig
 "
 
+src_prepare() {
+	sed -e "s:/target/:&$(rust_abi)/:" -i tools/viewsvg/viewsvg.pro
+	default
+}
+
 src_configure() {
 	cargo_src_configure
 	use qt5 || return
@@ -111,7 +116,7 @@ src_compile() {
 src_install() {
 	cargo_src_install --path crates/resvg
 	cargo_src_install --path crates/usvg
-	dolib.so target/$(rust_abi)/$(usex debug debug release)/libresvg.so
+	dolib.so $(cargo_target_dir)/libresvg.so
 	doheader crates/c-api/*.h
 	use qt5 && dobin viewsvg
 }
