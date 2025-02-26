@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -59,7 +59,7 @@ RDEPEND="
 	ffmpeg? ( media-video/ffmpeg:= )
 	mad? ( media-libs/libmad:= )
 	vorbis? ( media-libs/libvorbis )
-	flac? ( media-libs/flac )
+	flac? ( media-libs/flac:= )
 	wavpack? ( media-sound/wavpack )
 	sndfile? ( media-libs/libsndfile )
 	curl? ( net-misc/curl )
@@ -88,7 +88,7 @@ BDEPEND="
 	dev-util/intltool
 	oss? ( virtual/libc )
 	mac? ( dev-lang/yasm )
-	sys-devel/clang
+	llvm-core/clang
 "
 
 pkg_setup() {
