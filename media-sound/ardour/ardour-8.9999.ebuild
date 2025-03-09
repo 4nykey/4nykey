@@ -25,12 +25,15 @@ LICENSE="GPL-2"
 SLOT="${PV%%.*}"
 IUSE="
 alsa bindist bundled-libs dbus debug doc jack hid nls pulseaudio phone-home
-sanitize sse vst websockets
+sanitize vst websockets
 cpu_flags_x86_avx
 cpu_flags_x86_avx512f
+cpu_flags_x86_sse
 "
 REQUIRED_USE="
 	|| ( alsa jack pulseaudio )
+	cpu_flags_x86_avx? ( cpu_flags_x86_sse )
+	cpu_flags_x86_avx512f? ( cpu_flags_x86_sse )
 	dbus? ( alsa )
 "
 
@@ -101,9 +104,10 @@ src_prepare() {
 	sed -e 's:USE_EXTERNAL_LIBS:DONT_&:' -i {libs/aaf,session_utils}/wscript
 
 	local _c=()
-	use cpu_flags_x86_avx || _c+=( -e '/define_name =/ s:\<FPU_AVX_FMA_SUPPORT\>:NO_&:' )
-	use cpu_flags_x86_avx512f || _c+=( -e '/define_name =/ s:\<FPU_AVX512F_SUPPORT\>:NO_&:' )
-	sed "${_c[@]}" -i wscript
+	sed \
+		-e "/define_name =/ s:\<FPU_AVX_FMA_SUPPORT\>:$(usex cpu_flags_x86_avx '' 'NO_')&:" \
+		-e "/define_name =/ s:\<FPU_AVX512F_SUPPORT\>:$(usex cpu_flags_x86_avx512f '' 'NO_')&:" \
+		-i wscript
 
 	sed -e "s:Name=Ardour:& ${SLOT}:" -i gtk2_ardour/ardour.desktop.in
 }
@@ -124,7 +128,7 @@ src_configure() {
 		$(my_use vst vst3)
 		$(my_use nls)
 		$(my_use phone-home)
-		$(my_use sse fpu-optimization)
+		$(my_use cpu_flags_x86_sse fpu-optimization)
 		$(usex bindist '--freebie' '')
 		$(usex debug '--debug-symbols --rt-alloc-debug' '')
 		$(usex sanitize '--address-sanitizer' '')
