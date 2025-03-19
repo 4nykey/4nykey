@@ -3,7 +3,7 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-128esr-patches-08.tar.xz"
+FIREFOX_PATCHSET="firefox-128esr-patches-09.tar.xz"
 
 LLVM_COMPAT=( 17 18 19 )
 
@@ -33,7 +33,7 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="128.7.0esr-${MY_PV}-1-build2"
+MY_P="128.8.0esr-${MY_PV}-1-build2"
 MY_P="firefox-tor-browser-${MY_P}"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
@@ -626,7 +626,6 @@ src_configure() {
 		--enable-new-pass-manager \
 		--enable-official-branding \
 		--enable-release \
-		--enable-system-ffi \
 		--enable-system-pixman \
 		--enable-system-policies \
 		--host="${CBUILD:-${CHOST}}" \
@@ -636,6 +635,7 @@ src_configure() {
 		--without-ccache \
 		--with-intl-api \
 		--with-libclang-path="$(llvm-config --libdir)" \
+		--with-system-ffi \
 		--with-system-nspr \
 		--with-system-nss \
 		--with-system-zlib \
