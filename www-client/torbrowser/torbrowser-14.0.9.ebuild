@@ -3,11 +3,11 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-128esr-patches-09.tar.xz"
+FIREFOX_PATCHSET="firefox-128esr-patches-08.tar.xz"
 
 LLVM_COMPAT=( 17 18 19 )
 
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 PYTHON_REQ_USE="ncurses,sqlite,ssl"
 
 # This will also filter rust versions that don't match LLVM_COMPAT in the non-clang path; this is fine.
@@ -33,7 +33,7 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="128.8.0esr-${MY_PV}-1-build2"
+MY_P="128.9.0esr-${MY_PV}-2-build2"
 MY_P="firefox-tor-browser-${MY_P}"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
@@ -51,9 +51,6 @@ SRC_URI="
 	mirror://tor/${PN}/${MY_PV}/src-${MY_P}.tar.xz
 	https://noscript.net/download/releases/${MY_NOS}
 	${PATCH_URIS[@]}
-	vanilla? (
-		mirror://tor/${PN}/${MY_PV}/tor-browser-linux-x86_64-${MY_PV}.tar.xz
-	)
 	wasm-sandbox? (
 		https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-${WASI_SDK_VER/.*/}/wasi-sdk-${WASI_SDK_VER}-x86_64-linux.tar.gz
 	)
@@ -65,7 +62,7 @@ SLOT="0"
 IUSE="+clang dbus debug eme-free hardened hwaccel jack libproxy pgo pulseaudio selinux sndio"
 IUSE+=" +system-av1 +system-harfbuzz +system-icu +system-jpeg +system-libevent +system-libvpx"
 IUSE+=" system-png +system-webp wayland wifi +X"
-IUSE+=" +jumbo-build openh264 vanilla wasm-sandbox"
+IUSE+=" +jumbo-build openh264 wasm-sandbox"
 RESTRICT="primaryuri"
 
 REQUIRED_USE="|| ( X wayland )
@@ -74,9 +71,6 @@ REQUIRED_USE="|| ( X wayland )
 	wasm-sandbox? ( llvm_slot_19 )
 	wayland? ( dbus )
 	wifi? ( dbus )"
-REQUIRED_USE+="
-	vanilla? ( !wasm-sandbox )
-"
 
 BDEPEND="${PYTHON_DEPS}
 	$(llvm_gen_dep '
@@ -194,13 +188,9 @@ DEPEND="${COMMON_DEPEND}
 		x11-libs/libICE
 		x11-libs/libSM
 	)"
+
 RDEPEND+="
 	net-vpn/tor
-	!vanilla? (
-		media-fonts/croscorefonts
-		media-fonts/noto
-		media-fonts/stix-fonts
-	)
 "
 
 llvm_check_deps() {
@@ -429,7 +419,6 @@ src_prepare() {
 		rm -v "${WORKDIR}"/firefox-patches/*bgo-748849-RUST_TARGET_override.patch || die
 	fi
 
-	use vanilla || \
 	eapply "${WORKDIR}/firefox-patches"
 
 	# Allow user to apply any additional patches without modifing ebuild
@@ -646,8 +635,6 @@ src_configure() {
 
 	# Set update channel
 	local update_channel=release
-	[[ -n ${MOZ_ESR} ]] && update_channel=esr
-	mozconfig_add_options_ac '' --update-channel=${update_channel}
 
 	if ! use x86 ; then
 		mozconfig_add_options_ac '' --enable-rust-simd
@@ -665,10 +652,8 @@ src_configure() {
 		einfo "Building without Mozilla API key ..."
 	fi
 
-	if use !vanilla; then
 	mozconfig_use_with system-av1
 	mozconfig_use_with system-harfbuzz
-	fi
 	mozconfig_use_with system-icu
 	mozconfig_use_with system-jpeg
 	mozconfig_use_with system-libevent
@@ -715,7 +700,6 @@ src_configure() {
 		mozconfig_add_options_ac '+wasm-sandbox' --with-wasi-sysroot="${WORKDIR}/wasi-sdk-${WASI_SDK_VER}-${wasi_arch}-linux/share/wasi-sysroot/"
 	else
 		mozconfig_add_options_ac 'no wasm-sandbox' --without-wasm-sandboxed-libraries
-		use !vanilla && \
 		mozconfig_use_with system-harfbuzz system-graphite2
 	fi
 
@@ -818,8 +802,6 @@ src_configure() {
 		else
 			mozconfig_add_options_ac 'relr elf-hack' --enable-elf-hack=relr
 		fi
-	elif use ppc64 || use riscv ; then
-		# '--disable-elf-hack' is not recognized on ppc64/riscv,
 		# see bgo #917049, #930046
 		:;
 	else
@@ -1034,13 +1016,7 @@ src_install() {
 	done
 	newicon -s scalable "${_d}/content/about-logo.svg" ${PN}.svg
 
-	if use vanilla; then
-		insinto "${MOZILLA_FIVE_HOME}/fonts"
-		doins ../tor-browser/Browser/fonts/*.[ot]tf
-	else
-		rm -f "${ED}/${MOZILLA_FIVE_HOME}/fonts/fonts.conf"
-	fi
-	# Install .desktop for menu entry
+	# Install menu
 	make_desktop_entry ${PN} "Tor Browser" ${PN} "Network;WebBrowser" "StartupWMClass=Torbrowser"
 }
 
