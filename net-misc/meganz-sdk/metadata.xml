@@ -5,7 +5,6 @@
 		<email>4nykey@gmail.com</email>
 	</maintainer>
 	<use>
-		<flag name="c-ares">Use <pkg>net-dns/c-ares</pkg> for DNS lookups</flag>
 		<flag name="freeimage">Enable support for image I/O via <pkg>media-libs/freeimage</pkg></flag>
 		<flag name="fuse">Build FUSE-based example client</flag>
 		<flag name="libuv">Support asynchronous I/O via <pkg>dev-libs/libuv</pkg></flag>

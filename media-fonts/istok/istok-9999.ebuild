@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit subversion
 	ESVN_REPO_URI="https://svn.code.sf.net/p/${PN}/code/trunk"

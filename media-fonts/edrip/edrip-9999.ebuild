@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 inherit python-single-r1
 if [[ ${PV} == *9999* ]]; then
 	SRC_URI="mirror://gcarchive/${PN}/source-archive.zip -> ${P}.zip"

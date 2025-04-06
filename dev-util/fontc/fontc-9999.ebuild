@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 DISTUTILS_USE_PEP517=maturin
 CRATES="
 	addr2line@0.24.2
@@ -13,15 +13,14 @@ CRATES="
 	android_system_properties@0.1.5
 	anes@0.1.6
 	ansi_term@0.12.1
-	anstream@0.6.15
-	anstyle@1.0.8
-	anstyle-parse@0.2.5
-	anstyle-query@1.1.1
-	anstyle-wincon@3.0.4
-	anyhow@1.0.90
-	arrayref@0.3.9
+	anstream@0.6.18
+	anstyle-parse@0.2.6
+	anstyle-query@1.1.2
+	anstyle-wincon@3.0.7
+	anstyle@1.0.10
+	anyhow@1.0.97
 	arrayvec@0.7.6
-	async-trait@0.1.83
+	async-trait@0.1.88
 	auto_impl@0.5.0
 	autocfg@1.4.0
 	backtrace@0.3.74
@@ -29,64 +28,61 @@ CRATES="
 	bincode@1.3.3
 	bindgen@0.70.1
 	bitflags@1.3.2
-	bitflags@2.6.0
-	blake3@1.5.4
-	bumpalo@3.16.0
-	bytemuck@1.19.0
-	bytemuck_derive@1.8.0
-	bytes@1.7.2
+	bitflags@2.9.0
+	bumpalo@3.17.0
+	bytemuck@1.22.0
+	bytemuck_derive@1.9.3
+	bytes@1.10.1
 	camino@1.1.9
-	cargo-platform@0.1.8
-	cargo_metadata@0.18.1
+	cargo-platform@0.1.9
+	cargo_metadata@0.19.2
 	cast@0.3.0
-	cc@1.1.31
+	cc@1.2.17
 	cexpr@0.6.0
 	cfg-if@1.0.0
-	chrono@0.4.38
-	ciborium@0.2.2
+	chrono@0.4.40
 	ciborium-io@0.2.2
 	ciborium-ll@0.2.2
+	ciborium@0.2.2
 	clang-sys@1.8.1
-	clap@4.5.20
-	clap_builder@4.5.20
-	clap_derive@4.5.18
-	clap_lex@0.7.2
+	clap@4.5.34
+	clap_builder@4.5.34
+	clap_derive@4.5.32
+	clap_lex@0.7.4
 	close_already@0.3.3
-	cmake@0.1.51
-	colorchoice@1.0.2
-	constant_time_eq@0.3.1
+	cmake@0.1.54
+	colorchoice@1.0.3
 	core-foundation-sys@0.8.7
 	crc32fast@1.4.2
-	criterion@0.5.1
 	criterion-plot@0.5.0
-	crossbeam-channel@0.5.13
-	crossbeam-deque@0.8.5
+	criterion@0.5.1
+	crossbeam-channel@0.5.14
+	crossbeam-deque@0.8.6
 	crossbeam-epoch@0.9.18
-	crossbeam-utils@0.8.20
-	crunchy@0.2.2
+	crossbeam-utils@0.8.21
+	crunchy@0.2.3
 	darling@0.20.10
 	darling_core@0.20.10
 	darling_macro@0.20.10
 	dashmap@4.0.2
-	deranged@0.3.11
+	deranged@0.4.1
 	derive_builder@0.20.2
 	derive_builder_core@0.20.2
 	derive_builder_macro@0.20.2
 	diff@0.1.13
 	displaydoc@0.2.5
-	either@1.13.0
-	env_filter@0.1.2
-	env_logger@0.11.5
-	equivalent@1.0.1
-	errno@0.3.9
-	fastrand@2.1.1
+	either@1.15.0
+	env_filter@0.1.3
+	env_logger@0.11.7
+	equivalent@1.0.2
+	errno@0.3.10
+	fastrand@2.3.0
 	filetime@0.2.25
-	flate2@1.0.34
+	flate2@1.1.0
 	fnv@1.0.7
-	font-types@0.7.2
+	font-types@0.8.3
 	form_urlencoded@1.2.1
-	formatx@0.2.2
-	futures@0.3.31
+	formatx@0.2.3
 	futures-channel@0.3.31
 	futures-core@0.3.31
 	futures-executor@0.3.31
@@ -96,214 +92,235 @@ CRATES="
 	futures-task@0.3.31
 	futures-timer@3.0.3
 	futures-util@0.3.31
+	futures@0.3.31
 	getrandom@0.2.15
+	getrandom@0.3.2
 	gimli@0.31.1
-	glob@0.3.1
-	google-fonts-sources@0.3.1
-	half@2.4.1
-	hashbrown@0.15.0
+	glob@0.3.2
+	google-fonts-sources@0.7.1
+	half@2.5.0
+	hashbrown@0.15.2
 	heck@0.3.3
 	heck@0.5.0
 	hermit-abi@0.3.9
-	hermit-abi@0.4.0
-	httparse@1.9.5
-	humantime@2.1.0
-	iana-time-zone@0.1.61
+	hermit-abi@0.5.0
+	http@1.3.1
+	httparse@1.10.1
 	iana-time-zone-haiku@0.1.2
+	iana-time-zone@0.1.62
 	icu_collections@1.5.0
+	icu_collections@2.0.0-beta2
+	icu_locale_core@2.0.0-beta2
 	icu_locid@1.5.0
 	icu_locid_transform@1.5.0
-	icu_locid_transform_data@1.5.0
+	icu_locid_transform_data@1.5.1
+	icu_normalizer@1.5.0
+	icu_normalizer_data@1.5.1
 	icu_properties@1.5.1
-	icu_properties_data@1.5.0
+	icu_properties@2.0.0-beta2
+	icu_properties_data@1.5.1
+	icu_properties_data@2.0.0-beta2
 	icu_provider@1.5.0
+	icu_provider@2.0.0-beta2
+	icu_provider_baked@2.0.0-beta2
 	icu_provider_macros@1.5.0
 	ident_case@1.0.1
-	idna@0.5.0
-	indexmap@2.6.0
-	is-terminal@0.4.13
+	idna@1.0.3
+	idna_adapter@1.2.0
+	indexmap@2.8.0
+	is-terminal@0.4.16
 	is_terminal_polyfill@1.70.1
 	itertools@0.10.5
 	itertools@0.13.0
-	itoa@1.0.11
-	js-sys@0.3.72
-	kdam@0.5.2
+	itoa@1.0.15
+	jiff-static@0.2.5
+	jiff@0.2.5
+	js-sys@0.3.77
+	kdam@0.6.2
 	kurbo@0.11.1
-	libc@0.2.161
-	libloading@0.8.5
+	libc@0.2.171
+	libloading@0.8.6
 	libredox@0.1.3
-	linux-raw-sys@0.4.14
-	litemap@0.7.3
+	linux-raw-sys@0.9.3
+	litemap@0.7.5
 	lock_api@0.4.12
-	log@0.4.22
+	log@0.4.27
 	lsp-types@0.91.1
-	lspower@1.5.0
 	lspower-macros@0.2.1
+	lspower@1.5.0
 	maud@0.26.0
 	maud_macros@0.26.0
 	memchr@2.7.4
 	minimal-lexical@0.2.1
-	miniz_oxide@0.8.0
-	mio@1.0.2
+	miniz_oxide@0.8.5
+	mio@1.0.3
 	more-asserts@0.3.1
 	mutually_exclusive_features@0.1.0
 	nom@7.1.3
-	norad@0.14.2
+	norad@0.15.0
 	num-conv@0.1.0
 	num-traits@0.2.19
 	num_cpus@1.16.0
 	num_threads@0.1.7
-	object@0.36.5
-	once_cell@1.20.2
-	oorandom@11.1.4
-	ordered-float@4.4.0
+	object@0.36.7
+	once_cell@1.21.2
+	oorandom@11.1.5
+	ordered-float@4.6.0
 	parking_lot@0.12.3
 	parking_lot_core@0.9.10
 	percent-encoding@2.3.1
-	pin-project-lite@0.2.14
+	pin-project-lite@0.2.16
 	pin-utils@0.1.0
-	plist@1.7.0
-	plotters@0.3.7
+	plist@1.7.1
 	plotters-backend@0.3.7
 	plotters-svg@0.3.7
+	plotters@0.3.7
+	portable-atomic-util@0.2.4
+	portable-atomic@1.11.0
+	potential_utf@0.1.2
 	powerfmt@0.2.0
 	pretty_assertions@1.4.1
-	prettyplease@0.2.24
-	proc-macro-error@1.0.4
+	prettyplease@0.2.31
 	proc-macro-error-attr@1.0.4
-	proc-macro2@1.0.88
+	proc-macro-error@1.0.4
+	proc-macro2@1.0.94
 	quick-xml@0.32.0
 	quick-xml@0.36.2
-	quote@1.0.37
+	quick-xml@0.37.3
+	quote@1.0.40
+	r-efi@5.2.0
 	rand@0.8.5
 	rand_core@0.6.4
-	rayon@1.10.0
 	rayon-core@1.12.1
-	read-fonts@0.21.0
-	redox_syscall@0.5.7
-	regex@1.11.0
-	regex-automata@0.4.8
+	rayon@1.10.0
+	read-fonts@0.27.5
+	redox_syscall@0.5.10
+	regex-automata@0.4.9
 	regex-syntax@0.8.5
+	regex@1.11.1
 	relative-path@1.9.3
-	ring@0.17.8
+	ring@0.17.14
 	rstest@0.18.2
 	rstest_macros@0.18.2
 	rustc-demangle@0.1.24
 	rustc-hash@1.1.0
 	rustc_version@0.4.1
-	rustix@0.38.37
-	rustls@0.23.15
-	rustls-pki-types@1.10.0
-	rustls-webpki@0.102.8
-	rustversion@1.0.18
-	ryu@1.0.18
+	rustix@1.0.3
+	rustls-pemfile@2.2.0
+	rustls-pki-types@1.11.0
+	rustls-webpki@0.103.1
+	rustls@0.23.25
+	rustversion@1.0.20
+	ryu@1.0.20
 	same-file@1.0.6
 	scopeguard@1.2.0
-	semver@1.0.23
-	serde@1.0.210
-	serde_derive@1.0.210
-	serde_json@1.0.132
-	serde_repr@0.1.19
+	semver@1.0.26
+	serde@1.0.219
+	serde_derive@1.0.219
+	serde_json@1.0.140
+	serde_repr@0.1.20
 	serde_yaml@0.9.34+deprecated
 	shlex@1.3.0
-	skrifa@0.21.0
+	skrifa@0.28.1
 	slab@0.4.9
-	smallvec@1.13.2
+	smallvec@1.14.0
 	smol_str@0.2.2
-	socket2@0.5.7
-	spin@0.9.8
+	socket2@0.5.8
 	stable_deref_trait@1.2.0
 	strsim@0.11.1
 	subtle@2.6.1
 	syn@1.0.109
-	syn@2.0.81
+	syn@2.0.100
 	synstructure@0.13.1
 	temp-env@0.3.6
-	tempfile@3.13.0
-	terminal_size@0.3.0
-	thiserror@1.0.64
-	thiserror-impl@1.0.64
+	tempfile@3.19.1
+	terminal_size@0.4.2
+	thiserror-impl@1.0.69
+	thiserror-impl@2.0.12
+	thiserror@1.0.69
+	thiserror@2.0.12
 	threadpool@1.8.1
 	tidier@0.5.3
 	tidy-sys@0.8.2
-	time@0.3.36
-	time-core@0.1.2
-	time-macros@0.2.18
+	time-core@0.1.4
+	time-macros@0.2.22
+	time@0.3.41
 	tinystr@0.7.6
+	tinystr@0.8.1
 	tinytemplate@1.2.1
-	tinyvec@1.8.0
-	tinyvec_macros@0.1.1
-	tokio@1.40.0
-	tokio-macros@2.4.0
+	tokio-macros@2.5.0
 	tokio-util@0.6.10
+	tokio@1.44.1
 	tower-service@0.3.3
 	twoway@0.2.2
 	unchecked-index@0.2.2
-	unicode-bidi@0.3.17
-	unicode-ident@1.0.13
-	unicode-normalization@0.1.24
+	unicode-ident@1.0.18
 	unicode-segmentation@1.12.0
 	unsafe-libyaml@0.2.11
 	untrusted@0.9.0
-	ureq@2.10.1
-	url@2.5.2
+	ureq-proto@0.3.5
+	ureq@3.0.10
+	url@2.5.4
+	utf-8@0.7.6
+	utf16_iter@1.0.5
+	utf8_iter@1.0.4
 	utf8parse@0.2.2
-	uuid@1.11.0
-	vergen@9.0.1
-	vergen-gitcl@1.0.1
-	vergen-lib@0.1.4
+	vergen-gitcl@1.0.5
+	vergen-lib@0.1.6
+	vergen@9.0.4
 	version_check@0.9.5
 	walkdir@2.5.0
 	wasi@0.11.0+wasi-snapshot-preview1
-	wasm-bindgen@0.2.95
-	wasm-bindgen-backend@0.2.95
-	wasm-bindgen-macro@0.2.95
-	wasm-bindgen-macro-support@0.2.95
-	wasm-bindgen-shared@0.2.95
-	web-sys@0.3.72
-	webpki-roots@0.26.6
-	winapi@0.3.9
+	wasi@0.14.2+wasi-0.2.4
+	wasm-bindgen-backend@0.2.100
+	wasm-bindgen-macro-support@0.2.100
+	wasm-bindgen-macro@0.2.100
+	wasm-bindgen-shared@0.2.100
+	wasm-bindgen@0.2.100
+	web-sys@0.3.77
+	webpki-roots@0.26.8
 	winapi-i686-pc-windows-gnu@0.4.0
 	winapi-util@0.1.9
 	winapi-x86_64-pc-windows-gnu@0.4.0
+	winapi@0.3.9
 	windows-core@0.52.0
-	windows-sys@0.48.0
+	windows-link@0.1.1
 	windows-sys@0.52.0
 	windows-sys@0.59.0
-	windows-targets@0.48.5
 	windows-targets@0.52.6
-	windows_aarch64_gnullvm@0.48.5
 	windows_aarch64_gnullvm@0.52.6
-	windows_aarch64_msvc@0.48.5
 	windows_aarch64_msvc@0.52.6
-	windows_i686_gnu@0.48.5
 	windows_i686_gnu@0.52.6
 	windows_i686_gnullvm@0.52.6
-	windows_i686_msvc@0.48.5
 	windows_i686_msvc@0.52.6
-	windows_x86_64_gnu@0.48.5
 	windows_x86_64_gnu@0.52.6
-	windows_x86_64_gnullvm@0.48.5
 	windows_x86_64_gnullvm@0.52.6
-	windows_x86_64_msvc@0.48.5
 	windows_x86_64_msvc@0.52.6
-	write-fonts@0.29.0
+	wit-bindgen-rt@0.39.0
+	write-fonts@0.36.5
+	write16@1.0.0
 	writeable@0.5.5
+	writeable@0.6.1
 	yansi@1.0.1
-	yoke@0.7.4
-	yoke-derive@0.7.4
-	zerofrom@0.1.4
-	zerofrom-derive@0.1.4
+	yoke-derive@0.7.5
+	yoke-derive@0.8.0
+	yoke@0.7.5
+	yoke@0.8.0
+	zerofrom-derive@0.1.6
+	zerofrom@0.1.6
 	zeroize@1.8.1
-	zerovec@0.10.4
+	zerotrie@0.2.1
 	zerovec-derive@0.10.3
+	zerovec-derive@0.11.1
+	zerovec@0.10.4
+	zerovec@0.11.1
 "
 inherit cargo distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}.git"
 else
-	MY_PV="ab35d44"
+	MY_PV="f151133"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PN}-v${PV}"
 	SRC_URI="
 		mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz

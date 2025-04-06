@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 inherit python-single-r1 xdg cmake
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -31,7 +31,8 @@ RESTRICT+=" primaryuri"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 RDEPEND="
-	dev-libs/glib:2
+	>=dev-libs/glib-2.67:2
+	dev-libs/libltdl:0
 	dev-libs/libxml2:2=
 	>=media-libs/freetype-2.3.7:2=
 	gif? ( media-libs/giflib:= )
@@ -75,7 +76,7 @@ PATCHES=(
 )
 
 pkg_setup() {
-	:
+	use python && python-single-r1_pkg_setup
 }
 
 src_prepare() {

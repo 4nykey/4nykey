@@ -1,10 +1,16 @@
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -54,7 +54,5 @@ FetchContent_Declare(
-   DOWNLOAD_DIR ${ARCHIVE_DOWNLOAD_DIR}
-   ${ep_download_no_progress_args}
+@@ -18,7 +18,6 @@ FetchContent_Declare(
+   ninja
+   SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ninja-upstream
  )
 -FetchContent_MakeAvailable(ninja)
+ 
+ if(RUN_NINJA_TEST)
+   add_custom_target(
+@@ -28,5 +27,4 @@ if(RUN_NINJA_TEST)
+   )
+ endif()
  
 -install(TARGETS ninja COMPONENT python DESTINATION "${SKBUILD_SCRIPTS_DIR}")
 -install(FILES "${ninja_SOURCE_DIR}/misc/ninja_syntax.py" COMPONENT python DESTINATION ninja)

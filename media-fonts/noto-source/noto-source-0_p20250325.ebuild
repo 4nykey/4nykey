@@ -9,10 +9,10 @@ SRC_URI="
 mirror://githubcl/notofonts/adlam/tar.gz/dc2e980 -> noto-adlam-dc2e980.tar.gz
 mirror://githubcl/notofonts/ahom/tar.gz/fb3e25e -> noto-ahom-fb3e25e.tar.gz
 mirror://githubcl/notofonts/anatolian-hieroglyphs/tar.gz/d82f0bc -> noto-anatolian-hieroglyphs-d82f0bc.tar.gz
-mirror://githubcl/notofonts/arabic/tar.gz/9e68bce7 -> noto-arabic-9e68bce7.tar.gz
+mirror://githubcl/notofonts/arabic/tar.gz/d407884a -> noto-arabic-d407884a.tar.gz
 mirror://githubcl/notofonts/armenian/tar.gz/36e1e68 -> noto-armenian-36e1e68.tar.gz
 mirror://githubcl/notofonts/avestan/tar.gz/c19976e -> noto-avestan-c19976e.tar.gz
-mirror://githubcl/notofonts/balinese/tar.gz/b0f7466 -> noto-balinese-b0f7466.tar.gz
+mirror://githubcl/notofonts/balinese/tar.gz/6aedcd6 -> noto-balinese-6aedcd6.tar.gz
 mirror://githubcl/notofonts/bamum/tar.gz/92bf232 -> noto-bamum-92bf232.tar.gz
 mirror://githubcl/notofonts/bassa-vah/tar.gz/bed459c -> noto-bassa-vah-bed459c.tar.gz
 mirror://githubcl/notofonts/batak/tar.gz/9e4d85f -> noto-batak-9e4d85f.tar.gz
@@ -34,7 +34,7 @@ mirror://githubcl/notofonts/cypriot/tar.gz/4f81293 -> noto-cypriot-4f81293.tar.g
 mirror://githubcl/notofonts/cypro-minoan/tar.gz/12b0fed -> noto-cypro-minoan-12b0fed.tar.gz
 mirror://githubcl/notofonts/deseret/tar.gz/fab3d4d -> noto-deseret-fab3d4d.tar.gz
 mirror://githubcl/notofonts/devanagari/tar.gz/88d8a1d0 -> noto-devanagari-88d8a1d0.tar.gz
-mirror://githubcl/notofonts/dives-akuru/tar.gz/f9b566a -> noto-dives-akuru-f9b566a.tar.gz
+mirror://githubcl/notofonts/dives-akuru/tar.gz/e9e925bc -> noto-dives-akuru-e9e925bc.tar.gz
 mirror://githubcl/notofonts/dogra/tar.gz/ca3e78b -> noto-dogra-ca3e78b.tar.gz
 mirror://githubcl/notofonts/duployan/tar.gz/9626869 -> noto-duployan-9626869.tar.gz
 mirror://githubcl/notofonts/egyptian-hieroglyphs/tar.gz/773da39 -> noto-egyptian-hieroglyphs-773da39.tar.gz
@@ -57,7 +57,7 @@ mirror://githubcl/notofonts/indic-siyaq-numbers/tar.gz/5c2be06 -> noto-indic-siy
 mirror://githubcl/notofonts/inscriptional-pahlavi/tar.gz/ae11e43 -> noto-inscriptional-pahlavi-ae11e43.tar.gz
 mirror://githubcl/notofonts/inscriptional-parthian/tar.gz/3ad1b22 -> noto-inscriptional-parthian-3ad1b22.tar.gz
 mirror://githubcl/notofonts/javanese/tar.gz/da4d013 -> noto-javanese-da4d013.tar.gz
-mirror://githubcl/notofonts/kaithi/tar.gz/897d285 -> noto-kaithi-897d285.tar.gz
+mirror://githubcl/notofonts/kaithi/tar.gz/df87a6e -> noto-kaithi-df87a6e.tar.gz
 mirror://githubcl/notofonts/kawi/tar.gz/7b11823 -> noto-kawi-7b11823.tar.gz
 mirror://githubcl/notofonts/kannada/tar.gz/5808394 -> noto-kannada-5808394.tar.gz
 mirror://githubcl/notofonts/kayah-li/tar.gz/d804f25 -> noto-kayah-li-d804f25.tar.gz
@@ -79,10 +79,10 @@ mirror://githubcl/notofonts/mahajani/tar.gz/6af195b -> noto-mahajani-6af195b.tar
 mirror://githubcl/notofonts/makasar/tar.gz/e7902cc -> noto-makasar-e7902cc.tar.gz
 mirror://githubcl/notofonts/malayalam/tar.gz/66cd7c0 -> noto-malayalam-66cd7c0.tar.gz
 mirror://githubcl/notofonts/mandaic/tar.gz/36a3804 -> noto-mandaic-36a3804.tar.gz
-mirror://githubcl/notofonts/manichaean/tar.gz/d3d108a -> noto-manichaean-d3d108a.tar.gz
+mirror://githubcl/notofonts/manichaean/tar.gz/9cd9fd7 -> noto-manichaean-9cd9fd7.tar.gz
 mirror://githubcl/notofonts/marchen/tar.gz/8b7d0d7 -> noto-marchen-8b7d0d7.tar.gz
 mirror://githubcl/notofonts/masaram-gondi/tar.gz/aa68815 -> noto-masaram-gondi-aa68815.tar.gz
-mirror://githubcl/notofonts/math/tar.gz/fa7e876d -> noto-math-fa7e876d.tar.gz
+mirror://githubcl/notofonts/math/tar.gz/af9c5299 -> noto-math-af9c5299.tar.gz
 mirror://githubcl/notofonts/mayan-numerals/tar.gz/2361f67 -> noto-mayan-numerals-2361f67.tar.gz
 mirror://githubcl/notofonts/medefaidrin/tar.gz/db67ede -> noto-medefaidrin-db67ede.tar.gz
 mirror://githubcl/notofonts/meetei-mayek/tar.gz/0df2732 -> noto-meetei-mayek-0df2732.tar.gz
@@ -114,7 +114,7 @@ mirror://githubcl/notofonts/old-permic/tar.gz/080df88 -> noto-old-permic-080df88
 mirror://githubcl/notofonts/old-persian/tar.gz/27b5583 -> noto-old-persian-27b5583.tar.gz
 mirror://githubcl/notofonts/old-sogdian/tar.gz/aa13b98 -> noto-old-sogdian-aa13b98.tar.gz
 mirror://githubcl/notofonts/old-south-arabian/tar.gz/e77ff1f -> noto-old-south-arabian-e77ff1f.tar.gz
-mirror://githubcl/notofonts/old-turkic/tar.gz/598d6ec -> noto-old-turkic-598d6ec.tar.gz
+mirror://githubcl/notofonts/old-turkic/tar.gz/5c9bdd5 -> noto-old-turkic-5c9bdd5.tar.gz
 mirror://githubcl/notofonts/old-uyghur/tar.gz/44b6cbf -> noto-old-uyghur-44b6cbf.tar.gz
 mirror://githubcl/notofonts/oriya/tar.gz/757b8f1 -> noto-oriya-757b8f1.tar.gz
 mirror://githubcl/notofonts/osage/tar.gz/7778dc0 -> noto-osage-7778dc0.tar.gz
@@ -138,8 +138,8 @@ mirror://githubcl/notofonts/sinhala/tar.gz/ed40d91 -> noto-sinhala-ed40d91.tar.g
 mirror://githubcl/notofonts/sogdian/tar.gz/9f27761 -> noto-sogdian-9f27761.tar.gz
 mirror://githubcl/notofonts/sora-sompeng/tar.gz/d6dc3ea -> noto-sora-sompeng-d6dc3ea.tar.gz
 mirror://githubcl/notofonts/soyombo/tar.gz/c2488cb -> noto-soyombo-c2488cb.tar.gz
-mirror://githubcl/notofonts/sundanese/tar.gz/8069fb6 -> noto-sundanese-8069fb6.tar.gz
-mirror://githubcl/notofonts/syloti-nagri/tar.gz/24ab3ac -> noto-syloti-nagri-24ab3ac.tar.gz
+mirror://githubcl/notofonts/sundanese/tar.gz/98380ac -> noto-sundanese-98380ac.tar.gz
+mirror://githubcl/notofonts/syloti-nagri/tar.gz/ac1f18b -> noto-syloti-nagri-ac1f18b.tar.gz
 mirror://githubcl/notofonts/symbols/tar.gz/635cef9e -> noto-symbols-635cef9e.tar.gz
 mirror://githubcl/notofonts/syriac/tar.gz/0be4b71 -> noto-syriac-0be4b71.tar.gz
 mirror://githubcl/notofonts/tagalog/tar.gz/3546fa0 -> noto-tagalog-3546fa0.tar.gz
@@ -153,7 +153,7 @@ mirror://githubcl/notofonts/tangsa/tar.gz/8d40c34 -> noto-tangsa-8d40c34.tar.gz
 mirror://githubcl/notofonts/tangut/tar.gz/fd05a0c4 -> noto-tangut-fd05a0c4.tar.gz
 mirror://githubcl/notofonts/telugu/tar.gz/2729e30 -> noto-telugu-2729e30.tar.gz
 mirror://githubcl/notofonts/thaana/tar.gz/18a413d -> noto-thaana-18a413d.tar.gz
-mirror://githubcl/notofonts/thai/tar.gz/b257d43 -> noto-thai-b257d43.tar.gz
+mirror://githubcl/notofonts/thai/tar.gz/c62000b1 -> noto-thai-c62000b1.tar.gz
 mirror://githubcl/notofonts/tibetan/tar.gz/28f1693 -> noto-tibetan-28f1693.tar.gz
 mirror://githubcl/notofonts/tifinagh/tar.gz/6c19a68 -> noto-tifinagh-6c19a68.tar.gz
 mirror://githubcl/notofonts/tirhuta/tar.gz/3c941a6 -> noto-tirhuta-3c941a6.tar.gz

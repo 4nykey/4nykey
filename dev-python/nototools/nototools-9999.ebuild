@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
@@ -33,23 +33,23 @@ DEPEND="
 	>=dev-python/attrs-21.4[${PYTHON_USEDEP}]
 	>=dev-python/black-22.6[${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
-	>=app-arch/brotli-1.0.9[python,${PYTHON_USEDEP}]
-	>=dev-python/click-8.1.3[${PYTHON_USEDEP}]
+	>=app-arch/brotli-1.1[python,${PYTHON_USEDEP}]
+	>=dev-python/click-8.1.7[${PYTHON_USEDEP}]
 	>=dev-python/defcon-0.10.2[${PYTHON_USEDEP}]
 	>=dev-python/fontMath-0.9.2[${PYTHON_USEDEP}]
-	>=dev-python/fontParts-0.10.7[${PYTHON_USEDEP}]
+	>=dev-python/fontParts-0.12.1[${PYTHON_USEDEP}]
 	>=dev-python/fontPens-0.2.4[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-4.34.4[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.53[ufo(-),${PYTHON_USEDEP}]
 	>=dev-python/MutatorMath-3.0.1[${PYTHON_USEDEP}]
 	>=dev-python/pathspec-0.9[${PYTHON_USEDEP}]
-	>=dev-python/pillow-9.2[${PYTHON_USEDEP}]
+	>=dev-python/pillow-10.3[${PYTHON_USEDEP}]
 	>=dev-python/pyclipper-1.3[${PYTHON_USEDEP}]
 	>=dev-python/pytz-2022.1[${PYTHON_USEDEP}]
 	>=dev-python/regex-2022.7.25[${PYTHON_USEDEP}]
 	>=media-gfx/scour-0.38.2[${PYTHON_USEDEP}]
 	>=dev-python/ufoNormalizer-0.6.1[${PYTHON_USEDEP}]
 	>=dev-python/ufoProcessor-1.9[${PYTHON_USEDEP}]
-	>=dev-python/py-zopfli-0.2.1[${PYTHON_USEDEP}]
+	>=dev-python/py-zopfli-0.2.3[${PYTHON_USEDEP}]
 	dev-python/unicodedata2[${PYTHON_USEDEP}]
 	dev-python/freetype-py[${PYTHON_USEDEP}]
 	media-libs/harfbuzz

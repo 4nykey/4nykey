@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_EXT=1
 inherit distutils-r1
@@ -13,7 +13,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	MY_PV="3e8a1e2"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
-	MY_HB="harfbuzz-10.4.0"
+	MY_HB="harfbuzz-11.0.1"
 	SRC_URI="
 		mirror://githubcl/harfbuzz/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		https://github.com/harfbuzz/harfbuzz/releases/download/${MY_HB#*-}/${MY_HB}.tar.xz
@@ -36,6 +36,7 @@ DEPEND="
 "
 BDEPEND="
 	dev-python/cython[${PYTHON_USEDEP}]
+	dev-python/pkgconfig[${PYTHON_USEDEP}]
 "
 distutils_enable_tests pytest
 

@@ -3,8 +3,9 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 DISTUTILS_USE_PEP517=setuptools
+DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
@@ -30,28 +31,31 @@ IUSE="aafigure html matplotlib plantuml svg"
 REQUIRED_USE="test? ( aafigure plantuml svg )"
 
 DEPEND="
-	dev-python/docutils[${PYTHON_USEDEP}]
-	dev-python/importlib-metadata[${PYTHON_USEDEP}]
-	dev-python/jinja2[${PYTHON_USEDEP}]
-	dev-python/packaging[${PYTHON_USEDEP}]
-	dev-python/pygments[${PYTHON_USEDEP}]
-	dev-python/pyyaml[${PYTHON_USEDEP}]
-	dev-python/reportlab[${PYTHON_USEDEP}]
-	dev-python/smartypants[${PYTHON_USEDEP}]
-	aafigure? ( dev-python/aafigure[${PYTHON_USEDEP}] )
-	matplotlib? ( dev-python/matplotlib[${PYTHON_USEDEP}] )
-	svg? ( dev-python/svglib[${PYTHON_USEDEP}] )
-	html? ( dev-python/xhtml2pdf[${PYTHON_USEDEP}] )
+	$(python_gen_cond_dep '
+		dev-python/docutils[${PYTHON_USEDEP}]
+		dev-python/importlib-metadata[${PYTHON_USEDEP}]
+		dev-python/jinja2[${PYTHON_USEDEP}]
+		dev-python/packaging[${PYTHON_USEDEP}]
+		dev-python/pygments[${PYTHON_USEDEP}]
+		dev-python/pyyaml[${PYTHON_USEDEP}]
+		dev-python/reportlab[${PYTHON_USEDEP}]
+		dev-python/smartypants[${PYTHON_USEDEP}]
+		aafigure? ( dev-python/aafigure[${PYTHON_USEDEP}] )
+		matplotlib? ( dev-python/matplotlib[${PYTHON_USEDEP}] )
+		svg? ( dev-python/svglib[${PYTHON_USEDEP}] )
+		html? ( dev-python/xhtml2pdf[${PYTHON_USEDEP}] )
+	')
 	plantuml? ( media-gfx/plantuml )
 "
 RDEPEND="
 	${DEPEND}
 "
 BDEPEND="
-	dev-python/setuptools-scm[${PYTHON_USEDEP}]
-	test? (
-		dev-python/PyMuPDF[${PYTHON_USEDEP}]
-	)
+	$(python_gen_cond_dep '
+		test? (
+			dev-python/PyMuPDF[${PYTHON_USEDEP}]
+		)
+	')
 "
 PATCHES=( "${FILESDIR}"/setuptools.diff )
 distutils_enable_tests pytest

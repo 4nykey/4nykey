@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 inherit python-any-r1 vala toolchain-funcs
 if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/johanmattssonm/${PN}.git"

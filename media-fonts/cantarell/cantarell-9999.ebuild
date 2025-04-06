@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 MY_PN="${PN}-fonts"
 MY_FONT_TYPES=( otf )
 if [[ -z ${PV%%*9999} ]]; then

@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 PYTHON_REQ_USE='threads(+)'
 PLOCALES="
 ca cs de el en_GB es eu fr it ja ko nn pl pt pt_BR pt_PT ru sv zh

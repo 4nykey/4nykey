@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
@@ -28,7 +28,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-3.32[ufo(-),${PYTHON_USEDEP}]
+	dev-python/fonttools[ufo(-),${PYTHON_USEDEP}]
 	dev-python/defcon[${PYTHON_USEDEP}]
 	dev-python/fontMath[${PYTHON_USEDEP}]
 	dev-python/fontParts[${PYTHON_USEDEP}]

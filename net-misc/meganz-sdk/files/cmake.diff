@@ -98,8 +98,8 @@
 +install(FILES ${CMAKE_CURRENT_BINARY_DIR}/sdklibConfig.cmake DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/sdklib")
 +install(FILES ${CMAKE_CURRENT_BINARY_DIR}/sdklib.pc DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
 +install(FILES ${SDKLIB_PUB_HEADERS} ${PROJECT_BINARY_DIR}/mega/config.h third_party/ccronexpr/ccronexpr.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/mega)
---- a/examples/CMakeLists.txt
-+++ b/examples/CMakeLists.txt
+--- a/examples/megacli/CMakeLists.txt
++++ b/examples/megacli/CMakeLists.txt
 @@ -7,6 +7,10 @@ add_executable(megacli
  # Link with SDKlib.
  # megacli does not use the intermediate layer.

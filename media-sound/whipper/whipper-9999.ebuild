@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 DISTUTILS_USE_PEP517="setuptools"
 DISTUTILS_EXT=1
 
@@ -18,7 +18,7 @@ else
 		mirror://githubcl/whipper-team/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64"
 	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 

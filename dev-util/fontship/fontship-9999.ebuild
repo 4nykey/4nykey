@@ -317,7 +317,7 @@ CRATES="
 	zerovec-derive@0.10.3
 	zerovec@0.10.4
 "
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 inherit bash-completion-r1 autotools python-single-r1 cargo
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
