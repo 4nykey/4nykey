@@ -3,15 +3,15 @@
 
 EAPI=8
 
-inherit bash-completion-r1 cmake
+inherit bash-completion-r1 flag-o-matic cmake
 MY_PN="MEGAcmd"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/meganz/${MY_PN}.git"
 	EGIT_SUBMODULES=( )
 else
-	MY_PV="1eb38e3"
-	MY_SDK="dbf5291"
+	MY_PV="7fe3e1e"
+	MY_SDK="61013ee"
 	SRC_URI="
 		mirror://githubcl/meganz/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -39,6 +39,7 @@ RDEPEND="
 PATCHES=( "${FILESDIR}"/cmake.diff )
 
 src_prepare() {
+	append-cppflags -DNDEBUG
 	cmake_src_prepare
 	if [[ -n ${PV%%*9999} ]]; then
 		sed \
