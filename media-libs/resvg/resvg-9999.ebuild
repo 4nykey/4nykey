@@ -63,7 +63,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	MY_PV="55888a5"
 	if [[ -n ${PV%%*_p*} ]]; then
-		MY_PV="${PV}"
+		MY_PV="v${PV}"
 		SRC_URI="
 			https://github.com/RazrFalcon/${PN}/releases/download/${MY_PV}/${P}.tar.xz
 		"
