@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit gnome2-utils cmake-multilib
+inherit gnome2-utils cmake-multilib xdg
 
 if [[ ${PV} == *9999 ]] ; then
 	EGIT_REPO_URI="https://github.com/strukturag/libheif.git"
@@ -24,38 +24,34 @@ DESCRIPTION="ISO/IEC 23008-12:2017 HEIF file format decoder and encoder"
 HOMEPAGE="https://github.com/strukturag/libheif"
 
 LICENSE="GPL-3"
-IUSE="+aom gdk-pixbuf go rav1e svt-av1 test +threads x265"
-IUSE+=" +brotli ffmpeg openh264 openjph uvg266 vvdec vvenc webp"
-REQUIRED_USE="test? ( go )"
+IUSE="+aom doc examples gdk-pixbuf openh264 rav1e svt-av1 test +threads +webp x265"
+IUSE+=" +brotli ffmpeg openjph uvg266 vvdec vvenc"
 RESTRICT="!test? ( test )"
 RESTRICT+=" primaryuri"
 
 BDEPEND="
-	test? (
-		dev-lang/go
-	)
+	doc? ( app-text/doxygen )
 "
 DEPEND="
 	media-libs/dav1d:=[${MULTILIB_USEDEP}]
 	media-libs/libde265:=[${MULTILIB_USEDEP}]
-	media-libs/libpng:0=[${MULTILIB_USEDEP}]
+	media-libs/libjpeg-turbo:=[${MULTILIB_USEDEP}]
+	media-libs/libpng:=[${MULTILIB_USEDEP}]
 	media-libs/tiff:=[${MULTILIB_USEDEP}]
 	sys-libs/zlib:=[${MULTILIB_USEDEP}]
-	media-libs/libjpeg-turbo:0=[${MULTILIB_USEDEP}]
 	aom? ( >=media-libs/libaom-2.0.0:=[${MULTILIB_USEDEP}] )
 	gdk-pixbuf? ( x11-libs/gdk-pixbuf[${MULTILIB_USEDEP}] )
-	go? ( dev-lang/go )
+	openh264? ( media-libs/openh264:=[${MULTILIB_USEDEP}] )
 	rav1e? ( media-video/rav1e:= )
 	svt-av1? ( media-libs/svt-av1:=[${MULTILIB_USEDEP}] )
+	webp? ( media-libs/libwebp:= )
 	x265? ( media-libs/x265:=[${MULTILIB_USEDEP}] )
 	brotli? ( app-arch/brotli:=[${MULTILIB_USEDEP}] )
 	ffmpeg? ( media-video/ffmpeg:=[${MULTILIB_USEDEP}] )
-	openh264? ( media-libs/openh264:=[${MULTILIB_USEDEP}] )
 	openjph? ( media-libs/openjph:=[${MULTILIB_USEDEP}] )
 	uvg266? ( media-libs/uvg266[${MULTILIB_USEDEP}] )
 	vvenc? ( media-libs/vvenc:=[${MULTILIB_USEDEP}] )
 	vvdec? ( media-libs/vvdec:=[${MULTILIB_USEDEP}] )
-	webp? ( media-libs/libwebp:=[${MULTILIB_USEDEP}] )
 	media-libs/openjpeg:=[${MULTILIB_USEDEP}]
 	media-libs/kvazaar:=[${MULTILIB_USEDEP}]
 "
@@ -77,13 +73,19 @@ src_prepare() {
 multilib_src_configure() {
 	export GO111MODULE=auto
 	local mycmakeargs=(
+		$(cmake_use_find_package doc Doxygen)
+		-DBUILD_TESTING=$(usex test)
 		-DENABLE_PLUGIN_LOADING=true
 		-DWITH_LIBDE265=true
 		-DWITH_AOM_DECODER=$(usex aom)
 		-DWITH_AOM_ENCODER=$(usex aom)
+		-DWITH_EXAMPLES=$(usex examples)
 		-DWITH_GDK_PIXBUF=$(usex gdk-pixbuf)
-		-DWITH_RAV1E="$(multilib_native_usex rav1e)"
-		-DWITH_SvtEnc="$(usex svt-av1)"
+		-DWITH_OpenH264_DECODER=$(usex openh264)
+		-DWITH_OpenH264_ENCODER=$(usex openh264)
+		-DWITH_RAV1E=$(multilib_native_usex rav1e)
+		-DWITH_SvtEnc=$(usex svt-av1)
+		-DWITH_LIBSHARPYUV=$(usex webp)
 		-DWITH_X265=$(usex x265)
 		-DWITH_KVAZAAR=true
 		-DWITH_JPEG_DECODER=true
@@ -94,11 +96,8 @@ multilib_src_configure() {
 	mycmakeargs+=(
 		-DWITH_REDUCED_VISIBILITY=$(usex threads)
 		-DWITH_DAV1D=true
-		-DWITH_LIBSHARPYUV=$(usex webp)
 		-DWITH_UNCOMPRESSED_CODEC=$(usex brotli)
 		-DWITH_FFMPEG_DECODER=$(usex ffmpeg)
-		-DWITH_OpenH264_DECODER=$(usex openh264)
-		-DWITH_OpenH264_ENCODER=$(usex openh264)
 		-DWITH_OPENJPH_DECODER=$(usex openjph)
 		-DWITH_OPENJPH_ENCODER=$(usex openjph)
 		-DWITH_UVG266=$(usex uvg266)
@@ -108,10 +107,12 @@ multilib_src_configure() {
 	cmake_src_configure
 }
 
-pkg_preinst() {
-	multilib_foreach_abi gnome2_gdk_pixbuf_savelist
+pkg_postinst() {
+	xdg_pkg_postinst
+	use gdk-pixbuf && multilib_foreach_abi gnome2_gdk_pixbuf_update
 }
 
-pkg_postinst() {
-	multilib_foreach_abi gnome2_gdk_pixbuf_update
+pkg_postrm() {
+	xdg_pkg_postrm
+	use gdk-pixbuf && multilib_foreach_abi gnome2_gdk_pixbuf_update
 }

@@ -7,7 +7,6 @@
 	<use>
 	<flag name="aom">Use <pkg>media-libs/libaom</pkg> for AVIF encoding/decoding</flag>
 	<flag name="gdk-pixbuf">Enable <pkg>x11-libs/gdk-pixbuf</pkg> plugin</flag>
-	<flag name="go">Enable building <pkg>dev-lang/go</pkg> code/examples</flag>
 	<flag name="openh264">Enable support for <pkg>media-libs/openh264</pkg></flag>
 	<flag name="openjph">Enable support for HT-J2K via <pkg>media-libs/openjph</pkg></flag>
 	<flag name="rav1e">Use <pkg>media-video/rav1e</pkg> for AVIF encoding</flag>
