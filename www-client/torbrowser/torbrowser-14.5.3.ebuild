@@ -3,7 +3,7 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-128esr-patches-09.tar.xz"
+FIREFOX_PATCHSET="firefox-128esr-patches-11.tar.xz"
 
 LLVM_COMPAT=( 17 18 19 )
 
@@ -33,7 +33,7 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="128.9.0esr-${MY_PV}-1-build4"
+MY_P="128.11.0esr-${MY_PV}-1-build3"
 MY_P="firefox-tor-browser-${MY_P}"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
@@ -41,8 +41,7 @@ else
 	MY_PV+=".$(ver_cut 3)"
 	KEYWORDS="~amd64"
 fi
-MY_PV="${MY_PV%.0}"
-MY_NOS="12.1.1"
+MY_NOS="13.0.6"
 MY_NOS="noscript-${MY_NOS}.xpi"
 
 DESCRIPTION="The Tor Browser"
@@ -647,7 +646,7 @@ src_configure() {
 	# Set update channel
 	local update_channel=release
 	[[ -n ${MOZ_ESR} ]] && update_channel=esr
-	mozconfig_add_options_ac '' --update-channel=${update_channel}
+	mozconfig_add_options_ac '' --enable-update-channel=${update_channel}
 
 	if ! use x86 ; then
 		mozconfig_add_options_ac '' --enable-rust-simd
