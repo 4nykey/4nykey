@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/meganz/${MY_PN}.git"
 	EGIT_SUBMODULES=( -src/MEGASync/mega )
 else
-	MY_PV="2fb633d"
+	MY_PV="782c107"
 	SRC_URI="
 		mirror://githubcl/meganz/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -27,7 +27,7 @@ HOMEPAGE="https://github.com/meganz/MEGAsync"
 LICENSE="EULA"
 LICENSE_URL="https://raw.githubusercontent.com/meganz/MEGAsync/master/LICENCE.md"
 SLOT="0"
-IUSE="dolphin ffmpeg mediainfo nautilus raw test"
+IUSE="breakpad dolphin ffmpeg mediainfo nautilus raw test"
 
 RDEPEND="
 	>=net-misc/meganz-sdk-9.1:=[ffmpeg?,libuv,mediainfo?,qt,raw?,sqlite]
@@ -39,11 +39,11 @@ RDEPEND="
 	dev-qt/qtnetwork:5
 	dev-qt/qtdeclarative:5[widgets]
 	nautilus? ( gnome-base/nautilus )
+	breakpad? ( dev-util/breakpad )
 	dolphin? ( kde-apps/dolphin )
 "
 DEPEND="
 	${RDEPEND}
-	dev-util/breakpad
 "
 BDEPEND="
 	dev-qt/linguist-tools:5
@@ -72,6 +72,7 @@ src_configure() {
 		-DENABLE_DESKTOP_UPDATER=no
 		-DENABLE_DESKTOP_APP_TESTS=$(usex test)
 		-DENABLE_LINUX_EXT=yes
+		-DUSE_BREAKPAD=$(usex breakpad)
 	)
 	cmake_src_configure
 }

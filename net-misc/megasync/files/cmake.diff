@@ -1,15 +1,11 @@
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 30e75b1..8355f77 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -63,5 +63,3 @@ include(desktopapp_configuration)
+@@ -65,5 +65,3 @@ include(desktopapp_configuration)
  # Load the MEGA targets
  add_subdirectory(src)
  
 -include(get_clang_format)
 -get_clang_format()
-diff --git a/cmake/modules/desktopapp_configuration.cmake b/cmake/modules/desktopapp_configuration.cmake
-index a14ac86..4371626 100644
 --- a/cmake/modules/desktopapp_configuration.cmake
 +++ b/cmake/modules/desktopapp_configuration.cmake
 @@ -29,8 +29,6 @@ if(UNIX AND NOT APPLE)
@@ -29,8 +25,6 @@ index a14ac86..4371626 100644
  
      message(STATUS "Current installation path for ${PROJECT_NAME} project: \"${CMAKE_INSTALL_PREFIX}\"")
  
-diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index f3ae266..7064b15 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
 @@ -3,7 +3,6 @@
@@ -41,8 +35,6 @@ index f3ae266..7064b15 100644
  endif()
  
  if(ENABLE_DESKTOP_APP)
-diff --git a/src/MEGAAutoTests/UnitTests/CMakeLists.txt b/src/MEGAAutoTests/UnitTests/CMakeLists.txt
-index 7051809..64d14cb 100644
 --- a/src/MEGAAutoTests/UnitTests/CMakeLists.txt
 +++ b/src/MEGAAutoTests/UnitTests/CMakeLists.txt
 @@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.18)
@@ -53,17 +45,25 @@ index 7051809..64d14cb 100644
 +find_package(PkgConfig REQUIRED)
 +pkg_check_modules(breakpad REQUIRED IMPORTED_TARGET breakpad breakpad-client)
  
- #-------------- MEGA Sync unit tests --------------------
- 
-@@ -17,6 +20,7 @@ set_target_properties(UnitTests
+ find_package(Catch2 REQUIRED)
+ find_package(TrompeLoeil REQUIRED)
+@@ -20,6 +23,7 @@ set_target_properties(UnitTests
  
  target_compile_definitions(UnitTests
      PUBLIC
 +    __STDC_FORMAT_MACROS
      $<$<BOOL:${WIN32}>:PUBLIC NOMINMAX WIN32_LEAN_AND_MEAN UNICODE>
      $<$<BOOL:${ENABLE_ISOLATED_GFX}>:ENABLE_SDK_ISOLATED_GFX>
+     $<$<BOOL:${USE_BREAKPAD}>:USE_BREAKPAD>
+@@ -40,7 +44,6 @@ set(UNIT_TEST_FILES
  )
-@@ -73,7 +77,7 @@ target_link_libraries(UnitTests
+ 
+ if(USE_BREAKPAD)
+-    find_package(unofficial-breakpad CONFIG REQUIRED)
+ 
+     set(CRASH_BACKEND_URL "$ENV{MEGA_CRASH_BACKEND_URL}" CACHE STRING "Crash backend URL")
+     target_compile_definitions(UnitTests PRIVATE CRASH_BACKEND_URL="${CRASH_BACKEND_URL}")
+@@ -83,12 +86,11 @@ target_link_libraries(UnitTests
      PRIVATE
      trompeloeil
      MEGA::SDKlib
@@ -72,18 +72,12 @@ index 7051809..64d14cb 100644
      $<$<BOOL:${WIN32}>:Qt5::WinExtras>
      $<$<BOOL:${APPLE}>:Qt5::MacExtras>
      $<$<BOOL:${UNIX}>:Qt5::Svg>
-@@ -84,7 +88,8 @@ target_link_libraries(UnitTests
-     Qt5::Qml
-     Qt5::Quick
-     Qt5::QuickWidgets
--    MEGA::google_breakpad
-+    PkgConfig::breakpad
-+    z
-     )
- 
- target_include_directories(UnitTests PRIVATE ../3rdparty ${MegaSyncDir})
-diff --git a/src/MEGASync/CMakeLists.txt b/src/MEGASync/CMakeLists.txt
-index 9e32317..a88a4ab 100644
+-    $<$<BOOL:${USE_BREAKPAD}>:unofficial::breakpad::libbreakpad>
+-    $<$<BOOL:${USE_BREAKPAD}>:unofficial::breakpad::libbreakpad_client>
++    $<$<BOOL:${USE_BREAKPAD}>:PkgConfig::breakpad>
+     Qt5::Widgets
+     Qt5::Core
+     Qt5::Gui
 --- a/src/MEGASync/CMakeLists.txt
 +++ b/src/MEGASync/CMakeLists.txt
 @@ -75,7 +75,7 @@ set_target_properties(MEGAsync
@@ -95,20 +89,15 @@ index 9e32317..a88a4ab 100644
  qt5_create_translation(QM_OUTPUT ${CMAKE_CURRENT_SOURCE_DIR} gui/translations/translation.source.ts
      OPTIONS -locations none -no-ui-lines -no-obsolete)
  
-@@ -84,11 +84,10 @@ add_custom_target(generate_ts DEPENDS ${QM_OUTPUT})
+@@ -84,6 +84,7 @@ add_custom_target(generate_ts DEPENDS ${QM_OUTPUT})
  add_dependencies(MEGAsync generate_ts)
  
- target_include_directories(MEGAsync PRIVATE ${CMAKE_CURRENT_LIST_DIR}
--    ${CMAKE_CURRENT_LIST_DIR}/google_breakpad
-+    ${CMAKE_CURRENT_LIST_DIR}/mega/bindings/qt
- )
- 
- # Include modules in subdirectories with sources for Desktop App
--add_subdirectory(google_breakpad)
+ target_include_directories(MEGAsync PRIVATE ${CMAKE_CURRENT_LIST_DIR})
++target_include_directories(MEGAsync PRIVATE ${CMAKE_CURRENT_LIST_DIR}/mega/bindings/qt)
  
  set(ExecutableTarget MEGAsync)
  
-@@ -104,6 +103,7 @@ include(UserAttributesRequests/userattributesrequests.cmake)
+@@ -99,6 +100,7 @@ include(UserAttributesRequests/userattributesrequests.cmake)
  
  target_compile_definitions(MEGAsync
      PUBLIC
@@ -116,7 +105,15 @@ index 9e32317..a88a4ab 100644
      QT_NO_CAST_FROM_ASCII QT_NO_CAST_TO_ASCII
      $<$<CONFIG:Debug>:LOG_TO_STDOUT LOG_TO_LOGGER CREATE_COMPATIBLE_MINIDUMPS>
      $<$<BOOL:${WIN32}>:PUBLIC NOMINMAX WIN32_LEAN_AND_MEAN UNICODE>
-@@ -120,12 +120,15 @@ else()
+@@ -108,7 +110,6 @@ target_compile_definitions(MEGAsync
+ 
+ # Load and link needed libraries for the Desktop App target
+ if(USE_BREAKPAD)
+-    find_package(unofficial-breakpad CONFIG REQUIRED)
+ 
+     if(NOT DEFINED CACHE{CRASH_BACKEND_URL})
+         set(CRASH_BACKEND_URL "" CACHE STRING "Crash backend URL")
+@@ -133,17 +134,18 @@ else()
  endif()
  
  find_package(Qt5 REQUIRED COMPONENTS Widgets Core Gui Network Qml Quick QuickWidgets)
@@ -133,17 +130,21 @@ index 9e32317..a88a4ab 100644
      $<$<BOOL:${WIN32}>:Qt5::WinExtras>
      $<$<BOOL:${APPLE}>:Qt5::MacExtras>
      $<$<BOOL:${UNIX}>:Qt5::Svg>
-@@ -136,7 +139,8 @@ target_link_libraries(MEGAsync
+-    $<$<BOOL:${USE_BREAKPAD}>:unofficial::breakpad::libbreakpad>
+-    $<$<BOOL:${USE_BREAKPAD}>:unofficial::breakpad::libbreakpad_client>
+     Qt5::Widgets
+     Qt5::Core
+     Qt5::Gui
+@@ -151,6 +153,8 @@ target_link_libraries(MEGAsync
      Qt5::Qml
      Qt5::Quick
      Qt5::QuickWidgets
--    MEGA::google_breakpad
 +    PkgConfig::breakpad
 +    z
  )
  
  ## Adjust compilation flags for warnings and errors ##
-@@ -172,13 +176,6 @@ if (UNIX AND NOT APPLE)
+@@ -186,13 +190,6 @@ if (UNIX AND NOT APPLE)
  
      set(vcpkg_lib_folder "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/$<$<CONFIG:Debug>:debug/>lib/")
  

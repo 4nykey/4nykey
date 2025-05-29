@@ -36,7 +36,10 @@ DEPEND="
 RDEPEND="
 	${DEPEND}
 "
-PATCHES=( "${FILESDIR}"/cmake.diff )
+PATCHES=(
+	"${FILESDIR}"/cmake.diff
+	"${FILESDIR}"/sdk92.diff
+)
 
 src_prepare() {
 	append-cppflags -DNDEBUG

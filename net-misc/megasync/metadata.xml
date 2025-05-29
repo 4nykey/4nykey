@@ -5,6 +5,7 @@
 		<email>4nykey@gmail.com</email>
 	</maintainer>
 	<use>
+		<flag name="breakpad">Use <pkg>dev-util/breakpad</pkg> as the crash handler</flag>
 		<flag name="dolphin">Install <pkg>kde-apps/dolphin</pkg> extension</flag>
 		<flag name="mediainfo">Use <pkg>media-libs/libmediainfo</pkg> for media files</flag>
 		<flag name="nautilus">Install <pkg>gnome-base/nautilus</pkg> extension</flag>
