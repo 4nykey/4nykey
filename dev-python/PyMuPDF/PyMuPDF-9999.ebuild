@@ -28,7 +28,7 @@ LICENSE="AGPL-3"
 SLOT="0"
 
 DEPEND="
-	dev-python/mupdf:=[${PYTHON_USEDEP}]
+	>=dev-python/mupdf-1.25.6:=[${PYTHON_USEDEP}]
 "
 RDEPEND="
 	${DEPEND}
