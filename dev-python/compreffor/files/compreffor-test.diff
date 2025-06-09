@@ -5,7 +5,7 @@
  minversion = 2.8
  testpaths = 
 -	src/python/compreffor
-+	build/lib/compreffor
++	@_INSTDIR_@
  python_files = 
  	*_test.py
  python_classes = 

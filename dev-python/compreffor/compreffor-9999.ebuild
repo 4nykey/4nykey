@@ -1,9 +1,10 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
 PYTHON_COMPAT=( python3_{10..13} )
+DISTUTILS_USE_PEP517=standalone
 DISTUTILS_IN_SOURCE_BUILD=1
 DISTUTILS_EXT=1
 if [[ -z ${PV%%*9999} ]]; then
@@ -36,16 +37,21 @@ DEPEND="
 "
 BDEPEND="
 	cython? ( dev-python/cython[${PYTHON_USEDEP}] )
-	test? ( dev-python/pytest[${PYTHON_USEDEP}] )
 "
 PATCHES=( "${FILESDIR}"/${PN}-test.diff )
 distutils_enable_tests pytest
+
+pkg_setup() {
+	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
+}
 
 python_prepare_all() {
 	sed -e 's:, "setuptools_git_ls_files"::' -i setup.py
 	distutils-r1_python_prepare_all
 }
 
-pkg_setup() {
-	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
+python_prepare() {
+	sed -e \
+		"s:@_INSTDIR_@:${BUILD_DIR}/install$(python_get_sitedir)/${PN}:" \
+		-i setup.cfg
 }
