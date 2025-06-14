@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -13,7 +13,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
 else
-	MY_PV="14bd2af"
+	MY_PV="845249f"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
 	SRC_URI="
 		mirror://githubcl/${PN}/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
