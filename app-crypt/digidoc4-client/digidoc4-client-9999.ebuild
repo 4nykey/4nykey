@@ -11,18 +11,16 @@ else
 	MY_PV="${PV^^}"
 	MY_PV="v${MY_PV/_/-}"
 	[[ -z ${PV%%*_p*} ]] && MY_PV="a4da0d3"
-	MY_CM="cmake-4caaffc"
-	MY_QC="qt-common-c04bf62"
+	MY_QC="qt-common-6a1b281"
 	SRC_URI="${SRC_URI}
 		mirror://githubcl/open-eid/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
-		mirror://githubcl/open-eid/${MY_CM%-*}/tar.gz/${MY_CM##*-} -> ${MY_CM}.tar.gz
 		mirror://githubcl/open-eid/${MY_QC%-*}/tar.gz/${MY_QC##*-} -> ${MY_QC}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
 	S="${WORKDIR}/${MY_PN}-${MY_PV#v}"
 fi
-inherit cmake xdg
+inherit toolchain-funcs cmake xdg
 
 DESCRIPTION="An application for digitally signing and encrypting documents"
 HOMEPAGE="https://open-eid.github.io"
@@ -32,7 +30,7 @@ SLOT="0"
 IUSE="nautilus qt6"
 
 DEPEND="
-	>=dev-libs/libdigidocpp-4.1
+	>=dev-libs/libdigidocpp-4.2
 	sys-apps/pcsc-lite
 	net-nds/openldap
 	dev-libs/openssl:=
@@ -66,7 +64,6 @@ DOCS=( {README,RELEASE-NOTES}.md )
 
 src_prepare() {
 	if [[ -n ${PV%%*9999} ]]; then
-		mv ../${MY_CM}/* ./cmake/
 		mv ../${MY_QC}/* ./common/
 	fi
 	sed \
@@ -80,6 +77,8 @@ src_configure() {
 	local mycmakeargs=(
 		-DENABLE_KDE=no
 		-DENABLE_NAUTILUS_EXTENSION=$(usex nautilus)
+		-DCMAKE_CXX_COMPILER_AR=$(type -P $(tc-getBUILD_AR))
+		-DCMAKE_CXX_COMPILER_RANLIB=$(type -P $(tc-getBUILD_RANLIB))
 	)
 	cmake_src_configure
 }
