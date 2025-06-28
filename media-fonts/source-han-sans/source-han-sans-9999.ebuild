@@ -1,4 +1,4 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -11,25 +11,25 @@ if [[ -z ${PV%%*9999} ]]; then
 	REQUIRED_USE="!binary"
 else
 	SRC_URI="mirror://githubraw/adobe-fonts/${PN}/${PV}R/"
-	SRC_URIB="https://github.com/adobe-fonts/${PN}/releases/download/${PV}R/${MY_PN}"
+	SRC_URIB="https://github.com/adobe-fonts/${PN}/releases/download/${PV}R/"
 	SRC_URI="
 	binary? (
 		font_types_otf? (
 			!variable? (
 				l10n_ja? (
-					${SRC_URIB}JP.zip -> ${MY_PN}JP-${PV}.zip
+					${SRC_URIB}/17_${MY_PN}JP.zip -> ${MY_PN}JP-${PV}.zip
 				)
 				l10n_ko? (
-					${SRC_URIB}KR.zip -> ${MY_PN}KR-${PV}.zip
+					${SRC_URIB}/18_${MY_PN}KR.zip -> ${MY_PN}KR-${PV}.zip
 				)
 				l10n_zh-CN? (
-					${SRC_URIB}CN.zip -> ${MY_PN}CN-${PV}.zip
+					${SRC_URIB}/19_${MY_PN}CN.zip -> ${MY_PN}CN-${PV}.zip
 				)
 				l10n_zh-HK? (
-					${SRC_URIB}HK.zip -> ${MY_PN}HK-${PV}.zip
+					${SRC_URIB}/21_${MY_PN}HK.zip -> ${MY_PN}HK-${PV}.zip
 				)
 				l10n_zh-TW? (
-					${SRC_URIB}TC.zip -> ${MY_PN}TC-${PV}.zip
+					${SRC_URIB}/20_${MY_PN}TW.zip -> ${MY_PN}TC-${PV}.zip
 				)
 			)
 			variable? (
@@ -59,10 +59,10 @@ else
 			)
 			!variable? (
 				super-otc? (
-					${SRC_URIB}.ttc.zip -> ${MY_PN}-${PV}.ttc.zip
+					${SRC_URIB}/01_${MY_PN}.ttc.zip -> ${MY_PN}-${PV}.ttc.zip
 				)
 				!super-otc? (
-					${SRC_URIB}OTC.zip
+					${SRC_URIB}/03_${MY_PN}OTC.zip
 				)
 			)
 		)
@@ -120,6 +120,8 @@ src_unpack() {
 		cp -ut "${S}" $(printf "${DISTDIR}/%s " ${A})
 	else
 		default
+		cp -lt "${S}"/Masters \
+			"${S}"/{FontMenuNameDB,SourceHanSans_*_sequences,UniSourceHanSans}*
 	fi
 }
 
