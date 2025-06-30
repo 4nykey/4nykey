@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -6,7 +6,7 @@ EAPI=8
 PYTHON_COMPAT=( python3_{10..13} )
 FONT_S=( fonts )
 MY_FONT_VARIANTS=( +cbdt colrv1 )
-inherit toolchain-funcs python-any-r1 font-r1
+inherit toolchain-funcs python-single-r1 font-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}"
@@ -36,11 +36,11 @@ REQUIRED_USE="
 BDEPEND="
 !binary? (
 	${PYTHON_DEPS}
-	$(python_gen_any_dep '
+	$(python_gen_cond_dep '
 		>=dev-python/nototools-0.2.17[${PYTHON_USEDEP}]
 	')
 	font_variants_colrv1? (
-		$(python_gen_any_dep '
+		$(python_gen_cond_dep '
 			>=dev-python/nanoemoji-0.14.3[${PYTHON_USEDEP}]
 		')
 	)
@@ -55,7 +55,7 @@ BDEPEND="
 "
 
 pkg_setup() {
-	use binary || python-any-r1_pkg_setup
+	use binary || python-single-r1_pkg_setup
 	font-r1_pkg_setup
 }
 
