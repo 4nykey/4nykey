@@ -94,7 +94,8 @@ multilib_src_configure() {
 		-DWITH_OpenJPEG_ENCODER=true
 	)
 	mycmakeargs+=(
-		-DWITH_REDUCED_VISIBILITY=$(usex threads)
+		-DENABLE_MULTITHREADING_SUPPORT=$(usex threads)
+		-DENABLE_PARALLEL_TILE_DECODING=$(usex threads)
 		-DWITH_DAV1D=true
 		-DWITH_UNCOMPRESSED_CODEC=$(usex brotli)
 		-DWITH_FFMPEG_DECODER=$(usex ffmpeg)
