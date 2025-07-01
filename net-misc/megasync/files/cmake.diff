@@ -119,7 +119,7 @@
  find_package(Qt5 REQUIRED COMPONENTS Widgets Core Gui Network Qml Quick QuickWidgets)
 +find_package(sdklib REQUIRED)
 +find_package(PkgConfig REQUIRED)
-+pkg_check_modules(breakpad REQUIRED IMPORTED_TARGET breakpad breakpad-client)
++pkg_check_modules(breakpad IMPORTED_TARGET breakpad breakpad-client)
  message(STATUS "Building the MEGA Desktop App with Qt v${Qt5_VERSION} from ${Qt5_DIR}")
  
  target_link_libraries(MEGAsync
@@ -139,7 +139,7 @@
      Qt5::Qml
      Qt5::Quick
      Qt5::QuickWidgets
-+    PkgConfig::breakpad
++    $<$<BOOL:${USE_BREAKPAD}>:PkgConfig::breakpad>
 +    z
  )
  
