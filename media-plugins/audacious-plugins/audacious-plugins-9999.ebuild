@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -29,18 +29,22 @@ HOMEPAGE="https://audacious-media-player.org/"
 LICENSE="GPL-2"
 SLOT="0"
 IUSE="
-	aac +alsa ampache bs2b cdda cue ffmpeg flac fluidsynth gme http jack
-	lame libnotify libsamplerate lirc mms modplug mp3 nls opengl openmpt
-	opus pipewire pulseaudio scrobbler sdl sid sndfile soxr speedpitch
-	streamtuner vorbis wavpack
+	aac +alsa ampache bs2b cdda cue ffmpeg flac fluidsynth gme gtk http jack
+	lame libnotify libsamplerate lirc mms modplug mp3 opengl openmpt opus
+	pipewire pulseaudio qt6 scrobbler sdl sid sndfile soxr speedpitch
+	streamtuner vorbis wavpack X
 "
-IUSE+=" gtk"
+IUSE+=" nls gtk"
 
-REQUIRED_USE="ampache? ( http ) streamtuner? ( http )"
+REQUIRED_USE="
+	ampache? ( http )
+	streamtuner? ( http )
+"
 
 # The following plugins REQUIRE a GUI build of audacious, because non-GUI
 # builds do NOT install the libaudgui library & headers.
 # Plugins without a configure option:
+#   alarm
 #   albumart
 #   delete-files
 #   ladspa
@@ -49,6 +53,7 @@ REQUIRED_USE="ampache? ( http ) streamtuner? ( http )"
 #   skins
 #   vtx
 # Plugins with a configure option:
+#   glspectrum
 #   gtkui
 #   hotkey
 #   notify
@@ -61,18 +66,16 @@ BDEPEND="
 DEPEND="
 	app-arch/unzip
 	dev-libs/glib:2
-	dev-libs/libxml2:2
-	dev-qt/qtbase:6[gui,opengl,network,widgets]
-	dev-qt/qtmultimedia:6
-	~media-sound/audacious-${PV}
+	dev-libs/libxml2:2=
+	~media-sound/audacious-${PV}[gtk=,qt6=]
 	sys-libs/zlib
-	x11-libs/gdk-pixbuf:2
+	>=x11-libs/gdk-pixbuf-2.26:2
 	aac? ( >=media-libs/faad2-2.7 )
 	alsa? ( >=media-libs/alsa-lib-1.0.16 )
 	ampache? ( =media-libs/ampache_browser-1*:= )
-	bs2b? ( media-libs/libbs2b )
+	bs2b? ( >=media-libs/libbs2b-3.0.0 )
 	cdda? (
-		dev-libs/libcdio:=
+		>=dev-libs/libcdio-0.70:=
 		dev-libs/libcdio-paranoia:=
 		>=media-libs/libcddb-1.2.1
 	)
@@ -82,32 +85,50 @@ DEPEND="
 		>=media-libs/flac-1.2.1-r1:=
 		>=media-libs/libvorbis-1.0
 	)
-	fluidsynth? ( media-sound/fluidsynth:= )
-	gtk? ( x11-libs/gtk+:3 )
-	http? ( >=net-libs/neon-0.26.4 )
+	fluidsynth? ( >=media-sound/fluidsynth-1.0.6:= )
+	gtk? (
+		>=dev-libs/json-glib-1.0
+		x11-libs/cairo
+		>=x11-libs/gtk+-3.22:3
+		x11-libs/pango
+		X? (
+			opengl? ( virtual/opengl )
+			x11-libs/libX11
+			x11-libs/libXcomposite
+			x11-libs/libXrender
+		)
+	)
+	http? ( >=net-libs/neon-0.27 )
 	jack? (
 		>=media-libs/bio2jack-0.4
 		virtual/jack
 	)
 	lame? ( media-sound/lame )
-	libnotify? ( x11-libs/libnotify )
+	libnotify? ( >=x11-libs/libnotify-0.7 )
 	libsamplerate? ( media-libs/libsamplerate:= )
 	lirc? ( app-misc/lirc )
 	mms? ( >=media-libs/libmms-0.3 )
 	modplug? ( media-libs/libmodplug )
-	mp3? ( >=media-sound/mpg123-1.12.1 )
-	opengl? ( dev-qt/qtopengl:5 )
-	openmpt? ( media-libs/libopenmpt )
-	opus? ( media-libs/opusfile )
-	pipewire? ( media-video/pipewire:= )
-	pulseaudio? ( media-libs/libpulse )
-	scrobbler? ( net-misc/curl )
-	sdl? ( media-libs/libsdl2[sound] )
-	sid? ( >=media-libs/libsidplayfp-1.0.0 )
+	mp3? ( media-sound/mpg123-base )
+	openmpt? ( >=media-libs/libopenmpt-0.2 )
+	opus? ( >=media-libs/opusfile-0.4 )
+	pipewire? ( >=media-video/pipewire-0.3.26:= )
+	pulseaudio? ( >=media-libs/libpulse-0.9.5 )
+	qt6? (
+		dev-qt/qtbase:6[gui,opengl?,widgets]
+		dev-qt/qtmultimedia:6
+		X? (
+			dev-qt/qtbase:6=[X]
+			x11-libs/libX11
+		)
+	)
+	scrobbler? ( >=net-misc/curl-7.9.7 )
+	sdl? ( >=media-libs/libsdl2-2.0[sound] )
+	sid? ( >=media-libs/libsidplayfp-2.0 )
 	sndfile? ( >=media-libs/libsndfile-1.0.17-r1 )
 	soxr? ( media-libs/soxr )
 	speedpitch? ( media-libs/libsamplerate:= )
-	streamtuner? ( dev-qt/qtnetwork:5 )
+	streamtuner? ( dev-qt/qtbase:6[network] )
 	vorbis? (
 		>=media-libs/libogg-1.1.3
 		>=media-libs/libvorbis-1.2.0
@@ -122,6 +143,9 @@ pkg_setup() {
 
 src_prepare() {
 	default
+	if ! use X; then
+		sed -i -e "s/dependency('x11',.*)/disabler()/" meson.build || die
+	fi
 	if ! use nls; then
 		sed -e "/subdir('po')/d" -i meson.build || die "failed to sed" # bug #512698
 	fi
@@ -129,15 +153,21 @@ src_prepare() {
 
 src_configure() {
 	local emesonargs=(
+		# GUI toolkits
 		$(meson_use gtk)
-		-Dqt=true
+		-Dgtk2=false
+		$(meson_use qt6 qt)
+		-Dqt5=false
 
-		$(meson_use cue)
+		# container plugins
+		$(meson_use cue cue)
 
-		$(meson_use mms)
+		# transport plugins
+		$(meson_use mms mms)
 		$(meson_use http neon)
 
-		$(meson_use aac)
+		# input plugins
+		$(meson_use aac aac)
 		-Dadplug=false
 		$(meson_use fluidsynth amidiplug)
 		$(meson_use cdda cdaudio)
@@ -153,35 +183,42 @@ src_configure() {
 		$(meson_use vorbis)
 		$(meson_use wavpack)
 
+		# output plugins
 		$(meson_use alsa)
 		-Dcoreaudio=false
+		# filewriter
 		$(meson_use flac filewriter-flac)
 		$(meson_use lame filewriter-mp3)
+		$(meson_use vorbis filewriter-ogg)
 		$(meson_use jack)
 		-Doss=false
 		$(meson_use pipewire)
 		$(meson_use pulseaudio pulse)
-		-Dqtaudio=true
+		$(meson_use qt6 qtaudio)
 		$(meson_use sdl sdlout)
 		-Dsndio=false
 
+		# general plugins
 		$(meson_use ampache)
-		$(meson_use lirc)
+		$(meson_use X aosd)
+		$(meson_use X hotkey)
+		$(meson_use lirc lirc)
+		-Dmac-media-keys=false
 		-Dmpris2=true
 		$(meson_use libnotify notify)
 		$(meson_use scrobbler scrobbler2)
 		-Dsongchange=true
 		$(meson_use streamtuner)
 
+		# effect plugins
 		$(meson_use bs2b)
 		$(meson_use libsamplerate resample)
 		$(meson_use soxr)
 		$(meson_use speedpitch)
 
+		# visualization plugins
 		$(meson_use opengl gl-spectrum)
 		-Dvumeter=true
-
-		-Dmoonstone=true
 	)
 	meson_src_configure
 }
