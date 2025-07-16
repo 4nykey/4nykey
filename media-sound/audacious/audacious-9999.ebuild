@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -31,23 +31,33 @@ SRC_URI+=" mirror://gentoo/gentoo_ice-xmms-0.2.tar.bz2"
 
 LICENSE="BSD-2"
 SLOT="0"
-IUSE="gtk libarchive nls"
+IUSE="gtk qt6"
+IUSE+=" libarchive nls"
 
-DEPEND="
-	dev-qt/qtsvg:6
-	gtk? ( x11-libs/gtk+:3 )
-	libarchive? ( app-arch/libarchive )
-	virtual/freedesktop-icon-theme
-"
-RDEPEND="
-	${DEPEND}
-"
 BDEPEND="
 	virtual/pkgconfig
 	nls? ( dev-util/intltool )
 "
+DEPEND="
+	dev-libs/glib:2
+	virtual/freedesktop-icon-theme
+	gtk? (
+		x11-libs/cairo
+		x11-libs/gdk-pixbuf:2
+		>=x11-libs/gtk+-3.18:3
+		x11-libs/pango
+	)
+	qt6? (
+		dev-qt/qtbase:6[gui,widgets]
+		dev-qt/qtsvg:6
+	)
+	libarchive? ( app-arch/libarchive )
+"
+RDEPEND="
+	${DEPEND}
+"
 PDEPEND="
-	~media-plugins/audacious-plugins-${PV}
+	~media-plugins/audacious-plugins-${PV}[gtk=,qt6=]
 "
 
 src_prepare() {
@@ -58,16 +68,19 @@ src_prepare() {
 }
 
 src_configure() {
-	# D-Bus is a mandatory dependency, remote control,
+	# D-Bus is a mandatory dependency. Remote control,
 	# session management and some plugins depend on this.
 	# Building without D-Bus is *unsupported* and a USE-flag
 	# will not be added due to the bug reports that will result.
 	# Bugs #197894, #199069, #207330, #208606
 	local emesonargs=(
 		-Ddbus=true
-		-Dqt=true
+		$(meson_use qt6 qt)
+		-Dqt5=false
 		$(meson_use gtk)
+		-Dgtk2=false
 		$(meson_use libarchive)
+		-Dbuildstamp="Gentoo ${P}"
 		-Dvalgrind=false
 	)
 	meson_src_configure
