@@ -41,9 +41,6 @@ RDEPEND="
 	woff? (
 		>=dev-python/py-zopfli-0.2.3[${PYTHON_USEDEP}]
 	)
-	ufo? (
-		>=dev-python/fs-2.4.16[${PYTHON_USEDEP}]
-	)
 	unicode? (
 		>=dev-python/unicodedata2-15.1[${PYTHON_USEDEP}]
 	)
