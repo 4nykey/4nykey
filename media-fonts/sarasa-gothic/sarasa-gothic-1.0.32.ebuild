@@ -1,11 +1,11 @@
 # Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 MY_FONT_TYPES=( +ttc ttf )
 MY_FONT_VARIANTS=( fixed +monospace sans slab term ui )
-inherit font-r1
+inherit unpacker font-r1
 
 DESCRIPTION="A CJK programming font based on Iosevka and Source Han Sans"
 HOMEPAGE="https://github.com/be5invis/${PN}"
@@ -39,9 +39,6 @@ font_types_ttf? (
 	|| ( ${MY_FONT_VARIANTS[@]/#+/} )
 )
 ?? ( ${MY_FONT_TYPES[@]/#+/} )
-"
-BDEPEND="
-	app-arch/p7zip
 "
 S="${WORKDIR}"
 
