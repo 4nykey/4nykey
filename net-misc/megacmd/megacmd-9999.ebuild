@@ -29,7 +29,7 @@ SLOT="0"
 IUSE="pcre"
 
 DEPEND="
-	>=net-misc/meganz-sdk-9.1:=
+	>=net-misc/meganz-sdk-9.8:=
 	pcre? ( dev-libs/libpcre:3[cxx] )
 	sys-libs/readline:0
 "
@@ -39,6 +39,7 @@ RDEPEND="
 PATCHES=(
 	"${FILESDIR}"/cmake.diff
 	"${FILESDIR}"/sdk92.diff
+	"${FILESDIR}"/sdk98.diff
 )
 
 src_prepare() {

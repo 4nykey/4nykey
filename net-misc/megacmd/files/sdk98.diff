@@ -1,0 +1,34 @@
+diff --git a/src/megacmdexecuter.cpp b/src/megacmdexecuter.cpp
+index 2850b07..f634e8f 100644
+--- a/src/megacmdexecuter.cpp
++++ b/src/megacmdexecuter.cpp
+@@ -202,7 +202,7 @@ MegaCmdExecuter::MegaCmdExecuter(MegaApi *api, MegaCmdLogger *loggerCMD, MegaCmd
+     api->addTransferListener(globalTransferListener);
+     api->addGlobalListener(mSyncIssuesManager.getGlobalListener());
+     cwd = UNDEF;
+-    fsAccessCMD = new MegaFileSystemAccess();
++    auto fsAccessCMD = ::mega::createFSA();
+     session = NULL;
+ }
+ 
+diff --git a/src/megacmdexecuter.h b/src/megacmdexecuter.h
+index cf8e481..70cc90c 100644
+--- a/src/megacmdexecuter.h
++++ b/src/megacmdexecuter.h
+@@ -24,6 +24,7 @@
+ #include "listeners.h"
+ #include "deferred_single_trigger.h"
+ #include "sync_issues.h"
++#include "mega/filesystem.h"
+ 
+ namespace megacmd {
+ class MegaCmdGlobalTransferListener;
+@@ -36,7 +37,7 @@ private:
+     mega::MegaApi *api;
+     mega::handle cwd;
+     std::unique_ptr<char[]> session;
+-    mega::MegaFileSystemAccess *fsAccessCMD;
++    mega::FileSystemAccess *fsAccessCMD;
+     MegaCmdLogger *loggerCMD;
+     MegaCmdSandbox *sandboxCMD;
+     MegaCmdGlobalTransferListener *globalTransferListener;
