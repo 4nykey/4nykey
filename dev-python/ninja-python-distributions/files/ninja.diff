@@ -1,17 +1,32 @@
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -18,7 +18,6 @@ FetchContent_Declare(
-   ninja
-   SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ninja-upstream
- )
--FetchContent_MakeAvailable(ninja)
+@@ -6,6 +6,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SO
+ 
+ # Verify that the Ninja source directory is available
+ if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ninja-upstream/CMakeLists.txt")
++if(FALSE)
+   if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.git")
+     set(_details "Make sure to initialize submodules: git submodule update --init --recursive.")
+   else()
+@@ -13,6 +14,7 @@ if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DI
+   endif()
+   message(FATAL_ERROR "Missing ninja-upstream sources at [${CMAKE_CURRENT_SOURCE_DIR}/ninja-upstream]. ${_details}")
+ endif()
++endif()
+ 
+ # Options
+ option(RUN_NINJA_TEST "Run Ninja test suite" OFF)
+@@ -23,7 +25,6 @@ message(STATUS "")
+ message(STATUS "  RUN_NINJA_TEST : ${RUN_NINJA_TEST}")
+ message(STATUS "************************************")
+ 
+-add_subdirectory(ninja-upstream)
  
  if(RUN_NINJA_TEST)
    add_custom_target(
-@@ -28,5 +27,4 @@ if(RUN_NINJA_TEST)
+@@ -33,5 +34,4 @@ if(RUN_NINJA_TEST)
    )
  endif()
  
 -install(TARGETS ninja COMPONENT python DESTINATION "${SKBUILD_SCRIPTS_DIR}")
--install(FILES "${ninja_SOURCE_DIR}/misc/ninja_syntax.py" COMPONENT python DESTINATION ninja)
-+install(FILES "@_NINJA_SRC_DIR_@/misc/ninja_syntax.py" COMPONENT python DESTINATION ninja)
+ install(FILES "${ninja_SOURCE_DIR}/misc/ninja_syntax.py" COMPONENT python DESTINATION ninja)

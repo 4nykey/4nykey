@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -6,7 +6,7 @@ EAPI=8
 PYTHON_COMPAT=( python3_{10..13} )
 DISTUTILS_USE_PEP517=standalone
 inherit cmake distutils-r1
-MY_NI="ninja-1.11.1"
+MY_NI="ninja-1.13.0"
 SRC_URI="
 	mirror://githubcl/ninja-build/ninja/tar.gz/v${MY_NI#*-} -> ${MY_NI}.tar.gz
 "
@@ -47,7 +47,9 @@ src_unpack() {
 
 src_prepare() {
 	eapply "${FILESDIR}"/ninja.diff
-	sed -e "s:@_NINJA_SRC_DIR_@:${WORKDIR}/${MY_NI}:" -i CMakeLists.txt
+	sed -e \
+		"s:\${ninja_SOURCE_DIR}:${WORKDIR}/${MY_NI}:" \
+		-i CMakeLists.txt
 	cmake_src_prepare
 	distutils-r1_src_prepare
 }
