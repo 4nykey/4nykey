@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/meganz/${MY_PN}.git"
 	EGIT_SUBMODULES=( -src/MEGASync/mega )
 else
-	MY_PV="8b84d44"
+	MY_PV="7707e13"
 	SRC_URI="
 		mirror://githubcl/meganz/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -30,7 +30,7 @@ SLOT="0"
 IUSE="breakpad dolphin ffmpeg mediainfo nautilus raw test"
 
 RDEPEND="
-	>=net-misc/meganz-sdk-9.8:=[ffmpeg?,libuv,mediainfo?,qt,raw?,sqlite]
+	>=net-misc/meganz-sdk-9.10:=[ffmpeg?,libuv,mediainfo?,qt,raw?,sqlite]
 	dev-qt/qtsvg:5
 	dev-qt/qtx11extras:5
 	dev-qt/qtdbus:5

@@ -80,16 +80,17 @@
      Qt5::Gui
 --- a/src/MEGASync/CMakeLists.txt
 +++ b/src/MEGASync/CMakeLists.txt
-@@ -75,7 +75,7 @@ set_target_properties(MEGAsync
+@@ -82,7 +82,8 @@ set_target_properties(MEGAsync
  )
  
  
--find_package(Qt5 REQUIRED COMPONENTS LinguistTools)
+-find_package(Qt5 REQUIRED COMPONENTS Widgets Core Gui Network Qml Quick QuickWidgets LinguistTools)
++find_package(Qt5 REQUIRED COMPONENTS Widgets Core Gui Network Qml Quick QuickWidgets)
 +find_package(Qt5LinguistTools REQUIRED)
  qt5_create_translation(QM_OUTPUT ${CMAKE_CURRENT_SOURCE_DIR} gui/translations/translation.source.ts
      OPTIONS -locations none -no-ui-lines -no-obsolete)
  
-@@ -84,6 +84,7 @@ add_custom_target(generate_ts DEPENDS ${QM_OUTPUT})
+@@ -91,6 +92,7 @@ add_custom_target(generate_ts DEPENDS ${QM_OUTPUT})
  add_dependencies(MEGAsync generate_ts)
  
  target_include_directories(MEGAsync PRIVATE ${CMAKE_CURRENT_LIST_DIR})
@@ -97,7 +98,7 @@
  
  set(ExecutableTarget MEGAsync)
  
-@@ -99,6 +100,7 @@ include(UserAttributesRequests/userattributesrequests.cmake)
+@@ -106,6 +108,7 @@ include(UserAttributesRequests/userattributesrequests.cmake)
  
  target_compile_definitions(MEGAsync
      PUBLIC
@@ -105,7 +106,7 @@
      QT_NO_CAST_FROM_ASCII QT_NO_CAST_TO_ASCII
      $<$<CONFIG:Debug>:LOG_TO_STDOUT LOG_TO_LOGGER CREATE_COMPATIBLE_MINIDUMPS>
      $<$<BOOL:${WIN32}>:PUBLIC NOMINMAX WIN32_LEAN_AND_MEAN UNICODE>
-@@ -108,7 +110,6 @@ target_compile_definitions(MEGAsync
+@@ -115,7 +118,6 @@ target_compile_definitions(MEGAsync
  
  # Load and link needed libraries for the Desktop App target
  if(USE_BREAKPAD)
@@ -113,10 +114,10 @@
  
      if(NOT DEFINED CACHE{CRASH_BACKEND_URL})
          set(CRASH_BACKEND_URL "" CACHE STRING "Crash backend URL")
-@@ -133,17 +134,18 @@ else()
+@@ -139,17 +141,18 @@ else()
+     find_package(Qt5 REQUIRED COMPONENTS Svg)
  endif()
  
- find_package(Qt5 REQUIRED COMPONENTS Widgets Core Gui Network Qml Quick QuickWidgets)
 +find_package(sdklib REQUIRED)
 +find_package(PkgConfig REQUIRED)
 +pkg_check_modules(breakpad IMPORTED_TARGET breakpad breakpad-client)
@@ -135,7 +136,7 @@
      Qt5::Widgets
      Qt5::Core
      Qt5::Gui
-@@ -151,6 +153,8 @@ target_link_libraries(MEGAsync
+@@ -157,6 +160,8 @@ target_link_libraries(MEGAsync
      Qt5::Qml
      Qt5::Quick
      Qt5::QuickWidgets
@@ -144,7 +145,7 @@
  )
  
  ## Adjust compilation flags for warnings and errors ##
-@@ -186,13 +190,6 @@ if (UNIX AND NOT APPLE)
+@@ -192,13 +197,6 @@ if (UNIX AND NOT APPLE)
  
      set(vcpkg_lib_folder "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/$<$<CONFIG:Debug>:debug/>lib/")
  
