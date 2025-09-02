@@ -10,7 +10,7 @@ if [[ ${PV} = *9999* ]]; then
 else
 	MY_PV="80485b8"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v$(ver_rs 3 -)"
-	MY_LEI="libelectronic-id-9823275"
+	MY_LEI="libelectronic-id-0328016"
 	SRC_URI="
 		mirror://githubcl/web-eid/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://githubcl/web-eid/${MY_LEI%-*}/tar.gz/${MY_LEI##*-}
@@ -27,28 +27,18 @@ HOMEPAGE="https://web-eid.eu"
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="qt6 test"
+IUSE="test"
 
 RDEPEND="
 	dev-libs/openssl:=
 	sys-apps/pcsc-lite
-	!qt6? (
-		dev-qt/qtsvg:5=
-	)
-	qt6? (
-		dev-qt/qtbase:6=[network,test?,widgets]
-		dev-qt/qtsvg:6=
-	)
+	dev-qt/qtbase:6=[network,test?,widgets]
+	dev-qt/qtsvg:6=
 "
 DEPEND="
 	${RDEPEND}
 	test? ( dev-cpp/gtest )
-	!qt6? (
-		dev-qt/linguist-tools:5
-	)
-	qt6? (
-		dev-qt/qttools:6[linguist]
-	)
+	dev-qt/qttools:6[linguist]
 "
 
 src_prepare() {
@@ -57,14 +47,14 @@ src_prepare() {
 	fi
 	use test || sed -e '/enable_testing()/,$d' -i \
 		{lib/libelectronic-id,lib/libelectronic-id/lib/libpcsc-cpp,.}/CMakeLists.txt
-	use qt6 && sed -e 's:Qt6 Qt5:Qt6:' -i CMakeLists.txt
+	sed -e 's:Qt6 Qt5:Qt6:' -i CMakeLists.txt
 	cmake_src_prepare
 }
 
 src_configure() {
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_SYSCONFDIR="${EPREFIX}/etc"
-		-DQT_VERSION_MAJOR=$(usex qt6 6 5)
+		-DQT_VERSION_MAJOR=6
 	)
 	cmake_src_configure
 }

@@ -27,7 +27,7 @@ HOMEPAGE="https://open-eid.github.io"
 
 LICENSE="LGPL-2.1 Nokia-Qt-LGPL-Exception-1.1"
 SLOT="0"
-IUSE="nautilus qt6"
+IUSE="nautilus"
 
 DEPEND="
 	>=dev-libs/libdigidocpp-4.2
@@ -35,17 +35,9 @@ DEPEND="
 	net-nds/openldap
 	dev-libs/openssl:=
 	dev-libs/flatbuffers:=
-	qt6? (
-		dev-qt/qtbase:6=[gui,network,widgets]
-		dev-qt/qt5compat:6=
-		dev-qt/qtsvg:6=
-	)
-	!qt6? (
-		dev-qt/qtwidgets:5=
-		dev-qt/qtprintsupport:5=
-		dev-qt/qtsvg:5=
-		dev-qt/qtnetwork:5=
-	)
+	dev-qt/qtbase:6=[gui,network,widgets]
+	dev-qt/qt5compat:6=
+	dev-qt/qtsvg:6=
 "
 RDEPEND="
 	${DEPEND}
@@ -53,12 +45,7 @@ RDEPEND="
 	nautilus? ( gnome-base/nautilus )
 "
 BDEPEND="
-	qt6? (
-		dev-qt/qttools:6[linguist]
-	)
-	!qt6? (
-		dev-qt/linguist-tools:5
-	)
+	dev-qt/qttools:6[linguist]
 "
 DOCS=( {README,RELEASE-NOTES}.md )
 
@@ -69,7 +56,6 @@ src_prepare() {
 	sed \
 		-e "s:doc/${PN}:doc/${PF}:" \
 		-i CMakeLists.txt
-	use qt6 && sed -e '/QT NAMES/s: Qt5::' -i CMakeLists.txt
 	cmake_src_prepare
 }
 
