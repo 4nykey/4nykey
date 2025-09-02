@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -31,20 +31,17 @@ SLOT="0"
 IUSE="json"
 
 RDEPEND="
-	>=dev-python/fonttools-4.54.1[skia(-),ufo(-),unicode(-),${PYTHON_USEDEP}]
-	>=dev-python/glyphsLib-6.9.2[${PYTHON_USEDEP}]
-	>=dev-python/ufo2ft-3.3.1[cffsubr(+),${PYTHON_USEDEP}]
-	>=dev-python/MutatorMath-3.0.1[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.59.2[skia(-),ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/glyphsLib-6.11.6[${PYTHON_USEDEP}]
+	>=dev-python/ufo2ft-3.6.1[cffsubr(+),${PYTHON_USEDEP}]
 	>=dev-python/fontMath-0.9.4[${PYTHON_USEDEP}]
-	>=dev-python/defcon-0.10.2[${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
-	dev-python/skia-pathops[${PYTHON_USEDEP}]
-	>=dev-python/ufoLib2-0.16[${PYTHON_USEDEP}]
-	>=dev-python/attrs-23.2[${PYTHON_USEDEP}]
-	>=dev-python/ttfautohint-py-0.5.1[${PYTHON_USEDEP}]
+	>=dev-python/ufoLib2-0.18.1[${PYTHON_USEDEP}]
+	>=dev-python/cffsubr-0.3[${PYTHON_USEDEP}]
+	>=dev-python/ttfautohint-py-0.6[${PYTHON_USEDEP}]
 	json? (
-		>=dev-python/cattrs-23.2.3[${PYTHON_USEDEP}]
-		>=dev-python/orjson-3.9.13[${PYTHON_USEDEP}]
+		>=dev-python/cattrs-25.1.1[${PYTHON_USEDEP}]
+		>=dev-python/orjson-3.11.3[${PYTHON_USEDEP}]
 	)
 "
 DEPEND="
