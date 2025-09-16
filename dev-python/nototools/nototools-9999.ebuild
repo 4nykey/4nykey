@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -28,15 +28,15 @@ SLOT="0"
 IUSE=""
 
 DEPEND="
-	>=dev-util/afdko-3.9.1[${PYTHON_USEDEP}]
+	>=dev-util/afdko-4[${PYTHON_USEDEP}]
 	>=dev-python/appdirs-1.4.4[${PYTHON_USEDEP}]
-	>=dev-python/attrs-21.4[${PYTHON_USEDEP}]
-	>=dev-python/black-22.6[${PYTHON_USEDEP}]
+	>=dev-python/attrs-23.1[${PYTHON_USEDEP}]
+	>=dev-python/black-24.4[${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 	>=app-arch/brotli-1.1[python,${PYTHON_USEDEP}]
 	>=dev-python/click-8.1.7[${PYTHON_USEDEP}]
-	>=dev-python/defcon-0.10.2[${PYTHON_USEDEP}]
-	>=dev-python/fontMath-0.9.2[${PYTHON_USEDEP}]
+	>=dev-python/defcon-0.10.3[${PYTHON_USEDEP}]
+	>=dev-python/fontMath-0.9.3[${PYTHON_USEDEP}]
 	>=dev-python/fontParts-0.12.1[${PYTHON_USEDEP}]
 	>=dev-python/fontPens-0.2.4[${PYTHON_USEDEP}]
 	>=dev-python/fonttools-4.53[ufo(-),${PYTHON_USEDEP}]
@@ -44,8 +44,8 @@ DEPEND="
 	>=dev-python/pathspec-0.9[${PYTHON_USEDEP}]
 	>=dev-python/pillow-10.3[${PYTHON_USEDEP}]
 	>=dev-python/pyclipper-1.3[${PYTHON_USEDEP}]
-	>=dev-python/pytz-2022.1[${PYTHON_USEDEP}]
-	>=dev-python/regex-2022.7.25[${PYTHON_USEDEP}]
+	>=dev-python/pytz-2023.5[${PYTHON_USEDEP}]
+	>=dev-python/regex-2023.10.3[${PYTHON_USEDEP}]
 	>=media-gfx/scour-0.38.2[${PYTHON_USEDEP}]
 	>=dev-python/ufoNormalizer-0.6.1[${PYTHON_USEDEP}]
 	>=dev-python/ufoProcessor-1.9[${PYTHON_USEDEP}]
