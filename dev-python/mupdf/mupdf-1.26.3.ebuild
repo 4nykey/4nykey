@@ -24,7 +24,7 @@ RDEPEND="
 	${DEPEND}
 "
 BDEPEND="
-	dev-python/clang[${PYTHON_USEDEP}]
+	<dev-python/clang-21[${PYTHON_USEDEP}]
 	dev-lang/swig
 "
 PATCHES=(
