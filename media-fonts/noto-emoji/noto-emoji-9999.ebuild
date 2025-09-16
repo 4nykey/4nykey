@@ -37,7 +37,7 @@ BDEPEND="
 !binary? (
 	${PYTHON_DEPS}
 	$(python_gen_cond_dep '
-		>=dev-python/nototools-0.2.17[${PYTHON_USEDEP}]
+		>=dev-python/nototools-0.3.2[${PYTHON_USEDEP}]
 	')
 	font_variants_colrv1? (
 		$(python_gen_cond_dep '
@@ -50,7 +50,7 @@ BDEPEND="
 		x11-libs/cairo
 		media-libs/harfbuzz
 	)
-	>=app-i18n/unicode-emoji-16
+	>=app-i18n/unicode-emoji-17
 )
 "
 
