@@ -31,7 +31,7 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.59.2[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.60[ufo(-),${PYTHON_USEDEP}]
 	>=dev-python/defcon-0.10.3[${PYTHON_USEDEP}]
 	>=dev-python/compreffor-0.5.6[${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
