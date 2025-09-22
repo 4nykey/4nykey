@@ -70,7 +70,7 @@ src_configure() {
 		-DENABLE_SDKLIB_WERROR=no
 		-DENABLE_QT_BINDINGS=$(usex qt)
 		-DHAVE_LIBRAW=$(usex qt $(usex raw))
-		-DUSE_MEDIAINFO=$(usex mediainfo)
+		-DENABLE_MEDIA_FILE_METADATA=$(usex mediainfo)
 		-DUSE_FREEIMAGE=$(usex freeimage)
 		-DENABLE_ISOLATED_GFX=$(usex freeimage)
 		-DHAVE_FFMPEG=$(usex ffmpeg)
