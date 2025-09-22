@@ -3,7 +3,7 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-140esr-patches-01.tar.xz"
+FIREFOX_PATCHSET="firefox-140esr-patches-03.tar.xz"
 
 LLVM_COMPAT=( 19 20 )
 
@@ -13,15 +13,15 @@ RUST_NEEDS_LLVM=1
 # If not building with clang we need at least rust 1.76
 RUST_MIN_VER=1.82.0
 
-PYTHON_COMPAT=( python3_{11..13} )
+PYTHON_COMPAT=( python3_{11..14} )
 PYTHON_REQ_USE="ncurses,sqlite,ssl"
 
 VIRTUALX_REQUIRED="manual"
 
 # Information about the bundled wasi toolchain from
 # https://github.com/WebAssembly/wasi-sdk/
-WASI_SDK_VER=25.0
-WASI_SDK_LLVM_VER=19
+WASI_SDK_VER=27.0
+WASI_SDK_LLVM_VER=20
 
 inherit check-reqs desktop flag-o-matic gnome2-utils linux-info llvm-r1 multiprocessing \
 	optfeature pax-utils python-any-r1 readme.gentoo-r1 rust toolchain-funcs virtualx xdg
@@ -32,7 +32,7 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="140.2.0esr-${MY_PV}-1-build3"
+MY_P="140.3.0esr-${MY_PV}-1-build3"
 MY_P="firefox-tor-browser-${MY_P}"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
@@ -53,7 +53,7 @@ SRC_URI="
 		mirror://tor/${PN}/${MY_PV}/tor-browser-linux-x86_64-${MY_PV}.tar.xz
 	)
 	wasm-sandbox? (
-		https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-${WASI_SDK_VER/.*/}/wasi-sdk-${WASI_SDK_VER}-x86_64-linux.tar.gz
+		amd64? ( https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-${WASI_SDK_VER/.*/}/wasi-sdk-${WASI_SDK_VER}-x86_64-linux.tar.gz )
 	)
 "
 S="${WORKDIR}/${MY_P}"
@@ -102,10 +102,7 @@ BDEPEND="${PYTHON_DEPS}
 			x11-apps/xhost
 		)
 		!X? (
-			|| (
-				gui-wm/tinywl
-				<gui-libs/wlroots-0.17.3[tinywl(-)]
-			)
+			gui-wm/tinywl
 			x11-misc/xkeyboard-config
 		)
 	)"
@@ -114,7 +111,7 @@ COMMON_DEPEND="
 	dev-libs/expat
 	dev-libs/glib:2
 	dev-libs/libffi:=
-	>=dev-libs/nss-3.112
+	>=dev-libs/nss-3.112.1
 	>=dev-libs/nspr-4.35
 	media-libs/alsa-lib
 	media-libs/fontconfig
