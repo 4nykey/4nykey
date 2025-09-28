@@ -10,8 +10,8 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/meganz/${MY_PN}.git"
 	EGIT_SUBMODULES=( )
 else
-	MY_PV="7fe3e1e"
-	MY_SDK="61013ee"
+	MY_PV="a248533"
+	MY_SDK="337dbd5"
 	SRC_URI="
 		mirror://githubcl/meganz/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -29,7 +29,7 @@ SLOT="0"
 IUSE="pcre"
 
 DEPEND="
-	>=net-misc/meganz-sdk-9.8:=
+	>=net-misc/meganz-sdk-9.13:=
 	pcre? ( dev-libs/libpcre:3[cxx] )
 	sys-libs/readline:0
 "
@@ -38,8 +38,6 @@ RDEPEND="
 "
 PATCHES=(
 	"${FILESDIR}"/cmake.diff
-	"${FILESDIR}"/sdk92.diff
-	"${FILESDIR}"/sdk98.diff
 )
 
 src_prepare() {
