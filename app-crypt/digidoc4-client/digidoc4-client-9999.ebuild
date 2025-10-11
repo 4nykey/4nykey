@@ -4,6 +4,15 @@
 EAPI=8
 
 MY_PN="DigiDoc4-Client"
+# CMakeLists.txt: TSL_URL
+# common/CMakeLists.txt: CONFIG_URL
+SRC_URI="
+	https://ec.europa.eu/tools/lotl/eu-lotl.xml
+	https://sr.riik.ee/tsl/estonian-tsl.xml -> EE.xml
+	https://id.eesti.ee/config.json
+	https://id.eesti.ee/config.rsa
+	https://id.eesti.ee/config.pub
+"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/open-eid/${MY_PN}.git"
@@ -12,7 +21,7 @@ else
 	MY_PV="v${MY_PV/_/-}"
 	[[ -z ${PV%%*_p*} ]] && MY_PV="a4da0d3"
 	MY_QC="qt-common-6a1b281"
-	SRC_URI="${SRC_URI}
+	SRC_URI+="
 		mirror://githubcl/open-eid/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://githubcl/open-eid/${MY_QC%-*}/tar.gz/${MY_QC##*-} -> ${MY_QC}.tar.gz
 	"
@@ -56,6 +65,8 @@ src_prepare() {
 	sed \
 		-e "s:doc/${PN}:doc/${PF}:" \
 		-i CMakeLists.txt
+	cp -t client "${DISTDIR}"/eu-lotl.xml "${DISTDIR}"/EE.xml
+	cp -t common "${DISTDIR}"/config.{json,rsa,pub}
 	cmake_src_prepare
 }
 
