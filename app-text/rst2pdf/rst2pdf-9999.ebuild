@@ -40,6 +40,7 @@ DEPEND="
 		dev-python/pyyaml[${PYTHON_USEDEP}]
 		dev-python/reportlab[${PYTHON_USEDEP}]
 		dev-python/smartypants[${PYTHON_USEDEP}]
+		dev-python/roman[${PYTHON_USEDEP}]
 		aafigure? ( dev-python/aafigure[${PYTHON_USEDEP}] )
 		matplotlib? ( dev-python/matplotlib[${PYTHON_USEDEP}] )
 		svg? ( dev-python/svglib[${PYTHON_USEDEP}] )
