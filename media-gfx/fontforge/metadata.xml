@@ -6,6 +6,7 @@
 	</maintainer>
 	<use>
 		<flag name="extras">Build and install programs from the contrib directory</flag>
+        <flag name="harfbuzz">Enable HarfBuzz shaper support</flag>
 		<flag name="libspiro">Add support for media-libs/libspiro</flag>
 		<flag name="truetype-debugger">Enable truetype debugger in fontforge</flag>
 		<flag name="woff2">Enable WOFF2 support</flag>
