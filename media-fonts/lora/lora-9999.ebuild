@@ -1,9 +1,8 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-EMAKE_EXTRA_ARGS=( glyphs='sources/Lora-Italic.glyphs sources/Lora.glyphs' )
 MY_PN="${PN^}-Cyrillic"
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
