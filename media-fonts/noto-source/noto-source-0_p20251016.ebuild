@@ -4,19 +4,20 @@
 EAPI=8
 
 FONT_SRCDIR=src
+FONTMAKE_EXTRA_ARGS=( "--fea-include-dir ./${FONT_SRCDIR}" )
 # https://github.com/notofonts/notofonts.github.io/raw/main/fontrepos.json
 SRC_URI="
 mirror://githubcl/notofonts/adlam/tar.gz/35cfefd -> noto-adlam-35cfefd.tar.gz
 mirror://githubcl/notofonts/ahom/tar.gz/b729459 -> noto-ahom-b729459.tar.gz
 mirror://githubcl/notofonts/anatolian-hieroglyphs/tar.gz/c66edd8 -> noto-anatolian-hieroglyphs-c66edd8.tar.gz
-mirror://githubcl/notofonts/arabic/tar.gz/5b213e56 -> noto-arabic-5b213e56.tar.gz
+mirror://githubcl/notofonts/arabic/tar.gz/1b2b7e5c -> noto-arabic-1b2b7e5c.tar.gz
 mirror://githubcl/notofonts/armenian/tar.gz/9cf9428 -> noto-armenian-9cf9428.tar.gz
 mirror://githubcl/notofonts/avestan/tar.gz/ec07550 -> noto-avestan-ec07550.tar.gz
 mirror://githubcl/notofonts/balinese/tar.gz/595aa68 -> noto-balinese-595aa68.tar.gz
 mirror://githubcl/notofonts/bamum/tar.gz/f7525e9 -> noto-bamum-f7525e9.tar.gz
 mirror://githubcl/notofonts/bassa-vah/tar.gz/75d3c40 -> noto-bassa-vah-75d3c40.tar.gz
 mirror://githubcl/notofonts/batak/tar.gz/fc86bc4 -> noto-batak-fc86bc4.tar.gz
-mirror://githubcl/notofonts/bengali/tar.gz/a43cbb8 -> noto-bengali-a43cbb8.tar.gz
+mirror://githubcl/notofonts/bengali/tar.gz/24599733 -> noto-bengali-24599733.tar.gz
 mirror://githubcl/notofonts/bhaiksuki/tar.gz/342b753 -> noto-bhaiksuki-342b753.tar.gz
 mirror://githubcl/notofonts/brahmi/tar.gz/d93a535 -> noto-brahmi-d93a535.tar.gz
 mirror://githubcl/notofonts/buginese/tar.gz/ac43417 -> noto-buginese-ac43417.tar.gz
@@ -52,6 +53,7 @@ mirror://githubcl/notofonts/hanifi-rohingya/tar.gz/f54cf74 -> noto-hanifi-rohing
 mirror://githubcl/notofonts/hanunoo/tar.gz/0d3115a -> noto-hanunoo-0d3115a.tar.gz
 mirror://githubcl/notofonts/hatran/tar.gz/f5ce042 -> noto-hatran-f5ce042.tar.gz
 mirror://githubcl/notofonts/hebrew/tar.gz/27874fd -> noto-hebrew-27874fd.tar.gz
+mirror://githubcl/notofonts/hentaigana/tar.gz/3aa4d30 -> noto-hentaigana-3aa4d30.tar.gz
 mirror://githubcl/notofonts/imperial-aramaic/tar.gz/75e0de4 -> noto-imperial-aramaic-75e0de4.tar.gz
 mirror://githubcl/notofonts/indic-siyaq-numbers/tar.gz/e3ad73d -> noto-indic-siyaq-numbers-e3ad73d.tar.gz
 mirror://githubcl/notofonts/inscriptional-pahlavi/tar.gz/7261995 -> noto-inscriptional-pahlavi-7261995.tar.gz
@@ -82,7 +84,7 @@ mirror://githubcl/notofonts/mandaic/tar.gz/71352e0 -> noto-mandaic-71352e0.tar.g
 mirror://githubcl/notofonts/manichaean/tar.gz/79b6968 -> noto-manichaean-79b6968.tar.gz
 mirror://githubcl/notofonts/marchen/tar.gz/bf09f82 -> noto-marchen-bf09f82.tar.gz
 mirror://githubcl/notofonts/masaram-gondi/tar.gz/b9fde21 -> noto-masaram-gondi-b9fde21.tar.gz
-mirror://githubcl/notofonts/math/tar.gz/8e921086 -> noto-math-8e921086.tar.gz
+mirror://githubcl/notofonts/math/tar.gz/8ed3a095 -> noto-math-8ed3a095.tar.gz
 mirror://githubcl/notofonts/mayan-numerals/tar.gz/ff79df5 -> noto-mayan-numerals-ff79df5.tar.gz
 mirror://githubcl/notofonts/medefaidrin/tar.gz/b5d6e4e -> noto-medefaidrin-b5d6e4e.tar.gz
 mirror://githubcl/notofonts/meetei-mayek/tar.gz/5f93a3a -> noto-meetei-mayek-5f93a3a.tar.gz
@@ -90,7 +92,7 @@ mirror://githubcl/notofonts/mende-kikakui/tar.gz/481df85 -> noto-mende-kikakui-4
 mirror://githubcl/notofonts/meroitic/tar.gz/34cadfd -> noto-meroitic-34cadfd.tar.gz
 mirror://githubcl/notofonts/miao/tar.gz/47065c4 -> noto-miao-47065c4.tar.gz
 mirror://githubcl/notofonts/modi/tar.gz/27358a0 -> noto-modi-27358a0.tar.gz
-mirror://githubcl/notofonts/mongolian/tar.gz/1621964 -> noto-mongolian-1621964.tar.gz
+mirror://githubcl/notofonts/mongolian/tar.gz/9a35144 -> noto-mongolian-9a35144.tar.gz
 mirror://githubcl/notofonts/mro/tar.gz/80fc63a -> noto-mro-80fc63a.tar.gz
 mirror://githubcl/notofonts/multani/tar.gz/3831630 -> noto-multani-3831630.tar.gz
 mirror://githubcl/notofonts/music/tar.gz/81817dc -> noto-music-81817dc.tar.gz
@@ -134,7 +136,7 @@ mirror://githubcl/notofonts/sharada/tar.gz/d7fc03c -> noto-sharada-d7fc03c.tar.g
 mirror://githubcl/notofonts/shavian/tar.gz/9be01d3 -> noto-shavian-9be01d3.tar.gz
 mirror://githubcl/notofonts/siddham/tar.gz/780aa94 -> noto-siddham-780aa94.tar.gz
 mirror://githubcl/notofonts/sign-writing/tar.gz/4c4ff9d6 -> noto-sign-writing-4c4ff9d6.tar.gz
-mirror://githubcl/notofonts/sinhala/tar.gz/c59d95d -> noto-sinhala-c59d95d.tar.gz
+mirror://githubcl/notofonts/sinhala/tar.gz/7f19bfc -> noto-sinhala-7f19bfc.tar.gz
 mirror://githubcl/notofonts/sogdian/tar.gz/c075553 -> noto-sogdian-c075553.tar.gz
 mirror://githubcl/notofonts/sora-sompeng/tar.gz/da16e8f -> noto-sora-sompeng-da16e8f.tar.gz
 mirror://githubcl/notofonts/soyombo/tar.gz/5e319d9 -> noto-soyombo-5e319d9.tar.gz
@@ -142,7 +144,7 @@ mirror://githubcl/notofonts/sundanese/tar.gz/449e3c4 -> noto-sundanese-449e3c4.t
 mirror://githubcl/notofonts/sunuwar/tar.gz/e08c76c -> noto-sunuwar-e08c76c.tar.gz
 mirror://githubcl/notofonts/syloti-nagri/tar.gz/a9439b2 -> noto-syloti-nagri-a9439b2.tar.gz
 mirror://githubcl/notofonts/symbols/tar.gz/d8bee720 -> noto-symbols-d8bee720.tar.gz
-mirror://githubcl/notofonts/syriac/tar.gz/ba11708 -> noto-syriac-ba11708.tar.gz
+mirror://githubcl/notofonts/syriac/tar.gz/a24ba45 -> noto-syriac-a24ba45.tar.gz
 mirror://githubcl/notofonts/tagalog/tar.gz/a403815 -> noto-tagalog-a403815.tar.gz
 mirror://githubcl/notofonts/tagbanwa/tar.gz/5c2681f -> noto-tagbanwa-5c2681f.tar.gz
 mirror://githubcl/notofonts/tai-le/tar.gz/1ab9081 -> noto-tai-le-1ab9081.tar.gz
@@ -158,6 +160,7 @@ mirror://githubcl/notofonts/thai/tar.gz/db1ea1aa -> noto-thai-db1ea1aa.tar.gz
 mirror://githubcl/notofonts/tibetan/tar.gz/dc93090 -> noto-tibetan-dc93090.tar.gz
 mirror://githubcl/notofonts/tifinagh/tar.gz/50db48f -> noto-tifinagh-50db48f.tar.gz
 mirror://githubcl/notofonts/tirhuta/tar.gz/53753d7 -> noto-tirhuta-53753d7.tar.gz
+mirror://githubcl/notofonts/todhri/tar.gz/203e8ff -> noto-todhri-203e8ff.tar.gz
 mirror://githubcl/notofonts/toto/tar.gz/77284d9 -> noto-toto-77284d9.tar.gz
 mirror://githubcl/notofonts/ugaritic/tar.gz/b6bfea1 -> noto-ugaritic-b6bfea1.tar.gz
 mirror://githubcl/notofonts/vai/tar.gz/86eb4a4 -> noto-vai-86eb4a4.tar.gz
@@ -188,8 +191,8 @@ src_prepare() {
 	use variable && export SKIP_VF="$(grep -rl 'buildVariable.*false' \
 		--include=config-*.yaml | xargs yq -r '.sources[]' | grep -v NotoSansThaiLoopedUI)"
 	use clean-as-you-go && HELPER_ARGS=( clean )
-	mkdir -p src
-	mv -t src */sources/*
-	rm -f "src/NotoSansMultani-Regular (Autosaved).glyphs"
+	mkdir -p ${FONT_SRCDIR}
+	cp -f -t ${FONT_SRCDIR} -rl */sources/*
+	rm -f "${FONT_SRCDIR}/NotoSansMultani-Regular (Autosaved).glyphs"
 	fontmake_src_prepare
 }
