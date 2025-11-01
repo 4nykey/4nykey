@@ -1,7 +1,7 @@
-# Copyright 2019-2022 Gentoo Authors
+# Copyright 2019-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/vovochka404/${PN}.git"
