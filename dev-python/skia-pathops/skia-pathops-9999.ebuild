@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -13,9 +13,16 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_SUBMODULES=( )
 else
 	MY_PV="815070e"
+	MY_SB="skia-builder-53ed045"
+	MY_SK="skia-d9ab942"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v$(ver_rs 3 '.post')"
 	SRC_URI="
-		mirror://githubcl/fonttools/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+		mirror://githubcl/fonttools/${PN}/tar.gz/${MY_PV}
+		-> ${P}.tar.gz
+		mirror://githubcl/fonttools/${MY_SB%-*}/tar.gz/${MY_SB##*-}
+		-> ${MY_SB}.tar.gz
+		mirror://githubcl/fonttools/${MY_SK%-*}/tar.gz/${MY_SK##*-}
+		-> ${MY_SK}.tar.gz
 	"
 	S="${WORKDIR}/${PN}-${MY_PV#v}"
 	RESTRICT="primaryuri"
@@ -33,25 +40,24 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	media-libs/skia:0/113
 "
 DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
 	dev-python/cython[${PYTHON_USEDEP}]
+	dev-build/gn
 "
 distutils_enable_tests pytest
 
-pkg_setup() {
-	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV/_p/.post}"
-	export BUILD_SKIA_FROM_SOURCE=0
-	append-cppflags "-I${EROOT}/usr/include/skia"
-}
-
 python_prepare_all() {
-	distutils-r1_python_prepare_all
+	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV/_p/.post}"
 	sed -e '/doctest-cython/d' -i tox.ini
-	sed -e '/-std=c++14/d' -i setup.py
-	grep -rl '"include/' src/python/pathops | xargs sed 's:"include/:"skia/:' -i
+	sed \
+		-e "s:build_skia_py, :&'--no-virtualenv', '--no-sync-deps', '--no-fetch-gn', '--gn-path', '${EPREFIX}/usr/bin/gn', :" \
+		-i setup.py
+	rm -rf src/cpp/skia-builder ../${MY_SB}/skia
+	cp -frl ../${MY_SB} src/cpp/skia-builder
+	cp -frl ../${MY_SK} src/cpp/skia-builder/skia
+	distutils-r1_python_prepare_all
 }
