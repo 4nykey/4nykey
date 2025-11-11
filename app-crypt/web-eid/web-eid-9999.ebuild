@@ -10,7 +10,7 @@ if [[ ${PV} = *9999* ]]; then
 else
 	MY_PV="80485b8"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v$(ver_rs 3 -)"
-	MY_LEI="libelectronic-id-0328016"
+	MY_LEI="libelectronic-id-e7490d0"
 	SRC_URI="
 		mirror://githubcl/web-eid/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://githubcl/web-eid/${MY_LEI%-*}/tar.gz/${MY_LEI##*-}
@@ -47,7 +47,6 @@ src_prepare() {
 	fi
 	use test || sed -e '/enable_testing()/,$d' -i \
 		{lib/libelectronic-id,lib/libelectronic-id/lib/libpcsc-cpp,.}/CMakeLists.txt
-	sed -e 's:Qt6 Qt5:Qt6:' -i CMakeLists.txt
 	cmake_src_prepare
 }
 
