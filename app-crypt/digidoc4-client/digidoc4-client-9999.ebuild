@@ -6,12 +6,13 @@ EAPI=8
 MY_PN="DigiDoc4-Client"
 # CMakeLists.txt: TSL_URL
 # common/CMakeLists.txt: CONFIG_URL
+MY_EL=251111
 SRC_URI="
-	https://ec.europa.eu/tools/lotl/eu-lotl.xml
-	https://sr.riik.ee/tsl/estonian-tsl.xml -> EE.xml
-	https://id.eesti.ee/config.json
-	https://id.eesti.ee/config.rsa
-	https://id.eesti.ee/config.pub
+	https://ec.europa.eu/tools/lotl/eu-lotl.xml -> eu-lotl_${MY_EL}.xml
+	https://sr.riik.ee/tsl/estonian-tsl.xml -> estonian-tsl_${MY_EL}.xml
+	https://id.eesti.ee/config.json -> config_${MY_EL}.json
+	https://id.eesti.ee/config.rsa -> config_${MY_EL}.rsa
+	https://id.eesti.ee/config.pub -> config_${MY_EL}.pub
 "
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -65,8 +66,12 @@ src_prepare() {
 	sed \
 		-e "s:doc/${PN}:doc/${PF}:" \
 		-i CMakeLists.txt
-	cp -t client "${DISTDIR}"/eu-lotl.xml "${DISTDIR}"/EE.xml
-	cp -t common "${DISTDIR}"/config.{json,rsa,pub}
+	cp "${DISTDIR}"/eu-lotl_${MY_EL}.xml client/eu-lotl.xml || die
+	cp "${DISTDIR}"/estonian-tsl_${MY_EL}.xml client/EE.xml || die
+	local _x
+	for _x in json rsa pub; do
+		cp "${DISTDIR}"/config_${MY_EL}.${_x} common/config${_x} || die
+	done
 	cmake_src_prepare
 }
 
