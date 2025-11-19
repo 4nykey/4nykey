@@ -35,7 +35,6 @@ RESTRICT+=" test"
 
 RDEPEND="
 	dev-libs/crypto++:=
-	sys-libs/zlib
 	dev-libs/libpcre:3[cxx]
 	dev-libs/openssl:0
 	net-misc/curl
@@ -90,11 +89,7 @@ src_test() {
 
 src_install() {
 	cmake_src_install
-	cp -a include/mega{,api_impl}.h include/mega
-	doheader -r include/mega
 	rm -rf "${ED}"/usr/include/mega/{osx,win32,wincurl,wp8}
-	insinto /usr/include/mega
-	doins -r include/impl
 
 	insinto /usr/share/mega/cmake
 	doins cmake/modules/*.cmake
