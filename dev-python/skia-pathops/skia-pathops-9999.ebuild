@@ -13,8 +13,8 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_SUBMODULES=( )
 else
 	MY_PV="815070e"
-	MY_SB="skia-builder-53ed045"
-	MY_SK="skia-d9ab942"
+	MY_SB="skia-builder-501d7a3"
+	MY_SK="skia-a777ad7"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v$(ver_rs 3 '.post')"
 	SRC_URI="
 		mirror://githubcl/fonttools/${PN}/tar.gz/${MY_PV}
@@ -45,7 +45,7 @@ DEPEND="
 	${RDEPEND}
 "
 BDEPEND="
-	dev-python/cython[${PYTHON_USEDEP}]
+	>=dev-python/cython-3.2[${PYTHON_USEDEP}]
 	dev-build/gn
 "
 distutils_enable_tests pytest
