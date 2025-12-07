@@ -30,6 +30,7 @@ reiserfs static xfs
 
 RDEPEND="
 	dev-libs/openssl:=
+	dev-libs/xxhash
 	e2fs? ( sys-fs/e2fsprogs )
 	btrfs? ( sys-apps/util-linux )
 	fuse? ( sys-fs/fuse:0 )
