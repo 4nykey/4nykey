@@ -37,12 +37,12 @@ PATCHES=(
 # README.rst: Optional Requirements
 RDEPEND="
 	>=dev-python/lxml-5.3[${PYTHON_USEDEP}]
-	>=app-arch/brotli-1.1[python,${PYTHON_USEDEP}]
+	>=app-arch/brotli-1.2[python,${PYTHON_USEDEP}]
 	woff? (
 		>=dev-python/py-zopfli-0.2.3[${PYTHON_USEDEP}]
 	)
 	unicode? (
-		>=dev-python/unicodedata2-15.1[${PYTHON_USEDEP}]
+		>=dev-python/unicodedata2-17[${PYTHON_USEDEP}]
 	)
 	qt5? ( dev-python/pyqt5[${PYTHON_USEDEP}] )
 	graphite? ( dev-python/lz4[${PYTHON_USEDEP}] )

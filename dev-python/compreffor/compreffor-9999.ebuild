@@ -12,13 +12,13 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/googlefonts/${PN}.git"
 else
 	MY_PV="639877c"
-	[[ -n ${PV%%*_p*} ]] && MY_PV="${PV}"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/googlefonts/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64"
-	S="${WORKDIR}/${PN}-${MY_PV}"
+	S="${WORKDIR}/${PN}-${MY_PV#v}"
 fi
 inherit distutils-r1
 

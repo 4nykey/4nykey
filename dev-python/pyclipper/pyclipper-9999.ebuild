@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -35,9 +35,4 @@ distutils_enable_tests pytest
 
 pkg_setup() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV/_p/.post}"
-}
-
-src_prepare() {
-	sed -e 's:unittest2:unittest:' -i tests/test_pyclipper.py
-	distutils-r1_src_prepare
 }

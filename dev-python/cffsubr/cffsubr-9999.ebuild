@@ -28,7 +28,7 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
-	>=dev-util/afdko-3.6.1[${PYTHON_USEDEP}]
+	>=dev-util/afdko-4.0.3[${PYTHON_USEDEP}]
 "
 PATCHES=( "${FILESDIR}"/${PN}-system_tx.diff )
 distutils_enable_tests pytest
