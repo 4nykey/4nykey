@@ -52,12 +52,18 @@ distutils_enable_tests pytest
 
 python_prepare_all() {
 	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV/_p/.post}"
+	rm -rf src/cpp/skia-builder ../${MY_SB}/skia
+	cp -frl ../${MY_SB} src/cpp/skia-builder
+	cp -frl ../${MY_SK} src/cpp/skia-builder/skia
 	sed -e '/doctest-cython/d' -i tox.ini
 	sed \
 		-e "s:build_skia_py, :&'--no-virtualenv', '--no-sync-deps', '--no-fetch-gn', '--gn-path', '${EPREFIX}/usr/bin/gn', :" \
 		-i setup.py
-	rm -rf src/cpp/skia-builder ../${MY_SB}/skia
-	cp -frl ../${MY_SB} src/cpp/skia-builder
-	cp -frl ../${MY_SK} src/cpp/skia-builder/skia
+	sed \
+		-e '/subprocess.check_call(\["ninja"/s:"ninja",:& "-v",:' \
+		-i src/cpp/skia-builder/build_skia.py
+	sed \
+		-e "s:\"-O3\":$(printf '"%s", ' ${CXXFLAGS}):" \
+		-i src/cpp/skia-builder/skia/gn/skia/BUILD.gn
 	distutils-r1_python_prepare_all
 }
