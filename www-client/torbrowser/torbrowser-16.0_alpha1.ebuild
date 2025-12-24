@@ -3,9 +3,9 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-140esr-patches-03.tar.xz"
+FIREFOX_PATCHSET="firefox-146-patches-03.tar.xz"
 
-LLVM_COMPAT=( 19 20 )
+LLVM_COMPAT=( 19 20 21 )
 
 # This will also filter rust versions that don't match LLVM_COMPAT in the non-clang path; this is fine.
 RUST_NEEDS_LLVM=1
@@ -20,8 +20,8 @@ VIRTUALX_REQUIRED="manual"
 
 # Information about the bundled wasi toolchain from
 # https://github.com/WebAssembly/wasi-sdk/
-WASI_SDK_VER=27.0
-WASI_SDK_LLVM_VER=20
+WASI_SDK_VER=29.0
+WASI_SDK_LLVM_VER=21
 
 inherit check-reqs desktop flag-o-matic gnome2-utils linux-info llvm-r1 multiprocessing \
 	optfeature pax-utils python-any-r1 readme.gentoo-r1 rust toolchain-funcs virtualx xdg
@@ -32,25 +32,25 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="140.4.0esr-${MY_PV}-1-build2"
-MY_P="firefox-tor-browser-${MY_P}"
 if [[ -z ${PV%%*_alpha*} ]]; then
-	MY_PV+="a$(ver_cut 4)"
+	MY_PV2="a$(ver_cut 4)"
 else
 	MY_PV+=".$(ver_cut 3)"
 	KEYWORDS="~amd64"
 fi
-MY_NOS="13.0.9"
+MY_P="146.0${MY_PV2}-${MY_PV}-2-build2"
+MY_P="firefox-tor-browser-${MY_P}"
+MY_NOS="13.5.2"
 MY_NOS="noscript-${MY_NOS}.xpi"
 
 DESCRIPTION="The Tor Browser"
 HOMEPAGE="https://www.torproject.org"
 SRC_URI="
-	mirror://tor/${PN}/${MY_PV}/src-${MY_P}.tar.xz
+	mirror://tor/${PN}/${MY_PV}${MY_PV2}/src-${MY_P}.tar.xz
 	https://noscript.net/download/releases/${MY_NOS}
 	${PATCH_URIS[@]}
 	vanilla? (
-		mirror://tor/${PN}/${MY_PV}/tor-browser-linux-x86_64-${MY_PV}.tar.xz
+		mirror://tor/${PN}/${MY_PV}${MY_PV2}/tor-browser-linux-x86_64-${MY_PV}${MY_PV2}.tar.xz
 	)
 	wasm-sandbox? (
 		amd64? ( https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-${WASI_SDK_VER/.*/}/wasi-sdk-${WASI_SDK_VER}-x86_64-linux.tar.gz )
@@ -62,8 +62,8 @@ LICENSE+=" BSD CC-BY-3.0"
 SLOT="0"
 IUSE="+clang dbus debug eme-free hardened hwaccel jack libproxy pgo pulseaudio selinux sndio"
 IUSE+=" +system-av1 +system-harfbuzz +system-icu +system-jpeg +system-libevent +system-libvpx"
-IUSE+=" system-pipewire system-png +system-webp test wayland wifi +X"
-IUSE+=" +jumbo-build openh264 vanilla wasm-sandbox"
+IUSE+=" system-pipewire system-png +system-webp test valgrind wayland wifi +X"
+IUSE+=" jpegxl +jumbo-build openh264 vanilla wasm-sandbox"
 
 REQUIRED_USE="|| ( X wayland )
 	debug? ( !system-av1 )
@@ -90,7 +90,7 @@ BDEPEND="${PYTHON_DEPS}
 	app-alternatives/awk
 	app-arch/unzip
 	app-arch/zip
-	>=dev-util/cbindgen-0.27.0
+	>=dev-util/cbindgen-0.29.1
 	net-libs/nodejs
 	virtual/pkgconfig
 	amd64? ( >=dev-lang/nasm-2.14 )
@@ -111,14 +111,14 @@ COMMON_DEPEND="
 	dev-libs/expat
 	dev-libs/glib:2
 	dev-libs/libffi:=
-	>=dev-libs/nss-3.112.1
-	>=dev-libs/nspr-4.35
+	>=dev-libs/nss-3.118
+	>=dev-libs/nspr-4.38
 	media-libs/alsa-lib
 	media-libs/fontconfig
 	media-libs/freetype
 	media-libs/mesa
 	media-video/ffmpeg
-	sys-libs/zlib
+	virtual/zlib:=
 	virtual/freedesktop-icon-theme
 	x11-libs/cairo
 	x11-libs/gdk-pixbuf:2
@@ -140,7 +140,7 @@ COMMON_DEPEND="
 	sndio? ( >=media-sound/sndio-1.8.0-r1 )
 	system-av1? (
 		>=media-libs/dav1d-1.0.0:=
-		>=media-libs/libaom-1.0.0:=
+		>=media-libs/libaom-3.10.0:=
 	)
 	system-harfbuzz? (
 		>=media-libs/harfbuzz-2.8.1:0=
@@ -153,6 +153,7 @@ COMMON_DEPEND="
 	system-pipewire? ( >=media-video/pipewire-1.4.7-r2:= )
 	system-png? ( >=media-libs/libpng-1.6.45:0=[apng] )
 	system-webp? ( >=media-libs/libwebp-1.1.0:0= )
+	valgrind? ( dev-debug/valgrind )
 	wayland? (
 		>=media-libs/libepoxy-1.5.10-r1
 		x11-libs/gtk+:3[wayland]
@@ -414,9 +415,11 @@ src_prepare() {
 		rm -v "${WORKDIR}"/firefox-patches/*-LTO-Only-enable-LTO-*.patch || die
 	fi
 
-	# Workaround for bgo#915651 on musl
+	# Workaround for bgo#915651 and bmo#1988166 on musl
 	if use elibc_glibc ; then
 		rm -v "${WORKDIR}"/firefox-patches/*bgo-748849-RUST_TARGET_override.patch || die
+		rm -v "${WORKDIR}"/firefox-patches/*bmo-1988166-musl-remove-nonexisting-system-header-req.patch || die
+		rm -v "${WORKDIR}"/firefox-patches/*bgo-967694-musl-prctrl-exception-on-musl.patch || die
 	fi
 
 	use vanilla || \
@@ -653,11 +656,13 @@ src_configure() {
 
 	mozconfig_use_enable dbus
 	mozconfig_use_enable libproxy
+	mozconfig_use_enable valgrind
 
 	use eme-free && mozconfig_add_options_ac '+eme-free' --disable-eme
 
 	if use hardened ; then
 		mozconfig_add_options_ac "+hardened" --enable-hardening
+		mozconfig_add_options_ac "+hardened stl" --enable-stl-hardening
 		append-ldflags "-Wl,-z,relro -Wl,-z,now"
 
 		# Increase the FORTIFY_SOURCE value, #910071.
@@ -693,6 +698,8 @@ src_configure() {
 		use !vanilla && \
 		mozconfig_use_with system-harfbuzz system-graphite2
 	fi
+
+	! use jpegxl && mozconfig_add_options_ac '-jpegxl' --disable-jxl
 
 	if [[ ${use_lto} == "yes" ]] ; then
 		if use clang ; then
@@ -745,6 +752,9 @@ src_configure() {
 		if use clang ; then
 			# Used in build/pgo/profileserver.py
 			export LLVM_PROFDATA="llvm-profdata"
+		else
+			# Attempt to fix pgo hanging with gcc, bgo#966309.
+			export MOZ_REMOTE_SETTINGS_DEVTOOLS=1
 		fi
 	fi
 
@@ -808,6 +818,10 @@ src_configure() {
 
 	if ! use elibc_glibc; then
 		mozconfig_add_options_ac '!elibc_glibc' --disable-jemalloc
+	fi
+
+	if use valgrind; then
+		mozconfig_add_options_ac 'valgrind requirement' --disable-jemalloc
 	fi
 
 	# System-av1 fix
@@ -880,6 +894,10 @@ src_configure() {
 	done
 	echo "=========================================================="
 	echo
+
+	if use valgrind; then
+		sed -i -e 's/--enable-optimize=-O[0-9s]/--enable-optimize="-g -O2"/' .mozconfig || die
+	fi
 
 	./mach configure || die
 }

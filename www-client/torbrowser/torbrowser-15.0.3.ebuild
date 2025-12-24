@@ -3,7 +3,7 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-140esr-patches-03.tar.xz"
+FIREFOX_PATCHSET="firefox-140esr-patches-04.tar.xz"
 
 LLVM_COMPAT=( 19 20 21 )
 
@@ -32,7 +32,7 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="140.5.0esr-${MY_PV}-1-build2"
+MY_P="140.6.0esr-${MY_PV}-1-build5"
 MY_P="firefox-tor-browser-${MY_P}"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
@@ -40,7 +40,7 @@ else
 	MY_PV+=".$(ver_cut 3)"
 	KEYWORDS="~amd64"
 fi
-MY_NOS="13.4"
+MY_NOS="13.5.2"
 MY_NOS="noscript-${MY_NOS}.xpi"
 
 DESCRIPTION="The Tor Browser"
@@ -111,14 +111,14 @@ COMMON_DEPEND="
 	dev-libs/expat
 	dev-libs/glib:2
 	dev-libs/libffi:=
-	>=dev-libs/nss-3.112.1
-	>=dev-libs/nspr-4.35
+	>=dev-libs/nss-3.112.2
+	>=dev-libs/nspr-4.36
 	media-libs/alsa-lib
 	media-libs/fontconfig
 	media-libs/freetype
 	media-libs/mesa
 	media-video/ffmpeg
-	sys-libs/zlib
+	virtual/zlib:=
 	virtual/freedesktop-icon-theme
 	x11-libs/cairo
 	x11-libs/gdk-pixbuf:2
@@ -140,7 +140,7 @@ COMMON_DEPEND="
 	sndio? ( >=media-sound/sndio-1.8.0-r1 )
 	system-av1? (
 		>=media-libs/dav1d-1.0.0:=
-		>=media-libs/libaom-1.0.0:=
+		>=media-libs/libaom-3.10.0:=
 	)
 	system-harfbuzz? (
 		>=media-libs/harfbuzz-2.8.1:0=
