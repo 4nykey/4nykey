@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -38,10 +38,13 @@ DEPEND="
 BDEPEND="
 	test? ( dev-python/babelfont[${PYTHON_USEDEP}] )
 "
-PATCHES=( "${FILESDIR}"/babelfont-305.diff )
 distutils_enable_tests pytest
 
 pkg_pretend() {
 	use test && has network-sandbox ${FEATURES} && die \
 	"Tests require network access"
+}
+
+pkg_setup() {
+	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
 }

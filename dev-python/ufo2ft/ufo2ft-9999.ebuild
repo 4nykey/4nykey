@@ -31,12 +31,12 @@ SLOT="0"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/fonttools-4.60[ufo(-),${PYTHON_USEDEP}]
-	>=dev-python/defcon-0.10.3[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.61.1[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/defcon-0.12.2[${PYTHON_USEDEP}]
 	>=dev-python/compreffor-0.5.6[${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 	>=dev-python/cffsubr-0.3[${PYTHON_USEDEP}]
-	>=dev-python/skia-pathops-0.8[${PYTHON_USEDEP}]
+	>=dev-python/skia-pathops-0.9.1[${PYTHON_USEDEP}]
 	>=dev-python/fontMath-0.9.4[${PYTHON_USEDEP}]
 	>=dev-python/ufoLib2-0.18.1[${PYTHON_USEDEP}]
 "
