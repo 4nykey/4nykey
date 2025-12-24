@@ -1,0 +1,10 @@
+--- a/src/fontview/sample_text.h
++++ b/src/fontview/sample_text.h
+@@ -19,6 +19,7 @@
+ 
+ #include <string>
+ #include <vector>
++#include <cstdint>
+ 
+ #include <ft2build.h>
+ #include FT_FREETYPE_H

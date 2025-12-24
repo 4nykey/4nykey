@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -38,6 +38,7 @@ DEPEND="
 	virtual/pkgconfig
 	dev-build/gyp
 "
+PATCHES=( "${FILESDIR}"/cstdint.diff )
 
 pkg_setup() {
 	local _w=( 3 3.0-gtk3 )
