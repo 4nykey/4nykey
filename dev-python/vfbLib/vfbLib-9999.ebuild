@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -30,10 +30,14 @@ IUSE=""
 DEPEND="
 	dev-python/appdirs[${PYTHON_USEDEP}]
 	dev-python/attrs[${PYTHON_USEDEP}]
-	>=dev-python/fonttools-4.53.1[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.61[ufo(-),${PYTHON_USEDEP}]
 	dev-python/typing-extensions[${PYTHON_USEDEP}]
 	dev-python/ufoLib2[${PYTHON_USEDEP}]
 	dev-python/ufoNormalizer[${PYTHON_USEDEP}]
 "
 RDEPEND="${DEPEND}"
 distutils_enable_tests pytest
+
+pkg_setup() {
+	[[ -n ${PV%%*9999} ]] && export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
+}
