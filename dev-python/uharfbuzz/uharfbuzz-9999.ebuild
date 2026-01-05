@@ -1,4 +1,4 @@
-# Copyright 1999-2025 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -13,7 +13,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	MY_PV="3e8a1e2"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
-	MY_HB="harfbuzz-12.1.0"
+	MY_HB="harfbuzz-12.3.0"
 	SRC_URI="
 		mirror://githubcl/harfbuzz/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		https://github.com/harfbuzz/harfbuzz/releases/download/${MY_HB#*-}/${MY_HB}.tar.xz
