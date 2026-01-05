@@ -11,14 +11,3 @@
    install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/heif-dec${CMAKE_EXECUTABLE_SUFFIX} ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/heif-convert${CMAKE_EXECUTABLE_SUFFIX})")
  endif()
  
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -160,7 +160,7 @@ plugin_option(VVDEC "vvdec VVC decoder (
- if (WITH_VVDEC)
-     # TODO: how to do configure vvdec cleanly?
-     find_package(Threads REQUIRED)
--    find_package(vvdec 2.3.0)
-+    find_package(vvdec 3.0.0)
-     if (vvdec_FOUND)
-         set(vvdec_LIBRARIES vvdec::vvdec)
-     endif()
