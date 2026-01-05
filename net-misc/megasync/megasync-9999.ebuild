@@ -1,4 +1,4 @@
-# Copyright 1999-2025 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/meganz/${MY_PN}.git"
 	EGIT_SUBMODULES=( -src/MEGASync/mega )
 else
-	MY_PV="8178c16"
+	MY_PV="b01831c"
 	SRC_URI="
 		mirror://githubcl/meganz/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
