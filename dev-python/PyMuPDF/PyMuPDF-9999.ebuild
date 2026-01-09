@@ -1,10 +1,10 @@
-# Copyright 1999-2025 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
 PYTHON_COMPAT=( python3_{10..13} )
-DISTUTILS_USE_PEP517=setuptools
+DISTUTILS_USE_PEP517=standalone
 DISTUTILS_EXT=1
 inherit toolchain-funcs distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
@@ -37,11 +37,6 @@ BDEPEND="
 	dev-lang/swig
 "
 distutils_enable_tests pytest
-
-python_prepare_all() {
-	rm -f pyproject.toml
-	distutils-r1_python_prepare_all
-}
 
 python_compile() {
 	local _i=( $($(tc-getPKG_CONFIG) mupdf --cflags-only-I) )
