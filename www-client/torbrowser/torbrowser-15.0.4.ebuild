@@ -1,9 +1,9 @@
-# Copyright 1999-2025 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-140esr-patches-04.tar.xz"
+FIREFOX_PATCHSET="firefox-140esr-patches-05.tar.xz"
 
 LLVM_COMPAT=( 19 20 21 )
 
@@ -32,7 +32,7 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="140.6.0esr-${MY_PV}-1-build5"
+MY_P="140.7.0esr-${MY_PV}-1-build2"
 MY_P="firefox-tor-browser-${MY_P}"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
@@ -108,7 +108,6 @@ BDEPEND="${PYTHON_DEPS}
 	)"
 COMMON_DEPEND="
 	>=app-accessibility/at-spi2-core-2.46.0:2
-	dev-libs/expat
 	dev-libs/glib:2
 	dev-libs/libffi:=
 	>=dev-libs/nss-3.112.2
