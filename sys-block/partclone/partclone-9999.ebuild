@@ -1,4 +1,4 @@
-# Copyright 1999-2025 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -55,11 +55,17 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 "
+BDEPEND="
+	dev-libs/libxslt
+	app-text/docbook-xsl-stylesheets
+"
 DOCS=( AUTHORS ChangeLog HACKING IMAGE_FORMATS.md NEWS README.md )
 PATCHES=( "${FILESDIR}"/${PN}-reiserfs.diff )
 
 src_prepare() {
 	default
+	sed -e "/MAN_STYLESHEET=/s:=.*:=${EPREFIX}/usr/share/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl:" \
+		-i docs/Makefile.am
 	eautoreconf
 	append-cflags -fno-strict-aliasing
 }
