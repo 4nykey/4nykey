@@ -1,4 +1,4 @@
-# Copyright 1999-2025 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -36,7 +36,7 @@ BDEPEND="
 DEPEND="
 	media-libs/libpng:=[${MULTILIB_USEDEP}]
 	media-libs/tiff:=[${MULTILIB_USEDEP}]
-	sys-libs/zlib:=[${MULTILIB_USEDEP}]
+	virtual/zlib:=[${MULTILIB_USEDEP}]
 	aom? ( >=media-libs/libaom-2.0.0:=[${MULTILIB_USEDEP}] )
 	dav1d? ( media-libs/dav1d:=[${MULTILIB_USEDEP}] )
 	de265? ( media-libs/libde265[${MULTILIB_USEDEP}] )

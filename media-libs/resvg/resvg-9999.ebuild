@@ -1,4 +1,4 @@
-# Copyright 1999-2025 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -83,10 +83,10 @@ HOMEPAGE="https://github.com/RazrFalcon/resvg"
 
 LICENSE="MPL-2.0"
 SLOT="0"
-IUSE="qt5"
+IUSE="gui"
 
 DEPEND="
-	qt5? ( dev-qt/qtgui:5 )
+	gui? ( dev-qt/qtbase:6=[gui,widgets] )
 "
 RDEPEND="
 	${DEPEND}
@@ -95,22 +95,30 @@ RDEPEND="
 
 src_prepare() {
 	sed -e "s:/target/:&$(rust_abi)/:" -i tools/viewsvg/viewsvg.pro
+	sed -e 's%"tests/compile-fail/.gitignore":"[^,]\+",%%' \
+		-i vendor/bitflags-1.3.2/.cargo-checksum.json
+	sed \
+		-e 's%"examples/wasm/.gitignore":"[^,]\+",%%' \
+		-e 's%"testing-tools/font-view/.gitignore":"[^,]\+",%%' \
+		-i vendor/ttf-parser/.cargo-checksum.json
+	sed -e 's%"scripts/.gitignore":"[^,]\+",%%' \
+		-i vendor/rustybuzz/.cargo-checksum.json
 	default
 }
 
 src_configure() {
 	cargo_src_configure
-	use qt5 || return
+	use gui || return
 	local eqmakeargs=(
 		tools/viewsvg/viewsvg.pro
 		CONFIG+=$(usex debug debug release)
 	)
-	eqmake5 "${eqmakeargs[@]}"
+	eqmake6 "${eqmakeargs[@]}"
 }
 
 src_compile() {
 	cargo_src_compile --workspace
-	use qt5 && emake
+	use gui && emake
 }
 
 src_install() {
@@ -118,5 +126,5 @@ src_install() {
 	cargo_src_install --path crates/usvg
 	dolib.so $(cargo_target_dir)/libresvg.so
 	doheader crates/c-api/*.h
-	use qt5 && dobin viewsvg
+	use gui && dobin viewsvg
 }
