@@ -1,7 +1,7 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit qmake-utils
 if [[ -z ${PV%%*9999} ]]; then
@@ -25,7 +25,7 @@ LICENSE="CC-BY-2.5 CC-BY-SA-2.5 CC-BY-SA-3.0 GPL-2 LGPL-3"
 SLOT="0"
 IUSE=""
 BDEPEND="
-	dev-qt/qtcore:5
+	dev-qt/qtbase:6
 "
 RDEPEND="
 	media-video/smplayer
@@ -40,6 +40,6 @@ src_prepare() {
 		-e '/README/s:/\([^/]\+\)/$:/../../doc/$(PF)/\1_README.txt:' \
 		-i Makefile
 	sed \
-		-e "s:rcc -binary:$(qt5_get_bindir)/&:" \
+		-e "s:rcc -binary:$(qt6_get_libexecdir)/&:" \
 		-i themes/Makefile
 }

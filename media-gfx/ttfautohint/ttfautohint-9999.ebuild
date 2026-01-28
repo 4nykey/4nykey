@@ -1,7 +1,7 @@
 # Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools qmake-utils
 if [[ ${PV} == *9999* ]]; then
@@ -39,17 +39,18 @@ BDEPEND="
 src_prepare() {
 	default
 
-	[[ -f configure ]] && return
-	AUTORECONF=true \
-	autotools_run_tool ./bootstrap --no-bootstrap-sync --no-git --skip-po \
-		--force
+	# Don't invoke git to get the version number.
+	sed "s|m4_esyscmd.*VERSION)|${PV//_/-}|" -i configure.ac || die
+
+	sed -e 's:\<qmake\>:&5:' -i m4/autotroll.m4
+
 	eautoreconf
 }
 
 src_configure() {
 	local myeconfargs=(
 		--without-doc
-		$(use_with qt5 qt)
+		$(use_with qt5 qt $(qt5_get_bindir))
 	)
 	econf "${myeconfargs[@]}"
 }
