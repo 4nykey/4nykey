@@ -32,7 +32,7 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="140.7.0esr-${MY_PV}-1-build2"
+MY_P="140.7.0esr-${MY_PV}-1-build3"
 MY_P="firefox-tor-browser-${MY_P}"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
@@ -40,18 +40,13 @@ else
 	MY_PV+=".$(ver_cut 3)"
 	KEYWORDS="~amd64"
 fi
-MY_NOS="13.5.2"
-MY_NOS="noscript-${MY_NOS}.xpi"
 
 DESCRIPTION="The Tor Browser"
 HOMEPAGE="https://www.torproject.org"
 SRC_URI="
 	mirror://tor/${PN}/${MY_PV}/src-${MY_P}.tar.xz
-	https://noscript.net/download/releases/${MY_NOS}
 	${PATCH_URIS[@]}
-	vanilla? (
-		mirror://tor/${PN}/${MY_PV}/tor-browser-linux-x86_64-${MY_PV%.0}.tar.xz
-	)
+	mirror://tor/${PN}/${MY_PV}/tor-browser-linux-x86_64-${MY_PV%.0}.tar.xz
 	wasm-sandbox? (
 		amd64? ( https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-${WASI_SDK_VER/.*/}/wasi-sdk-${WASI_SDK_VER}-x86_64-linux.tar.gz )
 	)
@@ -420,6 +415,10 @@ src_prepare() {
 
 	use vanilla || \
 	eapply "${WORKDIR}/firefox-patches"
+
+	if use system-icu && has_version ">=dev-libs/icu-78.1" ; then
+		eapply "${FILESDIR}/firefox-146.0.1-icu78.patch" # bgo#967261
+	fi
 
 	# Allow user to apply any additional patches without modifing ebuild
 	eapply_user
@@ -945,7 +944,7 @@ src_install() {
 	# mimic official release
 	rm -f "${BUILD_DIR}"/browser/locales/bookmarks.html
 	insinto ${MOZILLA_FIVE_HOME}/browser/extensions
-	newins "${DISTDIR}"/${MY_NOS} {73a6fe31-595d-460b-a920-fcc0f8843232}.xpi
+	doins ../tor-browser/Browser/distribution/extensions/{73a6fe31-595d-460b-a920-fcc0f8843232}.xpi
 
 	# xpcshell is getting called during install
 	pax-mark m \
