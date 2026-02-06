@@ -3,7 +3,7 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-146-patches-03.tar.xz"
+FIREFOX_PATCHSET="firefox-147-patches-01.tar.xz"
 
 LLVM_COMPAT=( 19 20 21 )
 
@@ -38,20 +38,16 @@ else
 	MY_PV+=".$(ver_cut 3)"
 	KEYWORDS="~amd64"
 fi
-MY_P="146.0${MY_PV2}-${MY_PV}-2-build2"
+MY_P="147.0${MY_PV2}-${MY_PV}-2-build2"
+MY_P="147.0a1-${MY_PV}-2-build2"
 MY_P="firefox-tor-browser-${MY_P}"
-MY_NOS="13.5.2"
-MY_NOS="noscript-${MY_NOS}.xpi"
 
 DESCRIPTION="The Tor Browser"
 HOMEPAGE="https://www.torproject.org"
 SRC_URI="
 	mirror://tor/${PN}/${MY_PV}${MY_PV2}/src-${MY_P}.tar.xz
-	https://noscript.net/download/releases/${MY_NOS}
 	${PATCH_URIS[@]}
-	vanilla? (
-		mirror://tor/${PN}/${MY_PV}${MY_PV2}/tor-browser-linux-x86_64-${MY_PV}${MY_PV2}.tar.xz
-	)
+	mirror://tor/${PN}/${MY_PV}${MY_PV2}/tor-browser-linux-x86_64-${MY_PV}${MY_PV2}.tar.xz
 	wasm-sandbox? (
 		amd64? ( https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-${WASI_SDK_VER/.*/}/wasi-sdk-${WASI_SDK_VER}-x86_64-linux.tar.gz )
 	)
@@ -108,10 +104,9 @@ BDEPEND="${PYTHON_DEPS}
 	)"
 COMMON_DEPEND="
 	>=app-accessibility/at-spi2-core-2.46.0:2
-	dev-libs/expat
 	dev-libs/glib:2
 	dev-libs/libffi:=
-	>=dev-libs/nss-3.118
+	>=dev-libs/nss-3.119
 	>=dev-libs/nspr-4.38
 	media-libs/alsa-lib
 	media-libs/fontconfig
@@ -146,7 +141,7 @@ COMMON_DEPEND="
 		>=media-libs/harfbuzz-2.8.1:0=
 		!wasm-sandbox? ( >=media-gfx/graphite2-1.3.13 )
 	)
-	system-icu? ( >=dev-libs/icu-76.1:= )
+	system-icu? ( >=dev-libs/icu-78.1:= )
 	system-jpeg? ( >=media-libs/libjpeg-turbo-1.2.1:= )
 	system-libevent? ( >=dev-libs/libevent-2.1.12:0=[threads(+)] )
 	system-libvpx? ( >=media-libs/libvpx-1.8.2:0=[postproc] )
@@ -424,10 +419,6 @@ src_prepare() {
 
 	use vanilla || \
 	eapply "${WORKDIR}/firefox-patches"
-
-	if use system-icu && has_version ">=dev-libs/icu-78.1"; then
-		eapply "${FILESDIR}/firefox-146.0.1-icu78.patch" # in 147, bug #967261
-	fi
 
 	# Allow user to apply any additional patches without modifing ebuild
 	eapply_user
@@ -968,7 +959,7 @@ src_install() {
 	# mimic official release
 	rm -f "${BUILD_DIR}"/browser/locales/bookmarks.html
 	insinto ${MOZILLA_FIVE_HOME}/browser/extensions
-	newins "${DISTDIR}"/${MY_NOS} {73a6fe31-595d-460b-a920-fcc0f8843232}.xpi
+	doins ../tor-browser/Browser/distribution/extensions/{73a6fe31-595d-460b-a920-fcc0f8843232}.xpi
 
 	# xpcshell is getting called during install
 	pax-mark m \
