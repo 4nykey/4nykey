@@ -1,4 +1,4 @@
-# Copyright 1999-2025 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -28,9 +28,9 @@ LICENSE="Apache-2.0 MIT"
 SLOT="0"
 
 RDEPEND="
-	>=dev-python/fonttools-4.53.1[ufo(-),unicode(-),${PYTHON_USEDEP}]
-	>=dev-python/ufoLib2-0.16[${PYTHON_USEDEP}]
-	>=dev-python/openstep-plist-0.3.1[${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.61.1[ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/ufoLib2-0.18.1[${PYTHON_USEDEP}]
+	>=dev-python/openstep-plist-0.5.1[${PYTHON_USEDEP}]
 "
 DEPEND="
 	${RDEPEND}
