@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -30,19 +30,19 @@ jpeg jpeg2k pdf png postscript readline +screen sdl svg tiff truetype xfig
 DEPEND="
 	graphicsmagick? ( media-gfx/graphicsmagick )
 	imlib? ( media-libs/imlib2 )
-	gif? ( media-libs/giflib )
+	gif? ( media-libs/giflib:= )
 	tiff? ( media-libs/tiff:= )
-	readline? ( sys-libs/readline:0 )
+	readline? ( sys-libs/readline:0= )
 	jpeg? ( virtual/jpeg )
 	jpeg2k? ( media-libs/jasper:= )
 	postscript? ( app-text/libspectre )
 	djvu? ( app-text/djvu )
 	pdf? ( app-text/poppler:=[cairo] )
-	png? ( media-libs/libpng:0 )
+	png? ( media-libs/libpng:0= )
 	exif? ( media-libs/libexif )
 	aalib? ( media-libs/aalib )
 	sdl? ( media-libs/libsdl )
-	archive? ( app-arch/libarchive )
+	archive? ( app-arch/libarchive:= )
 	truetype? ( media-libs/freetype:2 )
 "
 RDEPEND="
@@ -61,6 +61,7 @@ DEPEND="
 DOCS=( doc/FIM.TXT )
 PATCHES=(
 	"${FILESDIR}"/CommandConsole.diff
+	"${FILESDIR}"/poppler26.02.diff
 )
 
 src_prepare() {

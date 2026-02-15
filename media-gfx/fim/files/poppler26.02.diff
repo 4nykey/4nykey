@@ -1,0 +1,14 @@
+--- a/src/FbiStuffPdf.cpp
++++ b/src/FbiStuffPdf.cpp
+@@ -216,7 +216,11 @@ pdf_init(FILE *fp, const fim_char_t *fil
+ 	if (!ds->od)
+ 	{
+         	GBool bitmapTopDown = gTrue;
++            #if (POPPLER_VERSION_MAJOR>=26 && (POPPLER_VERSION_MINOR>=2))
++        	ds->od = new SplashOutputDev(gSplashColorMode, /*4*/3, gBgColor, bitmapTopDown, splashThinLineDefault/*antialias*/);
++            #else
+         	ds->od = new SplashOutputDev(gSplashColorMode, /*4*/3, gFalse, gBgColor, bitmapTopDown, splashThinLineDefault/*antialias*/);
++            #endif
+ 	        if (ds->od)
+ #ifdef POPPLER_VERSION	/* as of 0.20.2, from poppler/poppler-config.h */
+ 			/* FIXME: this is an incomplete fix (triggered on 20120719's email on fim-devel);
