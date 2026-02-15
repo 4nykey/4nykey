@@ -59,17 +59,17 @@ CRATES="
 inherit qmake-utils cargo
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/RazrFalcon/${PN}.git"
+	EGIT_REPO_URI="https://github.com/linebender/${PN}.git"
 else
 	MY_PV="55888a5"
 	if [[ -n ${PV%%*_p*} ]]; then
 		MY_PV="v${PV}"
 		SRC_URI="
-			https://github.com/RazrFalcon/${PN}/releases/download/${MY_PV}/${P}.tar.xz
+			https://github.com/linebender/${PN}/releases/download/${MY_PV}/${P}.tar.xz
 		"
 	else
 		SRC_URI="
-			mirror://githubcl/RazrFalcon/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
+			mirror://githubcl/linebender/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 			${CARGO_CRATE_URIS}
 		"
 	fi
@@ -79,7 +79,7 @@ else
 fi
 
 DESCRIPTION="An SVG rendering library"
-HOMEPAGE="https://github.com/RazrFalcon/resvg"
+HOMEPAGE="https://github.com/linebender/resvg"
 
 LICENSE="MPL-2.0"
 SLOT="0"

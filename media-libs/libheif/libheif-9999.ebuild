@@ -24,7 +24,7 @@ DESCRIPTION="ISO/IEC 23008-12:2017 HEIF file format decoder and encoder"
 HOMEPAGE="https://github.com/strukturag/libheif"
 
 LICENSE="GPL-3"
-IUSE="+aom dav1d +de265 doc ffmpeg gdk-pixbuf gui +jpeg +jpeg2k +kvazaar openh264 rav1e svt-av1 test test-full +threads tools +webp x265"
+IUSE="+aom dav1d +de265 doc ffmpeg gdk-pixbuf gui +jpeg +jpeg2k +kvazaar openh264 rav1e svt-av1 test test-full +threads tools +webp x264 x265"
 IUSE+=" +brotli openjph uvg266 vvdec vvenc webp"
 REQUIRED_USE="test-full? ( test )"
 RESTRICT="!test? ( test )"
@@ -54,6 +54,7 @@ DEPEND="
 		)
 	)
 	webp? ( media-libs/libwebp:= )
+	x264? ( media-libs/x264:=[${MULTILIB_USEDEP}] )
 	x265? ( media-libs/x265:=[${MULTILIB_USEDEP}] )
 "
 DEPEND="
@@ -106,6 +107,7 @@ multilib_src_configure() {
 		-DWITH_RAV1E=$(multilib_native_usex rav1e)
 		-DWITH_SvtEnc=$(usex svt-av1)
 		-DWITH_LIBSHARPYUV=$(usex webp)
+		-DWITH_X264=$(usex x264)
 		-DWITH_X265=$(usex x265)
 		-DWITH_KVAZAAR=$(usex kvazaar)
 		-DWITH_JPEG_DECODER=$(usex jpeg)
