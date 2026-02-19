@@ -3,7 +3,7 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-147-patches-01.tar.xz"
+FIREFOX_PATCHSET="firefox-147-patches-02.tar.xz"
 
 LLVM_COMPAT=( 19 20 21 )
 
@@ -20,7 +20,7 @@ VIRTUALX_REQUIRED="manual"
 
 # Information about the bundled wasi toolchain from
 # https://github.com/WebAssembly/wasi-sdk/
-WASI_SDK_VER=29.0
+WASI_SDK_VER=30.0
 WASI_SDK_LLVM_VER=21
 
 inherit check-reqs desktop flag-o-matic gnome2-utils linux-info llvm-r1 multiprocessing \
@@ -39,15 +39,20 @@ else
 	KEYWORDS="~amd64"
 fi
 MY_P="147.0${MY_PV2}-${MY_PV}-2-build2"
-MY_P="147.0a1-${MY_PV}-2-build2"
+MY_P="147.0a1-${MY_PV}-2-build4"
 MY_P="firefox-tor-browser-${MY_P}"
+MY_NOS="13.5.12.90301984"
+MY_NOS="noscript-${MY_NOS}.xpi"
 
 DESCRIPTION="The Tor Browser"
 HOMEPAGE="https://www.torproject.org"
 SRC_URI="
 	mirror://tor/${PN}/${MY_PV}${MY_PV2}/src-${MY_P}.tar.xz
+	mirror://tor/${PN}/${MY_NOS%-*}/${MY_NOS}
 	${PATCH_URIS[@]}
-	mirror://tor/${PN}/${MY_PV}${MY_PV2}/tor-browser-linux-x86_64-${MY_PV}${MY_PV2}.tar.xz
+	vanilla? (
+		mirror://tor/${PN}/${MY_PV}${MY_PV2}/tor-browser-linux-x86_64-${MY_PV}${MY_PV2}.tar.xz
+	)
 	wasm-sandbox? (
 		amd64? ( https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-${WASI_SDK_VER/.*/}/wasi-sdk-${WASI_SDK_VER}-x86_64-linux.tar.gz )
 	)
@@ -478,6 +483,8 @@ src_prepare() {
 
 	# Clear checksums from cargo crates we've manually patched.
 	# moz_clear_vendor_checksums xyz
+	# glslopt: bgo#969412
+	moz_clear_vendor_checksums glslopt
 
 	# Respect choice for "jumbo-build"
 	# Changing the value for FILES_PER_UNIFIED_FILE may not work, see #905431
@@ -959,7 +966,7 @@ src_install() {
 	# mimic official release
 	rm -f "${BUILD_DIR}"/browser/locales/bookmarks.html
 	insinto ${MOZILLA_FIVE_HOME}/browser/extensions
-	doins ../tor-browser/Browser/distribution/extensions/{73a6fe31-595d-460b-a920-fcc0f8843232}.xpi
+	newins "${DISTDIR}"/${MY_NOS} "{73a6fe31-595d-460b-a920-fcc0f8843232}.xpi"
 
 	# xpcshell is getting called during install
 	pax-mark m \
