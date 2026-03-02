@@ -3,7 +3,7 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-140esr-patches-05.tar.xz"
+FIREFOX_PATCHSET="firefox-140esr-patches-07.tar.xz"
 
 LLVM_COMPAT=( 19 20 21 )
 
@@ -32,9 +32,9 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="140.7.1esr-${MY_PV}-1-build1"
+MY_P="140.8.0esr-${MY_PV}-1-build3"
 MY_P="firefox-tor-browser-${MY_P}"
-MY_NOS="13.5.13.1984"
+MY_NOS="13.5.14.1984"
 MY_NOS="noscript-${MY_NOS}.xpi"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
@@ -483,6 +483,8 @@ src_prepare() {
 
 	# Clear checksums from cargo crates we've manually patched.
 	# moz_clear_vendor_checksums xyz
+	# glslopt: bgo#969412
+	moz_clear_vendor_checksums glslopt
 
 	# Respect choice for "jumbo-build"
 	# Changing the value for FILES_PER_UNIFIED_FILE may not work, see #905431
