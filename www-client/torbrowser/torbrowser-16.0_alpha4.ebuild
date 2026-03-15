@@ -5,13 +5,13 @@ EAPI=8
 
 FIREFOX_PATCHSET="firefox-147-patches-02.tar.xz"
 
-LLVM_COMPAT=( 19 20 21 )
+LLVM_COMPAT=( 20 21 )
 
 # This will also filter rust versions that don't match LLVM_COMPAT in the non-clang path; this is fine.
 RUST_NEEDS_LLVM=1
 
 # If not building with clang we need at least rust 1.76
-RUST_MIN_VER=1.82.0
+RUST_MIN_VER=1.87.0
 
 PYTHON_COMPAT=( python3_{11..14} )
 PYTHON_REQ_USE="ncurses,sqlite,ssl"
@@ -38,10 +38,9 @@ else
 	MY_PV+=".$(ver_cut 3)"
 	KEYWORDS="~amd64"
 fi
-MY_P="147.0${MY_PV2}-${MY_PV}-2-build2"
-MY_P="147.0a1-${MY_PV}-2-build4"
+MY_P="148.0a1-${MY_PV}-2-build2"
 MY_P="firefox-tor-browser-${MY_P}"
-MY_NOS="13.5.12.90301984"
+MY_NOS="13.6.6.90401984"
 MY_NOS="noscript-${MY_NOS}.xpi"
 
 DESCRIPTION="The Tor Browser"
@@ -111,7 +110,7 @@ COMMON_DEPEND="
 	>=app-accessibility/at-spi2-core-2.46.0:2
 	dev-libs/glib:2
 	dev-libs/libffi:=
-	>=dev-libs/nss-3.119
+	>=dev-libs/nss-3.120.1
 	>=dev-libs/nspr-4.38
 	media-libs/alsa-lib
 	media-libs/fontconfig
