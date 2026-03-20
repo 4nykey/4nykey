@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/meganz/${MY_PN}.git"
 	EGIT_SUBMODULES=( -src/MEGASync/mega )
 else
-	MY_PV="feecffe"
+	MY_PV="5c54388"
 	SRC_URI="
 		mirror://githubcl/meganz/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -30,12 +30,11 @@ SLOT="0"
 IUSE="breakpad dolphin ffmpeg mediainfo nautilus raw test"
 
 RDEPEND="
-	>=net-misc/meganz-sdk-9.10:=[ffmpeg?,libuv,mediainfo?,qt,raw?,sqlite]
+	>=net-misc/meganz-sdk-10.6:=[ffmpeg?,libuv,mediainfo?,qt,raw?,sqlite]
 	dev-qt/qtsvg:5
 	dev-qt/qtx11extras:5
 	dev-qt/qtdbus:5
 	dev-qt/qtconcurrent:5
-	dev-qt/qtimageformats:5
 	dev-qt/qtnetwork:5
 	dev-qt/qtdeclarative:5[widgets]
 	nautilus? ( gnome-base/nautilus )
@@ -50,6 +49,7 @@ BDEPEND="
 "
 PATCHES=(
 	"${FILESDIR}"/cmake.diff
+	"${FILESDIR}"/dolphin.diff
 )
 
 src_prepare() {
