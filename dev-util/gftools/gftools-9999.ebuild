@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -62,6 +62,7 @@ RDEPEND="
 		dev-python/beautifulsoup4[${PYTHON_USEDEP}]
 		dev-python/nam-files[${PYTHON_USEDEP}]
 		dev-python/networkx[${PYTHON_USEDEP}]
+		dev-python/ufomerge[${PYTHON_USEDEP}]
 	')
 "
 DEPEND="
@@ -82,20 +83,16 @@ BDEPEND="
 PATCHES=( "${FILESDIR}"/setup.diff )
 EPYTEST_DESELECT=(
 	tests/push/test_servers.py
-	tests/test_gfgithub.py
+	tests/push/test_items.py::test_item_from_fp_and_gf_data
+	tests/test_gfgithub.py::test_pr_files
+	tests/test_usage.py::TestGFToolsScripts::test_check_font_version
 )
 distutils_enable_tests pytest
-
-pkg_pretend() {
-	use test && has network-sandbox ${FEATURES} && die \
-	"Tests require network access"
-}
 
 python_prepare_all() {
 	if [[ -n ${PV%%*9999} ]]; then
 		export SETUPTOOLS_SCM_PRETEND_VERSION="${PV/_p/.post}"
 	fi
-	sed -e '/"gftools-build-font2ttf",/d' -i bin/test_args.py
 	distutils-r1_python_prepare_all
 	cd Lib/${PN}
 	local _p
