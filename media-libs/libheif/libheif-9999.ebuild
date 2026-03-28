@@ -26,7 +26,7 @@ HOMEPAGE="https://github.com/strukturag/libheif"
 LICENSE="GPL-3"
 IUSE="+aom dav1d +de265 doc ffmpeg gdk-pixbuf gui +jpeg +jpeg2k +kvazaar openh264 rav1e svt-av1 test test-full +threads tools +webp x264 x265"
 IUSE+=" +brotli openjph uvg266 vvdec vvenc webp"
-REQUIRED_USE="test-full? ( test )"
+REQUIRED_USE="test-full? ( test brotli )"
 RESTRICT="!test? ( test )"
 RESTRICT+=" primaryuri"
 
@@ -73,7 +73,10 @@ RDEPEND="
 MULTILIB_WRAPPED_HEADERS=(
 	/usr/include/libheif/heif_version.h
 )
-PATCHES=( ${FILESDIR}/cmake.diff )
+PATCHES=(
+	"${FILESDIR}"/cmake.diff
+	"${FILESDIR}"/svt4.diff
+)
 
 pkg_pretend() {
 	if use gui && use !tools ; then
