@@ -3,7 +3,7 @@
 
 EAPI=8
 
-RUST_MIN_VER=1.85
+RUST_MIN_VER=1.92
 CRATES="
 	aho-corasick@1.1.4
 	anstream@0.6.21
@@ -11,22 +11,23 @@ CRATES="
 	anstyle-query@1.1.5
 	anstyle-wincon@3.0.11
 	anstyle@1.0.13
+	anyhow@1.0.102
 	async-trait@0.1.89
 	autocfg@1.5.0
-	automod@1.0.15
-	bitflags@2.10.0
+	automod@1.0.16
+	bitflags@2.11.0
 	build-version@0.1.1
 	byteorder@1.5.0
 	bytes@0.4.12
-	bytes@1.11.0
-	cairo-rs@0.21.5
-	cairo-sys-rs@0.21.5
-	cfg-expr@0.20.5
+	bytes@1.11.1
+	cairo-rs@0.22.0
+	cairo-sys-rs@0.22.0
+	cfg-expr@0.20.6
 	cfg-if@1.0.4
-	clap@4.5.53
-	clap_builder@4.5.53
-	clap_derive@4.5.49
-	clap_lex@0.7.6
+	clap@4.5.60
+	clap_builder@4.5.60
+	clap_derive@4.5.55
+	clap_lex@1.0.0
 	colorchoice@1.0.4
 	content_inspector@0.2.4
 	crossbeam-deque@0.8.6
@@ -34,44 +35,45 @@ CRATES="
 	crossbeam-utils@0.8.21
 	dunce@1.0.5
 	either@1.15.0
-	env_filter@0.1.4
-	env_logger@0.11.8
+	env_filter@1.0.0
+	env_logger@0.11.9
 	equivalent@1.0.2
 	errno@0.3.14
 	fastrand@2.3.0
 	field-offset@0.3.6
-	filetime@0.2.26
+	filetime@0.2.27
 	fnv@1.0.7
+	foldhash@0.1.5
 	fork@0.6.0
-	futures-channel@0.3.31
-	futures-core@0.3.31
-	futures-executor@0.3.31
-	futures-io@0.3.31
-	futures-macro@0.3.31
-	futures-sink@0.3.31
-	futures-task@0.3.31
-	futures-util@0.3.31
+	futures-channel@0.3.32
+	futures-core@0.3.32
+	futures-executor@0.3.32
+	futures-io@0.3.32
+	futures-macro@0.3.32
+	futures-sink@0.3.32
+	futures-task@0.3.32
+	futures-util@0.3.32
 	futures@0.1.31
-	futures@0.3.31
-	gdk-pixbuf-sys@0.21.5
-	gdk-pixbuf@0.21.5
-	gdk4-sys@0.10.3
-	gdk4@0.10.3
-	getrandom@0.3.4
-	gio-sys@0.21.5
-	gio@0.21.5
-	glib-macros@0.21.5
-	glib-sys@0.21.5
-	glib@0.21.5
+	futures@0.3.32
+	gdk-pixbuf-sys@0.22.0
+	gdk-pixbuf@0.22.0
+	gdk4-sys@0.11.0
+	gdk4@0.11.0
+	getrandom@0.4.1
+	gio-sys@0.22.0
+	gio@0.22.2
+	glib-macros@0.22.2
+	glib-sys@0.22.0
+	glib@0.22.2
 	glob@0.3.3
-	gobject-sys@0.21.5
-	graphene-rs@0.21.5
-	graphene-sys@0.21.5
-	gsk4-sys@0.10.3
-	gsk4@0.10.3
-	gtk4-macros@0.10.3
-	gtk4-sys@0.10.3
-	gtk4@0.10.3
+	gobject-sys@0.22.0
+	graphene-rs@0.22.0
+	graphene-sys@0.22.0
+	gsk4-sys@0.11.0
+	gsk4@0.11.0
+	gtk4-macros@0.11.0
+	gtk4-sys@0.11.0
+	gtk4@0.11.0
 	hashbrown@0.15.5
 	hashbrown@0.16.1
 	heck@0.5.0
@@ -79,59 +81,60 @@ CRATES="
 	html-escape@0.2.13
 	humantime-serde@1.1.1
 	humantime@2.3.0
-	indexmap@2.12.1
+	id-arena@2.3.0
+	indexmap@2.13.0
 	iovec@0.1.4
 	is-terminal@0.4.17
 	is_terminal_polyfill@1.70.2
-	itoa@1.0.15
-	jiff-static@0.2.16
-	jiff@0.2.16
-	libc@0.2.178
-	libredox@0.1.10
-	linux-raw-sys@0.11.0
+	itoa@1.0.17
+	jiff-static@0.2.22
+	jiff@0.2.22
+	leb128fmt@0.1.0
+	libc@0.2.182
+	libredox@0.1.14
+	linux-raw-sys@0.12.1
 	lock_api@0.4.14
 	log@0.4.29
-	memchr@2.7.6
+	memchr@2.8.0
 	memoffset@0.9.1
 	mio@1.1.1
 	normalize-line-endings@0.3.0
 	num-traits@0.2.19
-	num_cpus@1.17.0
 	nvim-rs@0.9.2
 	once_cell@1.21.3
 	once_cell_polyfill@1.70.2
 	os_pipe@1.2.3
-	pango-sys@0.21.5
-	pango@0.21.5
+	pango-sys@0.22.0
+	pango@0.22.0
 	parking_lot@0.12.5
 	parking_lot_core@0.9.12
-	paste@1.0.15
 	percent-encoding@2.3.2
 	phf@0.13.1
 	phf_codegen@0.13.1
 	phf_generator@0.13.1
 	phf_shared@0.13.1
-	pin-project-lite@0.2.16
-	pin-utils@0.1.0
+	pin-project-lite@0.2.17
 	pkg-config@0.3.32
-	portable-atomic-util@0.2.4
-	portable-atomic@1.11.1
+	plain@0.2.3
+	portable-atomic-util@0.2.5
+	portable-atomic@1.13.1
+	prettyplease@0.2.37
 	proc-macro-crate@3.4.0
-	proc-macro2@1.0.103
+	proc-macro2@1.0.106
 	quick-error@1.2.3
-	quote@1.0.42
+	quote@1.0.44
 	r-efi@5.3.0
 	rayon-core@1.13.0
 	rayon@1.11.0
 	redox_syscall@0.5.18
-	regex-automata@0.4.13
-	regex-syntax@0.8.8
-	regex@1.12.2
-	rmp@0.8.14
-	rmpv@1.3.0
+	redox_syscall@0.7.3
+	regex-automata@0.4.14
+	regex-syntax@0.8.10
+	regex@1.12.3
+	rmp@0.8.15
+	rmpv@1.3.1
 	rustc_version@0.4.1
-	rustix@1.1.2
-	ryu@1.0.20
+	rustix@1.1.4
 	same-file@1.0.6
 	scopeguard@1.2.0
 	semver@1.0.27
@@ -139,44 +142,51 @@ CRATES="
 	serde_bytes@0.11.19
 	serde_core@1.0.228
 	serde_derive@1.0.228
-	serde_json@1.0.145
-	serde_spanned@1.0.3
+	serde_json@1.0.149
+	serde_spanned@1.0.4
 	shlex@1.3.0
-	signal-hook-registry@1.4.7
+	signal-hook-registry@1.4.8
 	similar@2.7.0
-	siphasher@1.0.1
-	slab@0.4.11
+	siphasher@1.0.2
+	slab@0.4.12
 	smallvec@1.15.1
-	snapbox-macros@0.4.0
-	snapbox@0.6.23
-	socket2@0.6.1
+	snapbox-macros@1.0.0
+	snapbox@1.0.0
+	socket2@0.6.2
 	strsim@0.11.1
-	syn@2.0.111
+	syn@2.0.117
 	system-deps@7.0.7
 	target-lexicon@0.13.3
-	tempfile@3.23.0
+	tempfile@3.26.0
 	terminal_size@0.4.3
 	tokio-io@0.1.13
 	tokio-macros@2.6.0
-	tokio-util@0.7.17
-	tokio@1.48.0
+	tokio-util@0.7.18
+	tokio@1.49.0
 	toml@0.5.11
-	toml@0.9.8
-	toml_datetime@0.7.3
-	toml_edit@0.23.9
-	toml_parser@1.0.4
-	toml_writer@1.0.4
-	trycmd@0.15.11
-	unicode-ident@1.0.22
+	toml@0.9.12+spec-1.1.0
+	toml@1.0.3+spec-1.1.0
+	toml_datetime@0.7.5+spec-1.1.0
+	toml_datetime@1.0.0+spec-1.1.0
+	toml_edit@0.23.10+spec-1.0.0
+	toml_parser@1.0.9+spec-1.1.0
+	toml_writer@1.0.6+spec-1.1.0
+	trycmd@1.0.0
+	unicode-ident@1.0.24
 	unicode-segmentation@1.12.0
 	unicode-width@0.2.2
+	unicode-xid@0.2.6
 	utf8-width@0.1.8
 	utf8parse@0.2.2
 	version-compare@0.2.1
 	wait-timeout@0.2.1
 	walkdir@2.5.0
 	wasi@0.11.1+wasi-snapshot-preview1
-	wasip2@1.0.1+wasi-0.2.4
+	wasip2@1.0.2+wasi-0.2.9
+	wasip3@0.4.0+wasi-0.3.0-rc-2026-01-06
+	wasm-encoder@0.244.0
+	wasm-metadata@0.244.0
+	wasmparser@0.244.0
 	winapi-util@0.1.11
 	windows-link@0.2.1
 	windows-sys@0.60.2
@@ -192,14 +202,20 @@ CRATES="
 	windows_x86_64_msvc@0.53.1
 	winnow@0.7.14
 	winres@0.1.12
-	wit-bindgen@0.46.0
+	wit-bindgen-core@0.51.0
+	wit-bindgen-rust-macro@0.51.0
+	wit-bindgen-rust@0.51.0
+	wit-bindgen@0.51.0
+	wit-component@0.244.0
+	wit-parser@0.244.0
+	zmij@1.0.21
 "
 inherit cargo xdg
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/Lyude/${PN}.git"
 else
-	MY_PV="e9882f5"
+	MY_PV="1a73f0d"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/Lyude/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -217,7 +233,7 @@ LICENSE="GPL-3"
 # Dependent crate licenses
 LICENSE+="
 	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD LGPL-3 LGPL-3+ MIT
-	Unicode-3.0
+	Unicode-3.0 ZLIB
 "
 SLOT="0"
 
