@@ -3,7 +3,7 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-147-patches-02.tar.xz"
+FIREFOX_PATCHSET="firefox-149-patches-01.tar.xz"
 
 LLVM_COMPAT=( 20 21 )
 
@@ -11,7 +11,7 @@ LLVM_COMPAT=( 20 21 )
 RUST_NEEDS_LLVM=1
 
 # If not building with clang we need at least rust 1.76
-RUST_MIN_VER=1.87.0
+RUST_MIN_VER=1.90.0
 
 PYTHON_COMPAT=( python3_{11..14} )
 PYTHON_REQ_USE="ncurses,sqlite,ssl"
@@ -20,8 +20,8 @@ VIRTUALX_REQUIRED="manual"
 
 # Information about the bundled wasi toolchain from
 # https://github.com/WebAssembly/wasi-sdk/
-WASI_SDK_VER=30.0
-WASI_SDK_LLVM_VER=21
+WASI_SDK_VER=32.0
+WASI_SDK_LLVM_VER=22
 
 inherit check-reqs desktop flag-o-matic gnome2-utils linux-info llvm-r1 multiprocessing \
 	optfeature pax-utils python-any-r1 readme.gentoo-r1 rust toolchain-funcs virtualx xdg
@@ -38,9 +38,9 @@ else
 	MY_PV+=".$(ver_cut 3)"
 	KEYWORDS="~amd64"
 fi
-MY_P="148.0a1-${MY_PV}-2-build2"
+MY_P="149.0a1-${MY_PV}-2-build3"
 MY_P="firefox-tor-browser-${MY_P}"
-MY_NOS="13.6.6.90401984"
+MY_NOS="13.6.14.90101984"
 MY_NOS="noscript-${MY_NOS}.xpi"
 
 DESCRIPTION="The Tor Browser"
@@ -110,7 +110,7 @@ COMMON_DEPEND="
 	>=app-accessibility/at-spi2-core-2.46.0:2
 	dev-libs/glib:2
 	dev-libs/libffi:=
-	>=dev-libs/nss-3.120.1
+	>=dev-libs/nss-3.121
 	>=dev-libs/nspr-4.38
 	media-libs/alsa-lib
 	media-libs/fontconfig
