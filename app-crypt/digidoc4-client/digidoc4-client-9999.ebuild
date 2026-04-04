@@ -1,4 +1,4 @@
-# Copyright 1999-2025 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -6,7 +6,7 @@ EAPI=8
 MY_PN="DigiDoc4-Client"
 # CMakeLists.txt: TSL_URL
 # common/CMakeLists.txt: CONFIG_URL
-MY_EL=251111
+MY_EL=260331
 SRC_URI="
 	https://ec.europa.eu/tools/lotl/eu-lotl.xml -> eu-lotl_${MY_EL}.xml
 	https://sr.riik.ee/tsl/estonian-tsl.xml -> estonian-tsl_${MY_EL}.xml
@@ -20,7 +20,7 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	MY_PV="${PV^^}"
 	MY_PV="v${MY_PV/_/-}"
-	[[ -z ${PV%%*_p*} ]] && MY_PV="a4da0d3"
+	[[ -z ${PV%%*_p*} ]] && MY_PV="8b40029"
 	MY_QC="qt-common-6a1b281"
 	SRC_URI+="
 		mirror://githubcl/open-eid/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -33,7 +33,7 @@ fi
 inherit toolchain-funcs cmake xdg
 
 DESCRIPTION="An application for digitally signing and encrypting documents"
-HOMEPAGE="https://open-eid.github.io"
+HOMEPAGE="https://github.com/open-eid/DigiDoc4-Client"
 
 LICENSE="LGPL-2.1 Nokia-Qt-LGPL-Exception-1.1"
 SLOT="0"
