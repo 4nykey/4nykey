@@ -32,9 +32,9 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="140.9.0esr-${MY_PV}-1-build2"
+MY_P="140.9.1esr-${MY_PV}-1-build1"
 MY_P="firefox-tor-browser-${MY_P}"
-MY_NOS="13.6.12.1984"
+MY_NOS="13.6.15.1984"
 MY_NOS="noscript-${MY_NOS}.xpi"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
