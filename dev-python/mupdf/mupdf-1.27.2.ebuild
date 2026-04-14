@@ -1,4 +1,4 @@
-# Copyright 1999-2025 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -6,7 +6,8 @@ EAPI=8
 PYTHON_COMPAT=( python3_{10..13} )
 DISTUTILS_USE_PEP517=no
 DISTUTILS_EXT=1
-inherit distutils-r1
+LLVM_COMPAT=( {18..21} )
+inherit distutils-r1 llvm-r2
 
 DESCRIPTION="Python bindings for the MuPDF library"
 HOMEPAGE="https://mupdf.com"
@@ -24,7 +25,10 @@ RDEPEND="
 	${DEPEND}
 "
 BDEPEND="
-	<dev-python/clang-21[${PYTHON_USEDEP}]
+	$(llvm_gen_dep '
+		llvm-core/clang:${LLVM_SLOT}
+	')
+	dev-python/clang[${PYTHON_USEDEP}]
 	dev-lang/swig
 "
 PATCHES=(
@@ -34,16 +38,20 @@ distutils_enable_tests pytest
 
 _buildpy() {
 	"${EPYTHON}" ./scripts/mupdfwrap.py \
-		-d "build/shared-release-${EPYTHON}" "${@}" || die
+		--dir-so "build/shared-release-${EPYTHON}" "${@}" || die
 }
 
 python_compile() {
-	_buildpy -b 23
+	_buildpy --build 23
 }
 
 src_compile() {
 	# libmupdfcpp
-	./scripts/mupdfwrap.py -d "build/shared-release" -b 01 || die
+	LD_LIBRARY_PATH="$(get_llvm_prefix)/$(get_libdir)" \
+	tc-env_build ./scripts/mupdfwrap.py \
+			--dir-so "build/shared-release" \
+			--build 01 \
+			|| die
 	mv build/shared-release/libmupdfcpp.so{,.${PV}} .
 	# _mupdf.so
 	distutils-r1_src_compile
