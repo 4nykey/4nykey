@@ -71,7 +71,7 @@ src_configure() {
 		-DHAVE_LIBRAW=$(usex qt $(usex raw))
 		-DENABLE_MEDIA_FILE_METADATA=$(usex mediainfo)
 		-DUSE_FREEIMAGE=$(usex freeimage)
-		-DENABLE_ISOLATED_GFX=$(usex freeimage)
+		-DENABLE_ISOLATED_GFX=no
 		-DHAVE_FFMPEG=$(usex ffmpeg)
 		-DUSE_LIBUV=$(usex libuv)
 		-DUSE_PDFIUM=no

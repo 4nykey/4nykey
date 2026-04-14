@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/meganz/${MY_PN}.git"
 	EGIT_SUBMODULES=( -src/MEGASync/mega )
 else
-	MY_PV="5c54388"
+	MY_PV="cca47ff"
 	SRC_URI="
 		mirror://githubcl/meganz/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -49,7 +49,7 @@ BDEPEND="
 "
 PATCHES=(
 	"${FILESDIR}"/cmake.diff
-	"${FILESDIR}"/dolphin.diff
+	"${FILESDIR}"/97b2e2d.diff
 )
 
 src_prepare() {
