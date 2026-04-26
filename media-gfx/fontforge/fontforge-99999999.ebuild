@@ -1,9 +1,9 @@
-# Copyright 2004-2025 Gentoo Authors
+# Copyright 2004-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..13} )
+PYTHON_COMPAT=( python3_{12..14} )
 inherit python-single-r1 xdg cmake
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
