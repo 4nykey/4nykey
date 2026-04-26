@@ -34,7 +34,7 @@ FONT_SRCDIR=${FONT_SRCDIR:-sources}
 # fonts. By default: 'fonts fonts/otf fonts/ttf'
 FONTDIR_BIN=( ${FONTDIR_BIN[@]:-fonts fonts/otf fonts/ttf} )
 
-PYTHON_COMPAT=( python3_{10..13} )
+PYTHON_COMPAT=( python3_{12..14} )
 IUSE="autohint +binary variable"
 MY_FONT_TYPES=( ${MY_FONT_TYPES[@]:-otf +ttf} )
 
@@ -51,11 +51,11 @@ SRC_URI+="
 )
 "
 RESTRICT="primaryuri"
-DEPEND="
+BDEPEND="
 !binary? (
 	${PYTHON_DEPS}
 	$(python_gen_any_dep '
-		>=dev-util/fontmake-3.5[${PYTHON_USEDEP}]
+		dev-util/fontmake[${PYTHON_USEDEP}]
 	')
 	autohint? ( media-gfx/ttfautohint )
 )
@@ -64,6 +64,10 @@ case ${EAPI:-0} in
 	7|8) ;;
 	*) die "${ECLASS}: EAPI ${EAPI} not supported" ;;
 esac
+
+python_check_deps() {
+	python_has_version "dev-util/fontmake[${PYTHON_USEDEP}]"
+}
 
 fontmake_pkg_setup() {
 	if use binary; then
@@ -100,7 +104,7 @@ fontmake_src_compile() {
 	[[ "${#HELPER_ARGS[@]}" -ge 1 ]] && \
 		myemakeargs+=( ARGS="${HELPER_ARGS[*]}" )
 	[[ "${#FONTMAKE_EXTRA_ARGS[@]}" -ge 1 ]] && \
-		myemakeargs+=( FONTMAKE="fontmake ${FONTMAKE_EXTRA_ARGS[@]}" )
+		myemakeargs+=( FONTMAKE="fontmake ${FONTMAKE_EXTRA_ARGS[*]}" )
 
 	emake "${myemakeargs[@]}" ${FONT_SUFFIX}
 }
