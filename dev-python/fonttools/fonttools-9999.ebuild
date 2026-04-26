@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..13} )
+PYTHON_COMPAT=( python3_{12..14} )
 PYTHON_REQ_USE="xml(+)"
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
@@ -28,7 +28,7 @@ HOMEPAGE="https://github.com/${PN}/${PN}"
 
 LICENSE="BSD"
 SLOT="0"
-IUSE="doc graphite harfbuzz interpolatable plot png qt5 reportlab skia +ufo +unicode woff"
+IUSE="doc graphite harfbuzz interpolatable plot png reportlab skia +ufo +unicode woff"
 DOCS=( {README,NEWS}.rst )
 PATCHES=(
 	"${FILESDIR}"/${PN}-xattr.diff
@@ -44,7 +44,6 @@ RDEPEND="
 	unicode? (
 		>=dev-python/unicodedata2-17[${PYTHON_USEDEP}]
 	)
-	qt5? ( dev-python/pyqt5[${PYTHON_USEDEP}] )
 	graphite? ( dev-python/lz4[${PYTHON_USEDEP}] )
 	interpolatable? ( >=dev-python/scipy-1.14.1[${PYTHON_USEDEP}] )
 	reportlab? ( dev-python/reportlab[${PYTHON_USEDEP}] )
@@ -76,4 +75,5 @@ python_test() {
 
 pkg_postinst() {
 	optfeature "symbolic font statistics analysis" dev-python/sympy
+	optfeature "pen for drawing glyphs with Qt's QPainterPath" dev-python/pyqt5
 }
