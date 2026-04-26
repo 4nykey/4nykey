@@ -1,9 +1,9 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{10..13} )
+PYTHON_COMPAT=( python3_{12..14} )
 FONT_SUFFIX=otf
 FONT_S=( fonts )
 inherit python-any-r1 font-r1
@@ -37,6 +37,10 @@ BDEPEND="
 	dev-util/afdko
 )
 "
+
+python_check_deps() {
+	python_has_version "dev-python/fonttools[${PYTHON_USEDEP}]"
+}
 
 pkg_setup() {
 	use binary || python-any-r1_pkg_setup

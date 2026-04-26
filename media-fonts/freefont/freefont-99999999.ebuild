@@ -1,10 +1,10 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 MY_FONT_TYPES=( otf +ttf )
-PYTHON_COMPAT=( python3_{10..13} )
+PYTHON_COMPAT=( python3_{12..14} )
 if [[ ${PV} == *9999* ]]; then
 	inherit subversion
 	ESVN_REPO_URI="svn://svn.sv.gnu.org/${PN}/trunk/${PN}"
@@ -25,7 +25,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
-inherit python-single-r1 font-r1
+inherit python-any-r1 font-r1
 
 DESCRIPTION="A free family of scalable outline unicode fonts"
 HOMEPAGE="https://www.gnu.org/software/freefont"
@@ -38,17 +38,21 @@ DOCS="CREDITS"
 
 BDEPEND="
 	!binary? (
-	$(python_gen_cond_dep '
+	$(python_gen_any_dep '
 		media-gfx/fontforge[python,${PYTHON_SINGLE_USEDEP}]
 	')
 	)
 "
 
+python_check_deps() {
+	python_has_version "media-gfx/fontforge[python,${PYTHON_SINGLE_USEDEP}]"
+}
+
 pkg_setup() {
 	if use binary; then
 		DOCS+=" TROUBLESHOOTING USAGE"
 	else
-		python-single-r1_pkg_setup
+		python-any-r1_pkg_setup
 		FONT_S=( sfd )
 		DOCS+=" notes/*.txt"
 		PATCHES+=( "${FILESDIR}"/tools.diff )

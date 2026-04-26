@@ -1,11 +1,11 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{10..13} )
+PYTHON_COMPAT=( python3_{12..14} )
 MY_FONT_TYPES=( +otf ttc )
-inherit python-single-r1
+inherit python-any-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit subversion
 	ESVN_REPO_URI="https://svn.code.sf.net/p/${PN}/code/trunk"
@@ -36,7 +36,7 @@ IUSE="+binary latex"
 RESTRICT="primaryuri"
 BDEPEND="
 	!binary? (
-		$(python_gen_cond_dep '
+		$(python_gen_any_dep '
 			media-gfx/fontforge[python,${PYTHON_SINGLE_USEDEP}]
 			dev-python/fonttools[${PYTHON_USEDEP}]
 			font_types_ttc? ( dev-util/afdko[${PYTHON_USEDEP}] )
@@ -50,12 +50,20 @@ BDEPEND="
 	)
 "
 
+python_check_deps() {
+	python_has_version "media-gfx/fontforge[python,${PYTHON_SINGLE_USEDEP}]" &&
+	python_has_version "dev-python/fonttools[${PYTHON_USEDEP}]" &&
+	if use font_types_ttc; then
+		python_has_version "dev-util/afdko[${PYTHON_USEDEP}]"
+	fi
+}
+
 pkg_setup() {
 	if use binary; then
 		S="${WORKDIR}/nm-${MY_PV}"
 	else
 		S="${WORKDIR}/${MY_P}"
-		python-single-r1_pkg_setup
+		python-any-r1_pkg_setup
 	fi
 	font-r1_pkg_setup
 	use latex && DOCS+=" USAGE"

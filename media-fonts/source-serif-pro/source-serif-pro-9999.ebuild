@@ -1,7 +1,7 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 MY_FONT_TYPES=( otf +ttf )
 MY_PN="${PN%-pro}"
@@ -54,13 +54,20 @@ pkg_setup() {
 	font-r1_pkg_setup
 }
 
+src_prepare() {
+	default
+	use binary && return
+	sed \
+		-e "s:/tmp/:${T}/:g" \
+		-e 's:VAR_hinted:VAR:' \
+		-e 's:psautohint:otfautohint:' \
+		-i buildVFs.py
+}
+
 src_compile() {
 	use binary && return
 	if use variable; then
-		./buildVFs.py \
-			--verbose \
-			$(usex autohint --hinted '') \
-			|| die
+		./buildVFs.py --verbose $(usex autohint '--hinted' '') || die
 	else
 		./build.sh || die
 	fi

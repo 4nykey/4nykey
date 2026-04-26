@@ -1,9 +1,9 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-PYTHON_COMPAT=( python3_{10..13} )
+PYTHON_COMPAT=( python3_{12..14} )
 MY_FONT_TYPES=( pfb otf +ttf )
 if [[ -z ${PV%%*9999} ]]; then
 	inherit subversion
@@ -26,7 +26,7 @@ else
 	"
 	KEYWORDS="~amd64 ~x86"
 fi
-inherit python-single-r1 latex-package font-r1
+inherit python-any-r1 latex-package font-r1
 
 DESCRIPTION="Khartiya is extended Bitstream Charter font"
 HOMEPAGE="https://code.google.com/p/${PN}"
@@ -38,7 +38,7 @@ IUSE="+binary latex"
 BDEPEND="
 	!binary? (
 		${PYTHON_DEPS}
-		$(python_gen_cond_dep '
+		$(python_gen_any_dep '
 			media-gfx/fontforge[python,${PYTHON_SINGLE_USEDEP}]
 			media-gfx/xgridfit[${PYTHON_SINGLE_USEDEP}]
 		')
@@ -50,8 +50,13 @@ BDEPEND="
 "
 RESTRICT="primaryuri"
 
+python_check_deps() {
+	python_has_version "media-gfx/fontforge[python,${PYTHON_SINGLE_USEDEP}]" &&
+	python_has_version "media-gfx/xgridfit[${PYTHON_SINGLE_USEDEP}]"
+}
+
 pkg_setup() {
-	use binary || python-single-r1_pkg_setup
+	use binary || python-any-r1_pkg_setup
 	font-r1_pkg_setup
 }
 

@@ -1,9 +1,9 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..13} )
+PYTHON_COMPAT=( python3_{12..14} )
 MY_PN="${PN}-fonts"
 MY_FONT_TYPES=( otf )
 if [[ -z ${PV%%*9999} ]]; then
@@ -38,17 +38,27 @@ BDEPEND="
 	)
 "
 DOCS=( NEWS README.md )
-PATCHES=( "${FILESDIR}"/autohint.diff )
+
+python_check_deps() {
+	python_has_version "dev-python/fontMath[${PYTHON_USEDEP}]" &&
+	python_has_version "dev-python/ufo2ft[${PYTHON_USEDEP}]" &&
+	python_has_version "dev-python/ufoLib2[${PYTHON_USEDEP}]" &&
+	if use variable; then
+		python_has_version "dev-python/statmake[${PYTHON_USEDEP}]"
+	fi
+}
 
 pkg_setup() {
 	font-r1_pkg_setup
-	use binary && python-any-r1_pkg_setup
+	use binary || python-any-r1_pkg_setup
 }
 
 src_prepare() {
 	default
-	use autohint || sed \
-		-e "/find_program/s:'psautohint':'true':" -i meson.build
+	sed \
+		-e "/find_installation/s:'python3':'${EPYTHON}':" \
+		-e "/find_program/s:'psautohint':'$(usex autohint otfautohint true)':" \
+		-i meson.build
 }
 
 src_configure() {

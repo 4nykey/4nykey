@@ -1,9 +1,8 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..13} )
 MY_FONT_TYPES=( +otf ttf )
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
@@ -35,14 +34,14 @@ else
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64"
 fi
-inherit python-any-r1 font-r1
+inherit font-r1
 
 DESCRIPTION="Monospaced font family for user interface and coding environments"
 HOMEPAGE="https://adobe-fonts.github.io/${PN}"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-IUSE="+binary variable"
+IUSE="autohint +binary variable"
 
 BDEPEND="
 	!binary? (
@@ -57,27 +56,24 @@ pkg_setup() {
 	else
 		S="${S%/*}/$(usex binary '' ${PN}-${MY_PV//\//-})"
 	fi
-
 	FONT_S=( $(usex binary . target)/$(usex variable VF $(usex font_types_otf OTF TTF)) )
-
 	font-r1_pkg_setup
-	use binary || python-any-r1_pkg_setup
 }
 
 src_prepare() {
 	default
 	use binary && return
-	sed -e "s:/tmp/:${T}/:g" -i buildVFs.py
-	local _d _n=glyphs.com.adobe.type.processedGlyphs
-	find -type d -name ${_n} | while read _d; do
-		mv "${_d}" "${_d/G/g}"
-	done
+	sed \
+		-e "s:/tmp/:${T}/:g" \
+		-e 's:VF_hinted:VF:' \
+		-e 's:psautohint:otfautohint:' \
+		-i buildVFs.py
 }
 
 src_compile() {
 	use binary && return
 	if use variable; then
-		${EPYTHON} ./buildVFs.py || die
+		./buildVFs.py --verbose $(usex autohint '--hinted' '') || die
 	else
 		sh ./build.sh || die
 	fi

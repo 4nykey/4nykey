@@ -1,9 +1,9 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{10..13} )
+PYTHON_COMPAT=( python3_{12..14} )
 MY_FONT_VARIANTS="loose halfloose halftight tight xtrasmall small large xtralarge"
 MY_FONT_CHARS="empty_dollar dotted_zero base_one zstyle_l no_contextual_alternates"
 if [[ ${PV} == *9999* ]]; then
@@ -18,7 +18,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 	S="${WORKDIR}/${PN}-${MY_PV}"
 fi
-inherit python-single-r1 font-r1 multiprocessing
+inherit python-any-r1 font-r1 multiprocessing
 
 DESCRIPTION="Customisable coding font with alternates, ligatures and contextual positioning"
 HOMEPAGE="https://larsenwork.com/monoid"
@@ -28,7 +28,7 @@ SLOT="0"
 
 BDEPEND="
 	${PYTHON_DEPS}
-	$(python_gen_cond_dep '
+	$(python_gen_any_dep '
 		media-gfx/fontforge[python,${PYTHON_SINGLE_USEDEP}]
 	')
 "
@@ -36,8 +36,12 @@ BDEPEND="
 FONT_S=( _release )
 DOCS="Readme.md"
 
+python_check_deps() {
+	python_has_version "media-gfx/fontforge[python,${PYTHON_SINGLE_USEDEP}]"
+}
+
 pkg_setup() {
-	python-single-r1_pkg_setup
+	python-any-r1_pkg_setup
 	font-r1_pkg_setup
 }
 
