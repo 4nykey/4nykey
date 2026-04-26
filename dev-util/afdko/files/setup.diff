@@ -1,5 +1,13 @@
 --- a/setup.py
 +++ b/setup.py
+@@ -134,6 +134,7 @@ def _get_console_scripts():
+         ('waterfallplot', 'proofpdf:waterfallplot'),
+         ('otfautohint', 'otfautohint.__main__:main'),
+         ('otfstemhist', 'otfautohint.__main__:stemhist'),
++        ('splitpsdicts', 'otfautohint.splitpsdicts:main'),
+     ]
+     scripts_path = 'afdko'
+     scripts = [f'{name} = {scripts_path}.{entry}'
 @@ -194,8 +193,6 @@ def main():
                'wheel',
                'setuptools_scm',

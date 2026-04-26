@@ -1,4 +1,4 @@
-# Copyright 1999-2025 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -317,7 +317,7 @@ CRATES="
 	zerovec-derive@0.10.3
 	zerovec@0.10.4
 "
-PYTHON_COMPAT=( python3_{10..13} )
+PYTHON_COMPAT=( python3_{12..14} )
 inherit bash-completion-r1 autotools python-single-r1 cargo
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
