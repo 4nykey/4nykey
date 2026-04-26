@@ -1,9 +1,9 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..13} )
+PYTHON_COMPAT=( python3_{12..14} )
 inherit python-any-r1 vala toolchain-funcs
 if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/johanmattssonm/${PN}.git"
