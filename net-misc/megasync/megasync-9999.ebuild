@@ -9,7 +9,7 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/meganz/${MY_PN}.git"
 	EGIT_SUBMODULES=( -src/MEGASync/mega )
 else
-	MY_PV="cca47ff"
+	MY_PV="7df0681"
 	SRC_URI="
 		mirror://githubcl/meganz/${MY_PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -27,10 +27,10 @@ HOMEPAGE="https://github.com/meganz/MEGAsync"
 LICENSE="EULA"
 LICENSE_URL="https://raw.githubusercontent.com/meganz/MEGAsync/master/LICENCE.md"
 SLOT="0"
-IUSE="breakpad dolphin ffmpeg mediainfo nautilus raw test"
+IUSE="breakpad dolphin ffmpeg mediainfo nautilus nemo test thunar"
 
 RDEPEND="
-	>=net-misc/meganz-sdk-10.6:=[ffmpeg?,libuv,mediainfo?,qt,raw?,sqlite]
+	>=net-misc/meganz-sdk-10.6:=[ffmpeg?,libuv,mediainfo?,qt,sqlite]
 	dev-qt/qtsvg:5
 	dev-qt/qtx11extras:5
 	dev-qt/qtdbus:5
@@ -40,6 +40,8 @@ RDEPEND="
 	nautilus? ( gnome-base/nautilus )
 	breakpad? ( dev-util/breakpad )
 	dolphin? ( kde-apps/dolphin )
+	nemo? ( gnome-extra/nemo )
+	thunar? ( xfce-base/thunar )
 "
 DEPEND="
 	${RDEPEND}
@@ -49,7 +51,6 @@ BDEPEND="
 "
 PATCHES=(
 	"${FILESDIR}"/cmake.diff
-	"${FILESDIR}"/97b2e2d.diff
 )
 
 src_prepare() {
@@ -59,6 +60,8 @@ src_prepare() {
 	sed \
 		-e "/MEGAShellExtDolphin/s:.*\(add_subdirectory\):$(usex dolphin '' '#')\1:" \
 		-e "/MEGAShellExtNautilus/s:.*\(add_subdirectory\):$(usex nautilus '' '#')\1:" \
+		-e "/MEGAShellExtThunar/s:.*\(add_subdirectory\):$(usex thunar '' '#')\1:" \
+		-e "/MEGAShellExtNemo/s:.*\(add_subdirectory\):$(usex nemo '' '#')\1:" \
 		-i src/CMakeLists.txt
 	sed -e '/KF_VER/ s:"5":"6":' -i src/MEGAShellExtDolphin/CMakeLists.txt
 	ln -s ../../MEGASync/gui src/MEGAAutoTests/UnitTests/gui

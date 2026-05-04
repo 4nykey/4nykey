@@ -9,5 +9,7 @@
 		<flag name="dolphin">Install <pkg>kde-apps/dolphin</pkg> extension</flag>
 		<flag name="mediainfo">Use <pkg>media-libs/libmediainfo</pkg> for media files</flag>
 		<flag name="nautilus">Install <pkg>gnome-base/nautilus</pkg> extension</flag>
+		<flag name="nemo">MEGA Desktop App plugin for <pkg>gnome-extra/nemo</pkg></flag>
+		<flag name="thunar">MEGA Desktop App plugin for <pkg>xfce-base/thunar</pkg></flag>
 	</use>
 </pkgmetadata>
