@@ -28,10 +28,11 @@ SLOT="0"
 IUSE=""
 
 DEPEND="
-	dev-python/fonttools[${PYTHON_USEDEP}]
+	dev-python/packaging[${PYTHON_USEDEP}]
 	dev-python/click[${PYTHON_USEDEP}]
+	dev-python/fonttools[${PYTHON_USEDEP}]
+	dev-python/uharfbuzz[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
-	dev-python/unicodedata2[${PYTHON_USEDEP}]
 	dev-python/colorlog[${PYTHON_USEDEP}]
 "
 RDEPEND="${DEPEND}"
