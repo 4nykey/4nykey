@@ -3,9 +3,9 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-140esr-patches-07.tar.xz"
+FIREFOX_PATCHSET="firefox-140esr-patches-08.tar.xz"
 
-LLVM_COMPAT=( 19 20 21 )
+LLVM_COMPAT=( 20 21 )
 
 # This will also filter rust versions that don't match LLVM_COMPAT in the non-clang path; this is fine.
 RUST_NEEDS_LLVM=1
@@ -13,15 +13,15 @@ RUST_NEEDS_LLVM=1
 # If not building with clang we need at least rust 1.76
 RUST_MIN_VER=1.82.0
 
-PYTHON_COMPAT=( python3_{11..14} )
+PYTHON_COMPAT=( python3_{12..14} )
 PYTHON_REQ_USE="ncurses,sqlite,ssl"
 
 VIRTUALX_REQUIRED="manual"
 
 # Information about the bundled wasi toolchain from
 # https://github.com/WebAssembly/wasi-sdk/
-WASI_SDK_VER=30.0
-WASI_SDK_LLVM_VER=21
+WASI_SDK_VER=32.0
+WASI_SDK_LLVM_VER=22
 
 inherit check-reqs desktop flag-o-matic gnome2-utils linux-info llvm-r1 multiprocessing \
 	optfeature pax-utils python-any-r1 readme.gentoo-r1 rust toolchain-funcs virtualx xdg
@@ -32,9 +32,9 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="140.9.1esr-${MY_PV}-1-build1"
+MY_P="140.10.1esr-${MY_PV}-1-build1"
 MY_P="firefox-tor-browser-${MY_P}"
-MY_NOS="13.6.15.1984"
+MY_NOS="13.6.18.1984"
 MY_NOS="noscript-${MY_NOS}.xpi"
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV+="a$(ver_cut 4)"
@@ -110,7 +110,7 @@ COMMON_DEPEND="
 	>=app-accessibility/at-spi2-core-2.46.0:2
 	dev-libs/glib:2
 	dev-libs/libffi:=
-	>=dev-libs/nss-3.112.2
+	>=dev-libs/nss-3.112.5
 	>=dev-libs/nspr-4.36
 	media-libs/alsa-lib
 	media-libs/fontconfig
@@ -150,7 +150,7 @@ COMMON_DEPEND="
 	system-libevent? ( >=dev-libs/libevent-2.1.12:0=[threads(+)] )
 	system-libvpx? ( >=media-libs/libvpx-1.8.2:0=[postproc] )
 	system-pipewire? ( >=media-video/pipewire-1.4.7-r2:= )
-	system-png? ( >=media-libs/libpng-1.6.45:0=[apng] )
+	system-png? ( >=media-libs/libpng-1.6.58:0=[apng] )
 	system-webp? ( >=media-libs/libwebp-1.1.0:0= )
 	wayland? (
 		>=media-libs/libepoxy-1.5.10-r1
@@ -317,11 +317,11 @@ pkg_pretend() {
 	if [[ ${MERGE_TYPE} != binary ]] ; then
 		# Ensure we have enough disk space to compile
 		if use pgo || use debug ; then
-			CHECKREQS_DISK_BUILD="14300M"
+			CHECKREQS_DISK_BUILD="17000M"
 		elif tc-is-lto ; then
-			CHECKREQS_DISK_BUILD="10600M"
+			CHECKREQS_DISK_BUILD="9900M"
 		else
-			CHECKREQS_DISK_BUILD="7400M"
+			CHECKREQS_DISK_BUILD="9000M"
 		fi
 
 		check-reqs_pkg_pretend
@@ -355,11 +355,11 @@ pkg_setup() {
 
 		# Ensure we have enough disk space to compile
 		if use pgo || use debug ; then
-			CHECKREQS_DISK_BUILD="14300M"
+			CHECKREQS_DISK_BUILD="17000M"
 		elif [[ ${use_lto} == "yes" ]] ; then
-			CHECKREQS_DISK_BUILD="10600M"
+			CHECKREQS_DISK_BUILD="9900M"
 		else
-			CHECKREQS_DISK_BUILD="7400M"
+			CHECKREQS_DISK_BUILD="9000M"
 		fi
 
 		check-reqs_pkg_setup
