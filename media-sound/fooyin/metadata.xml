@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>4nykey@gmail.com</email>
+	</maintainer>
+	<use>
+		<flag name="archive">Build the libarchive input plugin using <pkg>app-arch/libarchive</pkg></flag>
+		<flag name="gme">Enable video game music formats support via <pkg>media-libs/game-music-emu</pkg></flag>
+		<flag name="loudness">Support loudness normalisation according to the EBU R128 standard using <pkg>media-libs/libebur128</pkg></flag>
+		<flag name="openmpt">Build the OpenMPT input plugin using <pkg>media-libs/libopenmpt</pkg></flag>
+		<flag name="pipewire">Enable sound support via native PipeWire backend</flag>
+		<flag name="sanitize">Enable AddressSanitizer</flag>
+		<flag name="soundtouch">Enable SoundTouch DSP plugin</flag>
+		<flag name="soxr">Enable SoX resampler DSP plugin</flag>
+	</use>
+</pkgmetadata>
