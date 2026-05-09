@@ -38,6 +38,10 @@ RDEPEND="
 	dev-libs/libpcre:3[cxx]
 	dev-libs/openssl:0
 	net-misc/curl
+	dev-libs/icu:=
+	net-libs/http-parser
+	dev-libs/libutf8proc
+	dev-libs/zxcvbn-c
 	sqlite? ( dev-db/sqlite:3 )
 	examples? (
 		sys-libs/readline:0
@@ -57,6 +61,7 @@ DEPEND="
 "
 PATCHES=(
 	"${FILESDIR}"/cmake.diff
+	"${FILESDIR}"/system-libs.diff
 )
 
 src_configure() {

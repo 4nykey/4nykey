@@ -1,0 +1,97 @@
+--- a/cmake/modules/sdklib_libraries.cmake
++++ b/cmake/modules/sdklib_libraries.cmake
+@@ -11,7 +11,7 @@ macro(load_sdklib_libraries)
+     endif()
+     target_link_libraries(SDKlib PUBLIC http_parser)
+     target_link_libraries(SDKlib PUBLIC utf8proc)
+-    target_link_libraries(SDKlib PUBLIC zxcvbn-c)
++    target_link_libraries(SDKlib PUBLIC zxcvbn)
+ 
+     if(VCPKG_ROOT)
+         find_package(cryptopp CONFIG REQUIRED)
+--- a/include/mega/utils.h
++++ b/include/mega/utils.h
+@@ -32,7 +32,7 @@
+ #include <thread>
+ #include <type_traits>
+ #undef SSIZE_MAX
+-#include <utf8proc/utf8proc.h>
++#include <utf8proc.h>
+ #undef SSIZE_MAX
+ 
+ // Include ICU headers
+--- a/include/megaapi_impl.h
++++ b/include/megaapi_impl.h
+@@ -40,7 +40,7 @@
+ #ifdef HAVE_LIBUV
+ #include "uv.h"
+ 
+-#include <http_parser/http_parser.h>
++#include <http_parser.h>
+ 
+ #ifdef USE_OPENSSL
+ #include <evt-tls/evt_tls.h>
+--- a/src/filesystem.cpp
++++ b/src/filesystem.cpp
+@@ -29,7 +29,7 @@
+ #include "mega/sync.h"
+ #include "megafs.h"
+ 
+-#include <utf8proc/utf8proc.h>
++#include <utf8proc.h>
+ 
+ #include <cassert>
+ #include <cctype>
+--- a/src/json.cpp
++++ b/src/json.cpp
+@@ -24,7 +24,7 @@
+ #include "mega/logging.h"
+ #include "mega/megaclient.h"
+ 
+-#include <utf8proc/utf8proc.h>
++#include <utf8proc.h>
+ 
+ #include <cctype>
+ #include <cstdint>
+--- a/src/megaapi_impl.cpp
++++ b/src/megaapi_impl.cpp
+@@ -71,7 +71,7 @@
+ #include <openssl/rand.h>
+ #endif
+ 
+-#include <zxcvbn-c/zxcvbn.h>
++#include <zxcvbn/zxcvbn.h>
+ 
+ // FUSE
+ #include <mega/fuse/common/mount_event_type.h>
+--- a/src/utils.cpp
++++ b/src/utils.cpp
+@@ -34,7 +34,7 @@
+ #include <unicode/ucol.h>
+ #include <unicode/unistr.h>
+ #include <unicode/utypes.h>
+-#include <utf8proc/utf8proc.h>
++#include <utf8proc.h>
+ 
+ #include <cctype>
+ #include <iomanip>
+--- a/third_party/CMakeLists.txt
++++ b/third_party/CMakeLists.txt
+@@ -6,6 +6,3 @@ endif()
+ if(NOT WIN32 AND NOT HAVE_GLOB_H)
+ 	add_subdirectory(glob)
+ endif()
+-add_subdirectory(http_parser)
+-add_subdirectory(utf8proc)
+-add_subdirectory(zxcvbn-c)
+--- a/src/megaapi_impl.cpp
++++ b/src/megaapi_impl.cpp
+@@ -71,7 +71,7 @@
+ #include <openssl/rand.h>
+ #endif
+ 
+-#include <zxcvbn/zxcvbn.h>
++#include <zxcvbn.h>
+ 
+ // FUSE
+ #include <mega/fuse/common/mount_event_type.h>
