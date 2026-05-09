@@ -3,15 +3,13 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-140esr-patches-08.tar.xz"
+FIREFOX_PATCHSET="firefox-150-patches-02.tar.xz"
 
-LLVM_COMPAT=( 20 21 )
+LLVM_COMPAT=( 21 22 )
 
 # This will also filter rust versions that don't match LLVM_COMPAT in the non-clang path; this is fine.
 RUST_NEEDS_LLVM=1
-
-# If not building with clang we need at least rust 1.76
-RUST_MIN_VER=1.82.0
+RUST_MIN_VER=1.90.0
 
 PYTHON_COMPAT=( python3_{12..14} )
 PYTHON_REQ_USE="ncurses,sqlite,ssl"
@@ -32,25 +30,25 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="140.10.1esr-${MY_PV}-1-build1"
-MY_P="firefox-tor-browser-${MY_P}"
-MY_NOS="13.6.18.1984"
-MY_NOS="noscript-${MY_NOS}.xpi"
 if [[ -z ${PV%%*_alpha*} ]]; then
-	MY_PV+="a$(ver_cut 4)"
+	MY_PV2="a$(ver_cut 4)"
 else
 	MY_PV+=".$(ver_cut 3)"
 	KEYWORDS="~amd64"
 fi
+MY_P="150.0a1-${MY_PV}-2-build3"
+MY_P="firefox-tor-browser-${MY_P}"
+MY_NOS="13.6.18.90101984"
+MY_NOS="noscript-${MY_NOS}.xpi"
 
 DESCRIPTION="The Tor Browser"
 HOMEPAGE="https://www.torproject.org"
 SRC_URI="
-	mirror://tor/${PN}/${MY_PV}/src-${MY_P}.tar.xz
+	mirror://tor/${PN}/${MY_PV}${MY_PV2}/src-${MY_P}.tar.xz
 	mirror://tor/${PN}/${MY_NOS%-*}/${MY_NOS}
 	${PATCH_URIS[@]}
 	vanilla? (
-		mirror://tor/${PN}/${MY_PV}/tor-browser-linux-x86_64-${MY_PV%.0}.tar.xz
+		mirror://tor/${PN}/${MY_PV}${MY_PV2}/tor-browser-linux-x86_64-${MY_PV}${MY_PV2}.tar.xz
 	)
 	wasm-sandbox? (
 		amd64? ( https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-${WASI_SDK_VER/.*/}/wasi-sdk-${WASI_SDK_VER}-x86_64-linux.tar.gz )
@@ -62,8 +60,8 @@ LICENSE+=" BSD CC-BY-3.0"
 SLOT="0"
 IUSE="+clang dbus debug eme-free hardened hwaccel jack libproxy pgo pulseaudio selinux sndio"
 IUSE+=" +system-av1 +system-harfbuzz +system-icu +system-jpeg +system-libevent +system-libvpx"
-IUSE+=" system-pipewire system-png +system-webp test wayland wifi +X"
-IUSE+=" +jumbo-build openh264 vanilla wasm-sandbox"
+IUSE+=" system-pipewire system-png +system-webp test valgrind wayland wifi +X"
+IUSE+=" jpegxl +jumbo-build openh264 vanilla wasm-sandbox"
 
 REQUIRED_USE="|| ( X wayland )
 	debug? ( !system-av1 )
@@ -90,7 +88,7 @@ BDEPEND="${PYTHON_DEPS}
 	app-alternatives/awk
 	app-arch/unzip
 	app-arch/zip
-	>=dev-util/cbindgen-0.27.0
+	>=dev-util/cbindgen-0.29.1
 	net-libs/nodejs
 	virtual/pkgconfig
 	amd64? ( >=dev-lang/nasm-2.14 )
@@ -110,8 +108,8 @@ COMMON_DEPEND="
 	>=app-accessibility/at-spi2-core-2.46.0:2
 	dev-libs/glib:2
 	dev-libs/libffi:=
-	>=dev-libs/nss-3.112.5
-	>=dev-libs/nspr-4.36
+	>=dev-libs/nss-3.123.1
+	>=dev-libs/nspr-4.38
 	media-libs/alsa-lib
 	media-libs/fontconfig
 	media-libs/freetype
@@ -145,13 +143,14 @@ COMMON_DEPEND="
 		>=media-libs/harfbuzz-2.8.1:0=
 		!wasm-sandbox? ( >=media-gfx/graphite2-1.3.13 )
 	)
-	system-icu? ( >=dev-libs/icu-76.1:= )
+	system-icu? ( >=dev-libs/icu-78.1:= )
 	system-jpeg? ( >=media-libs/libjpeg-turbo-1.2.1:= )
 	system-libevent? ( >=dev-libs/libevent-2.1.12:0=[threads(+)] )
 	system-libvpx? ( >=media-libs/libvpx-1.8.2:0=[postproc] )
 	system-pipewire? ( >=media-video/pipewire-1.4.7-r2:= )
-	system-png? ( >=media-libs/libpng-1.6.58:0=[apng] )
+	system-png? ( >=media-libs/libpng-1.6.45:0=[apng] )
 	system-webp? ( >=media-libs/libwebp-1.1.0:0= )
+	valgrind? ( dev-debug/valgrind )
 	wayland? (
 		>=media-libs/libepoxy-1.5.10-r1
 		x11-libs/gtk+:3[wayland]
@@ -317,11 +316,11 @@ pkg_pretend() {
 	if [[ ${MERGE_TYPE} != binary ]] ; then
 		# Ensure we have enough disk space to compile
 		if use pgo || use debug ; then
-			CHECKREQS_DISK_BUILD="17000M"
+			CHECKREQS_DISK_BUILD="18700M"
 		elif tc-is-lto ; then
-			CHECKREQS_DISK_BUILD="9900M"
+			CHECKREQS_DISK_BUILD="10900M"
 		else
-			CHECKREQS_DISK_BUILD="9000M"
+			CHECKREQS_DISK_BUILD="9700M"
 		fi
 
 		check-reqs_pkg_pretend
@@ -355,11 +354,11 @@ pkg_setup() {
 
 		# Ensure we have enough disk space to compile
 		if use pgo || use debug ; then
-			CHECKREQS_DISK_BUILD="17000M"
+			CHECKREQS_DISK_BUILD="18700M"
 		elif [[ ${use_lto} == "yes" ]] ; then
-			CHECKREQS_DISK_BUILD="9900M"
+			CHECKREQS_DISK_BUILD="10900M"
 		else
-			CHECKREQS_DISK_BUILD="9000M"
+			CHECKREQS_DISK_BUILD="9700M"
 		fi
 
 		check-reqs_pkg_setup
@@ -413,17 +412,15 @@ src_prepare() {
 		rm -v "${WORKDIR}"/firefox-patches/*-LTO-Only-enable-LTO-*.patch || die
 	fi
 
-	# Workaround for bgo#915651 on musl
+	# Workaround for bgo#915651 and bmo#1988166 on musl
 	if use elibc_glibc ; then
 		rm -v "${WORKDIR}"/firefox-patches/*bgo-748849-RUST_TARGET_override.patch || die
+		rm -v "${WORKDIR}"/firefox-patches/*bmo-1988166-musl-remove-nonexisting-system-header-req.patch || die
+		rm -v "${WORKDIR}"/firefox-patches/*bgo-967694-musl-prctrl-exception-on-musl.patch || die
 	fi
 
 	use vanilla || \
 	eapply "${WORKDIR}/firefox-patches"
-
-	if use system-icu && has_version ">=dev-libs/icu-78.1" ; then
-		eapply "${FILESDIR}/firefox-146.0.1-icu78.patch" # bgo#967261
-	fi
 
 	# Allow user to apply any additional patches without modifing ebuild
 	eapply_user
@@ -485,6 +482,7 @@ src_prepare() {
 	# moz_clear_vendor_checksums xyz
 	# glslopt: bgo#969412
 	moz_clear_vendor_checksums glslopt
+	moz_clear_vendor_checksums encoding_rs
 
 	# Respect choice for "jumbo-build"
 	# Changing the value for FILES_PER_UNIFIED_FILE may not work, see #905431
@@ -658,11 +656,13 @@ src_configure() {
 
 	mozconfig_use_enable dbus
 	mozconfig_use_enable libproxy
+	mozconfig_use_enable valgrind
 
 	use eme-free && mozconfig_add_options_ac '+eme-free' --disable-eme
 
 	if use hardened ; then
 		mozconfig_add_options_ac "+hardened" --enable-hardening
+		mozconfig_add_options_ac "+hardened stl" --enable-stl-hardening
 		append-ldflags "-Wl,-z,relro -Wl,-z,now"
 
 		# Increase the FORTIFY_SOURCE value, #910071.
@@ -698,6 +698,8 @@ src_configure() {
 		use !vanilla && \
 		mozconfig_use_with system-harfbuzz system-graphite2
 	fi
+
+	! use jpegxl && mozconfig_add_options_ac '-jpegxl' --disable-jxl
 
 	if [[ ${use_lto} == "yes" ]] ; then
 		if use clang ; then
@@ -750,6 +752,9 @@ src_configure() {
 		if use clang ; then
 			# Used in build/pgo/profileserver.py
 			export LLVM_PROFDATA="llvm-profdata"
+		else
+			# Attempt to fix pgo hanging with gcc, bgo#966309.
+			export MOZ_REMOTE_SETTINGS_DEVTOOLS=1
 		fi
 	fi
 
@@ -813,6 +818,10 @@ src_configure() {
 
 	if ! use elibc_glibc; then
 		mozconfig_add_options_ac '!elibc_glibc' --disable-jemalloc
+	fi
+
+	if use valgrind; then
+		mozconfig_add_options_ac 'valgrind requirement' --disable-jemalloc
 	fi
 
 	# System-av1 fix
@@ -885,6 +894,10 @@ src_configure() {
 	done
 	echo "=========================================================="
 	echo
+
+	if use valgrind; then
+		sed -i -e 's/--enable-optimize=-O[0-9s]/--enable-optimize="-g -O2"/' .mozconfig || die
+	fi
 
 	./mach configure || die
 }
