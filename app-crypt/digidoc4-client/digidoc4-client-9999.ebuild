@@ -6,7 +6,7 @@ EAPI=8
 MY_PN="DigiDoc4-Client"
 # CMakeLists.txt: TSL_URL
 # common/CMakeLists.txt: CONFIG_URL
-MY_EL=260331
+MY_EL=260429
 SRC_URI="
 	https://ec.europa.eu/tools/lotl/eu-lotl.xml -> eu-lotl_${MY_EL}.xml
 	https://sr.riik.ee/tsl/estonian-tsl.xml -> estonian-tsl_${MY_EL}.xml
@@ -21,10 +21,12 @@ else
 	MY_PV="${PV^^}"
 	MY_PV="v${MY_PV/_/-}"
 	[[ -z ${PV%%*_p*} ]] && MY_PV="8b40029"
-	MY_QC="qt-common-6a1b281"
+	MY_QC="qt-common-38737af"
+	MY_CD="libcdoc-f207eb5"
 	SRC_URI+="
 		mirror://githubcl/open-eid/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://githubcl/open-eid/${MY_QC%-*}/tar.gz/${MY_QC##*-} -> ${MY_QC}.tar.gz
+		mirror://githubcl/open-eid/${MY_CD%-*}/tar.gz/${MY_CD##*-} -> ${MY_CD}.tar.gz
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64 ~x86"
@@ -44,7 +46,6 @@ DEPEND="
 	sys-apps/pcsc-lite
 	net-nds/openldap
 	dev-libs/openssl:=
-	dev-libs/flatbuffers:=
 	dev-qt/qtbase:6=[gui,network,widgets]
 	dev-qt/qt5compat:6=
 	dev-qt/qtsvg:6=
@@ -56,12 +57,14 @@ RDEPEND="
 "
 BDEPEND="
 	dev-qt/qttools:6[linguist]
+	dev-libs/flatbuffers
 "
 DOCS=( {README,RELEASE-NOTES}.md )
 
 src_prepare() {
 	if [[ -n ${PV%%*9999} ]]; then
 		mv ../${MY_QC}/* ./common/
+		mv ../${MY_CD}/* ./client/libcdoc/
 	fi
 	sed \
 		-e "s:doc/${PN}:doc/${PF}:" \
