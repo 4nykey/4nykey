@@ -36,18 +36,18 @@ PATCHES=(
 
 # README.rst: Optional Requirements
 RDEPEND="
-	>=dev-python/lxml-5.3[${PYTHON_USEDEP}]
+	>=dev-python/lxml-6.1[${PYTHON_USEDEP}]
 	>=app-arch/brotli-1.2[python,${PYTHON_USEDEP}]
 	woff? (
-		>=dev-python/py-zopfli-0.2.3[${PYTHON_USEDEP}]
+		>=dev-python/py-zopfli-0.4[${PYTHON_USEDEP}]
 	)
 	unicode? (
 		>=dev-python/unicodedata2-17[${PYTHON_USEDEP}]
 	)
 	graphite? ( dev-python/lz4[${PYTHON_USEDEP}] )
-	interpolatable? ( >=dev-python/scipy-1.14.1[${PYTHON_USEDEP}] )
+	interpolatable? ( >=dev-python/scipy-1.16.3[${PYTHON_USEDEP}] )
 	reportlab? ( dev-python/reportlab[${PYTHON_USEDEP}] )
-	skia? ( >=dev-python/skia-pathops-0.8[${PYTHON_USEDEP}] )
+	skia? ( >=dev-python/skia-pathops-0.9[${PYTHON_USEDEP}] )
 	>=dev-python/freetype-py-2.5.1[${PYTHON_USEDEP}]
 	harfbuzz? ( >=dev-python/uharfbuzz-0.52[${PYTHON_USEDEP}] )
 "

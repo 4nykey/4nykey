@@ -6,6 +6,7 @@ EAPI=8
 PYTHON_COMPAT=( python3_{12..14} )
 DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_EXT=1
+MY_HB="harfbuzz-14.2.0"
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
@@ -13,10 +14,11 @@ if [[ -z ${PV%%*9999} ]]; then
 else
 	MY_PV="3e8a1e2"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
-	MY_HB="harfbuzz-14.2.0"
 	SRC_URI="
 		mirror://githubcl/harfbuzz/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
-		https://github.com/harfbuzz/harfbuzz/releases/download/${MY_HB#*-}/${MY_HB}.tar.xz
+		!system-harfbuzz? (
+			https://github.com/harfbuzz/harfbuzz/releases/download/${MY_HB#*-}/${MY_HB}.tar.xz
+		)
 	"
 	RESTRICT="primaryuri"
 	KEYWORDS="~amd64"
@@ -27,9 +29,12 @@ HOMEPAGE="https://github.com/harfbuzz/${PN}"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE=""
+IUSE="system-harfbuzz"
 
 RDEPEND="
+	system-harfbuzz? (
+		~media-libs/harfbuzz-${MY_HB#*-}:=
+	)
 "
 DEPEND="
 	${RDEPEND}
@@ -44,7 +49,11 @@ python_prepare_all() {
 	distutils-r1_python_prepare_all
 	[[ -z ${PV%%*9999} ]] && return
 	export SETUPTOOLS_SCM_PRETEND_VERSION="${PV%_*}"
-	mv "${WORKDIR}"/${MY_HB}/* harfbuzz
+	if use system-harfbuzz; then
+		export USE_SYSTEM_LIBS=1
+	else
+		mv "${WORKDIR}"/${MY_HB}/* harfbuzz
+	fi
 }
 
 python_install() {
