@@ -25,7 +25,7 @@ DESCRIPTION="MEGA C++ SDK"
 HOMEPAGE="https://github.com/meganz/sdk"
 
 LICENSE="BSD-2"
-IUSE="debug examples ffmpeg freeimage fuse inotify libuv mediainfo qt raw readline +sqlite test"
+IUSE="debug examples ffmpeg freeimage fuse inotify libuv mediainfo qt5 raw readline +sqlite test"
 REQUIRED_USE="
 	examples? ( readline sqlite )
 "
@@ -54,6 +54,7 @@ RDEPEND="
 	ffmpeg? ( media-video/ffmpeg )
 	raw? ( media-libs/libraw )
 	readline? ( sys-libs/readline )
+	qt5? ( dev-qt/qtcore:5= )
 "
 DEPEND="
 	${RDEPEND}
@@ -72,8 +73,8 @@ src_configure() {
 		-DENABLE_SDKLIB_EXAMPLES=$(usex examples)
 		-DENABLE_SDKLIB_TESTS=$(usex test)
 		-DENABLE_SDKLIB_WERROR=no
-		-DENABLE_QT_BINDINGS=$(usex qt)
-		-DHAVE_LIBRAW=$(usex qt $(usex raw))
+		-DENABLE_QT_BINDINGS=$(usex qt5)
+		-DHAVE_LIBRAW=$(usex qt5 $(usex raw))
 		-DENABLE_MEDIA_FILE_METADATA=$(usex mediainfo)
 		-DUSE_FREEIMAGE=$(usex freeimage)
 		-DENABLE_ISOLATED_GFX=no

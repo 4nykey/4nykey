@@ -9,6 +9,5 @@
 		<flag name="fuse">Build FUSE-based example client</flag>
 		<flag name="libuv">Support asynchronous I/O via <pkg>dev-libs/libuv</pkg></flag>
 		<flag name="mediainfo">Use <pkg>media-libs/libmediainfo</pkg> for media files</flag>
-		<flag name="qt">Install QT bindings</flag>
 	</use>
 </pkgmetadata>
