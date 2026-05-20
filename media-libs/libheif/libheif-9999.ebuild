@@ -75,7 +75,6 @@ MULTILIB_WRAPPED_HEADERS=(
 )
 PATCHES=(
 	"${FILESDIR}"/cmake.diff
-	"${FILESDIR}"/svt4.diff
 )
 
 pkg_pretend() {
