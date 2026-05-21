@@ -11,7 +11,8 @@ if [[ ${PV} == *9999 ]] ; then
 	inherit git-r3
 	SLOT="0/${PV}"
 else
-	MY_PV="v$(ver_rs 3 -)"
+	MY_PV="ef124f9"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v$(ver_rs 3 -)"
 	SRC_URI="
 		mirror://githubcl/strukturag/libheif/tar.gz/${MY_PV} -> ${P}.tar.gz
 	"
