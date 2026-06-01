@@ -75,16 +75,16 @@ pkg_pretend() {
 
 src_prepare() {
 	default
+	# ERR_WORKER_OUT_OF_MEMORY
+	eapply -R "${FILESDIR}"/2ea96d2.diff
 	if use font_variants_custom; then
 		local _p="private-build-plans.toml"
 		local _m="
 	Custom build requires ${_p} file in
 	${PORTAGE_CONFIGROOT}etc/portage/savedconfig/${CATEGORY}/${PN}, see
-	https://github.com/be5invis/Iosevka#configuring-custom-build"
+	https://be5invis.github.io/Iosevka/customizer"
 		restore_config ${_p}
-		if [[ -e "${S}"/${_p} ]]; then
-			cat ${_p} >> build-plans.toml
-		else
+		if [[ ! -e "${S}"/${_p} ]]; then
 			die "${_m}"
 		fi
 	fi
