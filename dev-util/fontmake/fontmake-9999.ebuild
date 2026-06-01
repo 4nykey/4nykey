@@ -31,9 +31,9 @@ SLOT="0"
 IUSE="json"
 
 RDEPEND="
-	>=dev-python/fonttools-4.59.2[skia(-),ufo(-),unicode(-),${PYTHON_USEDEP}]
+	>=dev-python/fonttools-4.63[harfbuzz(-),skia(-),ufo(-),unicode(-),${PYTHON_USEDEP}]
 	>=dev-python/glyphsLib-6.11.6[${PYTHON_USEDEP}]
-	>=dev-python/ufo2ft-3.6.1[cffsubr(+),${PYTHON_USEDEP}]
+	>=dev-python/ufo2ft-3.8[cffsubr(+),${PYTHON_USEDEP}]
 	>=dev-python/fontMath-0.9.4[${PYTHON_USEDEP}]
 	>=dev-python/booleanOperations-0.9[${PYTHON_USEDEP}]
 	>=dev-python/ufoLib2-0.18.1[${PYTHON_USEDEP}]
