@@ -6,7 +6,7 @@ EAPI=8
 PYTHON_COMPAT=( python3_{12..14} )
 DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_EXT=1
-MY_HB="harfbuzz-14.2.0"
+MY_HB="harfbuzz-14.2.1"
 inherit distutils-r1
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
