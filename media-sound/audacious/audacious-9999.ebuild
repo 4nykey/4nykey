@@ -1,4 +1,4 @@
-# Copyright 1999-2025 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -27,14 +27,15 @@ fi
 
 DESCRIPTION="Lightweight and versatile audio player"
 HOMEPAGE="https://audacious-media-player.org/"
-SRC_URI+=" mirror://gentoo/gentoo_ice-xmms-0.2.tar.bz2"
 
 LICENSE="BSD-2"
 SLOT="0"
-IUSE="gtk qt6"
+IUSE="gtk qt6 test"
 IUSE+=" libarchive nls"
 
 BDEPEND="
+	>=dev-util/gdbus-codegen-2.80.5-r1
+	sys-devel/gettext
 	virtual/pkgconfig
 	nls? ( dev-util/intltool )
 "
@@ -84,14 +85,33 @@ src_configure() {
 		-Dvalgrind=false
 	)
 	meson_src_configure
+
+	if use test; then
+		emesonargs=()
+		EMESON_SOURCE="${S}"/src/libaudcore/tests \
+		BUILD_DIR="${WORKDIR}"/${P}-libaudcore_tests-build \
+		meson_src_configure
+	fi
 }
 
-src_install() {
-	meson_src_install
+src_compile() {
+	meson_src_compile
 
-	# Gentoo_ice skin installation; bug #109772
-	insinto /usr/share/audacious/Skins/gentoo_ice
-	doins -r "${WORKDIR}"/gentoo_ice/.
-	docinto gentoo_ice
-	dodoc "${WORKDIR}"/README
+	if use test; then
+		EMESON_SOURCE="${S}"/src/libaudcore/tests \
+		BUILD_DIR="${WORKDIR}"/${P}-libaudcore_tests-build \
+		meson_src_compile
+	fi
+}
+
+src_test() {
+	BUILD_DIR="${WORKDIR}"/${P}-libaudcore_tests-build meson_src_test
+}
+
+pkg_postinst() {
+	if use gtk || use qt6; then
+		ewarn "Audacious without X11/XWayland is unsupported."
+		ewarn "Especially the Winamp interface is not usable yet on Wayland."
+	fi
+	xdg_pkg_postinst
 }
