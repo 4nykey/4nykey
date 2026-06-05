@@ -1,4 +1,4 @@
-# Copyright 1999-2025 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -25,14 +25,32 @@ fi
 
 DESCRIPTION="Plugins for Audacious music player"
 HOMEPAGE="https://audacious-media-player.org/"
+SRC_URI+="
+	mirror://gentoo/gentoo_ice-xmms-0.2.tar.bz2
+"
 
-LICENSE="GPL-2"
+# BSD-2 albumart, alsa, asx, audpl, cd-menu-items, compressor, crossfade, cue, delete-files,
+# ffaudio, gio, glspectrum, gtkui, jack, ladspa, mixer, mms, mpris2, openmpt, opus, pipewire,
+# playlist-manager, qtaudio, qtui, resample, sdl, search-tool, silence-removal, song-info,
+# sox-resampler, speedpitch, statusicon-qt, ui-common
+# BSD psf, xsf
+# GPL-2+ amidiplug, aosd, blur_scope, bs2b, filewriter, flac, hotkey, lirc, m3u, metronom,
+# neon, pls, psf(peops), pulse, qtglspectrum, qthotkey, sid, sndfile, statusicon, tonegen,
+# vorbis, vtx, xsf(desmume), xspf
+# CC-BY-SA-4.0 Glare skin
+# GPL-3 ampache, cdaudio, notify, playback-history-qt, scrobbler, skins-qt, skins, songchange,
+# LGPL-2.1+ console, ladspa.h
+# ISC bitcrusher, cairo-spectrum, crystalizer, lyrics, mpg123, qt-spectrum, streamtuner,
+# voice-removal, vumeter
+# MIT xsf(spu)
+# public-domain modplug
+LICENSE="BSD-2 BSD CC-BY-SA-4.0 GPL-2+ GPL-3 ISC LGPL-2.1+ MIT public-domain"
 SLOT="0"
 IUSE="
 	aac +alsa ampache bs2b cdda cue ffmpeg flac fluidsynth gme gtk http jack
-	lame libnotify libsamplerate lirc mms modplug mp3 opengl openmpt opus
-	pipewire pulseaudio qt6 scrobbler sdl sid sndfile soxr speedpitch
-	streamtuner vorbis wavpack X
+	lame libnotify libsamplerate lirc mms modplug +mp3 opengl openmpt opus
+	pipewire pulseaudio qt6 qtmedia scrobbler sdl sid sndfile soxr streamtuner
+	vorbis wavpack wayland X
 "
 IUSE+=" nls gtk"
 
@@ -44,22 +62,30 @@ REQUIRED_USE="
 # The following plugins REQUIRE a GUI build of audacious, because non-GUI
 # builds do NOT install the libaudgui library & headers.
 # Plugins without a configure option:
-#   alarm
-#   albumart
+#   albumart{,-qt}
+#   blur-scope{,-qt}
 #   delete-files
+#   filebrowser-qt
 #   ladspa
-#   playlist-manager
-#   search-tool
-#   skins
-#   vtx
+#   lyrics-{gtk,qt}
+#   playback-history-qt
+#   playlist-manager{,-qt}
+#   search-tool{,-qt}
+#   song-info-qt
+#   spectrum-analyzer
+#   statusicon{,-qt}
 # Plugins with a configure option:
-#   glspectrum
+#   aosd (X+gtk)
+#   ampache (qt6)
+#   glspectrum (X) (handles qtglspectrum if qt6)
 #   gtkui
-#   hotkey
+#   hotkey (X) (handles qthotkey if qt6)
 #   notify
-#   statusicon
+#   qtui
+#   streamtuner (qt6)
+#   vumeter{,-qt} (forced)
 BDEPEND="
-	dev-util/gdbus-codegen
+	>=dev-util/gdbus-codegen-2.80.5-r1
 	virtual/pkgconfig
 	nls? ( dev-util/intltool )
 "
@@ -68,11 +94,9 @@ DEPEND="
 	dev-libs/glib:2
 	dev-libs/libxml2:2=
 	~media-sound/audacious-${PV}[gtk=,qt6=]
-	sys-libs/zlib
-	>=x11-libs/gdk-pixbuf-2.26:2
-	aac? ( >=media-libs/faad2-2.7 )
+	virtual/zlib:=
+	aac? ( media-libs/faad2 )
 	alsa? ( >=media-libs/alsa-lib-1.0.16 )
-	ampache? ( =media-libs/ampache_browser-1*:= )
 	bs2b? ( >=media-libs/libbs2b-3.0.0 )
 	cdda? (
 		>=dev-libs/libcdio-0.70:=
@@ -80,55 +104,55 @@ DEPEND="
 		>=media-libs/libcddb-1.2.1
 	)
 	cue? ( media-libs/libcue:= )
-	ffmpeg? ( >=media-video/ffmpeg-0.7.3:= )
-	flac? (
-		>=media-libs/flac-1.2.1-r1:=
-		>=media-libs/libvorbis-1.0
-	)
+	ffmpeg? ( >=media-video/ffmpeg-2.8.1:= )
+	flac? ( >=media-libs/flac-1.2.1-r1:= )
 	fluidsynth? ( >=media-sound/fluidsynth-1.0.6:= )
 	gtk? (
 		>=dev-libs/json-glib-1.0
 		x11-libs/cairo
-		>=x11-libs/gtk+-3.22:3
+		>=x11-libs/gdk-pixbuf-2.26:2
+		>=x11-libs/gtk+-3.22:3[wayland?,X?]
 		x11-libs/pango
+		libnotify? ( >=x11-libs/libnotify-0.7 )
 		X? (
-			opengl? ( virtual/opengl )
 			x11-libs/libX11
 			x11-libs/libXcomposite
 			x11-libs/libXrender
+			opengl? ( media-libs/libglvnd[X] )
 		)
 	)
-	http? ( >=net-libs/neon-0.27 )
-	jack? (
-		>=media-libs/bio2jack-0.4
-		virtual/jack
-	)
+	http? ( >=net-libs/neon-0.27:= )
+	jack? ( virtual/jack )
 	lame? ( media-sound/lame )
-	libnotify? ( >=x11-libs/libnotify-0.7 )
-	libsamplerate? ( media-libs/libsamplerate:= )
+	libsamplerate? ( media-libs/libsamplerate )
 	lirc? ( app-misc/lirc )
 	mms? ( >=media-libs/libmms-0.3 )
 	modplug? ( media-libs/libmodplug )
-	mp3? ( media-sound/mpg123-base )
+	mp3? ( >=media-sound/mpg123-base-1.12 )
 	openmpt? ( >=media-libs/libopenmpt-0.2 )
 	opus? ( >=media-libs/opusfile-0.4 )
-	pipewire? ( >=media-video/pipewire-0.3.26:= )
+	pipewire? ( >=media-video/pipewire-0.3.33:= )
 	pulseaudio? ( >=media-libs/libpulse-0.9.5 )
 	qt6? (
-		dev-qt/qtbase:6[gui,opengl?,widgets]
-		dev-qt/qtmultimedia:6
+		dev-qt/qtbase:6[gui,widgets]
+		ampache? ( >=media-libs/ampache_browser-1.0.7-r1 )
+		libnotify? (
+			>=x11-libs/gdk-pixbuf-2.26:2
+			>=x11-libs/libnotify-0.7
+		)
+		opengl? ( dev-qt/qtbase:6[-gles2-only,opengl] )
+		qtmedia? ( dev-qt/qtmultimedia:6 )
+		streamtuner? ( dev-qt/qtbase:6[network] )
 		X? (
-			dev-qt/qtbase:6=[X]
+			dev-qt/qtbase:6[X]
 			x11-libs/libX11
 		)
 	)
 	scrobbler? ( >=net-misc/curl-7.9.7 )
-	sdl? ( >=media-libs/libsdl2-2.0[sound] )
-	sid? ( >=media-libs/libsidplayfp-2.0 )
+	sdl? ( >=media-libs/libsdl3-3.2.0 )
+	sid? ( >=media-libs/libsidplayfp-2.0:= )
 	sndfile? ( >=media-libs/libsndfile-1.0.17-r1 )
 	soxr? ( media-libs/soxr )
-	speedpitch? ( media-libs/libsamplerate:= )
-	streamtuner? ( dev-qt/qtbase:6[network] )
 	vorbis? (
 		>=media-libs/libogg-1.1.3
 		>=media-libs/libvorbis-1.2.0
@@ -137,12 +161,9 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 
-pkg_setup() {
-	use mp3 || ewarn "MP3 support is optional, you may want to enable the mp3 USE-flag"
-}
-
 src_prepare() {
 	default
+	# avoid automagic for glspectrum
 	if ! use X; then
 		sed -i -e "s/dependency('x11',.*)/disabler()/" meson.build || die
 	fi
@@ -152,22 +173,29 @@ src_prepare() {
 }
 
 src_configure() {
+	# defang automagic dependencies
+	use X || append-cppflags -DGENTOO_GTK_HIDE_X11
+	use wayland || append-cppflags -DGENTOO_GTK_HIDE_WAYLAND
+
 	local emesonargs=(
 		# GUI toolkits
 		$(meson_use gtk)
 		-Dgtk2=false
 		$(meson_use qt6 qt)
 		-Dqt5=false
+		$(meson_use gtk gtkui)
+		$(meson_use qt6 qtui)
+		$(meson_use X skins)
 
 		# container plugins
-		$(meson_use cue cue)
+		$(meson_use cue)
 
 		# transport plugins
-		$(meson_use mms mms)
+		$(meson_use mms)
 		$(meson_use http neon)
 
 		# input plugins
-		$(meson_use aac aac)
+		$(meson_use aac)
 		-Dadplug=false
 		$(meson_use fluidsynth amidiplug)
 		$(meson_use cdda cdaudio)
@@ -194,7 +222,7 @@ src_configure() {
 		-Doss=false
 		$(meson_use pipewire)
 		$(meson_use pulseaudio pulse)
-		$(meson_use qt6 qtaudio)
+		$(meson_use qtmedia qtaudio)
 		$(meson_use sdl sdlout)
 		-Dsndio=false
 
@@ -202,8 +230,8 @@ src_configure() {
 		$(meson_use ampache)
 		$(meson_use X aosd)
 		$(meson_use X hotkey)
-		$(meson_use lirc lirc)
-		-Dmac-media-keys=false
+		$(meson_use lirc)
+		-Dmac-now-playing=false
 		-Dmpris2=true
 		$(meson_use libnotify notify)
 		$(meson_use scrobbler scrobbler2)
@@ -213,12 +241,32 @@ src_configure() {
 		# effect plugins
 		$(meson_use bs2b)
 		$(meson_use libsamplerate resample)
+		$(meson_use libsamplerate speedpitch)
 		$(meson_use soxr)
-		$(meson_use speedpitch)
 
 		# visualization plugins
 		$(meson_use opengl gl-spectrum)
 		-Dvumeter=true
 	)
 	meson_src_configure
+}
+
+src_install() {
+	meson_src_install
+
+	# the skin Winamp2.9 is copyrighted, so revert upstream' commit 367e7a3
+	# see comments at https://www.gnome-look.org/p/1008229 and bug #965338
+	# part of skins-data which depends on gui
+	if use gtk || use qt6; then
+		rm -r "${ED}"/usr/share/audacious/Skins/Winamp2.9 || die
+	fi
+
+	# Gentoo_ice Winamp skin installation; bug #109772
+	# The Winamp interface is not supported on Wayland.
+	if use X; then
+		insinto /usr/share/audacious/Skins/gentoo_ice
+		doins -r "${WORKDIR}"/gentoo_ice/.
+		docinto gentoo_ice
+		dodoc "${WORKDIR}"/README
+	fi
 }
