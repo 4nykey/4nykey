@@ -3,7 +3,7 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-150-patches-02.tar.xz"
+FIREFOX_PATCHSET="firefox-151-patches-01.tar.xz"
 
 LLVM_COMPAT=( 21 22 )
 
@@ -36,9 +36,9 @@ else
 	MY_PV+=".$(ver_cut 3)"
 	KEYWORDS="~amd64"
 fi
-MY_P="150.0a1-${MY_PV}-2-build3"
+MY_P="151.0a1-${MY_PV}-1-build4"
 MY_P="firefox-tor-browser-${MY_P}"
-MY_NOS="13.6.18.90101984"
+MY_NOS="13.6.19.90101984"
 MY_NOS="noscript-${MY_NOS}.xpi"
 
 DESCRIPTION="The Tor Browser"
@@ -109,7 +109,7 @@ COMMON_DEPEND="
 	dev-libs/glib:2
 	dev-libs/libffi:=
 	>=dev-libs/nss-3.123.1
-	>=dev-libs/nspr-4.38
+	>=dev-libs/nspr-4.39
 	media-libs/alsa-lib
 	media-libs/fontconfig
 	media-libs/freetype
@@ -421,6 +421,9 @@ src_prepare() {
 
 	use vanilla || \
 	eapply "${WORKDIR}/firefox-patches"
+
+	# https://github.com/hsivonen/encoding_rs/pull/130
+	eapply --directory=third_party/rust/encoding_rs "${FILESDIR}"/b1baabb.patch
 
 	# Allow user to apply any additional patches without modifing ebuild
 	eapply_user
