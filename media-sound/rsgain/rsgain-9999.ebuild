@@ -31,7 +31,7 @@ LICENSE="BSD-2"
 SLOT="0"
 IUSE="std_format"
 
-RDEPEND="
+DEPEND="
 	media-video/ffmpeg:=
 	media-libs/taglib:=
 	media-libs/libebur128:=
