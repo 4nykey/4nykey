@@ -93,6 +93,15 @@ RDEPEND="
 	media-libs/fontconfig
 "
 
+src_unpack() {
+	if [[ -z ${PV%%*9999} ]]; then
+		git-r3_src_unpack
+		cargo_live_src_unpack
+	else
+		cargo_src_unpack
+	fi
+}
+
 src_prepare() {
 	sed -e 's%"tests/compile-fail/.gitignore":"[^,]\+",%%' \
 		-i vendor/bitflags-1.3.2/.cargo-checksum.json

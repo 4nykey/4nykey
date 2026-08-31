@@ -9,40 +9,30 @@ if [[ -z ${PV%%*9999} ]]; then
 	EGIT_REPO_URI="https://github.com/Fraunhofer-IIS/${PN}.git"
 	inherit git-r3
 else
-	MY_PV="c08b803"
+	MY_PV="e296913"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="r${PV}"
-	MY_ILO="ilo-r2.0.2"
-	MY_MMT="mmtisobmff-r1.0.4"
 	SRC_URI+="
 		mirror://githubcl/Fraunhofer-IIS/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
-		mirror://githubcl/Fraunhofer-IIS/${MY_ILO%-*}/tar.gz/${MY_ILO#*-} -> ${MY_ILO}.tar.gz
-		mirror://githubcl/Fraunhofer-IIS/${MY_MMT%-*}/tar.gz/${MY_MMT#*-} -> ${MY_MMT}.tar.gz
 	"
 	KEYWORDS="~amd64"
 	S="${WORKDIR}/${PN}-${MY_PV}"
 	RESTRICT="primaryuri"
 fi
 
-DESCRIPTION="A C/C++ implementation of the MPEG-H Audio standard"
+DESCRIPTION="An ISOBMFF reader and writer library with MPEG-H 3D Audio support"
 HOMEPAGE="https://github.com/Fraunhofer-IIS/${PN}"
 
 LICENSE="FraunhoferFDK"
 SLOT="0"
-IUSE="apidocs"
 DEPEND="
-	media-libs/mmtisobmff
+	dev-libs/ilo
 "
 RDEPEND="
 	${DEPEND}
 "
-BDEPEND="
-	apidocs? ( app-text/doxygen )
-"
 
 src_configure() {
 	local mycmakeargs=(
-		-Dmpeghdec_BUILD_BINARIES=true
-		-Dmpeghdec_BUILD_DOC=$(usex apidocs)
 		-DUSE_PKGCONFIG_DEPS=yes
 	)
 	cmake_src_configure
