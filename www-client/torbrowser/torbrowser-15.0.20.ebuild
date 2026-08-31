@@ -34,7 +34,7 @@ PATCH_URIS=(
 
 MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
-MY_P="140.13.0esr-${MY_PV}-1-build2"
+MY_P="140.14.0esr-${MY_PV}-1-build2"
 MY_P="firefox-tor-browser-${MY_P}"
 MY_NOS="13.6.31.1984"
 MY_NOS="noscript-${MY_NOS}.xpi"
