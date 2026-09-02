@@ -147,10 +147,10 @@ font-r1_font_install() {
 	insinto "${FONTDIR}"
 
 	for _s in ${FONT_SUFFIX}; do
-		find "${FONT_S[@]}" -mindepth 1 -maxdepth 1 -! -size 0 -type f \
+		find "${FONT_S[@]}" -mindepth 1 -maxdepth 1 ! -size 0 -type f \
 			-ipath "*.${_s}" -exec doins {} + 2>/dev/null
 
-		find "${ED}${FONTDIR}" -mindepth 1 -maxdepth 1 -! -size 0 -type f \
+		find "${ED}${FONTDIR}" -mindepth 1 -maxdepth 1 ! -size 0 -type f \
 			-ipath "*.${_s}" -exec false {} + && die \
 			"No ${_s} fonts were installed in ${FONTDIR}"
 	done
