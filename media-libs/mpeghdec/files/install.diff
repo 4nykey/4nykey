@@ -1,0 +1,7 @@
+--- a/demo/CMakeLists.txt
++++ b/demo/CMakeLists.txt
+@@ -31,3 +31,4 @@ if(${mpeghdec_BUILD_UIMANAGER})
+   )
+   target_link_libraries(mpeghUiManager mpeghdec mmtisobmff ilo)
+ endif()
++install(TARGETS mpeghDecoder mpeghUiManager)

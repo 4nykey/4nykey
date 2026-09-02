@@ -28,20 +28,21 @@ HOMEPAGE="https://github.com/Fraunhofer-IIS/${PN}"
 
 LICENSE="FraunhoferFDK"
 SLOT="0"
-IUSE="apidocs"
+IUSE="apidocs tools"
 DEPEND="
-	media-libs/mmtisobmff
-"
-RDEPEND="
-	${DEPEND}
+	tools? (
+		dev-libs/ilo
+		media-libs/mmtisobmff
+	)
 "
 BDEPEND="
 	apidocs? ( app-text/doxygen )
 "
+PATCHES=( "${FILESDIR}"/install.diff )
 
 src_configure() {
 	local mycmakeargs=(
-		-Dmpeghdec_BUILD_BINARIES=true
+		-Dmpeghdec_BUILD_BINARIES=$(usex tools)
 		-Dmpeghdec_BUILD_DOC=$(usex apidocs)
 		-DUSE_PKGCONFIG_DEPS=yes
 	)
