@@ -6,7 +6,7 @@ EAPI=8
 PYTHON_COMPAT=( python3_{12..14} )
 DISTUTILS_USE_PEP517=standalone
 inherit cmake distutils-r1
-MY_NI="ninja-1.13.0"
+MY_NI="ninja-1.13.2"
 SRC_URI="
 	mirror://githubcl/ninja-build/ninja/tar.gz/v${MY_NI#*-} -> ${MY_NI}.tar.gz
 "
