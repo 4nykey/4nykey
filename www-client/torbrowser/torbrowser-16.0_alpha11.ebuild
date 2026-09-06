@@ -3,9 +3,9 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-153-patches-01.tar.xz"
+FIREFOX_PATCHSET="firefox-153esr-patches-02.tar.xz"
 
-LLVM_COMPAT=( 21 22 )
+LLVM_COMPAT=( 22 )
 
 # This will also filter rust versions that don't match LLVM_COMPAT in the non-clang path; this is fine.
 RUST_NEEDS_LLVM=1
@@ -18,8 +18,8 @@ VIRTUALX_REQUIRED="manual"
 
 # Information about the bundled wasi toolchain from
 # https://github.com/WebAssembly/wasi-sdk/
-WASI_SDK_VER=32.0
-WASI_SDK_LLVM_VER=22
+WASI_SDK_VER=34.0
+WASI_SDK_LLVM_VER=23
 
 inherit check-reqs desktop flag-o-matic gnome2-utils linux-info llvm-r1 multiprocessing \
 	optfeature pax-utils python-any-r1 readme.gentoo-r1 rust toolchain-funcs virtualx xdg
@@ -36,7 +36,7 @@ else
 	MY_PV+=".$(ver_cut 3)"
 	KEYWORDS="~amd64"
 fi
-MY_P="153.1.0esr-${MY_PV}-1-build4"
+MY_P="153.2.0esr-${MY_PV}-1-build3"
 MY_P="firefox-tor-browser-${MY_P}"
 MY_NOS="13.6.31.90301984"
 MY_NOS="noscript-${MY_NOS}.xpi"
@@ -60,7 +60,7 @@ LICENSE+=" BSD CC-BY-3.0"
 SLOT="0"
 IUSE="+clang dbus debug eme-free hardened hwaccel jack libproxy pgo pulseaudio selinux sndio"
 IUSE+=" +system-av1 +system-harfbuzz +system-icu +system-jpeg +system-libevent +system-libvpx"
-IUSE+=" system-pipewire system-png +system-webp test valgrind wayland wifi +X"
+IUSE+=" system-pipewire system-png +system-webp test wayland wifi +X"
 IUSE+=" jpegxl +jumbo-build openh264 vanilla wasm-sandbox"
 
 REQUIRED_USE="|| ( X wayland )
@@ -108,7 +108,7 @@ COMMON_DEPEND="
 	>=app-accessibility/at-spi2-core-2.46.0:2
 	dev-libs/glib:2
 	dev-libs/libffi:=
-	>=dev-libs/nss-3.124
+	>=dev-libs/nss-3.126
 	>=dev-libs/nspr-4.39
 	media-libs/alsa-lib
 	media-libs/fontconfig
@@ -150,7 +150,6 @@ COMMON_DEPEND="
 	system-pipewire? ( >=media-video/pipewire-1.4.7-r2:= )
 	system-png? ( >=media-libs/libpng-1.6.45:0=[apng] )
 	system-webp? ( >=media-libs/libwebp-1.1.0:0= )
-	valgrind? ( dev-debug/valgrind )
 	wayland? (
 		>=media-libs/libepoxy-1.5.10-r1
 		x11-libs/gtk+:3[wayland]
@@ -479,9 +478,6 @@ src_prepare() {
 
 	# Clear checksums from cargo crates we've manually patched.
 	# moz_clear_vendor_checksums xyz
-	# glslopt: bgo#969412
-	moz_clear_vendor_checksums glslopt
-	moz_clear_vendor_checksums encoding_rs
 
 	# Respect choice for "jumbo-build"
 	# Changing the value for FILES_PER_UNIFIED_FILE may not work, see #905431
@@ -655,7 +651,6 @@ src_configure() {
 
 	mozconfig_use_enable dbus
 	mozconfig_use_enable libproxy
-	mozconfig_use_enable valgrind
 
 	use eme-free && mozconfig_add_options_ac '+eme-free' --disable-eme
 
@@ -819,10 +814,6 @@ src_configure() {
 		mozconfig_add_options_ac '!elibc_glibc' --disable-jemalloc
 	fi
 
-	if use valgrind; then
-		mozconfig_add_options_ac 'valgrind requirement' --disable-jemalloc
-	fi
-
 	# System-av1 fix
 	use system-av1 && append-ldflags "-Wl,--undefined-version"
 
@@ -893,10 +884,6 @@ src_configure() {
 	done
 	echo "=========================================================="
 	echo
-
-	if use valgrind; then
-		sed -i -e 's/--enable-optimize=-O[0-9s]/--enable-optimize="-g -O2"/' .mozconfig || die
-	fi
 
 	./mach configure || die
 }
@@ -1001,7 +988,7 @@ src_install() {
 
 	# Force hwaccel prefs if USE=hwaccel is enabled
 	if use hwaccel ; then
-		cat "${FILESDIR}"/gentoo-hwaccel-prefs.js-r2 \
+		cat "${FILESDIR}"/gentoo-hwaccel-prefs.js-r4 \
 		>>"${GENTOO_PREFS}" \
 		|| die "failed to add prefs to force hardware-accelerated rendering to all-gentoo.js"
 
@@ -1018,6 +1005,7 @@ src_install() {
 		# Install the vaapitest binary on supported arches (122.0 supports all platforms, bmo#1865969)
 		exeinto "${MOZILLA_FIVE_HOME}"
 		doexe "${BUILD_DIR}"/dist/bin/vaapitest
+		doexe "${BUILD_DIR}"/dist/bin/vulkantest
 	fi
 
 	# Force the graphite pref if USE=system-harfbuzz is enabled, since the pref cannot disable it
@@ -1065,21 +1053,10 @@ src_install() {
 pkg_postinst() {
 	xdg_pkg_postinst
 
-	# bug 835078
-	if use hwaccel && has_version "x11-drivers/xf86-video-nouveau"; then
-		ewarn "You have nouveau drivers installed in your system and 'hwaccel' "
-		ewarn "enabled for Firefox. Nouveau / your GPU might not support the "
-		ewarn "required EGL, so either disable 'hwaccel' or try the workaround "
-		ewarn "explained in https://bugs.gentoo.org/835078#c5 if Firefox crashes."
-	fi
-
 	optfeature_header "Optional programs for extra features:"
 	optfeature "desktop notifications" x11-libs/libnotify
 	optfeature "fallback mouse cursor theme e.g. on WMs" gnome-base/gsettings-desktop-schemas
 	optfeature "screencasting with pipewire" sys-apps/xdg-desktop-portal
-	if use hwaccel && has_version "x11-drivers/nvidia-drivers"; then
-		optfeature "hardware acceleration with NVIDIA cards" media-libs/nvidia-vaapi-driver
-	fi
 
 	if ! has_version "sys-libs/glibc"; then
 		elog
