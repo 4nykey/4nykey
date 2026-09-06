@@ -6,7 +6,7 @@ EAPI=8
 MY_PN="DigiDoc4-Client"
 # CMakeLists.txt: TSL_URL
 # common/CMakeLists.txt: CONFIG_URL
-MY_EL=260429
+MY_EL=260721
 SRC_URI="
 	https://ec.europa.eu/tools/lotl/eu-lotl.xml -> eu-lotl_${MY_EL}.xml
 	https://sr.riik.ee/tsl/estonian-tsl.xml -> estonian-tsl_${MY_EL}.xml
@@ -21,8 +21,8 @@ else
 	MY_PV="${PV^^}"
 	MY_PV="v${MY_PV/_/-}"
 	[[ -z ${PV%%*_p*} ]] && MY_PV="8b40029"
-	MY_QC="qt-common-38737af"
-	MY_CD="libcdoc-f207eb5"
+	MY_QC="qt-common-78d45ae"
+	MY_CD="libcdoc-83408f9"
 	SRC_URI+="
 		mirror://githubcl/open-eid/${MY_PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
 		mirror://githubcl/open-eid/${MY_QC%-*}/tar.gz/${MY_QC##*-} -> ${MY_QC}.tar.gz
@@ -42,7 +42,7 @@ SLOT="0"
 IUSE="nautilus"
 
 DEPEND="
-	>=dev-libs/libdigidocpp-4.2
+	>=dev-libs/libdigidocpp-4.5
 	sys-apps/pcsc-lite
 	net-nds/openldap
 	dev-libs/openssl:=
