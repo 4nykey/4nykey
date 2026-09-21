@@ -20,6 +20,14 @@
                  ]
 --- a/scripts/wrap/__main__.py
 +++ b/scripts/wrap/__main__.py
+@@ -924,7 +924,6 @@ try:
+ finally:
+     del sys.path[0]
+ 
+-autovenv.enter()
+ 
+ # Install/import pipcl. We don't pass 'pipcl' to above call to autovenv.enter()
+ # because this would do `pip install pipcl`, which seems to fail if we are
 @@ -1095,7 +1095,7 @@ def get_so_version( build_dirs):
      major = get_v('FZ_VERSION_MAJOR')
      minor = get_v('FZ_VERSION_MINOR')
