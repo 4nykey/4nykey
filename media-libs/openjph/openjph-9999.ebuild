@@ -7,7 +7,7 @@ inherit cmake-multilib
 
 MY_PN="OpenJPH"
 # https://github.com/aous72/jp2k_test_codestreams
-MY_TST="jp2k_test_codestreams-dabb847"
+MY_TST="jp2k_test_codestreams-1ccd349"
 SRC_URI="
 	test? (
 		mirror://githubcl/aous72/${MY_TST%-*}/tar.gz/${MY_TST##*-}
