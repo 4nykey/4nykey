@@ -36,9 +36,9 @@ else
 	MY_PV+=".$(ver_cut 3)"
 	KEYWORDS="~amd64"
 fi
-MY_P="153.2.0esr-${MY_PV}-1-build3"
+MY_P="153.3.0esr-${MY_PV}-1-build2"
 MY_P="firefox-tor-browser-${MY_P}"
-MY_NOS="13.6.31.90301984"
+MY_NOS="13.6.33.90101984"
 MY_NOS="noscript-${MY_NOS}.xpi"
 
 DESCRIPTION="The Tor Browser"
@@ -108,7 +108,7 @@ COMMON_DEPEND="
 	>=app-accessibility/at-spi2-core-2.46.0:2
 	dev-libs/glib:2
 	dev-libs/libffi:=
-	>=dev-libs/nss-3.126
+	>=dev-libs/nss-3.125
 	>=dev-libs/nspr-4.39
 	media-libs/alsa-lib
 	media-libs/fontconfig
@@ -136,8 +136,8 @@ COMMON_DEPEND="
 	selinux? ( sec-policy/selinux-mozilla )
 	sndio? ( >=media-sound/sndio-1.8.0-r1 )
 	system-av1? (
-		>=media-libs/dav1d-1.0.0:=
-		>=media-libs/libaom-3.10.0:=
+		>=media-libs/dav1d-1.5.3:=
+		>=media-libs/libaom-3.12.1:=
 	)
 	system-harfbuzz? (
 		>=media-libs/harfbuzz-2.8.1:0=
@@ -147,7 +147,7 @@ COMMON_DEPEND="
 	system-jpeg? ( >=media-libs/libjpeg-turbo-1.2.1:= )
 	system-libevent? ( >=dev-libs/libevent-2.1.12:0=[threads(+)] )
 	system-libvpx? ( >=media-libs/libvpx-1.8.2:0=[postproc] )
-	system-pipewire? ( >=media-video/pipewire-1.4.7-r2:= )
+	system-pipewire? ( >=media-video/pipewire-1.6.8:= )
 	system-png? ( >=media-libs/libpng-1.6.45:0=[apng] )
 	system-webp? ( >=media-libs/libwebp-1.1.0:0= )
 	wayland? (
