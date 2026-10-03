@@ -45,6 +45,7 @@ DEPEND="
 "
 BDEPEND="
 	test? (
+		>=dev-python/uharfbuzz-0.56[${PYTHON_USEDEP}]
 		dev-python/syrupy[${PYTHON_USEDEP}]
 	)
 "
