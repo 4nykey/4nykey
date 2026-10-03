@@ -3,7 +3,7 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-153esr-patches-02.tar.xz"
+FIREFOX_PATCHSET="firefox-153esr-patches-04.tar.xz"
 
 LLVM_COMPAT=( 22 )
 
@@ -36,9 +36,9 @@ else
 	MY_PV+=".$(ver_cut 3)"
 	KEYWORDS="~amd64"
 fi
-MY_P="153.3.0esr-${MY_PV}-1-build2"
+MY_P="153.4.0esr-${MY_PV}-1-build3"
 MY_P="firefox-tor-browser-${MY_P}"
-MY_NOS="13.6.33.90101984"
+MY_NOS="13.6.34.90101984"
 MY_NOS="noscript-${MY_NOS}.xpi"
 
 DESCRIPTION="The Tor Browser"
