@@ -10,11 +10,8 @@ if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/fonttools/${PN}.git"
 else
-	if [[ -z ${PV%%*_p*} ]]; then
-		inherit vcs-snapshot
-		MY_PV="e685526"
-	fi
-	MY_PV="v${PV}"
+	MY_PV="e685526"
+	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/fonttools/${PN}/tar.gz/${MY_PV}
 		-> ${P}.tar.gz
@@ -32,11 +29,11 @@ IUSE="msgpack orjson test"
 REQUIRED_USE="test? ( msgpack orjson )"
 
 RDEPEND="
-	>=dev-python/fonttools-4.54.1[ufo(-),${PYTHON_USEDEP}]
-	>=dev-python/attrs-24.2[${PYTHON_USEDEP}]
-	>=dev-python/cattrs-24.1.2[${PYTHON_USEDEP}]
-	msgpack? ( >=dev-python/msgpack-1.1[${PYTHON_USEDEP}] )
-	orjson? ( >=dev-python/orjson-3.10.10[${PYTHON_USEDEP}] )
+	>=dev-python/fonttools-4.63[ufo(-),${PYTHON_USEDEP}]
+	>=dev-python/attrs-26.1[${PYTHON_USEDEP}]
+	>=dev-python/cattrs-26.1[${PYTHON_USEDEP}]
+	msgpack? ( >=dev-python/msgpack-1.2.1[${PYTHON_USEDEP}] )
+	orjson? ( >=dev-python/orjson-3.11.9[${PYTHON_USEDEP}] )
 "
 DEPEND="
 	${RDEPEND}
