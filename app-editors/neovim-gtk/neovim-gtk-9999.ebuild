@@ -5,206 +5,190 @@ EAPI=8
 
 RUST_MIN_VER=1.92
 CRATES="
-	aho-corasick@1.1.4
+	aho-corasick@1.1.5
 	anstream@1.0.0
 	anstyle-parse@1.0.0
 	anstyle-query@1.1.5
 	anstyle-wincon@3.0.11
 	anstyle@1.0.14
-	anyhow@1.0.102
-	async-trait@0.1.89
-	autocfg@1.5.0
-	automod@1.0.16
-	bitflags@2.11.1
+	async-trait@0.1.92
+	autocfg@1.5.1
+	bitflags@1.3.2
+	bitflags@2.13.2
+	bstr@1.13.1
 	build-version@0.1.1
 	byteorder@1.5.0
 	bytes@0.4.12
-	bytes@1.11.1
-	cairo-rs@0.22.0
-	cairo-sys-rs@0.22.0
-	cfg-expr@0.20.7
-	cfg-if@1.0.4
-	clap@4.6.1
-	clap_builder@4.6.0
-	clap_derive@4.6.1
-	clap_lex@1.1.0
+	bytes@1.12.1
+	cairo-rs@0.22.9
+	cairo-sys-rs@0.22.9
+	cfg-expr@0.20.9
+	cfg-if@1.0.5
+	clap@4.6.7
+	clap_builder@4.6.7
+	clap_derive@4.6.7
+	clap_lex@1.1.1
 	colorchoice@1.0.5
 	content_inspector@0.2.4
-	crossbeam-deque@0.8.6
-	crossbeam-epoch@0.9.18
-	crossbeam-utils@0.8.21
+	crossbeam-deque@0.8.8
+	crossbeam-epoch@0.9.21
+	crossbeam-utils@0.8.23
+	defmt-macros@1.1.1
+	defmt-parser@1.0.0
+	defmt@1.1.1
 	dunce@1.0.5
-	either@1.15.0
-	env_filter@1.0.1
-	env_logger@0.11.10
+	either@1.18.0
+	env_filter@2.0.0
+	env_logger@0.11.11
 	equivalent@1.0.2
 	errno@0.3.14
-	fastrand@2.4.1
+	fastrand@2.5.0
 	field-offset@0.3.6
-	filetime@0.2.27
+	filetime@0.2.29
 	fnv@1.0.7
-	foldhash@0.1.5
-	fork@0.7.0
-	futures-channel@0.3.32
-	futures-core@0.3.32
-	futures-executor@0.3.32
-	futures-io@0.3.32
-	futures-macro@0.3.32
-	futures-sink@0.3.32
-	futures-task@0.3.32
-	futures-util@0.3.32
+	fork@0.8.0
+	futures-channel@0.3.34
+	futures-core@0.3.34
+	futures-executor@0.3.34
+	futures-io@0.3.34
+	futures-macro@0.3.34
+	futures-sink@0.3.34
+	futures-task@0.3.34
+	futures-util@0.3.34
 	futures@0.1.31
-	futures@0.3.32
-	gdk-pixbuf-sys@0.22.0
+	futures@0.3.34
+	gdk-pixbuf-sys@0.22.9
 	gdk-pixbuf@0.22.0
-	gdk4-sys@0.11.2
-	gdk4@0.11.2
-	getrandom@0.4.2
-	gio-sys@0.22.0
-	gio@0.22.6
-	glib-macros@0.22.6
-	glib-sys@0.22.6
-	glib@0.22.7
-	glob@0.3.3
-	gobject-sys@0.22.6
-	graphene-rs@0.22.0
-	graphene-sys@0.22.0
-	gsk4-sys@0.11.1
-	gsk4@0.11.1
-	gtk4-macros@0.11.0
-	gtk4-sys@0.11.3
-	gtk4@0.11.3
+	gdk4-sys@0.11.5
+	gdk4@0.11.5
+	gio-sys@0.22.9
+	gio@0.22.10
+	glib-macros@0.22.9
+	glib-sys@0.22.9
+	glib@0.22.10
+	glob@0.3.4
+	gobject-sys@0.22.9
+	graphene-rs@0.22.8
+	graphene-sys@0.22.9
+	gsk4-sys@0.11.5
+	gsk4@0.11.5
+	gtk4-macros@0.11.5
+	gtk4-sys@0.11.5
+	gtk4@0.11.5
 	hashbrown@0.15.5
-	hashbrown@0.17.0
+	hashbrown@0.17.1
 	heck@0.5.0
-	hermit-abi@0.5.2
-	html-escape@0.2.13
+	hermit-abi@0.5.3
+	html-escape@0.2.15
 	humantime-serde@1.1.1
-	humantime@2.3.0
-	id-arena@2.3.0
-	indexmap@2.14.0
+	humantime@2.4.0
+	indexmap@2.14.2
 	iovec@0.1.4
 	is-terminal@0.4.17
 	is_terminal_polyfill@1.70.2
 	itoa@1.0.18
-	jiff-static@0.2.24
-	jiff@0.2.24
-	leb128fmt@0.1.0
-	libc@0.2.186
-	libredox@0.1.16
+	jiff-core@0.1.1
+	jiff-static@0.2.37
+	jiff@0.2.37
+	libc@0.2.189
 	linux-raw-sys@0.12.1
 	lock_api@0.4.14
-	log@0.4.29
-	memchr@2.8.0
+	log@0.4.34
+	memchr@2.8.3
 	memoffset@0.9.1
-	mio@1.2.0
+	mio@1.2.3
 	normalize-line-endings@0.3.0
 	num-traits@0.2.19
 	nvim-rs@0.9.2
 	once_cell@1.21.4
 	once_cell_polyfill@1.70.2
 	os_pipe@1.2.3
-	pango-sys@0.22.0
-	pango@0.22.6
+	pango-sys@0.22.9
+	pango@0.22.9
 	parking_lot@0.12.5
 	parking_lot_core@0.9.12
 	percent-encoding@2.3.2
-	phf@0.13.1
-	phf_codegen@0.13.1
-	phf_generator@0.13.1
-	phf_shared@0.13.1
+	phf@0.14.0
+	phf_codegen@0.14.0
+	phf_generator@0.14.0
+	phf_shared@0.14.0
 	pin-project-lite@0.2.17
-	pkg-config@0.3.33
-	plain@0.2.3
-	portable-atomic-util@0.2.7
-	portable-atomic@1.13.1
-	prettyplease@0.2.37
+	pkg-config@0.3.34
+	portable-atomic-util@0.2.8
+	portable-atomic@1.15.0
 	proc-macro-crate@3.5.0
-	proc-macro2@1.0.106
+	proc-macro2@1.0.107
 	quick-error@1.2.3
-	quote@1.0.45
-	r-efi@6.0.0
+	quote@1.0.47
 	rayon-core@1.13.0
 	rayon@1.12.0
 	redox_syscall@0.5.18
-	redox_syscall@0.7.4
-	regex-automata@0.4.14
-	regex-syntax@0.8.10
-	regex@1.12.3
+	regex-automata@0.4.18
+	regex-syntax@0.8.11
+	regex@1.13.1
 	rmp@0.8.15
 	rmpv@1.3.1
 	rustc_version@0.4.1
-	rustix@1.1.4
+	rustix@1.1.5
 	same-file@1.0.6
 	scopeguard@1.2.0
 	semver@1.0.28
-	serde@1.0.228
+	serde@1.0.229
 	serde_bytes@0.11.19
-	serde_core@1.0.228
-	serde_derive@1.0.228
-	serde_json@1.0.149
+	serde_core@1.0.229
+	serde_derive@1.0.229
+	serde_json@1.0.151
 	serde_spanned@1.1.1
 	shlex@1.3.0
 	signal-hook-registry@1.4.8
-	similar@2.7.0
-	siphasher@1.0.2
+	similar@3.2.0
+	siphasher@1.0.3
 	slab@0.4.12
-	smallvec@1.15.1
+	smallvec@1.16.2
 	snapbox-macros@1.1.0
-	snapbox@1.2.1
-	socket2@0.6.3
+	snapbox@1.2.2
+	socket2@0.6.5
 	strsim@0.11.1
-	syn@2.0.117
-	system-deps@7.0.8
-	target-lexicon@0.13.3
+	syn@2.0.119
+	syn@3.0.6
+	system-deps@9.0.0
+	target-lexicon@0.13.5
 	tempfile@3.27.0
 	terminal_size@0.4.4
+	thiserror-impl@2.0.21
+	thiserror@2.0.21
 	tokio-io@0.1.13
-	tokio-macros@2.7.0
-	tokio-util@0.7.18
-	tokio@1.52.1
+	tokio-macros@2.7.2
+	tokio-util@0.7.19
+	tokio@1.53.1
 	toml@0.5.11
-	toml@1.1.2+spec-1.1.0
+	toml@1.1.6+spec-1.1.0
 	toml_datetime@1.1.1+spec-1.1.0
-	toml_edit@0.25.11+spec-1.1.0
-	toml_parser@1.1.2+spec-1.1.0
-	toml_writer@1.1.1+spec-1.1.0
-	trycmd@1.2.0
-	unicode-ident@1.0.24
-	unicode-segmentation@1.13.2
+	toml_edit@0.25.15+spec-1.1.0
+	toml_parser@1.1.3+spec-1.1.0
+	toml_writer@1.1.2+spec-1.1.0
+	trycmd@1.2.1
+	unicode-ident@1.0.26
+	unicode-segmentation@1.13.3
 	unicode-width@0.2.2
-	unicode-xid@0.2.6
-	utf8-width@0.1.8
 	utf8parse@0.2.2
 	version-compare@0.2.1
 	wait-timeout@0.2.1
 	walkdir@2.5.0
 	wasi@0.11.1+wasi-snapshot-preview1
-	wasip2@1.0.3+wasi-0.2.9
-	wasip3@0.4.0+wasi-0.3.0-rc-2026-01-06
-	wasm-encoder@0.244.0
-	wasm-metadata@0.244.0
-	wasmparser@0.244.0
 	winapi-util@0.1.11
 	windows-link@0.2.1
 	windows-sys@0.61.2
-	winnow@1.0.2
+	winnow@1.0.4
 	winres@0.1.12
-	wit-bindgen-core@0.51.0
-	wit-bindgen-rust-macro@0.51.0
-	wit-bindgen-rust@0.51.0
-	wit-bindgen@0.51.0
-	wit-bindgen@0.57.1
-	wit-component@0.244.0
-	wit-parser@0.244.0
-	zmij@1.0.21
+	zmij@1.0.23
 "
 inherit cargo xdg
 if [[ -z ${PV%%*9999} ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/Lyude/${PN}.git"
 else
-	MY_PV="3de4381"
+	MY_PV="a394e44"
 	[[ -n ${PV%%*_p*} ]] && MY_PV="v${PV}"
 	SRC_URI="
 		mirror://githubcl/Lyude/${PN}/tar.gz/${MY_PV} -> ${P}.tar.gz
@@ -222,7 +206,7 @@ LICENSE="GPL-3"
 # Dependent crate licenses
 LICENSE+="
 	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD LGPL-3 LGPL-3+ MIT
-	Unicode-3.0 ZLIB
+	Unicode-3.0
 "
 SLOT="0"
 
