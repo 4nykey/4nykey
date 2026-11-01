@@ -4,10 +4,10 @@
  AC_CHECK_HEADERS([reiserfs/reiserfs.h], ,
      AC_MSG_ERROR([*** reiserfs header files (reiserfs/reiserfs.h) not found])
  )
--AC_CHECK_LIB([dal], [file_dal_open], [],
-+AC_CHECK_LIB([dal], [file_open], [],
+-AC_CHECK_LIB([dal], [file_dal_open], [:],
++AC_CHECK_LIB([dal], [file_open], [:],
      AC_MSG_ERROR([*** Reiserfs depend library (libdal) not found]))
- AC_CHECK_LIB([reiserfs], [reiserfs_fs_open], [],
+ AC_CHECK_LIB([reiserfs], [reiserfs_fs_open], [:],
      AC_MSG_ERROR([*** Reiserfs library (libreiserfs) not found]))
 --- a/src/reiserfsclone.c
 +++ b/src/reiserfsclone.c
