@@ -32,13 +32,13 @@ MY_PV="$(ver_cut 1-2)"
 # https://dist.torproject.org/torbrowser
 if [[ -z ${PV%%*_alpha*} ]]; then
 	MY_PV2="a$(ver_cut 4)"
-else
+elif [[ -n $(ver_cut 3) ]]; then
 	MY_PV+=".$(ver_cut 3)"
 	KEYWORDS="~amd64"
 fi
-MY_P="153.5.0esr-${MY_PV}-1-build2"
+MY_P="153.6.0esr-${MY_PV}-1-build3"
 MY_P="firefox-tor-browser-${MY_P}"
-MY_NOS="13.6.36.90201984"
+MY_NOS="13.6.37.1984"
 MY_NOS="noscript-${MY_NOS}.xpi"
 
 DESCRIPTION="The Tor Browser"
@@ -365,7 +365,7 @@ pkg_setup() {
 		rust_pkg_setup
 		python-any-r1_pkg_setup
 
-		# Avoid PGO profiling problems due to enviroment leakage
+		# Avoid PGO profiling problems due to environment leakage
 		# These should *always* be cleaned up anyway
 		unset \
 			DBUS_SESSION_BUS_ADDRESS \
@@ -420,7 +420,7 @@ src_prepare() {
 	use vanilla || \
 	eapply "${WORKDIR}/firefox-patches"
 
-	# Allow user to apply any additional patches without modifing ebuild
+	# Allow user to apply any additional patches without modifying ebuild
 	eapply_user
 
 	# Make cargo respect MAKEOPTS
