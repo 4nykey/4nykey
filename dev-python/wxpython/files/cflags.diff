@@ -1,0 +1,12 @@
+--- a/buildtools/config.py
++++ b/buildtools/config.py
+@@ -229,9 +229,6 @@ class Configuration(object):
+                 for lst in [self.cflags, self.cxxflags]:
+                     lst.append('-ggdb')
+                     lst.append('-O0')
+-            else:
+-                for lst in [self.cflags, self.cxxflags]:
+-                    lst.append('-O3')
+ 
+             lflags = self.getWxConfigValue('--libs')
+             self.MONOLITHIC = (lflags.find("_xrc") == -1)
