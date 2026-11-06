@@ -1,0 +1,11 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -342,7 +342,7 @@ endif()
+ 
+ if(BUILD_TESTING)
+   find_package(Qt${QT_MAJOR_VERSION} REQUIRED COMPONENTS Core Test)
+-  if(NOT MSVC)
++  if(NOT GENTOO_IS_NOT_KWALIFIED)
+     # Kwalify is not available for MSVC easily (eg. via vcpkg)
+     find_package(Kwalify REQUIRED)
+   endif()

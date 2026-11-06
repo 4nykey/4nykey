@@ -1,0 +1,9 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@/vst3sdk
+includedir=${prefix}/include/vst3sdk
+
+Name: @PROJECT_NAME@
+Description: @PROJECT_DESCRIPTION@
+Version: @PROJECT_VERSION@
+Libs: -L${libdir} -Wl,-rpath -Wl,${libdir} -lsdk_hosting -lsdk_common -lbase -lpluginterfaces
+Cflags: -I${includedir}

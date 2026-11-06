@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>4nykey@gmail.com</email>
+	</maintainer>
+	<use>
+		<flag name="frei0r">Build the module for <pkg>media-plugins/frei0r-plugins</pkg></flag>
+		<flag name="glaxnimate">Build Glaxnimate module</flag>
+		<flag name="opencv">Build motion tracking module using <pkg>media-libs/opencv</pkg></flag>
+		<flag name="python">Build SWIG bindings for Python</flag>
+		<flag name="rtaudio">Builds rtaudio consumer for native audio support on multiple platforms.</flag>
+		<flag name="rubberband">Build a module for audio pitch-shifting based on librubberband</flag>
+		<flag name="sdl1">Build SDLv1 module</flag>
+		<flag name="vidstab">Enabled video stabilization with <pkg>media-libs/vidstab</pkg>.</flag>
+	</use>
+	<upstream>
+		<remote-id type="sourceforge">mlt</remote-id>
+		<remote-id type="github">mltframework/mlt</remote-id>
+	</upstream>
+</pkgmetadata>
