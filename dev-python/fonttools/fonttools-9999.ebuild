@@ -37,7 +37,7 @@ PATCHES=(
 # README.rst: Optional Requirements
 RDEPEND="
 	>=dev-python/lxml-6.1.3[${PYTHON_USEDEP}]
-	>=app-arch/brotli-1.2[python,${PYTHON_USEDEP}]
+	>=app-arch/brotli-1.2.1[python,${PYTHON_USEDEP}]
 	woff? (
 		>=dev-python/py-zopfli-0.4[${PYTHON_USEDEP}]
 	)
