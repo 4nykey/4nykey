@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>4nykey@gmail.com</email>
+	</maintainer>
+	<use>
+		<flag name="gstreamer">
+			Enable the wxMediaCtrl class for playing audio and video through
+			gstreamer.
+		</flag>
+		<flag name="legacy">
+			Enable wxwidgets.eclass compatibility
+		</flag>
+		<flag name="sdl">
+			Use Simple Directmedia Layer (<pkg>media-libs/libsdl</pkg>) for
+			audio.
+		</flag>
+	</use>
+</pkgmetadata>

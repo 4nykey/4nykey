@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>4nykey@gmail.com</email>
+	</maintainer>
+	<use>
+		<flag name="gtk3">
+			Build wxGTK3
+		</flag>
+		<flag name="gtk4">
+			Build wxGTK4
+		</flag>
+		<flag name="chm">
+			Enable support for Microsoft Compiled HTML Help files.
+		</flag>
+		<flag name="sdl">
+			Use Simple Directmedia Layer (<pkg>media-libs/libsdl</pkg>) for
+			audio.
+		</flag>
+		<flag name="stc">
+			Use wxStyledTextCtrl library
+		</flag>
+	</use>
+</pkgmetadata>

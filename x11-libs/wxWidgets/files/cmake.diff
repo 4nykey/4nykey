@@ -1,0 +1,10 @@
+--- a/build/cmake/functions.cmake
++++ b/build/cmake/functions.cmake
+@@ -1057,6 +1057,7 @@ endfunction()
+ # The default is ON if not third parameter is specified
+ function(wx_option name desc)
+     cmake_parse_arguments(OPTION "" "" "STRINGS" ${ARGN})
++    set(OPTION_STRINGS OFF)
+     if(ARGC EQUAL 2)
+         set(default ON)
+     else()
