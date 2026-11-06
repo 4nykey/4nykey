@@ -1,0 +1,18 @@
+--- a/gmic-qt/CMakeLists.txt
++++ b/gmic-qt/CMakeLists.txt
+@@ -149,7 +149,6 @@ endif()
+ # Gmic
+ #
+ if (ENABLE_SYSTEM_GMIC)
+-  find_package(Gmic REQUIRED CONFIG)
+ endif (ENABLE_SYSTEM_GMIC)
+ 
+ #
+@@ -204,6 +204,7 @@ find_package(PNG REQUIRED)
+ add_definitions(${PNG_DEFINITIONS})
+ add_definitions(-Dcimg_use_png)
+ include_directories(SYSTEM ${PNG_INCLUDE_DIR})
++link_directories(BEFORE "${GMIC_LIB_PATH}")
+ if (APPLE)
+     # this is not added correctly on OSX -- see http://forum.kde.org/viewtopic.php?f=139&t=101867&p=221242#p221242
+     include_directories(SYSTEM ${PNG_INCLUDE_DIR})
