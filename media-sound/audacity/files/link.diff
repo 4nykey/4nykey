@@ -1,0 +1,365 @@
+--- a/muse/framework/cloud/CMakeLists.txt
++++ b/muse/framework/cloud/CMakeLists.txt
+@@ -49,6 +49,7 @@ if (MUSE_MODULE_CLOUD_MUSESCORECOM)
+ endif()
+ 
+ target_link_libraries(muse_cloud PRIVATE Qt::Network Qt::NetworkAuth)
++target_link_libraries(muse_cloud PRIVATE Qt::Quick)
+ 
+ if (MUSE_MODULE_CLOUD_QML)
+     add_subdirectory(qml/Muse/Cloud)
+--- a/muse/framework/diagnostics/qml/Muse/Diagnostics/CMakeLists.txt
++++ b/muse/framework/diagnostics/qml/Muse/Diagnostics/CMakeLists.txt
+@@ -43,6 +43,7 @@ qt_add_qml_module(muse_diagnostics_qml
+         TARGET muse_ui_qml
+         TARGET muse_uicomponents_qml
+ )
++target_link_libraries(muse_diagnostics_qml PRIVATE Qt::Quick)
+ 
+ fixup_qml_module_dependencies(muse_diagnostics_qml)
+ 
+--- a/muse/framework/extensions/qml/Muse/Extensions/CMakeLists.txt
++++ b/muse/framework/extensions/qml/Muse/Extensions/CMakeLists.txt
+@@ -56,3 +56,4 @@ fixup_qml_module_dependencies(muse_extensions_qml)
+ 
+ # Necessary for the auto-generated sources
+ target_include_directories(muse_extensions_qml PRIVATE devtools)
++target_link_libraries(muse_extensions_qml PRIVATE Qt::Quick)
+--- a/muse/framework/multiwindows/CMakeLists.txt
++++ b/muse/framework/multiwindows/CMakeLists.txt
+@@ -55,6 +55,7 @@ target_sources(muse_multiwindows PRIVATE
+     internal/multiprocess/ipc/ipcloop.cpp
+     internal/multiprocess/ipc/ipcloop.h
+ )
++target_link_libraries(muse_multiwindows PRIVATE Qt::Network)
+ 
+ if (MUSE_MODULE_MULTIWINDOWS_QML)
+     add_subdirectory(qml/Muse/MultiWindows)
+--- a/muse/framework/rcommand/CMakeLists.txt
++++ b/muse/framework/rcommand/CMakeLists.txt
+@@ -35,6 +35,7 @@ target_sources(muse_rcommand PRIVATE
+     internal/commandsstate.cpp
+     internal/commandsstate.h
+ )
++target_link_libraries(muse_rcommand PRIVATE Qt::Quick)
+ 
+ if (MUSE_MODULE_RCOMMAND_QML)
+     add_subdirectory(qml/Muse/RCommand)
+--- a/muse/framework/shortcuts/CMakeLists.txt
++++ b/muse/framework/shortcuts/CMakeLists.txt
+@@ -43,6 +43,7 @@ target_sources(muse_shortcuts PRIVATE
+ )
+ 
+ target_link_libraries(muse_shortcuts PRIVATE Qt::Gui)
++target_link_libraries(muse_shortcuts PRIVATE Qt::Qml)
+ 
+ if (MUSE_MODULE_SHORTCUTS_QML)
+     add_subdirectory(qml/Muse/Shortcuts)
+--- a/muse/framework/tours/CMakeLists.txt
++++ b/muse/framework/tours/CMakeLists.txt
+@@ -35,6 +35,7 @@ target_sources(muse_tours PRIVATE
+     internal/toursprovider.cpp
+     internal/toursprovider.h
+ )
++target_link_libraries(muse_tours PRIVATE Qt::Quick)
+ 
+ if (MUSE_MODULE_TOURS_TESTS)
+     # add_subdirectory(tests) # todo
+--- a/muse/framework/tours/qml/Muse/Tours/CMakeLists.txt
++++ b/muse/framework/tours/qml/Muse/Tours/CMakeLists.txt
+@@ -33,5 +33,6 @@ qt_add_qml_module(muse_tours_qml
+         TARGET muse_ui_qml
+         TARGET muse_uicomponents_qml
+ )
++target_link_libraries(muse_tours_qml PRIVATE Qt::Quick)
+ 
+ fixup_qml_module_dependencies(muse_tours_qml)
+--- a/muse/framework/uicomponents/qml/Muse/UiComponents/CMakeLists.txt
++++ b/muse/framework/uicomponents/qml/Muse/UiComponents/CMakeLists.txt
+@@ -239,6 +239,7 @@ endif()
+ target_include_directories(muse_uicomponents_qml PRIVATE internal validators)
+ 
+ target_link_libraries(muse_uicomponents_qml PRIVATE Qt::Qml)
++target_link_libraries(muse_uicomponents_qml PRIVATE Qt::Quick)
+ 
+ # For widgetview.cpp
+ target_link_libraries(muse_uicomponents_qml PRIVATE Qt::Widgets)
+--- a/muse/framework/update/CMakeLists.txt
++++ b/muse/framework/update/CMakeLists.txt
+@@ -44,6 +44,7 @@ target_sources(muse_update PRIVATE
+ 
+ if (MUSE_QT_SUPPORT)
+     target_link_libraries(muse_update PRIVATE Qt::Concurrent)
++    target_link_libraries(muse_update PRIVATE Qt::Network)
+ endif()
+ 
+ if (MUSE_MODULE_UPDATE_TESTS)
+--- a/src/project/CMakeLists.txt
++++ b/src/project/CMakeLists.txt
+@@ -143,7 +143,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/../au3wrap/au3wrapDefs.cmake)
+ 
+ set(MODULE_INCLUDE ${AU3_INCLUDE})
+ set(MODULE_DEF ${AU3_DEF})
+-set(MODULE_LINK au3wrap Qt::Widgets)
++set(MODULE_LINK au3wrap Qt::Widgets Qt::Quick)
+ if (QT_ADD_CONCURRENT)
+     list(APPEND MODULE_LINK Qt::Concurrent)
+ endif()
+--- a/src/trackedit/CMakeLists.txt
++++ b/src/trackedit/CMakeLists.txt
+@@ -118,6 +118,7 @@ set(MODULE_LINK au3wrap extension_native)
+ set(MODULE_LINK
+     ${MODULE_LINK}
+     muse::draw
++    Qt::Quick
+ )
+ 
+ set(MODULE_USE_UNITY OFF)
+--- a/src/uicomponents/CMakeLists.txt
++++ b/src/uicomponents/CMakeLists.txt
+@@ -40,6 +40,7 @@ set(MODULE_SRC
+ 
+ set(MODULE_LINK
+     muse::uicomponents_qml
++    Qt::Quick
+ )
+ 
+ setup_module()
+--- a/muse/framework/midiremote/CMakeLists.txt
++++ b/muse/framework/midiremote/CMakeLists.txt
+@@ -41,6 +41,7 @@ target_sources(muse_midiremote PRIVATE
+     internal/mmcdecoderfactory.cpp
+     internal/mmcdecoderfactory.h
+ )
++target_link_libraries(muse_midiremote PRIVATE Qt::Quick)
+ 
+ if (MUSE_MODULE_MIDIREMOTE_QML)
+     add_subdirectory(qml/Muse/MidiRemote)
+--- a/muse/framework/vst/qml/Muse/Vst/CMakeLists.txt
++++ b/muse/framework/vst/qml/Muse/Vst/CMakeLists.txt
+@@ -24,3 +24,4 @@ if (OS_IS_LIN OR OS_IS_FBSD)
+ endif()
+ 
+ target_link_libraries(muse_vst_qml PRIVATE vst3sdk)
++target_link_libraries(muse_vst_qml PRIVATE Qt::Quick)
+--- a/muse/framework/workspace/qml/Muse/Workspace/CMakeLists.txt
++++ b/muse/framework/workspace/qml/Muse/Workspace/CMakeLists.txt
+@@ -19,5 +19,6 @@ qt_add_qml_module(muse_workspace_qml
+         TARGET muse_ui_qml
+         TARGET muse_uicomponents_qml
+ )
++target_link_libraries(muse_workspace_qml PRIVATE Qt::Quick)
+ 
+ fixup_qml_module_dependencies(muse_workspace_qml)
+--- a/src/effects/builtin/CMakeLists.txt
++++ b/src/effects/builtin/CMakeLists.txt
+@@ -37,7 +37,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/../../au3wrap/au3wrapDefs.cmake)
+ set(MODULE_INCLUDE ${AU3_INCLUDE})
+ set(MODULE_DEF ${AU3_DEF})
+ 
+-set(MODULE_LINK au3wrap)
++set(MODULE_LINK au3wrap Qt::Qml Qt::Quick)
+ 
+ set(MODULE_USE_UNITY OFF)
+ 
+--- a/src/effects/effects_base/CMakeLists.txt
++++ b/src/effects/effects_base/CMakeLists.txt
+@@ -134,7 +134,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/../../au3wrap/au3wrapDefs.cmake)
+ set(MODULE_INCLUDE ${AU3_INCLUDE})
+ set(MODULE_DEF ${AU3_DEF})
+ 
+-set(MODULE_LINK au3wrap uicomponents)
++set(MODULE_LINK au3wrap uicomponents Qt::Qml Qt::Quick)
+ 
+ set(MODULE_USE_UNITY OFF)
+ 
+--- a/src/preferences/CMakeLists.txt
++++ b/src/preferences/CMakeLists.txt
+@@ -7,6 +7,7 @@ target_sources(preferences PRIVATE
+ )
+ 
+ target_link_libraries(preferences PRIVATE importer)
++target_link_libraries(preferences PRIVATE Qt::Qml)
+ 
+ add_subdirectory(qml/Audacity/Preferences)
+ 
+--- a/src/projectscene/CMakeLists.txt
++++ b/src/projectscene/CMakeLists.txt
+@@ -245,6 +245,7 @@ set(MODULE_LINK au3wrap trackedit spectrogram uicomponents)
+ if(MUSE_MODULE_WORKSPACE)
+     set(MODULE_LINK ${MODULE_LINK} muse::workspace_qml)
+ endif()
++set(MODULE_LINK ${MODULE_LINK} Qt::Qml Qt::Quick)
+ 
+ set(MODULE_INCLUDE ${CLIPSVIEW_V1_INC})
+ 
+--- a/src/spectrogram/CMakeLists.txt
++++ b/src/spectrogram/CMakeLists.txt
+@@ -107,7 +107,7 @@ set(MODULE_SRC
+ 
+ set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
+ set(MODULE_USE_UNITY OFF)
+-set(MODULE_LINK au3wrap Qt6::Concurrent tft)
++set(MODULE_LINK au3wrap Qt6::Concurrent tft Qt::Qml Qt::Quick)
+ set(MODULE_LINK_PUBLIC shared)
+ 
+ setup_module()
+--- a/muse/framework/rcommand/qml/Muse/RCommand/CMakeLists.txt
++++ b/muse/framework/rcommand/qml/Muse/RCommand/CMakeLists.txt
+@@ -30,5 +30,6 @@ qt_add_qml_module(muse_rcommand_qml
+         TARGET muse_ui_qml
+         TARGET muse_uicomponents_qml
+ )
++target_link_libraries(muse_rcommand_qml PRIVATE Qt::Quick)
+ 
+ fixup_qml_module_dependencies(muse_rcommand_qml)
+--- a/src/appshell/qml/Audacity/AppShell/CMakeLists.txt
++++ b/src/appshell/qml/Audacity/AppShell/CMakeLists.txt
+@@ -146,6 +146,7 @@ if (NOT OS_IS_MAC)
+ endif(NOT OS_IS_MAC)
+ 
+ target_link_libraries(appshell_qml PRIVATE Qt::Widgets)
++target_link_libraries(appshell_qml PRIVATE Qt::Quick)
+ 
+ fixup_qml_module_dependencies(appshell_qml)
+ 
+--- a/muse/framework/actions/CMakeLists.txt
++++ b/muse/framework/actions/CMakeLists.txt
+@@ -33,6 +33,7 @@ target_sources(muse_actions PRIVATE
+     internal/actionsdispatcher.cpp
+     internal/actionsdispatcher.h
+ )
++target_link_libraries(muse_actions PRIVATE Qt::Qml Qt::Quick)
+ 
+ if (MUSE_MODULE_ACTIONS_TESTS)
+     add_subdirectory(tests)
+--- a/muse/framework/network/CMakeLists.txt
++++ b/muse/framework/network/CMakeLists.txt
+@@ -38,6 +38,7 @@ target_sources(muse_network PRIVATE
+ )
+ 
+ target_link_libraries(muse_network PUBLIC Qt::Network)
++target_link_libraries(muse_network PUBLIC Qt::Qml)
+ 
+ if (MUSE_MODULE_NETWORK_WEBSOCKET)
+     target_sources(muse_network PRIVATE
+--- a/muse/framework/rcontrol/CMakeLists.txt
++++ b/muse/framework/rcontrol/CMakeLists.txt
+@@ -30,6 +30,7 @@ target_sources(muse_rcontrol PRIVATE
+     mcp/transport/tcptransport.cpp
+     mcp/transport/tcptransport.h
+ )
++target_link_libraries(muse_rcontrol PRIVATE Qt::Quick)
+ 
+ add_executable(musescore-mcpbridge
+     mcp/bridge/main.cpp
+--- a/src/automation/CMakeLists.txt
++++ b/src/automation/CMakeLists.txt
+@@ -20,6 +20,7 @@ set(MODULE_SRC
+ 
+ set(MODULE_USE_UNITY OFF)
+ set(MODULE_LINK au3wrap)
++set(MODULE_LINK ${MODULE_LINK} Qt::Qml)
+ 
+ setup_module()
+ 
+--- a/src/effects/builtin_collection/CMakeLists.txt
++++ b/src/effects/builtin_collection/CMakeLists.txt
+@@ -192,6 +192,7 @@ set(MODULE_DEF ${MODULE_DEF}
+ )
+ 
+ set(MODULE_LINK au3wrap libsbsms shared)
++set(MODULE_LINK au3wrap ${MODULE_LINK} Qt::Qml Qt::Quick)
+ set(MODULE_LINK_PUBLIC au3-effects au3-builtin-effects)
+ 
+ set(MODULE_USE_UNITY OFF)
+--- a/src/effects/extensions/CMakeLists.txt
++++ b/src/effects/extensions/CMakeLists.txt
+@@ -34,6 +34,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/../../au3wrap/au3wrapDefs.cmake)
+ set(MODULE_INCLUDE ${AU3_INCLUDE})
+ set(MODULE_DEF ${AU3_DEF})
+ set(MODULE_LINK au3wrap trackedit muse::extensions)
++set(MODULE_LINK au3wrap ${MODULE_LINK} Qt::Quick)
+ set(MODULE_USE_UNITY OFF)
+ 
+ setup_module()
+--- a/src/effects/lv2/CMakeLists.txt
++++ b/src/effects/lv2/CMakeLists.txt
+@@ -37,6 +37,7 @@ set(MODULE_SRC
+ )
+ 
+ set(MODULE_LINK effects_base au3wrap lv2sdk X11)
++set(MODULE_LINK effects_base ${MODULE_LINK} Qt::Quick)
+ 
+ # AU3
+ include(${CMAKE_CURRENT_LIST_DIR}/../../au3wrap/au3wrapDefs.cmake)
+--- a/src/effects/nyquist/CMakeLists.txt
++++ b/src/effects/nyquist/CMakeLists.txt
+@@ -37,6 +37,7 @@ set(MODULE_INCLUDE ${AU3_INCLUDE})
+ set(MODULE_DEF ${AU3_DEF})
+ 
+ set(MODULE_LINK au3wrap effects_builtin au3-nyquist-effects)
++set(MODULE_LINK au3wrap ${MODULE_LINK} Qt::Qml)
+ 
+ add_subdirectory(libnyquist)
+ 
+--- a/src/effects/vst/CMakeLists.txt
++++ b/src/effects/vst/CMakeLists.txt
+@@ -40,6 +40,7 @@ set(MODULE_DEF ${AU3_DEF})
+ set(MODULE_LINK
+         au3wrap
+         vst_sdk_3 # Note: vst_sdk_3 needed because au3-vst3 public headers expose VST3 SDK types
++        Qt::Qml
+ )
+ 
+ if(MUSE_MODULE_VST_QML)
+--- a/src/importexport/export/CMakeLists.txt
++++ b/src/importexport/export/CMakeLists.txt
+@@ -46,6 +46,7 @@ set(MODULE_SRC
+ set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
+ 
+ set(MODULE_LINK au3wrap)
++set(MODULE_LINK ${MODULE_LINK} Qt::Qml)
+ 
+ set(MODULE_USE_UNITY OFF)
+ 
+--- a/src/importexport/labels/CMakeLists.txt
++++ b/src/importexport/labels/CMakeLists.txt
+@@ -37,5 +37,6 @@ include(${CMAKE_CURRENT_LIST_DIR}/../../au3wrap/au3wrapDefs.cmake)
+ set(MODULE_INCLUDE ${AU3_INCLUDE})
+ set(MODULE_DEF ${AU3_DEF})
+ set(MODULE_LINK au3wrap)
++set(MODULE_LINK ${MODULE_LINK} Qt::Qml)
+ 
+ setup_module()
+--- a/src/playback/CMakeLists.txt
++++ b/src/playback/CMakeLists.txt
+@@ -86,6 +86,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/../au3wrap/au3wrapDefs.cmake)
+ set(MODULE_INCLUDE ${AU3_INCLUDE})
+ set(MODULE_DEF ${AU3_DEF})
+ set(MODULE_LINK au3wrap uicomponents)
++set(MODULE_LINK au3wrap ${MODULE_LINK} Qt::Quick)
+ 
+ set(MODULE_USE_UNITY OFF)
+ 
+--- a/src/preferences/qml/Audacity/Preferences/CMakeLists.txt
++++ b/src/preferences/qml/Audacity/Preferences/CMakeLists.txt
+@@ -120,6 +120,7 @@ qt_add_qml_module(preferences_qml
+         TARGET muse_uicomponents_qml
+         TARGET muse_shortcuts_qml
+ )
++target_link_libraries(preferences_qml PRIVATE Qt::Quick)
+ 
+ fixup_qml_module_dependencies(preferences_qml)
+ 
+--- a/src/record/CMakeLists.txt
++++ b/src/record/CMakeLists.txt
+@@ -47,7 +47,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/../au3wrap/au3wrapDefs.cmake)
+ 
+ set(MODULE_INCLUDE ${AU3_INCLUDE})
+ set(MODULE_DEF ${AU3_DEF})
+-set(MODULE_LINK au3wrap)
++set(MODULE_LINK au3wrap Qt::Quick)
+ 
+ set(MODULE_USE_UNITY OFF)
+ 

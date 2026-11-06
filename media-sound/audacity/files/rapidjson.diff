@@ -1,0 +1,23 @@
+--- a/cmake-proxies/cmake-modules/dependencies/rapidjson.cmake
++++ b/cmake-proxies/cmake-modules/dependencies/rapidjson.cmake
+@@ -2,9 +2,7 @@
+ 
+ if(NOT ${_OPT}use_rapidjson STREQUAL "off")
+    if(NOT TARGET rapidjson::rapidjson)
+-      if(TARGET rapidjson)
+-         add_library( rapidjson::rapidjson ALIAS rapidjson )
+-      else()
++      if(NOT TARGET rapidjson)
+          # At least on Arch RapidJSONConfig.cmake does not define a target at all
+          # so we have to do it ourselves
+          add_library( rapidjson::rapidjson INTERFACE IMPORTED GLOBAL)
+--- a/libraries/lib-import-export/CMakeLists.txt
++++ b/libraries/lib-import-export/CMakeLists.txt
+@@ -42,7 +42,6 @@ set( SOURCES
+    PlainExportOptionsEditor.h
+ )
+ set( LIBRARIES
+-   rapidjson::rapidjson
+    lib-tags-interface
+    lib-wave-track-interface
+    lib-project-interface

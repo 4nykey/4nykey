@@ -1,0 +1,57 @@
+--- a/cmake-proxies/cmake-modules/Findvst3sdk.cmake
++++ b/cmake-proxies/cmake-modules/Findvst3sdk.cmake
+@@ -2,6 +2,9 @@
+ A module to look for vst3sdk
+ ]]
+ 
++include( FindPackageHandleStandardArgs )
++find_package( PkgConfig QUIET )
++pkg_check_modules( vst3sdk vst3sdk )
+ if( NOT vst3sdk_FOUND )
+    if( DEFINED ENV{VST3_SDK_DIR} )
+       set( vst3sdk_DIR $ENV{VST3_SDK_DIR} )
+--- a/libraries/lib-vst3/CMakeLists.txt
++++ b/libraries/lib-vst3/CMakeLists.txt
+@@ -32,16 +32,17 @@ set( SOURCES
+    >
+ )
+ set( LIBRARIES
+-   vst3sdk::base
+-   vst3sdk::pluginterfaces
+-   vst3sdk::sdk_hosting
+-   vst3sdk::sdk_common
++   ${vst3sdk_LIBRARIES}
++   X11
+    lib-effects-interface
+    lib-files-interface
+ )
+ audacity_library( lib-vst3 "${SOURCES}" "${LIBRARIES}"
+    "" ""
+ )
++target_include_directories(lib-vst3 PUBLIC "${vst3sdk_INCLUDEDIR}")
++target_link_directories(lib-vst3 PUBLIC "${vst3sdk_LIBRARY_DIRS}")
++target_link_options(lib-vst3 PRIVATE ${vst3sdk_LDFLAGS_OTHER} )
+ 
+ if(${wxIS_MAC})
+    set_source_files_properties(
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -1142,6 +1142,7 @@ list( APPEND LDFLAGS
+    PRIVATE
+       $<$<CXX_COMPILER_ID:MSVC>:/MANIFEST:NO>
+       $<$<CXX_COMPILER_ID:GNU>:-Wl,--disable-new-dtags>
++      $<$<BOOL:${${_OPT}has_vst3}>:${vst3sdk_LDFLAGS_OTHER}>
+ )
+ 
+ find_package( Threads QUIET )
+--- a/libraries/lib-vst3/module_linux.cpp
++++ b/libraries/lib-vst3/module_linux.cpp
+@@ -50,7 +50,7 @@
+ #define USE_EXPERIMENTAL_FS 1
+ #endif
+ #else
+-#define USE_EXPERIMENTAL_FS 1
++#define USE_EXPERIMENTAL_FS 0
+ #endif
+ 
+ #if USE_EXPERIMENTAL_FS == 1

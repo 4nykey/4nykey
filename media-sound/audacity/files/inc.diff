@@ -1,0 +1,310 @@
+--- a/muse/framework/extensions/internal/extensionsession.h
++++ b/muse/framework/extensions/internal/extensionsession.h
+@@ -20,6 +20,7 @@
+ 
+ #include "../iextensionsession.h"
+ #include "scriptengine.h"
++#include "extensionstypes.h"
+ 
+ namespace muse::extensions {
+ class ExtensionSession final : public IExtensionSession
+--- a/muse/framework/global/api/apiutils.h
++++ b/muse/framework/global/api/apiutils.h
+@@ -26,6 +26,7 @@
+ #include <vector>
+ #include <QString>
+ #include <QJSValue>
++#include <QMetaEnum>
+ 
+ #include "apitypes.h"
+ #include "iapiengine.h"
+--- a/muse/framework/global/globalmodule.h
++++ b/muse/framework/global/globalmodule.h
+@@ -24,6 +24,7 @@
+ 
+ #include <memory>
+ #include <optional>
++#include <QFile>
+ 
+ #include "logger.h"
+ 
+--- a/muse/framework/interactive/api/interactiveapi.cpp
++++ b/muse/framework/interactive/api/interactiveapi.cpp
+@@ -23,6 +23,7 @@
+ #include "interactiveapi.h"
+ 
+ #include <QUrl>
++#include <QMetaEnum>
+ 
+ using namespace muse::interactive;
+ 
+--- a/muse/framework/interactive/internal/interactive.cpp
++++ b/muse/framework/interactive/internal/interactive.cpp
+@@ -31,6 +31,7 @@
+ #include <QUrl>
+ #include <QWidget>
+ #include <QWindow>
++#include <QQmlEngine>
+ 
+ #include "async/async.h"
+ #include "io/path.h"
+--- a/muse/framework/interactive/qml/Muse/Interactive/interactiveprovidermodel.h
++++ b/muse/framework/interactive/qml/Muse/Interactive/interactiveprovidermodel.h
+@@ -24,6 +24,7 @@
+ 
+ #include <QObject>
+ #include <QQmlParserStatus>
++#include <QWindow>
+ #include <qqmlintegration.h>
+ 
+ #include "global/async/asyncable.h"
+--- a/muse/framework/multiwindows/internal/singleprocess/singleprocessprovider.cpp
++++ b/muse/framework/multiwindows/internal/singleprocess/singleprocessprovider.cpp
+@@ -27,6 +27,7 @@
+  #include "actions/iactionsdispatcher.h"
+ 
+  #include "log.h"
++#include <QCoreApplication>
+ 
+ using namespace muse;
+ using namespace muse::mi;
+--- a/muse/framework/multiwindows/qml/Muse/MultiWindows/multiinstancesdevmodel.h
++++ b/muse/framework/multiwindows/qml/Muse/MultiWindows/multiinstancesdevmodel.h
+@@ -23,6 +23,7 @@
+ #pragma once
+ 
+ #include <QObject>
++#include <QVariant>
+ #include <qqmlintegration.h>
+ 
+ #include "modularity/ioc.h"
+--- a/muse/framework/ui/api/themeapi.h
++++ b/muse/framework/ui/api/themeapi.h
+@@ -23,6 +23,7 @@
+ #pragma once
+ 
+ #include <QFont>
++#include <QFontMetricsF>
+ 
+ #include <qqmlintegration.h>
+ 
+--- a/muse/framework/ui/qml/Muse/Ui/initialletternavigation.cpp
++++ b/muse/framework/ui/qml/Muse/Ui/initialletternavigation.cpp
+@@ -21,6 +21,7 @@
+  */
+ 
+ #include "initialletternavigation.h"
++#include <QRegularExpression>
+ 
+ #include "global/log.h"
+ 
+--- a/muse/framework/ui/qml/Muse/Ui/initialletternavigation.h
++++ b/muse/framework/ui/qml/Muse/Ui/initialletternavigation.h
+@@ -23,6 +23,7 @@
+ #pragma once
+ 
+ #include <QObject>
++#include <QTimer>
+ #include <qqmlintegration.h>
+ 
+ #include "abstractnavigation.h"
+--- a/muse/framework/ui/view/qmldataformatter.cpp
++++ b/muse/framework/ui/view/qmldataformatter.cpp
+@@ -22,6 +22,7 @@
+ #include "qmldataformatter.h"
+ 
+ #include "global/dataformatter.h"
++#include <QLocale>
+ 
+ using namespace muse::ui;
+ 
+--- a/muse/framework/ui/view/widgetstyle.cpp
++++ b/muse/framework/ui/view/widgetstyle.cpp
+@@ -34,6 +34,7 @@
+ #include <QTextEdit>
+ #include <QToolBar>
+ #include <QVariant>
++#include <QPainter>
+ 
+ #include "api/themeapi.h"
+ #include "iconcodes.h"
+--- a/muse/framework/uicomponents/qml/Muse/UiComponents/abstracttableviewmodel.cpp
++++ b/muse/framework/uicomponents/qml/Muse/UiComponents/abstracttableviewmodel.cpp
+@@ -22,6 +22,7 @@
+ #include "abstracttableviewmodel.h"
+ 
+ #include <QSet>
++#include <QTimer>
+ 
+ #include "internal/tableviewlistcell.h"
+ 
+--- a/muse/framework/uicomponents/qml/Muse/UiComponents/filteredflyoutmodel.h
++++ b/muse/framework/uicomponents/qml/Muse/UiComponents/filteredflyoutmodel.h
+@@ -23,6 +23,7 @@
+ #pragma once
+ 
+ #include <QObject>
++#include <QVariant>
+ #include <qqmlintegration.h>
+ 
+ namespace muse::uicomponents {
+--- a/muse/framework/uicomponents/qml/Muse/UiComponents/polylineplot.cpp
++++ b/muse/framework/uicomponents/qml/Muse/UiComponents/polylineplot.cpp
+@@ -28,6 +28,7 @@
+ #include <QBrush>
+ #include <QHoverEvent>
+ #include <QMouseEvent>
++#include <QCursor>
+ 
+ #include <algorithm>
+ #include <cmath>
+--- a/src/appshell/qml/Audacity/AppShell/FirstLaunchSetup/themespagemodel.cpp
++++ b/src/appshell/qml/Audacity/AppShell/FirstLaunchSetup/themespagemodel.cpp
+@@ -22,6 +22,7 @@
+ #include "themespagemodel.h"
+ 
+ #include "ui/internal/themeconverter.h"
++#include "framework/global/translation.h"
+ 
+ using namespace au::appshell;
+ using namespace muse::ui;
+--- a/src/automation/automationmodule.cpp
++++ b/src/automation/automationmodule.cpp
+@@ -3,6 +3,7 @@
+ #include "internal/au3/au3clipgaininteraction.h"
+ 
+ #include "view/clipgainmodel.h"
++#include <qqml.h>
+ 
+ using namespace au::automation;
+ 
+--- a/src/effects/builtin_collection/builtineffectscollectionmodule.cpp
++++ b/src/effects/builtin_collection/builtineffectscollectionmodule.cpp
+@@ -9,6 +9,7 @@
+ #include "common/valuewarper/valuewarper.h"
+ 
+ #include "effects/effects_base/ieffectviewlaunchregister.h"
++#include <qqml.h>
+ 
+ using namespace au::effects;
+ 
+--- a/src/effects/effects_base/view/effectsviewutils.h
++++ b/src/effects/effects_base/view/effectsviewutils.h
+@@ -4,6 +4,7 @@
+ #pragma once
+ 
+ #include "effectsviewtypes.h"
++#include <QQmlEngine>
+ 
+ #include "framework/uicomponents/qml/Muse/UiComponents/menuitem.h"
+ 
+--- a/src/effects/lv2/view/lv2viewmodel.h
++++ b/src/effects/lv2/view/lv2viewmodel.h
+@@ -19,6 +19,7 @@
+ 
+ #include <QObject>
+ #include <QQuickItem>
++#include <QTimer>
+ 
+ class LV2PortUIStates;
+ struct LV2EffectOutputs;
+--- a/src/importexport/export/exportermodule.cpp
++++ b/src/importexport/export/exportermodule.cpp
+@@ -15,6 +15,7 @@
+ #include "view/channelmappingtableviewmodel.h"
+ 
+ #include "exportermodule.h"
++#include <qqml.h>
+ 
+ using namespace au::importexport;
+ using namespace muse;
+--- a/src/importexport/labels/labelsmodule.cpp
++++ b/src/importexport/labels/labelsmodule.cpp
+@@ -13,6 +13,7 @@
+ #include "internal/labelsconfiguration.h"
+ 
+ #include "view/exportlabelsmodel.h"
++#include <qqml.h>
+ 
+ using namespace au::importexport;
+ 
+--- a/src/playback/internal/meters/dblogmeter.cpp
++++ b/src/playback/internal/meters/dblogmeter.cpp
+@@ -8,6 +8,7 @@
+ #include <sstream>
+ #include <iomanip>
+ #include <algorithm>
++#include <array>
+ 
+ using namespace au::playback;
+ 
+--- a/src/preferences/qml/Audacity/Preferences/preferencesmodel.cpp
++++ b/src/preferences/qml/Audacity/Preferences/preferencesmodel.cpp
+@@ -20,6 +20,7 @@
+  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  */
+ #include <QGuiApplication>
++#include <QCursor>
+ 
+ #include "preferencesmodel.h"
+ 
+--- a/src/project/internal/projectactionscontroller.cpp
++++ b/src/project/internal/projectactionscontroller.cpp
+@@ -1,6 +1,7 @@
+ #include "projectactionscontroller.h"
+ 
+ #include <QFileDialog>
++#include <QWindow>
+ 
+ #include <variant>
+ 
+--- a/src/project/view/projectthumbnailloader.h
++++ b/src/project/view/projectthumbnailloader.h
+@@ -1,6 +1,7 @@
+ #pragma once
+ 
+ #include <QObject>
++#include <QPixmap>
+ 
+ #include "framework/global/async/asyncable.h"
+ 
+--- a/src/projectscene/view/timeline/playregioncontroller.cpp
++++ b/src/projectscene/view/timeline/playregioncontroller.cpp
+@@ -6,6 +6,7 @@
+ #include <cmath>
+ 
+ #include <QGuiApplication>
++#include <QCursor>
+ 
+ #include "framework/global/log.h"
+ 
+--- a/src/projectscene/view/trackruler/itrackruler.h
++++ b/src/projectscene/view/trackruler/itrackruler.h
+@@ -2,6 +2,7 @@
+ 
+ #include <cstddef>
+ #include <vector>
++#include <string>
+ 
+ namespace au::projectscene {
+ enum class IsFullWidthTick : bool {
+--- a/src/projectscene/view/trackruler/linearbaseruler.cpp
++++ b/src/projectscene/view/trackruler/linearbaseruler.cpp
+@@ -4,6 +4,7 @@
+ #include <cassert>
+ #include <iomanip>
+ #include <sstream>
++#include <array>
+ 
+ #include "framework/global/realfn.h"
+ 
+--- a/src/trackedit/dom/wave.h
++++ b/src/trackedit/dom/wave.h
+@@ -5,6 +5,7 @@
+ 
+ #include <memory>
+ #include <vector>
++#include <cstdint>
+ 
+ namespace au::trackedit {
+ class Wave
